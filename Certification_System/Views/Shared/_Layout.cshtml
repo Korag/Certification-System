@@ -9,32 +9,52 @@
 
 </head>
 <body>
-    <div class="navbar navbar-inverse navbar-fixed-top">
-        <div class="container">
-            <div class="navbar-header">
-                <button type="button" class="navbar-toggle" data-toggle="collapse" data-target=".navbar-collapse">
-                    <span class="icon-bar"></span>
-                    <span class="icon-bar"></span>
-                    <span class="icon-bar"></span>
-                </button>
-                @Html.ActionLink("Application name", "Index", "Home", new { area = "" }, new { @class = "navbar-brand" })
-            </div>
-            <div class="navbar-collapse collapse">
-                <ul class="nav navbar-nav">
-                    <li>@Html.ActionLink("Home", "Index", "Home")</li>
-                    <li>@Html.ActionLink("About", "About", "Home")</li>
-                    <li>@Html.ActionLink("Contact", "Contact", "Home")</li>
-                </ul>
-                @Html.Partial("_LoginPartial")
+    <div id="top-bar-wrap" style="background-color: #252525; color: #ffffff" class="clr">
+        <div id="top-bar" class="clr container">
+            <div id="top-bar-inner" class="clr">
+                <div id="top-bar-content" class="clr has-content top-bar-left">
+                    <span class="topbar-content">
+                        <b>Godziny otwarcia: </b>pn-pt 7:00– 15:00,    tel. 33 81 38 300-309,   e-mail: szkolenie@ziad.bielsko.pl
+                    </span>
+                </div><!-- #top-bar-content -->
+            </div><!-- #top-bar-inner -->
+        </div><!-- #top-bar -->
+    </div>
+
+    @if (Request.IsAuthenticated)
+    {
+        <div class="navbar navbar-inverse">
+            <div class="container">
+                <div class="navbar-header">
+                    <button type="button" class="navbar-toggle" data-toggle="collapse" data-target=".navbar-collapse">
+                        <span class="icon-bar"></span>
+                        <span class="icon-bar"></span>
+                        <span class="icon-bar"></span>
+                    </button>
+                    @Html.ActionLink("Platforma certyfikacyjna", "Index", "Home", new { area = "" }, new { @class = "navbar-brand" })
+                </div>
+                <div class="navbar-collapse collapse">
+                    <ul class="nav navbar-nav">
+                        <li>@Html.ActionLink("Home", "Index", "Home")</li>
+                        <li>@Html.ActionLink("About", "About", "Home")</li>
+                        <li>@Html.ActionLink("Contact", "Contact", "Home")</li>
+                    </ul>
+                    @Html.Partial("_LoginPartial")
+                </div>
             </div>
         </div>
-    </div>
+    }
     <div class="container body-content">
         @RenderBody()
         <hr />
-        <footer>
-            <p>&copy; @DateTime.Now.Year - My ASP.NET Application</p>
-        </footer>
+    </div>
+
+    <div id="footer-bottom" class="clr no-footer-nav" style="color: #ffffff">
+        <div id="footer-bottom-inner" class="container clr">
+            <div id="copyright" class="clr" role="contentinfo">
+                © Copyright  Łukasz Czepielik
+            </div><!-- #copyright -->
+        </div><!-- #footer-bottom-inner -->
     </div>
 
     @Scripts.Render("~/bundles/jquery")
