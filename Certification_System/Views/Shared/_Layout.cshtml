@@ -21,28 +21,66 @@
         </div><!-- #top-bar -->
     </div>
 
-    @if (Request.IsAuthenticated)
+    @if (true)
     {
-        <div class="navbar navbar-inverse">
-            <div class="container">
-                <div class="navbar-header">
-                    <button type="button" class="navbar-toggle" data-toggle="collapse" data-target=".navbar-collapse">
-                        <span class="icon-bar"></span>
-                        <span class="icon-bar"></span>
-                        <span class="icon-bar"></span>
-                    </button>
-                    @Html.ActionLink("Platforma certyfikacyjna", "Index", "Home", new { area = "" }, new { @class = "navbar-brand" })
+        @*<div class="navbar navbar-inverse">
+                <div class="container">
+                    <div class="navbar-header">
+                        <button type="button" class="navbar-toggle" data-toggle="collapse" data-target=".navbar-collapse">
+                            <span class="icon-bar"></span>
+                            <span class="icon-bar"></span>
+                            <span class="icon-bar"></span>
+                        </button>
+                        @Html.ActionLink("Platforma certyfikacyjna", "Index", "Home", new { area = "" }, new { @class = "navbar-brand" })
+                    </div>
+                    <div class="navbar-collapse collapse">
+                        <ul class="nav navbar-nav">
+                            <li>@Html.ActionLink("Home", "Index", "Home")</li>
+                            <li>@Html.ActionLink("About", "About", "Home")</li>
+                            <li>@Html.ActionLink("Contact", "Contact", "Home")</li>
+                        </ul>
+                        @Html.Partial("_LoginPartial")
+                    </div>
                 </div>
-                <div class="navbar-collapse collapse">
-                    <ul class="nav navbar-nav">
-                        <li>@Html.ActionLink("Home", "Index", "Home")</li>
-                        <li>@Html.ActionLink("About", "About", "Home")</li>
-                        <li>@Html.ActionLink("Contact", "Contact", "Home")</li>
-                    </ul>
-                    @Html.Partial("_LoginPartial")
+            </div>*@
+
+    <nav class="navbar navbar-expand-lg sticky-top navbar navbar-light bg-light font-weight-bold" style=" opacity: 0.7; font-size:16px">
+        <img src="http://szkolenie.ziad.bielsko.pl/wp-content/uploads/elementor/thumbs/LOGO-ZIAD-u-e1552386865677-o4rd90ugx6yz8nf4i45ijoxmsw4smd9zrcb27yfta8.png" />
+        <a class="navbar-brand ml-2" href="#"  style="font-size:16px">Certification Platform v0.1 alpha</a>
+        <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
+            <span class="navbar-toggler-icon"></span>
+        </button>
+        <div class="collapse navbar-collapse" id="navbarSupportedContent">
+            <ul class="navbar-nav mr-auto">
+                <li class="nav-item active">
+                    <a class="nav-link" href="#">Certyfikaty</a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link" href="#">Features</a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link" href="#">Pricing</a>
+                </li>
+                <li class="nav-item dropdown">
+                    <a class="nav-link dropdown-toggle" id="navbarDropdownMenuLink" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">Dropdown</a>
+                    <div class="dropdown-menu">
+                        <a class="dropdown-item" href="#">Action</a>
+                        <a class="dropdown-item" href="#">Another action</a>
+                        <a class="dropdown-item" href="#">Something else here</a>
+                    </div>
+                </li>
+            </ul>
+            @*<form class="form-inline">
+                <div class="md-form my-0">
+                    <input class="form-control mr-sm-2" type="text" placeholder="Search" aria-label="Search">
                 </div>
-            </div>
+            </form>*@
+            
+            @Html.Partial("_LoginPartial")
         </div>
+    </nav>
+
+
     }
     <div class="container body-content">
         @RenderBody()
@@ -62,3 +100,14 @@
     @RenderSection("scripts", required: false)
 </body>
 </html>
+
+<script>
+    $('body').on('mouseenter mouseleave', '.dropdown-hover', function (e) {
+        let dropdown = $(e.target).closest('.dropdown-hover');
+        dropdown.addClass('show');
+
+        setTimeout(function () {
+            dropdown[dropdown.is(':hover') ? 'addClass' : 'removeClass']('show');
+        }, 300);
+    });
+</script>
