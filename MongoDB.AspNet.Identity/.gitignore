@@ -109,6 +109,3 @@ UpgradeLog*.XML
 MongoDB.AspNet.Identity.csproj.GhostDoc.xml
 /.vs/config/applicationhost.config
 /Properties/PublishProfiles/MongoDbAspNetIdentity.pubxml
-/web.config
-/web.Debug.config
-/web.Release.config
