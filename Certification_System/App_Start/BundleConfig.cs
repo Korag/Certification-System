@@ -24,8 +24,7 @@ namespace Certification_System
 
             bundles.Add(new StyleBundle("~/Content/css").Include(
                       "~/Content/bootstrap.css",
-                      "~/Content/site.css",
-                      "~/Content/style.min.css"));
+                      "~/Content/site.css"));
         }
     }
 }
