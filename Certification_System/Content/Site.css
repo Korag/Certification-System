@@ -1,6 +1,6 @@
 ﻿body {
-    padding-top: 50px;
-    padding-bottom: 20px;
+    /*padding-top: 50px;*/
+    /*padding-bottom: 20px;*/
 }
 
 /* Set padding to keep content from hitting the edges */
@@ -23,6 +23,41 @@ textarea {
     max-width: 280px;
 }
 
-.active{
-    color
+#top-bar-wrap {
+    background-color: #252525;
+    color: #ffffff;
+    font-size: 12px;
 }
+
+#copyright {
+    float: none;
+    width: 100%;
+    text-align: center;
+    padding-left: 0;
+    padding-right: 0;
+}
+
+#footer-bottom{
+    padding-bottom: 5px;
+    padding-top: 5px;
+    background-color: #000000;
+}
+
+.dropdown-menu a:hover {
+    background-color: #99ccff;
+    color:#ffffff;
+}
+
+#navbarDropdown:hover {
+    color: #4162ce;
+}
+
+#navbarItem:hover {
+    color:#4162ce;
+}
+
+.navbar-light .navbar-nav .show > .nav-link, .navbar-light .navbar-nav .active > .nav-link, .navbar-light .navbar-nav .nav-link.show, .navbar-light .navbar-nav .nav-link.active {
+    color: #4162ce;
+}
+
+
