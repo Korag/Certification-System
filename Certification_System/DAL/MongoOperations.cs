@@ -22,7 +22,7 @@ namespace Certification_System.DAL
         }
 
         #region Methods
-        private List<IdentityUser> GetUsers()
+        public List<IdentityUser> GetUsers()
         {
             _users = _context.db.GetCollection<IdentityUser>(_usersCollectionName);
             return _users.AsQueryable().ToList();
