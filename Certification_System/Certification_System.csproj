@@ -208,6 +208,8 @@
     <Content Include="Content\bootstrap-reboot.min.css" />
     <Content Include="Content\bootstrap.css" />
     <Content Include="Content\bootstrap.min.css" />
+    <Content Include="Content\Img\favicon.ico" />
+    <Content Include="Content\Img\logo_ziad.png" />
     <Content Include="Content\style.min.css" />
     <Content Include="favicon.ico" />
     <Content Include="Global.asax" />
@@ -296,6 +298,7 @@
     <Content Include="Scripts\popper.js.map" />
     <Content Include="Scripts\popper-utils.min.js.map" />
     <Content Include="Scripts\popper-utils.js.map" />
+    <Content Include="Views\Shared\_CertificationSystemBanner.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Data\" />
