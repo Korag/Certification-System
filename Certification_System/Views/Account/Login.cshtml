@@ -1,8 +1,10 @@
 ﻿@using Certification_System.Models
 @model LoginViewModel
 @{
-    ViewBag.Title = "Log in";
+    ViewBag.Title = "Logowanie";
 }
+
+@{Html.RenderPartial("_CertificationSystemBanner");}
 
 <h2>@ViewBag.Title.</h2>
 <div class="row">
@@ -11,7 +13,7 @@
             @using (Html.BeginForm("Login", "Account", new { ReturnUrl = ViewBag.ReturnUrl }, FormMethod.Post, new { @class = "form-horizontal", role = "form" }))
             {
                 @Html.AntiForgeryToken()
-                <h4>Use a local account to log in.</h4>
+                <h4>Zaloguj się na swoje konto.</h4>
                 <hr />
                 <div class="form-group">
                     <div class="col-6 m-auto p-0">
@@ -47,19 +49,19 @@
                 </div>
                 <div class="form-group">
                     <div class="col-6 m-auto p-0">
-                        <input type="submit" value="Log in" class="btn btn-primary" />
+                        <input type="submit" value="Zaloguj" class="btn btn-primary" />
                     </div>
                 </div>
                 <p class="row justify-content-center">
-                    @Html.ActionLink("Register as a new user", "Register")
+                    @Html.ActionLink("Nie posiadasz konta? Zarejestruj się.", "Register")
                 </p>
                 <div class="row justify-content-center">
                     @Html.ValidationSummary("", new { @class = "text-danger" })
                 </div>
                 @* Enable this once you have account confirmation enabled for password reset functionality
-            <p>
-                @Html.ActionLink("Forgot your password?", "ForgotPassword")
-            </p>*@
+                    <p>
+                        @Html.ActionLink("Forgot your password?", "ForgotPassword")
+                    </p>*@
             }
         </section>
     </div>

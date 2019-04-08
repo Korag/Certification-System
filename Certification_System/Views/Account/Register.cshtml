@@ -1,7 +1,9 @@
 ﻿@model Certification_System.Models.RegisterViewModel
 @{
-    ViewBag.Title = "Register";
+    ViewBag.Title = "Rejestracja";
 }
+
+@{Html.RenderPartial("_CertificationSystemBanner");}
 
 <h2>@ViewBag.Title.</h2>
 
@@ -9,7 +11,7 @@
 {
 
     @Html.AntiForgeryToken()
-    <h4>Create a new account.</h4>
+    <h4>Utwórz nowe konto.</h4>
     <hr />
     <div class="form-group form-group">
         <div class="col-6 m-auto p-0">
@@ -43,7 +45,7 @@
     </div>
     <div class="form-group">
         <div class="col-6 m-auto p-0">
-            <input type="submit" class="btn btn-primary" value="Register" />
+            <input type="submit" class="btn btn-primary" value="Zarejestruj" />
         </div>
     </div>
     <div class="row justify-content-center">
