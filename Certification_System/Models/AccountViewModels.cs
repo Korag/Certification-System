@@ -79,6 +79,10 @@ namespace Certification_System.Models
         [Display(Name = "Potwierdź hasło")]
         [Compare("Password", ErrorMessage = "The password and confirmation password do not match.")]
         public string ConfirmPassword { get; set; }
+
+        [Required]
+        [Display(Name = "Imię")]
+        public string FirstName { get; set; }
     }
 
     public class ResetPasswordViewModel
