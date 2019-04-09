@@ -87,6 +87,8 @@ namespace MongoDB.AspNet.Identity
         /// </summary>
         public bool TwoFactorEnabled { get; set; }
 
+        public string FirstName { get; set; }
+
         /// <summary>
         /// Initializes a new instance of the <see cref="IdentityUser"/> class.
         /// </summary>
