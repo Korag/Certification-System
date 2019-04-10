@@ -89,14 +89,28 @@ namespace MongoDB.AspNet.Identity
 
         public string FirstName { get; set; }
 
+        public string LastName { get; set; }
+
+        public string Country { get; set; }
+
+        public string City { get; set; }
+
+        public string PostCode { get; set; }
+
+        public string Address { get; set; }
+
+        public string NumberOfApartment { get; set; }
+
+        public string DateOfBirth { get; set; }
+
         /// <summary>
         /// Initializes a new instance of the <see cref="IdentityUser"/> class.
         /// </summary>
         public IdentityUser()
 		{
-			this.Claims = new List<IdentityUserClaim>();
+			//this.Claims = new List<IdentityUserClaim>();
 			this.Roles = new List<string>();
-			this.Logins = new List<UserLoginInfo>();
+			//this.Logins = new List<UserLoginInfo>();
 		}
 
         /// <summary>

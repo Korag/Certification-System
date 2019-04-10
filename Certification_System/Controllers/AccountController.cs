@@ -152,7 +152,10 @@ namespace Certification_System.Controllers
         {
             if (ModelState.IsValid)
             {
-                var user = new ApplicationUser { UserName = model.Email, Email = model.Email, FirstName = model.FirstName};
+                var user = new ApplicationUser { UserName = model.Email, Email = model.Email,
+                    FirstName = model.FirstName, LastName = model.LastName , Country = model.Country,
+                    City = model.City, PostCode = model.PostCode, Address = model.Address, NumberOfApartment = model.NumberOfApartment,
+                    DateOfBirth = model.DateOfBirth};
                 var result = await UserManager.CreateAsync(user, model.Password);
                 if (result.Succeeded)
                 {
