@@ -11,6 +11,10 @@ namespace Certification_System.Controllers
     {
         public ActionResult Index()
         {
+            if (!Request.IsAuthenticated)
+            {
+                return RedirectToAction("Login", "Account");
+            }
             return View();
         }
 
