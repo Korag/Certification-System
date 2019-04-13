@@ -3,10 +3,6 @@ Microsoft Visual Studio Solution File, Format Version 12.00
 # Visual Studio 15
 VisualStudioVersion = 15.0.28307.421
 MinimumVisualStudioVersion = 10.0.40219.1
-Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Test1", "Test1\Test1.csproj", "{10FD3307-DC6A-4D37-A10C-5B9310255D9A}"
-EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Test2", "Test2\Test2.csproj", "{9DFE4AF9-618A-4B57-9ACC-2E320BDC92DD}"
-EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Certification_System", "Certification_System\Certification_System.csproj", "{45919CA8-3BF0-48FA-8619-44F0C7AB3337}"
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "MongoDB.AspNet.Identity", "MongoDB.AspNet.Identity\MongoDB.AspNet.Identity.csproj", "{0FF87680-235F-4231-8302-9BF6FCAC7476}"
@@ -17,14 +13,6 @@ Global
 		Release|Any CPU = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(ProjectConfigurationPlatforms) = postSolution
-		{10FD3307-DC6A-4D37-A10C-5B9310255D9A}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
-		{10FD3307-DC6A-4D37-A10C-5B9310255D9A}.Debug|Any CPU.Build.0 = Debug|Any CPU
-		{10FD3307-DC6A-4D37-A10C-5B9310255D9A}.Release|Any CPU.ActiveCfg = Release|Any CPU
-		{10FD3307-DC6A-4D37-A10C-5B9310255D9A}.Release|Any CPU.Build.0 = Release|Any CPU
-		{9DFE4AF9-618A-4B57-9ACC-2E320BDC92DD}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
-		{9DFE4AF9-618A-4B57-9ACC-2E320BDC92DD}.Debug|Any CPU.Build.0 = Debug|Any CPU
-		{9DFE4AF9-618A-4B57-9ACC-2E320BDC92DD}.Release|Any CPU.ActiveCfg = Release|Any CPU
-		{9DFE4AF9-618A-4B57-9ACC-2E320BDC92DD}.Release|Any CPU.Build.0 = Release|Any CPU
 		{45919CA8-3BF0-48FA-8619-44F0C7AB3337}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
 		{45919CA8-3BF0-48FA-8619-44F0C7AB3337}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{45919CA8-3BF0-48FA-8619-44F0C7AB3337}.Release|Any CPU.ActiveCfg = Release|Any CPU
