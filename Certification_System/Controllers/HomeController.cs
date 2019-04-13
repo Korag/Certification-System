@@ -1,4 +1,5 @@
-﻿using System;
+﻿using Microsoft.AspNet.Identity;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Web;
@@ -13,10 +14,11 @@ namespace Certification_System.Controllers
             return View();
         }
 
+        [Authorize(Roles = "Admin")]
         public ActionResult About()
         {
             ViewBag.Message = "Your application description page.";
-
+         
             return View();
         }
 
