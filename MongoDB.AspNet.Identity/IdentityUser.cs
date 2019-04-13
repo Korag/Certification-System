@@ -108,9 +108,9 @@ namespace MongoDB.AspNet.Identity
         /// </summary>
         public IdentityUser()
 		{
-			//this.Claims = new List<IdentityUserClaim>();
+			this.Claims = new List<IdentityUserClaim>();
 			this.Roles = new List<string>();
-			//this.Logins = new List<UserLoginInfo>();
+			this.Logins = new List<UserLoginInfo>();
 		}
 
         /// <summary>
