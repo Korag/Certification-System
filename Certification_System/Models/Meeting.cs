@@ -14,6 +14,7 @@ namespace Certification_System.Models
         public string Id { get; set; }
         public DateTime DateOfMeeting { get; set; }
         public List<string> AttendanceList { get; set; }
+        public object Instructor { get; set; }
         public string Country { get; set; }
         public string City { get; set; }
         public string Address { get; set; }
