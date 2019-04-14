@@ -6,7 +6,7 @@ using System.Web.Mvc;
 using Microsoft.AspNet.Identity;
 using Microsoft.AspNet.Identity.Owin;
 using Microsoft.Owin.Security;
-using Certification_System.Models;
+using Certification_System.ViewModels;
 
 namespace Certification_System.Controllers
 {
