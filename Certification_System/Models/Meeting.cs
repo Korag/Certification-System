@@ -2,8 +2,6 @@
 using MongoDB.Bson.Serialization.Attributes;
 using System;
 using System.Collections.Generic;
-using System.Linq;
-using System.Web;
 
 namespace Certification_System.Models
 {
@@ -22,6 +20,6 @@ namespace Certification_System.Models
         public string NumberOfApartment { get; set; }
 
         public ICollection<string> AttendanceList { get; set; }
-        public ICollection<string> InstructorId { get; set; }
+        public ICollection<string> Instructor { get; set; }
     }
 }
