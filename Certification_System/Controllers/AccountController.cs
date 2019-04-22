@@ -431,6 +431,49 @@ namespace Certification_System.Controllers
             base.Dispose(disposing);
         }
 
+        //
+        // GET: /Account/GenerateMenu
+        [Authorize]
+        public ActionResult GenerateMenu()
+        {
+            if (this.User.IsInRole("Admin"))
+            {
+                return PartialView("_AdminMenu");
+            }
+            else if (this.User.IsInRole("Company"))
+            {
+                return PartialView("_CompanyMenu");
+            }
+            else 
+            {
+                return PartialView("_WorkerMenu");
+            }
+        }
+
+        //
+        // GET: /Account/_AdminMenu
+        [Authorize(Roles = "Admin")]
+        public ActionResult _AdminMenu()
+        {
+            return PartialView();
+        }
+
+        //
+        // GET: /Account/_CompanyMenu
+        [Authorize(Roles = "Company")]
+        public ActionResult _CompanyMenu()
+        {
+            return PartialView();
+        }
+
+        //
+        // GET: /Account/_WorkerMenu
+        [Authorize(Roles = "Worker")]
+        public ActionResult _WorkerMenu()
+        {
+            return PartialView();
+        }
+
         #region Helpers
         // Used for XSRF protection when adding external logins
         private const string XsrfKey = "XsrfId";

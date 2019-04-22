@@ -24,178 +24,22 @@
 
     @if (Request.IsAuthenticated)
     {
-        // Menu Pracownik
-        @*<nav class="navbar navbar-expand-lg sticky-top navbar navbar-light bg-light font-weight-bold" style=" opacity: 0.95; font-size:18px">
-                <img src="http://szkolenie.ziad.bielsko.pl/wp-content/uploads/elementor/thumbs/LOGO-ZIAD-u-e1552386865677-o4rd90ugx6yz8nf4i45ijoxmsw4smd9zrcb27yfta8.png" />
-                <a class="navbar-brand ml-2" style="font-size: 18px" href="#">Certification Platform v0.2 alpha PR</a>
-                <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
-                    <span class="navbar-toggler-icon"></span>
-                </button>
-                <div class="collapse navbar-collapse" id="navbarSupportedContent">
-                    <ul class="navbar-nav mr-auto">
-                        <li class="nav-item dropdown">
-                            <a class="nav-link dropdown-toggle" href="#" id="navbarDropdown" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">Certyfikaty</a>
-                            <div class="dropdown-menu">
-                                @Html.ActionLink("Moje certyfikaty", "Index", "Home", htmlAttributes: new { @class = "dropdown-item" })
-                                @Html.ActionLink("Generuj kod QR", "Index", "Home", htmlAttributes: new { @class = "dropdown-item" })
-                            </div>
-                        </li>
-                        <li class="nav-item dropdown">
-                            <a class="nav-link dropdown-toggle" href="#" id="navbarDropdown" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">Szkolenia</a>
-                            <div class="dropdown-menu">
-                                @Html.ActionLink("Moje aktywne szkolenia", "Index", "Home", htmlAttributes: new { @class = "dropdown-item" })
-                                @Html.ActionLink("Moje archiwalne szkolenia", "Index", "Home", htmlAttributes: new { @class = "dropdown-item" })
-                                @Html.ActionLink("Dostępne szkolenia", "Index", "Home", htmlAttributes: new { @class = "dropdown-item" })
-                                @Html.ActionLink("Historia szkoleń", "Index", "Home", htmlAttributes: new { @class = "dropdown-item" })
-                                @Html.ActionLink("Zapisz się na szkolenie", "Index", "Home", htmlAttributes: new { @class = "dropdown-item" })
-                            </div>
-                        </li>
-                        <li class="nav-item">
-                            <a class="nav-link" id="navbarItem" href="#">Kalendarz</a>
-                        </li>
-                    </ul>
-                    <form class="form-inline">
-                            <div class="md-form my-0">
-                                <input class="form-control mr-sm-2" type="text" placeholder="Search" aria-label="Search">
-                                <button class="btn btn-outline-success my-2 my-sm-0 mr-2" type="submit">Search</button>
-                            </div>
-                        </form>
-                    @Html.Partial("_LoginPartial")
-                </div>
-            </nav>*@
+        //@Html.Action("GenerateMenu", "Account");
 
-        // Menu Pracodawca
+        // Menu Pracownik
         if (this.User.IsInRole("Worker"))
         {
-        <nav class="navbar navbar-expand-lg sticky-top navbar navbar-light bg-light font-weight-bold" style=" opacity: 0.95; font-size:18px">
-            <img src="http://szkolenie.ziad.bielsko.pl/wp-content/uploads/elementor/thumbs/LOGO-ZIAD-u-e1552386865677-o4rd90ugx6yz8nf4i45ijoxmsw4smd9zrcb27yfta8.png" />
-            <a class="navbar-brand ml-2" style="font-size: 18px" href="#">Certification Platform v0.2 alpha PW</a>
-            <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
-                <span class="navbar-toggler-icon"></span>
-            </button>
-            <div class="collapse navbar-collapse" id="navbarSupportedContent">
-                <ul class="navbar-nav mr-auto">
-                    <li class="nav-item dropdown">
-                        <a class="nav-link dropdown-toggle" href="#" id="navbarDropdown" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">Certyfikaty</a>
-                        <div class="dropdown-menu">
-                            @Html.ActionLink("Moje certyfikaty", "Index", "Home", htmlAttributes: new { @class = "dropdown-item" })
-                            @Html.ActionLink("Generuj kod QR", "Index", "Home", htmlAttributes: new { @class = "dropdown-item" })
-                            @if (this.User.IsInRole("Company"))
-                            {
-                                <div class="dropdown-divider"></div>
-                                @Html.ActionLink("Wyszukaj certyfikat pracownika", "Index", "Home", htmlAttributes: new { @class = "dropdown-item" })
-                                @Html.ActionLink("Weryfikuj certyfikat po numerze", "Index", "Home", htmlAttributes: new { @class = "dropdown-item" })
-                                @Html.ActionLink("Weryfikuj certyfikat QR", "Index", "Home", htmlAttributes: new { @class = "dropdown-item" })
-                                @Html.ActionLink("Wyświetl listę pracowników z danym certyfikatem", "Index", "Home", htmlAttributes: new { @class = "dropdown-item" })
-                            }
-                        </div>
-                    </li>
-                    <li class="nav-item dropdown">
-                        <a class="nav-link dropdown-toggle" href="#" id="navbarDropdown" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">Szkolenia</a>
-                        <div class="dropdown-menu">
-                            @Html.ActionLink("Moje aktywne szkolenia", "Index", "Home", htmlAttributes: new { @class = "dropdown-item" })
-                            @Html.ActionLink("Moje archiwalne szkolenia", "Index", "Home", htmlAttributes: new { @class = "dropdown-item" })
-                            @Html.ActionLink("Dostępne szkolenia", "Index", "Home", htmlAttributes: new { @class = "dropdown-item" })
-                            @Html.ActionLink("Zapisz się na szkolenie", "Index", "Home", htmlAttributes: new { @class = "dropdown-item" })
-                            @if (this.User.IsInRole("Company"))
-                            {
-                                <div class="dropdown-divider"></div>
-                                @Html.ActionLink("Aktywne szkolenia pracowników", "Index", "Home", htmlAttributes: new { @class = "dropdown-item" })
-                                @Html.ActionLink("Aktywne szkolenia wybranego pracownika", "Index", "Home", htmlAttributes: new { @class = "dropdown-item" })
-                                @Html.ActionLink("Historia szkoleń wybranego pracownika", "Index", "Home", htmlAttributes: new { @class = "dropdown-item" })
-                                @Html.ActionLink("Zapisz pracowników na szkolenie", "Index", "Home", htmlAttributes: new { @class = "dropdown-item" })
-                                @Html.ActionLink("Usuń pracownika z aktywnego szkolenia", "Index", "Home", htmlAttributes: new { @class = "dropdown-item" })
-                            }
-                        </div>
-                    </li>
-                    @if (this.User.IsInRole("Company"))
-                    {
-                        <li class="nav-item dropdown">
-                            <a class="nav-link dropdown-toggle" href="#" id="navbarDropdown" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">Zarządzaj</a>
-                            <div class="dropdown-menu">
-                                @Html.ActionLink("Utwórz konto dla pracownika", "Index", "Home", htmlAttributes: new { @class = "dropdown-item" })
-                                @Html.ActionLink("Zatwierdź zgłoszenia o przypisanie do przedsiębiorstwa", "Index", "Home", htmlAttributes: new { @class = "dropdown-item" })
-                                @Html.ActionLink("Usuń pracownika z przedsiębiorstwa", "Index", "Home", htmlAttributes: new { @class = "dropdown-item" })
-                                @Html.ActionLink("Nadaj pracownikowi uprawnienia zarządzania", "Index", "Home", htmlAttributes: new { @class = "dropdown-item" })
-                                @Html.ActionLink("Przeglądaj zdarzenia", "Index", "Home", htmlAttributes: new { @class = "dropdown-item" })
-                            </div>
-                        </li>
-                    }
-                    <li class="nav-item">
-                        <a class="nav-link" id="navbarItem" href="#">Kalendarz</a>
-                    </li>
-                </ul>
-                @*<form class="form-inline">
-                        <div class="md-form my-0">
-                            <input class="form-control mr-sm-2" type="text" placeholder="Search" aria-label="Search">
-                            <button class="btn btn-outline-success my-2 my-sm-0 mr-2" type="submit">Search</button>
-                        </div>
-                    </form>*@
-                @Html.Partial("_LoginPartial")
-            </div>
-        </nav>
+            @Html.Action("_WorkerMenu", "Account")
         }
-
-        // Menu Admin
-        if (this.User.IsInRole("Admin"))
+        // Menu Pracodawca
+        else if (this.User.IsInRole("Company"))
         {
-            <nav class="navbar navbar-expand-lg sticky-top navbar navbar-light bg-light font-weight-bold" style=" opacity: 0.95; font-size:18px">
-                <img src="http://szkolenie.ziad.bielsko.pl/wp-content/uploads/elementor/thumbs/LOGO-ZIAD-u-e1552386865677-o4rd90ugx6yz8nf4i45ijoxmsw4smd9zrcb27yfta8.png" />
-                <a class="navbar-brand ml-2" style="font-size: 18px" href="#">Certification Platform v0.2 alpha DM</a>
-                <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
-                    <span class="navbar-toggler-icon"></span>
-                </button>
-                <div class="collapse navbar-collapse" id="navbarSupportedContent">
-                    <ul class="navbar-nav mr-auto">
-                        <li class="nav-item dropdown">
-                            <a class="nav-link dropdown-toggle" href="#" id="navbarDropdown" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">Certyfikaty</a>
-                            <div class="dropdown-menu">
-                                @Html.ActionLink("Wyszukaj certyfikat pracownika", "Index", "Home", htmlAttributes: new { @class = "dropdown-item" })
-                                @Html.ActionLink("Weryfikuj certyfikat po numerze", "Index", "Home", htmlAttributes: new { @class = "dropdown-item" })
-                                @Html.ActionLink("Weryfikuj certyfikat QR", "Index", "Home", htmlAttributes: new { @class = "dropdown-item" })
-                                @Html.ActionLink("Wyświetl listę pracowników z danym certyfikatem", "Index", "Home", htmlAttributes: new { @class = "dropdown-item" })
-                                <div class="dropdown-divider"></div>
-                                @Html.ActionLink("Przyznaj pracownikowi certyfikat", "Index", "Home", htmlAttributes: new { @class = "dropdown-item" })
-                                @Html.ActionLink("Utwórz nowy certyfikat", "Index", "Home", htmlAttributes: new { @class = "dropdown-item" })
-                            </div>
-                        </li>
-                        <li class="nav-item dropdown">
-                            <a class="nav-link dropdown-toggle" href="#" id="navbarDropdown" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">Szkolenia</a>
-                            <div class="dropdown-menu">
-                                @Html.ActionLink("Statystyki aktywnych szkoleń", "Index", "Home", htmlAttributes: new { @class = "dropdown-item" })
-                                @Html.ActionLink("Aktywne szkolenia wybranego pracownika", "Index", "Home", htmlAttributes: new { @class = "dropdown-item" })
-                                @Html.ActionLink("Historia szkoleń wybranego pracownika", "Index", "Home", htmlAttributes: new { @class = "dropdown-item" })
-                                @Html.ActionLink("Zapisz pracownika na szkolenie", "Index", "Home", htmlAttributes: new { @class = "dropdown-item" })
-                                <div class="dropdown-divider"></div>
-                                @Html.ActionLink("Dodaj szkolenie", "Index", "Home", htmlAttributes: new { @class = "dropdown-item" })
-                                @Html.ActionLink("Dodaj spotkanie do szkolenia", "Index", "Home", htmlAttributes: new { @class = "dropdown-item" })
-                                @Html.ActionLink("Modyfikuj szkolenie", "Index", "Home", htmlAttributes: new { @class = "dropdown-item" })
-                                @Html.ActionLink("Zarządzaj zgłoszeniami na szkolenie", "Index", "Home", htmlAttributes: new { @class = "dropdown-item" })
-                            </div>
-                        </li>
-                        <li class="nav-item dropdown">
-                            <a class="nav-link dropdown-toggle" href="#" id="navbarDropdown" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">Przedsiębiorstwa</a>
-                            <div class="dropdown-menu">
-                                @Html.ActionLink("Przeglądaj przedsiębiorstwa", "Index", "Home", htmlAttributes: new { @class = "dropdown-item" })
-                                @Html.ActionLink("Utwórz przedsiębiorstwo", "Index", "Home", htmlAttributes: new { @class = "dropdown-item" })
-                                @Html.ActionLink("Modyfikuj dane przedsiębiorstwa", "Index", "Home", htmlAttributes: new { @class = "dropdown-item" })
-                                @Html.ActionLink("Nadaj uprawnienie do zarządzania przedsiębiorstwem", "Index", "Home", htmlAttributes: new { @class = "dropdown-item" })
-                                @Html.ActionLink("Przeglądaj zdarzenia", "Index", "Home", htmlAttributes: new { @class = "dropdown-item" })
-                            </div>
-                        </li>
-                        <li class="nav-item">
-                            <a class="nav-link" id="navbarItem" href="#">Kalendarz</a>
-                        </li>
-                    </ul>
-                    @*<form class="form-inline">
-                            <div class="md-form my-0">
-                                <input class="form-control mr-sm-2" type="text" placeholder="Search" aria-label="Search">
-                                <button class="btn btn-outline-success my-2 my-sm-0 mr-2" type="submit">Search</button>
-                            </div>
-                        </form>*@
-                    @Html.Partial("_LoginPartial")
-                </div>
-            </nav>
+            @Html.Action("_CompanyMenu", "Account");
+        }
+        // Menu Admin
+        else if (this.User.IsInRole("Admin"))
+        {
+            @Html.Action("_AdminMenu", "Account");
         }
     }
     else
