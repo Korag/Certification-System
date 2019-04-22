@@ -202,6 +202,7 @@
     <Compile Include="Models\Certificate.cs" />
     <Compile Include="Models\Company.cs" />
     <Compile Include="Models\Course.cs" />
+    <Compile Include="Models\GivenCertificate.cs" />
     <Compile Include="Models\Instructor.cs" />
     <Compile Include="Models\Meeting.cs" />
     <Compile Include="ViewModels\AccountViewModels.cs" />

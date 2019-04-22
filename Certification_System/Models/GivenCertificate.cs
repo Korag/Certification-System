@@ -7,16 +7,17 @@ using System.Web;
 
 namespace Certification_System.Models
 {
-    public class Certificate
+    public class GivenCertificate
     {
         [BsonId]
         [BsonRepresentation(BsonType.ObjectId)]
         public string Id { get; set; }
 
-        public string CertificateIdentificator { get; set; }
-        public string Name { get; set; }
-        public string Description { get; set; }
+        public string ConcreteCertificateIdentificator { get; set; }
+        public DateTime ReceiptDate { get; set; }
+        public DateTime Expires { get; set; }
 
-        public ICollection<string> Branches { get; set; }
+        public string CourseId { get; set; }
+        public string CertificateId { get; set; }
     }
 }
