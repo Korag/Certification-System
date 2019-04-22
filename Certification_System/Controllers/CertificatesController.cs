@@ -1,4 +1,5 @@
 ﻿using Certification_System.DAL;
+using Certification_System.Models;
 using Certification_System.ViewModels;
 using System;
 using System.Collections.Generic;
@@ -23,10 +24,25 @@ namespace Certification_System.Controllers
         {
             AddCertificateToDbViewModel addedCertificate = new AddCertificateToDbViewModel
             {
-                Branches = _context.GetBranches()
+                AvailableBranches = new List<SelectListItem>(),
+                SelectedBranches = new List<string>()
             };
 
-            return View();
+            addedCertificate.AvailableBranches = _context.GetBranchesAsSelectList().ToList();
+
+            return View(addedCertificate);
+        }
+
+        // GET: AddNewCertificateConfirmation
+        [Authorize(Roles = "Admin")]
+        public ActionResult AddNewCertificateConfirmation(string CertificateIdentificator)
+        {
+            if (CertificateIdentificator != null)
+            {
+                var Certificate = _context.GetCertificateByCertId(CertificateIdentificator);
+                return View(Certificate);
+            }
+            return RedirectToAction(nameof(AddNewCertificate));
         }
 
         // POST: AddNewCertificate
@@ -35,7 +51,28 @@ namespace Certification_System.Controllers
         [HttpPost]
         public ActionResult AddNewCertificate(AddCertificateToDbViewModel addedCertificate)
         {
-            return View();
+            if (ModelState.IsValid)
+            {
+                Certificate certificate = new Certificate
+                {
+                    Name = addedCertificate.Name,
+                    CertificateIdentificator = addedCertificate.CertificateIdentificator,
+                    Description = addedCertificate.Description,
+
+                    Branches = addedCertificate.SelectedBranches
+                };
+
+                _context.AddCertificate(certificate);
+
+                return RedirectToAction("AddNewCertificateConfirmation", new { CertificateIdentificator = addedCertificate.CertificateIdentificator });
+            }
+
+            addedCertificate.AvailableBranches = _context.GetBranchesAsSelectList().ToList();
+            if (addedCertificate.SelectedBranches == null)
+            {
+                addedCertificate.SelectedBranches = new List<string>();
+            }
+            return View(addedCertificate);
         }
 
 
