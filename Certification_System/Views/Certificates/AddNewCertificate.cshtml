@@ -38,10 +38,28 @@
     </div>
 
     <div class="form-group">
-        @Html.LabelFor(model => model.Description, htmlAttributes: new { @class = "control-label col-md-2" })
+        @Html.LabelFor(model => model.AvailableBranches, htmlAttributes: new { @class = "control-label col-md-2" })
         <div class="col-10">
-            @Html.DropDownListFor(model => model.Branches.Select(z=>z.Name), Model.BranchesChosen, new { @class = "text-danger" })
-            @Html.ValidationMessageFor(model => model.Description, "", new { @class = "text-danger" })
+            @*@Html.DropDownListFor(model => Model.SelectedBranches, Model.AvailableBranches, new { @class = "text-danger" })
+            @Html.ListBoxFor(model => Model.SelectedBranches, Model.AvailableBranches, new { @class = "text-danger" })*@
+      
+            @foreach (var availableBranch in Model.AvailableBranches)
+            {
+            <div class="checkbox">
+                <label>
+                    <input type="checkbox"
+                           name="SelectedBranches"
+                           value="@availableBranch.Value"
+                           @if (Model.SelectedBranches.Contains(availableBranch.Value))
+                           {
+                               <text> checked </text>
+                           } 
+                           />
+                    @availableBranch.Text
+                    </label>
+                </div>
+            }
+            @Html.ValidationMessageFor(model => model.SelectedBranches, "", new { @class = "text-danger" })
         </div>
     </div>
 
@@ -51,7 +69,7 @@
 
     <div class="form-group">
         <div class="col-12 row justify-content-center">
-            <input type="submit" value="Create" class="btn btn-primary" />
+            <input type="submit" value="Utwórz" class="btn btn-primary" />
         </div>
     </div>
 </div>
