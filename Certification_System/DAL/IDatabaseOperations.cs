@@ -1,4 +1,5 @@
-﻿using MongoDB.AspNet.Identity;
+﻿using Certification_System.Models;
+using MongoDB.AspNet.Identity;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -6,8 +7,16 @@ using System.Web;
 
 namespace Certification_System.DAL
 {
-    interface IDatabaseOperations
+    public interface IDatabaseOperations
     {
-        List<IdentityUser> GetUsers();
+        #region Users
+        ICollection<IdentityUser> GetUsers();
+        #endregion
+    
+        #region Branches
+        ICollection<Branch> GetBranches();
+        void AddBranch(Branch branch);
+        #endregion
+
     }
 }
