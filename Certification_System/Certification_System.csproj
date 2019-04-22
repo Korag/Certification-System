@@ -318,6 +318,7 @@
     <Content Include="Views\Shared\_CompanyMenu.cshtml" />
     <Content Include="Views\Shared\_WorkerMenu.cshtml" />
     <Content Include="Views\Certificates\AddNewCertificate.cshtml" />
+    <Content Include="Views\Certificates\AddNewCertificateConfirmation.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Data\" />
