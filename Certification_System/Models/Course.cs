@@ -12,9 +12,12 @@ namespace Certification_System.Models
         [BsonId]
         [BsonRepresentation(BsonType.ObjectId)]
         public string Id { get; set; }
+
         public string Name { get; set; }
-        public DateTime StartDate { get; set; }
-        public DateTime EndDate { get; set; }
-        public List<string> Meetings { get; set; }
+        public DateTime DateOfStart { get; set; }
+        public DateTime DateOfEnd { get; set; }
+
+        public ICollection<string> Branches { get; set; }
+        public ICollection<string> Meetings { get; set; }
     }
 }
