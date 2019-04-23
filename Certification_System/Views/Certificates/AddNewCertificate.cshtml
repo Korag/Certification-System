@@ -1,18 +1,14 @@
 ﻿@model Certification_System.ViewModels.AddCertificateToDbViewModel
-
 @{
     ViewBag.Title = "AddNewCertificate";
 }
-
 <h2>Dodaj nowy certyfikat</h2>
 <hr />
-
 @using (Html.BeginForm())
 {
     @Html.AntiForgeryToken()
 
     <div class="form-horizontal">
-        @Html.ValidationSummary(true, "", new { @class = "text-danger" })
         <div class="form-group">
             @Html.LabelFor(model => model.CertificateIdentificator, htmlAttributes: new { @class = "control-label col-md-2" })
             <div class="col-10">
@@ -20,7 +16,6 @@
                 @Html.ValidationMessageFor(model => model.CertificateIdentificator, "", new { @class = "text-danger" })
             </div>
         </div>
-
         <div class="form-group">
             @Html.LabelFor(model => model.Name, htmlAttributes: new { @class = "control-label col-md-2" })
             <div class="col-10">
@@ -28,7 +23,6 @@
                 @Html.ValidationMessageFor(model => model.Name, "", new { @class = "text-danger" })
             </div>
         </div>
-
         <div class="form-group">
             @Html.LabelFor(model => model.Description, htmlAttributes: new { @class = "control-label col-md-2" })
             <div class="col-10">
@@ -36,17 +30,14 @@
                 @Html.ValidationMessageFor(model => model.Description, "", new { @class = "text-danger" })
             </div>
         </div>
-
         <div class="form-group">
             @Html.LabelFor(model => model.AvailableBranches, htmlAttributes: new { @class = "control-label col-md-2" })
             <div class="col-10">
                 @*@Html.DropDownListFor(model => Model.SelectedBranches, Model.AvailableBranches, new { @class = "text-danger" })
-        @Html.ListBoxFor(model => Model.SelectedBranches, Model.AvailableBranches, new { @class = "text-danger" })*@
-
+                @Html.ListBoxFor(model => Model.SelectedBranches, Model.AvailableBranches, new { @class = "text-danger" })*@
                 <div class="btn-group btn-group-toggle" data-toggle="buttons">
                     @foreach (var availableBranch in Model.AvailableBranches)
                     {
-                        @*<div id="checkbox-list">*@
                         <label class="btn btn-outline-secondary mr-2">
                             <input type="checkbox"
                                    name="SelectedBranches"
@@ -58,14 +49,11 @@
 
                     }
                 </div>
-                    @Html.ValidationMessageFor(model => model.SelectedBranches, "", new { @class = "text-danger" })
-                </div>
             </div>
-
+        </div>
         <div class="row justify-content-center">
             @Html.ValidationSummary("", new { @class = "text-danger" })
         </div>
-
         <div class="form-group">
             <div class="col-12 row justify-content-center">
                 <input type="submit" value="Utwórz" class="btn btn-primary" />
@@ -73,7 +61,6 @@
         </div>
     </div>
 }
-
 <div>
     @Html.ActionLink("Back to List", "Index")
 </div>

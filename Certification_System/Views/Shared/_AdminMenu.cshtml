@@ -26,7 +26,7 @@
                     @Html.ActionLink("Historia szkoleń wybranego pracownika", "Index", "Home", htmlAttributes: new { @class = "dropdown-item" })
                     @Html.ActionLink("Zapisz pracownika na szkolenie", "Index", "Home", htmlAttributes: new { @class = "dropdown-item" })
                     <div class="dropdown-divider"></div>
-                    @Html.ActionLink("Dodaj szkolenie", "Index", "Home", htmlAttributes: new { @class = "dropdown-item" })
+                    @Html.ActionLink("Dodaj szkolenie", "AddNewCourse", new { controller = "Courses" }, htmlAttributes: new { @class = "dropdown-item" })
                     @Html.ActionLink("Dodaj spotkanie do szkolenia", "Index", "Home", htmlAttributes: new { @class = "dropdown-item" })
                     @Html.ActionLink("Modyfikuj szkolenie", "Index", "Home", htmlAttributes: new { @class = "dropdown-item" })
                     @Html.ActionLink("Zarządzaj zgłoszeniami na szkolenie", "Index", "Home", htmlAttributes: new { @class = "dropdown-item" })
