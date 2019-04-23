@@ -60,6 +60,20 @@ namespace Certification_System.DAL
             return SelectList;
         }
 
+        public ICollection<string> GetBranchesById(ICollection<string> BranchesId)
+        {
+            _branches = _context.db.GetCollection<Branch>(_branchCollectionName);
+            List<string> BranchesNames = new List<string>();
+
+            foreach (var branch in BranchesId)
+            {
+                var filter = Builders<Branch>.Filter.Eq(x => x.Id, branch);
+                BranchesNames.Add(_branches.Find<Branch>(filter).Project(z=> z.Name).FirstOrDefault());
+            }
+           
+            return BranchesNames.AsQueryable().ToList();
+        }
+
         public ICollection<Certificate> GetCertificates()
         {
             _certificates = _context.db.GetCollection<Certificate>(_certificatesCollectionName);

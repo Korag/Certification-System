@@ -18,6 +18,7 @@ namespace Certification_System.DAL
         ICollection<Branch> GetBranches();
         void AddBranch(Branch branch);
         ICollection<SelectListItem> GetBranchesAsSelectList();
+        ICollection<string> GetBranchesById(ICollection<string> BranchesId);
         #endregion
 
         #region Certificate
