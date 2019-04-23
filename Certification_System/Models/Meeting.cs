@@ -11,6 +11,8 @@ namespace Certification_System.Models
         [BsonRepresentation(BsonType.ObjectId)]
         public string Id { get; set; }
 
+        public string MeetingIdentificator { get; set; }
+
         public DateTime DateOfMeeting { get; set; }
 
         public string Country { get; set; }
