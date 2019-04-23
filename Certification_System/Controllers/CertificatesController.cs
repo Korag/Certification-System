@@ -22,15 +22,15 @@ namespace Certification_System.Controllers
         [Authorize(Roles = "Admin")]
         public ActionResult AddNewCertificate()
         {
-            AddCertificateToDbViewModel addedCertificate = new AddCertificateToDbViewModel
+            AddCertificateToDbViewModel newCertificate = new AddCertificateToDbViewModel
             {
                 AvailableBranches = new List<SelectListItem>(),
                 SelectedBranches = new List<string>()
             };
 
-            addedCertificate.AvailableBranches = _context.GetBranchesAsSelectList().ToList();
+            newCertificate.AvailableBranches = _context.GetBranchesAsSelectList().ToList();
 
-            return View(addedCertificate);
+            return View(newCertificate);
         }
 
         // GET: AddNewCertificateConfirmation
@@ -61,30 +61,30 @@ namespace Certification_System.Controllers
         [ValidateAntiForgeryToken]
         [Authorize(Roles = "Admin")]
         [HttpPost]
-        public ActionResult AddNewCertificate(AddCertificateToDbViewModel addedCertificate)
+        public ActionResult AddNewCertificate(AddCertificateToDbViewModel newCertificate)
         {
             if (ModelState.IsValid)
             {
                 Certificate certificate = new Certificate
                 {
-                    Name = addedCertificate.Name,
-                    CertificateIdentificator = addedCertificate.CertificateIdentificator,
-                    Description = addedCertificate.Description,
+                    Name = newCertificate.Name,
+                    CertificateIdentificator = newCertificate.CertificateIdentificator,
+                    Description = newCertificate.Description,
 
-                    Branches = addedCertificate.SelectedBranches
+                    Branches = newCertificate.SelectedBranches
                 };
 
                 _context.AddCertificate(certificate);
 
-                return RedirectToAction("AddNewCertificateConfirmation", new { CertificateIdentificator = addedCertificate.CertificateIdentificator });
+                return RedirectToAction("AddNewCertificateConfirmation", new { CertificateIdentificator = newCertificate.CertificateIdentificator });
             }
 
-            addedCertificate.AvailableBranches = _context.GetBranchesAsSelectList().ToList();
-            if (addedCertificate.SelectedBranches == null)
+            newCertificate.AvailableBranches = _context.GetBranchesAsSelectList().ToList();
+            if (newCertificate.SelectedBranches == null)
             {
-                addedCertificate.SelectedBranches = new List<string>();
+                newCertificate.SelectedBranches = new List<string>();
             }
-            return View(addedCertificate);
+            return View(newCertificate);
         }
 
 
