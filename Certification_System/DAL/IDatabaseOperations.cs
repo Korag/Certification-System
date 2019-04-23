@@ -27,5 +27,18 @@ namespace Certification_System.DAL
         Certificate GetCertificateByCertId(string certificateIdentificator);
         #endregion
 
+        #region Course
+        void AddCourse(Course course);
+        Course GetCourseByCourId(string courseIdentificator);
+        #endregion
+
+        #region Meeting
+        ICollection<Meeting> GetMeetingsById(ICollection<string> MeetingsId);
+        #endregion
+
+        #region Instructor
+        ICollection<Instructor> GetInstructorsById(ICollection<string> InstructorsId);
+        #endregion
+
     }
 }
