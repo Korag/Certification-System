@@ -40,7 +40,19 @@ namespace Certification_System.Controllers
             if (CertificateIdentificator != null)
             {
                 var Certificate = _context.GetCertificateByCertId(CertificateIdentificator);
-                return View(Certificate);
+
+                AddCertificateToDbViewModel addedCertificate = new AddCertificateToDbViewModel
+                {
+                    CertificateIdentificator = Certificate.CertificateIdentificator,
+                    Name = Certificate.Name,
+                    Description = Certificate.Description,
+                };
+
+                var BranchNames = _context.GetBranchesById(Certificate.Branches);
+
+                addedCertificate.SelectedBranches = BranchNames;
+
+                return View(addedCertificate);
             }
             return RedirectToAction(nameof(AddNewCertificate));
         }

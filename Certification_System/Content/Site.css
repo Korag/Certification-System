@@ -37,7 +37,7 @@ textarea {
     padding-right: 0;
 }
 
-#footer-bottom{
+#footer-bottom {
     padding-bottom: 5px;
     padding-top: 5px;
     background-color: #000000;
@@ -45,7 +45,7 @@ textarea {
 
 .dropdown-menu a:hover {
     background-color: #99ccff;
-    color:#ffffff;
+    color: #ffffff;
 }
 
 #navbarDropdown:hover {
@@ -53,11 +53,9 @@ textarea {
 }
 
 #navbarItem:hover {
-    color:#4162ce;
+    color: #4162ce;
 }
 
 .navbar-light .navbar-nav .show > .nav-link, .navbar-light .navbar-nav .active > .nav-link, .navbar-light .navbar-nav .nav-link.show, .navbar-light .navbar-nav .nav-link.active {
     color: #4162ce;
 }
-
-

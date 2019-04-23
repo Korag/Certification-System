@@ -1,4 +1,4 @@
-﻿@model Certification_System.Models.Certificate
+﻿@model Certification_System.ViewModels.AddCertificateToDbViewModel
 
 @{
     ViewBag.Title = "AddNewCertificateConfirmation";
@@ -6,9 +6,6 @@
 
 <h2 class="alert alert-success" role="alert">Dodano następujący certyfikat:</h2>
 
-<p>
-    @Html.ActionLink("Dodaj kolejny certyfikat", "AddNewCertificate")
-</p>
 <table class="table">
     <tr>
         <th>
@@ -20,7 +17,9 @@
         <th>
             @Html.DisplayNameFor(model => model.Description)
         </th>
-        <th></th>
+        <th>
+            @Html.DisplayNameFor(model => model.AvailableBranches)
+        </th>
     </tr>
 
     <tr>
@@ -35,7 +34,7 @@
         </td>
         <td>
             <ul>
-            @foreach (var branch in Model.Branches)
+            @foreach (var branch in Model.SelectedBranches)
             {
                 <li>@branch</li>
             }
@@ -47,3 +46,6 @@
         </td>
     </tr>
 </table>
+<p>
+    @Html.ActionLink("Dodaj kolejny certyfikat", "AddNewCertificate")
+</p>
