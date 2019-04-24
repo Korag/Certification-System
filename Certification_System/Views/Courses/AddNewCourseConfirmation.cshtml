@@ -53,67 +53,79 @@
     </tr>
 </table>
 
-<table class="table">
-    <tr>
-        <th>
-            @Html.DisplayNameFor(model => Model.MeetingsViewModels.FirstOrDefault().MeetingIdentificator)
-        </th>
-        <th>
-            @Html.DisplayNameFor(model => Model.MeetingsViewModels.FirstOrDefault().Country)
-        </th>
-        <th>
-            @Html.DisplayNameFor(model => Model.MeetingsViewModels.FirstOrDefault().City)
-        </th>
-        <th>
-            @Html.DisplayNameFor(model => Model.MeetingsViewModels.FirstOrDefault().PostCode)
-        </th>
-        <th>
-            @Html.DisplayNameFor(model => Model.MeetingsViewModels.FirstOrDefault().Address)
-        </th>
-        <th>
-            @Html.DisplayNameFor(model => Model.MeetingsViewModels.FirstOrDefault().NumberOfApartment)
-        </th>
-        <th>
-            @Html.DisplayNameFor(model => Model.MeetingsViewModels.FirstOrDefault().Instructor)
-        </th>
-    </tr>
+@if (Model.MeetingsViewModels.Count() != 0)
+{
+    <table class="table">
+        <tr>
+            Dodane spotkania w ramach kursu:
+        </tr>
+        <tr>
+            <th>
+                @Html.DisplayNameFor(model => Model.MeetingsViewModels.FirstOrDefault().MeetingIdentificator)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => Model.MeetingsViewModels.FirstOrDefault().DateOfMeeting)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => Model.MeetingsViewModels.FirstOrDefault().Country)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => Model.MeetingsViewModels.FirstOrDefault().City)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => Model.MeetingsViewModels.FirstOrDefault().PostCode)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => Model.MeetingsViewModels.FirstOrDefault().Address)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => Model.MeetingsViewModels.FirstOrDefault().NumberOfApartment)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => Model.MeetingsViewModels.FirstOrDefault().Instructor)
+            </th>
+        </tr>
 
-    @foreach (var Meeting in Model.MeetingsViewModels)
-    {
-    <tr>
-        <td>
-            @Html.DisplayFor(model => Meeting.MeetingIdentificator)
-        </td>
-        <td>
-            @Html.DisplayFor(model => Meeting.Country)
-        </td>
-        <td>
-            @Html.DisplayFor(model => Meeting.City)
-        </td>
-        <td>
-            @Html.DisplayFor(model => Meeting.PostCode)
-        </td>
-        <td>
-            @Html.DisplayFor(model => Meeting.Address)
-        </td>
-        <td>
-            @Html.DisplayFor(model => Meeting.NumberOfApartment)
-        </td>
-        <td>
-            <ul>
-                @foreach (var instructor in Meeting.Instructor)
-                {
-                    <li>@instructor</li>
-                }
-            </ul>
-        </td>
-        <td>
-            @*@Html.ActionLink("Edit", "Edit", new { /* id=item.PrimaryKey */ }) |
-            @Html.ActionLink("Delete", "Delete", new { /* id=item.PrimaryKey */ })*@
-        </td>
-    </tr>
-    }
-</table>
+        @foreach (var Meeting in Model.MeetingsViewModels)
+        {
+            <tr>
+                <td>
+                    @Html.DisplayFor(model => Meeting.MeetingIdentificator)
+                </td>
+                <td>
+                    @Html.DisplayFor(model => Meeting.DateOfMeeting)
+                </td>
+                <td>
+                    @Html.DisplayFor(model => Meeting.Country)
+                </td>
+                <td>
+                    @Html.DisplayFor(model => Meeting.City)
+                </td>
+                <td>
+                    @Html.DisplayFor(model => Meeting.PostCode)
+                </td>
+                <td>
+                    @Html.DisplayFor(model => Meeting.Address)
+                </td>
+                <td>
+                    @Html.DisplayFor(model => Meeting.NumberOfApartment)
+                </td>
+                <td>
+                    <ul>
+                        @foreach (var instructor in Meeting.Instructor)
+                        {
+                            <li>@instructor</li>
+                        }
+                    </ul>
+                </td>
+                <td>
+                    @*@Html.ActionLink("Edit", "Edit", new { /* id=item.PrimaryKey */ }) |
+                        @Html.ActionLink("Delete", "Delete", new { /* id=item.PrimaryKey */ })*@
+                </td>
+            </tr>
+        }
+    </table>
+}
 
 <p>
     @Html.ActionLink("Dodaj kolejny kurs", "AddNewCourse")

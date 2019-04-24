@@ -31,8 +31,8 @@
         <div class="form-group">
             @Html.LabelFor(model => model.DateOfStart, htmlAttributes: new { @class = "control-label col-md-2" })
             <div class="col-md-10">
-                <div class='input-group date' id='DateOfStart' name="DateOfStart">
-                    <input type='text' class="form-control"  value="@DateTime.Now.ToShortDateString() @DateTime.Now.ToShortTimeString()" />
+                <div class='input-group date' id='DateOfStart'>
+                    <input type='text' class="form-control" name="DateOfStart" value="@DateTime.Now.ToShortDateString() @DateTime.Now.ToShortTimeString()" />
                     <span class="input-group-addon">
                         <span class="fa fa-calendar pl-1 pt-0.5" style="font-size:34px"></span>
                     </span>
@@ -44,8 +44,8 @@
         <div class="form-group">
             @Html.LabelFor(model => model.DateOfEnd, htmlAttributes: new { @class = "control-label col-md-2" })
             <div class="col-md-10">
-                <div class='input-group date' id='DateOfEnd' name="DateOfEnd">
-                    <input type='text' class="form-control" value="@DateTime.Now.ToShortDateString() @DateTime.Now.ToShortTimeString()" />
+                <div class='input-group date' id='DateOfEnd'>
+                    <input type='text' class="form-control" name="DateOfEnd" value="@DateTime.Now.AddDays(1).ToShortDateString() @DateTime.Now.ToShortTimeString()" />
                     <span class="input-group-addon">
                         <span class="fa fa-calendar pl-1 pt-0.5" style="font-size:34px"></span>
                     </span>

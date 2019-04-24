@@ -30,6 +30,8 @@ namespace Certification_System.Controllers
 
             newCourse.AvailableBranches = _context.GetBranchesAsSelectList().ToList();
 
+            //todo GetInstructorsData and store it in some collection in AddCourseViewModel
+
             return View(newCourse);
         }
 
@@ -51,37 +53,41 @@ namespace Certification_System.Controllers
                     MeetingsViewModels = new List<AddMeetingViewModel>()
                 };
 
-                var MeetingsId = _context.GetMeetingsById(Course.Meetings);
-                var BranchNames = _context.GetBranchesById(Course.Branches);
-                List<AddMeetingViewModel> Meetings = new List<AddMeetingViewModel>();
-
-                foreach (var meeting in MeetingsId)
+                if (Course.Meetings != null)
                 {
-                    var Instructors = _context.GetInstructorsById(meeting.Instructor);
+                    var MeetingsId = _context.GetMeetingsById(Course.Meetings);
+                    List<AddMeetingViewModel> Meetings = new List<AddMeetingViewModel>();
 
-                    AddMeetingViewModel meetingsInCourse = new AddMeetingViewModel
+                    foreach (var meeting in MeetingsId)
                     {
-                        MeetingIdentificator = meeting.MeetingIdentificator,
-                        DateOfMeeting = meeting.DateOfMeeting,
-                        Country = meeting.Country,
-                        City = meeting.City,
-                        PostCode = meeting.PostCode,
-                        Address = meeting.Address,
-                        NumberOfApartment = meeting.NumberOfApartment,
+                        var Instructors = _context.GetInstructorsById(meeting.Instructor);
 
-                        Instructor = new List<string>()
-                    };
+                        AddMeetingViewModel meetingsInCourse = new AddMeetingViewModel
+                        {
+                            MeetingIdentificator = meeting.MeetingIdentificator,
+                            DateOfMeeting = meeting.DateOfMeeting,
+                            Country = meeting.Country,
+                            City = meeting.City,
+                            PostCode = meeting.PostCode,
+                            Address = meeting.Address,
+                            NumberOfApartment = meeting.NumberOfApartment,
 
-                    foreach (var instructor in Instructors)
-                    {
-                        string instructorIdentity = instructor.FirstName + instructor.LastName;
-                        meetingsInCourse.Instructor.Add(instructorIdentity);
+                            Instructor = new List<string>()
+                        };
+
+                        foreach (var instructor in Instructors)
+                        {
+                            string instructorIdentity = instructor.FirstName + instructor.LastName;
+                            meetingsInCourse.Instructor.Add(instructorIdentity);
+                        }
+
+                        Meetings.Add(meetingsInCourse);
                     }
 
-                    Meetings.Add(meetingsInCourse);
+                    addedCourse.MeetingsViewModels = Meetings;
                 }
 
-                addedCourse.MeetingsViewModels = Meetings;
+                var BranchNames = _context.GetBranchesById(Course.Branches);
                 addedCourse.SelectedBranches = BranchNames;
 
                 return View(addedCourse);
@@ -100,15 +106,47 @@ namespace Certification_System.Controllers
                 Course course = new Course
                 {
                     Name = newCourse.Name,
-                    CourseIdentificator = newCourse.Name,
+                    CourseIdentificator = newCourse.CourseIdentificator,
                     DateOfStart = newCourse.DateOfStart,
                     DateOfEnd = newCourse.DateOfEnd,
 
-                    Branches = newCourse.SelectedBranches
+                    Branches = newCourse.SelectedBranches,
+                    Meetings = new List<string>()
                 };
 
+                if (newCourse.MeetingsViewModels != null)
+                {
+                    foreach (var meeting in newCourse.MeetingsViewModels)
+                    {
+                        Meeting singleMeeting = new Meeting
+                        {
+                            MeetingIdentificator = meeting.MeetingIdentificator,
+                            DateOfMeeting = meeting.DateOfMeeting,
+                            Country = meeting.Country,
+                            City = meeting.City,
+                            PostCode = meeting.PostCode,
+                            Address = meeting.Address,
+                            NumberOfApartment = meeting.NumberOfApartment,
+
+                            Instructor = new List<string>()
+                        };
+
+                        //foreach (var instructor in Instructor)
+                        //{
+
+                        //}
+
+                    //todo InstructorFindBySomething for example Name
+                    // --> maybe 2 collections in ViewModel - firstName, LastName of all Instructors available
+                    //todo Instructor in singleMeeting.Add(instructor.Id)
+                    //todo Meeting add to collection in Mongo
+                    //todo Add reference to meeting to Course.Meetings Array
+
+                        //_context.AddMeeting(singleMeeting);
+                    }
+                }
+
                 _context.AddCourse(course);
-                //todo: add meetings
 
                 return RedirectToAction("AddNewCourseConfirmation", new { CourseIdentificator = newCourse.CourseIdentificator, MeetingsIdentificators = new List<string>() });
             }
