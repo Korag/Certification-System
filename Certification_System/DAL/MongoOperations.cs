@@ -190,9 +190,9 @@ namespace Certification_System.DAL
             _companies.InsertOne(company);
         }
 
-        public Company GetCompanyByName(string companyName)
+        public Company GetCompanyById(string companyIdentificator)
         {
-            var filter = Builders<Company>.Filter.Eq(x => x.CompanyName, companyName);
+            var filter = Builders<Company>.Filter.Eq(x => x.CompanyIdentificator, companyIdentificator);
             Company company = _context.db.GetCollection<Company>(_companiesCollectionName).Find<Company>(filter).FirstOrDefault();
             return company;
         }

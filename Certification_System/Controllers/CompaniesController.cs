@@ -1,6 +1,7 @@
 ﻿using Certification_System.DAL;
 using Certification_System.Models;
 using Certification_System.ViewModels;
+using MongoDB.Bson;
 using System.Collections.Generic;
 using System.Web.Mvc;
 
@@ -52,11 +53,11 @@ namespace Certification_System.Controllers
 
         // GET: AddNewCompanyConfirmation
         [Authorize(Roles = "Admin")]
-        public ActionResult AddNewCompanyConfirmation(string companyName)
+        public ActionResult AddNewCompanyConfirmation(string companyIdentificator)
         {
-            if (companyName != null)
+            if (companyIdentificator != null)
             {
-                Company company = _context.GetCompanyByName(companyName);
+                Company company = _context.GetCompanyById(companyIdentificator);
 
                 AddCompanyViewModel addedCompany = new AddCompanyViewModel
                 {
@@ -86,6 +87,8 @@ namespace Certification_System.Controllers
             {
                 Company company = new Company
                 {
+                    CompanyIdentificator = ObjectId.GenerateNewId().ToString(),
+
                     CompanyName = newCompany.CompanyName,
                     Email = newCompany.Email,
                     Phone = newCompany.Phone,
@@ -98,7 +101,7 @@ namespace Certification_System.Controllers
 
                 _context.AddCompany(company);
 
-                return RedirectToAction("AddNewCompanyConfirmation", new { companyName = newCompany.CompanyName});
+                return RedirectToAction("AddNewCompanyConfirmation", new { companyIdentificator = company.CompanyIdentificator });
             }
 
             return View(newCompany);

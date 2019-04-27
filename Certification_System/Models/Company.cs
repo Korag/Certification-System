@@ -7,7 +7,7 @@ namespace Certification_System.Models
     {
         [BsonId]
         [BsonRepresentation(BsonType.ObjectId)]
-        public string Id { get; set; }
+        public string CompanyIdentificator { get; set; }
 
         public string CompanyName { get; set; }
         public string Email { get; set; }
