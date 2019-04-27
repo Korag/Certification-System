@@ -47,6 +47,7 @@ namespace Certification_System.Controllers
                 {
                     CourseIdentificator = Course.CourseIdentificator,
                     Name = Course.Name,
+                    Description = Course.Description,
                     DateOfStart = Course.DateOfStart,
                     DateOfEnd = Course.DateOfEnd,
 
@@ -106,6 +107,7 @@ namespace Certification_System.Controllers
                 Course course = new Course
                 {
                     Name = newCourse.Name,
+                    Description = newCourse.Description,
                     CourseIdentificator = newCourse.CourseIdentificator,
                     DateOfStart = newCourse.DateOfStart,
                     DateOfEnd = newCourse.DateOfEnd,

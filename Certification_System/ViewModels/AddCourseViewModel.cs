@@ -15,6 +15,9 @@ namespace Certification_System.ViewModels
         [Display(Name = "Nazwa kursu")]
         public string Name { get; set; }
 
+        [Display(Name = "Opis")]
+        public string Description { get; set; }
+
         [Required]
         [Display(Name = "Data rozpoczęcia")]
         public DateTime DateOfStart { get; set; }
