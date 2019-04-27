@@ -1,0 +1,25 @@
+﻿@model string
+
+@{
+    ViewBag.Title = "AddNewBranchConfirmation";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+<h2 class="alert alert-success" role="alert">Dodano następujący obszar certyfikacji:</h2>
+
+
+<div class="container col-12">
+    <div class="btn-group btn-group-toggle" data-toggle="buttons">
+        <label class="btn btn-outline-secondary mr-2">
+            <span>@Model</span>
+        </label>
+    </div>
+
+    <p>
+        @Html.ActionLink("Dodaj kolejny obszar", "AddNewBranch", "Branches")
+    </p>
+    <p>
+        @Html.ActionLink("Wyświetl wszystkie obszary", "DisplayAllBranches", "Branches")
+    </p>
+</div>
+

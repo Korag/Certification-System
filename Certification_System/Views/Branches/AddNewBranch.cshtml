@@ -1,0 +1,38 @@
+﻿@model Certification_System.ViewModels.AddBranchViewModel
+
+@{
+    ViewBag.Title = "AddNewBranch";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+<h2>Dodaj nowy obszar certyfikacji</h2>
+<hr />
+
+@using (Html.BeginForm())
+{
+    @Html.AntiForgeryToken()
+
+<div class="form-horizontal">
+    <div class="form-group">
+        @Html.LabelFor(model => model.Name, htmlAttributes: new { @class = "control-label col-md-2" })
+        <div class="col-md-10">
+            @Html.EditorFor(model => model.Name, new { htmlAttributes = new { @class = "form-control" } })
+            @Html.ValidationMessageFor(model => model.Name, "", new { @class = "text-danger" })
+        </div>
+    </div>
+
+    <div class="row justify-content-center">
+        @Html.ValidationSummary("", new { @class = "text-danger" })
+    </div>
+
+    <div class="form-group">
+        <div class="row justify-content-center">
+            <input type="submit" value="Dodaj" class="btn btn-primary" />
+        </div>
+    </div>
+</div>
+}
+
+<div>
+    @Html.ActionLink("List wszystkich dostępnych obszarów", "DisplayAllBranches", "Branches")
+</div>

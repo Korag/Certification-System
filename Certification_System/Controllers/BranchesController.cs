@@ -1,4 +1,5 @@
 ﻿using Certification_System.DAL;
+using Certification_System.Models;
 using Certification_System.ViewModels;
 using System.Collections.Generic;
 using System.Web.Mvc;
@@ -33,9 +34,21 @@ namespace Certification_System.Controllers
             return View(existingBranches);
         }
 
+        // GET: AddNewBranchConfirmation
+        [Authorize(Roles = "Admin")]
+        public ActionResult AddNewBranchConfirmation(string BranchName)
+        {
+            if (BranchName == null)
+            {
+                return RedirectToAction(nameof(AddNewBranch));
+            }
+            return View(BranchName);
+        }
+
         // GET: AddNewBranch
         [Authorize(Roles = "Admin")]
-        public ActionResult Index()
+        [HttpGet]
+        public ActionResult AddNewBranch()
         {
             return View();
         }
@@ -44,9 +57,19 @@ namespace Certification_System.Controllers
         [ValidateAntiForgeryToken]
         [Authorize(Roles = "Admin")]
         [HttpPost]
-        public ActionResult AddNewBranch()
+        public ActionResult AddNewBranch(AddBranchViewModel newBranch)
         {
-            return View();
+            if (ModelState.IsValid)
+            {
+                Branch branch = new Branch
+                {
+                    Name = newBranch.Name
+                };
+
+                return RedirectToAction("AddNewBranchConfirmation", new { BranchName = newBranch.Name });
+            }
+
+            return View(newBranch);
         }
 
     }
