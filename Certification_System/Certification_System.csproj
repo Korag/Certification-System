@@ -191,6 +191,7 @@
     <Compile Include="App_Start\RouteConfig.cs" />
     <Compile Include="App_Start\Startup.Auth.cs" />
     <Compile Include="Controllers\AccountController.cs" />
+    <Compile Include="Controllers\BranchesController.cs" />
     <Compile Include="Controllers\CertificatesController.cs" />
     <Compile Include="Controllers\CoursesController.cs" />
     <Compile Include="Controllers\ManageController.cs" />
@@ -212,6 +213,7 @@
     <Compile Include="Models\Meeting.cs" />
     <Compile Include="ViewModels\AccountViewModels.cs" />
     <Compile Include="Models\IdentityModels.cs" />
+    <Compile Include="ViewModels\AddBranchViewModel.cs" />
     <Compile Include="ViewModels\AddCertificateToDbViewModel.cs" />
     <Compile Include="ViewModels\AddCourseViewModel.cs" />
     <Compile Include="ViewModels\AddMeetingViewModel.cs" />
@@ -338,6 +340,7 @@
     <Content Include="Views\Courses\AddNewCourse.cshtml" />
     <Content Include="Views\Courses\AddNewCourseConfirmation.cshtml" />
     <Content Include="Views\Meetings\AddNewMeetingPartial.cshtml" />
+    <Content Include="Views\Branches\DisplayAllBranches.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Data\" />

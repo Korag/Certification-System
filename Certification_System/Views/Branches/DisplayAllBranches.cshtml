@@ -1,0 +1,30 @@
+﻿@model IEnumerable<Certification_System.ViewModels.AddBranchViewModel>
+
+@{
+    ViewBag.Title = "DisplayAllBranches";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+<h2>Obszary certyfikacji zdefiniowane w platformie</h2>
+
+<div class="container col-12">
+    <div class="btn-group btn-group-toggle" data-toggle="buttons">
+        @foreach (var branch in Model)
+        {
+            <label class="btn btn-outline-secondary mr-2">
+                <span>@branch.Name</span>
+            </label>
+        }
+    </div>
+
+    <p>
+        @Html.ActionLink("Dodaj nowy obszar", "AddNewBranch", "Branches")
+    </p>
+</div>
+
+
+@*@Html.ActionLink("Edit", "Edit", new { /* id=item.PrimaryKey */ }) |
+    @Html.ActionLink("Details", "Details", new { /* id=item.PrimaryKey */ }) |
+    @Html.ActionLink("Delete", "Delete", new { /* id=item.PrimaryKey */ })*@
+
+
