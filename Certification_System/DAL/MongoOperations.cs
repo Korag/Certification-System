@@ -19,6 +19,7 @@ namespace Certification_System.DAL
         private string _coursesCollectionName = "Courses";
         private string _meetingsCollectionName = "Meetings";
         private string _instructorsCollectionName = "Instructors";
+        private string _companiesCollectionName = "Companies";
 
         //Collections
         private IMongoCollection<IdentityUser> _users;
@@ -27,6 +28,7 @@ namespace Certification_System.DAL
         private IMongoCollection<Course> _courses;
         private IMongoCollection<Meeting> _meetings;
         private IMongoCollection<Instructor> _instructors;
+        private IMongoCollection<Company> _companies;
 
         public MongoOperations()
         {
@@ -87,7 +89,6 @@ namespace Certification_System.DAL
             _certificates = _context.db.GetCollection<Certificate>(_certificatesCollectionName);
             return _certificates.AsQueryable().ToList();
         }
-
 
         public void AddCertificate(Certificate certificate)
         {
@@ -156,5 +157,14 @@ namespace Certification_System.DAL
             return Instructors;
         }
         #endregion
+
+        #region Company
+        public ICollection<Company> GetCompanies()
+        {
+            _companies = _context.db.GetCollection<Company>(_companiesCollectionName);
+            return _companies.AsQueryable().ToList();
+        }
+        #endregion
+
     }
 }

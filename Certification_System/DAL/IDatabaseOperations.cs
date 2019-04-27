@@ -40,5 +40,8 @@ namespace Certification_System.DAL
         ICollection<Instructor> GetInstructorsById(ICollection<string> InstructorsId);
         #endregion
 
+        #region Company
+        ICollection<Company> GetCompanies();
+        #endregion   
     }
 }
