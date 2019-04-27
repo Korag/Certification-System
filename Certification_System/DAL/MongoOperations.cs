@@ -150,11 +150,18 @@ namespace Certification_System.DAL
 
             foreach (var instructor in InstructorsId)
             {
-                var filter = Builders<Instructor>.Filter.Eq(x => x.Id, instructor);
+                var filter = Builders<Instructor>.Filter.Eq(x => x.InstructorIdentificator, instructor);
                 Instructor singleInstructor = _context.db.GetCollection<Instructor>(_instructorsCollectionName).Find<Instructor>(filter).FirstOrDefault();
                 Instructors.Add(singleInstructor);
             }
             return Instructors;
+        }
+
+        public Instructor GetInstructorById(string instructorIdentificator)
+        {
+            var filter = Builders<Instructor>.Filter.Eq(x => x.InstructorIdentificator, instructorIdentificator);
+            Instructor instructor = _context.db.GetCollection<Instructor>(_instructorsCollectionName).Find<Instructor>(filter).FirstOrDefault();
+            return instructor;
         }
 
         public void AddInstructor(Instructor instructor)

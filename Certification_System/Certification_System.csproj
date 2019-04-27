@@ -352,6 +352,7 @@
     <Content Include="Views\Companies\AddNewCompanyConfirmation.cshtml" />
     <Content Include="Views\Instructors\AddNewInstructor.cshtml" />
     <Content Include="Views\Instructors\DisplayAllInstructors.cshtml" />
+    <Content Include="Views\Instructors\AddNewInstructorConfirmation.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Data\" />

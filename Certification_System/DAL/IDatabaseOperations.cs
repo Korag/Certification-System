@@ -38,6 +38,7 @@ namespace Certification_System.DAL
 
         #region Instructor
         ICollection<Instructor> GetInstructorsById(ICollection<string> InstructorsId);
+        Instructor GetInstructorById(string instructorIdentificator);
         void AddInstructor(Instructor instructor);
         ICollection<Instructor> GetInstructors();
         #endregion
