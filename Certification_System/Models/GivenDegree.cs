@@ -10,7 +10,7 @@ namespace Certification_System.Models
         [BsonRepresentation(BsonType.ObjectId)]
         public string GivenDegreeIdentificator { get; set; }
 
-        public string DegreeIndexer { get; set; }
+        public string GivenDegreeIndexer { get; set; }
         public DateTime ReceiptDate { get; set; }
         public DateTime ExpirationDate { get; set; }
 
