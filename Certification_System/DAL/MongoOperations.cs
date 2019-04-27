@@ -156,6 +156,18 @@ namespace Certification_System.DAL
             }
             return Instructors;
         }
+
+        public void AddInstructor(Instructor instructor)
+        {
+            _instructors = _context.db.GetCollection<Instructor>(_instructorsCollectionName);
+            _instructors.InsertOne(instructor);
+        }
+
+        public ICollection<Instructor> GetInstructors()
+        {
+            _instructors = _context.db.GetCollection<Instructor>(_instructorsCollectionName);
+            return _instructors.AsQueryable().ToList();
+        }
         #endregion
 
         #region Company
