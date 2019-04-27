@@ -11,81 +11,87 @@
 {
     @Html.AntiForgeryToken()
 
-    <div class="form-horizontal">
-        <div class="form-group">
-            @Html.LabelFor(model => model.CourseIdentificator, htmlAttributes: new { @class = "control-label col-md-2" })
-            <div class="col-md-10">
-                @Html.EditorFor(model => model.CourseIdentificator, new { htmlAttributes = new { @class = "form-control" } })
-                @Html.ValidationMessageFor(model => model.CourseIdentificator, "", new { @class = "text-danger" })
-            </div>
-        </div>
-
-        <div class="form-group">
-            @Html.LabelFor(model => model.Name, htmlAttributes: new { @class = "control-label col-md-2" })
-            <div class="col-md-10">
-                @Html.EditorFor(model => model.Name, new { htmlAttributes = new { @class = "form-control" } })
-                @Html.ValidationMessageFor(model => model.Name, "", new { @class = "text-danger" })
-            </div>
-        </div>
-
-        <div class="form-group">
-            @Html.LabelFor(model => model.DateOfStart, htmlAttributes: new { @class = "control-label col-md-2" })
-            <div class="col-md-10">
-                <div class='input-group date' id='DateOfStart'>
-                    <input type='text' class="form-control" name="DateOfStart" value="@DateTime.Now.ToShortDateString() @DateTime.Now.ToShortTimeString()" />
-                    <span class="input-group-addon">
-                        <span class="fa fa-calendar pl-1 pt-0.5" style="font-size:34px"></span>
-                    </span>
-                </div>
-                @Html.ValidationMessageFor(model => model.DateOfStart, "", new { @class = "text-danger" })
-            </div>
-        </div>
-
-        <div class="form-group">
-            @Html.LabelFor(model => model.DateOfEnd, htmlAttributes: new { @class = "control-label col-md-2" })
-            <div class="col-md-10">
-                <div class='input-group date' id='DateOfEnd'>
-                    <input type='text' class="form-control" name="DateOfEnd" value="@DateTime.Now.AddDays(1).ToShortDateString() @DateTime.Now.ToShortTimeString()" />
-                    <span class="input-group-addon">
-                        <span class="fa fa-calendar pl-1 pt-0.5" style="font-size:34px"></span>
-                    </span>
-                </div>
-                @Html.ValidationMessageFor(model => model.DateOfEnd, "", new { @class = "text-danger" })
-            </div>
-        </div>
-
-        <div class="form-group">
-            @Html.LabelFor(model => model.AvailableBranches, htmlAttributes: new { @class = "control-label col-md-2" })
-            <div class="col-10">
-              
-                <div class="btn-group btn-group-toggle" data-toggle="buttons">
-                    @foreach (var availableBranch in Model.AvailableBranches)
-                    {
-                        @*<div id="checkbox-list">*@
-                        <label class="btn btn-outline-secondary mr-2">
-                            <input type="checkbox"
-                                   name="SelectedBranches"
-                                   value="@availableBranch.Value"
-                                   autocomplete="off"
-                                   @if (Model.SelectedBranches.Contains(availableBranch.Value)) { <text> checked </text> } />
-                            <span>@availableBranch.Text</span>
-                        </label>
-                    }
-                </div>
-                @Html.ValidationMessageFor(model => model.SelectedBranches, "", new { @class = "text-danger" })
-            </div>
-        </div>
-
-        <div class="row justify-content-center">
-            @Html.ValidationSummary("", new { @class = "text-danger" })
-        </div>
-
-        <div class="form-group">
-            <div class="row justify-content-center">
-                <input type="submit" value="Utwórz" class="btn btn-primary" />
-            </div>
+<div class="form-horizontal">
+    <div class="form-group">
+        @Html.LabelFor(model => model.CourseIdentificator, htmlAttributes: new { @class = "control-label col-md-2" })
+        <div class="col-md-10">
+            @Html.EditorFor(model => model.CourseIdentificator, new { htmlAttributes = new { @class = "form-control" } })
+            @Html.ValidationMessageFor(model => model.CourseIdentificator, "", new { @class = "text-danger" })
         </div>
     </div>
+
+    <div class="form-group">
+        @Html.LabelFor(model => model.Name, htmlAttributes: new { @class = "control-label col-md-2" })
+        <div class="col-md-10">
+            @Html.EditorFor(model => model.Name, new { htmlAttributes = new { @class = "form-control" } })
+            @Html.ValidationMessageFor(model => model.Name, "", new { @class = "text-danger" })
+        </div>
+    </div>
+
+    <div class="form-group">
+        @Html.LabelFor(model => model.DateOfStart, htmlAttributes: new { @class = "control-label col-md-2" })
+        <div class="col-md-10">
+            <div class='input-group date' id='DateOfStart'>
+                <input type='text' class="form-control" name="DateOfStart" value="@DateTime.Now.ToShortDateString() @DateTime.Now.ToShortTimeString()" />
+                <span class="input-group-addon">
+                    <span class="fa fa-calendar pl-1 pt-0.5" style="font-size:34px"></span>
+                </span>
+            </div>
+            @Html.ValidationMessageFor(model => model.DateOfStart, "", new { @class = "text-danger" })
+        </div>
+    </div>
+
+    <div class="form-group">
+        @Html.LabelFor(model => model.DateOfEnd, htmlAttributes: new { @class = "control-label col-md-2" })
+        <div class="col-md-10">
+            <div class='input-group date' id='DateOfEnd'>
+                <input type='text' class="form-control" name="DateOfEnd" value="@DateTime.Now.AddDays(1).ToShortDateString() @DateTime.Now.ToShortTimeString()" />
+                <span class="input-group-addon">
+                    <span class="fa fa-calendar pl-1 pt-0.5" style="font-size:34px"></span>
+                </span>
+            </div>
+            @Html.ValidationMessageFor(model => model.DateOfEnd, "", new { @class = "text-danger" })
+        </div>
+    </div>
+
+    <div class="form-group">
+        @Html.LabelFor(model => model.AvailableBranches, htmlAttributes: new { @class = "control-label col-md-2" })
+        <div class="col-10">
+
+            <div class="btn-group btn-group-toggle" data-toggle="buttons">
+                @foreach (var availableBranch in Model.AvailableBranches)
+                {
+                    @*<div id="checkbox-list">*@
+                    <label class="btn btn-outline-secondary mr-2">
+                        <input type="checkbox"
+                               name="SelectedBranches"
+                               value="@availableBranch.Value"
+                               autocomplete="off"
+                               @if (Model.SelectedBranches.Contains(availableBranch.Value)) { <text> checked </text> } />
+                        <span>@availableBranch.Text</span>
+                    </label>
+                }
+            </div>
+            @Html.ValidationMessageFor(model => model.SelectedBranches, "", new { @class = "text-danger" })
+        </div>
+    </div>
+
+    <input type="button" id="loadPartialView" class="btn btn-dark" value="Dodaj nowe spotkanie w ramach kursu" />
+    <div id="meetingContainer">
+    </div>
+
+ 
+
+    <div class="row justify-content-center">
+        @Html.ValidationSummary("", new { @class = "text-danger" })
+    </div>
+
+    <div class="form-group">
+        <div class="row justify-content-center">
+            <input type="submit" value="Utwórz" class="btn btn-primary" />
+        </div>
+    </div>
+</div>
 }
 
 <div>
@@ -101,6 +107,22 @@
         //        week: { dow: 1 }
         //    })
         //});
+
+        var meetingNumber = 0;
+
+        @*'@Url.Action("AddNewMeetingPartial", "Meetings", new { MeetingIdentificator = meetingNumber })'*@
+
+        $("#loadPartialView").click(function () {
+
+            var url = '@Html.Raw(@Url.Action("AddNewMeetingPartial", "Meetings"))' + '?MeetingIdentificator=' + meetingNumber;
+            $.get(url, {}, function (response) {
+
+            $("#meetingContainer").append(`<div name="meetingNumber${meetingNumber}></div>`).html(response);
+            meetingNumber++;
+        });
+        });
+
+       
 
         $(function () {
             $('#DateOfStart').datetimepicker({

@@ -195,6 +195,7 @@
     <Compile Include="Controllers\CoursesController.cs" />
     <Compile Include="Controllers\HomeController.cs" />
     <Compile Include="Controllers\ManageController.cs" />
+    <Compile Include="Controllers\MeetingsController.cs" />
     <Compile Include="DAL\IDatabaseOperations.cs" />
     <Compile Include="DAL\MongoContext.cs" />
     <Compile Include="DAL\MongoOperations.cs" />
@@ -340,6 +341,7 @@
     <Content Include="Views\Certificates\AddNewCertificateConfirmation.cshtml" />
     <Content Include="Views\Courses\AddNewCourse.cshtml" />
     <Content Include="Views\Courses\AddNewCourseConfirmation.cshtml" />
+    <Content Include="Views\Meetings\AddNewMeetingPartial.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Data\" />
