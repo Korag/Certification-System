@@ -195,6 +195,7 @@
     <Compile Include="Controllers\CertificatesController.cs" />
     <Compile Include="Controllers\CompaniesController.cs" />
     <Compile Include="Controllers\CoursesController.cs" />
+    <Compile Include="Controllers\InstructorsController.cs" />
     <Compile Include="Controllers\ManageController.cs" />
     <Compile Include="Controllers\MeetingsController.cs" />
     <Compile Include="DAL\IDatabaseOperations.cs" />
@@ -218,6 +219,7 @@
     <Compile Include="ViewModels\AddCertificateToDbViewModel.cs" />
     <Compile Include="ViewModels\AddCompanyViewModel.cs" />
     <Compile Include="ViewModels\AddCourseViewModel.cs" />
+    <Compile Include="ViewModels\AddInstructorViewModel.cs" />
     <Compile Include="ViewModels\AddMeetingViewModel.cs" />
     <Compile Include="ViewModels\ManageViewModels.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
@@ -348,6 +350,8 @@
     <Content Include="Views\Companies\DisplayAllCompanies.cshtml" />
     <Content Include="Views\Companies\AddNewCompany.cshtml" />
     <Content Include="Views\Companies\AddNewCompanyConfirmation.cshtml" />
+    <Content Include="Views\Instructors\AddNewInstructor.cshtml" />
+    <Content Include="Views\Instructors\DisplayAllInstructors.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Data\" />
