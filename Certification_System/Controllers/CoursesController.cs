@@ -146,6 +146,11 @@ namespace Certification_System.Controllers
                     }
                 }
 
+                if (course.DateOfEnd != null)
+                {
+                    course.CourseLength = course.DateOfEnd.Subtract(course.DateOfStart).Days;
+                }
+
                 _context.AddCourse(course);
 
                 return RedirectToAction("AddNewCourseConfirmation", new { CourseIdentificator = newCourse.CourseIdentificator, MeetingsIdentificators = new List<string>() });

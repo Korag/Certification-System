@@ -15,6 +15,7 @@ namespace Certification_System.Models
         public string Name { get; set; }
         public DateTime DateOfStart { get; set; }
         public DateTime DateOfEnd { get; set; }
+        public int CourseLength { get; set; }
 
         public ICollection<string> Branches { get; set; }
         public ICollection<string> Meetings { get; set; }
