@@ -112,7 +112,7 @@ namespace Certification_System.DAL
             _courses.InsertOne(course);
         }
 
-        public Course GetCourseByCourId(string courseIdentificator)
+        public Course GetCourseById(string courseIdentificator)
         {
             var filter = Builders<Course>.Filter.Eq(x => x.CourseIdentificator, courseIdentificator);
             Course course = _context.db.GetCollection<Course>(_coursesCollectionName).Find<Course>(filter).FirstOrDefault();

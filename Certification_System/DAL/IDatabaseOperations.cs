@@ -29,7 +29,7 @@ namespace Certification_System.DAL
 
         #region Course
         void AddCourse(Course course);
-        Course GetCourseByCourId(string courseIdentificator);
+        Course GetCourseById(string courseIdentificator);
         #endregion
 
         #region Meeting

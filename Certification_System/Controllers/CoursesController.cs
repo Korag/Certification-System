@@ -1,6 +1,7 @@
 ﻿using Certification_System.DAL;
 using Certification_System.Models;
 using Certification_System.ViewModels;
+using MongoDB.Bson;
 using System.Collections.Generic;
 using System.Linq;
 using System.Web.Mvc;
@@ -37,15 +38,15 @@ namespace Certification_System.Controllers
 
         // GET: AddNewCourseConfirmation
         [Authorize(Roles = "Admin")]
-        public ActionResult AddNewCourseConfirmation(string CourseIdentificator, ICollection<string> MeetingsIdentificators)
+        public ActionResult AddNewCourseConfirmation(string courseIdentificator, ICollection<string> MeetingsIdentificators)
         {
-            if (CourseIdentificator != null)
+            if (courseIdentificator != null)
             {
-                var Course = _context.GetCourseByCourId(CourseIdentificator);
+                var Course = _context.GetCourseById(courseIdentificator);
 
                 AddCourseViewModel addedCourse = new AddCourseViewModel
                 {
-                    CourseIdentificator = Course.CourseIdentificator,
+                    CourseIndexer = Course.CourseIndexer,
                     Name = Course.Name,
                     Description = Course.Description,
                     DateOfStart = Course.DateOfStart,
@@ -107,9 +108,11 @@ namespace Certification_System.Controllers
             {
                 Course course = new Course
                 {
+                    CourseIdentificator = ObjectId.GenerateNewId().ToString(),
+
                     Name = newCourse.Name,
                     Description = newCourse.Description,
-                    CourseIdentificator = newCourse.CourseIdentificator,
+                    CourseIndexer = newCourse.CourseIndexer,
                     DateOfStart = newCourse.DateOfStart,
                     DateOfEnd = newCourse.DateOfEnd,
 
@@ -157,7 +160,7 @@ namespace Certification_System.Controllers
 
                 _context.AddCourse(course);
 
-                return RedirectToAction("AddNewCourseConfirmation", new { CourseIdentificator = newCourse.CourseIdentificator, MeetingsIdentificators = new List<string>() });
+                return RedirectToAction("AddNewCourseConfirmation", new { courseIdentificator = course.CourseIdentificator, MeetingsIdentificators = new List<string>() });
             }
 
             newCourse.AvailableBranches = _context.GetBranchesAsSelectList().ToList();

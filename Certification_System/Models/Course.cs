@@ -9,9 +9,9 @@ namespace Certification_System.Models
     {
         [BsonId]
         [BsonRepresentation(BsonType.ObjectId)]
-        public string Id { get; set; }
-
         public string CourseIdentificator { get; set; }
+
+        public string CourseIndexer { get; set; }
         public string Name { get; set; }
         public DateTime DateOfStart { get; set; }
         public DateTime DateOfEnd { get; set; }
