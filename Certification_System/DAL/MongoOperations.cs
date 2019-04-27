@@ -164,6 +164,19 @@ namespace Certification_System.DAL
             _companies = _context.db.GetCollection<Company>(_companiesCollectionName);
             return _companies.AsQueryable().ToList();
         }
+
+        public void AddCompany(Company company)
+        {
+            _companies = _context.db.GetCollection<Company>(_companiesCollectionName);
+            _companies.InsertOne(company);
+        }
+
+        public Company GetCompanyByName(string companyName)
+        {
+            var filter = Builders<Company>.Filter.Eq(x => x.CompanyName, companyName);
+            Company company = _context.db.GetCollection<Company>(_companiesCollectionName).Find<Company>(filter).FirstOrDefault();
+            return company;
+        }
         #endregion
 
     }

@@ -42,6 +42,8 @@ namespace Certification_System.DAL
 
         #region Company
         ICollection<Company> GetCompanies();
-        #endregion   
+        void AddCompany(Company company);
+        Company GetCompanyByName(string companyName);
+        #endregion
     }
 }

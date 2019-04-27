@@ -346,6 +346,8 @@
     <Content Include="Views\Branches\AddNewBranch.cshtml" />
     <Content Include="Views\Branches\AddNewBranchConfirmation.cshtml" />
     <Content Include="Views\Companies\DisplayAllCompanies.cshtml" />
+    <Content Include="Views\Companies\AddNewCompany.cshtml" />
+    <Content Include="Views\Companies\AddNewCompanyConfirmation.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Data\" />
