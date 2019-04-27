@@ -103,7 +103,8 @@ namespace MongoDB.AspNet.Identity
 
         public string DateOfBirth { get; set; }
 
-        public string Company { get; set; }
+        public ICollection<string> CompanyRoleManager { get; set; }
+        public ICollection<string> CompanyRoleWorker { get; set; }
         public ICollection<string> Courses { get; set; }
         public ICollection<string> Certificates { get; set; }
         public ICollection<string> Degrees { get; set; }
