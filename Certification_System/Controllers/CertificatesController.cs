@@ -1,6 +1,7 @@
 ﻿using Certification_System.DAL;
 using Certification_System.Models;
 using Certification_System.ViewModels;
+using MongoDB.Bson;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -35,15 +36,15 @@ namespace Certification_System.Controllers
 
         // GET: AddNewCertificateConfirmation
         [Authorize(Roles = "Admin")]
-        public ActionResult AddNewCertificateConfirmation(string CertificateIdentificator)
+        public ActionResult AddNewCertificateConfirmation(string certificateIdentificator)
         {
-            if (CertificateIdentificator != null)
+            if (certificateIdentificator != null)
             {
-                var Certificate = _context.GetCertificateByCertId(CertificateIdentificator);
+                var Certificate = _context.GetCertificateById(certificateIdentificator);
 
                 AddCertificateToDbViewModel addedCertificate = new AddCertificateToDbViewModel
                 {
-                    CertificateIdentificator = Certificate.CertificateIdentificator,
+                    CertificateIndexer = Certificate.CertificateIndexer,
                     Name = Certificate.Name,
                     Description = Certificate.Description,
                 };
@@ -67,8 +68,10 @@ namespace Certification_System.Controllers
             {
                 Certificate certificate = new Certificate
                 {
-                    Name = newCertificate.Name,
-                    CertificateIdentificator = newCertificate.CertificateIdentificator,
+                    CertificateIdentificator = ObjectId.GenerateNewId().ToString(),
+
+                    CertificateIndexer = newCertificate.CertificateIndexer,
+                    Name = newCertificate.Name, 
                     Description = newCertificate.Description,
 
                     Branches = newCertificate.SelectedBranches
@@ -76,7 +79,7 @@ namespace Certification_System.Controllers
 
                 _context.AddCertificate(certificate);
 
-                return RedirectToAction("AddNewCertificateConfirmation", new { CertificateIdentificator = newCertificate.CertificateIdentificator });
+                return RedirectToAction("AddNewCertificateConfirmation", new { certificateIdentificator = certificate.CertificateIdentificator });
             }
 
             newCertificate.AvailableBranches = _context.GetBranchesAsSelectList().ToList();

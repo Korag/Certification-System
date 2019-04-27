@@ -8,7 +8,7 @@ namespace Certification_System.ViewModels
     {
         [Required]
         [Display(Name="Identyfikator")]
-        public string CertificateIdentificator { get; set; }
+        public string CertificateIndexer { get; set; }
         [Required]
         [Display(Name = "Nazwa certyfikatu")]
         public string Name { get; set; }

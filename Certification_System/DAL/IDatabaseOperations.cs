@@ -18,13 +18,13 @@ namespace Certification_System.DAL
         ICollection<Branch> GetBranches();
         void AddBranch(Branch branch);
         ICollection<SelectListItem> GetBranchesAsSelectList();
-        ICollection<string> GetBranchesById(ICollection<string> BranchesId);
+        ICollection<string> GetBranchesById(ICollection<string> branchesIdentificators);
         #endregion
 
         #region Certificate
         ICollection<Certificate> GetCertificates();
         void AddCertificate(Certificate certificate);
-        Certificate GetCertificateByCertId(string certificateIdentificator);
+        Certificate GetCertificateById(string certificateIdentificator);
         #endregion
 
         #region Course

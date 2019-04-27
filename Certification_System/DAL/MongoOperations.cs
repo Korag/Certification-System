@@ -60,7 +60,7 @@ namespace Certification_System.DAL
                         new SelectListItem()
                         {
                             Text = branch.Name,
-                            Value = branch.Id
+                            Value = branch.BranchIdentificator
                         }
                     );
             };
@@ -68,14 +68,14 @@ namespace Certification_System.DAL
             return SelectList;
         }
 
-        public ICollection<string> GetBranchesById(ICollection<string> branchesId)
+        public ICollection<string> GetBranchesById(ICollection<string> branchesIdentificators)
         {
             _branches = _context.db.GetCollection<Branch>(_branchCollectionName);
             List<string> BranchesNames = new List<string>();
 
-            foreach (var branch in branchesId)
+            foreach (var branch in branchesIdentificators)
             {
-                var filter = Builders<Branch>.Filter.Eq(x => x.Id, branch);
+                var filter = Builders<Branch>.Filter.Eq(x => x.BranchIdentificator, branch);
                 BranchesNames.Add(_branches.Find<Branch>(filter).Project(z=> z.Name).FirstOrDefault());
             }
            
@@ -96,7 +96,7 @@ namespace Certification_System.DAL
             _certificates.InsertOne(certificate);
         }
 
-        public Certificate GetCertificateByCertId(string certificateIdentificator)
+        public Certificate GetCertificateById(string certificateIdentificator)
         {
             var filter = Builders<Certificate>.Filter.Eq(x => x.CertificateIdentificator, certificateIdentificator);
             Certificate certificate = _context.db.GetCollection<Certificate>(_certificatesCollectionName).Find<Certificate>(filter).FirstOrDefault();
