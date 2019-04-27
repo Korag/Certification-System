@@ -1,6 +1,7 @@
 ﻿using Certification_System.DAL;
 using Certification_System.Models;
 using Certification_System.ViewModels;
+using MongoDB.Bson;
 using System.Collections.Generic;
 using System.Web.Mvc;
 
@@ -53,9 +54,29 @@ namespace Certification_System.Controllers
 
         // GET: AddNewInstructorConfirmation
         [Authorize(Roles = "Admin")]
-        public ActionResult AddNewInstructorConfirmation()
+        public ActionResult AddNewInstructorConfirmation(string instructorIdentificator)
         {
-      
+            if (instructorIdentificator != null)
+            {
+                Instructor instructor = _context.GetInstructorById(instructorIdentificator);
+
+                AddInstructorViewModel singleInstructor = new AddInstructorViewModel
+                {
+                    FirstName = instructor.FirstName,
+                    LastName = instructor.LastName,
+                    Email = instructor.Email,
+                    Phone = instructor.Phone,
+                    Country = instructor.Country,
+                    City = instructor.City,
+                    PostCode = instructor.PostCode,
+                    Address = instructor.Address,
+                    NumberOfApartment = instructor.NumberOfApartment
+                };
+
+                return View(singleInstructor);
+            }
+
+            return RedirectToAction(nameof(AddNewInstructor));
         }
 
         // GET: AddNewInstructor
@@ -68,6 +89,7 @@ namespace Certification_System.Controllers
             {
                 Instructor instructor = new Instructor
                 {
+                    InstructorIdentificator = ObjectId.GenerateNewId().ToString(),
                     FirstName = newInstructor.FirstName,
                     LastName = newInstructor.LastName,
                     Email = newInstructor.Email,
@@ -81,7 +103,7 @@ namespace Certification_System.Controllers
 
                 _context.AddInstructor(instructor);
 
-                return RedirectToAction("AddNewInstructorConfirmation", new { companyName = newCompany.CompanyName });
+                return RedirectToAction("AddNewInstructorConfirmation", new { instructorIdentificator = instructor.InstructorIdentificator });
             }
 
             return View(newInstructor);
