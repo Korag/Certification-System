@@ -66,7 +66,7 @@ namespace Certification_System.Controllers
 
                         AddMeetingViewModel meetingsInCourse = new AddMeetingViewModel
                         {
-                            MeetingIdentificator = meeting.MeetingIdentificator,
+                            MeetingIndexer = meeting.MeetingIndexer,
                             Description = meeting.Description,
                             DateOfMeeting = meeting.DateOfMeeting,
                             Country = meeting.Country,
@@ -126,7 +126,9 @@ namespace Certification_System.Controllers
                     {
                         Meeting singleMeeting = new Meeting
                         {
-                            MeetingIdentificator = meeting.MeetingIdentificator,
+                            MeetingIdentificator = ObjectId.GenerateNewId().ToString(),
+
+                            MeetingIndexer = meeting.MeetingIndexer,
                             Description = meeting.Description,
                             DateOfMeeting = meeting.DateOfMeeting,
                             Country = meeting.Country,

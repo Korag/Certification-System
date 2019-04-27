@@ -8,7 +8,7 @@ namespace Certification_System.ViewModels
     {
         [Required]
         [Display(Name = "Identyfikator")]
-        public string MeetingIdentificator { get; set; }
+        public string MeetingIndexer { get; set; }
 
         [Display(Name = "Opis")]
         public string Description { get; set; }

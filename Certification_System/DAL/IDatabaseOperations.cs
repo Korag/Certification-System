@@ -33,7 +33,7 @@ namespace Certification_System.DAL
         #endregion
 
         #region Meeting
-        ICollection<Meeting> GetMeetingsById(ICollection<string> MeetingsId);
+        ICollection<Meeting> GetMeetingsById(ICollection<string> meetingsIdentificators);
         #endregion
 
         #region Instructor

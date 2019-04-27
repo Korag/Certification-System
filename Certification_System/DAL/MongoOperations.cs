@@ -121,13 +121,13 @@ namespace Certification_System.DAL
         #endregion
 
         #region Meeting
-        public ICollection<Meeting> GetMeetingsById(ICollection<string> MeetingsId)
+        public ICollection<Meeting> GetMeetingsById(ICollection<string> meetingsIdentificators)
         {
             List<Meeting> Meetings = new List<Meeting>();
 
-            foreach (var meeting in MeetingsId)
+            foreach (var meeting in meetingsIdentificators)
             {
-                var filter = Builders<Meeting>.Filter.Eq(x => x.Id, meeting);
+                var filter = Builders<Meeting>.Filter.Eq(x => x.MeetingIdentificator, meeting);
                 Meeting singleMeeting = _context.db.GetCollection<Meeting>(_meetingsCollectionName).Find<Meeting>(filter).FirstOrDefault();
                 Meetings.Add(singleMeeting);
             }
