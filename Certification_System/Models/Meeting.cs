@@ -12,6 +12,7 @@ namespace Certification_System.Models
         public string Id { get; set; }
 
         public string MeetingIdentificator { get; set; }
+        public string Description { get; set; }
 
         public DateTime DateOfMeeting { get; set; }
 

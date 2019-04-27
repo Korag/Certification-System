@@ -10,6 +10,9 @@ namespace Certification_System.ViewModels
         [Display(Name = "Identyfikator")]
         public string MeetingIdentificator { get; set; }
 
+        [Display(Name = "Opis")]
+        public string Description { get; set; }
+
         [Required]
         [Display(Name = "Data szkolenia")]
         public DateTime DateOfMeeting { get; set; }
