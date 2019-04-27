@@ -193,6 +193,7 @@
     <Compile Include="Controllers\AccountController.cs" />
     <Compile Include="Controllers\BranchesController.cs" />
     <Compile Include="Controllers\CertificatesController.cs" />
+    <Compile Include="Controllers\CompaniesController.cs" />
     <Compile Include="Controllers\CoursesController.cs" />
     <Compile Include="Controllers\ManageController.cs" />
     <Compile Include="Controllers\MeetingsController.cs" />
@@ -215,6 +216,7 @@
     <Compile Include="Models\IdentityModels.cs" />
     <Compile Include="ViewModels\AddBranchViewModel.cs" />
     <Compile Include="ViewModels\AddCertificateToDbViewModel.cs" />
+    <Compile Include="ViewModels\AddCompanyViewModel.cs" />
     <Compile Include="ViewModels\AddCourseViewModel.cs" />
     <Compile Include="ViewModels\AddMeetingViewModel.cs" />
     <Compile Include="ViewModels\ManageViewModels.cs" />
@@ -343,6 +345,7 @@
     <Content Include="Views\Branches\DisplayAllBranches.cshtml" />
     <Content Include="Views\Branches\AddNewBranch.cshtml" />
     <Content Include="Views\Branches\AddNewBranchConfirmation.cshtml" />
+    <Content Include="Views\Companies\DisplayAllCompanies.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Data\" />
