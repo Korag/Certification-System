@@ -17,6 +17,9 @@ namespace Certification_System.ViewModels
         [MaxLength(255)]
         public string Description { get; set; }
 
+        [Display(Name = "Przedawniony")]
+        public bool Depreciated { get; set; }
+
         [Required(ErrorMessage = "Należy zaznaczyć conajmniej jeden Obszar.")]
         public ICollection<string> SelectedBranches{ get; set; }
         [Display(Name = "Obszar")]

@@ -79,8 +79,10 @@ namespace Certification_System.Controllers
                     CertificateIdentificator = ObjectId.GenerateNewId().ToString(),
 
                     CertificateIndexer = newCertificate.CertificateIndexer,
-                    Name = newCertificate.Name, 
+                    Name = newCertificate.Name,
                     Description = newCertificate.Description,
+
+                    Depreciated = newCertificate.Depreciated,
 
                     Branches = newCertificate.SelectedBranches
                 };
