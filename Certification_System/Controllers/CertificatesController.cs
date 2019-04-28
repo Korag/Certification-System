@@ -19,7 +19,15 @@ namespace Certification_System.Controllers
             _context = new MongoOperations();
         }
 
+        // GET: BlankMenu
+        [Authorize]
+        public ActionResult BlankMenu()
+        {
+            return View();
+        }
+
         // GET: AddNewCertificate
+        [Authorize]
         [Authorize(Roles = "Admin")]
         public ActionResult AddNewCertificate()
         {

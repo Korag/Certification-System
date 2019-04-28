@@ -16,7 +16,7 @@ namespace Certification_System
             routes.MapRoute(
                 name: "Default",
                 url: "{controller}/{action}/{id}",
-                defaults: new { controller = "Branches", action = "DisplayAllBranches", id = UrlParameter.Optional }
+                defaults: new { controller = "Certificates", action = "BlankMenu", id = UrlParameter.Optional }
             );
         }
     }

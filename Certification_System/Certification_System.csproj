@@ -238,6 +238,8 @@
     <Content Include="Content\font-awesome.min.css" />
     <Content Include="Content\Img\favicon.ico" />
     <Content Include="Content\Img\logo_ziad.png" />
+    <Content Include="Content\Img\logo_ziad_big.jpg" />
+    <Content Include="Content\Img\logo_ziad_medium.jpg" />
     <Content Include="Content\style.min.css" />
     <Content Include="favicon.ico" />
     <Content Include="fonts\fontawesome-webfont.svg" />
@@ -353,6 +355,7 @@
     <Content Include="Views\Instructors\AddNewInstructor.cshtml" />
     <Content Include="Views\Instructors\DisplayAllInstructors.cshtml" />
     <Content Include="Views\Instructors\AddNewInstructorConfirmation.cshtml" />
+    <Content Include="Views\Certificates\BlankMenu.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Data\" />
