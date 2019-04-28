@@ -35,6 +35,30 @@ namespace Certification_System.DAL
             _context = new MongoContext();
         }
 
+        public ICollection<SelectListItem> GetRolesAsSelectList()
+        {
+            List<SelectListItem> SelectList = new List<SelectListItem>
+            {
+                 new SelectListItem()
+                        {
+                            Text = "Worker",
+                            Value = "Worker"
+                        },
+                  new SelectListItem()
+                        {
+                            Text = "Company",
+                            Value = "Company"
+                        },
+                   new SelectListItem()
+                        {
+                            Text = "Admin",
+                            Value = "Admin"
+                        }
+            };
+
+            return SelectList;
+        }
+
         #region Branch
         public void AddBranch(Branch branch)
         {
@@ -76,9 +100,9 @@ namespace Certification_System.DAL
             foreach (var branch in branchesIdentificators)
             {
                 var filter = Builders<Branch>.Filter.Eq(x => x.BranchIdentificator, branch);
-                BranchesNames.Add(_branches.Find<Branch>(filter).Project(z=> z.Name).FirstOrDefault());
+                BranchesNames.Add(_branches.Find<Branch>(filter).Project(z => z.Name).FirstOrDefault());
             }
-           
+
             return BranchesNames.AsQueryable().ToList();
         }
         #endregion
@@ -178,6 +202,27 @@ namespace Certification_System.DAL
         #endregion
 
         #region Company
+        public ICollection<SelectListItem> GetCompaniesAsSelectList()
+        {
+            var Companies = GetCompanies();
+            List<SelectListItem> SelectList = new List<SelectListItem>();
+            SelectList.Add(new SelectListItem { Text = "---", Value = null });
+
+            foreach (var company in Companies)
+            {
+                SelectList.Add
+                    (
+                        new SelectListItem()
+                        {
+                            Text = company.CompanyName,
+                            Value = company.CompanyIdentificator
+                        }
+                    );
+            };
+
+            return SelectList;
+        }
+
         public ICollection<Company> GetCompanies()
         {
             _companies = _context.db.GetCollection<Company>(_companiesCollectionName);

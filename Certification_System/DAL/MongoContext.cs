@@ -1,9 +1,5 @@
 ﻿using MongoDB.Driver;
-using System;
-using System.Collections.Generic;
 using System.Configuration;
-using System.Linq;
-using System.Web;
 
 namespace Certification_System.DAL
 {
@@ -39,9 +35,5 @@ namespace Certification_System.DAL
             _mongoClient = new MongoClient(_connectionstring);
             db = _mongoClient.GetDatabase(_database);
         }
-
-
-
-
     }
 }

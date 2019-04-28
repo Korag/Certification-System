@@ -10,6 +10,8 @@ namespace Certification_System.DAL
 {
     public interface IDatabaseOperations
     {
+        ICollection<SelectListItem> GetRolesAsSelectList();
+
         #region Users
         ICollection<IdentityUser> GetUsers();
         #endregion
@@ -47,6 +49,7 @@ namespace Certification_System.DAL
         ICollection<Company> GetCompanies();
         void AddCompany(Company company);
         Company GetCompanyById(string companyIdentificator);
+        ICollection<SelectListItem> GetCompaniesAsSelectList();
         #endregion
     }
 }
