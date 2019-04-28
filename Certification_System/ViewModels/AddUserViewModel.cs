@@ -77,19 +77,17 @@ namespace Certification_System.ViewModels
         [Display(Name = "Data urodzenia")]
         public string DateOfBirth { get; set; }
 
-        [Required]
         [Display(Name = "Rola użytkownika")]
         public IList<SelectListItem> AvailableRoles { get; set; }
 
         [Required(ErrorMessage = "Należy przydzielić rolę")]
         public string SelectedRole { get; set; }
 
-        [Required]
         [Display(Name = "Przedsiębiorstwa")]
         public IList<SelectListItem> AvailableCompanies { get; set; }
 
         [Display(Name = "Przedsiębiorstwo zarządzane przez użytkownika")]
-        public string CompanyRoleAdmin { get; set; }
+        public string CompanyRoleManager { get; set; }
 
         [Display(Name = "Przedsiębiorstwo zrzeszające pracownika")]
         public string CompanyRoleWorker { get; set; }
