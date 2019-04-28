@@ -1,16 +1,17 @@
-﻿@model Certification_System.ViewModels.RegisterViewModel
+﻿@model Certification_System.ViewModels.AddUserViewModel
+
 @{
-    ViewBag.Title = "Rejestracja";
+    ViewBag.Title = "AddNewUser";
+    Layout = "~/Views/Shared/_Layout.cshtml";
 }
 
-<h2>@ViewBag.Title.</h2>
+<h2>Dodaj nowego użytkownika systemu certyfikacji</h2>
+<hr />
 
-@using (Html.BeginForm("Register", "Account", FormMethod.Post, new { @class = "", role = "form" }))
+@using (Html.BeginForm())
 {
-
     @Html.AntiForgeryToken()
-    <h4>Utwórz nowe konto.</h4>
-    <hr />
+
     <div class="form-group form-group">
         <div class="col-6 m-auto p-0">
             @Html.LabelFor(m => m.Email, new { @class = "col-12 control-label p-0" })
@@ -139,8 +140,30 @@
         <div class="col-6 m-auto p-0">
             @Html.TextBoxFor(m => m.DateOfBirth, new { @class = "col-12 form-control" })
         </div>
+
         <div class="row justify-content-center">
             @Html.ValidationMessageFor(m => m.DateOfBirth, "", new { @class = "text-danger" })
+        </div>
+    </div>
+
+    <div class="form-group">
+        @Html.LabelFor(model => model.AvailableRoles, htmlAttributes: new { @class = "control-label col-md-2" })
+        <div class="col-10">
+            @Html.DropDownListFor(model => Model.SelectedRole, Model.AvailableRoles, new { @class = "text-danger" })
+        </div>
+    </div>
+
+    <div class="form-group">
+        @Html.LabelFor(model => model.CompanyRoleWorker, htmlAttributes: new { @class = "control-label col-md-2" })
+        <div class="col-10">
+            @Html.DropDownListFor(model => Model.CompanyRoleWorker, Model.AvailableCompanies, new { @class = "text-danger" })
+        </div>
+    </div>
+
+    <div class="form-group">
+        @Html.LabelFor(model => model.CompanyRoleAdmin, htmlAttributes: new { @class = "control-label col-md-2" })
+        <div class="col-10">
+            @Html.DropDownListFor(model => Model.CompanyRoleAdmin, Model.AvailableCompanies, new { @class = "text-danger" })
         </div>
     </div>
 
@@ -150,11 +173,12 @@
 
     <div class="form-group">
         <div class="col-6 m-auto p-0">
-            <input type="submit" class="btn btn-primary" value="Zarejestruj" />
+            <input type="submit" class="btn btn-primary" value="Dodaj użytkownika" />
         </div>
     </div>
+
 }
 
-@section Scripts {
-    @Scripts.Render("~/bundles/jqueryval")
-}
+<div>
+    @Html.ActionLink("Przejdź do listy użytkowników", "DisplayAllUsers", "Users")
+</div>
