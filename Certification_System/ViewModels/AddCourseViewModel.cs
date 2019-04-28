@@ -25,6 +25,11 @@ namespace Certification_System.ViewModels
         [Display(Name = "Data zakończenia")]
         public DateTime DateOfEnd { get; set; }
 
+        [Display(Name = "Limit uczestników")]
+        public int EnrolledUsersLimit { get; set; }
+
+        public bool CourseEnded { get; set; }
+
         public int CourseLength { get; set; }
 
 
@@ -34,6 +39,7 @@ namespace Certification_System.ViewModels
         [Display(Name = "Obszar")]
         public IList<SelectListItem> AvailableBranches { get; set; }
 
+        public ICollection<string> EnrolledUsers { get; set; }
 
         public ICollection<AddMeetingViewModel> MeetingsViewModels { get; set; }
     }

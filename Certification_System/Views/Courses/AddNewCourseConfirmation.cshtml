@@ -18,6 +18,9 @@
             @Html.DisplayNameFor(model => model.Description)
         </th>
         <th>
+            @Html.DisplayNameFor(model => model.EnrolledUsersLimit)
+        </th>
+        <th>
             @Html.DisplayNameFor(model => model.DateOfStart)
         </th>
         <th>
@@ -39,6 +42,9 @@
             @Html.DisplayFor(model => model.Description)
         </td>
         <td>
+            @Html.DisplayFor(model => model.EnrolledUsersLimit)
+        </td>
+        <td>
             @Html.DisplayFor(model => model.DateOfStart)
         </td>
         <td>
@@ -57,7 +63,7 @@
             @Html.ActionLink("Delete", "Delete", new { /* id=item.PrimaryKey */ })*@
         </td>
     </tr>
-</table>
+</table> 
 
 @if (Model.MeetingsViewModels.Count() != 0)
 {

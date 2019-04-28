@@ -115,6 +115,7 @@ namespace Certification_System.Controllers
                     CourseIndexer = newCourse.CourseIndexer,
                     DateOfStart = newCourse.DateOfStart,
                     DateOfEnd = newCourse.DateOfEnd,
+                    EnrolledUsersLimit = newCourse.EnrolledUsersLimit,
 
                     Branches = newCourse.SelectedBranches,
                     Meetings = new List<string>()
