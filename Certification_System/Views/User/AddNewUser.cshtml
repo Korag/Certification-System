@@ -147,22 +147,28 @@
     </div>
 
     <div class="form-group">
-        @Html.LabelFor(model => model.AvailableRoles, htmlAttributes: new { @class = "control-label col-md-2" })
-        <div class="col-10">
+        <div class="col-6 m-auto p-0">
+            @Html.LabelFor(model => model.AvailableRoles, htmlAttributes: new { @class = "col-12 control-label p-0" })
+        </div>
+        <div class="col-6 m-auto p-0">
             @Html.DropDownListFor(model => Model.SelectedRole, Model.AvailableRoles, new { @class = "text-danger" })
         </div>
     </div>
 
     <div class="form-group">
-        @Html.LabelFor(model => model.CompanyRoleWorker, htmlAttributes: new { @class = "control-label col-md-2" })
-        <div class="col-10">
+        <div class="col-6 m-auto p-0">
+            @Html.LabelFor(model => model.CompanyRoleWorker, htmlAttributes: new { @class = "col-12 control-label p-0" })
+        </div>
+        <div class="col-6 m-auto p-0">
             @Html.DropDownListFor(model => Model.CompanyRoleWorker, Model.AvailableCompanies, new { @class = "text-danger" })
         </div>
     </div>
 
     <div class="form-group">
-        @Html.LabelFor(model => model.CompanyRoleAdmin, htmlAttributes: new { @class = "control-label col-md-2" })
-        <div class="col-10">
+        <div class="col-6 m-auto p-0">
+            @Html.LabelFor(model => model.CompanyRoleAdmin, htmlAttributes: new { @class = "col-12 control-label p-0" })
+        </div>
+        <div class="col-6 m-auto p-0">
             @Html.DropDownListFor(model => Model.CompanyRoleAdmin, Model.AvailableCompanies, new { @class = "text-danger" })
         </div>
     </div>
@@ -172,7 +178,7 @@
     </div>
 
     <div class="form-group">
-        <div class="col-6 m-auto p-0">
+        <div class="row justify-content-center">
             <input type="submit" class="btn btn-primary" value="Dodaj użytkownika" />
         </div>
     </div>
