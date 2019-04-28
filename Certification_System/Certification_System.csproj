@@ -198,6 +198,7 @@
     <Compile Include="Controllers\InstructorsController.cs" />
     <Compile Include="Controllers\ManageController.cs" />
     <Compile Include="Controllers\MeetingsController.cs" />
+    <Compile Include="Controllers\UserController.cs" />
     <Compile Include="DAL\IDatabaseOperations.cs" />
     <Compile Include="DAL\MongoContext.cs" />
     <Compile Include="DAL\MongoOperations.cs" />
@@ -221,6 +222,7 @@
     <Compile Include="ViewModels\AddCourseViewModel.cs" />
     <Compile Include="ViewModels\AddInstructorViewModel.cs" />
     <Compile Include="ViewModels\AddMeetingViewModel.cs" />
+    <Compile Include="ViewModels\AddUserViewModel.cs" />
     <Compile Include="ViewModels\ManageViewModels.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="Startup.cs" />
@@ -356,6 +358,7 @@
     <Content Include="Views\Instructors\DisplayAllInstructors.cshtml" />
     <Content Include="Views\Instructors\AddNewInstructorConfirmation.cshtml" />
     <Content Include="Views\Certificates\BlankMenu.cshtml" />
+    <Content Include="Views\User\AddNewUser.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Data\" />
