@@ -27,17 +27,16 @@ namespace Certification_System.Controllers
         }
 
         // GET: AddNewCertificate
-        [Authorize]
         [Authorize(Roles = "Admin")]
         public ActionResult AddNewCertificate()
         {
             AddCertificateToDbViewModel newCertificate = new AddCertificateToDbViewModel
             {
-                AvailableBranches = new List<SelectListItem>(),
+                AvailableBranches = _context.GetBranchesAsSelectList().ToList(),
                 SelectedBranches = new List<string>()
             };
 
-            newCertificate.AvailableBranches = _context.GetBranchesAsSelectList().ToList();
+            //newCertificate.AvailableBranches = _context.GetBranchesAsSelectList().ToList();
 
             return View(newCertificate);
         }
