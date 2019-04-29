@@ -3,6 +3,7 @@ using Certification_System.Models;
 using Certification_System.ViewModels;
 using Microsoft.AspNet.Identity;
 using Microsoft.AspNet.Identity.Owin;
+using MongoDB.Bson;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
@@ -46,6 +47,38 @@ namespace Certification_System.Controllers
             return View();
         }
 
+        // GET: AddNewUserConfirmation
+        [Authorize(Roles = "Admin")]
+        public ActionResult AddNewUserConfirmation(string userIdentificator)
+        {
+            if (userIdentificator != null)
+            {
+                var User = _context.GetUserById(userIdentificator);
+
+                AddUserViewModel addedUser = new AddUserViewModel
+                {
+                    Email = User.Email,
+                    FirstName = User.FirstName,
+                    LastName = User.LastName,
+                    Country = User.Country,
+                    City = User.City,
+                    PostCode = User.PostCode,
+                    Address = User.Address,
+                    NumberOfApartment = User.NumberOfApartment,
+                    DateOfBirth = User.DateOfBirth,
+                    PhoneNumber = User.PhoneNumber,
+
+                    SelectedRole = User.Roles.First()
+                };
+
+                addedUser.CompanyRoleWorker = _context.GetCompanyById(User.CompanyRoleWorker.First()).CompanyName;
+                addedUser.CompanyRoleManager = _context.GetCompanyById(User.CompanyRoleManager.First()).CompanyName;
+
+                return View(addedUser);
+            }
+            return RedirectToAction(nameof(AddNewUser));
+        }
+
         // GET: AddNewUser
         [Authorize(Roles = "Admin")]
         public ActionResult AddNewUser()
@@ -69,6 +102,8 @@ namespace Certification_System.Controllers
             {
                 var user = new ApplicationUser
                 {
+                    Id = ObjectId.GenerateNewId().ToString(),
+
                     UserName = newUser.Email,
                     Email = newUser.Email,
                     FirstName = newUser.FirstName,
@@ -97,10 +132,15 @@ namespace Certification_System.Controllers
 
                 user.Roles.Add(newUser.SelectedRole);
 
+                if (newUser.SelectedRole == "Company")
+                {
+                    user.Roles.Add("Worker");
+                }
+
                 var result = await UserManager.CreateAsync(user, newUser.Password);
                 if (result.Succeeded)
                 {
-                    return RedirectToAction("AddNewUserConfirmation", "Users");
+                    return RedirectToAction("AddNewUserConfirmation", "Users", new { userIdentificator = user.Id });
                 }
                 return View(newUser);
             }
