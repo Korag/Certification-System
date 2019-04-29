@@ -7,6 +7,12 @@
 .body-content {
     padding-left: 15px;
     padding-right: 15px;
+    background-image: url('Img/logo_ziad_big_transparent.png');
+    background-size: 40vw 40vw;
+    background-repeat: no-repeat;
+    background-attachment: fixed;
+    background-position: center;
+    min-height: 30vw;
 }
 
 /* Override the default bootstrap behavior where horizontal description lists 

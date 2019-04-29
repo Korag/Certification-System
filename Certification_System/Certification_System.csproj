@@ -241,6 +241,8 @@
     <Content Include="Content\Img\favicon.ico" />
     <Content Include="Content\Img\logo_ziad.png" />
     <Content Include="Content\Img\logo_ziad_big.jpg" />
+    <Content Include="Content\Img\logo_ziad_big_transparent.png" />
+    <Content Include="Content\Img\logo_ziad_big_transparent2.png" />
     <Content Include="Content\Img\logo_ziad_medium.jpg" />
     <Content Include="Content\style.min.css" />
     <Content Include="favicon.ico" />
