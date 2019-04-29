@@ -44,7 +44,30 @@ namespace Certification_System.Controllers
         [Authorize(Roles = "Admin")]
         public ActionResult DisplayAllUsers()
         {
-            return View();
+            var Users = _context.GetUsers();
+            List<DisplayUsersViewModel> usersToDisplay = new List<DisplayUsersViewModel>();
+
+            foreach (var user in Users)
+            {
+                DisplayUsersViewModel singleUser = new DisplayUsersViewModel
+                {
+                    Email = user.Email,
+                    FirstName = user.FirstName,
+                    LastName = user.LastName,
+
+                    Roles = user.Roles,
+
+                    CompanyRoleManager = new List<string>(),
+                    CompanyRoleWorker = new List<string>()
+                };
+
+                singleUser.CompanyRoleManager = _context.GetCompaniesById(user.CompanyRoleManager).Select(s => s.CompanyName).ToList();
+                singleUser.CompanyRoleWorker = _context.GetCompaniesById(user.CompanyRoleWorker).Select(s => s.CompanyName).ToList();
+
+                usersToDisplay.Add(singleUser);
+            }
+
+            return View(usersToDisplay);
         }
 
         // GET: AddNewUserConfirmation
