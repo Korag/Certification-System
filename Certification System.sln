@@ -7,6 +7,13 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Certification_System", "Cer
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "MongoDB.AspNet.Identity", "MongoDB.AspNet.Identity\MongoDB.AspNet.Identity.csproj", "{0FF87680-235F-4231-8302-9BF6FCAC7476}"
 EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "MongoDB Schema", "MongoDB Schema", "{8B5191DA-905F-4D00-B14B-393F196163B3}"
+	ProjectSection(SolutionItems) = preProject
+		MongoDB Schema\certification_mongoStructure.pdf = MongoDB Schema\certification_mongoStructure.pdf
+		MongoDB Schema\certification_mongoStructure.png = MongoDB Schema\certification_mongoStructure.png
+		MongoDB Schema\certification_mongoStructure.vsdx = MongoDB Schema\certification_mongoStructure.vsdx
+	EndProjectSection
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
