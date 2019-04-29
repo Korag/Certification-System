@@ -1,0 +1,79 @@
+﻿@model IEnumerable<Certification_System.ViewModels.DisplayUsersViewModel>
+
+@{
+    ViewBag.Title = "DisplayAllUsers";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+<h2>Lista użytkowników systemu</h2>
+
+<p>
+    @Html.ActionLink("Dodaj nowego użytkownika", "AddNewUser", "Users")
+</p>
+
+<table class="table table-responsive">
+    <tr>
+        <th>
+            @Html.DisplayNameFor(model => model.Email)
+        </th>
+        <th>
+            @Html.DisplayNameFor(model => model.FirstName)
+        </th>
+        <th>
+            @Html.DisplayNameFor(model => model.LastName)
+        </th>
+        <th>
+            @Html.DisplayNameFor(model => model.Roles)
+        </th>
+        <th>
+            @Html.DisplayNameFor(model => model.CompanyRoleWorker)
+        </th>
+        <th>
+            @Html.DisplayNameFor(model => model.CompanyRoleManager)
+        </th>
+    </tr>
+
+    @foreach (var item in Model)
+    {
+        <tr>
+            <td>
+                @Html.DisplayFor(modelItem => item.Email)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.FirstName)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.LastName)
+            </td>
+            <td>
+                <ul>
+                    @foreach (var role in item.Roles)
+                    {
+                        <li>@role</li>
+                    }
+                </ul>
+            </td>
+            <td>
+                <ul>
+                    @foreach (var companyWorker in item.CompanyRoleWorker)
+                    {
+                        <li>@companyWorker</li>
+                    }
+                </ul>
+            </td>
+            <td>
+                <ul>
+                    @foreach (var companyManager in item.CompanyRoleManager)
+                    {
+                        <li>@companyManager</li>
+                    }
+                </ul>
+            </td>
+            <td>
+                @Html.ActionLink("Edit", "Edit", new { /* id=item.PrimaryKey */ }) |
+                @Html.ActionLink("Details", "Details", new { /* id=item.PrimaryKey */ }) |
+                @Html.ActionLink("Delete", "Delete", new { /* id=item.PrimaryKey */ })
+            </td>
+        </tr>
+    }
+</table>

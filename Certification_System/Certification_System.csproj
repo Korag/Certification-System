@@ -223,6 +223,7 @@
     <Compile Include="ViewModels\AddInstructorViewModel.cs" />
     <Compile Include="ViewModels\AddMeetingViewModel.cs" />
     <Compile Include="ViewModels\AddUserViewModel.cs" />
+    <Compile Include="ViewModels\DisplayUsersViewModel.cs" />
     <Compile Include="ViewModels\ManageViewModels.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="Startup.cs" />
@@ -362,6 +363,7 @@
     <Content Include="Views\Certificates\BlankMenu.cshtml" />
     <Content Include="Views\Users\AddNewUser.cshtml" />
     <Content Include="Views\Users\AddNewUserConfirmation.cshtml" />
+    <Content Include="Views\Users\DisplayAllUsers.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Data\" />
