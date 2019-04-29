@@ -14,8 +14,9 @@ namespace Certification_System.DAL
 
         #region Users
         ICollection<IdentityUser> GetUsers();
+        IdentityUser GetUserById(string userIdentificator);
         #endregion
-    
+
         #region Branches
         ICollection<Branch> GetBranches();
         void AddBranch(Branch branch);

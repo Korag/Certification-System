@@ -165,6 +165,13 @@ namespace Certification_System.DAL
             _users = _context.db.GetCollection<IdentityUser>(_usersCollectionName);
             return _users.AsQueryable().ToList();
         }
+
+        public IdentityUser GetUserById(string userIdentificator)
+        {
+            var filter = Builders<IdentityUser>.Filter.Eq(x => x.Id, userIdentificator);
+            IdentityUser user = _context.db.GetCollection<IdentityUser>(_usersCollectionName).Find<IdentityUser>(filter).FirstOrDefault();
+            return user;
+        }
         #endregion
 
         #region Instructor

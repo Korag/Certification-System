@@ -361,6 +361,7 @@
     <Content Include="Views\Instructors\AddNewInstructorConfirmation.cshtml" />
     <Content Include="Views\Certificates\BlankMenu.cshtml" />
     <Content Include="Views\Users\AddNewUser.cshtml" />
+    <Content Include="Views\Users\AddNewUserConfirmation.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Data\" />
