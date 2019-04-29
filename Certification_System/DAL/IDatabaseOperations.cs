@@ -48,6 +48,7 @@ namespace Certification_System.DAL
 
         #region Company
         ICollection<Company> GetCompanies();
+        ICollection<Company> GetCompaniesById(ICollection<string> companyIdentificators);
         void AddCompany(Company company);
         Company GetCompanyById(string companyIdentificator);
         ICollection<SelectListItem> GetCompaniesAsSelectList();
