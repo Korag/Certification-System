@@ -12,6 +12,9 @@ Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "MongoDB Schema", "MongoDB S
 		MongoDB Schema\certification_mongoStructure.pdf = MongoDB Schema\certification_mongoStructure.pdf
 		MongoDB Schema\certification_mongoStructure.png = MongoDB Schema\certification_mongoStructure.png
 		MongoDB Schema\certification_mongoStructure.vsdx = MongoDB Schema\certification_mongoStructure.vsdx
+		MongoDB Schema\certification_mongoStructure_v2.1.pdf = MongoDB Schema\certification_mongoStructure_v2.1.pdf
+		MongoDB Schema\certification_mongoStructure_v2.1.png = MongoDB Schema\certification_mongoStructure_v2.1.png
+		MongoDB Schema\certification_mongoStructure_v2.1.vsdx = MongoDB Schema\certification_mongoStructure_v2.1.vsdx
 	EndProjectSection
 EndProject
 Global
