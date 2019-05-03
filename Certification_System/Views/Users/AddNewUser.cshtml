@@ -137,8 +137,12 @@
         <div class="col-6 m-auto p-0">
             @Html.LabelFor(m => m.DateOfBirth, new { @class = "col-12 control-label p-0" })
         </div>
-        <div class="col-6 m-auto p-0">
-            @Html.TextBoxFor(m => m.DateOfBirth, new { @class = "col-12 form-control" })
+
+        <div class='input-group date col-6 m-auto p-0' id='DateOfBirth'>
+            <input type='text' class="form-control col-12" name="DateOfBirth" value="@DateTime.Now.ToShortDateString() @DateTime.Now.ToShortTimeString()" />
+            <span class="input-group-addon">
+                <span class="fa fa-calendar pl-1 pt-0.5" style="font-size:34px"></span>
+            </span>
         </div>
 
         <div class="row justify-content-center">
@@ -188,3 +192,17 @@
 <div>
     @Html.ActionLink("Przejdź do listy użytkowników", "DisplayAllUsers", "Users")
 </div>
+
+<script src="~/Scripts/moment-with-locales.js"></script>
+@section Scripts {
+    <script>
+        $(function () {
+            $('#DateOfBirth').datetimepicker({
+                format: 'DD.MM.YYYY HH:mm',
+                locale: moment.locale('pl', {
+                    week: { dow: 1 }
+                })
+            });
+        });
+    </script>
+}
