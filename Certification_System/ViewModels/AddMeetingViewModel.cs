@@ -1,11 +1,18 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
+using System.Web.Mvc;
 
 namespace Certification_System.ViewModels
 {
     public class AddMeetingViewModel
     {
+        [Required(ErrorMessage = "Należy wybrać do którego kursu przypisać spotkanie.")]
+        public string SelectedCourse { get; set; }
+
+        [Display(Name = "Kurs")]
+        public IList<SelectListItem> AvailableCourses { get; set; }
+
         [Required]
         [Display(Name = "Identyfikator")]
         public string MeetingIndexer { get; set; }
@@ -38,6 +45,9 @@ namespace Certification_System.ViewModels
         public string NumberOfApartment { get; set; }
 
         [Display(Name = "Instruktor")]
-        public ICollection<string> Instructor { get; set; }
+        public ICollection<string> Instructors { get; set; }
+
+        [Display(Name = "Lista Obecności")]
+        public ICollection<string> AttendanceList { get; set; }
     }
 }
