@@ -1,0 +1,126 @@
+﻿@model Certification_System.ViewModels.AddMeetingViewModel
+
+@{
+    ViewBag.Title = "AddNewMeeting";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+<h2>Dodaj spotkanie w ramach kursu</h2>
+<hr />
+
+@using (Html.BeginForm())
+{
+    @Html.AntiForgeryToken()
+
+<div class="form-horizontal">
+
+    <div class="form-group">
+        @Html.LabelFor(model => model.MeetingIndexer, htmlAttributes: new { @class = "control-label col-md-2" })
+        <div class="col-md-10">
+            @Html.DropDownListFor(model => Model.SelectedCourse, Model.AvailableCourses, new { @class = "form-control" })
+            @Html.ValidationMessageFor(model => model.MeetingIndexer, "", new { @class = "text-danger" })
+        </div>
+    </div>
+
+    <div class="form-group">
+        @Html.LabelFor(model => model.MeetingIndexer, htmlAttributes: new { @class = "control-label col-md-2" })
+        <div class="col-md-10">
+            @Html.EditorFor(model => model.MeetingIndexer, new { htmlAttributes = new { @class = "form-control" } })
+            @Html.ValidationMessageFor(model => model.MeetingIndexer, "", new { @class = "text-danger" })
+        </div>
+    </div>
+
+    <div class="form-group">
+        @Html.LabelFor(model => model.Description, htmlAttributes: new { @class = "control-label col-md-2" })
+        <div class="col-md-10">
+            @Html.TextAreaFor(model => model.Description, new { htmlAttributes = new { @class = "form-control" } })
+            @Html.ValidationMessageFor(model => model.Description, "", new { @class = "text-danger" })
+        </div>
+    </div>
+
+    <div class="form-group">
+        @Html.LabelFor(model => model.DateOfMeeting, htmlAttributes: new { @class = "control-label col-md-2" })
+        <div class="col-md-10">
+            <div class='input-group date' id='DateOfMeeting'>
+                <input type='text' class="form-control" name="DateOfMeeting" value="@DateTime.Now.ToShortDateString() @DateTime.Now.ToShortTimeString()" />
+                <span class="input-group-addon">
+                    <span class="fa fa-calendar pl-1 pt-0.5" style="font-size:34px"></span>
+                </span>
+            </div>
+            @Html.ValidationMessageFor(model => model.DateOfMeeting, "", new { @class = "text-danger" })
+        </div>
+    </div>
+
+    <div class="form-group">
+        @Html.LabelFor(model => model.Country, htmlAttributes: new { @class = "control-label col-md-2" })
+        <div class="col-md-10">
+            @Html.EditorFor(model => model.Country, new { htmlAttributes = new { @class = "form-control" } })
+            @Html.ValidationMessageFor(model => model.Country, "", new { @class = "text-danger" })
+        </div>
+    </div>
+
+    <div class="form-group">
+        @Html.LabelFor(model => model.City, htmlAttributes: new { @class = "control-label col-md-2" })
+        <div class="col-md-10">
+            @Html.EditorFor(model => model.City, new { htmlAttributes = new { @class = "form-control" } })
+            @Html.ValidationMessageFor(model => model.City, "", new { @class = "text-danger" })
+        </div>
+    </div>
+
+    <div class="form-group">
+        @Html.LabelFor(model => model.PostCode, htmlAttributes: new { @class = "control-label col-md-2" })
+        <div class="col-md-10">
+            @Html.EditorFor(model => model.PostCode, new { htmlAttributes = new { @class = "form-control" } })
+            @Html.ValidationMessageFor(model => model.PostCode, "", new { @class = "text-danger" })
+        </div>
+    </div>
+
+    <div class="form-group">
+        @Html.LabelFor(model => model.Address, htmlAttributes: new { @class = "control-label col-md-2" })
+        <div class="col-md-10">
+            @Html.EditorFor(model => model.Address, new { htmlAttributes = new { @class = "form-control" } })
+            @Html.ValidationMessageFor(model => model.Address, "", new { @class = "text-danger" })
+        </div>
+    </div>
+
+    <div class="form-group">
+        @Html.LabelFor(model => model.NumberOfApartment, htmlAttributes: new { @class = "control-label col-md-2" })
+        <div class="col-md-10">
+            @Html.EditorFor(model => model.NumberOfApartment, new { htmlAttributes = new { @class = "form-control" } })
+            @Html.ValidationMessageFor(model => model.NumberOfApartment, "", new { @class = "text-danger" })
+        </div>
+    </div>
+
+    <div class="row justify-content-center">
+        @Html.ValidationSummary("", new { @class = "text-danger" })
+    </div>
+
+    <div class="form-group">
+        <div class="row justify-content-center">
+            <input type="submit" value="Utwórz" class="btn btn-primary" />
+        </div>
+    </div>
+</div>
+}
+
+<div>
+    @*jeżeli było to przekierowanie to możemy wrócić
+        @Html.ActionLink("Wróć do listy spotkań szkolenia", "Index")
+
+        jeżeli panel został ręcznie wywołany możemy z tego poziomu przejść do widoku aktywnych kursów
+        @Html.ActionLink("Przeglądaj aktywne kursy", "Index")*@
+</div>
+<script src="~/Scripts/moment-with-locales.js"></script>
+
+@section Scripts {
+    <script>
+        $(function () {
+            $('#DateOfMeeting').datetimepicker({
+                format: 'DD.MM.YYYY HH:mm',
+                locale: moment.locale('pl', {
+                    week: { dow: 1 }
+                })
+            });
+        });
+    </script>
+}
