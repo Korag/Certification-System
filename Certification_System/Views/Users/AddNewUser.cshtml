@@ -155,7 +155,7 @@
             @Html.LabelFor(model => model.AvailableRoles, htmlAttributes: new { @class = "col-12 control-label p-0" })
         </div>
         <div class="col-6 m-auto p-0">
-            @Html.DropDownListFor(model => Model.SelectedRole, Model.AvailableRoles, new { @class = "text-danger" })
+            @Html.DropDownListFor(model => Model.SelectedRole, Model.AvailableRoles, new { @class = "form-control" })
         </div>
     </div>
 
@@ -164,7 +164,7 @@
             @Html.LabelFor(model => model.CompanyRoleWorker, htmlAttributes: new { @class = "col-12 control-label p-0" })
         </div>
         <div class="col-6 m-auto p-0">
-            @Html.DropDownListFor(model => Model.CompanyRoleWorker, Model.AvailableCompanies, new { @class = "text-danger" })
+            @Html.DropDownListFor(model => Model.CompanyRoleWorker, Model.AvailableCompanies, new { @class = "form-control" })
         </div>
     </div>
 
@@ -173,7 +173,7 @@
             @Html.LabelFor(model => model.CompanyRoleManager, htmlAttributes: new { @class = "col-12 control-label p-0" })
         </div>
         <div class="col-6 m-auto p-0">
-            @Html.DropDownListFor(model => Model.CompanyRoleManager, Model.AvailableCompanies, new { @class = "text-danger" })
+            @Html.DropDownListFor(model => Model.CompanyRoleManager, Model.AvailableCompanies, new { @class = "form-control" })
         </div>
     </div>
 
