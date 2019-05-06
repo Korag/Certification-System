@@ -364,6 +364,7 @@
     <Content Include="Views\Users\AddNewUser.cshtml" />
     <Content Include="Views\Users\AddNewUserConfirmation.cshtml" />
     <Content Include="Views\Users\DisplayAllUsers.cshtml" />
+    <Content Include="Views\Meetings\AddNewMeeting.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Data\" />

@@ -33,10 +33,13 @@ namespace Certification_System.DAL
         #region Course
         void AddCourse(Course course);
         Course GetCourseById(string courseIdentificator);
+        ICollection<SelectListItem> GetCoursesAsSelectList();
+        ICollection<Course> GetActiveCourses();
         #endregion
 
         #region Meeting
         ICollection<Meeting> GetMeetingsById(ICollection<string> meetingsIdentificators);
+        void AddMeeting(Meeting meeting);
         #endregion
 
         #region Instructor

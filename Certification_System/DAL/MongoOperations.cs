@@ -142,12 +142,18 @@ namespace Certification_System.DAL
             Course course = _context.db.GetCollection<Course>(_coursesCollectionName).Find<Course>(filter).FirstOrDefault();
             return course;
         }
+        public ICollection<Course> GetActiveCourses()
+        {
+            var filter = Builders<Course>.Filter.Eq(x => x.CourseEnded, false);
+            ICollection<Course> course = _context.db.GetCollection<Course>(_coursesCollectionName).Find<Course>(filter).ToList();
+            return course;
+        }
         #endregion
 
         #region Meeting
         public ICollection<Meeting> GetMeetingsById(ICollection<string> meetingsIdentificators)
         {
-            List<Meeting> Meetings = new List<Meeting>();
+            ICollection<Meeting> Meetings = new List<Meeting>();
 
             foreach (var meeting in meetingsIdentificators)
             {
@@ -157,6 +163,34 @@ namespace Certification_System.DAL
             }
             return Meetings;
         }
+
+        public ICollection<SelectListItem> GetCoursesAsSelectList()
+        {
+            List<Course> Courses = GetActiveCourses().ToList();
+            List<SelectListItem> SelectList = new List<SelectListItem>();
+            SelectList.Add(new SelectListItem { Text = "---", Value = null });
+
+            foreach (var course in Courses)
+            {
+                SelectList.Add
+                    (
+                        new SelectListItem()
+                        {
+                            Text = course.CourseIndexer + " " + course.Name,
+                            Value = course.CourseIdentificator
+                        }
+                    );
+            };
+
+            return SelectList;
+        }
+
+        public void AddMeeting(Meeting meeting)
+        {
+            _meetings = _context.db.GetCollection<Meeting>(_meetingsCollectionName);
+            _meetings.InsertOne(meeting);
+        }
+
         #endregion
 
         #region Users
