@@ -75,13 +75,13 @@ namespace Certification_System.Controllers
                             Address = meeting.Address,
                             NumberOfApartment = meeting.NumberOfApartment,
 
-                            Instructor = new List<string>()
+                            Instructors = new List<string>()
                         };
 
                         foreach (var instructor in Instructors)
                         {
                             string instructorIdentity = instructor.FirstName + instructor.LastName;
-                            meetingsInCourse.Instructor.Add(instructorIdentity);
+                            meetingsInCourse.Instructors.Add(instructorIdentity);
                         }
 
                         Meetings.Add(meetingsInCourse);
@@ -117,6 +117,7 @@ namespace Certification_System.Controllers
                     DateOfEnd = newCourse.DateOfEnd,
                     EnrolledUsersLimit = newCourse.EnrolledUsersLimit,
 
+                    CourseEnded = false,
                     Branches = newCourse.SelectedBranches,
                     Meetings = new List<string>()
                 };
