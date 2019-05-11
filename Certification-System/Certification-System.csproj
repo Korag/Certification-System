@@ -5,6 +5,7 @@
     <UserSecretsId>aspnet-Certification_System-352A3B1B-2193-4830-8CAC-0E183CFADE94</UserSecretsId>
     <AspNetCoreHostingModel>InProcess</AspNetCoreHostingModel>
     <RootNamespace>Certification_System</RootNamespace>
+    <ApplicationIcon>favicon.ico</ApplicationIcon>
   </PropertyGroup>
 
 
@@ -34,6 +35,7 @@
     <Folder Include="ViewModels\AccountViewModels\" />
     <Folder Include="ViewModels\ManageViewModels\" />
     <Folder Include="Views\Account\" />
+    <Folder Include="wwwroot\Image\" />
   </ItemGroup>
 
 </Project>
