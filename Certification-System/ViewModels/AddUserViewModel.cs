@@ -1,8 +1,10 @@
-﻿using System.ComponentModel.DataAnnotations;
+﻿using Microsoft.AspNetCore.Mvc.Rendering;
+using System.Collections.Generic;
+using System.ComponentModel.DataAnnotations;
 
-namespace Certification_System.ViewModels.AccountViewModels
+namespace Certification_System.ViewModels
 {
-    public class RegisterViewModel
+    public class AddUserViewModel
     {
         [Required]
         [EmailAddress]
@@ -73,5 +75,20 @@ namespace Certification_System.ViewModels.AccountViewModels
         [DisplayFormat(DataFormatString = "{0:MM/dd/yyyy}")]
         [Display(Name = "Data urodzenia")]
         public string DateOfBirth { get; set; }
+
+        [Display(Name = "Rola użytkownika")]
+        public IList<SelectListItem> AvailableRoles { get; set; }
+
+        [Required(ErrorMessage = "Należy przydzielić rolę")]
+        public string SelectedRole { get; set; }
+
+        [Display(Name = "Przedsiębiorstwa")]
+        public IList<SelectListItem> AvailableCompanies { get; set; }
+
+        [Display(Name = "Przedsiębiorstwo zarządzane przez użytkownika")]
+        public string CompanyRoleManager { get; set; }
+
+        [Display(Name = "Przedsiębiorstwo zrzeszające pracownika")]
+        public string CompanyRoleWorker { get; set; }
     }
 }
