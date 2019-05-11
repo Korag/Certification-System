@@ -11,11 +11,21 @@
   <ItemGroup>
     <PackageReference Include="Microsoft.AspNetCore.App" />
     <PackageReference Include="Microsoft.AspNetCore.Razor.Design" Version="2.2.0" PrivateAssets="All" />
+    <PackageReference Include="Microsoft.VisualStudio.Web.CodeGeneration.Design" Version="2.2.0" />
   </ItemGroup>
 
 
   <ItemGroup>
     <ProjectReference Include="..\AspNetCore.Identity.Mongo\AspNetCore.Identity.Mongo.csproj" />
+  </ItemGroup>
+
+
+  <ItemGroup>
+    <Folder Include="Extensions\" />
+    <Folder Include="Services\Mailing\" />
+    <Folder Include="ViewModels\AccountViewModels\" />
+    <Folder Include="ViewModels\ManageViewModels\" />
+    <Folder Include="Views\Account\" />
   </ItemGroup>
 
 </Project>
