@@ -58,7 +58,7 @@ namespace Certification_System.Controllers
             {
                 // This doesn't count login failures towards account lockout
                 // To enable password failures to trigger account lockout, set lockoutOnFailure: true
-                var result = await _signInManager.PasswordSignInAsync(model.Username, model.Password, model.RememberMe, lockoutOnFailure: false);
+                var result = await _signInManager.PasswordSignInAsync(model.Email, model.Password, model.RememberMe, lockoutOnFailure: false);
                 if (result.Succeeded)
                 {
                     _logger.LogInformation("User logged in.");
@@ -217,7 +217,23 @@ namespace Certification_System.Controllers
             ViewData["ReturnUrl"] = returnUrl;
             if (ModelState.IsValid)
             {
-                var user = new CertificationPlatformUser { UserName = model.Username, Email = model.Email };
+                var user = new CertificationPlatformUser
+                {
+                    UserName = model.Email,
+                    Email = model.Email,
+                    FirstName = model.FirstName,
+                    LastName = model.LastName,
+                    Country = model.Country,
+                    City = model.City,
+                    PostCode = model.PostCode,
+                    Address = model.Address,
+                    NumberOfApartment = model.NumberOfApartment,
+                    DateOfBirth = model.DateOfBirth,
+                    PhoneNumber = model.PhoneNumber
+                };
+
+                user.Roles.Add("Worker");
+
                 var result = await _userManager.CreateAsync(user, model.Password);
                 if (result.Succeeded)
                 {
@@ -432,6 +448,49 @@ namespace Certification_System.Controllers
         public IActionResult AccessDenied()
         {
             return View();
+        }
+
+        //
+        // GET: /Account/GenerateMenu
+        [Authorize]
+        public ActionResult GenerateMenu()
+        {
+            if (this.User.IsInRole("Admin"))
+            {
+                return PartialView("_AdminMenu");
+            }
+            else if (this.User.IsInRole("Company"))
+            {
+                return PartialView("_CompanyMenu");
+            }
+            else
+            {
+                return PartialView("_WorkerMenu");
+            }
+        }
+
+        //
+        // GET: /Account/_AdminMenu
+        [Authorize(Roles = "Admin")]
+        public IActionResult _AdminMenu()
+        {
+            return PartialView();
+        }
+
+        //
+        // GET: /Account/_CompanyMenu
+        [Authorize(Roles = "Company")]
+        public IActionResult _CompanyMenu()
+        {
+            return PartialView();
+        }
+
+        //
+        // GET: /Account/_WorkerMenu
+        [Authorize(Roles = "Worker")]
+        public IActionResult _WorkerMenu()
+        {
+            return PartialView();
         }
 
         #region Helpers
