@@ -17,9 +17,11 @@ Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "MongoDB Schema", "MongoDB S
 		MongoDB Schema\certification_mongoStructure_v2.1.vsdx = MongoDB Schema\certification_mongoStructure_v2.1.vsdx
 	EndProjectSection
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Certification-System", "Certification-System\Certification-System.csproj", "{60C0AB49-802A-479A-BC44-9A88FA32105A}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Certification-System", "Certification-System\Certification-System.csproj", "{60C0AB49-802A-479A-BC44-9A88FA32105A}"
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "AspNetCore.Identity.Mongo", "AspNetCore.Identity.Mongo\AspNetCore.Identity.Mongo.csproj", "{09033783-67D1-43AC-ADDA-35C927303DF2}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Certification-System_Test", "Certification-System_Test\Certification-System_Test.csproj", "{B608E5DE-1463-4933-81AF-A094E52A7A13}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -43,6 +45,10 @@ Global
 		{09033783-67D1-43AC-ADDA-35C927303DF2}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{09033783-67D1-43AC-ADDA-35C927303DF2}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{09033783-67D1-43AC-ADDA-35C927303DF2}.Release|Any CPU.Build.0 = Release|Any CPU
+		{B608E5DE-1463-4933-81AF-A094E52A7A13}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{B608E5DE-1463-4933-81AF-A094E52A7A13}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{B608E5DE-1463-4933-81AF-A094E52A7A13}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{B608E5DE-1463-4933-81AF-A094E52A7A13}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
