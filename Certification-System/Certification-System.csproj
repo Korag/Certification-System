@@ -5,8 +5,9 @@
     <UserSecretsId>aspnet-Certification_System-352A3B1B-2193-4830-8CAC-0E183CFADE94</UserSecretsId>
     <AspNetCoreHostingModel>InProcess</AspNetCoreHostingModel>
     <RootNamespace>Certification_System</RootNamespace>
-    <ApplicationIcon>favicon.ico</ApplicationIcon>
+    <ApplicationIcon></ApplicationIcon>
     <TypeScriptToolsVersion>3.1</TypeScriptToolsVersion>
+    <Win32Resource />
   </PropertyGroup>
 
 
