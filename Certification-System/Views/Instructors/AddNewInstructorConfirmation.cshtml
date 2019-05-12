@@ -1,0 +1,79 @@
+﻿@model Certification_System.ViewModels.AddInstructorViewModel
+
+@{
+    ViewBag.Title = "AddNewInstructorConfirmation";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+
+<h2 class="alert alert-success" role="alert">Dodano następującego instruktora:</h2>
+
+<table class="table table-responsive">
+    <tr>
+        <th>
+            @Html.DisplayNameFor(model => model.FirstName)
+        </th>
+        <th>
+            @Html.DisplayNameFor(model => model.LastName)
+        </th>
+        <th>
+            @Html.DisplayNameFor(model => model.Email)
+        </th>
+        <th>
+            @Html.DisplayNameFor(model => model.Phone)
+        </th>
+        <th>
+            @Html.DisplayNameFor(model => model.Country)
+        </th>
+        <th>
+            @Html.DisplayNameFor(model => model.City)
+        </th>
+        <th>
+            @Html.DisplayNameFor(model => model.PostCode)
+        </th>
+        <th>
+            @Html.DisplayNameFor(model => model.Address)
+        </th>
+        <th>
+            @Html.DisplayNameFor(model => model.NumberOfApartment)
+        </th>
+    </tr>
+    <tr>
+        <td>
+            @Html.DisplayFor(model => model.FirstName)
+        </td>
+        <td>
+            @Html.DisplayFor(model => model.LastName)
+        </td>
+        <td>
+            @Html.DisplayFor(model => model.Email)
+        </td>
+        <td>
+            @Html.DisplayFor(model => model.Phone)
+        </td>
+        <td>
+            @Html.DisplayFor(model => model.Country)
+        </td>
+        <td>
+            @Html.DisplayFor(model => model.City)
+        </td>
+        <td>
+            @Html.DisplayFor(model => model.PostCode)
+        </td>
+        <td>
+            @Html.DisplayFor(model => model.Address)
+        </td>
+        <td>
+            @Html.DisplayFor(model => model.NumberOfApartment)
+        </td>
+        <td>
+            @*@Html.ActionLink("Edit", "Edit", new { /* id=item.PrimaryKey */ }) |
+                @Html.ActionLink("Details", "Details", new { /* id=item.PrimaryKey */ }) |
+                @Html.ActionLink("Delete", "Delete", new { /* id=item.PrimaryKey */ })*@
+        </td>
+    </tr>
+</table>
+
+<p>
+    @Html.ActionLink("Dodaj nowego instruktora", "AddNewInstructor", "Instructors")
+</p>

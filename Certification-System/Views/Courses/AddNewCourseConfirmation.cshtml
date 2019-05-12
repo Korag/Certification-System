@@ -1,0 +1,144 @@
+﻿@model Certification_System.ViewModels.AddCourseViewModel
+
+@{
+    ViewBag.Title = "AddNewCourseConfirmation";
+}
+
+<h2 class="alert alert-success" role="alert">Dodano następujący kurs:</h2>
+
+<table class="table table-responsive">
+    <tr>
+        <th>
+            @Html.DisplayNameFor(model => model.CourseIndexer)
+        </th>
+        <th>
+            @Html.DisplayNameFor(model => model.Name)
+        </th>
+        <th>
+            @Html.DisplayNameFor(model => model.Description)
+        </th>
+        <th>
+            @Html.DisplayNameFor(model => model.EnrolledUsersLimit)
+        </th>
+        <th>
+            @Html.DisplayNameFor(model => model.DateOfStart)
+        </th>
+        <th>
+            @Html.DisplayNameFor(model => model.DateOfEnd)
+        </th>
+        <th>
+            @Html.DisplayNameFor(model => model.AvailableBranches)
+        </th>
+    </tr>
+
+    <tr>
+        <td>
+            @Html.DisplayFor(model => model.CourseIndexer)
+        </td>
+        <td>
+            @Html.DisplayFor(model => model.Name)
+        </td>
+        <td>
+            @Html.DisplayFor(model => model.Description)
+        </td>
+        <td>
+            @Html.DisplayFor(model => model.EnrolledUsersLimit)
+        </td>
+        <td>
+            @Html.DisplayFor(model => model.DateOfStart)
+        </td>
+        <td>
+            @Html.DisplayFor(model => model.DateOfEnd)
+        </td>
+        <td>
+            <ul>
+                @foreach (var branch in Model.SelectedBranches)
+                {
+                    <li>@branch</li>
+                }
+            </ul>
+        </td>
+        <td>
+            @*@Html.ActionLink("Edit", "Edit", new { /* id=item.PrimaryKey */ }) |
+            @Html.ActionLink("Delete", "Delete", new { /* id=item.PrimaryKey */ })*@
+        </td>
+    </tr>
+</table> 
+
+@if (Model.MeetingsViewModels.Count() != 0)
+{
+    <table class="table table-responsive">
+        <tr>
+            Dodane spotkania w ramach kursu:
+        </tr>
+        <tr>
+            <th>
+                @Html.DisplayNameFor(model => Model.MeetingsViewModels.FirstOrDefault().MeetingIndexer)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => Model.MeetingsViewModels.FirstOrDefault().DateOfMeeting)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => Model.MeetingsViewModels.FirstOrDefault().Country)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => Model.MeetingsViewModels.FirstOrDefault().City)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => Model.MeetingsViewModels.FirstOrDefault().PostCode)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => Model.MeetingsViewModels.FirstOrDefault().Address)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => Model.MeetingsViewModels.FirstOrDefault().NumberOfApartment)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => Model.MeetingsViewModels.FirstOrDefault().Instructors)
+            </th>
+        </tr>
+
+        @foreach (var Meeting in Model.MeetingsViewModels)
+        {
+            <tr>
+                <td>
+                    @Html.DisplayFor(model => Meeting.MeetingIndexer)
+                </td>
+                <td>
+                    @Html.DisplayFor(model => Meeting.DateOfMeeting)
+                </td>
+                <td>
+                    @Html.DisplayFor(model => Meeting.Country)
+                </td>
+                <td>
+                    @Html.DisplayFor(model => Meeting.City)
+                </td>
+                <td>
+                    @Html.DisplayFor(model => Meeting.PostCode)
+                </td>
+                <td>
+                    @Html.DisplayFor(model => Meeting.Address)
+                </td>
+                <td>
+                    @Html.DisplayFor(model => Meeting.NumberOfApartment)
+                </td>
+                <td>
+                    <ul>
+                        @foreach (var instructor in Meeting.Instructors)
+                        {
+                            <li>@instructor</li>
+                        }
+                    </ul>
+                </td>
+                <td>
+                    @*@Html.ActionLink("Edit", "Edit", new { /* id=item.PrimaryKey */ }) |
+                        @Html.ActionLink("Delete", "Delete", new { /* id=item.PrimaryKey */ })*@
+                </td>
+            </tr>
+        }
+    </table>
+}
+
+<p>
+    @Html.ActionLink("Dodaj kolejny kurs", "AddNewCourse")
+</p>

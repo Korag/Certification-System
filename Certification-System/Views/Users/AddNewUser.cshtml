@@ -1,0 +1,208 @@
+﻿@model Certification_System.ViewModels.AddUserViewModel
+
+@{
+    ViewBag.Title = "AddNewUser";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+<h2>Dodaj nowego użytkownika systemu certyfikacji</h2>
+<hr />
+
+@using (Html.BeginForm())
+{
+    @Html.AntiForgeryToken()
+
+    <div class="form-group form-group">
+        <div class="col-6 m-auto p-0">
+            @Html.LabelFor(m => m.Email, new { @class = "col-12 control-label p-0" })
+        </div>
+        <div class="col-6 m-auto p-0">
+            @Html.TextBoxFor(m => m.Email, new { @class = "col-12 form-control" })
+        </div>
+        <div class="row justify-content-center">
+            @Html.ValidationMessageFor(m => m.Email, "", new { @class = "text-danger" })
+        </div>
+    </div>
+    <div class="form-group">
+        <div class="col-6 m-auto p-0">
+            @Html.LabelFor(m => m.Password, new { @class = "col-12 control-label p-0" })
+        </div>
+        <div class="col-6 m-auto p-0">
+            @Html.PasswordFor(m => m.Password, new { @class = "col-12 form-control" })
+        </div>
+        <div class="row justify-content-center">
+            @Html.ValidationMessageFor(m => m.Password, "", new { @class = "text-danger" })
+        </div>
+    </div>
+    <div class="form-group">
+        <div class="col-6 m-auto p-0">
+            @Html.LabelFor(m => m.ConfirmPassword, new { @class = "col-12 control-label p-0" })
+        </div>
+        <div class="col-6 m-auto p-0">
+            @Html.PasswordFor(m => m.ConfirmPassword, new { @class = "col-12 form-control" })
+        </div>
+        <div class="row justify-content-center">
+            @Html.ValidationMessageFor(m => m.ConfirmPassword, "", new { @class = "text-danger" })
+        </div>
+    </div>
+    <div class="form-group">
+        <div class="col-6 m-auto p-0">
+            @Html.LabelFor(m => m.FirstName, new { @class = "col-12 control-label p-0" })
+        </div>
+        <div class="col-6 m-auto p-0">
+            @Html.TextBoxFor(m => m.FirstName, new { @class = "col-12 form-control" })
+        </div>
+        <div class="row justify-content-center">
+            @Html.ValidationMessageFor(m => m.FirstName, "", new { @class = "text-danger" })
+        </div>
+    </div>
+    <div class="form-group">
+        <div class="col-6 m-auto p-0">
+            @Html.LabelFor(m => m.LastName, new { @class = "col-12 control-label p-0" })
+        </div>
+        <div class="col-6 m-auto p-0">
+            @Html.TextBoxFor(m => m.LastName, new { @class = "col-12 form-control" })
+        </div>
+        <div class="row justify-content-center">
+            @Html.ValidationMessageFor(m => m.LastName, "", new { @class = "text-danger" })
+        </div>
+    </div>
+    <div class="form-group">
+        <div class="col-6 m-auto p-0">
+            @Html.LabelFor(m => m.Country, new { @class = "col-12 control-label p-0" })
+        </div>
+        <div class="col-6 m-auto p-0">
+            @Html.TextBoxFor(m => m.Country, new { @class = "col-12 form-control" })
+        </div>
+        <div class="row justify-content-center">
+            @Html.ValidationMessageFor(m => m.Country, "", new { @class = "text-danger" })
+        </div>
+    </div>
+    <div class="form-group">
+        <div class="col-6 m-auto p-0">
+            @Html.LabelFor(m => m.City, new { @class = "col-12 control-label p-0" })
+        </div>
+        <div class="col-6 m-auto p-0">
+            @Html.TextBoxFor(m => m.City, new { @class = "col-12 form-control" })
+        </div>
+        <div class="row justify-content-center">
+            @Html.ValidationMessageFor(m => m.City, "", new { @class = "text-danger" })
+        </div>
+    </div>
+    <div class="form-group">
+        <div class="col-6 m-auto p-0">
+            @Html.LabelFor(m => m.PostCode, new { @class = "col-12 control-label p-0" })
+        </div>
+        <div class="col-6 m-auto p-0">
+            @Html.TextBoxFor(m => m.PostCode, new { @class = "col-12 form-control" })
+        </div>
+        <div class="row justify-content-center">
+            @Html.ValidationMessageFor(m => m.PostCode, "", new { @class = "text-danger" })
+        </div>
+    </div>
+    <div class="form-group">
+        <div class="col-6 m-auto p-0">
+            @Html.LabelFor(m => m.Address, new { @class = "col-12 control-label p-0" })
+        </div>
+        <div class="col-6 m-auto p-0">
+            @Html.TextBoxFor(m => m.Address, new { @class = "col-12 form-control" })
+        </div>
+        <div class="row justify-content-center">
+            @Html.ValidationMessageFor(m => m.Address, "", new { @class = "text-danger" })
+        </div>
+    </div>
+    <div class="form-group">
+        <div class="col-6 m-auto p-0">
+            @Html.LabelFor(m => m.NumberOfApartment, new { @class = "col-12 control-label p-0" })
+        </div>
+        <div class="col-6 m-auto p-0">
+            @Html.TextBoxFor(m => m.NumberOfApartment, new { @class = "col-12 form-control" })
+        </div>
+        <div class="row justify-content-center">
+            @Html.ValidationMessageFor(m => m.NumberOfApartment, "", new { @class = "text-danger" })
+        </div>
+    </div>
+    <div class="form-group">
+        <div class="col-6 m-auto p-0">
+            @Html.LabelFor(m => m.PhoneNumber, new { @class = "col-12 control-label p-0" })
+        </div>
+        <div class="col-6 m-auto p-0">
+            @Html.TextBoxFor(m => m.PhoneNumber, new { @class = "col-12 form-control" })
+        </div>
+        <div class="row justify-content-center">
+            @Html.ValidationMessageFor(m => m.PhoneNumber, "", new { @class = "text-danger" })
+        </div>
+    </div>
+    <div class="form-group">
+        <div class="col-6 m-auto p-0">
+            @Html.LabelFor(m => m.DateOfBirth, new { @class = "col-12 control-label p-0" })
+        </div>
+
+        <div class='input-group date col-6 m-auto p-0' id='DateOfBirth'>
+            <input type='text' class="form-control col-12" name="DateOfBirth" value="@DateTime.Now.ToShortDateString() @DateTime.Now.ToShortTimeString()" />
+            <span class="input-group-addon">
+                <span class="fa fa-calendar pl-1 pt-0.5" style="font-size:34px"></span>
+            </span>
+        </div>
+
+        <div class="row justify-content-center">
+            @Html.ValidationMessageFor(m => m.DateOfBirth, "", new { @class = "text-danger" })
+        </div>
+    </div>
+
+    <div class="form-group">
+        <div class="col-6 m-auto p-0">
+            @Html.LabelFor(model => model.AvailableRoles, htmlAttributes: new { @class = "col-12 control-label p-0" })
+        </div>
+        <div class="col-6 m-auto p-0">
+            @Html.DropDownListFor(model => Model.SelectedRole, Model.AvailableRoles, new { @class = "form-control" })
+        </div>
+    </div>
+
+    <div class="form-group">
+        <div class="col-6 m-auto p-0">
+            @Html.LabelFor(model => model.CompanyRoleWorker, htmlAttributes: new { @class = "col-12 control-label p-0" })
+        </div>
+        <div class="col-6 m-auto p-0">
+            @Html.DropDownListFor(model => Model.CompanyRoleWorker, Model.AvailableCompanies, new { @class = "form-control" })
+        </div>
+    </div>
+
+    <div class="form-group">
+        <div class="col-6 m-auto p-0">
+            @Html.LabelFor(model => model.CompanyRoleManager, htmlAttributes: new { @class = "col-12 control-label p-0" })
+        </div>
+        <div class="col-6 m-auto p-0">
+            @Html.DropDownListFor(model => Model.CompanyRoleManager, Model.AvailableCompanies, new { @class = "form-control" })
+        </div>
+    </div>
+
+    <div class="row justify-content-center">
+        @Html.ValidationSummary("", new { @class = "text-danger" })
+    </div>
+
+    <div class="form-group">
+        <div class="row justify-content-center">
+            <input type="submit" class="btn btn-primary" value="Dodaj użytkownika" />
+        </div>
+    </div>
+
+}
+
+<div>
+    @Html.ActionLink("Przejdź do listy użytkowników", "DisplayAllUsers", "Users")
+</div>
+
+<script src="~/Scripts/moment-with-locales.js"></script>
+@section Scripts {
+    <script>
+        $(function () {
+            $('#DateOfBirth').datetimepicker({
+                format: 'DD.MM.YYYY HH:mm',
+                locale: moment.locale('pl', {
+                    week: { dow: 1 }
+                })
+            });
+        });
+    </script>
+}

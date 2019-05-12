@@ -1,0 +1,109 @@
+﻿@model Certification_System.ViewModels.AddUserViewModel
+
+@{
+    ViewBag.Title = "AddNewUserConfirmation";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+<h2 class="alert alert-success" role="alert">Dodano następującego użytkownika platformy:</h2>
+
+<table class="table table-responsive">
+    <tr>
+        <th>
+            @Html.DisplayNameFor(model => model.Email)
+        </th>
+        <th>
+            @Html.DisplayNameFor(model => model.Password)
+        </th>
+        <th>
+            @Html.DisplayNameFor(model => model.FirstName)
+        </th>
+        <th>
+            @Html.DisplayNameFor(model => model.LastName)
+        </th>
+        <th>
+            @Html.DisplayNameFor(model => model.Country)
+        </th>
+        <th>
+            @Html.DisplayNameFor(model => model.City)
+        </th>
+        <th>
+            @Html.DisplayNameFor(model => model.PostCode)
+        </th>
+        <th>
+            @Html.DisplayNameFor(model => model.Address)
+        </th>
+        <th>
+            @Html.DisplayNameFor(model => model.NumberOfApartment)
+        </th>
+        <th>
+            @Html.DisplayNameFor(model => model.PhoneNumber)
+        </th>
+        <th>
+            @Html.DisplayNameFor(model => model.DateOfBirth)
+        </th>
+        <th>
+            @Html.DisplayNameFor(model => model.SelectedRole)
+        </th>
+        <th>
+            @Html.DisplayNameFor(model => model.CompanyRoleManager)
+        </th>
+        <th>
+            @Html.DisplayNameFor(model => model.CompanyRoleWorker)
+        </th>
+    </tr>
+
+    <tr>
+        <td>
+            @Html.DisplayFor(model => model.Email)
+        </td>
+        <td>
+            @Html.DisplayFor(model => model.Password)
+        </td>
+        <td>
+            @Html.DisplayFor(model => model.FirstName)
+        </td>
+        <td>
+            @Html.DisplayFor(model => model.LastName)
+        </td>
+        <td>
+            @Html.DisplayFor(model => model.Country)
+        </td>
+        <td>
+            @Html.DisplayFor(model => model.City)
+        </td>
+        <td>
+            @Html.DisplayFor(model => model.PostCode)
+        </td>
+        <td>
+            @Html.DisplayFor(model => model.Address)
+        </td>
+        <td>
+            @Html.DisplayFor(model => model.NumberOfApartment)
+        </td>
+        <td>
+            @Html.DisplayFor(model => model.PhoneNumber)
+        </td>
+        <td>
+            @Html.DisplayFor(model => model.DateOfBirth)
+        </td>
+        <td>
+            @Html.DisplayFor(model => model.SelectedRole)
+        </td>
+        <td>
+            @Html.DisplayFor(model => model.CompanyRoleManager)
+        </td>
+        <td>
+            @Html.DisplayFor(model => model.CompanyRoleWorker)
+        </td>
+        <td>
+            @*@Html.ActionLink("Edit", "Edit", new { /* id=item.PrimaryKey */ }) |
+                @Html.ActionLink("Details", "Details", new { /* id=item.PrimaryKey */ }) |
+                @Html.ActionLink("Delete", "Delete", new { /* id=item.PrimaryKey */ })*@
+        </td>
+    </tr>
+</table>
+
+<p>
+    @Html.ActionLink("Dodaj kolejnego użytkownika", "AddNewUser", "Users")
+</p>
