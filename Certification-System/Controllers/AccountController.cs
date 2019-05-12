@@ -10,6 +10,7 @@ using Microsoft.Extensions.Logging;
 using Certification_System.Models;
 using Certification_System.Mailing;
 using Certification_System.Extensions;
+using AspNetCore.Identity.Mongo.Model;
 
 namespace Certification_System.Controllers
 {
@@ -19,17 +20,22 @@ namespace Certification_System.Controllers
     {
         private readonly UserManager<CertificationPlatformUser> _userManager;
         private readonly SignInManager<CertificationPlatformUser> _signInManager;
+        private readonly RoleManager<MongoRole> _roleManager;
         private readonly IEmailSender _emailSender;
         private readonly ILogger _logger;
+
+
 
         public AccountController(
             UserManager<CertificationPlatformUser> userManager,
             SignInManager<CertificationPlatformUser> signInManager,
+             RoleManager<MongoRole> roleManager,
             IEmailSender emailSender,
             ILogger<AccountController> logger)
         {
             _userManager = userManager;
             _signInManager = signInManager;
+            _roleManager = roleManager;
             _emailSender = emailSender;
             _logger = logger;
         }
@@ -232,9 +238,16 @@ namespace Certification_System.Controllers
                     PhoneNumber = model.PhoneNumber
                 };
 
-                user.Roles.Add("Worker");
-
+    
                 var result = await _userManager.CreateAsync(user, model.Password);
+
+                if (!await _roleManager.RoleExistsAsync("Worker"))
+                {
+                    await _roleManager.CreateAsync(new CertificationPlatformUserRole("Worker"));
+                }
+
+                var addToRole = await _userManager.AddToRoleAsync(user, "Worker");
+
                 if (result.Succeeded)
                 {
                     _logger.LogInformation("User created a new account with password.");
@@ -260,7 +273,7 @@ namespace Certification_System.Controllers
         {
             await _signInManager.SignOutAsync();
             _logger.LogInformation("User logged out.");
-            return RedirectToAction(nameof(HomeController.Index), "Home");
+            return RedirectToAction(nameof(Login), "Account");
         }
 
         [HttpPost]
