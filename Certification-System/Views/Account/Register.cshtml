@@ -6,7 +6,7 @@
 <div class="row">
     <div class="col-12">
         <form asp-route-returnUrl="@ViewData["ReturnUrl"]" method="post" class="form-horizontal">
-            @Html.AntiForgeryToken();
+            @Html.AntiForgeryToken()
             <h4>Utwórz nowe konto.</h4>
             <hr />
 
@@ -179,7 +179,7 @@
     </div>
 </div>
 
-<script src="~/Scripts/moment-with-locales.js"></script>
+
 @section Scripts {
 
     <script>
