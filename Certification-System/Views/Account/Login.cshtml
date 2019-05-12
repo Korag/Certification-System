@@ -3,55 +3,75 @@
 @using Microsoft.AspNetCore.Identity
 @model Certification_System.ViewModels.AccountViewModels.LoginViewModel
 @inject SignInManager<CertificationPlatformUser> SignInManager
-
 @{
-    ViewData["Title"] = "Log in";
+    ViewData["Title"] = "Logowanie";
 }
 
+<h2>@ViewData["Title"].</h2>
 <div class="row">
-    <div class="col-md-4">
-        <section>
-            <h4>@ViewData["Title"]</h4>
-            <form asp-route-returnurl="@ViewData["ReturnUrl"]" method="post">
-                <div asp-validation-summary="All" class="text-danger"></div>
+    <div class="col-12">
+        <section id="loginForm">
+            <form asp-route-returnUrl="@ViewData["ReturnUrl"]" method="post" class="form-horizontal">
+                <h4>Zaloguj się na swoje konto.</h4>
+                <hr />
+
                 <div class="form-group">
-                    <label asp-for="Username"></label>
-                    <input asp-for="Username" class="form-control" />
-                    <span asp-validation-for="Username" class="text-danger"></span>
+                    <div class="col-6 m-auto p-0">
+                        <label asp-for="Email"></label>
+                    </div>
+                    <div class="col-6 m-auto p-0">
+                        <input type="email" asp-for="Email" class="col-12 form-control" />
+                    </div>
+                    <div class="row justify-content-center">
+                        <span asp-validation-for="Email" class="text-danger"></span>
+                    </div>
                 </div>
+
                 <div class="form-group">
-                    <label asp-for="Password"></label>
-                    <input asp-for="Password" class="form-control" />
-                    <span asp-validation-for="Password" class="text-danger"></span>
+                    <div class="col-6 m-auto p-0">
+                        <label asp-for="Password"></label>
+                    </div>
+                    <div class="col-6 m-auto p-0">
+                        <input type="password" asp-for="Password" class="col-12 form-control" />
+                    </div>
+                    <div class="row justify-content-center">
+                        <span asp-validation-for="Password" class="text-danger"></span>
+                    </div>
                 </div>
-                <div class="form-group">
-                    <div class="checkbox">
+
+                <div class="form-group col-6 m-auto p-0">
+                    <div class="checkbox col-12 p-0">
                         <label asp-for="RememberMe">
                             <input asp-for="RememberMe" />
                             @Html.DisplayNameFor(m => m.RememberMe)
                         </label>
                     </div>
                 </div>
+
+
                 <div class="form-group">
-                    <button type="submit" class="btn btn-default">Log in</button>
+                    <div class="col-6 m-auto p-0">
+                        <input type="submit" value="Zaloguj" class="btn btn-primary" />
+                    </div>
                 </div>
+
                 <div class="form-group">
-                    <p>
-                        <a asp-action="ForgotPassword">Forgot your password?</a>
+                    <p class="row justify-content-center">
+                        <a asp-action="Register" asp-route-returnurl="@ViewData["ReturnUrl"]">Nie posiadasz konta? Zarejestruj się.</a>
                     </p>
                     <p>
-                        <a asp-action="Register" asp-route-returnurl="@ViewData["ReturnUrl"]">Register as a new user?</a>
+                        <a asp-action="ForgotPassword">Zapomniałeś hasła?</a>
                     </p>
+
+                    <div class="row justify-content-center">
+                        <div asp-validation-summary="All" class="text-danger"></div>
+                    </div>
                 </div>
             </form>
         </section>
     </div>
-    <div class="col-md-6 col-md-offset-2">
-        <section>
-
-        </section>
-    </div>
 </div>
+
 
 @section Scripts {
     @await Html.PartialAsync("_ValidationScriptsPartial")
