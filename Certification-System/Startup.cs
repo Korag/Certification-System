@@ -81,7 +81,7 @@ namespace Certification_System
             {
                 routes.MapRoute(
                     name: "default",
-                    template: "{controller=Home}/{action=Index}/{id?}");
+                    template: "{controller=Certificates}/{action=BlankMenu}/{id?}");   
             });
         }
     }
