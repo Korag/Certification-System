@@ -6,6 +6,7 @@
     <AspNetCoreHostingModel>InProcess</AspNetCoreHostingModel>
     <RootNamespace>Certification_System</RootNamespace>
     <ApplicationIcon>favicon.ico</ApplicationIcon>
+    <TypeScriptToolsVersion>3.1</TypeScriptToolsVersion>
   </PropertyGroup>
 
 
