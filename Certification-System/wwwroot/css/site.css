@@ -11,7 +11,7 @@
 }
 
 .background-image {
-    background-image: url('Img/logo_ziad_big_transparent.png');
+    background-image: url('~/Image/logo_ziad_big_transparent.png');
     background-size: 40vw 30vw;
     background-repeat: no-repeat;
     background-attachment: fixed;

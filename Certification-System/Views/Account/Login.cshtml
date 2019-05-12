@@ -50,7 +50,7 @@
 
 
                 <div class="form-group">
-                    <div class="col-6 m-auto p-0">
+                    <div class="row justify-content-center">
                         <input type="submit" value="Zaloguj" class="btn btn-primary" />
                     </div>
                 </div>
@@ -59,10 +59,9 @@
                     <p class="row justify-content-center">
                         <a asp-action="Register" asp-route-returnurl="@ViewData["ReturnUrl"]">Nie posiadasz konta? Zarejestruj się.</a>
                     </p>
-                    <p>
+                    <p class="row justify-content-center">
                         <a asp-action="ForgotPassword">Zapomniałeś hasła?</a>
                     </p>
-
                     <div class="row justify-content-center">
                         <div asp-validation-summary="All" class="text-danger"></div>
                     </div>
