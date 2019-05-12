@@ -1,6 +1,6 @@
 ﻿<nav class="navbar navbar-expand-lg sticky-top navbar navbar-light bg-light font-weight-bold" style=" opacity: 0.95; font-size:18px">
     <img src="http://szkolenie.ziad.bielsko.pl/wp-content/uploads/elementor/thumbs/LOGO-ZIAD-u-e1552386865677-o4rd90ugx6yz8nf4i45ijoxmsw4smd9zrcb27yfta8.png" />
-    <a class="navbar-brand ml-2" style="font-size: 18px" href="#">Certification Platform</a>
+    <a asp-controller="Certificates" asp-action="BlankMenu" class="navbar-brand ml-2" style="font-size: 18px">Certification Platform</a>
     <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
         <span class="navbar-toggler-icon"></span>
     </button>
@@ -9,37 +9,37 @@
             <li class="nav-item dropdown">
                 <a class="nav-link dropdown-toggle" href="#" id="navbarDropdown" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">Certyfikaty</a>
                 <div class="dropdown-menu">
-                    @Html.ActionLink("Wyszukaj certyfikat pracownika", "Index", "Home", htmlAttributes: new { @class = "dropdown-item" })
-                    @Html.ActionLink("Weryfikuj certyfikat po numerze", "Index", "Home", htmlAttributes: new { @class = "dropdown-item" })
-                    @Html.ActionLink("Weryfikuj certyfikat QR", "Index", "Home", htmlAttributes: new { @class = "dropdown-item" })
-                    @Html.ActionLink("Wyświetl listę pracowników z danym certyfikatem", "Index", "Home", htmlAttributes: new { @class = "dropdown-item" })
+                    <a asp-controller="Home" asp-action="Index" class="dropdown-item">Wyszukaj certyfikat pracownika</a>
+                    <a asp-controller="Home" asp-action="Index" class="dropdown-item">Weryfikuj certyfikat po numerze</a>
+                    <a asp-controller="Home" asp-action="Index" class="dropdown-item">Weryfikuj certyfikat QR</a>
+                    <a asp-controller="Home" asp-action="Index" class="dropdown-item">Wyświetl listę pracowników z danym certyfikatem</a>
                     <div class="dropdown-divider"></div>
-                    @Html.ActionLink("Przyznaj pracownikowi certyfikat", "Index", "Home", htmlAttributes: new { @class = "dropdown-item" })
-                    @Html.ActionLink("Utwórz nowy certyfikat", "AddNewCertificate", new { controller = "Certificates" }, htmlAttributes: new { @class = "dropdown-item" })
+                    <a asp-controller="Home" asp-action="Index" class="dropdown-item">Przyznaj pracownikowi certyfikat</a>
+                    <a asp-controller="Certificates" asp-action="AddNewCertificate" class="dropdown-item">Utwórz nowy certyfikat</a>
                 </div>
             </li>
             <li class="nav-item dropdown">
                 <a class="nav-link dropdown-toggle" href="#" id="navbarDropdown" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">Szkolenia</a>
                 <div class="dropdown-menu">
-                    @Html.ActionLink("Statystyki aktywnych szkoleń", "Index", "Home", htmlAttributes: new { @class = "dropdown-item" })
-                    @Html.ActionLink("Aktywne szkolenia wybranego pracownika", "Index", "Home", htmlAttributes: new { @class = "dropdown-item" })
-                    @Html.ActionLink("Historia szkoleń wybranego pracownika", "Index", "Home", htmlAttributes: new { @class = "dropdown-item" })
-                    @Html.ActionLink("Zapisz pracownika na szkolenie", "Index", "Home", htmlAttributes: new { @class = "dropdown-item" })
+                    <a asp-controller="Home" asp-action="Index" class="dropdown-item">Statystyki aktywnych szkoleń</a>
+                    <a asp-controller="Home" asp-action="Index" class="dropdown-item">Aktywne szkolenia wybranego pracownika</a>
+                    <a asp-controller="Home" asp-action="Index" class="dropdown-item">Historia szkoleń wybranego pracownika</a>
+                    <a asp-controller="Home" asp-action="Index" class="dropdown-item">Zapisz pracownika na szkolenie</a>
                     <div class="dropdown-divider"></div>
-                    @Html.ActionLink("Dodaj szkolenie", "AddNewCourse", new { controller = "Courses" }, htmlAttributes: new { @class = "dropdown-item" })
-                    @Html.ActionLink("Dodaj spotkanie do szkolenia", "Index", "Home", htmlAttributes: new { @class = "dropdown-item" })
-                    @Html.ActionLink("Modyfikuj szkolenie", "Index", "Home", htmlAttributes: new { @class = "dropdown-item" })
-                    @Html.ActionLink("Zarządzaj zgłoszeniami na szkolenie", "Index", "Home", htmlAttributes: new { @class = "dropdown-item" })
+                    <a asp-controller="Courses" asp-action="AddNewCourse" class="dropdown-item">Dodaj szkolenie</a>
+                    <a asp-controller="Home" asp-action="Index" class="dropdown-item">Dodaj spotkanie do szkolenia</a>
+                    <a asp-controller="Home" asp-action="Index" class="dropdown-item">Modyfikuj szkolenie</a>
+                    <a asp-controller="Home" asp-action="Index" class="dropdown-item">Zarządzaj zgłoszeniami na szkolenie</a>
                 </div>
             </li>
             <li class="nav-item dropdown">
                 <a class="nav-link dropdown-toggle" href="#" id="navbarDropdown" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">Przedsiębiorstwa</a>
                 <div class="dropdown-menu">
-                    @Html.ActionLink("Przeglądaj przedsiębiorstwa", "Index", "Home", htmlAttributes: new { @class = "dropdown-item" })
-                    @Html.ActionLink("Utwórz przedsiębiorstwo", "Index", "Home", htmlAttributes: new { @class = "dropdown-item" })
-                    @Html.ActionLink("Modyfikuj dane przedsiębiorstwa", "Index", "Home", htmlAttributes: new { @class = "dropdown-item" })
-                    @Html.ActionLink("Nadaj uprawnienie do zarządzania przedsiębiorstwem", "Index", "Home", htmlAttributes: new { @class = "dropdown-item" })
-                    @Html.ActionLink("Przeglądaj zdarzenia", "Index", "Home", htmlAttributes: new { @class = "dropdown-item" })
+                    <a asp-controller="Home" asp-action="Index" class="dropdown-item">Przeglądaj przedsiębiorstwa</a>
+                    <a asp-controller="Home" asp-action="Index" class="dropdown-item">Utwórz przedsiębiorstwo</a>
+                    <a asp-controller="Home" asp-action="Index" class="dropdown-item">Modyfikuj dane przedsiębiorstwa</a>
+                    <a asp-controller="Home" asp-action="Index" class="dropdown-item">Nadaj uprawnienie do zarządzania przedsiębiorstwem</a>
+                    <a asp-controller="Home" asp-action="Index" class="dropdown-item">Przeglądaj zdarzeniae</a>
                 </div>
             </li>
             <li class="nav-item">
@@ -47,12 +47,11 @@
             </li>
         </ul>
         @*<form class="form-inline">
-            <div class="md-form my-0">
-                <input class="form-control mr-sm-2" type="text" placeholder="Search" aria-label="Search">
-                <button class="btn btn-outline-success my-2 my-sm-0 mr-2" type="submit">Search</button>
-            </div>
-        </form>*@
-        @*@Html.Partial("_LoginPartial")*@
+                <div class="md-form my-0">
+                    <input class="form-control mr-sm-2" type="text" placeholder="Search" aria-label="Search">
+                    <button class="btn btn-outline-success my-2 my-sm-0 mr-2" type="submit">Search</button>
+                </div>
+            </form>*@
         <partial name="_LoginPartial" />
     </div>
 </nav>
