@@ -98,5 +98,29 @@ namespace Certification_System.Controllers
             }
             return View(newCertificate);
         }
+
+        // GET: DisplayAllCertificates
+        [Authorize(Roles = "Admin")]
+        public IActionResult DisplayAllCertificates()
+        {
+            var Certificates = _context.GetCertificates();
+            List<DisplayListOfCertificatesViewModel> ListOfCertificates = new List<DisplayListOfCertificatesViewModel>();
+
+            foreach (var certificate in Certificates)
+            {
+                DisplayListOfCertificatesViewModel singleCertificateViewModel = new DisplayListOfCertificatesViewModel
+                {
+                    CertificateIndexer = certificate.CertificateIndexer,
+                    Name = certificate.Name,
+                    Description = certificate.Description,
+                    Branches = _context.GetBranchesById(certificate.Branches),
+                    Depreciated = certificate.Depreciated
+                };
+
+                ListOfCertificates.Add(singleCertificateViewModel);
+            }
+            
+            return View(ListOfCertificates);
+        }
     }
 }
