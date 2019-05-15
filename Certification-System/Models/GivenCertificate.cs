@@ -12,7 +12,8 @@ namespace Certification_System.Models
 
         public string GivenCertificateIndexer { get; set; }
         public DateTime ReceiptDate { get; set; }
-        public DateTime Expires { get; set; }
+        public DateTime ExpirationDate{ get; set; }
+        public bool Depreciated { get; set; }
 
         public string Course{ get; set; }
         public string Certificate { get; set; }
