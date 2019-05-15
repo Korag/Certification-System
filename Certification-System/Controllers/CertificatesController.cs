@@ -119,8 +119,54 @@ namespace Certification_System.Controllers
 
                 ListOfCertificates.Add(singleCertificateViewModel);
             }
-            
+
             return View(ListOfCertificates);
+        }
+
+        // GET: AddNewGivenCertificate
+        [Authorize(Roles = "Admin")]
+        public IActionResult AddNewGivenCertificate()
+        {
+            AddNewGivenCertificateViewModel newGivenCertificate = new AddNewGivenCertificateViewModel
+            {
+                AvailableCertificates = _context.GetCertificatesAsSelectList().ToList(),
+                AvailableUsers = _context.GetUsersAsSelectList().ToList(),
+                AvailableCourses = _context.GetCoursesAsSelectList().ToList()
+            };
+
+            return View(newGivenCertificate);
+        }
+
+        // POST: AddNewCertificate
+        [ValidateAntiForgeryToken]
+        [Authorize(Roles = "Admin")]
+        [HttpPost]
+        public IActionResult AddNewGivenCertificate(AddNewGivenCertificateViewModel newGivenCertificate)
+        {
+            if (ModelState.IsValid)
+            {
+                GivenCertificate givenCertificate = new GivenCertificate
+                {
+                    GivenCertificateIdentificator = ObjectId.GenerateNewId().ToString(),
+
+                    ReceiptDate = newGivenCertificate.ReceiptDate,
+                    ExpirationDate = newGivenCertificate.ExpirationDate,
+
+                    Course = _context.GetCourseById(newGivenCertificate.SelectedCourses).CourseIdentificator,
+                    Certificate = _context.GetCertificateById(newGivenCertificate.SelectedCertificate).CertificateIdentificator
+                };
+
+                _context.AddGivenCertificate(givenCertificate);
+                _context.AddUserCertificate(newGivenCertificate.SelectedUser, givenCertificate.GivenCertificateIdentificator);
+
+                return RedirectToAction("AddNewGivenCertificateConfirmation", new { givenCertificateIdentificator = givenCertificate.GivenCertificateIdentificator });
+            }
+
+            newGivenCertificate.AvailableCertificates = _context.GetCertificatesAsSelectList().ToList();
+            newGivenCertificate.AvailableUsers = _context.GetUsersAsSelectList().ToList();
+            newGivenCertificate.AvailableCourses = _context.GetCoursesAsSelectList().ToList();
+
+            return View(newGivenCertificate);
         }
     }
 }
