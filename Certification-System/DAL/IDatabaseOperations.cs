@@ -15,6 +15,7 @@ namespace Certification_System.DAL
         #region Users
         ICollection<CertificationPlatformUser> GetUsers();
         CertificationPlatformUser GetUserById(string userIdentificator);
+        ICollection<SelectListItem> GetUsersAsSelectList();
         #endregion
 
         #region Branches
@@ -28,6 +29,7 @@ namespace Certification_System.DAL
         ICollection<Certificate> GetCertificates();
         void AddCertificate(Certificate certificate);
         Certificate GetCertificateById(string certificateIdentificator);
+        ICollection<SelectListItem> GetCertificatesAsSelectList();
         #endregion
 
         #region Course

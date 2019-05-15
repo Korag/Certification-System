@@ -127,6 +127,26 @@ namespace Certification_System.DAL
             return certificate;
         }
 
+        public ICollection<SelectListItem> GetCertificatesAsSelectList()
+        {
+            List<Certificate> Certificates = GetCertificates().ToList();
+            List<SelectListItem> SelectList = new List<SelectListItem>();
+
+            foreach (var certificate in Certificates)
+            {
+                SelectList.Add
+                    (
+                        new SelectListItem()
+                        {
+                            Text = certificate.CertificateIndexer + " " + certificate.Name,
+                            Value = certificate.CertificateIdentificator
+                        }
+                    );
+            };
+
+            return SelectList;
+        }
+
         #endregion
 
         #region Course
@@ -153,7 +173,7 @@ namespace Certification_System.DAL
         {
             List<Course> Courses = GetActiveCourses().ToList();
             List<SelectListItem> SelectList = new List<SelectListItem>();
-            SelectList.Add(new SelectListItem { Text = "---", Value = null });
+            //SelectList.Add(new SelectListItem { Text = "---", Value = null });
 
             foreach (var course in Courses)
             {
@@ -233,6 +253,27 @@ namespace Certification_System.DAL
             CertificationPlatformUser user = _context.db.GetCollection<CertificationPlatformUser>(_usersCollectionName).Find<CertificationPlatformUser>(filter).FirstOrDefault();
             return user;
         }
+
+        public ICollection<SelectListItem> GetUsersAsSelectList()
+        {
+            List<CertificationPlatformUser> Users = GetUsers().ToList();
+            List<SelectListItem> SelectList = new List<SelectListItem>();
+
+            foreach (var user in Users)
+            {
+                SelectList.Add
+                    (
+                        new SelectListItem()
+                        {
+                            Text = user.FirstName + " " + user.LastName + " | " + user.Email,
+                            Value = user.Id
+                        }
+                    );
+            };
+
+            return SelectList;
+
+        }
         #endregion
 
         #region Instructor
@@ -294,7 +335,7 @@ namespace Certification_System.DAL
         {
             var Companies = GetCompanies();
             List<SelectListItem> SelectList = new List<SelectListItem>();
-            SelectList.Add(new SelectListItem { Text = "---", Value = null });
+            //SelectList.Add(new SelectListItem { Text = "---", Value = null });
 
             foreach (var company in Companies)
             {
@@ -342,6 +383,15 @@ namespace Certification_System.DAL
             }
             return Companies;
         }
+        #endregion
+
+        #region GivenCertificate
+    
+        public void AddGivenCertificate(GivenCertificate givenCertificate)
+        {
+      
+        }
+
         #endregion
 
     }
