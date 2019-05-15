@@ -1,0 +1,120 @@
+﻿@model Certification_System.ViewModels.AddNewGivenCertificateViewModel
+
+@{
+    ViewData["Title"] = "AddNewGivenCertificate";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+<h1>Przyznaj certyfikat użytkownikowi</h1>
+<hr />
+
+<div class="row">
+    <div class="col-md-4">
+        <form asp-action="AddNewGivenCertificate">
+
+            <div class="form-group">
+                <label asp-for="AvailableUsers" class="control-label col-md-2"></label>
+                <div class="col-md-10">
+                    <select asp-for="SelectedUser" asp-items="@Model.AvailableUsers" data-width="auto" data-header="Wybierz użytkownika" data-live-search="true" title="Nie wybrano żadnego elementu" class="form-control selectpicker show-tick"> </select>
+                    <div class="row col-md-10">
+                        <span asp-validation-for="SelectedUser" class="text-danger"></span>
+                    </div>
+                </div>
+            </div>
+
+            <div class="form-group">
+                <label asp-for="AvailableCertificates" class="control-label col-md-2"></label>
+                <div class="col-md-10">
+                    <select asp-for="SelectedCertificate" asp-items="@Model.AvailableCertificates" data-width="auto" data-header="Wybierz użytkownika" data-live-search="true" title="Nie wybrano żadnego elementu" class="form-control selectpicker show-tick"> </select>
+                    <div class="row col-md-10">
+                        <span asp-validation-for="SelectedCertificate" class="text-danger"></span>
+                    </div>
+                </div>
+            </div>
+
+            <div class="form-group">
+                <label asp-for="AvailableCourses" class="control-label col-md-2"></label>
+                <div class="col-md-10">
+                    <select asp-for="SelectedCourses" asp-items="@Model.AvailableCourses" data-width="auto" data-header="Wybierz użytkownika" data-live-search="true" title="Nie wybrano żadnego elementu" class="form-control selectpicker show-tick"> </select>
+                    <div class="row col-md-10">
+                        <span asp-validation-for="SelectedCourses" class="text-danger"></span>
+                    </div>
+                </div>
+            </div>
+
+            <div class="form-group">
+                <label asp-for="GivenCertificateIndexer" class="control-label col-md-2"></label>
+                <div class="col-md-10">
+                    <input asp-for="GivenCertificateIndexer" class="form-control" />
+                    <span asp-validation-for="GivenCertificateIndexer" class="text-danger"></span>
+                </div>
+            </div>
+
+            <div class="form-group">
+                <label asp-for="ReceiptDate" class="control-label col-md-2"></label>
+                <div class="col-md-10">
+                    <div class='input-group date' id='ReceiptDate'>
+                        <input type='text' class="form-control" name="ReceiptDate" value="@DateTime.Now.ToShortDateString() @DateTime.Now.ToShortTimeString()" />
+                        <span class="input-group-addon">
+                            <span class="fa fa-calendar pl-1 pt-0.5" style="font-size:34px"></span>
+                        </span>
+                    </div>
+                    <span asp-validation-for="ReceiptDate" class="text-danger"></span>
+                </div>
+            </div>
+
+            <div class="form-group">
+                <label asp-for="ExpirationDate" class="control-label col-md-2"></label>
+                <div class="col-md-10">
+                    <div class='input-group date' id='ExpirationDate'>
+                        <input type='text' class="form-control" name="ExpirationDate" value="@DateTime.Now.AddMonths(6).ToShortDateString() @DateTime.Now.ToShortTimeString()" />
+                        <span class="input-group-addon">
+                            <span class="fa fa-calendar pl-1 pt-0.5" style="font-size:34px"></span>
+                        </span>
+                    </div>
+                    <span asp-validation-for="ExpirationDate" class="text-danger"></span>
+                </div>
+            </div>
+
+            <div class="form-group">
+                <input type="submit" value="Nadaj certyfikat" class="btn btn-primary" />
+            </div>
+
+            <div class="row justify-content-center">
+                <div asp-validation-summary="All" class="text-danger"></div>
+            </div>
+        </form>
+    </div>
+</div>
+
+<div>
+    <a asp-action="DisplayAllUsers" asp-controller="Users">Wyświetl listę użytkowników</a>
+</div>
+
+@section Scripts {
+    @{await Html.RenderPartialAsync("_ValidationScriptsPartial");}
+
+    <script>
+        $(function () {
+            $('#ReceiptDate').datetimepicker({
+                format: 'DD.MM.YYYY HH:mm',
+                locale: moment.locale('pl', {
+                    week: { dow: 1 }
+                })
+            });
+            $('#ExpirationDate').datetimepicker({
+                format: 'DD.MM.YYYY HH:mm',
+                locale: moment.locale('pl', {
+                    week: { dow: 1 }
+                }),
+                useCurrent: false
+            });
+            $("#ReceiptDate").on("dp.change", function (e) {
+                $('#ExpirationDate').data("DateTimePicker").minDate(e.date);
+            });
+            $("#ExpirationDate").on("dp.change", function (e) {
+                $('#ReceiptDate').data("DateTimePicker").maxDate(e.date);
+            });
+        });
+    </script>
+}
