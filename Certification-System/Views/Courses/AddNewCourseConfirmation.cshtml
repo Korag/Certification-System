@@ -94,7 +94,7 @@
                 @Html.DisplayNameFor(model => Model.MeetingsViewModels.FirstOrDefault().NumberOfApartment)
             </th>
             <th>
-                @Html.DisplayNameFor(model => Model.MeetingsViewModels.FirstOrDefault().Instructors)
+                @Html.DisplayNameFor(model => Model.MeetingsViewModels.FirstOrDefault().SelectedInstructors)
             </th>
         </tr>
 
@@ -124,7 +124,7 @@
                 </td>
                 <td>
                     <ul>
-                        @foreach (var instructor in Meeting.Instructors)
+                        @foreach (var instructor in Meeting.SelectedInstructors)
                         {
                             <li>@instructor</li>
                         }

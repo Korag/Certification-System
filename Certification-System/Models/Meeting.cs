@@ -23,6 +23,6 @@ namespace Certification_System.Models
         public string NumberOfApartment { get; set; }
 
         public ICollection<string> AttendanceList { get; set; }
-        public ICollection<string> Instructor { get; set; }
+        public ICollection<string> Instructors { get; set; }
     }
 }

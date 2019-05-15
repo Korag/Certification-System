@@ -44,8 +44,13 @@ namespace Certification_System.ViewModels
         [Display(Name = "Numer domu/mieszkania")]
         public string NumberOfApartment { get; set; }
 
+        [Display(Name = "Instruktorzy")]
+        public IList<SelectListItem> AvailableInstructors { get; set; }
+
+
         [Display(Name = "Instruktor")]
-        public ICollection<string> Instructors { get; set; }
+        [Required(ErrorMessage = "Należy wybrać conajmniej jednego instruktora.")]
+        public ICollection<string> SelectedInstructors { get; set; }
 
         [Display(Name = "Lista Obecności")]
         public ICollection<string> AttendanceList { get; set; }

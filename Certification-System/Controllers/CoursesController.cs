@@ -59,37 +59,37 @@ namespace Certification_System.Controllers
 
                 if (Course.Meetings != null)
                 {
-                    var MeetingsId = _context.GetMeetingsById(Course.Meetings);
-                    List<AddMeetingViewModel> Meetings = new List<AddMeetingViewModel>();
+                //    var MeetingsId = _context.GetMeetingsById(Course.Meetings);
+                //    List<AddMeetingViewModel> Meetings = new List<AddMeetingViewModel>();
 
-                    foreach (var meeting in MeetingsId)
-                    {
-                        var Instructors = _context.GetInstructorsById(meeting.Instructor);
+                //    foreach (var meeting in MeetingsId)
+                //    {
+                //        var Instructors = _context.GetInstructorsById(meeting.Instructor);
 
-                        AddMeetingViewModel meetingsInCourse = new AddMeetingViewModel
-                        {
-                            MeetingIndexer = meeting.MeetingIndexer,
-                            Description = meeting.Description,
-                            DateOfMeeting = meeting.DateOfMeeting,
-                            Country = meeting.Country,
-                            City = meeting.City,
-                            PostCode = meeting.PostCode,
-                            Address = meeting.Address,
-                            NumberOfApartment = meeting.NumberOfApartment,
+                //        AddMeetingViewModel meetingsInCourse = new AddMeetingViewModel
+                //        {
+                //            MeetingIndexer = meeting.MeetingIndexer,
+                //            Description = meeting.Description,
+                //            DateOfMeeting = meeting.DateOfMeeting,
+                //            Country = meeting.Country,
+                //            City = meeting.City,
+                //            PostCode = meeting.PostCode,
+                //            Address = meeting.Address,
+                //            NumberOfApartment = meeting.NumberOfApartment,
 
-                            Instructors = new List<string>()
-                        };
+                //            Instructors = new List<string>()
+                //        };
+                        
+                //        foreach (var instructor in Instructors)
+                //        {
+                //            string instructorIdentity = instructor.FirstName + instructor.LastName;
+                //            meetingsInCourse.Instructors.Add(instructorIdentity);
+                //        }
 
-                        foreach (var instructor in Instructors)
-                        {
-                            string instructorIdentity = instructor.FirstName + instructor.LastName;
-                            meetingsInCourse.Instructors.Add(instructorIdentity);
-                        }
+                //        Meetings.Add(meetingsInCourse);
+                //    }
 
-                        Meetings.Add(meetingsInCourse);
-                    }
-
-                    addedCourse.MeetingsViewModels = Meetings;
+                //    addedCourse.MeetingsViewModels = Meetings;
                 }
 
                 var BranchNames = _context.GetBranchesById(Course.Branches);
@@ -141,7 +141,7 @@ namespace Certification_System.Controllers
                             Address = meeting.Address,
                             NumberOfApartment = meeting.NumberOfApartment,
 
-                            Instructor = new List<string>()
+                            Instructors = new List<string>()
                         };
 
                         //foreach (var instructor in Instructor)

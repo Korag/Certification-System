@@ -24,9 +24,37 @@ namespace Certification_System.Controllers
         [Authorize(Roles = "Admin")]
         public IActionResult AddNewMeetingConfirmation(string meetingIdentificator)
         {
-            return View();
+            if (meetingIdentificator != null)
+            {
+                var Meeting = _context.GetMeetingById(meetingIdentificator);
+
+                AddMeetingViewModel addedMeeting = new AddMeetingViewModel
+                {
+                    SelectedCourse = _context.GetCourseByMeetingId(meetingIdentificator).CourseIndexer,
+                    MeetingIndexer = Meeting.MeetingIndexer,
+                    Description = Meeting.Description,
+                    DateOfMeeting = Meeting.DateOfMeeting,
+                    Country = Meeting.Country,
+                    City = Meeting.City,
+                    PostCode = Meeting.PostCode,
+                    Address = Meeting.Address,
+                    NumberOfApartment = Meeting.NumberOfApartment,
+                    SelectedInstructors = new List<string>()
+                };
+
+                if (addedMeeting.SelectedInstructors != null)
+                {
+                    var Instructors = _context.GetInstructorsById(Meeting.Instructors);
+                    addedMeeting.SelectedInstructors = Instructors.Select(z => z.FirstName + " " +  z.LastName).ToList();
+                }
+
+                return View(addedMeeting);
+            }
+
+            return RedirectToAction(nameof(AddNewMeeting));
         }
 
+        // LEGACY
         // GET: AddNewMeetingPartial
         [Authorize(Roles = "Admin")]
         public IActionResult AddNewMeetingPartial()
@@ -40,7 +68,8 @@ namespace Certification_System.Controllers
         {
             AddMeetingViewModel newMeeting = new AddMeetingViewModel
             {
-                AvailableCourses = _context.GetCoursesAsSelectList().ToList()
+                AvailableCourses = _context.GetCoursesAsSelectList().ToList(),
+                AvailableInstructors = _context.GetInstructorsAsSelectList().ToList()
             };
 
             return View(newMeeting);
@@ -67,15 +96,17 @@ namespace Certification_System.Controllers
                     Address = newMeeting.Address,
                     NumberOfApartment = newMeeting.NumberOfApartment,
 
-                    // instructors
+                    Instructors = newMeeting.SelectedInstructors
                 };
 
                 _context.AddMeeting(meeting);
+                _context.AddMeetingToCourse(meeting.MeetingIdentificator, newMeeting.SelectedCourse);
 
                 return RedirectToAction("AddNewMeetingConfirmation", new { meetingIdentificator = meeting.MeetingIdentificator });
             }
 
             newMeeting.AvailableCourses = _context.GetCoursesAsSelectList().ToList();
+            newMeeting.AvailableInstructors = _context.GetInstructorsAsSelectList().ToList();
             return View(newMeeting);
         }
     }
