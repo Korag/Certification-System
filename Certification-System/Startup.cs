@@ -14,6 +14,7 @@ using Microsoft.Extensions.DependencyInjection;
 using AspNetCore.Identity.Mongo;
 using Certification_System.Models;
 using Certification_System.Mailing;
+using Certification_System.DAL;
 
 namespace Certification_System
 {
@@ -52,6 +53,7 @@ namespace Certification_System
             });
 
             services.AddTransient<IEmailSender, EmailSender>();
+            services.AddSingleton<IDatabaseOperations, MongoOperations>();
 
             services.AddMvc().SetCompatibilityVersion(CompatibilityVersion.Version_2_2)
                 .AddDataAnnotationsLocalization().AddDataAnnotationsLocalization(); 
