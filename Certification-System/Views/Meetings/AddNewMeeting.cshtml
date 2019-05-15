@@ -12,95 +12,107 @@
 {
     @Html.AntiForgeryToken()
 
-<div class="form-horizontal">
+    <div class="form-horizontal">
 
-    <div class="form-group">
-        @Html.LabelFor(model => model.MeetingIndexer, htmlAttributes: new { @class = "control-label col-md-2" })
-        <div class="col-md-10">
-            @Html.DropDownListFor(model => Model.SelectedCourse, Model.AvailableCourses, new { @class = "form-control" })
-            @Html.ValidationMessageFor(model => model.MeetingIndexer, "", new { @class = "text-danger" })
-        </div>
-    </div>
-
-    <div class="form-group">
-        @Html.LabelFor(model => model.MeetingIndexer, htmlAttributes: new { @class = "control-label col-md-2" })
-        <div class="col-md-10">
-            @Html.EditorFor(model => model.MeetingIndexer, new { htmlAttributes = new { @class = "form-control" } })
-            @Html.ValidationMessageFor(model => model.MeetingIndexer, "", new { @class = "text-danger" })
-        </div>
-    </div>
-
-    <div class="form-group">
-        @Html.LabelFor(model => model.Description, htmlAttributes: new { @class = "control-label col-md-2" })
-        <div class="col-md-10">
-            @Html.TextAreaFor(model => model.Description, new { htmlAttributes = new { @class = "form-control" } })
-            @Html.ValidationMessageFor(model => model.Description, "", new { @class = "text-danger" })
-        </div>
-    </div>
-
-    <div class="form-group">
-        @Html.LabelFor(model => model.DateOfMeeting, htmlAttributes: new { @class = "control-label col-md-2" })
-        <div class="col-md-10">
-            <div class='input-group date' id='DateOfMeeting'>
-                <input type='text' class="form-control" name="DateOfMeeting" value="@DateTime.Now.ToShortDateString() @DateTime.Now.ToShortTimeString()" />
-                <span class="input-group-addon">
-                    <span class="fa fa-calendar pl-1 pt-0.5" style="font-size:34px"></span>
-                </span>
+        <div class="form-group">
+            @Html.LabelFor(model => model.AvailableCourses, htmlAttributes: new { @class = "control-label col-md-2" })
+            <div class="col-md-10">
+                <select asp-for="SelectedCourse" asp-items="@Model.AvailableCourses" data-width="auto" data-header="Wybierz kurs" data-live-search="true" title="Nie wybrano żadnego elementu" class="form-control selectpicker show-tick"> </select>
+                <div class="row col-md-10">
+                    <span asp-validation-for="SelectedCourse" class="text-danger"></span>
+                </div>
             </div>
-            @Html.ValidationMessageFor(model => model.DateOfMeeting, "", new { @class = "text-danger" })
         </div>
-    </div>
 
-    <div class="form-group">
-        @Html.LabelFor(model => model.Country, htmlAttributes: new { @class = "control-label col-md-2" })
-        <div class="col-md-10">
-            @Html.EditorFor(model => model.Country, new { htmlAttributes = new { @class = "form-control" } })
-            @Html.ValidationMessageFor(model => model.Country, "", new { @class = "text-danger" })
+        <div class="form-group">
+            @Html.LabelFor(model => model.MeetingIndexer, htmlAttributes: new { @class = "control-label col-md-2" })
+            <div class="col-md-10">
+                @Html.EditorFor(model => model.MeetingIndexer, new { htmlAttributes = new { @class = "form-control" } })
+                <span asp-validation-for="MeetingIndexer" class="text-danger"></span>
+            </div>
         </div>
-    </div>
 
-    <div class="form-group">
-        @Html.LabelFor(model => model.City, htmlAttributes: new { @class = "control-label col-md-2" })
-        <div class="col-md-10">
-            @Html.EditorFor(model => model.City, new { htmlAttributes = new { @class = "form-control" } })
-            @Html.ValidationMessageFor(model => model.City, "", new { @class = "text-danger" })
+        <div class="form-group">
+            @Html.LabelFor(model => model.Description, htmlAttributes: new { @class = "control-label col-md-2" })
+            <div class="col-md-10">
+                @Html.TextAreaFor(model => model.Description, new { htmlAttributes = new { @class = "form-control" } })
+                <span asp-validation-for="Description" class="text-danger"></span>
+            </div>
         </div>
-    </div>
 
-    <div class="form-group">
-        @Html.LabelFor(model => model.PostCode, htmlAttributes: new { @class = "control-label col-md-2" })
-        <div class="col-md-10">
-            @Html.EditorFor(model => model.PostCode, new { htmlAttributes = new { @class = "form-control" } })
-            @Html.ValidationMessageFor(model => model.PostCode, "", new { @class = "text-danger" })
+        <div class="form-group">
+            @Html.LabelFor(model => model.DateOfMeeting, htmlAttributes: new { @class = "control-label col-md-2" })
+            <div class="col-md-10">
+                <div class='input-group date' id='DateOfMeeting'>
+                    <input type='text' class="form-control" name="DateOfMeeting" value="@DateTime.Now.ToShortDateString() @DateTime.Now.ToShortTimeString()" />
+                    <span class="input-group-addon">
+                        <span class="fa fa-calendar pl-1 pt-0.5" style="font-size:34px"></span>
+                    </span>
+                </div>
+                <span asp-validation-for="DateOfMeeting" class="text-danger"></span>
+            </div>
         </div>
-    </div>
 
-    <div class="form-group">
-        @Html.LabelFor(model => model.Address, htmlAttributes: new { @class = "control-label col-md-2" })
-        <div class="col-md-10">
-            @Html.EditorFor(model => model.Address, new { htmlAttributes = new { @class = "form-control" } })
-            @Html.ValidationMessageFor(model => model.Address, "", new { @class = "text-danger" })
+        <div class="form-group">
+            @Html.LabelFor(model => model.Country, htmlAttributes: new { @class = "control-label col-md-2" })
+            <div class="col-md-10">
+                @Html.EditorFor(model => model.Country, new { htmlAttributes = new { @class = "form-control" } })
+                <span asp-validation-for="Country" class="text-danger"></span>
+            </div>
         </div>
-    </div>
 
-    <div class="form-group">
-        @Html.LabelFor(model => model.NumberOfApartment, htmlAttributes: new { @class = "control-label col-md-2" })
-        <div class="col-md-10">
-            @Html.EditorFor(model => model.NumberOfApartment, new { htmlAttributes = new { @class = "form-control" } })
-            @Html.ValidationMessageFor(model => model.NumberOfApartment, "", new { @class = "text-danger" })
+        <div class="form-group">
+            @Html.LabelFor(model => model.City, htmlAttributes: new { @class = "control-label col-md-2" })
+            <div class="col-md-10">
+                @Html.EditorFor(model => model.City, new { htmlAttributes = new { @class = "form-control" } })
+                <span asp-validation-for="City" class="text-danger"></span>
+            </div>
         </div>
-    </div>
 
-    <div class="row justify-content-center">
-        @Html.ValidationSummary("", new { @class = "text-danger" })
-    </div>
+        <div class="form-group">
+            @Html.LabelFor(model => model.PostCode, htmlAttributes: new { @class = "control-label col-md-2" })
+            <div class="col-md-10">
+                @Html.EditorFor(model => model.PostCode, new { htmlAttributes = new { @class = "form-control" } })
+                <span asp-validation-for="PostCode" class="text-danger"></span>
+            </div>
+        </div>
 
-    <div class="form-group">
+        <div class="form-group">
+            @Html.LabelFor(model => model.Address, htmlAttributes: new { @class = "control-label col-md-2" })
+            <div class="col-md-10">
+                @Html.EditorFor(model => model.Address, new { htmlAttributes = new { @class = "form-control" } })
+                <span asp-validation-for="Address" class="text-danger"></span>
+            </div>
+        </div>
+
+        <div class="form-group">
+            @Html.LabelFor(model => model.NumberOfApartment, htmlAttributes: new { @class = "control-label col-md-2" })
+            <div class="col-md-10">
+                @Html.EditorFor(model => model.NumberOfApartment, new { htmlAttributes = new { @class = "form-control" } })
+                <span asp-validation-for="NumberOfApartment" class="text-danger"></span>
+            </div>
+        </div>
+
+        <div class="form-group">
+            <label asp-for="AvailableInstructors" class="control-label col-md-2"></label>
+            <div class="col-md-10">
+                <select asp-for="SelectedInstructors" asp-items="@Model.AvailableInstructors" data-width="auto" data-header="Wybierz instruktora" data-live-search="true" title="Nie wybrano instruktora" multiple class="form-control selectpicker show-tick"> </select>
+                <div class="row col-md-10">
+                    <span asp-validation-for="SelectedInstructors" class="text-danger"></span>
+                </div>
+            </div>
+        </div>
+
         <div class="row justify-content-center">
-            <input type="submit" value="Utwórz" class="btn btn-primary" />
+            <div asp-validation-summary="All" class="text-danger"></div>
+        </div>
+
+        <div class="form-group">
+            <div class="row justify-content-center">
+                <input type="submit" value="Utwórz" class="btn btn-primary" />
+            </div>
         </div>
     </div>
-</div>
 }
 
 <div>
@@ -110,7 +122,6 @@
         jeżeli panel został ręcznie wywołany możemy z tego poziomu przejść do widoku aktywnych kursów
         @Html.ActionLink("Przeglądaj aktywne kursy", "Index")*@
 </div>
-
 
 @section Scripts {
     <script>
