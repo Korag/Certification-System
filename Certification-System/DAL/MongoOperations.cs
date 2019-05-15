@@ -20,6 +20,7 @@ namespace Certification_System.DAL
         private string _meetingsCollectionName = "Meetings";
         private string _instructorsCollectionName = "Instructors";
         private string _companiesCollectionName = "Companies";
+        private string _givenCertificatesCollectionName = "GivenCertificates";
 
         //Collections
         private IMongoCollection<CertificationPlatformUser> _users;
@@ -29,6 +30,7 @@ namespace Certification_System.DAL
         private IMongoCollection<Meeting> _meetings;
         private IMongoCollection<Instructor> _instructors;
         private IMongoCollection<Company> _companies;
+        private IMongoCollection<GivenCertificate> _givenCertificates;
 
         public MongoOperations()
         {
@@ -231,9 +233,10 @@ namespace Certification_System.DAL
 
         public void AddMeetingToCourse(string meetingIdentificator, string courseIdentificator)
         {
-            var filter = Builders<Course>.Filter.Eq(x => x.CourseIdentificator, courseIdentificator);
-            Course course = _context.db.GetCollection<Course>(_coursesCollectionName).Find<Course>(filter).FirstOrDefault();
+            Course course = GetCourseById(courseIdentificator);
             course.Meetings.Add(meetingIdentificator);
+
+            var filter = Builders<Course>.Filter.Eq(x => x.CourseIdentificator, courseIdentificator);
 
             _context.db.GetCollection<Course>(_coursesCollectionName).ReplaceOne(filter, course);
         }
@@ -271,9 +274,20 @@ namespace Certification_System.DAL
                     );
             };
 
-            return SelectList;
-
+            return SelectList; 
         }
+
+
+        public void AddUserCertificate(string userIdentificator, string givenCertificateIdentificator)
+        {
+            var User = GetUserById(userIdentificator);
+            User.Certificates.Add(givenCertificateIdentificator);
+
+            var filter = Builders<CertificationPlatformUser>.Filter.Eq(x => x.Id, userIdentificator);
+
+            _context.db.GetCollection<CertificationPlatformUser>(_usersCollectionName).ReplaceOne(filter, User);
+        }
+
         #endregion
 
         #region Instructor
@@ -389,7 +403,8 @@ namespace Certification_System.DAL
     
         public void AddGivenCertificate(GivenCertificate givenCertificate)
         {
-      
+            _givenCertificates = _context.db.GetCollection<GivenCertificate>(_givenCertificatesCollectionName);
+            _givenCertificates.InsertOne(givenCertificate);
         }
 
         #endregion
