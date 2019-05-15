@@ -148,21 +148,6 @@ namespace Certification_System.DAL
             ICollection<Course> course = _context.db.GetCollection<Course>(_coursesCollectionName).Find<Course>(filter).ToList();
             return course;
         }
-        #endregion
-
-        #region Meeting
-        public ICollection<Meeting> GetMeetingsById(ICollection<string> meetingsIdentificators)
-        {
-            ICollection<Meeting> Meetings = new List<Meeting>();
-
-            foreach (var meeting in meetingsIdentificators)
-            {
-                var filter = Builders<Meeting>.Filter.Eq(x => x.MeetingIdentificator, meeting);
-                Meeting singleMeeting = _context.db.GetCollection<Meeting>(_meetingsCollectionName).Find<Meeting>(filter).FirstOrDefault();
-                Meetings.Add(singleMeeting);
-            }
-            return Meetings;
-        }
 
         public ICollection<SelectListItem> GetCoursesAsSelectList()
         {
@@ -185,10 +170,52 @@ namespace Certification_System.DAL
             return SelectList;
         }
 
+        public Course GetCourseByMeetingId(string meetingIdentificator)
+        {
+            var filter = Builders<Course>.Filter.Where(x => x.Meetings.Contains(meetingIdentificator));
+            Course course = _context.db.GetCollection<Course>(_coursesCollectionName).Find<Course>(filter).FirstOrDefault();
+            return course;
+        }
+
+        #endregion
+
+        #region Meeting
+        public ICollection<Meeting> GetMeetingsById(ICollection<string> meetingsIdentificators)
+        {
+            ICollection<Meeting> Meetings = new List<Meeting>();
+
+            foreach (var meeting in meetingsIdentificators)
+            {
+                var filter = Builders<Meeting>.Filter.Eq(x => x.MeetingIdentificator, meeting);
+                Meeting singleMeeting = _context.db.GetCollection<Meeting>(_meetingsCollectionName).Find<Meeting>(filter).FirstOrDefault();
+                Meetings.Add(singleMeeting);
+            }
+            return Meetings;
+        }
+
         public void AddMeeting(Meeting meeting)
         {
             _meetings = _context.db.GetCollection<Meeting>(_meetingsCollectionName);
             _meetings.InsertOne(meeting);
+        }
+
+        public Meeting GetMeetingById(string meetingsIdentificators)
+        {
+            Meeting Meeting = new Meeting();
+
+            var filter = Builders<Meeting>.Filter.Eq(x => x.MeetingIdentificator, meetingsIdentificators);
+            Meeting = _context.db.GetCollection<Meeting>(_meetingsCollectionName).Find<Meeting>(filter).FirstOrDefault();
+
+            return Meeting;
+        }
+
+        public void AddMeetingToCourse(string meetingIdentificator, string courseIdentificator)
+        {
+            var filter = Builders<Course>.Filter.Eq(x => x.CourseIdentificator, courseIdentificator);
+            Course course = _context.db.GetCollection<Course>(_coursesCollectionName).Find<Course>(filter).FirstOrDefault();
+            course.Meetings.Add(meetingIdentificator);
+
+            _context.db.GetCollection<Course>(_coursesCollectionName).ReplaceOne(filter, course);
         }
 
         #endregion
@@ -239,6 +266,26 @@ namespace Certification_System.DAL
         {
             _instructors = _context.db.GetCollection<Instructor>(_instructorsCollectionName);
             return _instructors.AsQueryable().ToList();
+        }
+
+        public ICollection<SelectListItem> GetInstructorsAsSelectList()
+        {
+            List<Instructor> Instructors = GetInstructors().ToList();
+            List<SelectListItem> SelectList = new List<SelectListItem>();
+
+            foreach (var instructor in Instructors)
+            {
+                SelectList.Add
+                    (
+                        new SelectListItem()
+                        {
+                            Text = instructor.FirstName + " " + instructor.LastName,
+                            Value = instructor.InstructorIdentificator
+                        }
+                    );
+            };
+
+            return SelectList;
         }
         #endregion
 

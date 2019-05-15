@@ -35,11 +35,14 @@ namespace Certification_System.DAL
         Course GetCourseById(string courseIdentificator);
         ICollection<SelectListItem> GetCoursesAsSelectList();
         ICollection<Course> GetActiveCourses();
+        Course GetCourseByMeetingId(string meetingIdentificator);
         #endregion
 
         #region Meeting
         ICollection<Meeting> GetMeetingsById(ICollection<string> meetingsIdentificators);
+        Meeting GetMeetingById(string meetingsIdentificators);
         void AddMeeting(Meeting meeting);
+        void AddMeetingToCourse(string meetingIdentificator, string courseIdentificator);
         #endregion
 
         #region Instructor
@@ -47,6 +50,7 @@ namespace Certification_System.DAL
         Instructor GetInstructorById(string instructorIdentificator);
         void AddInstructor(Instructor instructor);
         ICollection<Instructor> GetInstructors();
+        ICollection<SelectListItem> GetInstructorsAsSelectList();
         #endregion
 
         #region Company
