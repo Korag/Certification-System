@@ -18,10 +18,10 @@ namespace Certification_System.Controllers
         private UserManager<CertificationPlatformUser> _userManager;
         private readonly RoleManager<MongoRole> _roleManager;
 
-        public UsersController()
-        {
-            _context = new MongoOperations();
-        }
+        //public UsersController()
+        //{
+        //    _context = new MongoOperations();
+        //}
 
         public UsersController(UserManager<CertificationPlatformUser> userManager, RoleManager<MongoRole> roleManager)
         {
@@ -130,6 +130,9 @@ namespace Certification_System.Controllers
                     DateOfBirth = newUser.DateOfBirth,
                     PhoneNumber = newUser.PhoneNumber,
 
+                    Courses = new List<string>(),
+                    Certificates = new List<string>(),
+                    Degrees = new List<string>(),
                     CompanyRoleWorker = new List<string>(),
                     CompanyRoleManager = new List<string>()
                 };

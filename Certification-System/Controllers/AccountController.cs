@@ -11,6 +11,7 @@ using Certification_System.Models;
 using Certification_System.Mailing;
 using Certification_System.Extensions;
 using AspNetCore.Identity.Mongo.Model;
+using System.Collections.Generic;
 
 namespace Certification_System.Controllers
 {
@@ -235,7 +236,13 @@ namespace Certification_System.Controllers
                     Address = model.Address,
                     NumberOfApartment = model.NumberOfApartment,
                     DateOfBirth = model.DateOfBirth,
-                    PhoneNumber = model.PhoneNumber
+                    PhoneNumber = model.PhoneNumber,
+
+                    Certificates = new List<string>(),
+                    Courses = new List<string>(),
+                    Degrees = new List<string>(),
+                    CompanyRoleManager = new List<string>(),
+                    CompanyRoleWorker = new List<string>()
                 };
 
     
