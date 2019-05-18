@@ -151,6 +151,24 @@ namespace Certification_System.DAL
             return SelectList;
         }
 
+        public ICollection<Certificate> GetCertificatesById(ICollection<string> certificateIdentificators)
+        {
+            List<Certificate> Certificates = new List<Certificate>();
+
+            if (certificateIdentificators != null)
+            {
+                foreach (var certificateIdentificator in certificateIdentificators)
+                {
+                    var filter = Builders<Certificate>.Filter.Eq(x => x.CertificateIdentificator, certificateIdentificator);
+                    Certificate certificate = _context.db.GetCollection<Certificate>(_certificatesCollectionName).Find<Certificate>(filter).FirstOrDefault();
+
+                    Certificates.Add(certificate);
+                }
+            }
+
+            return Certificates;
+        }
+
         #endregion
 
         #region Course

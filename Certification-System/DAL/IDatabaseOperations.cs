@@ -37,7 +37,7 @@ namespace Certification_System.DAL
         void AddCertificate(Certificate certificate);
         Certificate GetCertificateById(string certificateIdentificator);
         ICollection<SelectListItem> GetCertificatesAsSelectList();
-
+        ICollection<Certificate> GetCertificatesById(ICollection<string> certificateIdentificators);
         #endregion
 
         #region Course
