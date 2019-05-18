@@ -137,7 +137,7 @@ namespace Certification_System.Controllers
             return View(newGivenCertificate);
         }
 
-        // POST: AddNewCertificate
+        // POST: AddNewGivenCertificate
         [ValidateAntiForgeryToken]
         [Authorize(Roles = "Admin")]
         [HttpPost]
@@ -148,6 +148,7 @@ namespace Certification_System.Controllers
                 GivenCertificate givenCertificate = new GivenCertificate
                 {
                     GivenCertificateIdentificator = ObjectId.GenerateNewId().ToString(),
+                    GivenCertificateIndexer = newGivenCertificate.GivenCertificateIndexer,
 
                     ReceiptDate = newGivenCertificate.ReceiptDate,
                     ExpirationDate = newGivenCertificate.ExpirationDate,
@@ -167,6 +168,35 @@ namespace Certification_System.Controllers
             newGivenCertificate.AvailableCourses = _context.GetCoursesAsSelectList().ToList();
 
             return View(newGivenCertificate);
+        }
+
+        // GET: AddNewGivenCertificateConfirmation
+        [Authorize(Roles = "Admin")]
+        public IActionResult AddNewGivenCertificateConfirmation(string givenCertificateIdentificator)
+        {
+            if (givenCertificateIdentificator != null)
+            {
+                var GivenCertificate = _context.GetGivenCertificateById(givenCertificateIdentificator);
+
+                var Course = _context.GetCourseById(GivenCertificate.Course);
+                var Certificate = _context.GetCertificateById(GivenCertificate.Certificate);
+                var User = _context.GetUserCertificate(GivenCertificate.GivenCertificateIdentificator);
+
+                DisplayGivenCertificateViewModel addedGivenCertificate = new DisplayGivenCertificateViewModel
+                {
+                    GivenCertificateIndexer = GivenCertificate.GivenCertificateIndexer,
+                    ReceiptDate = GivenCertificate.ReceiptDate,
+                    ExpirationDate = GivenCertificate.ExpirationDate,
+
+                    Course = Course.CourseIndexer + " " + Course.Name,
+                    Certificate = Certificate.CertificateIndexer + " " + Certificate.Name,
+                    User = User.FirstName + " " + User.LastName        
+                };
+
+
+                return View(addedGivenCertificate);
+            }
+            return RedirectToAction(nameof(AddNewGivenCertificate));
         }
     }
 }
