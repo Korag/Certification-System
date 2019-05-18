@@ -21,6 +21,7 @@ namespace Certification_System.DAL
         private string _instructorsCollectionName = "Instructors";
         private string _companiesCollectionName = "Companies";
         private string _givenCertificatesCollectionName = "GivenCertificates";
+        private string _degreesCollectionName = "Degrees";
 
         //Collections
         private IMongoCollection<CertificationPlatformUser> _users;
@@ -31,6 +32,7 @@ namespace Certification_System.DAL
         private IMongoCollection<Instructor> _instructors;
         private IMongoCollection<Company> _companies;
         private IMongoCollection<GivenCertificate> _givenCertificates;
+        private IMongoCollection<Degree> _degrees;
 
         public MongoOperations()
         {
@@ -435,5 +437,38 @@ namespace Certification_System.DAL
 
         #endregion
 
+        #region Degrees
+        public ICollection<Degree> GetDegrees()
+        {
+            _degrees = _context.db.GetCollection<Degree>(_degreesCollectionName);
+            return _degrees.AsQueryable().ToList();
+        }
+
+        public ICollection<SelectListItem> GetDegreesAsSelectList()
+        {
+            var Degrees = GetDegrees();
+            List<SelectListItem> SelectList = new List<SelectListItem>();
+
+            foreach (var degree in Degrees)
+            {
+                SelectList.Add
+                    (
+                        new SelectListItem()
+                        {
+                            Text = degree.DegreeIndexer + " | " + degree.Name,
+                            Value = degree.DegreeIdentificator
+                        }
+                    );
+            };
+
+            return SelectList;
+        }
+
+        public void AddDegree(Degree degree)
+        {
+            _degrees.InsertOne(degree);
+        }
+
+        #endregion
     }
 }
