@@ -288,6 +288,13 @@ namespace Certification_System.DAL
             _context.db.GetCollection<CertificationPlatformUser>(_usersCollectionName).ReplaceOne(filter, User);
         }
 
+        public CertificationPlatformUser GetUserCertificate(string givenCertificateIdentificator)
+        {
+            var filter = Builders<CertificationPlatformUser>.Filter.Where(z => z.Certificates.Contains(givenCertificateIdentificator));
+            CertificationPlatformUser user = _context.db.GetCollection<CertificationPlatformUser>(_usersCollectionName).Find<CertificationPlatformUser>(filter).FirstOrDefault();
+            return user;
+        }
+
         #endregion
 
         #region Instructor
@@ -425,6 +432,7 @@ namespace Certification_System.DAL
             _givenCertificates = _context.db.GetCollection<GivenCertificate>(_givenCertificatesCollectionName);
             return _givenCertificates.AsQueryable().ToList();
         }
+
         #endregion
 
     }
