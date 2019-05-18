@@ -1,0 +1,91 @@
+﻿@model Certification_System.ViewModels.AddDegreeViewModel
+
+@{
+    ViewData["Title"] = "AddNewDegree";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+<h2>Dodaj nowy stopień zawodowy</h2>
+<hr />
+
+<div class="row">
+    <div class="col-md-4">
+        <form asp-action="AddNewDegree">
+
+            <div class="form-group">
+                <label asp-for="DegreeIndexer" class="control-label"></label>
+                <input asp-for="DegreeIndexer" class="form-control" />
+                <span asp-validation-for="DegreeIndexer" class="text-danger"></span>
+            </div>
+
+            <div class="form-group">
+                <label asp-for="Name" class="control-label"></label>
+                <input asp-for="Name" class="form-control" />
+                <span asp-validation-for="Name" class="text-danger"></span>
+            </div>
+
+            <div class="form-group">
+                <label asp-for="Description" class="control-label"></label>
+                <input asp-for="Description" class="form-control" />
+                <span asp-validation-for="Description" class="text-danger"></span>
+            </div>
+
+            <div class="row justify-content-center">
+                <div asp-validation-summary="All" class="text-danger"></div>
+            </div>
+
+            <div class="form-group">
+                <label asp-for="AvailableCertificates" class="control-label col-md-2"></label>
+                <div class="col-md-10">
+                    <select asp-for="SelectedCertificates" asp-items="@Model.AvailableCertificates" data-width="auto" data-header="Wybierz wymagane certyfikaty" data-live-search="true" title="Nie wybrano żadnego elementu" class="form-control selectpicker show-tick"> </select>
+                    <div class="row col-md-10">
+                        <span asp-validation-for="SelectedCertificates" class="text-danger"></span>
+                    </div>
+                </div>
+            </div>
+
+            <div class="form-group">
+                <label asp-for="AvailableDegrees" class="control-label col-md-2"></label>
+                <div class="col-md-10">
+                    <select asp-for="SelectedDegrees" asp-items="@Model.AvailableDegrees" data-width="auto" data-header="Wybierz wymagane stopnie zawodowe" data-live-search="true" title="Nie wybrano żadnego elementu" class="form-control selectpicker show-tick"> </select>
+                    <div class="row col-md-10">
+                        <span asp-validation-for="SelectedDegrees" class="text-danger"></span>
+                    </div>
+                </div>
+            </div>
+
+            <div class="form-group">
+                @Html.LabelFor(model => model.AvailableBranches, htmlAttributes: new { @class = "control-label col-md-2" })
+                <div class="col-10">
+                   <div class="btn-group btn-group-toggle" data-toggle="buttons">
+                        @foreach (var availableBranch in Model.AvailableBranches)
+                        {
+                            <label class="btn btn-outline-secondary mr-2">
+                                <input type="checkbox"
+                                       name="SelectedBranches"
+                                       value="@availableBranch.Value"
+                                       autocomplete="off"
+                                       @if (Model.SelectedBranches.Contains(availableBranch.Value)) { <text> checked </text> } />
+                                <span>@availableBranch.Text</span>
+                            </label>
+                        }
+                    </div>
+                </div>
+            </div>
+
+            <div class="form-group">
+                <div class="row justify-content-center">
+                    <input type="submit" value="Create" class="btn btn-primary" />
+                </div>
+            </div>
+        </form>
+    </div>
+</div>
+
+<div>
+    <a asp-action="DisplayAllDegrees" asp-controller="Degrees">Przejdź do listy stopni zawodowych</a>
+</div>
+
+@section Scripts {
+    @{await Html.RenderPartialAsync("_ValidationScriptsPartial");}
+}
