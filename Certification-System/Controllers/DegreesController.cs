@@ -105,5 +105,35 @@ namespace Certification_System.Controllers
             }
             return RedirectToAction(nameof(AddNewDegree));
         }
+
+        // GET: DisplayAllDegrees
+        [Authorize(Roles = "Admin")]
+        public IActionResult DisplayAllDegrees()
+        {
+            var Degrees = _context.GetDegrees();
+            List<DisplayDegreeViewModel> ListOfDegrees = new List<DisplayDegreeViewModel>();
+
+            foreach (var degree in Degrees)
+            {
+                var RequiredCertificates = _context.GetCertificatesById(degree.RequiredCertificates);
+                var RequiredDegrees = _context.GetDegreesById(degree.RequiredDegrees);
+                var Branches = _context.GetBranchesById(degree.Branches);
+
+                DisplayDegreeViewModel singleDegree = new DisplayDegreeViewModel
+                {
+                    DegreeIndexer = degree.DegreeIndexer,
+                    Name = degree.Name,
+                    Description = degree.Description,
+
+                    RequiredCertificates = RequiredCertificates.Select(z => z.CertificateIndexer + " " + z.Name).ToList(),
+                    RequiredDegrees = RequiredDegrees.Select(z => z.DegreeIdentificator + " " + z.Name).ToList(),
+                    Branches = Branches
+                };
+
+                ListOfDegrees.Add(singleDegree);
+            }
+
+            return View(ListOfDegrees);
+        }
     }
 }

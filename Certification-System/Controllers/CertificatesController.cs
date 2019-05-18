@@ -108,7 +108,7 @@ namespace Certification_System.Controllers
 
             foreach (var certificate in Certificates)
             {
-                DisplayListOfCertificatesViewModel singleCertificateViewModel = new DisplayListOfCertificatesViewModel
+                DisplayListOfCertificatesViewModel singleCertificate = new DisplayListOfCertificatesViewModel
                 {
                     CertificateIndexer = certificate.CertificateIndexer,
                     Name = certificate.Name,
@@ -117,7 +117,7 @@ namespace Certification_System.Controllers
                     Depreciated = certificate.Depreciated
                 };
 
-                ListOfCertificates.Add(singleCertificateViewModel);
+                ListOfCertificates.Add(singleCertificate);
             }
 
             return View(ListOfCertificates);
