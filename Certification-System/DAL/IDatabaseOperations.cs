@@ -66,6 +66,8 @@ namespace Certification_System.DAL
 
         #region GivenCertificate
         void AddGivenCertificate(GivenCertificate givenCertificate);
+        GivenCertificate GetGivenCertificateById(string givenCertificateIdentificator);
+        ICollection<GivenCertificate> GetGivenCertificates()
         #endregion
     }
 

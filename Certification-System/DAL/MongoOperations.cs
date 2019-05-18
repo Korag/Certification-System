@@ -164,6 +164,7 @@ namespace Certification_System.DAL
             Course course = _context.db.GetCollection<Course>(_coursesCollectionName).Find<Course>(filter).FirstOrDefault();
             return course;
         }
+
         public ICollection<Course> GetActiveCourses()
         {
             var filter = Builders<Course>.Filter.Eq(x => x.CourseEnded, false);
@@ -277,7 +278,6 @@ namespace Certification_System.DAL
             return SelectList; 
         }
 
-
         public void AddUserCertificate(string userIdentificator, string givenCertificateIdentificator)
         {
             var User = GetUserById(userIdentificator);
@@ -388,13 +388,19 @@ namespace Certification_System.DAL
         public ICollection<Company> GetCompaniesById(ICollection<string> companyIdentificators)
         {
             List<Company> Companies = new List<Company>();
-            foreach (var companyIdentificator in companyIdentificators)
-            {
-                var filter = Builders<Company>.Filter.Eq(x => x.CompanyIdentificator, companyIdentificator);
-                Company company = _context.db.GetCollection<Company>(_companiesCollectionName).Find<Company>(filter).FirstOrDefault();
 
-                Companies.Add(company);
+            if (companyIdentificators != null)
+            {
+                foreach (var companyIdentificator in companyIdentificators)
+                {
+                    var filter = Builders<Company>.Filter.Eq(x => x.CompanyIdentificator, companyIdentificator);
+                    Company company = _context.db.GetCollection<Company>(_companiesCollectionName).Find<Company>(filter).FirstOrDefault();
+
+                    Companies.Add(company);
+                }
+
             }
+
             return Companies;
         }
         #endregion
@@ -407,6 +413,18 @@ namespace Certification_System.DAL
             _givenCertificates.InsertOne(givenCertificate);
         }
 
+        public GivenCertificate GetGivenCertificateById(string givenCertificateIdentificator)
+        {
+            var filter = Builders<GivenCertificate>.Filter.Eq(x => x.GivenCertificateIdentificator, givenCertificateIdentificator);
+            GivenCertificate givenCertificate = _context.db.GetCollection<GivenCertificate>(_givenCertificatesCollectionName).Find<GivenCertificate>(filter).FirstOrDefault();
+            return givenCertificate;
+        }
+
+        public ICollection<GivenCertificate> GetGivenCertificates()
+        {
+            _givenCertificates = _context.db.GetCollection<GivenCertificate>(_givenCertificatesCollectionName);
+            return _givenCertificates.AsQueryable().ToList();
+        }
         #endregion
 
     }
