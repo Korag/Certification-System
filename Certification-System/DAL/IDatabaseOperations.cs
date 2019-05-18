@@ -91,6 +91,8 @@ namespace Certification_System.DAL
         ICollection<Degree> GetDegrees();
         ICollection<SelectListItem> GetDegreesAsSelectList();
         void AddDegree(Degree degree);
+        Degree GetDegreeById(string degreeIdentificator);
+        ICollection<Degree> GetDegreesById(ICollection<string> degreeIdentificators);
 
         #endregion
 

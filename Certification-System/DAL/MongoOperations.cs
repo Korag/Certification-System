@@ -466,7 +466,34 @@ namespace Certification_System.DAL
 
         public void AddDegree(Degree degree)
         {
+            _degrees = _context.db.GetCollection<Degree>(_degreesCollectionName);
             _degrees.InsertOne(degree);
+        }
+
+        public Degree GetDegreeById(string degreeIdentificator)
+        {
+            var filter = Builders<Degree>.Filter.Eq(x => x.DegreeIdentificator, degreeIdentificator);
+            Degree degree = _context.db.GetCollection<Degree>(_degreesCollectionName).Find<Degree>(filter).FirstOrDefault();
+            return degree;
+        }
+
+        public ICollection<Degree> GetDegreesById(ICollection<string> degreeIdentificators)
+        {
+            List<Degree> Degrees = new List<Degree>();
+
+            if (degreeIdentificators != null)
+            {
+                foreach (var degreeIdentificator in degreeIdentificators)
+                {
+                    var filter = Builders<Degree>.Filter.Eq(x => x.DegreeIdentificator, degreeIdentificator);
+                    Degree degree = _context.db.GetCollection<Degree>(_companiesCollectionName).Find<Degree>(filter).FirstOrDefault();
+
+                    Degrees.Add(degree);
+                }
+
+            }
+
+            return Degrees;
         }
 
         #endregion
