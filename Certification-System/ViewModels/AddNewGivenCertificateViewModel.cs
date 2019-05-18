@@ -20,7 +20,7 @@ namespace Certification_System.ViewModels
         public DateTime ExpirationDate { get; set; }
 
 
-        [Display(Name = "Instruktorzy")]
+        [Display(Name = "Certyfikaty")]
         public IList<SelectListItem> AvailableCertificates { get; set; }
 
         [Required]
