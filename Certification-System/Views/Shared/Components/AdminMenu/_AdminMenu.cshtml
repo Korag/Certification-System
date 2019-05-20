@@ -14,8 +14,8 @@
                     <a asp-controller="Home" asp-action="Index" class="dropdown-item">Weryfikuj certyfikat QR</a>
                     <a asp-controller="Home" asp-action="Index" class="dropdown-item">Wyświetl listę pracowników z danym certyfikatem</a>
                     <div class="dropdown-divider"></div>
-                    <a asp-controller="Home" asp-action="Index" class="dropdown-item">Przyznaj pracownikowi certyfikat</a>
-                    <a asp-controller="Certificates" asp-action="AddNewCertificate" class="dropdown-item">Utwórz nowy certyfikat</a>
+                    <a asp-controller="Certificates" asp-action="AddNewGivenCertificate" class="dropdown-item">Przyznaj pracownikowi certyfikat *</a>
+                    <a asp-controller="Certificates" asp-action="AddNewCertificate" class="dropdown-item">Utwórz nowy certyfikat *</a>
                 </div>
             </li>
             <li class="nav-item dropdown">
@@ -26,8 +26,8 @@
                     <a asp-controller="Home" asp-action="Index" class="dropdown-item">Historia szkoleń wybranego pracownika</a>
                     <a asp-controller="Home" asp-action="Index" class="dropdown-item">Zapisz pracownika na szkolenie</a>
                     <div class="dropdown-divider"></div>
-                    <a asp-controller="Courses" asp-action="AddNewCourse" class="dropdown-item">Dodaj szkolenie</a>
-                    <a asp-controller="Home" asp-action="Index" class="dropdown-item">Dodaj spotkanie do szkolenia</a>
+                    <a asp-controller="Courses" asp-action="AddNewCourse" class="dropdown-item">Dodaj szkolenie *</a>
+                    <a asp-controller="Meetings" asp-action="AddNewMeeting" class="dropdown-item">Dodaj spotkanie do szkolenia *</a>
                     <a asp-controller="Home" asp-action="Index" class="dropdown-item">Modyfikuj szkolenie</a>
                     <a asp-controller="Home" asp-action="Index" class="dropdown-item">Zarządzaj zgłoszeniami na szkolenie</a>
                 </div>
@@ -35,11 +35,29 @@
             <li class="nav-item dropdown">
                 <a class="nav-link dropdown-toggle" href="#" id="navbarDropdown" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">Przedsiębiorstwa</a>
                 <div class="dropdown-menu">
-                    <a asp-controller="Home" asp-action="Index" class="dropdown-item">Przeglądaj przedsiębiorstwa</a>
-                    <a asp-controller="Home" asp-action="Index" class="dropdown-item">Utwórz przedsiębiorstwo</a>
+                    <a asp-controller="Companies" asp-action="DisplayAllCompanies" class="dropdown-item">Przeglądaj przedsiębiorstwa*</a>
+                    <a asp-controller="Companies" asp-action="AddNewCompany" class="dropdown-item">Utwórz przedsiębiorstwo*</a>
                     <a asp-controller="Home" asp-action="Index" class="dropdown-item">Modyfikuj dane przedsiębiorstwa</a>
                     <a asp-controller="Home" asp-action="Index" class="dropdown-item">Nadaj uprawnienie do zarządzania przedsiębiorstwem</a>
-                    <a asp-controller="Home" asp-action="Index" class="dropdown-item">Przeglądaj zdarzeniae</a>
+                    <a asp-controller="Home" asp-action="Index" class="dropdown-item">Przeglądaj zdarzenia</a>
+                </div>
+            </li>
+            <li class="nav-item dropdown">
+                <a class="nav-link dropdown-toggle" href="#" id="navbarDropdown" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">Gotowe</a>
+                <div class="dropdown-menu">
+                    <a asp-controller="Companies" asp-action="DisplayAllCompanies" class="dropdown-item">Przeglądaj przedsiębiorstwa*</a>
+                    <a asp-controller="Companies" asp-action="AddNewCompany" class="dropdown-item">Utwórz przedsiębiorstwo*</a>
+                    <a asp-controller="Courses" asp-action="AddNewCourse" class="dropdown-item">Dodaj szkolenie *</a>
+                    <a asp-controller="Meetings" asp-action="AddNewMeeting" class="dropdown-item">Dodaj spotkanie do szkolenia *</a>
+                    <a asp-controller="Certificates" asp-action="AddNewGivenCertificate" class="dropdown-item">Przyznaj pracownikowi certyfikat *</a>
+                    <a asp-controller="Certificates" asp-action="AddNewCertificate" class="dropdown-item">Utwórz nowy certyfikat *</a>
+                    <a asp-controller="Branches" asp-action="AddNewBranch" class="dropdown-item">Dodaj nowy obszar certyfikacji *</a>
+                    <a asp-controller="Branches" asp-action="DisplayAllBranches" class="dropdown-item">Wyświetl obszary certyfikacji *</a>
+                    <a asp-controller="Certificates" asp-action="DisplayAllCertificates" class="dropdown-item">Wyświetl wszystkie certyfikaty *</a>
+                    <a asp-controller="Degrees" asp-action="AddNewDegree" class="dropdown-item">Dodaj nowy stopień zawodowy *</a>
+                    <a asp-controller="Degrees" asp-action="DisplayAllDegrees" class="dropdown-item">Wyświetl wszystkie stopnie zawodowe *</a>
+                    <a asp-controller="Instructors" asp-action="AddNewInstructor" class="dropdown-item">Dodaj nowego instruktora *</a>
+                    <a asp-controller="Instructors" asp-action="DisplayAllInstructors" class="dropdown-item">Wyświetl wszystkich instruktorów *</a>
                 </div>
             </li>
             <li class="nav-item">
