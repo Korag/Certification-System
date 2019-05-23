@@ -192,6 +192,12 @@ namespace Certification_System.DAL
             return course;
         }
 
+        public ICollection<Course> GetCourses()
+        {
+            _courses= _context.db.GetCollection<Course>(_coursesCollectionName);
+            return _courses.AsQueryable().ToList();
+        }
+
         public ICollection<SelectListItem> GetCoursesAsSelectList()
         {
             List<Course> Courses = GetActiveCourses().ToList();
@@ -276,6 +282,20 @@ namespace Certification_System.DAL
             var filter = Builders<CertificationPlatformUser>.Filter.Eq(x => x.Id, userIdentificator);
             CertificationPlatformUser user = _context.db.GetCollection<CertificationPlatformUser>(_usersCollectionName).Find<CertificationPlatformUser>(filter).FirstOrDefault();
             return user;
+        }
+
+        public ICollection<CertificationPlatformUser> GetUsersById(ICollection<string> userIdentificators)
+        {
+            List<CertificationPlatformUser> Users = new List<CertificationPlatformUser>();
+
+            foreach (var user in userIdentificators)
+            {
+                var filter = Builders<CertificationPlatformUser>.Filter.Eq(x => x.Id, user);
+                CertificationPlatformUser singleUser = _context.db.GetCollection<CertificationPlatformUser>(_usersCollectionName).Find<CertificationPlatformUser>(filter).FirstOrDefault();
+                Users.Add(singleUser);
+            }
+
+            return Users;
         }
 
         public ICollection<SelectListItem> GetUsersAsSelectList()

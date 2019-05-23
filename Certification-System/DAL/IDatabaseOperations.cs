@@ -16,6 +16,7 @@ namespace Certification_System.DAL
 
         ICollection<CertificationPlatformUser> GetUsers();
         CertificationPlatformUser GetUserById(string userIdentificator);
+        ICollection<CertificationPlatformUser> GetUsersById(ICollection<string> userIdentificators);
         ICollection<SelectListItem> GetUsersAsSelectList();
         void AddUserCertificate(string userIdentificator, string givenCertificateIdentificator);
         CertificationPlatformUser GetUserCertificate(string givenCertificateIdentificator);
@@ -47,6 +48,7 @@ namespace Certification_System.DAL
         ICollection<SelectListItem> GetCoursesAsSelectList();
         ICollection<Course> GetActiveCourses();
         Course GetCourseByMeetingId(string meetingIdentificator);
+        ICollection<Course> GetCourses();
 
         #endregion
 
