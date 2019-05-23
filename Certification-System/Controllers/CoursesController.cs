@@ -59,37 +59,37 @@ namespace Certification_System.Controllers
 
                 if (Course.Meetings != null)
                 {
-                //    var MeetingsId = _context.GetMeetingsById(Course.Meetings);
-                //    List<AddMeetingViewModel> Meetings = new List<AddMeetingViewModel>();
+                    //    var MeetingsId = _context.GetMeetingsById(Course.Meetings);
+                    //    List<AddMeetingViewModel> Meetings = new List<AddMeetingViewModel>();
 
-                //    foreach (var meeting in MeetingsId)
-                //    {
-                //        var Instructors = _context.GetInstructorsById(meeting.Instructor);
+                    //    foreach (var meeting in MeetingsId)
+                    //    {
+                    //        var Instructors = _context.GetInstructorsById(meeting.Instructor);
 
-                //        AddMeetingViewModel meetingsInCourse = new AddMeetingViewModel
-                //        {
-                //            MeetingIndexer = meeting.MeetingIndexer,
-                //            Description = meeting.Description,
-                //            DateOfMeeting = meeting.DateOfMeeting,
-                //            Country = meeting.Country,
-                //            City = meeting.City,
-                //            PostCode = meeting.PostCode,
-                //            Address = meeting.Address,
-                //            NumberOfApartment = meeting.NumberOfApartment,
+                    //        AddMeetingViewModel meetingsInCourse = new AddMeetingViewModel
+                    //        {
+                    //            MeetingIndexer = meeting.MeetingIndexer,
+                    //            Description = meeting.Description,
+                    //            DateOfMeeting = meeting.DateOfMeeting,
+                    //            Country = meeting.Country,
+                    //            City = meeting.City,
+                    //            PostCode = meeting.PostCode,
+                    //            Address = meeting.Address,
+                    //            NumberOfApartment = meeting.NumberOfApartment,
 
-                //            Instructors = new List<string>()
-                //        };
-                        
-                //        foreach (var instructor in Instructors)
-                //        {
-                //            string instructorIdentity = instructor.FirstName + instructor.LastName;
-                //            meetingsInCourse.Instructors.Add(instructorIdentity);
-                //        }
+                    //            Instructors = new List<string>()
+                    //        };
 
-                //        Meetings.Add(meetingsInCourse);
-                //    }
+                    //        foreach (var instructor in Instructors)
+                    //        {
+                    //            string instructorIdentity = instructor.FirstName + instructor.LastName;
+                    //            meetingsInCourse.Instructors.Add(instructorIdentity);
+                    //        }
 
-                //    addedCourse.MeetingsViewModels = Meetings;
+                    //        Meetings.Add(meetingsInCourse);
+                    //    }
+
+                    //    addedCourse.MeetingsViewModels = Meetings;
                 }
 
                 var BranchNames = _context.GetBranchesById(Course.Branches);
@@ -121,7 +121,8 @@ namespace Certification_System.Controllers
 
                     CourseEnded = false,
                     Branches = newCourse.SelectedBranches,
-                    Meetings = new List<string>()
+                    Meetings = new List<string>(),
+                    EnrolledUsers = new List<string>()
                 };
 
                 if (newCourse.MeetingsViewModels != null)
@@ -149,11 +150,11 @@ namespace Certification_System.Controllers
 
                         //}
 
-                    //todo InstructorFindBySomething for example Name
-                    // --> maybe 2 collections in ViewModel - firstName, LastName of all Instructors available
-                    //todo Instructor in singleMeeting.Add(instructor.Id)
-                    //todo Meeting add to collection in Mongo
-                    //todo Add reference to meeting to Course.Meetings Array
+                        //todo InstructorFindBySomething for example Name
+                        // --> maybe 2 collections in ViewModel - firstName, LastName of all Instructors available
+                        //todo Instructor in singleMeeting.Add(instructor.Id)
+                        //todo Meeting add to collection in Mongo
+                        //todo Add reference to meeting to Course.Meetings Array
 
                         //_context.AddMeeting(singleMeeting);
                     }
@@ -175,6 +176,120 @@ namespace Certification_System.Controllers
                 newCourse.SelectedBranches = new List<string>();
             }
             return View(newCourse);
+        }
+
+        // GET: DisplayAllCourses
+        [Authorize(Roles = "Admin")]
+        public IActionResult DisplayAllCourses()
+        {
+            var Courses = _context.GetCourses();
+            List<DisplayListOfCoursesViewModel> ListOfCourses = new List<DisplayListOfCoursesViewModel>();
+
+            if (Courses.Count != 0)
+            {
+                foreach (var course in Courses)
+                {
+                    DisplayListOfCoursesViewModel singleCourse = new DisplayListOfCoursesViewModel
+                    {
+                        CourseIdentificator = course.CourseIdentificator,
+                        CourseIndexer = course.CourseIndexer,
+                        Name = course.Name,
+                        Description = course.Description,
+                        DateOfStart = course.DateOfStart,
+                        DateOfEnd = course.DateOfEnd,
+                        CourseLength = course.CourseLength,
+                        CourseEnded = course.CourseEnded,
+                        EnrolledUsersLimit = course.EnrolledUsersLimit,
+                        EnrolledUsersQuantity = course.EnrolledUsers.Count,
+
+                        SelectedBranches = _context.GetBranchesById(course.Branches)
+                    };
+
+                    ListOfCourses.Add(singleCourse);
+                }
+            }
+
+            return View(ListOfCourses);
+        }
+
+
+        // GET:   CourseDetails
+        [Authorize(Roles = "Admin")]
+        public IActionResult CourseDetails(string CourseIdentificator)
+        {
+            var Course = _context.GetCourseById(CourseIdentificator);
+            var Meetings = _context.GetMeetingsById(Course.Meetings);
+
+            List<DisplayMeetingViewModel> meetingsViewModel = new List<DisplayMeetingViewModel>();
+
+            foreach (var meeting in Meetings)
+            {
+                DisplayMeetingViewModel singleMeeting = new DisplayMeetingViewModel
+                {
+                    MeetingIdentificator = meeting.MeetingIdentificator,
+                    MeetingIndexer = meeting.MeetingIndexer,
+                    Description = meeting.Description,
+                    DateOfMeeting = meeting.DateOfMeeting,
+                    Country = meeting.Country,
+                    City = meeting.City,
+                    Address = meeting.Address,
+                    NumberOfApartment = meeting.NumberOfApartment,
+                    PostCode = meeting.PostCode,
+
+                    CourseIdentificator = Course.CourseIdentificator,
+                    Instructors = _context.GetInstructorsById(meeting.Instructors).Select(z => z.FirstName + " " + z.LastName).ToList()
+                };
+
+                meetingsViewModel.Add(singleMeeting);
+            }
+
+            var Users = _context.GetUsersById(Course.EnrolledUsers);
+
+            List<DisplayUsersViewModel> usersViewModel = new List<DisplayUsersViewModel>();
+
+            foreach (var user in Users)
+            {
+                DisplayUsersViewModel singleUser = new DisplayUsersViewModel
+                {
+                    UserIdentificator = user.Id,
+                    FirstName = user.FirstName,
+                    LastName = user.LastName,
+                    Email = user.Email,
+                    CompanyRoleWorker = user.CompanyRoleWorker,
+                    CompanyRoleManager = user.CompanyRoleManager
+                };
+
+                usersViewModel.Add(singleUser);
+            }
+
+            CourseDetailsViewModel courseDetails = new CourseDetailsViewModel
+            {
+                CourseIndexer = Course.CourseIndexer,
+                Name = Course.Name,
+                Description = Course.Description,
+                DateOfStart = Course.DateOfStart,
+                DateOfEnd = Course.DateOfEnd,
+                CourseLength = Course.CourseLength,
+                CourseEnded = Course.CourseEnded,
+                EnrolledUsersLimit = Course.EnrolledUsersLimit,
+                EnrolledUsersQuantity = Course.EnrolledUsers.Count,
+
+                SelectedBranches = _context.GetBranchesById(Course.Branches),
+                Meetings = meetingsViewModel,
+                EnrolledUsers = usersViewModel
+            };
+
+            return View(courseDetails);
+        }
+
+
+
+        [Authorize(Roles = "Admin")]
+        public IActionResult Test()
+        {
+
+
+            return Ok();
         }
 
     }
