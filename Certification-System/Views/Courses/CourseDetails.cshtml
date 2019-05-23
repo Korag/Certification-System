@@ -1,0 +1,259 @@
+﻿@model Certification_System.ViewModels.CourseDetailsViewModel
+
+@{
+    ViewData["Title"] = "CourseDetails";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+<h1>Szczegóły szkolenia</h1>
+<hr />
+
+<div>
+    <a asp-action="DisplayAllCourses">Powrót do listy kursów</a>
+</div>
+
+<div class="row">
+    <div class="col-md-4">
+        <form asp-action="CourseDetails">
+            <div class="form-group">
+                <label asp-for="CourseIndexer" class="control-label"></label>
+                <input asp-for="CourseIndexer" class="form-control" disabled />
+                <span asp-validation-for="CourseIndexer" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <label asp-for="Name" class="control-label"></label>
+                <input asp-for="Name" class="form-control" disabled />
+                <span asp-validation-for="Name" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <label asp-for="Description" class="control-label"></label>
+                <input asp-for="Description" class="form-control" disabled />
+                <span asp-validation-for="Description" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <label asp-for="DateOfStart" class="control-label"></label>
+                <input asp-for="DateOfStart" class="form-control" disabled />
+                <span asp-validation-for="DateOfStart" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <label asp-for="DateOfEnd" class="control-label"></label>
+                <input asp-for="DateOfEnd" class="form-control" disabled />
+                <span asp-validation-for="DateOfEnd" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <label asp-for="EnrolledUsersLimit" class="control-label"></label>
+                <input asp-for="EnrolledUsersLimit" class="form-control" disabled />
+                <span asp-validation-for="EnrolledUsersLimit" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <label asp-for="EnrolledUsersQuantity" class="control-label"></label>
+                <input asp-for="EnrolledUsersQuantity" class="form-control" disabled />
+                <span asp-validation-for="EnrolledUsersQuantity" class="text-danger"></span>
+            </div>
+            <div class="form-group form-check">
+                <label class="form-check-label">
+                    <input class="form-check-input" asp-for="CourseEnded" disabled /> @Html.DisplayNameFor(model => model.CourseEnded)
+                </label>
+            </div>
+            <div class="form-group">
+                <label asp-for="CourseLength" class="control-label"></label>
+                <input asp-for="CourseLength" class="form-control" disabled />
+                <span asp-validation-for="CourseLength" class="text-danger"></span>
+            </div>
+        </form>
+    </div>
+</div>
+
+<p>
+    @Html.ActionLink("Dodaj kolejne spotkanie do kursu", "AddNewMeetingToCourse", new { CourseIdentificator = Model.Meetings.First() })
+</p>
+
+@if (Model.Meetings.Count != 0)
+{
+    <div class="col-12 table-responsive">
+        <table id="meetingsList" class="table table-striped table-bordered display" style="width: 100%;" role="grid">
+            <thead>
+                <tr>
+                    <th>
+                        @Html.DisplayNameFor(model => model.Meetings.First().MeetingIdentificator)
+                    </th>
+                    <th>
+                        @Html.DisplayNameFor(model => model.Meetings.First().MeetingIndexer)
+                    </th>
+                    <th>
+                        @Html.DisplayNameFor(model => model.Meetings.First().Description)
+                    </th>
+                    <th>
+                        @Html.DisplayNameFor(model => model.Meetings.First().DateOfMeeting)
+                    </th>
+                    <th>
+                        @Html.DisplayNameFor(model => model.Meetings.First().Country)
+                    </th>
+                    <th>
+                        @Html.DisplayNameFor(model => model.Meetings.First().City)
+                    </th>
+                    <th>
+                        @Html.DisplayNameFor(model => model.Meetings.First().PostCode)
+                    </th>
+                    <th>
+                        @Html.DisplayNameFor(model => model.Meetings.First().Address)
+                    </th>
+                    <th>
+                        @Html.DisplayNameFor(model => model.Meetings.First().NumberOfApartment)
+                    </th>
+                    <th>
+                        @Html.DisplayNameFor(model => model.Meetings.First().Instructors)
+                    </th>
+                    <th>
+                        Operacje
+                    </th>
+                </tr>
+            </thead>
+            <tbody>
+                @foreach (var item in Model.Meetings)
+                {
+                    <tr>
+                        <td>
+                            @Html.DisplayFor(modelItem => item.MeetingIdentificator)
+                        </td>
+                        <td>
+                            @Html.DisplayFor(modelItem => item.MeetingIndexer)
+                        </td>
+                        <td>
+                            @Html.DisplayFor(modelItem => item.Description)
+                        </td>
+                        <td>
+                            @Html.DisplayFor(modelItem => item.DateOfMeeting)
+                        </td>
+                        <td>
+                            @Html.DisplayFor(modelItem => item.Country)
+                        </td>
+                        <td>
+                            @Html.DisplayFor(modelItem => item.City)
+                        </td>
+                        <td>
+                            @Html.DisplayFor(modelItem => item.PostCode)
+                        </td>
+                        <td>
+                            @Html.DisplayFor(modelItem => item.Address)
+                        </td>
+                        <td>
+                            @Html.DisplayFor(modelItem => item.NumberOfApartment)
+                        </td>
+                        <td>
+                            <ul>
+                                @foreach (var instructor in item.Instructors)
+                                {
+                                    <li>@instructor</li>
+                                }
+                            </ul>
+                        </td>
+                        <td>
+                            @Html.ActionLink("Edytuj spotkanie", "EditMeeting", new { MeetingIdentificator = item.MeetingIdentificator }) |
+                            @Html.ActionLink("Usuń spotkanie ze szkolenia", "DeleteMeeting", new { MeetingIdentificator = item.MeetingIdentificator }) |
+                            @Html.ActionLink("Sprawdź obecność", "CheckUsersPresence", new { MeetingIdentificator = item.MeetingIdentificator })
+                        </td>
+                    </tr>
+                }
+            </tbody>
+        </table>
+    </div>
+}
+else
+{
+    <p>Brak dodanych spotkań w ramach kursu.</p>
+}
+
+<p>
+    @Html.ActionLink("Dodaj użytkownika do kursu", "AssignUserToCourse", new { CourseIdentificator = Model.Meetings.First() })
+</p>
+
+@if (Model.EnrolledUsers.Count != 0)
+{
+    <div class="col-12 table-responsive">
+        <table id="listUsers" class="table table-striped table-bordered display" style="width: 100%;" role="grid">
+            <tr>
+                <th>
+                    @Html.DisplayNameFor(model => model.EnrolledUsers.First().FirstName)
+                </th>
+                <th>
+                    @Html.DisplayNameFor(model => model.EnrolledUsers.First().LastName)
+                </th>
+                <th>
+                    @Html.DisplayNameFor(model => model.EnrolledUsers.First().Email)
+                </th>
+                <th>
+                    @Html.DisplayNameFor(model => model.EnrolledUsers.First().CompanyRoleWorker)
+                </th>
+                <th>
+                    @Html.DisplayNameFor(model => model.EnrolledUsers.First().CompanyRoleManager)
+                </th>
+                <th>
+                    Operacje
+                </th>
+            </tr>
+
+            @foreach (var item in Model.EnrolledUsers)
+            {
+                <tr>
+                    <td>
+                        @Html.DisplayFor(modelItem => item.Email)
+                    </td>
+                    <td>
+                        @Html.DisplayFor(modelItem => item.FirstName)
+                    </td>
+                    <td>
+                        @Html.DisplayFor(modelItem => item.LastName)
+                    </td>
+                    <td>
+                        <ul>
+                            @foreach (var companyWorker in item.CompanyRoleWorker)
+                            {
+                                <li>@companyWorker</li>
+                            }
+                        </ul>
+                    </td>
+                    <td>
+                        <ul>
+                            @foreach (var companyManager in item.CompanyRoleManager)
+                            {
+                                <li>@companyManager</li>
+                            }
+                        </ul>
+                    </td>
+                    <td>
+                        @Html.ActionLink("Szczegóły użytkownika", "UserDetails", "Users", new { UserIdentificator = item.UserIdentificator }) |
+                        @Html.ActionLink("Usuń z kursu", "DeleteUserFromCourse", "Courses", new { UserIdentificator = item.UserIdentificator })
+                    </td>
+                </tr>
+            }
+        </table>
+    </div>
+}
+else
+{
+    <p>Brak zapisanych użytkowników.</p>
+}
+
+@section Scripts {
+    <script>
+        $(document).ready(function () {
+
+            $('#meetingsList').DataTable({
+                "language": {
+                    "url": "//cdn.datatables.net/plug-ins/1.10.19/i18n/Polish.json"
+                },
+            }
+            );
+
+            $('#listUsers').DataTable({
+                "language": {
+                    "url": "//cdn.datatables.net/plug-ins/1.10.19/i18n/Polish.json"
+                },
+            }
+            );
+        });
+    </script>
+
+
+}
