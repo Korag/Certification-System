@@ -3,6 +3,7 @@ using Certification_System.Models;
 using Certification_System.ViewModels;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
+using MongoDB.Bson;
 using System.Collections.Generic;
 
 namespace Certification_System.Controllers
@@ -22,12 +23,13 @@ namespace Certification_System.Controllers
         {
             var BranchesList = _context.GetBranches();
 
-            List<AddBranchViewModel> existingBranches = new List<AddBranchViewModel>();
+            List<DisplayBranchViewModel> existingBranches = new List<DisplayBranchViewModel>();
 
             foreach (var branch in BranchesList)
             {
-                existingBranches.Add(new AddBranchViewModel
+                existingBranches.Add(new DisplayBranchViewModel
                 {
+                    BranchIdentificator = branch.BranchIdentificator,
                     Name = branch.Name
                 });
             }
@@ -37,13 +39,18 @@ namespace Certification_System.Controllers
 
         // GET: AddNewBranchConfirmation
         [Authorize(Roles = "Admin")]
-        public IActionResult AddNewBranchConfirmation(string BranchName)
+        public IActionResult AddNewBranchConfirmation(string BranchIdentificator, string TypeOfAction)
         {
-            if (BranchName == null)
+            ViewBag.TypeOfAction = TypeOfAction;
+
+            var Branch = _context.GetBranchById(BranchIdentificator);
+
+            if (BranchIdentificator == null)
             {
                 return RedirectToAction(nameof(AddNewBranch));
             }
-            return View(BranchName);
+
+            return View(Branch);
         }
 
         // GET: AddNewBranch
@@ -64,14 +71,50 @@ namespace Certification_System.Controllers
             {
                 Branch branch = new Branch
                 {
+                    BranchIdentificator = ObjectId.GenerateNewId().ToString(),
                     Name = newBranch.Name
                 };
 
-                return RedirectToAction("AddNewBranchConfirmation", new { BranchName = newBranch.Name });
+                _context.AddBranch(branch);
+                return RedirectToAction("AddNewBranchConfirmation", new { BranchIdentificator = newBranch.BranchIdentificator, TypeOfAction = "Add" });
             }
 
             return View(newBranch);
         }
 
+        // GET: EditBranch
+        [Authorize(Roles = "Admin")]
+        [HttpGet]
+        public IActionResult EditBranch(string BranchIdentificator)
+        {
+            var Branch = _context.GetBranchById(BranchIdentificator);
+
+            AddBranchViewModel branchToUpdate = new AddBranchViewModel
+            {
+                BranchIdentificator = Branch.BranchIdentificator,
+                Name = Branch.Name
+            };
+
+            return View(branchToUpdate);
+        }
+
+        // POST: EditBranch
+        [ValidateAntiForgeryToken]
+        [Authorize(Roles = "Admin")]
+        [HttpPost]
+        public IActionResult EditBranch(AddBranchViewModel editedBranch)
+        {
+            if (ModelState.IsValid)
+            {
+                var OriginBranch = _context.GetBranchById(editedBranch.BranchIdentificator);
+                OriginBranch.Name = editedBranch.Name;
+
+                _context.UpdateBranch(OriginBranch);
+
+                return RedirectToAction("AddNewBranchConfirmation", "Branches" , new { BranchIdentificator = OriginBranch.BranchIdentificator, TypeOfAction = "Edit" });
+            }
+
+            return View(editedBranch);
+        }
     }
 }

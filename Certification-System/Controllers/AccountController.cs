@@ -531,7 +531,7 @@ namespace Certification_System.Controllers
             }
             else
             {
-                return RedirectToAction(nameof(HomeController.Index), "Home");
+                return RedirectToAction(nameof(CertificatesController.BlankMenu), "Certificates");
             }
         }
 
