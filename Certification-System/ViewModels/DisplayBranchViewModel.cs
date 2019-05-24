@@ -2,12 +2,11 @@
 
 namespace Certification_System.ViewModels
 {
-    public class AddBranchViewModel
+    public class DisplayBranchViewModel
     {
         [Display(Name = "Identyfikator")]
         public string BranchIdentificator { get; set; }
 
-        [Required]
         [Display(Name = "Nazwa obszaru")]
         public string Name { get; set; }
     }
