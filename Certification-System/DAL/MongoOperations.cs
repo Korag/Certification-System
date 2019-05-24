@@ -70,6 +70,14 @@ namespace Certification_System.DAL
             _branches.InsertOne(branch);
         }
 
+        public void UpdateBranch(Branch branch)
+        {
+            var filter = Builders<Branch>.Filter.Eq(x => x.BranchIdentificator, branch.BranchIdentificator);
+            var result =  _context.db.GetCollection<Branch>(_branchCollectionName).ReplaceOne(filter, branch);
+
+
+        }
+
         public ICollection<Branch> GetBranches()
         {
             _branches = _context.db.GetCollection<Branch>(_branchCollectionName);
@@ -94,6 +102,13 @@ namespace Certification_System.DAL
             };
 
             return SelectList;
+        }
+
+        public Branch GetBranchById(string branchIdentificator)
+        {
+            var filter = Builders<Branch>.Filter.Eq(x => x.BranchIdentificator, branchIdentificator);
+            Branch branch = _context.db.GetCollection<Branch>(_branchCollectionName).Find<Branch>(filter).FirstOrDefault();
+            return branch;
         }
 
         public ICollection<string> GetBranchesById(ICollection<string> branchesIdentificators)

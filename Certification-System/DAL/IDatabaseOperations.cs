@@ -26,6 +26,8 @@ namespace Certification_System.DAL
         #region Branches
 
         ICollection<Branch> GetBranches();
+        void UpdateBranch(Branch branch);
+        Branch GetBranchById(string branchIdentificator);
         void AddBranch(Branch branch);
         ICollection<SelectListItem> GetBranchesAsSelectList();
         ICollection<string> GetBranchesById(ICollection<string> branchesIdentificators);
