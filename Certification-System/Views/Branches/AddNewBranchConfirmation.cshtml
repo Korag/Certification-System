@@ -1,16 +1,24 @@
-﻿@model string
+﻿@model Certification_System.Models.Branch
 
 @{
     ViewBag.Title = "AddNewBranchConfirmation";
     Layout = "~/Views/Shared/_Layout.cshtml";
 }
 
-<h2 class="alert alert-success" role="alert">Dodano następujący obszar certyfikacji:</h2>
+@if (ViewBag.TypeOfAction == "Add")
+{
+    <h2 class="alert alert-success" role="alert">Dodano następujący obszar certyfikacji:</h2>
+}
+else
+{
+    <h2 class="alert alert-success" role="alert">Zmodyfikowano obszar certyfikacji:</h2>
+}
+
 
 <div class="container col-12">
     <div class="btn-group btn-group-toggle" data-toggle="buttons">
         <label class="btn btn-outline-secondary mr-2">
-            <span>@Model</span>
+            <span>@Model.Name</span>
         </label>
     </div>
 
@@ -21,4 +29,6 @@
         @Html.ActionLink("Wyświetl wszystkie obszary", "DisplayAllBranches", "Branches")
     </p>
 </div>
+
+
 

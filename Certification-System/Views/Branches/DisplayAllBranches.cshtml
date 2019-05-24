@@ -1,4 +1,4 @@
-﻿@model IEnumerable<Certification_System.ViewModels.AddBranchViewModel>
+﻿@model IEnumerable<Certification_System.ViewModels.DisplayBranchViewModel>
 
 @{
     ViewBag.Title = "DisplayAllBranches";
@@ -9,12 +9,10 @@
 <hr />
 
 <div class="container col-12">
-    <div class="btn-group btn-group-toggle" data-toggle="buttons">
+    <div>
         @foreach (var branch in Model)
         {
-            <label class="btn btn-outline-secondary mr-2">
-                <span>@branch.Name</span>
-            </label>
+            @Html.ActionLink(branch.Name, "EditBranch", "Branches", new { BranchIdentificator=branch.BranchIdentificator}, new { @class = "btn btn-outline-secondary mr-2" })
         }
     </div>
 
@@ -22,10 +20,4 @@
         @Html.ActionLink("Dodaj nowy obszar", "AddNewBranch", "Branches")
     </p>
 </div>
-
-
-@*@Html.ActionLink("Edit", "Edit", new { /* id=item.PrimaryKey */ }) |
-    @Html.ActionLink("Details", "Details", new { /* id=item.PrimaryKey */ }) |
-    @Html.ActionLink("Delete", "Delete", new { /* id=item.PrimaryKey */ })*@
-
 
