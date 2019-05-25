@@ -1,0 +1,143 @@
+﻿@model Certification_System.ViewModels.AddCourseViewModel
+
+@{
+    ViewData["Title"] = "EditCourse";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+<h2>Edytuj kurs</h2>
+<hr />
+
+<div class="row">
+    <div class="col-12">
+        <form asp-action="EditCourse">
+
+            <input asp-for="CourseIdentificator" class="form-control" hidden />
+
+            <div class="form-group">
+                <label asp-for="CourseIndexer" class="control-label"></label>
+                <input asp-for="CourseIndexer" class="form-control" />
+                <span asp-validation-for="CourseIndexer" class="text-danger"></span>
+            </div>
+
+            <div class="form-group">
+                <label asp-for="Name" class="control-label"></label>
+                <input asp-for="Name" class="form-control" />
+                <span asp-validation-for="Name" class="text-danger"></span>
+            </div>
+
+            <div class="form-group">
+                <label asp-for="Description" class="control-label"></label>
+                <input asp-for="Description" class="form-control" />
+                <span asp-validation-for="Description" class="text-danger"></span>
+            </div>
+
+            <div class="form-group">
+                @Html.LabelFor(model => model.DateOfStart, htmlAttributes: new { @class = "control-label col-md-2" })
+                <div class="">
+                    <div class='input-group date' id='DateOfStart'>
+                        <input type='text' class="form-control" name="DateOfStart" value="@DateTime.Now.ToShortDateString() @DateTime.Now.ToShortTimeString()" />
+                        <span class="input-group-addon">
+                            <span class="fa fa-calendar pl-1 pt-0.5" style="font-size:34px"></span>
+                        </span>
+                    </div>
+                    @Html.ValidationMessageFor(model => model.DateOfStart, "", new { @class = "text-danger" })
+                </div>
+            </div>
+
+            <div class="form-group">
+                @Html.LabelFor(model => model.DateOfEnd, htmlAttributes: new { @class = "control-label" })
+                <div class="">
+                    <div class='input-group date' id='DateOfEnd'>
+                        <input type='text' class="form-control" name="DateOfEnd" value="@DateTime.Now.AddDays(1).ToShortDateString() @DateTime.Now.ToShortTimeString()" />
+                        <span class="input-group-addon">
+                            <span class="fa fa-calendar pl-1 pt-0.5" style="font-size:34px"></span>
+                        </span>
+                    </div>
+                    @Html.ValidationMessageFor(model => model.DateOfEnd, "", new { @class = "text-danger" })
+                </div>
+            </div>
+
+            <div class="form-group">
+                <label asp-for="EnrolledUsersLimit" class="control-label"></label>
+                <input asp-for="EnrolledUsersLimit" class="form-control" />
+                <span asp-validation-for="EnrolledUsersLimit" class="text-danger"></span>
+            </div>
+
+            <div class="form-group form-check">
+                <label class="form-check-label">
+                    <input class="form-check-input" asp-for="CourseEnded" /> @Html.DisplayNameFor(model => model.CourseEnded)
+                </label>
+            </div>
+
+            <div class="form-group">
+                <label asp-for="CourseLength" class="control-label"></label>
+                <input asp-for="CourseLength" class="form-control" />
+                <span asp-validation-for="CourseLength" class="text-danger"></span>
+            </div>
+
+            <div class="form-group">
+                @Html.LabelFor(model => model.AvailableBranches, htmlAttributes: new { @class = "control-label" })
+                <div class="col-10">
+
+                    <div class="btn-group btn-group-toggle" data-toggle="buttons">
+                        @foreach (var availableBranch in Model.AvailableBranches)
+                        {
+                            @*<div id="checkbox-list">*@
+                            <label class="btn btn-outline-secondary mr-2  @if (Model.SelectedBranches.Contains(availableBranch.Value)) { <text> active </text> }">
+                                <input type="checkbox"
+                                       name="SelectedBranches"
+                                       value="@availableBranch.Value"
+                                       autocomplete="off"
+                                       @if (Model.SelectedBranches.Contains(availableBranch.Value)) { <text> checked </text> } />
+                                <span>@availableBranch.Text</span>
+                            </label>
+                        }
+                    </div>
+                    @Html.ValidationMessageFor(model => model.SelectedBranches, "", new { @class = "text-danger" })
+                </div>
+            </div>
+
+            <div class="row justify-content-center">
+                <div asp-validation-summary="All" class="text-danger"></div>
+            </div>
+
+            <div class="form-group d-flex justify-content-center">
+                <input type="submit" value="Edytuj" class="btn btn-warning" />
+            </div>
+
+        </form>
+    </div>
+</div>
+
+<div>
+    @Html.ActionLink("Powrót do listy wszystkich kursów", "DisplayAllCourses", "Courses", null, new { @class = "btn btn-primary" })
+</div>
+
+@section Scripts {
+    @{await Html.RenderPartialAsync("_ValidationScriptsPartial");}
+
+    <script>
+        $(function () {
+            $('#DateOfStart').datetimepicker({
+                format: 'DD.MM.YYYY HH:mm',
+                locale: moment.locale('pl', {
+                    week: { dow: 1 }
+                })
+            });
+            $('#DateOfEnd').datetimepicker({
+                format: 'DD.MM.YYYY HH:mm',
+                locale: moment.locale('pl', {
+                    week: { dow: 1 }
+                }),
+                useCurrent: false
+            });
+            $("#DateOfStart").on("dp.change", function (e) {
+                $('#DateOfEnd').data("DateTimePicker").minDate(e.date);
+            });
+            $("#DateOfEnd").on("dp.change", function (e) {
+                $('#DateOfStart').data("DateTimePicker").maxDate(e.date);
+            });
+        });
+    </script>
+}
