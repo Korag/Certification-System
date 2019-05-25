@@ -8,6 +8,8 @@ namespace Certification_System.ViewModels
 {
     public class DisplayListOfCertificatesViewModel
     {
+        public string CertificateIdentificator{ get; set; }
+
         [Display(Name = "Identyfikator")]
         public string CertificateIndexer { get; set; }
 

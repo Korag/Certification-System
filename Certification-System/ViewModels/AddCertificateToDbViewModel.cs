@@ -6,6 +6,8 @@ namespace Certification_System.ViewModels
 {
     public class AddCertificateToDbViewModel
     {
+        public string CertificateIdentificator { get; set; }
+
         [Required]
         [Display(Name="Identyfikator")]
         public string CertificateIndexer { get; set; }
