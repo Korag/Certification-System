@@ -21,6 +21,7 @@ namespace Certification_System.DAL
         void AddUserCertificate(string userIdentificator, string givenCertificateIdentificator);
         CertificationPlatformUser GetUserByGivenCertificateId(string givenCertificateIdentificator);
         ICollection<CertificationPlatformUser> GetUsersByGivenCertificateId(ICollection<string> givenCertificatesIdentificators);
+        ICollection<CertificationPlatformUser> GetUsersConnectedToCompany(string companyIdentificator);
 
         #endregion
 
@@ -81,6 +82,7 @@ namespace Certification_System.DAL
         ICollection<Company> GetCompanies();
         ICollection<Company> GetCompaniesById(ICollection<string> companyIdentificators);
         void AddCompany(Company company);
+        void UpdateCompany(Company company);
         Company GetCompanyById(string companyIdentificator);
         ICollection<SelectListItem> GetCompaniesAsSelectList();
 

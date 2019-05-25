@@ -381,6 +381,17 @@ namespace Certification_System.DAL
             return Users;
         }
 
+        public ICollection<CertificationPlatformUser> GetUsersConnectedToCompany(string companyIdentificator)
+        {
+            List<CertificationPlatformUser> Users = new List<CertificationPlatformUser>();
+
+            var filter = Builders<CertificationPlatformUser>.Filter.Where(x => x.CompanyRoleManager.Contains(companyIdentificator) || x.CompanyRoleWorker.Contains(companyIdentificator));
+            Users = _context.db.GetCollection<CertificationPlatformUser>(_usersCollectionName).Find<CertificationPlatformUser>(filter).ToList();
+
+            return Users;
+        }
+
+
         #endregion
 
         #region Instructor
@@ -469,6 +480,12 @@ namespace Certification_System.DAL
         {
             _companies = _context.db.GetCollection<Company>(_companiesCollectionName);
             _companies.InsertOne(company);
+        }
+
+        public void UpdateCompany(Company company)
+        {
+            var filter = Builders<Company>.Filter.Eq(x => x.CompanyIdentificator, company.CompanyIdentificator);
+            var result = _context.db.GetCollection<Company>(_companiesCollectionName).ReplaceOne(filter, company);
         }
 
         public Company GetCompanyById(string companyIdentificator)
