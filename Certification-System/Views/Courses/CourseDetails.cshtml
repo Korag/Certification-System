@@ -75,9 +75,6 @@
             <thead>
                 <tr>
                     <th>
-                        @Html.DisplayNameFor(model => model.Meetings.First().MeetingIdentificator)
-                    </th>
-                    <th>
                         @Html.DisplayNameFor(model => model.Meetings.First().MeetingIndexer)
                     </th>
                     <th>
@@ -113,9 +110,6 @@
                 @foreach (var item in Model.Meetings)
                 {
                     <tr>
-                        <td>
-                            @Html.DisplayFor(modelItem => item.MeetingIdentificator)
-                        </td>
                         <td>
                             @Html.DisplayFor(modelItem => item.MeetingIndexer)
                         </td>
@@ -174,13 +168,13 @@ else
         <table id="listUsers" class="table table-striped table-bordered display" style="width: 100%;" role="grid">
             <tr>
                 <th>
+                    @Html.DisplayNameFor(model => model.EnrolledUsers.First().Email)
+                </th>
+                <th>
                     @Html.DisplayNameFor(model => model.EnrolledUsers.First().FirstName)
                 </th>
                 <th>
                     @Html.DisplayNameFor(model => model.EnrolledUsers.First().LastName)
-                </th>
-                <th>
-                    @Html.DisplayNameFor(model => model.EnrolledUsers.First().Email)
                 </th>
                 <th>
                     @Html.DisplayNameFor(model => model.EnrolledUsers.First().CompanyRoleWorker)

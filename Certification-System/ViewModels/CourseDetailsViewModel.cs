@@ -40,7 +40,7 @@ namespace Certification_System.ViewModels
         [Display(Name = "Spotkania w ramach szkolenia")]
         public ICollection<DisplayMeetingViewModel> Meetings { get; set; }
 
-        [Display(Name = "Obszary certyfikacji")]
+        [Display(Name = "Zarejestrowani uczestnicy")]
         public ICollection<DisplayUsersViewModel> EnrolledUsers { get; set; }
     }
 }
