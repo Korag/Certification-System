@@ -74,8 +74,6 @@ namespace Certification_System.DAL
         {
             var filter = Builders<Branch>.Filter.Eq(x => x.BranchIdentificator, branch.BranchIdentificator);
             var result =  _context.db.GetCollection<Branch>(_branchCollectionName).ReplaceOne(filter, branch);
-
-
         }
 
         public ICollection<Branch> GetBranches()
@@ -137,6 +135,12 @@ namespace Certification_System.DAL
         {
             _certificates = _context.db.GetCollection<Certificate>(_certificatesCollectionName);
             _certificates.InsertOne(certificate);
+        }
+
+        public void UpdateCertificate(Certificate editedCertificate)
+        {
+            var filter = Builders<Certificate>.Filter.Eq(x => x.CertificateIdentificator, editedCertificate.CertificateIdentificator);
+            var result = _context.db.GetCollection<Certificate>(_certificatesCollectionName).ReplaceOne(filter, editedCertificate);
         }
 
         public Certificate GetCertificateById(string certificateIdentificator)
