@@ -5,7 +5,16 @@
     Layout = "~/Views/Shared/_Layout.cshtml";
 }
 
-<h2 class="alert alert-success" role="alert">Dodano następujący wpis dotyczący przedsiębiorstwa:</h2>
+
+@if (ViewBag.TypeOfAction == "Update")
+{
+    <h2 class="alert alert-info" role="alert">Zaktualizowano wpis dotyczący przedsiębiorstwa:</h2>
+}
+else
+{
+    <h2 class="alert alert-success" role="alert">Dodano następujący wpis dotyczący przedsiębiorstwa:</h2>
+}
+
 
 <table class="table table-responsive">
     <tr>
@@ -71,4 +80,5 @@
 
 <p>
     @Html.ActionLink("Utwórz nowy wpis dotyczący przedsiębiorstwa", "AddNewCompany", "Companies")
+    @Html.ActionLink("Przeglądaj przedsiębiorstwa", "DisplayAllCompanies", "Companies")
 </p>
