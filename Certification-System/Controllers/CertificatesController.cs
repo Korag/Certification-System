@@ -28,7 +28,7 @@ namespace Certification_System.Controllers
 
         // GET: AddNewCertificate
         [Authorize(Roles = "Admin")]
-        public IActionResult AddNewCertificate()
+        public ActionResult AddNewCertificate()
         {
             AddCertificateToDbViewModel newCertificate = new AddCertificateToDbViewModel
             {
@@ -43,10 +43,12 @@ namespace Certification_System.Controllers
 
         // GET: AddNewCertificateConfirmation
         [Authorize(Roles = "Admin")]
-        public IActionResult AddNewCertificateConfirmation(string certificateIdentificator)
+        public ActionResult AddNewCertificateConfirmation(string certificateIdentificator, string TypeOfAction)
         {
             if (certificateIdentificator != null)
             {
+                ViewBag.TypeOfAction = TypeOfAction;
+
                 var Certificate = _context.GetCertificateById(certificateIdentificator);
 
                 AddCertificateToDbViewModel addedCertificate = new AddCertificateToDbViewModel
@@ -69,7 +71,7 @@ namespace Certification_System.Controllers
         [ValidateAntiForgeryToken]
         [Authorize(Roles = "Admin")]
         [HttpPost]
-        public IActionResult AddNewCertificate(AddCertificateToDbViewModel newCertificate)
+        public ActionResult AddNewCertificate(AddCertificateToDbViewModel newCertificate)
         {
             if (ModelState.IsValid)
             {
@@ -88,7 +90,7 @@ namespace Certification_System.Controllers
 
                 _context.AddCertificate(certificate);
 
-                return RedirectToAction("AddNewCertificateConfirmation", new { certificateIdentificator = certificate.CertificateIdentificator });
+                return RedirectToAction("AddNewCertificateConfirmation", new { certificateIdentificator = certificate.CertificateIdentificator, TypeOfAction = "Add" });
             }
 
             newCertificate.AvailableBranches = _context.GetBranchesAsSelectList().ToList();
@@ -101,7 +103,7 @@ namespace Certification_System.Controllers
 
         // GET: DisplayAllCertificates
         [Authorize(Roles = "Admin")]
-        public IActionResult DisplayAllCertificates()
+        public ActionResult DisplayAllCertificates()
         {
             var Certificates = _context.GetCertificates();
             List<DisplayListOfCertificatesViewModel> ListOfCertificates = new List<DisplayListOfCertificatesViewModel>();
@@ -110,6 +112,7 @@ namespace Certification_System.Controllers
             {
                 DisplayListOfCertificatesViewModel singleCertificate = new DisplayListOfCertificatesViewModel
                 {
+                    CertificateIdentificator = certificate.CertificateIdentificator,
                     CertificateIndexer = certificate.CertificateIndexer,
                     Name = certificate.Name,
                     Description = certificate.Description,
@@ -125,7 +128,7 @@ namespace Certification_System.Controllers
 
         // GET: AddNewGivenCertificate
         [Authorize(Roles = "Admin")]
-        public IActionResult AddNewGivenCertificate()
+        public ActionResult AddNewGivenCertificate()
         {
             AddNewGivenCertificateViewModel newGivenCertificate = new AddNewGivenCertificateViewModel
             {
@@ -141,7 +144,7 @@ namespace Certification_System.Controllers
         [ValidateAntiForgeryToken]
         [Authorize(Roles = "Admin")]
         [HttpPost]
-        public IActionResult AddNewGivenCertificate(AddNewGivenCertificateViewModel newGivenCertificate)
+        public ActionResult AddNewGivenCertificate(AddNewGivenCertificateViewModel newGivenCertificate)
         {
             if (ModelState.IsValid)
             {
@@ -172,7 +175,7 @@ namespace Certification_System.Controllers
 
         // GET: AddNewGivenCertificateConfirmation
         [Authorize(Roles = "Admin")]
-        public IActionResult AddNewGivenCertificateConfirmation(string givenCertificateIdentificator)
+        public ActionResult AddNewGivenCertificateConfirmation(string givenCertificateIdentificator)
         {
             if (givenCertificateIdentificator != null)
             {
@@ -197,6 +200,63 @@ namespace Certification_System.Controllers
                 return View(addedGivenCertificate);
             }
             return RedirectToAction(nameof(AddNewGivenCertificate));
+        }
+
+
+        // GET: EditCertificate
+        [Authorize(Roles = "Admin")]
+        public ActionResult EditCertificate(string certificateIdentificator)
+        {
+            var Certificate = _context.GetCertificateById(certificateIdentificator);
+
+            AddCertificateToDbViewModel certificateToUpdate = new AddCertificateToDbViewModel
+            {
+                CertificateIdentificator = Certificate.CertificateIdentificator,
+                CertificateIndexer = Certificate.CertificateIndexer,
+                Description = Certificate.Description,
+                Name = Certificate.Name,
+                Depreciated = Certificate.Depreciated,
+
+                SelectedBranches = Certificate.Branches,
+                AvailableBranches = _context.GetBranchesAsSelectList().ToList()
+            };
+
+            return View(certificateToUpdate);
+        }
+
+
+        // POST: EditCertificate
+        [ValidateAntiForgeryToken]
+        [Authorize(Roles = "Admin")]
+        [HttpPost]
+        public ActionResult EditCertificate(AddCertificateToDbViewModel editedCertificate)
+        {
+            if (ModelState.IsValid)
+            {
+                Certificate certificate = new Certificate
+                {
+                    CertificateIdentificator = editedCertificate.CertificateIdentificator,
+
+                    CertificateIndexer = editedCertificate.CertificateIndexer,
+                    Name = editedCertificate.Name,
+                    Description = editedCertificate.Description,
+
+                    Depreciated = editedCertificate.Depreciated,
+
+                    Branches = editedCertificate.SelectedBranches
+                };
+
+                _context.UpdateCertificate(certificate);
+
+                return RedirectToAction("AddNewCertificateConfirmation", "Certificates", new { CertificateIdentificator = editedCertificate.CertificateIdentificator, TypeOfAction = "Update" });
+            }
+
+            editedCertificate.AvailableBranches = _context.GetBranchesAsSelectList().ToList();
+            if (editedCertificate.SelectedBranches == null)
+            {
+                editedCertificate.SelectedBranches = new List<string>();
+            }
+            return View(editedCertificate);
         }
     }
 }

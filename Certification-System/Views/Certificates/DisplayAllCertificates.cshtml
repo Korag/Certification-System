@@ -38,49 +38,49 @@
         <tbody>
             @foreach (var item in Model)
             {
-            <tr>
-                <td>
-                    @Html.DisplayFor(modelItem => item.CertificateIndexer)
-                </td>
-                <td>
-                    @Html.DisplayFor(modelItem => item.Name)
-                </td>
-                <td>
-                    @Html.DisplayFor(modelItem => item.Description)
-                </td>
-                <td>
-                    @Html.DisplayFor(modelItem => item.Depreciated)
-                </td>
-                <td>
-                    <ul>
-                       @foreach (var branch in item.Branches)
-                       {
-                        <li>@branch</li>
-                       }
-                   </ul>
-                </td>
-                <td>
-                    @Html.ActionLink("Edit", "Edit", new { /* id=item.PrimaryKey */ }) |
-                    @Html.ActionLink("Details", "Details", new { /* id=item.PrimaryKey */ }) |
-                    @Html.ActionLink("Delete", "Delete", new { /* id=item.PrimaryKey */ })
-                </td>
-            </tr>
+                <tr>
+                    <td>
+                        @Html.DisplayFor(modelItem => item.CertificateIndexer)
+                    </td>
+                    <td>
+                        @Html.DisplayFor(modelItem => item.Name)
+                    </td>
+                    <td>
+                        @Html.DisplayFor(modelItem => item.Description)
+                    </td>
+                    <td>
+                        @Html.DisplayFor(modelItem => item.Depreciated)
+                    </td>
+                    <td>
+                        <ul>
+                            @foreach (var branch in item.Branches)
+                            {
+                                <li>@branch</li>
+                            }
+                        </ul>
+                    </td>
+                    <td>
+                        @Html.ActionLink("Szczegóły", "CertificateDetails", "Certificates", new { CertificateIdentificator = item.CertificateIdentificator }, new { @class = "btn btn-info" })
+                        @Html.ActionLink("Aktualizuj", "EditCertificate", "Certificates", new { CertificateIdentificator = item.CertificateIdentificator }, new { @class = "btn btn-warning" })
+                        @*@Html.ActionLink("Usuń", "MarkCertificateAsDepreciated", "Certificates", new { CertificateIdentificator = item.CertificateIndexer }, new { @class = "btn btn-danger" })*@
+                    </td>
+                </tr>
             }
         </tbody>
     </table>
 </div>
 
 @section Scripts{
-<script>
-    $(document).ready(function () {
+    <script>
+        $(document).ready(function () {
 
-        $('#certificatesList').DataTable({
-            "language": {
-                "url": "//cdn.datatables.net/plug-ins/1.10.19/i18n/Polish.json"
-            },
-              //responsive: true
-        }
-        );
-    });
-</script>
+            $('#certificatesList').DataTable({
+                "language": {
+                    "url": "//cdn.datatables.net/plug-ins/1.10.19/i18n/Polish.json"
+                },
+                //responsive: true
+            }
+            );
+        });
+    </script>
 }
