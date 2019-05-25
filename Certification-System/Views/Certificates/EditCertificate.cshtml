@@ -1,0 +1,79 @@
+﻿@model Certification_System.ViewModels.AddCertificateToDbViewModel
+@{
+    ViewData["Title"] = "EditCertificate";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+<h1>Edytuj certyfikat</h1>
+<hr />
+
+@using (Html.BeginForm())
+{
+    @Html.AntiForgeryToken()
+
+    <div class="form-horizontal">
+        <div class="form-group">
+            @Html.LabelFor(model => model.CertificateIndexer, htmlAttributes: new { @class = "control-label col-md-2" })
+            <div class="col-10">
+                @Html.EditorFor(model => model.CertificateIndexer, new { htmlAttributes = new { @class = "form-control" } })
+                @Html.ValidationMessageFor(model => model.CertificateIndexer, "", new { @class = "text-danger" })
+            </div>
+        </div>
+        <div class="form-group">
+            @Html.LabelFor(model => model.Name, htmlAttributes: new { @class = "control-label col-md-2" })
+            <div class="col-10">
+                @Html.EditorFor(model => model.Name, new { htmlAttributes = new { @class = "form-control" } })
+                @Html.ValidationMessageFor(model => model.Name, "", new { @class = "text-danger" })
+            </div>
+        </div>
+        <div class="form-group">
+            @Html.LabelFor(model => model.Description, htmlAttributes: new { @class = "control-label col-md-2" })
+            <div class="col-10">
+                @Html.TextAreaFor(model => model.Description, new { htmlAttributes = new { @class = "form-control" } })
+                @Html.ValidationMessageFor(model => model.Description, "", new { @class = "text-danger" })
+            </div>
+        </div>
+
+        <div class="form-group d-none">
+            @Html.LabelFor(model => model.Depreciated, htmlAttributes: new { @class = "control-label col-md-2" })
+            <div class="col-10">
+                @Html.EditorFor(model => model.Depreciated, new { htmlAttributes = new { @class = "form-control" } })
+                @Html.ValidationMessageFor(model => model.Depreciated, "", new { @class = "text-danger" })
+
+                @*@Html.RadioButtonFor(model => model.Depreciated, true)
+                    @Html.RadioButtonFor(model => model.Depreciated, false)*@
+            </div>
+        </div>
+        <div class="form-group">
+            @Html.LabelFor(model => model.AvailableBranches, htmlAttributes: new { @class = "control-label col-md-2" })
+            <div class="col-10">
+                @*@Html.DropDownListFor(model => Model.SelectedBranches, Model.AvailableBranches, new { @class = "text-danger" })
+                    @Html.ListBoxFor(model => Model.SelectedBranches, Model.AvailableBranches, new { @class = "text-danger" })*@
+                <div class="btn-group btn-group-toggle" data-toggle="buttons">
+                    @foreach (var availableBranch in Model.AvailableBranches)
+                    {
+                        <label class="btn btn-outline-secondary mr-2  @if (Model.SelectedBranches.Contains(availableBranch.Value)) { <text> active </text>} ">
+                            <input type="checkbox"
+                                   name="SelectedBranches"
+                                   value="@availableBranch.Value"
+                                   autocomplete="off"
+                                   @if (Model.SelectedBranches.Contains(availableBranch.Value)) { <text> checked </text>} />
+                            <span>@availableBranch.Text</span>
+                        </label>
+                    }
+                </div>
+            </div>
+        </div>
+        <div class="row justify-content-center">
+            @Html.ValidationSummary("", new { @class = "text-danger" })
+        </div>
+        <div class="form-group">
+            <div class="col-12 row justify-content-center">
+                <input type="submit" value="Aktualizuj" class="btn btn-primary" />
+            </div>
+        </div>
+    </div>
+}
+<div>
+    @Html.ActionLink("Przejdź do listy certyfikatów", "DisplayAllCertificates")
+</div>
