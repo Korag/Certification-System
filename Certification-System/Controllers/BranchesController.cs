@@ -19,7 +19,7 @@ namespace Certification_System.Controllers
 
         // GET: DisplayAllBranches
         [Authorize(Roles = "Admin")]
-        public IActionResult DisplayAllBranches()
+        public ActionResult DisplayAllBranches()
         {
             var BranchesList = _context.GetBranches();
 
@@ -39,7 +39,7 @@ namespace Certification_System.Controllers
 
         // GET: AddNewBranchConfirmation
         [Authorize(Roles = "Admin")]
-        public IActionResult AddNewBranchConfirmation(string BranchIdentificator, string TypeOfAction)
+        public ActionResult AddNewBranchConfirmation(string BranchIdentificator, string TypeOfAction)
         {
             ViewBag.TypeOfAction = TypeOfAction;
 
@@ -56,7 +56,7 @@ namespace Certification_System.Controllers
         // GET: AddNewBranch
         [Authorize(Roles = "Admin")]
         [HttpGet]
-        public IActionResult AddNewBranch()
+        public ActionResult AddNewBranch()
         {
             return View();
         }
@@ -65,7 +65,7 @@ namespace Certification_System.Controllers
         [ValidateAntiForgeryToken]
         [Authorize(Roles = "Admin")]
         [HttpPost]
-        public IActionResult AddNewBranch(AddBranchViewModel newBranch)
+        public ActionResult AddNewBranch(AddBranchViewModel newBranch)
         {
             if (ModelState.IsValid)
             {
@@ -76,7 +76,7 @@ namespace Certification_System.Controllers
                 };
 
                 _context.AddBranch(branch);
-                return RedirectToAction("AddNewBranchConfirmation", new { BranchIdentificator = newBranch.BranchIdentificator, TypeOfAction = "Add" });
+                return RedirectToAction("AddNewBranchConfirmation", "Branches", new { BranchIdentificator = newBranch.BranchIdentificator, TypeOfAction = "Add" });
             }
 
             return View(newBranch);
@@ -85,7 +85,7 @@ namespace Certification_System.Controllers
         // GET: EditBranch
         [Authorize(Roles = "Admin")]
         [HttpGet]
-        public IActionResult EditBranch(string BranchIdentificator)
+        public ActionResult EditBranch(string BranchIdentificator)
         {
             var Branch = _context.GetBranchById(BranchIdentificator);
 
@@ -102,7 +102,7 @@ namespace Certification_System.Controllers
         [ValidateAntiForgeryToken]
         [Authorize(Roles = "Admin")]
         [HttpPost]
-        public IActionResult EditBranch(AddBranchViewModel editedBranch)
+        public ActionResult EditBranch(AddBranchViewModel editedBranch)
         {
             if (ModelState.IsValid)
             {
@@ -111,7 +111,7 @@ namespace Certification_System.Controllers
 
                 _context.UpdateBranch(OriginBranch);
 
-                return RedirectToAction("AddNewBranchConfirmation", "Branches" , new { BranchIdentificator = OriginBranch.BranchIdentificator, TypeOfAction = "Edit" });
+                return RedirectToAction("AddNewBranchConfirmation", "Branches" , new { BranchIdentificator = OriginBranch.BranchIdentificator, TypeOfAction = "Update" });
             }
 
             return View(editedBranch);

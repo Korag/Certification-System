@@ -5,13 +5,13 @@
     Layout = "~/Views/Shared/_Layout.cshtml";
 }
 
-@if (ViewBag.TypeOfAction == "Add")
+@if (ViewBag.TypeOfAction == "Update")
 {
-    <h2 class="alert alert-success" role="alert">Dodano następujący obszar certyfikacji:</h2>
+    <h2 class="alert alert-info" role="alert">Zmodyfikowano obszar certyfikacji:</h2>
 }
 else
 {
-    <h2 class="alert alert-success" role="alert">Zmodyfikowano obszar certyfikacji:</h2>
+    <h2 class="alert alert-success" role="alert">Dodano następujący obszar certyfikacji:</h2>
 }
 
 
@@ -23,10 +23,9 @@ else
     </div>
 
     <p>
-        @Html.ActionLink("Dodaj kolejny obszar", "AddNewBranch", "Branches")
-    </p>
-    <p>
-        @Html.ActionLink("Wyświetl wszystkie obszary", "DisplayAllBranches", "Branches")
+        @Html.ActionLink("Dodaj certyfikat", "AddNewBranch", "Branches", null, new { @class = "btn btn-primary" })
+        @Html.ActionLink("Aktualizuj", "EditBranch", "Branches", new { branchIdentificator = Model.BranchIdentificator }, new { @class = "btn btn-warning" })
+        @Html.ActionLink("Lista wszystkich obszarów", "DisplayAllBranches", "Certificates", null, new { @class = "btn btn-success" })
     </p>
 </div>
 
