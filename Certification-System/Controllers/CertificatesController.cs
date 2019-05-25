@@ -183,7 +183,7 @@ namespace Certification_System.Controllers
 
                 var Course = _context.GetCourseById(GivenCertificate.Course);
                 var Certificate = _context.GetCertificateById(GivenCertificate.Certificate);
-                var User = _context.GetUserCertificate(GivenCertificate.GivenCertificateIdentificator);
+                var User = _context.GetUserByGivenCertificateId(GivenCertificate.GivenCertificateIdentificator);
 
                 DisplayGivenCertificateViewModel addedGivenCertificate = new DisplayGivenCertificateViewModel
                 {
@@ -257,6 +257,80 @@ namespace Certification_System.Controllers
                 editedCertificate.SelectedBranches = new List<string>();
             }
             return View(editedCertificate);
+        }
+
+        // GET: CertificateDetails
+        [Authorize(Roles = "Admin")]
+        public ActionResult CertificateDetails(string certificateIdentificator)
+        {
+            var Certificate = _context.GetCertificateById(certificateIdentificator);
+            var GivenCertificatesInstances = _context.GetGivenCertificatesByIdOfCertificate(certificateIdentificator);
+
+            var GivenCertificatesIdentificators = GivenCertificatesInstances.Select(z => z.GivenCertificateIdentificator);
+            var UsersWithCertificate = _context.GetUsersByGivenCertificateId(GivenCertificatesIdentificators.ToList());
+
+            List<DisplayUsersViewModel> ListOfUsers = new List<DisplayUsersViewModel>();
+
+            if (UsersWithCertificate.Count != 0)
+            {
+                foreach (var user in UsersWithCertificate)
+                {
+                    DisplayUsersViewModel singleUser = new DisplayUsersViewModel
+                    {
+                        UserIdentificator = user.Id,
+                        FirstName = user.FirstName,
+                        LastName = user.LastName,
+                        Email = user.Email,
+                        CompanyRoleWorker = user.CompanyRoleWorker,
+                        CompanyRoleManager = user.CompanyRoleManager
+                    };
+
+                    ListOfUsers.Add(singleUser);
+                }
+            }
+
+            var CoursesWhichEndedWithSuchCertificate = _context.GetCoursesById(GivenCertificatesInstances.Select(z => z.Course).ToList());
+
+            List<DisplayListOfCoursesViewModel> ListOfCourses = new List<DisplayListOfCoursesViewModel>();
+
+            if (CoursesWhichEndedWithSuchCertificate.Count != 0)
+            {
+                foreach (var course in CoursesWhichEndedWithSuchCertificate)
+                {
+                    DisplayListOfCoursesViewModel singleCourse = new DisplayListOfCoursesViewModel
+                    {
+                        CourseIdentificator = course.CourseIdentificator,
+                        CourseIndexer = course.CourseIndexer,
+                        Name = course.Name,
+                        Description = course.Description,
+                        DateOfStart = course.DateOfStart,
+                        DateOfEnd = course.DateOfEnd,
+                        CourseLength = course.CourseLength,
+                        CourseEnded = course.CourseEnded,
+                        EnrolledUsersLimit = course.EnrolledUsersLimit,
+                        EnrolledUsersQuantity = course.EnrolledUsers.Count,
+
+                        SelectedBranches = _context.GetBranchesById(course.Branches)
+                    };
+
+                    ListOfCourses.Add(singleCourse);
+                }
+            }
+
+            CertificateDetailsViewModel CertificateDetails = new CertificateDetailsViewModel
+            {
+                CertificateIdentificator = Certificate.CertificateIdentificator,
+                CertificateIndexer = Certificate.CertificateIndexer,
+                Name = Certificate.Name,
+                Description = Certificate.Description,
+                Depreciated = Certificate.Depreciated,
+
+                Branches = _context.GetBranchesById(Certificate.Branches),
+                CoursesWhichEndedWithCertificate = ListOfCourses,
+                UsersWithCertificate = ListOfUsers
+            };
+
+            return View(CertificateDetails);
         }
     }
 }
