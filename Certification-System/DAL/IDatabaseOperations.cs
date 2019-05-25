@@ -49,6 +49,7 @@ namespace Certification_System.DAL
         #region Course
 
         void AddCourse(Course course);
+        void UpdateCourse(Course course);
         Course GetCourseById(string courseIdentificator);
         ICollection<Course> GetCoursesById(ICollection<string> coursesIdentificators);
         ICollection<SelectListItem> GetCoursesAsSelectList();

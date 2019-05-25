@@ -197,6 +197,12 @@ namespace Certification_System.DAL
             _courses.InsertOne(course);
         }
 
+        public void UpdateCourse(Course course)
+        {
+            var filter = Builders<Course>.Filter.Eq(x => x.CourseIdentificator, course.CourseIdentificator);
+            var result = _context.db.GetCollection<Course>(_coursesCollectionName).ReplaceOne(filter, course);
+        }
+
         public Course GetCourseById(string courseIdentificator)
         {
             var filter = Builders<Course>.Filter.Eq(x => x.CourseIdentificator, courseIdentificator);

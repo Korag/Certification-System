@@ -173,9 +173,11 @@
                             </ul>
                         </td>
                         <td>
-                            @Html.ActionLink("Edytuj spotkanie", "EditMeeting", new { MeetingIdentificator = item.MeetingIdentificator }) |
-                            @Html.ActionLink("Usuń spotkanie ze szkolenia", "DeleteMeeting", new { MeetingIdentificator = item.MeetingIdentificator }) |
-                            @Html.ActionLink("Sprawdź obecność", "CheckUsersPresence", new { MeetingIdentificator = item.MeetingIdentificator })
+                            @Html.ActionLink("Szczegóły spotkania", "MeetingDetail", new { meetingIdentificator = item.MeetingIdentificator }, new { @class = "btn btn-info" })
+                            @*@Html.ActionLink("Szczegóły instruktora", "InstructorDetail", new { instructorIdentificator = item.Instructors }, new { @class = "btn btn-secondary" })*@
+                            @Html.ActionLink("Edytuj spotkanie", "EditMeeting", new { meetingIdentificator = item.MeetingIdentificator }, new { @class = "btn btn-warning" })
+                            @*@Html.ActionLink("Usuń spotkanie ze szkolenia", "DeleteMeeting", new { meetingIdentificator = item.MeetingIdentificator }) |*@
+                            @Html.ActionLink("Sprawdź obecność", "CheckUsersPresence", new { meetingIdentificator = item.MeetingIdentificator }, new { @class = "btn btn-primary" })
                         </td>
                     </tr>
                 }
@@ -189,7 +191,7 @@ else
 }
 
 <p>
-    @Html.ActionLink("Dodaj użytkownika do kursu", "AssignUserToCourse", new { CourseIdentificator = Model.Meetings.First() })
+    @Html.ActionLink("Dodaj użytkownika do kursu", "AssignUserToCourse", new { CourseIdentificator = Model.Meetings.First() }, new { @class = "btn btn-primary" })
 </p>
 
 @if (Model.EnrolledUsers.Count != 0)
@@ -248,8 +250,8 @@ else
                             </ul>
                         </td>
                         <td>
-                            @Html.ActionLink("Szczegóły użytkownika", "UserDetails", "Users", new { UserIdentificator = item.UserIdentificator }) |
-                            @Html.ActionLink("Usuń z kursu", "DeleteUserFromCourse", "Courses", new { UserIdentificator = item.UserIdentificator })
+                            @Html.ActionLink("Szczegóły użytkownika", "UserDetails", "Users", new { userIdentificator = item.UserIdentificator }, new { @class = "btn btn-info" }))
+                            @Html.ActionLink("Usuń z kursu", "DeleteUserFromCourse", "Courses", new { userIdentificator = item.UserIdentificator }, new { @class = "btn btn-warning" }))
                         </td>
                     </tr>
                 }

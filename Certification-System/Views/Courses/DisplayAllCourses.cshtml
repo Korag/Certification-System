@@ -90,8 +90,8 @@
                         </ul>
                     </td>
                     <td>
-                        @Html.ActionLink("Edytuj", "EditCourse", new { CourseIdentificator = item.CourseIdentificator }) |
-                        @Html.ActionLink("Szczegóły", "CourseDetails", new { CourseIdentificator = item.CourseIdentificator }) |
+                        @Html.ActionLink("Szczegóły", "CourseDetails", new { courseIdentificator = item.CourseIdentificator }, new { @class = "btn btn-info" })
+                        @Html.ActionLink("Edytuj", "EditCourse", new { courseIdentificator = item.CourseIdentificator }, new { @class = "btn btn-warning" })
                     </td>
                 </tr>
             }
