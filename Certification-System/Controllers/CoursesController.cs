@@ -21,7 +21,7 @@ namespace Certification_System.Controllers
 
         // GET: AddNewCourse
         [Authorize(Roles = "Admin")]
-        public IActionResult AddNewCourse()
+        public ActionResult AddNewCourse()
         {
             AddCourseViewModel newCourse = new AddCourseViewModel
             {
@@ -40,10 +40,12 @@ namespace Certification_System.Controllers
 
         // GET: AddNewCourseConfirmation
         [Authorize(Roles = "Admin")]
-        public IActionResult AddNewCourseConfirmation(string courseIdentificator, ICollection<string> MeetingsIdentificators)
+        public ActionResult AddNewCourseConfirmation(string courseIdentificator, ICollection<string> meetingsIdentificators, string TypeOfAction)
         {
             if (courseIdentificator != null)
             {
+                ViewBag.TypeOfAction = TypeOfAction;
+
                 var Course = _context.GetCourseById(courseIdentificator);
 
                 AddCourseViewModel addedCourse = new AddCourseViewModel
@@ -104,7 +106,7 @@ namespace Certification_System.Controllers
         [ValidateAntiForgeryToken]
         [Authorize(Roles = "Admin")]
         [HttpPost]
-        public IActionResult AddNewCourse(AddCourseViewModel newCourse)
+        public ActionResult AddNewCourse(AddCourseViewModel newCourse)
         {
             if (ModelState.IsValid)
             {
@@ -115,11 +117,14 @@ namespace Certification_System.Controllers
                     Name = newCourse.Name,
                     Description = newCourse.Description,
                     CourseIndexer = newCourse.CourseIndexer,
+
                     DateOfStart = newCourse.DateOfStart,
                     DateOfEnd = newCourse.DateOfEnd,
+                    
                     EnrolledUsersLimit = newCourse.EnrolledUsersLimit,
-
+                    CourseLength = newCourse.CourseLength,
                     CourseEnded = false,
+
                     Branches = newCourse.SelectedBranches,
                     Meetings = new List<string>(),
                     EnrolledUsers = new List<string>()
@@ -167,7 +172,7 @@ namespace Certification_System.Controllers
 
                 _context.AddCourse(course);
 
-                return RedirectToAction("AddNewCourseConfirmation", new { courseIdentificator = course.CourseIdentificator, MeetingsIdentificators = new List<string>() });
+                return RedirectToAction("AddNewCourseConfirmation", new { courseIdentificator = course.CourseIdentificator, meetingsIdentificators = new List<string>(), TypeOfAction = "Update" });
             }
 
             newCourse.AvailableBranches = _context.GetBranchesAsSelectList().ToList();
@@ -180,7 +185,7 @@ namespace Certification_System.Controllers
 
         // GET: DisplayAllCourses
         [Authorize(Roles = "Admin")]
-        public IActionResult DisplayAllCourses()
+        public ActionResult DisplayAllCourses()
         {
             var Courses = _context.GetCourses();
             List<DisplayListOfCoursesViewModel> ListOfCourses = new List<DisplayListOfCoursesViewModel>();
@@ -215,7 +220,7 @@ namespace Certification_System.Controllers
 
         // GET:   CourseDetails
         [Authorize(Roles = "Admin")]
-        public IActionResult CourseDetails(string CourseIdentificator)
+        public ActionResult CourseDetails(string CourseIdentificator)
         {
             var Course = _context.GetCourseById(CourseIdentificator);
             var Meetings = _context.GetMeetingsById(Course.Meetings);
@@ -282,10 +287,77 @@ namespace Certification_System.Controllers
             return View(courseDetails);
         }
 
+        // GET: EditCourse
+        [Authorize(Roles = "Admin")]
+        public ActionResult EditCourse(string courseIdentificator)
+        {
+            var Course = _context.GetCourseById(courseIdentificator);
 
+            AddCourseViewModel courseToUpdate = new AddCourseViewModel
+            {
+                CourseIdentificator = Course.CourseIdentificator,
+
+                CourseIndexer = Course.CourseIndexer,
+                Name = Course.Name,
+                Description = Course.Description,
+                DateOfStart = Course.DateOfStart,
+                DateOfEnd = Course.DateOfEnd,
+                
+                CourseLength = Course.CourseLength,
+        
+                SelectedBranches = Course.Branches,
+                AvailableBranches = _context.GetBranchesAsSelectList().ToList()
+            };
+
+            return View(courseToUpdate);
+        }
+
+
+        // POST: EditCourse
+        [ValidateAntiForgeryToken]
+        [Authorize(Roles = "Admin")]
+        [HttpPost]
+        public ActionResult EditCourse(AddCourseViewModel editedCourse)
+        {
+            var OriginCourse = _context.GetCourseById(editedCourse.CourseIdentificator);
+
+            if (ModelState.IsValid)
+            {
+                Course course = new Course
+                {
+                    CourseIdentificator = editedCourse.CourseIdentificator,
+
+                    Name = editedCourse.Name,
+                    Description = editedCourse.Description,
+                    CourseIndexer = editedCourse.CourseIndexer,
+
+                    DateOfStart = editedCourse.DateOfStart,
+                    DateOfEnd = editedCourse.DateOfEnd,
+                    EnrolledUsersLimit = editedCourse.EnrolledUsersLimit,
+                    
+                    CourseEnded = OriginCourse.CourseEnded,
+                    CourseLength = editedCourse.CourseLength,
+
+                    Branches = editedCourse.SelectedBranches,
+                    Meetings = OriginCourse.Meetings,
+                    EnrolledUsers = OriginCourse.EnrolledUsers
+                };
+
+                _context.UpdateCourse(course);
+
+                return RedirectToAction("AddNewCourseConfirmation", "Courses", new { courseIdentificator = editedCourse.CourseIdentificator, TypeOfAction = "Update" });
+            }
+
+            editedCourse.AvailableBranches = _context.GetBranchesAsSelectList().ToList();
+            if (editedCourse.SelectedBranches == null)
+            {
+                editedCourse.SelectedBranches = new List<string>();
+            }
+            return View(editedCourse);
+        }
 
         [Authorize(Roles = "Admin")]
-        public IActionResult Test()
+        public ActionResult Test()
         {
 
 

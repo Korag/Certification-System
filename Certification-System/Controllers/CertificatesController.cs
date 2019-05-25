@@ -216,7 +216,7 @@ namespace Certification_System.Controllers
                 Description = Certificate.Description,
                 Name = Certificate.Name,
                 Depreciated = Certificate.Depreciated,
-
+                
                 SelectedBranches = Certificate.Branches,
                 AvailableBranches = _context.GetBranchesAsSelectList().ToList()
             };
