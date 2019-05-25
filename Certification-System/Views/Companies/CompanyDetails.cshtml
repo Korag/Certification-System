@@ -1,0 +1,140 @@
+﻿@model Certification_System.ViewModels.CompanyDetailsViewModel
+
+@{
+    ViewData["Title"] = "CompanyDetails";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+<h2>Szczegóły przedsiębiorstwa</h2>
+<hr />
+
+<div class="row">
+    <div class="col-md-4">
+        <form asp-action="CompanyDetails">
+
+            <div class="form-group">
+                <label asp-for="CompanyName" class="control-label" disabled></label>
+                <input asp-for="CompanyName" class="form-control" disabled />
+                <span asp-validation-for="CompanyName" class="text-danger"></span>
+            </div>
+
+            <div class="form-group">
+                <label asp-for="Email" class="control-label"></label>
+                <input asp-for="Email" class="form-control" disabled />
+                <span asp-validation-for="Email" class="text-danger"></span>
+            </div>
+
+            <div class="form-group">
+                <label asp-for="Phone" class="control-label"></label>
+                <input asp-for="Phone" class="form-control" disabled />
+                <span asp-validation-for="Phone" class="text-danger"></span>
+            </div>
+
+            <div class="form-group">
+                <label asp-for="Country" class="control-label"></label>
+                <input asp-for="Country" class="form-control" disabled />
+                <span asp-validation-for="Country" class="text-danger"></span>
+            </div>
+
+            <div class="form-group">
+                <label asp-for="City" class="control-label"></label>
+                <input asp-for="City" class="form-control" disabled />
+                <span asp-validation-for="City" class="text-danger"></span>
+            </div>
+
+            <div class="form-group">
+                <label asp-for="PostCode" class="control-label"></label>
+                <input asp-for="PostCode" class="form-control" disabled />
+                <span asp-validation-for="PostCode" class="text-danger"></span>
+            </div>
+
+            <div class="form-group">
+                <label asp-for="Address" class="control-label"></label>
+                <input asp-for="Address" class="form-control" disabled />
+                <span asp-validation-for="Address" class="text-danger"></span>
+            </div>
+
+            <div class="form-group">
+                <label asp-for="NumberOfApartment" class="control-label"></label>
+                <input asp-for="NumberOfApartment" class="form-control" disabled />
+                <span asp-validation-for="NumberOfApartment" class="text-danger"></span>
+            </div>
+
+        </form>
+    </div>
+</div>
+
+
+<div>
+    @Html.ActionLink("Powrót do listy przedsiębiorstw", "DisplayAllCompanies", "Companies", null, new { @class = "btn btn-info" })
+</div>
+
+
+@if (Model.UsersConnectedToCompany.Count != 0)
+{
+    <div class="col-12 table-responsive">
+        <table id="listUsers" class="table table-striped table-bordered display" style="width: 100%;" role="grid">
+            <thead>
+                <tr>
+                    <th>
+                        @Html.DisplayNameFor(model => model.UsersConnectedToCompany.First().Email)
+                    </th>
+                    <th>
+                        @Html.DisplayNameFor(model => model.UsersConnectedToCompany.First().FirstName)
+                    </th>
+                    <th>
+                        @Html.DisplayNameFor(model => model.UsersConnectedToCompany.First().LastName)
+                    </th>
+                    <th>
+                        @Html.DisplayNameFor(model => model.UsersConnectedToCompany.First().CompanyRoleWorker)
+                    </th>
+                    <th>
+                        @Html.DisplayNameFor(model => model.UsersConnectedToCompany.First().CompanyRoleManager)
+                    </th>
+                    <th>
+                        Operacje
+                    </th>
+                </tr>
+            </thead>
+            <tbody>
+                @foreach (var user in Model.UsersConnectedToCompany)
+                {
+                    <tr>
+                        <td>
+                            @Html.DisplayFor(modelItem => user.Email)
+                        </td>
+                        <td>
+                            @Html.DisplayFor(modelItem => user.FirstName)
+                        </td>
+                        <td>
+                            @Html.DisplayFor(modelItem => user.LastName)
+                        </td>
+                        <td>
+                            <ul>
+                                @foreach (var companyWorker in user.CompanyRoleWorker)
+                                {
+                                    <li>@companyWorker</li>
+                                }
+                            </ul>
+                        </td>
+                        <td>
+                            <ul>
+                                @foreach (var companyManager in user.CompanyRoleManager)
+                                {
+                                    <li>@companyManager</li>
+                                }
+                            </ul>
+                        </td>
+                        <td>
+                            @Html.ActionLink("Szczegóły", "UserDetails", "Users", new { userIdentificator = user.UserIdentificator }, new { @class = "btn btn-info" })
+                        </td>
+                    </tr>
+                }
+            </tbody>
+        </table>
+    </div>
+}
+else
+{
+    <p>Brak użytkowników posiadający dany certyfikat</p>
+}
