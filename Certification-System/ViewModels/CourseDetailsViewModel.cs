@@ -35,7 +35,7 @@ namespace Certification_System.ViewModels
         public int CourseLength { get; set; }
 
         [Display(Name = "Obszary certyfikacji")]
-        public ICollection<string> SelectedBranches { get; set; }
+        public ICollection<string> Branches { get; set; }
 
         [Display(Name = "Spotkania w ramach szkolenia")]
         public ICollection<DisplayMeetingViewModel> Meetings { get; set; }
