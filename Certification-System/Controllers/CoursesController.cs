@@ -274,7 +274,7 @@ namespace Certification_System.Controllers
                 EnrolledUsersLimit = Course.EnrolledUsersLimit,
                 EnrolledUsersQuantity = Course.EnrolledUsers.Count,
 
-                SelectedBranches = _context.GetBranchesById(Course.Branches),
+                Branches = _context.GetBranchesById(Course.Branches),
                 Meetings = meetingsViewModel,
                 EnrolledUsers = usersViewModel
             };

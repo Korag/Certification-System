@@ -60,8 +60,8 @@
                         </ul>
                     </td>
                     <td>
-                        @Html.ActionLink("Szczegóły", "CertificateDetails", "Certificates", new { CertificateIdentificator = item.CertificateIdentificator }, new { @class = "btn btn-info" })
-                        @Html.ActionLink("Aktualizuj", "EditCertificate", "Certificates", new { CertificateIdentificator = item.CertificateIdentificator }, new { @class = "btn btn-warning" })
+                        @Html.ActionLink("Szczegóły", "CertificateDetails", "Certificates", new { certificateIdentificator = item.CertificateIdentificator }, new { @class = "btn btn-info" })
+                        @Html.ActionLink("Aktualizuj", "EditCertificate", "Certificates", new { certificateIdentificator = item.CertificateIdentificator }, new { @class = "btn btn-warning" })
                         @*@Html.ActionLink("Usuń", "MarkCertificateAsDepreciated", "Certificates", new { CertificateIdentificator = item.CertificateIndexer }, new { @class = "btn btn-danger" })*@
                     </td>
                 </tr>
