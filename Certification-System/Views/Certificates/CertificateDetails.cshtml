@@ -66,64 +66,67 @@
 
 @if (Model.UsersWithCertificate.Count != 0)
 {
-<div class="col-12 table-responsive">
-    <table id="listUsers" class="table table-striped table-bordered display" style="width: 100%;" role="grid">
-        <tr>
-            <th>
-                @Html.DisplayNameFor(model => model.UsersWithCertificate.First().Email)
-            </th>
-            <th>
-                @Html.DisplayNameFor(model => model.UsersWithCertificate.First().FirstName)
-            </th>
-            <th>
-                @Html.DisplayNameFor(model => model.UsersWithCertificate.First().LastName)
-            </th>
-            <th>
-                @Html.DisplayNameFor(model => model.UsersWithCertificate.First().CompanyRoleWorker)
-            </th>
-            <th>
-                @Html.DisplayNameFor(model => model.UsersWithCertificate.First().CompanyRoleManager)
-            </th>
-            <th>
-                Operacje
-            </th>
-        </tr>
-
-        @foreach (var user in Model.UsersWithCertificate)
-        {
-            <tr>
-                <td>
-                    @Html.DisplayFor(modelItem => user.Email)
-                </td>
-                <td>
-                    @Html.DisplayFor(modelItem => user.FirstName)
-                </td>
-                <td>
-                    @Html.DisplayFor(modelItem => user.LastName)
-                </td>
-                <td>
-                    <ul>
-                        @foreach (var companyWorker in user.CompanyRoleWorker)
-                        {
-                            <li>@companyWorker</li>
-                        }
-                    </ul>
-                </td>
-                <td>
-                    <ul>
-                        @foreach (var companyManager in user.CompanyRoleManager)
-                        {
-                            <li>@companyManager</li>
-                        }
-                    </ul>
-                </td>
-                <td>
-                    @Html.ActionLink("Szczegóły", "UserDetails", "Users", new { userIdentificator = user.UserIdentificator }, new { @class = "btn btn-info" })
-                </td>
-            </tr>
-        }
-    </table>
-</div>
+    <div class="col-12 table-responsive">
+        <table id="listUsers" class="table table-striped table-bordered display" style="width: 100%;" role="grid">
+            <thead>
+                <tr>
+                    <th>
+                        @Html.DisplayNameFor(model => model.UsersWithCertificate.First().Email)
+                    </th>
+                    <th>
+                        @Html.DisplayNameFor(model => model.UsersWithCertificate.First().FirstName)
+                    </th>
+                    <th>
+                        @Html.DisplayNameFor(model => model.UsersWithCertificate.First().LastName)
+                    </th>
+                    <th>
+                        @Html.DisplayNameFor(model => model.UsersWithCertificate.First().CompanyRoleWorker)
+                    </th>
+                    <th>
+                        @Html.DisplayNameFor(model => model.UsersWithCertificate.First().CompanyRoleManager)
+                    </th>
+                    <th>
+                        Operacje
+                    </th>
+                </tr>
+            </thead>
+            <tbody>
+                @foreach (var user in Model.UsersWithCertificate)
+                {
+                    <tr>
+                        <td>
+                            @Html.DisplayFor(modelItem => user.Email)
+                        </td>
+                        <td>
+                            @Html.DisplayFor(modelItem => user.FirstName)
+                        </td>
+                        <td>
+                            @Html.DisplayFor(modelItem => user.LastName)
+                        </td>
+                        <td>
+                            <ul>
+                                @foreach (var companyWorker in user.CompanyRoleWorker)
+                                {
+                                    <li>@companyWorker</li>
+                                }
+                            </ul>
+                        </td>
+                        <td>
+                            <ul>
+                                @foreach (var companyManager in user.CompanyRoleManager)
+                                {
+                                    <li>@companyManager</li>
+                                }
+                            </ul>
+                        </td>
+                        <td>
+                            @Html.ActionLink("Szczegóły", "UserDetails", "Users", new { userIdentificator = user.UserIdentificator }, new { @class = "btn btn-info" })
+                        </td>
+                    </tr>
+                }
+            </tbody>
+        </table>
+    </div>
 }
 else
 {
@@ -132,92 +135,92 @@ else
 
 @if (Model.CoursesWhichEndedWithCertificate.Count != 0)
 {
-<div class="col-12 table-responsive">
-    <table id="coursesList" class="table table-striped table-bordered display" style="width: 100%;" role="grid">
-        <thead>
-            <tr>
-                <th>
-                    @Html.DisplayNameFor(model => model.CoursesWhichEndedWithCertificate.First().CourseIndexer)
-                </th>
-                <th>
-                    @Html.DisplayNameFor(model => model.CoursesWhichEndedWithCertificate.First().Name)
-                </th>
-                <th>
-                    @Html.DisplayNameFor(model => model.CoursesWhichEndedWithCertificate.First().Description)
-                </th>
-                <th>
-                    @Html.DisplayNameFor(model => model.CoursesWhichEndedWithCertificate.First().DateOfStart)
-                </th>
-                <th>
-                    @Html.DisplayNameFor(model => model.CoursesWhichEndedWithCertificate.First().DateOfEnd)
-                </th>
-                <th>
-                    @Html.DisplayNameFor(model => model.CoursesWhichEndedWithCertificate.First().EnrolledUsersLimit)
-                </th>
-                <th>
-                    @Html.DisplayNameFor(model => model.CoursesWhichEndedWithCertificate.First().EnrolledUsersQuantity)
-                </th>
-                <th>
-                    @Html.DisplayNameFor(model => model.CoursesWhichEndedWithCertificate.First().CourseEnded)
-                </th>
-                <th>
-                    @Html.DisplayNameFor(model => model.CoursesWhichEndedWithCertificate.First().CourseLength)
-                </th>
-                <th>
-                    @Html.DisplayNameFor(model => model.CoursesWhichEndedWithCertificate.First().SelectedBranches)
-                </th>
-                <th>
-                    Operacje
-                </th>
-            </tr>
-        </thead>
-        <tbody>
-            @foreach (var item in Model.CoursesWhichEndedWithCertificate)
-            {
+    <div class="col-12 table-responsive">
+        <table id="coursesList" class="table table-striped table-bordered display" style="width: 100%;" role="grid">
+            <thead>
                 <tr>
-                    <td>
-                        @Html.DisplayFor(modelItem => item.CourseIndexer)
-                    </td>
-                    <td>
-                        @Html.DisplayFor(modelItem => item.Name)
-                    </td>
-                    <td>
-                        @Html.DisplayFor(modelItem => item.Description)
-                    </td>
-                    <td>
-                        @Html.DisplayFor(modelItem => item.DateOfStart)
-                    </td>
-                    <td>
-                        @Html.DisplayFor(modelItem => item.DateOfEnd)
-                    </td>
-                    <td>
-                        @Html.DisplayFor(modelItem => item.EnrolledUsersLimit)
-                    </td>
-                    <td>
-                        @Html.DisplayFor(modelItem => item.EnrolledUsersQuantity)
-                    </td>
-                    <td>
-                        @Html.DisplayFor(modelItem => item.CourseEnded)
-                    </td>
-                    <td>
-                        @Html.DisplayFor(modelItem => item.CourseLength)
-                    </td>
-                    <td>
-                        <ul>
-                            @foreach (var branch in item.SelectedBranches)
-                            {
-                                <li>@branch</li>
-                            }
-                        </ul>
-                    </td>
-                    <td>
-                        @Html.ActionLink("Szczegóły", "CourseDetails", new { CourseIdentificator = item.CourseIdentificator }, new { @class = "btn btn-info" })
-                    </td>
+                    <th>
+                        @Html.DisplayNameFor(model => model.CoursesWhichEndedWithCertificate.First().CourseIndexer)
+                    </th>
+                    <th>
+                        @Html.DisplayNameFor(model => model.CoursesWhichEndedWithCertificate.First().Name)
+                    </th>
+                    <th>
+                        @Html.DisplayNameFor(model => model.CoursesWhichEndedWithCertificate.First().Description)
+                    </th>
+                    <th>
+                        @Html.DisplayNameFor(model => model.CoursesWhichEndedWithCertificate.First().DateOfStart)
+                    </th>
+                    <th>
+                        @Html.DisplayNameFor(model => model.CoursesWhichEndedWithCertificate.First().DateOfEnd)
+                    </th>
+                    <th>
+                        @Html.DisplayNameFor(model => model.CoursesWhichEndedWithCertificate.First().EnrolledUsersLimit)
+                    </th>
+                    <th>
+                        @Html.DisplayNameFor(model => model.CoursesWhichEndedWithCertificate.First().EnrolledUsersQuantity)
+                    </th>
+                    <th>
+                        @Html.DisplayNameFor(model => model.CoursesWhichEndedWithCertificate.First().CourseEnded)
+                    </th>
+                    <th>
+                        @Html.DisplayNameFor(model => model.CoursesWhichEndedWithCertificate.First().CourseLength)
+                    </th>
+                    <th>
+                        @Html.DisplayNameFor(model => model.CoursesWhichEndedWithCertificate.First().SelectedBranches)
+                    </th>
+                    <th>
+                        Operacje
+                    </th>
                 </tr>
-            }
-        </tbody>
-    </table>
-</div>
+            </thead>
+            <tbody>
+                @foreach (var item in Model.CoursesWhichEndedWithCertificate)
+                {
+                    <tr>
+                        <td>
+                            @Html.DisplayFor(modelItem => item.CourseIndexer)
+                        </td>
+                        <td>
+                            @Html.DisplayFor(modelItem => item.Name)
+                        </td>
+                        <td>
+                            @Html.DisplayFor(modelItem => item.Description)
+                        </td>
+                        <td>
+                            @Html.DisplayFor(modelItem => item.DateOfStart)
+                        </td>
+                        <td>
+                            @Html.DisplayFor(modelItem => item.DateOfEnd)
+                        </td>
+                        <td>
+                            @Html.DisplayFor(modelItem => item.EnrolledUsersLimit)
+                        </td>
+                        <td>
+                            @Html.DisplayFor(modelItem => item.EnrolledUsersQuantity)
+                        </td>
+                        <td>
+                            @Html.DisplayFor(modelItem => item.CourseEnded)
+                        </td>
+                        <td>
+                            @Html.DisplayFor(modelItem => item.CourseLength)
+                        </td>
+                        <td>
+                            <ul>
+                                @foreach (var branch in item.SelectedBranches)
+                                {
+                                    <li>@branch</li>
+                                }
+                            </ul>
+                        </td>
+                        <td>
+                            @Html.ActionLink("Szczegóły", "CourseDetails", new { CourseIdentificator = item.CourseIdentificator }, new { @class = "btn btn-info" })
+                        </td>
+                    </tr>
+                }
+            </tbody>
+        </table>
+    </div>
 }
 else
 {
