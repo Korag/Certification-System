@@ -248,7 +248,7 @@ namespace Certification_System.Controllers
 
                 _context.UpdateCertificate(certificate);
 
-                return RedirectToAction("AddNewCertificateConfirmation", "Certificates", new { CertificateIdentificator = editedCertificate.CertificateIdentificator, TypeOfAction = "Update" });
+                return RedirectToAction("AddNewCertificateConfirmation", "Certificates", new { certificateIdentificator = editedCertificate.CertificateIdentificator, TypeOfAction = "Update" });
             }
 
             editedCertificate.AvailableBranches = _context.GetBranchesAsSelectList().ToList();
