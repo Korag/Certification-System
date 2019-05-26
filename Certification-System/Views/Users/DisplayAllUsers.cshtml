@@ -8,7 +8,7 @@
 <h2>Lista użytkowników systemu</h2>
 
 <p>
-    <a asp-action="AddNewUser" asp-controller="Users">Dodaj kolejnego użytkownika</a>
+    @Html.ActionLink("Dodaj użytkownika", "AddNewUser", "Users", null, new { @class = "btn btn-primary" })
 </p>
 
 <div class="col-12 table-responsive">
@@ -76,9 +76,10 @@
                         </ul>
                     </td>
                     <td>
-                        @Html.ActionLink("Edit", "Edit", new { /* id=item.PrimaryKey */ }) |
-                        @Html.ActionLink("Details", "Details", new { /* id=item.PrimaryKey */ }) |
-                        @Html.ActionLink("Delete", "Delete", new { /* id=item.PrimaryKey */ })
+                        @Html.ActionLink("Szczegóły", "UserDetails", "Users", new { userIdentificator = item.UserIdentificator }, new { @class = "btn btn-info" })
+                        @Html.ActionLink("Edytuj", "EditUser", "Users", new { userIdentificator = item.UserIdentificator }, new { @class = "btn btn-warning" })
+                        @Html.ActionLink("Nadaj certyfikat", "", "Certificates", new { userIdentificator = item.UserIdentificator }, new { @class = "btn btn-primary" })
+                        @Html.ActionLink("Nadaj stopień zawodowy", "", "Degrees", new { userIdentificator = item.UserIdentificator }, new { @class = "btn btn-secondary" })
                     </td>
                 </tr>
             }

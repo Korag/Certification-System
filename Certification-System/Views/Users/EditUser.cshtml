@@ -1,16 +1,18 @@
-﻿@model Certification_System.ViewModels.AddUserViewModel
+﻿@model Certification_System.ViewModels.EditUserViewModel
 
 @{
-    ViewBag.Title = "AddNewUser";
+    ViewData["Title"] = "EditUser";
     Layout = "~/Views/Shared/_Layout.cshtml";
 }
 
-<h2>Dodaj nowego użytkownika systemu certyfikacji</h2>
+<h2>Edytuj dane użytkownika systemu</h2>
 <hr />
 
 @using (Html.BeginForm())
 {
     @Html.AntiForgeryToken()
+
+    <input asp-for="UserIdentificator" class="form-control" hidden/>
 
     <div class="form-group form-group">
         <div class="col-6 m-auto p-0">
@@ -21,30 +23,6 @@
         </div>
         <div class="row justify-content-center">
             @Html.ValidationMessageFor(m => m.Email, "", new { @class = "text-danger" })
-        </div>
-    </div>
-
-    <div class="form-group">
-        <div class="col-6 m-auto p-0">
-            @Html.LabelFor(m => m.Password, new { @class = "col-12 control-label p-0" })
-        </div>
-        <div class="col-6 m-auto p-0">
-            @Html.PasswordFor(m => m.Password, new { @class = "col-12 form-control" })
-        </div>
-        <div class="row justify-content-center">
-            @Html.ValidationMessageFor(m => m.Password, "", new { @class = "text-danger" })
-        </div>
-    </div>
-
-    <div class="form-group">
-        <div class="col-6 m-auto p-0">
-            @Html.LabelFor(m => m.ConfirmPassword, new { @class = "col-12 control-label p-0" })
-        </div>
-        <div class="col-6 m-auto p-0">
-            @Html.PasswordFor(m => m.ConfirmPassword, new { @class = "col-12 form-control" })
-        </div>
-        <div class="row justify-content-center">
-            @Html.ValidationMessageFor(m => m.ConfirmPassword, "", new { @class = "text-danger" })
         </div>
     </div>
 
@@ -201,12 +179,13 @@
 
     <div class="form-group">
         <div class="row justify-content-center">
-            <input type="submit" class="btn btn-primary" value="Dodaj użytkownika" />
+            <input type="submit" class="btn btn-warning" value="Edytuj użytkownika" />
         </div>
     </div>
 }
 
 <div>
+    @Html.ActionLink("Dodaj nowego użytkownika", "AddNewUser", "Users", null, new { @class = "btn btn-primary" })
     @Html.ActionLink("Przejdź do listy użytkowników", "DisplayAllUsers", "Users", null, new { @class = "btn btn-secondary" })
 </div>
 
