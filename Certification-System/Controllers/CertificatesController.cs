@@ -126,6 +126,7 @@ namespace Certification_System.Controllers
             return View(ListOfCertificates);
         }
 
+
         // GET: AddNewGivenCertificate
         [Authorize(Roles = "Admin")]
         public ActionResult AddNewGivenCertificate()
@@ -163,7 +164,7 @@ namespace Certification_System.Controllers
                 _context.AddGivenCertificate(givenCertificate);
                 _context.AddUserCertificate(newGivenCertificate.SelectedUser, givenCertificate.GivenCertificateIdentificator);
 
-                return RedirectToAction("AddNewGivenCertificateConfirmation", new { givenCertificateIdentificator = givenCertificate.GivenCertificateIdentificator });
+                return RedirectToAction("AddNewGivenCertificateConfirmation", new { givenCertificateIdentificator = givenCertificate.GivenCertificateIdentificator, TypeOfAction = "Update" });
             }
 
             newGivenCertificate.AvailableCertificates = _context.GetCertificatesAsSelectList().ToList();
@@ -175,10 +176,12 @@ namespace Certification_System.Controllers
 
         // GET: AddNewGivenCertificateConfirmation
         [Authorize(Roles = "Admin")]
-        public ActionResult AddNewGivenCertificateConfirmation(string givenCertificateIdentificator)
+        public ActionResult AddNewGivenCertificateConfirmation(string givenCertificateIdentificator, string TypeOfAction)
         {
             if (givenCertificateIdentificator != null)
             {
+                ViewBag.TypeOfAction = TypeOfAction;
+
                 var GivenCertificate = _context.GetGivenCertificateById(givenCertificateIdentificator);
 
                 var Course = _context.GetCourseById(GivenCertificate.Course);
@@ -258,6 +261,54 @@ namespace Certification_System.Controllers
             }
             return View(editedCertificate);
         }
+
+        // GET: EditGivenCertificate
+        [Authorize(Roles = "Admin")]
+        public ActionResult EditGivenCertificate(string givenCertificateIdentificator)
+        {
+            var GivenCertificate = _context.GetGivenCertificateById(givenCertificateIdentificator);
+
+            EditGivenCertificateViewModel givenCertificateToUpdate = new EditGivenCertificateViewModel
+            {
+                GivenCertificateIdentificator = GivenCertificate.GivenCertificateIdentificator,
+                GivenCertificateIndexer = GivenCertificate.GivenCertificateIndexer,
+                ReceiptDate = GivenCertificate.ReceiptDate,
+                ExpirationDate = GivenCertificate.ExpirationDate
+            };
+
+            return View(givenCertificateToUpdate);
+        }
+
+        // POST: EditGivenCertificate
+        [ValidateAntiForgeryToken]
+        [Authorize(Roles = "Admin")]
+        [HttpPost]
+        public ActionResult EditGivenCertificate(EditGivenCertificateViewModel editedGivenCertificate)
+        {
+            if (ModelState.IsValid)
+            {
+                var OriginGivenCertificate = _context.GetGivenCertificateById(editedGivenCertificate.GivenCertificateIdentificator);
+
+                GivenCertificate givenCertificate = new GivenCertificate
+                {
+                    GivenCertificateIdentificator = OriginGivenCertificate.GivenCertificateIdentificator,
+
+                    GivenCertificateIndexer = editedGivenCertificate.GivenCertificateIndexer,
+                    ReceiptDate = editedGivenCertificate.ReceiptDate,
+                    ExpirationDate = editedGivenCertificate.ExpirationDate,
+
+                    Certificate = OriginGivenCertificate.Certificate,
+                    Course = OriginGivenCertificate.Course
+                };
+
+                _context.UpdateGivenCertificate(givenCertificate);
+
+                return RedirectToAction("AddNewGivenCertificateConfirmation", "Certificates", new { certificateIdentificator = editedGivenCertificate.GivenCertificateIdentificator, TypeOfAction = "Update" });
+            }
+
+            return View(editedGivenCertificate);
+        }
+
 
         // GET: CertificateDetails
         [Authorize(Roles = "Admin")]
