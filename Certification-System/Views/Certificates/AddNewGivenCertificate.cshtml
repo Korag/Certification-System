@@ -87,9 +87,9 @@
     </div>
 </div>
 
-<div>
-    <a asp-action="DisplayAllUsers" asp-controller="Users">Wyświetl listę użytkowników</a>
-</div>
+<p>
+    @Html.ActionLink("Wyświetl listę użytkowników", "DisplayAllUsers", "Users", null , new { @class = "btn btn-secondary" })
+</p>
 
 @section Scripts {
     @{await Html.RenderPartialAsync("_ValidationScriptsPartial");}

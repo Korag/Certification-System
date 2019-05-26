@@ -7,6 +7,8 @@ namespace Certification_System.ViewModels
 {
     public class AddNewGivenCertificateViewModel
     {
+        public string GivenCertificateIdentificator { get; set; }
+
         [Required]
         [Display(Name = "Identyfikator nadawanego certyfikatu")]
         public string GivenCertificateIndexer { get; set; }
