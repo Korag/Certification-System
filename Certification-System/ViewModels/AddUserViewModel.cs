@@ -86,9 +86,9 @@ namespace Certification_System.ViewModels
         public IList<SelectListItem> AvailableCompanies { get; set; }
 
         [Display(Name = "Przedsiębiorstwo zarządzane przez użytkownika")]
-        public string CompanyRoleManager { get; set; }
+        public ICollection<string> CompanyRoleManager { get; set; }
 
         [Display(Name = "Przedsiębiorstwo zrzeszające pracownika")]
-        public string CompanyRoleWorker { get; set; }
+        public ICollection<string> CompanyRoleWorker { get; set; }
     }
 }
