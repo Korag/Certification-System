@@ -1,0 +1,93 @@
+﻿@model Certification_System.ViewModels.EditGivenCertificateViewModel
+
+@{
+    ViewData["Title"] = "EditGivenCertificate";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+<h1>Edytuj nadany certyfikat</h1>
+<hr />
+
+<div class="row">
+    <div class="col-12">
+        <form asp-action="EditGivenCertificate">
+
+            <input asp-for="GivenCertificateIdentificator" class="form-control" hidden />
+
+            <div class="form-group">
+                <label asp-for="GivenCertificateIndexer" class="control-label"></label>
+                <input asp-for="GivenCertificateIndexer" class="form-control" />
+                <span asp-validation-for="GivenCertificateIndexer" class="text-danger"></span>
+            </div>
+
+            <div class="form-group">
+                <label asp-for="ReceiptDate" class="control-label col-md-2"></label>
+                <div class="col-md-10">
+                    <div class='input-group date' id='ReceiptDate'>
+                        <input type='text' class="form-control" name="ReceiptDate" value="@DateTime.Now.ToShortDateString() @DateTime.Now.ToShortTimeString()" />
+                        <span class="input-group-addon">
+                            <span class="fa fa-calendar pl-1 pt-0.5" style="font-size:34px"></span>
+                        </span>
+                    </div>
+                    <span asp-validation-for="ReceiptDate" class="text-danger"></span>
+                </div>
+            </div>
+
+            <div class="form-group">
+                <label asp-for="ExpirationDate" class="control-label col-md-2"></label>
+                <div class="col-md-10">
+                    <div class='input-group date' id='ExpirationDate'>
+                        <input type='text' class="form-control" name="ExpirationDate" value="@DateTime.Now.AddMonths(6).ToShortDateString() @DateTime.Now.ToShortTimeString()" />
+                        <span class="input-group-addon">
+                            <span class="fa fa-calendar pl-1 pt-0.5" style="font-size:34px"></span>
+                        </span>
+                    </div>
+                    <span asp-validation-for="ExpirationDate" class="text-danger"></span>
+                </div>
+            </div>
+
+            <div class="form-group d-flex justify-content-center">
+                <input type="submit" value="Aktualizuj" class="btn btn-warning" />
+            </div>
+
+            <div class="row justify-content-center">
+                <div asp-validation-summary="All" class="text-danger"></div>
+            </div>
+
+        </form>
+    </div>
+</div>
+
+<p>
+    @Html.ActionLink("Wróć do listy wszystkich nadanych certyfikatów", "DisplayAllGivenCertificates", "Users", null, new { @class = "btn btn-primary" })
+    @Html.ActionLink("Wyświetl listę użytkowników", "DisplayAllUsers", "Users", null, new { @class = "btn btn-secondary" })
+    @Html.ActionLink("Przejdź do szczegółów użytkownika", "UserDetails", "Users", null, new { @class = "btn btn-info" })
+</p>
+
+@section Scripts {
+    @{await Html.RenderPartialAsync("_ValidationScriptsPartial");}
+
+    <script>
+        $(function () {
+            $('#ReceiptDate').datetimepicker({
+                format: 'DD.MM.YYYY HH:mm',
+                locale: moment.locale('pl', {
+                    week: { dow: 1 }
+                })
+            });
+            $('#ExpirationDate').datetimepicker({
+                format: 'DD.MM.YYYY HH:mm',
+                locale: moment.locale('pl', {
+                    week: { dow: 1 }
+                }),
+                useCurrent: false
+            });
+            $("#ReceiptDate").on("dp.change", function (e) {
+                $('#ExpirationDate').data("DateTimePicker").minDate(e.date);
+            });
+            $("#ExpirationDate").on("dp.change", function (e) {
+                $('#ReceiptDate').data("DateTimePicker").maxDate(e.date);
+            });
+        });
+    </script>
+}
