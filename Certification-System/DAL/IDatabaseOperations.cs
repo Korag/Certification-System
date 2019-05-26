@@ -91,6 +91,7 @@ namespace Certification_System.DAL
 
         #region GivenCertificate
         void AddGivenCertificate(GivenCertificate givenCertificate);
+        void UpdateGivenCertificate(GivenCertificate givenCertificate);
         GivenCertificate GetGivenCertificateById(string givenCertificateIdentificator);
         ICollection<GivenCertificate> GetGivenCertificates();
         ICollection<GivenCertificate> GetGivenCertificatesByIdOfCertificate(string certificateIdentificator);

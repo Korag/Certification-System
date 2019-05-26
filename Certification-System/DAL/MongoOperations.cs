@@ -529,6 +529,12 @@ namespace Certification_System.DAL
             _givenCertificates.InsertOne(givenCertificate);
         }
 
+        public void UpdateGivenCertificate(GivenCertificate givenCertificate)
+        {
+            var filter = Builders<GivenCertificate>.Filter.Eq(x => x.GivenCertificateIdentificator, givenCertificate.GivenCertificateIdentificator);
+            var result = _context.db.GetCollection<GivenCertificate>(_givenCertificatesCollectionName).ReplaceOne(filter, givenCertificate);
+        }
+
         public GivenCertificate GetGivenCertificateById(string givenCertificateIdentificator)
         {
             var filter = Builders<GivenCertificate>.Filter.Eq(x => x.GivenCertificateIdentificator, givenCertificateIdentificator);
