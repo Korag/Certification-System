@@ -18,11 +18,6 @@ namespace Certification_System.Controllers
         private UserManager<CertificationPlatformUser> _userManager;
         private readonly RoleManager<MongoRole> _roleManager;
 
-        //public UsersController()
-        //{
-        //    _context = new MongoOperations();
-        //}
-
         public UsersController(UserManager<CertificationPlatformUser> userManager, RoleManager<MongoRole> roleManager)
         {
             _userManager = userManager;
@@ -33,7 +28,7 @@ namespace Certification_System.Controllers
 
         // GET: DisplayAllUsers
         [Authorize(Roles = "Admin")]
-        public IActionResult DisplayAllUsers()
+        public ActionResult DisplayAllUsers()
         {
             var Users = _context.GetUsers();
             List<DisplayUsersViewModel> usersToDisplay = new List<DisplayUsersViewModel>();
@@ -42,6 +37,8 @@ namespace Certification_System.Controllers
             {
                 DisplayUsersViewModel singleUser = new DisplayUsersViewModel
                 {
+                    UserIdentificator = user.Id,
+
                     Email = user.Email,
                     FirstName = user.FirstName,
                     LastName = user.LastName,
@@ -63,13 +60,15 @@ namespace Certification_System.Controllers
 
         // GET: AddNewUserConfirmation
         [Authorize(Roles = "Admin")]
-        public IActionResult AddNewUserConfirmation(string userIdentificator)
+        public ActionResult AddNewUserConfirmation(string userIdentificator, string TypeOfAction)
         {
             if (userIdentificator != null)
             {
+                ViewBag.TypeOfAction = TypeOfAction;
+
                 var User = _context.GetUserById(userIdentificator);
 
-                AddUserViewModel addedUser = new AddUserViewModel
+                DisplayAllUserInformationViewModel addedUser = new DisplayAllUserInformationViewModel
                 {
                     Email = User.Email,
                     FirstName = User.FirstName,
@@ -82,11 +81,11 @@ namespace Certification_System.Controllers
                     DateOfBirth = User.DateOfBirth,
                     PhoneNumber = User.PhoneNumber,
 
-                    SelectedRole = User.Roles.First()
+                    Roles = User.Roles
                 };
 
-                addedUser.CompanyRoleWorker = _context.GetCompanyById(User.CompanyRoleWorker.First()).CompanyName;
-                addedUser.CompanyRoleManager = _context.GetCompanyById(User.CompanyRoleManager.First()).CompanyName;
+                addedUser.CompanyRoleWorker = _context.GetCompaniesById(User.CompanyRoleWorker).Select(z=> z.CompanyName).ToList();
+                addedUser.CompanyRoleManager = _context.GetCompaniesById(User.CompanyRoleManager).Select(z=> z.CompanyName).ToList();
 
                 return View(addedUser);
             }
@@ -95,12 +94,12 @@ namespace Certification_System.Controllers
 
         // GET: AddNewUser
         [Authorize(Roles = "Admin")]
-        public IActionResult AddNewUser()
+        public ActionResult AddNewUser()
         {
             AddUserViewModel newUser = new AddUserViewModel
             {
                 AvailableRoles = _context.GetRolesAsSelectList().ToList(),
-                AvailableCompanies = _context.GetCompaniesAsSelectList().ToList()
+                AvailableCompanies = _context.GetCompaniesAsSelectList().ToList()  
             };
 
             return View(newUser);
@@ -110,7 +109,7 @@ namespace Certification_System.Controllers
         [ValidateAntiForgeryToken]
         [Authorize(Roles = "Admin")]
         [HttpPost]
-        public async Task<IActionResult> AddNewUser(AddUserViewModel newUser)
+        public async Task<ActionResult> AddNewUser(AddUserViewModel newUser)
         {
             if (ModelState.IsValid)
             {
@@ -139,12 +138,14 @@ namespace Certification_System.Controllers
 
                 if (newUser.CompanyRoleWorker != null)
                 {
-                    user.CompanyRoleWorker.Add(newUser.CompanyRoleWorker);
+                    //user.CompanyRoleWorker.Add(newUser.CompanyRoleWorker);
+                    user.CompanyRoleWorker = newUser.CompanyRoleWorker;
                 }
 
                 if (newUser.CompanyRoleManager != null)
                 {
-                    user.CompanyRoleManager.Add(newUser.CompanyRoleManager);
+                    //user.CompanyRoleManager.Add(newUser.CompanyRoleManager);
+                    user.CompanyRoleManager = newUser.CompanyRoleManager;
                 }
 
                 if (!await _roleManager.RoleExistsAsync(newUser.SelectedRole))
@@ -167,7 +168,7 @@ namespace Certification_System.Controllers
                 var result = await _userManager.CreateAsync(user, newUser.Password);
                 if (result.Succeeded)
                 {
-                    return RedirectToAction("AddNewUserConfirmation", "Users", new { userIdentificator = user.Id });
+                    return RedirectToAction("AddNewUserConfirmation", "Users", new { userIdentificator = user.Id, TypeOfAction = "Add" });
                 }
                 return View(newUser);
             }
@@ -177,5 +178,82 @@ namespace Certification_System.Controllers
             return View(newUser);
         }
 
+        // GET: EditUser
+        [Authorize(Roles = "Admin")]
+        public ActionResult EditUser(string userIdentificator)
+        {
+            var User = _context.GetUserById(userIdentificator);
+
+            EditUserViewModel userToUpdate = new EditUserViewModel
+            {
+                UserIdentificator = User.Id,
+
+                Email = User.Email,
+                PhoneNumber = User.PhoneNumber,
+
+                FirstName = User.FirstName,
+                LastName = User.LastName,
+                DateOfBirth = User.DateOfBirth,
+
+                Country = User.Country,
+                City = User.City,
+                PostCode = User.PostCode,
+                Address = User.Address,
+                NumberOfApartment = User.NumberOfApartment,
+                
+                AvailableCompanies = _context.GetCompaniesAsSelectList().ToList(),
+                AvailableRoles = _context.GetRolesAsSelectList().ToList(),
+
+                CompanyRoleManager = User.CompanyRoleManager,
+                CompanyRoleWorker = User.CompanyRoleWorker,
+
+                SelectedRole = User.Roles
+            };
+
+            return View(userToUpdate);
+        }
+
+        // POST: EditUser
+        [ValidateAntiForgeryToken]
+        [Authorize(Roles = "Admin")]
+        [HttpPost]
+        public ActionResult EditUser(EditUserViewModel editedUser)
+        {
+            if (ModelState.IsValid)
+            {
+                var OriginUser = _context.GetUserById(editedUser.UserIdentificator);
+
+                _userManager.RemoveFromRolesAsync(OriginUser, OriginUser.Roles).Wait();
+
+                OriginUser.UserName = editedUser.Email;
+                OriginUser.Email = editedUser.Email;
+                OriginUser.NormalizedUserName = editedUser.Email.ToUpper();
+                OriginUser.NormalizedEmail = editedUser.Email.ToUpper();
+
+                OriginUser.FirstName = editedUser.FirstName;
+                OriginUser.LastName = editedUser.LastName;
+                OriginUser.PhoneNumber = editedUser.PhoneNumber;
+                OriginUser.DateOfBirth = editedUser.DateOfBirth;
+
+                OriginUser.Country = editedUser.Country;
+                OriginUser.City = editedUser.City;
+                OriginUser.PostCode = editedUser.PostCode;
+                OriginUser.Address = editedUser.Address;
+                OriginUser.NumberOfApartment = editedUser.NumberOfApartment;
+
+                OriginUser.CompanyRoleManager = editedUser.CompanyRoleManager;
+                OriginUser.CompanyRoleWorker = editedUser.CompanyRoleWorker;
+
+                _userManager.AddToRolesAsync(OriginUser, editedUser.SelectedRole).Wait();    
+
+                _context.UpdateUser(OriginUser);
+
+                return RedirectToAction("AddNewUserConfirmation", "Users", new { userIdentificator = editedUser.UserIdentificator, TypeOfAction = "Update" });
+            }
+
+            editedUser.AvailableRoles = _context.GetRolesAsSelectList().ToList();
+            editedUser.AvailableCompanies = _context.GetCompaniesAsSelectList().ToList();
+            return View(editedUser);
+        }
     }
 }
