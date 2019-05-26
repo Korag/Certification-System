@@ -126,6 +126,61 @@ namespace Certification_System.Controllers
             return View(ListOfCertificates);
         }
 
+        // GET: DisplayAllGivenCertificates
+        [Authorize(Roles = "Admin")]
+        public ActionResult DisplayAllGivenCertificates()
+        {
+            var GivenCertificates = _context.GetGivenCertificates();
+            List<DisplayGivenCertificateViewModel> ListOfGivenCertificates = new List<DisplayGivenCertificateViewModel>();
+
+            foreach (var givenCertificate in GivenCertificates)
+            {
+                var Course = _context.GetCourseById(givenCertificate.Course);
+                var Certificate = _context.GetCertificateById(givenCertificate.Certificate);
+                var User = _context.GetUserByGivenCertificateId(givenCertificate.GivenCertificateIdentificator);
+
+                DisplayListOfCoursesViewModel courseViewModel = new DisplayListOfCoursesViewModel
+                {
+                    CourseIdentificator = Course.CourseIdentificator,
+
+                    CourseIndexer = Course.CourseIndexer,
+                    Name = Course.Name,
+                };
+
+                DisplayListOfCertificatesViewModel certificateViewModel = new DisplayListOfCertificatesViewModel
+                {
+                    CertificateIdentificator = Certificate.CertificateIdentificator,
+   
+                    CertificateIndexer = Certificate.CertificateIndexer,
+                    Name = Certificate.Name
+                };
+
+                DisplayUsersViewModel userViewModel = new DisplayUsersViewModel
+                {
+                    UserIdentificator = User.Id,
+
+                    FirstName = User.FirstName,
+                    LastName = User.LastName
+                };
+
+                DisplayGivenCertificateViewModel singleGivenCertificate = new DisplayGivenCertificateViewModel
+                {
+                    GivenCertificateIdentificator = givenCertificate.GivenCertificateIdentificator,
+
+                    GivenCertificateIndexer = givenCertificate.GivenCertificateIndexer,
+                    ReceiptDate = givenCertificate.ReceiptDate,
+                    ExpirationDate = givenCertificate.ExpirationDate,
+
+                    Certificate = certificateViewModel,
+                    Course = courseViewModel,
+                    User = userViewModel
+                };
+
+                ListOfGivenCertificates.Add(singleGivenCertificate);
+            }
+
+            return View(ListOfGivenCertificates);
+        }
 
         // GET: AddNewGivenCertificate
         [Authorize(Roles = "Admin")]
@@ -188,15 +243,39 @@ namespace Certification_System.Controllers
                 var Certificate = _context.GetCertificateById(GivenCertificate.Certificate);
                 var User = _context.GetUserByGivenCertificateId(GivenCertificate.GivenCertificateIdentificator);
 
+                DisplayUsersViewModel userViewModel = new DisplayUsersViewModel
+                {
+                    UserIdentificator = User.Id,
+
+                    FirstName = User.FirstName,
+                    LastName = User.LastName
+                };
+
+                DisplayListOfCoursesViewModel courseViewModel = new DisplayListOfCoursesViewModel
+                {
+                    CourseIdentificator = Course.CourseIdentificator,
+
+                    CourseIndexer = Course.CourseIndexer,
+                    Name = Course.Name
+                };
+
+                DisplayListOfCertificatesViewModel certificateViewModel = new DisplayListOfCertificatesViewModel
+                {
+                    CertificateIdentificator = Certificate.CertificateIdentificator,
+
+                    CertificateIndexer = Certificate.CertificateIndexer,
+                    Name = Certificate.Name
+                };
+
                 DisplayGivenCertificateViewModel addedGivenCertificate = new DisplayGivenCertificateViewModel
                 {
                     GivenCertificateIndexer = GivenCertificate.GivenCertificateIndexer,
                     ReceiptDate = GivenCertificate.ReceiptDate,
                     ExpirationDate = GivenCertificate.ExpirationDate,
 
-                    Course = Course.CourseIndexer + " " + Course.Name,
-                    Certificate = Certificate.CertificateIndexer + " " + Certificate.Name,
-                    User = User.FirstName + " " + User.LastName        
+                    Course = courseViewModel,
+                    Certificate = certificateViewModel,
+                    User = userViewModel
                 };
 
 
@@ -219,7 +298,7 @@ namespace Certification_System.Controllers
                 Description = Certificate.Description,
                 Name = Certificate.Name,
                 Depreciated = Certificate.Depreciated,
-                
+
                 SelectedBranches = Certificate.Branches,
                 AvailableBranches = _context.GetBranchesAsSelectList().ToList()
             };
