@@ -255,5 +255,137 @@ namespace Certification_System.Controllers
             editedUser.AvailableCompanies = _context.GetCompaniesAsSelectList().ToList();
             return View(editedUser);
         }
+
+        // GET: UserDetails
+        [Authorize(Roles = "Admin")]
+        public ActionResult UserDetails(string userIdentificator)
+        {
+            var User = _context.GetUserById(userIdentificator);
+            var GivenCertificates = _context.GetGivenCertificatesById(User.Certificates);
+
+            var Courses = _context.GetCoursesById(User.Courses);
+            //var GivenDegrees  
+
+            var CompaniesRoleWorker = _context.GetCompaniesById(User.CompanyRoleWorker);
+            var CompaniesRoleManager = _context.GetCompaniesById(User.CompanyRoleManager);
+
+            var Companies = CompaniesRoleWorker.Concat(CompaniesRoleManager);
+
+            List<DisplayListOfCoursesViewModel> ListOfCourses = new List<DisplayListOfCoursesViewModel>();
+
+            if (Courses.Count != 0)
+            {
+                foreach (var course in Courses)
+                {
+                    DisplayListOfCoursesViewModel singleCourse = new DisplayListOfCoursesViewModel
+                    {
+                        CourseIdentificator = course.CourseIdentificator,
+                        CourseIndexer = course.CourseIndexer,
+                        Name = course.Name,
+                        Description = course.Description,
+                        DateOfStart = course.DateOfStart,
+                        DateOfEnd = course.DateOfEnd,
+                        CourseLength = course.CourseLength,
+                        CourseEnded = course.CourseEnded,
+                        EnrolledUsersLimit = course.EnrolledUsersLimit,
+                        EnrolledUsersQuantity = course.EnrolledUsers.Count,
+
+                        SelectedBranches = _context.GetBranchesById(course.Branches)
+                    };
+
+                    ListOfCourses.Add(singleCourse);
+                }
+            }
+
+            List<DisplayGivenCertificateViewModel> ListOfGivenCertificates = new List<DisplayGivenCertificateViewModel>();
+
+            if (GivenCertificates.Count != 0)
+            {
+                foreach (var givenCertificate in GivenCertificates)
+                {
+                    var Course = _context.GetCourseById(givenCertificate.Course);
+                    var Certificate = _context.GetCertificateById(givenCertificate.Certificate);
+
+                    DisplayListOfCoursesViewModel courseViewModel = new DisplayListOfCoursesViewModel
+                    {
+                        CourseIdentificator = Course.CourseIdentificator,
+
+                        CourseIndexer = Course.CourseIndexer,
+                        Name = Course.Name,
+                    };
+
+                    DisplayListOfCertificatesViewModel certificateViewModel = new DisplayListOfCertificatesViewModel
+                    {
+                        CertificateIdentificator = Certificate.CertificateIdentificator,
+
+                        CertificateIndexer = Certificate.CertificateIndexer,
+                        Name = Certificate.Name
+                    };
+
+                    DisplayGivenCertificateViewModel singleGivenCertificate = new DisplayGivenCertificateViewModel
+                    {
+                        GivenCertificateIdentificator = givenCertificate.GivenCertificateIdentificator,
+
+                        GivenCertificateIndexer = givenCertificate.GivenCertificateIndexer,
+                        ReceiptDate = givenCertificate.ReceiptDate,
+                        ExpirationDate = givenCertificate.ExpirationDate,
+
+                        Certificate = certificateViewModel,
+                        Course = courseViewModel
+                    };
+
+                    ListOfGivenCertificates.Add(singleGivenCertificate);
+                }
+            }
+
+            List<AddCompanyViewModel> ListOfCompanies = new List<AddCompanyViewModel>();
+
+            foreach (var company in Companies)
+            {
+                AddCompanyViewModel singleCompany = new AddCompanyViewModel
+                {
+                    CompanyIdentificator = company.CompanyIdentificator,
+                    CompanyName = company.CompanyName,
+                    Email = company.Email,
+                    Phone = company.Phone,
+                    Country = company.Country,
+                    City = company.City,
+                    PostCode = company.PostCode,
+                    Address = company.Address,
+                    NumberOfApartment = company.NumberOfApartment
+                };
+
+                ListOfCompanies.Add(singleCompany);
+            }
+
+            UserDetailsViewModel UserDetails = new UserDetailsViewModel
+            {
+                UserIdentificator = User.Id,
+
+                Email = User.Email,
+                PhoneNumber = User.PhoneNumber,
+
+                FirstName = User.FirstName,
+                LastName = User.LastName,
+                DateOfBirth = User.DateOfBirth,
+
+                Country = User.Country,
+                City = User.City,
+                PostCode = User.PostCode,
+                Address = User.Address,
+                NumberOfApartment = User.NumberOfApartment,
+
+                CompanyRoleManager = User.CompanyRoleManager,
+                CompanyRoleWorker = User.CompanyRoleWorker,
+
+                Roles = User.Roles,
+
+                Certificates = ListOfGivenCertificates,
+                Courses = ListOfCourses,
+                Companies = ListOfCompanies
+            };
+
+            return View(UserDetails);
+        }
     }
 }
