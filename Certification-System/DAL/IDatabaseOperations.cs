@@ -15,6 +15,7 @@ namespace Certification_System.DAL
         #region Users
 
         ICollection<CertificationPlatformUser> GetUsers();
+        void UpdateUser(CertificationPlatformUser user);
         CertificationPlatformUser GetUserById(string userIdentificator);
         ICollection<CertificationPlatformUser> GetUsersById(ICollection<string> userIdentificators);
         ICollection<SelectListItem> GetUsersAsSelectList();

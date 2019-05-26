@@ -397,6 +397,11 @@ namespace Certification_System.DAL
             return Users;
         }
 
+        public void UpdateUser(CertificationPlatformUser user)
+        {
+            var filter = Builders<CertificationPlatformUser>.Filter.Eq(x => x.Id, user.Id);
+            var result = _context.db.GetCollection<CertificationPlatformUser>(_usersCollectionName).ReplaceOne(filter, user);
+        }
 
         #endregion
 
