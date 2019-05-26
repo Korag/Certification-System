@@ -96,6 +96,7 @@ namespace Certification_System.DAL
         GivenCertificate GetGivenCertificateById(string givenCertificateIdentificator);
         ICollection<GivenCertificate> GetGivenCertificates();
         ICollection<GivenCertificate> GetGivenCertificatesByIdOfCertificate(string certificateIdentificator);
+        ICollection<GivenCertificate> GetGivenCertificatesById(ICollection<string> givenCertificatesIdentificators);
 
         #endregion
 

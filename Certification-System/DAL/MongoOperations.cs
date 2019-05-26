@@ -547,6 +547,19 @@ namespace Certification_System.DAL
             return givenCertificate;
         }
 
+        public ICollection<GivenCertificate> GetGivenCertificatesById(ICollection<string> givenCertificatesIdentificators)
+        {
+            List<GivenCertificate> GivenCertificates = new List<GivenCertificate>();
+
+            foreach (var givenCertificateIdentificator in givenCertificatesIdentificators)
+            {
+                var filter = Builders<GivenCertificate>.Filter.Eq(x => x.GivenCertificateIdentificator, givenCertificateIdentificator);
+                GivenCertificate singleGivenCertificate = _context.db.GetCollection<GivenCertificate>(_givenCertificatesCollectionName).Find<GivenCertificate>(filter).FirstOrDefault();
+                GivenCertificates.Add(singleGivenCertificate);
+            }
+            return GivenCertificates;
+        }
+
         public ICollection<GivenCertificate> GetGivenCertificates()
         {
             _givenCertificates = _context.db.GetCollection<GivenCertificate>(_givenCertificatesCollectionName);
