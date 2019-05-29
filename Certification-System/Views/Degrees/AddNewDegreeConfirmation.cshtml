@@ -70,30 +70,29 @@
                     </ul>
                 </td>
                 <td>
-                    @Html.ActionLink("Edit", "Edit", new { /* id=item.PrimaryKey */ }) |
-                    @Html.ActionLink("Details", "Details", new { /* id=item.PrimaryKey */ }) |
-                    @Html.ActionLink("Delete", "Delete", new { /* id=item.PrimaryKey */ })
+                    @Html.ActionLink("Szczegóły", "DegreeDetails", "Degrees", new { degreeIdentificator = Model.DegreeIdentificator }, new { @class = "btn btn-info m-1" })
+                    @Html.ActionLink("Aktualizuj", "EditDegree", "Degrees", new { degreeIdentificator = Model.DegreeIdentificator }, new { @class = "btn btn-warning m-1" })
                 </td>
             </tr>
         </tbody>
     </table>
 </div>
 
-<p>
-    <a asp-action="AddNewDegree" asp-controller="Degrees">Dodaj kolejny stopień zawodowy</a>
-</p>
+<div class="mt-3">
+    @Html.ActionLink("Dodaj stopień zawodowy", "AddNewDegree", "Degrees", null, new { @class = "btn btn-primary" })
+    @Html.ActionLink("Powrót do listy stopni zawodowych", "DisplayAllDegrees", "Degrees", null, new { @class = "btn btn-info" })
+</div>
 
+    @section Scripts{
+        <script>
+            $(document).ready(function () {
 
-@section Scripts{
-    <script>
-    $(document).ready(function () {
-
-        $('#degreeConfirmation').DataTable({
-            "language": {
-                "url": "//cdn.datatables.net/plug-ins/1.10.19/i18n/Polish.json"
-            },
-        }
-        );
-    });
-    </script>
-}
+                $('#degreeConfirmation').DataTable({
+                    "language": {
+                        "url": "//cdn.datatables.net/plug-ins/1.10.19/i18n/Polish.json"
+                    },
+                }
+                );
+            });
+        </script>
+    }
