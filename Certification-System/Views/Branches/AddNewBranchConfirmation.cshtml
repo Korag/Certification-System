@@ -24,11 +24,11 @@ else
         </div>
     </div>
 
-    <p>
+    <div class="mt-3">
         @Html.ActionLink("Dodaj certyfikat", "AddNewBranch", "Branches", null, new { @class = "btn btn-primary" })
         @Html.ActionLink("Aktualizuj", "EditBranch", "Branches", new { branchIdentificator = Model.BranchIdentificator }, new { @class = "btn btn-warning" })
         @Html.ActionLink("Lista wszystkich obszarów", "DisplayAllBranches", "Certificates", null, new { @class = "btn btn-success" })
-    </p>
+    </div>
 </div>
 
 
