@@ -63,8 +63,8 @@
                     </td>
                     <td>
                         @Html.ActionLink("Szczegóły użytkownika", "UserDetails", "Users", new { userIdentificator = item.User.UserIdentificator }, new { @class = "btn btn-info m-1" })
-                        @Html.ActionLink("Edytuj certyfikat", "EditGivenCertificate", "Certificates", new { givenCertificateIdentificator = item.Certificate.CertificateIdentificator }, new { @class = "btn btn-warning m-1" })
-                        @Html.ActionLink("Szczegóły kursu", "EditGivenCertificate", "Certificates", new { givenCertificateIdentificator = item.Certificate.CertificateIdentificator }, new { @class = "btn btn-secondary m-1" })
+                        @Html.ActionLink("Edytuj certyfikat", "EditGivenCertificate", "Certificates", new { givenCertificateIdentificator = item.GivenCertificateIdentificator }, new { @class = "btn btn-warning m-1" })
+                        @Html.ActionLink("Szczegóły kursu", "CourseDetails", "Courses", new { courseIdentificator = item.Course.CourseIdentificator }, new { @class = "btn btn-secondary m-1" })
                     </td>
                 </tr>
             }
