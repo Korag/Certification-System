@@ -92,6 +92,8 @@ namespace Certification_System.Controllers
 
                 DisplayDegreeViewModel addedDegree = new DisplayDegreeViewModel
                 {
+                    DegreeIdentificator = Degree.DegreeIdentificator,
+
                     DegreeIndexer = Degree.DegreeIndexer,
                     Name = Degree.Name,
                     Description = Degree.Description,
@@ -121,6 +123,8 @@ namespace Certification_System.Controllers
 
                 DisplayDegreeViewModel singleDegree = new DisplayDegreeViewModel
                 {
+                    DegreeIdentificator = degree.DegreeIdentificator,
+
                     DegreeIndexer = degree.DegreeIndexer,
                     Name = degree.Name,
                     Description = degree.Description,

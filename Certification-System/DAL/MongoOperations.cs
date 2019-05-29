@@ -624,7 +624,7 @@ namespace Certification_System.DAL
                 foreach (var degreeIdentificator in degreeIdentificators)
                 {
                     var filter = Builders<Degree>.Filter.Eq(x => x.DegreeIdentificator, degreeIdentificator);
-                    Degree degree = _context.db.GetCollection<Degree>(_companiesCollectionName).Find<Degree>(filter).FirstOrDefault();
+                    Degree degree = _context.db.GetCollection<Degree>(_degreesCollectionName).Find<Degree>(filter).FirstOrDefault();
 
                     Degrees.Add(degree);
                 }
