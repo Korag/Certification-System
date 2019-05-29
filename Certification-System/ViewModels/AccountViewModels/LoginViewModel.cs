@@ -4,8 +4,7 @@ namespace Certification_System.ViewModels.AccountViewModels
 {
     public class LoginViewModel
     {
-        [Required]
-        [Display(Name = "Adres email")]
+        [Display(Name = "Adres e-mail")]
         [EmailAddress]
         public string Email { get; set; }
 

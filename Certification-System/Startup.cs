@@ -56,7 +56,7 @@ namespace Certification_System
             services.AddSingleton<IDatabaseOperations, MongoOperations>();
 
             services.AddMvc().SetCompatibilityVersion(CompatibilityVersion.Version_2_2)
-                .AddDataAnnotationsLocalization().AddDataAnnotationsLocalization(); 
+                .AddDataAnnotationsLocalization(); 
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.

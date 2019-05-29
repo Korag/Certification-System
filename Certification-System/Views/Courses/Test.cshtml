@@ -1,4 +1,4 @@
-﻿@model IEnumerable<Certification_System.ViewModels.DisplayMeetingViewModel>
+﻿@model Certification_System.ViewModels.AddCertificateToDbViewModel
 
 @{
     ViewData["Title"] = "Test";
@@ -7,78 +7,45 @@
 
 <h1>Test</h1>
 
-<p>
-    <a asp-action="Create">Create New</a>
-</p>
-<table class="table">
-    <thead>
-        <tr>
-            <th>
-                @Html.DisplayNameFor(model => model.MeetingIdentificator)
-            </th>
-            <th>
-                @Html.DisplayNameFor(model => model.MeetingIndexer)
-            </th>
-            <th>
-                @Html.DisplayNameFor(model => model.Description)
-            </th>
-            <th>
-                @Html.DisplayNameFor(model => model.DateOfMeeting)
-            </th>
-            <th>
-                @Html.DisplayNameFor(model => model.Country)
-            </th>
-            <th>
-                @Html.DisplayNameFor(model => model.City)
-            </th>
-            <th>
-                @Html.DisplayNameFor(model => model.PostCode)
-            </th>
-            <th>
-                @Html.DisplayNameFor(model => model.Address)
-            </th>
-            <th>
-                @Html.DisplayNameFor(model => model.NumberOfApartment)
-            </th>
-            <th></th>
-        </tr>
-    </thead>
-    <tbody>
-@foreach (var item in Model) {
-        <tr>
-            <td>
-                @Html.DisplayFor(modelItem => item.MeetingIdentificator)
-            </td>
-            <td>
-                @Html.DisplayFor(modelItem => item.MeetingIndexer)
-            </td>
-            <td>
-                @Html.DisplayFor(modelItem => item.Description)
-            </td>
-            <td>
-                @Html.DisplayFor(modelItem => item.DateOfMeeting)
-            </td>
-            <td>
-                @Html.DisplayFor(modelItem => item.Country)
-            </td>
-            <td>
-                @Html.DisplayFor(modelItem => item.City)
-            </td>
-            <td>
-                @Html.DisplayFor(modelItem => item.PostCode)
-            </td>
-            <td>
-                @Html.DisplayFor(modelItem => item.Address)
-            </td>
-            <td>
-                @Html.DisplayFor(modelItem => item.NumberOfApartment)
-            </td>
-            <td>
-                @Html.ActionLink("Edit", "Edit", new { /* id=item.PrimaryKey */ }) |
-                @Html.ActionLink("Details", "Details", new { /* id=item.PrimaryKey */ }) |
-                @Html.ActionLink("Delete", "Delete", new { /* id=item.PrimaryKey */ })
-            </td>
-        </tr>
-}
-    </tbody>
-</table>
+<h4>AddCertificateToDbViewModel</h4>
+<hr />
+<div class="row">
+    <div class="col-md-4">
+        <form asp-action="Test">
+            <div asp-validation-summary="ModelOnly" class="text-danger"></div>
+            <div class="form-group">
+                <label asp-for="CertificateIdentificator" class="control-label"></label>
+                <input asp-for="CertificateIdentificator" class="form-control" />
+                <span asp-validation-for="CertificateIdentificator" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <label asp-for="CertificateIndexer" class="control-label"></label>
+                <input asp-for="CertificateIndexer" class="form-control" />
+                <span asp-validation-for="CertificateIndexer" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <label asp-for="Name" class="control-label"></label>
+                <input asp-for="Name" class="form-control" />
+                <span asp-validation-for="Name" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <label asp-for="Description" class="control-label"></label>
+                <input asp-for="Description" class="form-control" />
+                <span asp-validation-for="Description" class="text-danger"></span>
+            </div>
+            <div class="form-group form-check">
+                <label class="form-check-label">
+                    <input class="form-check-input" asp-for="Depreciated" /> @Html.DisplayNameFor(model => model.Depreciated)
+                </label>
+            </div>
+            <div class="form-group">
+                <input type="submit" value="Create" class="btn btn-primary" />
+            </div>
+        </form>
+    </div>
+</div>
+
+<div>
+    <a asp-action="Index">Back to List</a>
+</div>
+
