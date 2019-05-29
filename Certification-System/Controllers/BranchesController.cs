@@ -76,7 +76,7 @@ namespace Certification_System.Controllers
                 };
 
                 _context.AddBranch(branch);
-                return RedirectToAction("AddNewBranchConfirmation", "Branches", new { BranchIdentificator = newBranch.BranchIdentificator, TypeOfAction = "Add" });
+                return RedirectToAction("AddNewBranchConfirmation", "Branches", new { BranchIdentificator = branch.BranchIdentificator, TypeOfAction = "Add" });
             }
 
             return View(newBranch);
