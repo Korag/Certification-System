@@ -12,84 +12,105 @@
 {
     @Html.AntiForgeryToken()
 
-<div class="form-horizontal">
+    <div class="form-horizontal">
 
-    <div class="form-group">
-        @Html.LabelFor(model => model.CompanyName, htmlAttributes: new { @class = "control-label col-md-2" })
-        <div class="col-md-10">
-            @Html.EditorFor(model => model.CompanyName, new { htmlAttributes = new { @class = "form-control" } })
-            <span asp-validation-for="CompanyName" class="text-danger"></span>
+        <div class="col-md-6 col-xl-6 col-sm-8 col-xs-10 m-auto p-3 shadow p-3 mb-5 bg-light rounded border border-primary rounded-bottom" style="opacity:0.80">
+
+            <div class="form-group">
+                @Html.LabelFor(model => model.CompanyName, htmlAttributes: new { @class = "control-label" })
+                <div>
+                    @Html.EditorFor(model => model.CompanyName, new { htmlAttributes = new { @class = "form-control col-12" } })
+                    <div class="row justify-content-center">
+                        <span asp-validation-for="CompanyName" class="text-danger"></span>
+                    </div>
+                </div>
+            </div>
+
+            <div class="form-group">
+                @Html.LabelFor(model => model.Email, htmlAttributes: new { @class = "control-label" })
+                <div>
+                    @Html.EditorFor(model => model.Email, new { htmlAttributes = new { @class = "form-control col-12" } })
+                    <div class="row justify-content-center">
+                        <span asp-validation-for="Email" class="text-danger"></span>
+                    </div>
+                </div>
+            </div>
+
+            <div class="form-group">
+                @Html.LabelFor(model => model.Phone, htmlAttributes: new { @class = "control-label" })
+                <div>
+                    @Html.EditorFor(model => model.Phone, new { htmlAttributes = new { @class = "form-control col-12" } })
+                    <div class="row justify-content-center">
+                        <span asp-validation-for="Phone" class="text-danger"></span>
+                    </div>
+                </div>
+            </div>
+
+            <div class="form-group">
+                @Html.LabelFor(model => model.Country, htmlAttributes: new { @class = "control-label" })
+                <div>
+                    @Html.EditorFor(model => model.Country, new { htmlAttributes = new { @class = "form-control col-12" } })
+                    <div class="row justify-content-center">
+                        <span asp-validation-for="Country" class="text-danger"></span>
+                    </div>
+                </div>
+            </div>
+
+            <div class="form-group">
+                @Html.LabelFor(model => model.City, htmlAttributes: new { @class = "control-label" })
+                <div>
+                    @Html.EditorFor(model => model.City, new { htmlAttributes = new { @class = "form-control col-12" } })
+                    <div class="row justify-content-center">
+                        <span asp-validation-for="City" class="text-danger"></span>
+                    </div>
+                </div>
+            </div>
+
+            <div class="form-group">
+                @Html.LabelFor(model => model.PostCode, htmlAttributes: new { @class = "control-label" })
+                <div>
+                    @Html.EditorFor(model => model.PostCode, new { htmlAttributes = new { @class = "form-control col-12" } })
+                    <div class="row justify-content-center">
+                        <span asp-validation-for="PostCode" class="text-danger"></span>
+                    </div>
+                </div>
+            </div>
+
+            <div class="form-group">
+                @Html.LabelFor(model => model.Address, htmlAttributes: new { @class = "control-label" })
+                <div>
+                    @Html.EditorFor(model => model.Address, new { htmlAttributes = new { @class = "form-control col-12" } })
+                    <div class="row justify-content-center">
+                        <span asp-validation-for="Address" class="text-danger"></span>
+                    </div>
+                </div>
+            </div>
+
+            <div class="form-group">
+                @Html.LabelFor(model => model.NumberOfApartment, htmlAttributes: new { @class = "control-label" })
+                <div>
+                    @Html.EditorFor(model => model.NumberOfApartment, new { htmlAttributes = new { @class = "form-control col-12" } })
+                    <div class="row justify-content-center">
+                        <span asp-validation-for="NumberOfApartment" class="text-danger"></span>
+                    </div>
+                </div>
+            </div>
+
+            <div class="form-group mb-0">
+                <div class="row justify-content-center">
+                    <input type="submit" value="Aktualizuj" class="btn btn-primary" />
+                </div>
+            </div>
+
         </div>
-    </div>
 
-    <div class="form-group">
-        @Html.LabelFor(model => model.Email, htmlAttributes: new { @class = "control-label col-md-2" })
-        <div class="col-md-10">
-            @Html.EditorFor(model => model.Email, new { htmlAttributes = new { @class = "form-control" } })
-            <span asp-validation-for="Email" class="text-danger"></span>
-        </div>
-    </div>
-
-    <div class="form-group">
-        @Html.LabelFor(model => model.Phone, htmlAttributes: new { @class = "control-label col-md-2" })
-        <div class="col-md-10">
-            @Html.EditorFor(model => model.Phone, new { htmlAttributes = new { @class = "form-control" } })
-            <span asp-validation-for="Phone" class="text-danger"></span>
-        </div>
-    </div>
-
-    <div class="form-group">
-        @Html.LabelFor(model => model.Country, htmlAttributes: new { @class = "control-label col-md-2" })
-        <div class="col-md-10">
-            @Html.EditorFor(model => model.Country, new { htmlAttributes = new { @class = "form-control" } })
-            <span asp-validation-for="Country" class="text-danger"></span>
-        </div>
-    </div>
-
-    <div class="form-group">
-        @Html.LabelFor(model => model.City, htmlAttributes: new { @class = "control-label col-md-2" })
-        <div class="col-md-10">
-            @Html.EditorFor(model => model.City, new { htmlAttributes = new { @class = "form-control" } })
-            <span asp-validation-for="City" class="text-danger"></span>
-        </div>
-    </div>
-
-    <div class="form-group">
-        @Html.LabelFor(model => model.PostCode, htmlAttributes: new { @class = "control-label col-md-2" })
-        <div class="col-md-10">
-            @Html.EditorFor(model => model.PostCode, new { htmlAttributes = new { @class = "form-control" } })
-            <span asp-validation-for="PostCode" class="text-danger"></span>
-        </div>
-    </div>
-
-    <div class="form-group">
-        @Html.LabelFor(model => model.Address, htmlAttributes: new { @class = "control-label col-md-2" })
-        <div class="col-md-10">
-            @Html.EditorFor(model => model.Address, new { htmlAttributes = new { @class = "form-control" } })
-            <span asp-validation-for="Address" class="text-danger"></span>
-        </div>
-    </div>
-
-    <div class="form-group">
-        @Html.LabelFor(model => model.NumberOfApartment, htmlAttributes: new { @class = "control-label col-md-2" })
-        <div class="col-md-10">
-            @Html.EditorFor(model => model.NumberOfApartment, new { htmlAttributes = new { @class = "form-control" } })
-            <span asp-validation-for="NumberOfApartment" class="text-danger"></span>
-        </div>
-    </div>
-
-    <div class="row justify-content-center">
-        <div asp-validation-summary="All" class="text-danger"></div>
-    </div>
-
-    <div class="form-group">
         <div class="row justify-content-center">
-            <input type="submit" value="Aktualizuj" class="btn btn-primary" />
+            <div asp-validation-summary="All" class="text-danger"></div>
         </div>
+
     </div>
-</div>
 }
 
-<p>
-    @Html.ActionLink("Powrót do listy przedsiębiorstw", "DisplayAllCompanies", "Companies", null , new { @class = "btn btn-info" })
-</p>
+<div class="mt-3">
+    @Html.ActionLink("Powrót do listy przedsiębiorstw", "DisplayAllCompanies", "Companies", null, new { @class = "btn btn-info" })
+</div>
