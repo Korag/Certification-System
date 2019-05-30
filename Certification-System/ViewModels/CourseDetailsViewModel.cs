@@ -7,6 +7,8 @@ namespace Certification_System.ViewModels
 {
     public class CourseDetailsViewModel
     {
+        public string CourseIdentificator { get; set; }
+
         [Display(Name = "Identyfikator")]
         public string CourseIndexer { get; set; }
 

@@ -269,6 +269,8 @@ namespace Certification_System.Controllers
 
             CourseDetailsViewModel courseDetails = new CourseDetailsViewModel
             {
+                CourseIdentificator = Course.CourseIdentificator,
+
                 CourseIndexer = Course.CourseIndexer,
                 Name = Course.Name,
                 Description = Course.Description,
