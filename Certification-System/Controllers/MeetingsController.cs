@@ -30,6 +30,8 @@ namespace Certification_System.Controllers
 
                 AddMeetingViewModel addedMeeting = new AddMeetingViewModel
                 {
+                    MeetingIdentificator = Meeting.MeetingIdentificator,
+
                     SelectedCourse = _context.GetCourseByMeetingId(meetingIdentificator).CourseIndexer,
                     MeetingIndexer = Meeting.MeetingIndexer,
                     Description = Meeting.Description,

@@ -7,6 +7,8 @@ namespace Certification_System.ViewModels
 {
     public class AddMeetingViewModel
     {
+        public string MeetingIdentificator { get; set; }
+
         [Required(ErrorMessage = "Należy wybrać do którego kursu przypisać spotkanie.")]
         public string SelectedCourse { get; set; }
 
