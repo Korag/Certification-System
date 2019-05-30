@@ -146,12 +146,12 @@ else
     }
 </div>
 
-<p>
-    @Html.ActionLink("Dodaj kurs", "AddNewCourse", "Courses", null, new { @class = "btn btn-primary" })
-    @Html.ActionLink("Szczegóły", "CourseDetails", "Courses", new { courseIdentificator = Model.CourseIdentificator }, new { @class = "btn btn-info" })
-    @Html.ActionLink("Aktualizuj", "EditCourse", "Courses", new { courseIdentificator = Model.CourseIdentificator }, new { @class = "btn btn-warning" })
-    @Html.ActionLink("Lista wszystkich certyfikatów", "DisplayAllCourses", "Courses", null, new { @class = "btn btn-success" })
-</p>
+<div class="mt-3">
+    @Html.ActionLink("Dodaj kurs", "AddNewCourse", "Courses", null, new { @class = "btn btn-primary m-1" })
+    @Html.ActionLink("Szczegóły", "CourseDetails", "Courses", new { courseIdentificator = Model.CourseIdentificator }, new { @class = "btn btn-info m-1" })
+    @Html.ActionLink("Aktualizuj", "EditCourse", "Courses", new { courseIdentificator = Model.CourseIdentificator }, new { @class = "btn btn-warning m-1" })
+    @Html.ActionLink("Lista wszystkich certyfikatów", "DisplayAllCourses", "Courses", null, new { @class = "btn btn-success m-1" })
+</div>
 
 @section Scripts{
     <script>
