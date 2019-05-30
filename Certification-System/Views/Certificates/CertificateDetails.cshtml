@@ -12,7 +12,7 @@
     <h2>Informacje o certyfikacie</h2>
 
     <div class="mt-3 mb-3">
-        @Html.ActionLink("Edytuj", "EditCertificate", new { certificateIdentificator = Model.CertificateIdentificator }, new { @class = "btn btn-warning" })
+        @Html.ActionLink("Edytuj", "EditCertificate", "Certificates", new { certificateIdentificator = Model.CertificateIdentificator }, new { @class = "btn btn-warning" })
     </div>
 
     <form>
@@ -232,7 +232,7 @@ else
 }
 else
 {
-      <div class="mt-4 mb-4 alert alert-warning">Brak kursów, które zakończyły się nadaniem takiego certyfikatu</div>
+    <div class="mt-4 mb-4 alert alert-warning">Brak kursów, które zakończyły się nadaniem takiego certyfikatu</div>
 }
 
 @section Scripts{

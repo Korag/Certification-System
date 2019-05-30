@@ -217,6 +217,8 @@
 
 
 @section Scripts {
+    @await Html.PartialAsync("_ValidationScriptsPartial")
+
     <script>
         $(function () {
             $('#DateOfBirth').datetimepicker({
