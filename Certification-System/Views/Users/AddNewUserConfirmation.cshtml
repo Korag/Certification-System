@@ -127,12 +127,14 @@ else
     </table>
 </div>
 
-<p>
+<div class="mt-3">
     @Html.ActionLink("Dodaj użytkownika", "AddNewUser", "Users", null, new { @class = "btn btn-primary" })
-    @Html.ActionLink("Wyświetl listę użytkowników", "DisplayAllUsers", "Users", null, new { @class = "btn btn-secondary" })
-</p>
+    @Html.ActionLink("Wyświetl listę użytkowników", "DisplayAllUsers", "Users", null, new { @class = "btn btn-info" })
+</div>
 
 @section Scripts{
+    @await Html.PartialAsync("_ValidationScriptsPartial")
+
     <script>
         $(document).ready(function () {
 
