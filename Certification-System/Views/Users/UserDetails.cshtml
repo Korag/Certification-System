@@ -8,304 +8,325 @@
 <h1>Szczegóły użytkownika</h1>
 <hr />
 
-<p>
-    @Html.ActionLink("Przejdź do listy użytkowników", "DisplayAllUsers", "Users", null, new { @class = "btn btn-primary" })
-</p>
+<div>
 
-<div class="row">
-    <div class="col-12">
-        <form asp-action="UserDetails">
+    <h2>Informacje o użytkowniku</h2>
+
+    <div class="mt-3 mb-3">
+        @Html.ActionLink("Edytuj", "EditUser", "Users", new { userIdentificator = Model.UserIdentificator }, new { @class = "btn btn-warning" })
+    </div>
+
+    <form asp-action="UserDetails">
+
+        <div class="col-md-6 col-xl-6 col-sm-8 col-xs-10 m-auto p-3 shadow p-3 mb-5 bg-light rounded border border-primary rounded-bottom" style="opacity:0.80">
 
             <div class="form-group">
                 <label asp-for="Email" class="control-label"></label>
-                <input asp-for="Email" class="form-control" disabled />
-                <span asp-validation-for="Email" class="text-danger"></span>
+                <input asp-for="Email" class="form-control col-12" disabled />
             </div>
 
             <div class="form-group">
                 <label asp-for="FirstName" class="control-label"></label>
-                <input asp-for="FirstName" class="form-control" disabled />
-                <span asp-validation-for="FirstName" class="text-danger"></span>
+                <input asp-for="FirstName" class="form-control col-12" disabled />
             </div>
 
             <div class="form-group">
                 <label asp-for="LastName" class="control-label"></label>
-                <input asp-for="LastName" class="form-control" disabled />
-                <span asp-validation-for="LastName" class="text-danger"></span>
+                <input asp-for="LastName" class="form-control col-12" disabled />
             </div>
 
             <div class="form-group">
                 <label asp-for="PhoneNumber" class="control-label"></label>
-                <input asp-for="PhoneNumber" class="form-control" disabled />
-                <span asp-validation-for="PhoneNumber" class="text-danger"></span>
+                <input asp-for="PhoneNumber" class="form-control col-12" disabled />
             </div>
 
             <div class="form-group">
                 <label asp-for="Country" class="control-label"></label>
-                <input asp-for="Country" class="form-control" disabled />
-                <span asp-validation-for="Country" class="text-danger"></span>
+                <input asp-for="Country" class="form-control col-12" disabled />
             </div>
 
             <div class="form-group">
                 <label asp-for="City" class="control-label"></label>
-                <input asp-for="City" class="form-control" disabled />
-                <span asp-validation-for="City" class="text-danger"></span>
+                <input asp-for="City" class="form-control col-12" disabled />
             </div>
 
             <div class="form-group">
                 <label asp-for="PostCode" class="control-label"></label>
-                <input asp-for="PostCode" class="form-control" disabled />
-                <span asp-validation-for="PostCode" class="text-danger"></span>
+                <input asp-for="PostCode" class="form-control col-12" disabled />
             </div>
 
             <div class="form-group">
                 <label asp-for="Address" class="control-label"></label>
-                <input asp-for="Address" class="form-control" disabled />
-                <span asp-validation-for="Address" class="text-danger"></span>
+                <input asp-for="Address" class="form-control col-12" disabled />
             </div>
 
             <div class="form-group">
                 <label asp-for="NumberOfApartment" class="control-label"></label>
-                <input asp-for="NumberOfApartment" class="form-control" disabled />
-                <span asp-validation-for="NumberOfApartment" class="text-danger"></span>
+                <input asp-for="NumberOfApartment" class="form-control col-12" disabled />
             </div>
 
             <div class="form-group">
                 <label asp-for="DateOfBirth" class="control-label"></label>
-                <input asp-for="DateOfBirth" class="form-control" disabled />
-                <span asp-validation-for="DateOfBirth" class="text-danger"></span>
+                <input asp-for="DateOfBirth" class="form-control col-12" disabled />
             </div>
 
-            @*public ICollection<string>Roles { get; set; }
-                public ICollection<string> CompanyRoleWorker { get; set; }
-                public ICollection<string> CompanyRoleManager { get; set; }*@
-        </form>
+        </div>
+
+        @*public ICollection<string>Roles { get; set; }
+            public ICollection<string> CompanyRoleWorker { get; set; }
+            public ICollection<string> CompanyRoleManager { get; set; }*@
+    </form>
+</div>
+
+<div class="mt-3">
+    @Html.ActionLink("Powrót do listy użytkowników", "DisplayAllUsers", "Users", null, new { @class = "btn btn-info" })
+</div>
+
+<h2 class="mt-4 mb-4">Certyfikaty użytkownika</h2>
+
+@if (Model.Certificates.Count != 0)
+{
+    <div class="col-12 table-responsive">
+        <table id="listGivenCertificates" class="table table-striped table-bordered display" style="width: 100%;" role="grid">
+            <thead>
+                <tr>
+                    <th>
+                        @Html.DisplayNameFor(model => model.Certificates.First().GivenCertificateIndexer)
+                    </th>
+                    <th>
+                        @Html.DisplayNameFor(model => model.Certificates.First().ReceiptDate)
+                    </th>
+                    <th>
+                        @Html.DisplayNameFor(model => model.Certificates.First().ExpirationDate)
+                    </th>
+                    <th>
+                        @Html.DisplayNameFor(model => model.Certificates.First().Certificate.CertificateIndexer) i @Html.DisplayNameFor(model => model.Certificates.First().Certificate.Name)
+                    </th>
+                    <th>
+                        @Html.DisplayNameFor(model => model.Certificates.First().Course.CourseIndexer) i @Html.DisplayNameFor(model => model.Certificates.First().Course.Name)
+                    </th>
+                    <th>
+                        Operacje
+                    </th>
+                </tr>
+            </thead>
+            <tbody>
+                @foreach (var item in Model.Certificates)
+                {
+                    <tr>
+                        <td>
+                            @Html.DisplayFor(modelItem => item.GivenCertificateIndexer)
+                        </td>
+                        <td>
+                            @Html.DisplayFor(modelItem => item.ReceiptDate)
+                        </td>
+                        <td>
+                            @Html.DisplayFor(modelItem => item.ExpirationDate)
+                        </td>
+                        <td>
+                            @Html.DisplayFor(model => item.Certificate.CertificateIndexer) @Html.DisplayFor(model => item.Certificate.Name)
+                        </td>
+                        <td>
+                            @Html.DisplayFor(model => item.Course.CourseIndexer) @Html.DisplayFor(model => item.Course.Name)
+                        </td>
+                        <td>
+                            @Html.ActionLink("Edytuj certyfikat", "EditGivenCertificate", "Certificates", new { givenCertificateIdentificator = item.Certificate.CertificateIdentificator }, new { @class = "btn btn-warning m-1" })
+                        </td>
+                    </tr>
+                }
+            </tbody>
+        </table>
     </div>
-</div>
+}
 
+else
+{
+    <div class="mt-4 mb-4 alert alert-warning">Użytkownikowi nie przyznano żadnych certyfikatów</div>
+}
 
-<p>
-    @Html.ActionLink("Przyznaj certyfikat", "AddNewGivenCertificate", "Certificates", null, new { @class = "btn btn-primary" })
-</p>
-
-<div class="col-12 table-responsive">
-    <table id="listGivenCertificates" class="table table-striped table-bordered display" style="width: 100%;" role="grid">
-        <thead>
-            <tr>
-                <th>
-                    @Html.DisplayNameFor(model => model.Certificates.First().GivenCertificateIndexer)
-                </th>
-                <th>
-                    @Html.DisplayNameFor(model => model.Certificates.First().ReceiptDate)
-                </th>
-                <th>
-                    @Html.DisplayNameFor(model => model.Certificates.First().ExpirationDate)
-                </th>
-                <th>
-                    @Html.DisplayNameFor(model => model.Certificates.First().Certificate.CertificateIndexer) i @Html.DisplayNameFor(model => model.Certificates.First().Certificate.Name)
-                </th>
-                <th>
-                    @Html.DisplayNameFor(model => model.Certificates.First().Course.CourseIndexer) i @Html.DisplayNameFor(model => model.Certificates.First().Course.Name)
-                </th>
-                <th>
-                    Operacje
-                </th>
-            </tr>
-        </thead>
-        <tbody>
-            @foreach (var item in Model.Certificates)
-            {
-                <tr>
-                    <td>
-                        @Html.DisplayFor(modelItem => item.GivenCertificateIndexer)
-                    </td>
-                    <td>
-                        @Html.DisplayFor(modelItem => item.ReceiptDate)
-                    </td>
-                    <td>
-                        @Html.DisplayFor(modelItem => item.ExpirationDate)
-                    </td>
-                    <td>
-                        @Html.DisplayFor(model => item.Certificate.CertificateIndexer) @Html.DisplayNameFor(model => item.Certificate.Name)
-                    </td>
-                    <td>
-                        @Html.DisplayFor(model => item.Course.CourseIndexer) @Html.DisplayNameFor(model => item.Course.Name)
-                    </td>
-                    <td>
-                        @Html.ActionLink("Edytuj certyfikat", "EditGivenCertificate", "Certificates", new { givenCertificateIdentificator = item.Certificate.CertificateIdentificator }, new { @class = "btn btn-warning" })
-                    </td>
-                </tr>
-            }
-        </tbody>
-    </table>
-</div>
-
-<p>
+<h2 class="mt-4 mb-4">Kursy użytkownika</h2>
+<div class="mt-3">
     @Html.ActionLink("Dodaj nowy kurs", "AddNewCourse", "Courses", null, new { @class = "btn btn-primary" })
-</p>
-
-<div class="col-12 table-responsive">
-    <table id="coursesList" class="table table-striped table-bordered display" style="width: 100%;" role="grid">
-        <thead>
-            <tr>
-                <th>
-                    @Html.DisplayNameFor(model => model.Courses.First().CourseIndexer)
-                </th>
-                <th>
-                    @Html.DisplayNameFor(model => model.Courses.First().Name)
-                </th>
-                <th>
-                    @Html.DisplayNameFor(model => model.Courses.First().Description)
-                </th>
-                <th>
-                    @Html.DisplayNameFor(model => model.Courses.First().DateOfStart)
-                </th>
-                <th>
-                    @Html.DisplayNameFor(model => model.Courses.First().DateOfEnd)
-                </th>
-                <th>
-                    @Html.DisplayNameFor(model => model.Courses.First().EnrolledUsersLimit)
-                </th>
-                <th>
-                    @Html.DisplayNameFor(model => model.Courses.First().EnrolledUsersQuantity)
-                </th>
-                <th>
-                    @Html.DisplayNameFor(model => model.Courses.First().CourseEnded)
-                </th>
-                <th>
-                    @Html.DisplayNameFor(model => model.Courses.First().CourseLength)
-                </th>
-                <th>
-                    @Html.DisplayNameFor(model => model.Courses.First().SelectedBranches)
-                </th>
-                <th>
-                    Operacje
-                </th>
-            </tr>
-        </thead>
-        <tbody>
-            @foreach (var item in Model.Courses)
-            {
-                <tr>
-                    <td>
-                        @Html.DisplayFor(modelItem => item.CourseIndexer)
-                    </td>
-                    <td>
-                        @Html.DisplayFor(modelItem => item.Name)
-                    </td>
-                    <td>
-                        @Html.DisplayFor(modelItem => item.Description)
-                    </td>
-                    <td>
-                        @Html.DisplayFor(modelItem => item.DateOfStart)
-                    </td>
-                    <td>
-                        @Html.DisplayFor(modelItem => item.DateOfEnd)
-                    </td>
-                    <td>
-                        @Html.DisplayFor(modelItem => item.EnrolledUsersLimit)
-                    </td>
-                    <td>
-                        @Html.DisplayFor(modelItem => item.EnrolledUsersQuantity)
-                    </td>
-                    <td>
-                        @Html.DisplayFor(modelItem => item.CourseEnded)
-                    </td>
-                    <td>
-                        @Html.DisplayFor(modelItem => item.CourseLength)
-                    </td>
-                    <td>
-                        <ul>
-                            @foreach (var branch in item.SelectedBranches)
-                            {
-                                <li>@branch</li>
-                            }
-                        </ul>
-                    </td>
-                    <td>
-                        @Html.ActionLink("Szczegóły", "CourseDetails", new { courseIdentificator = item.CourseIdentificator }, new { @class = "btn btn-info" })
-                        @Html.ActionLink("Edytuj", "EditCourse", new { courseIdentificator = item.CourseIdentificator }, new { @class = "btn btn-warning" })
-                    </td>
-                </tr>
-            }
-        </tbody>
-    </table>
 </div>
 
-<p>
+@if (Model.Courses.Count != 0)
+{
+    <div class="col-12 table-responsive">
+        <table id="coursesList" class="table table-striped table-bordered display" style="width: 100%;" role="grid">
+            <thead>
+                <tr>
+                    <th>
+                        @Html.DisplayNameFor(model => model.Courses.First().CourseIndexer)
+                    </th>
+                    <th>
+                        @Html.DisplayNameFor(model => model.Courses.First().Name)
+                    </th>
+                    <th>
+                        @Html.DisplayNameFor(model => model.Courses.First().Description)
+                    </th>
+                    <th>
+                        @Html.DisplayNameFor(model => model.Courses.First().DateOfStart)
+                    </th>
+                    <th>
+                        @Html.DisplayNameFor(model => model.Courses.First().DateOfEnd)
+                    </th>
+                    <th>
+                        @Html.DisplayNameFor(model => model.Courses.First().EnrolledUsersLimit)
+                    </th>
+                    <th>
+                        @Html.DisplayNameFor(model => model.Courses.First().EnrolledUsersQuantity)
+                    </th>
+                    <th>
+                        @Html.DisplayNameFor(model => model.Courses.First().CourseEnded)
+                    </th>
+                    <th>
+                        @Html.DisplayNameFor(model => model.Courses.First().CourseLength)
+                    </th>
+                    <th>
+                        @Html.DisplayNameFor(model => model.Courses.First().SelectedBranches)
+                    </th>
+                    <th>
+                        Operacje
+                    </th>
+                </tr>
+            </thead>
+            <tbody>
+                @foreach (var item in Model.Courses)
+                {
+                    <tr>
+                        <td>
+                            @Html.DisplayFor(modelItem => item.CourseIndexer)
+                        </td>
+                        <td>
+                            @Html.DisplayFor(modelItem => item.Name)
+                        </td>
+                        <td>
+                            @Html.DisplayFor(modelItem => item.Description)
+                        </td>
+                        <td>
+                            @Html.DisplayFor(modelItem => item.DateOfStart)
+                        </td>
+                        <td>
+                            @Html.DisplayFor(modelItem => item.DateOfEnd)
+                        </td>
+                        <td>
+                            @Html.DisplayFor(modelItem => item.EnrolledUsersLimit)
+                        </td>
+                        <td>
+                            @Html.DisplayFor(modelItem => item.EnrolledUsersQuantity)
+                        </td>
+                        <td>
+                            @Html.DisplayFor(modelItem => item.CourseEnded)
+                        </td>
+                        <td>
+                            @Html.DisplayFor(modelItem => item.CourseLength)
+                        </td>
+                        <td>
+                            <ul>
+                                @foreach (var branch in item.SelectedBranches)
+                                {
+                                    <li>@branch</li>
+                                }
+                            </ul>
+                        </td>
+                        <td>
+                            @Html.ActionLink("Szczegóły", "CourseDetails", new { courseIdentificator = item.CourseIdentificator }, new { @class = "btn btn-info m-1" })
+                            @Html.ActionLink("Edytuj", "EditCourse", new { courseIdentificator = item.CourseIdentificator }, new { @class = "btn btn-warning m-1" })
+                        </td>
+                    </tr>
+                }
+            </tbody>
+        </table>
+    </div>
+}
+else
+{
+    <div class="mt-4 mb-4 alert alert-warning">Użytkownik nie uczęszczał na żaden kurs</div>
+}
+
+<h2 class="mt-4 mb-4">Przedsiębiorstwa powiązane z użytkownikiem</h2>
+<div class="mt-3">
     @Html.ActionLink("Dodaj nowe przedsiębiorstwo", "AddNewCompany", "Companies", null, new { @class = "btn btn-primary" })
-</p>
-
-<div class="col-12 table-responsive">
-    <table id="listCompanies" class="table table-striped table-bordered display" style="width: 100%;" role="grid">
-        <thead>
-            <tr>
-                <th>
-                    @Html.DisplayNameFor(model => model.Companies.First().CompanyName)
-                </th>
-                <th>
-                    @Html.DisplayNameFor(model => model.Companies.First().Email)
-                </th>
-                <th>
-                    @Html.DisplayNameFor(model => model.Companies.First().Phone)
-                </th>
-                <th>
-                    @Html.DisplayNameFor(model => model.Companies.First().Country)
-                </th>
-                <th>
-                    @Html.DisplayNameFor(model => model.Companies.First().City)
-                </th>
-                <th>
-                    @Html.DisplayNameFor(model => model.Companies.First().PostCode)
-                </th>
-                <th>
-                    @Html.DisplayNameFor(model => model.Companies.First().Address)
-                </th>
-                <th>
-                    @Html.DisplayNameFor(model => model.Companies.First().NumberOfApartment)
-                </th>
-                <th>
-                    Operacje
-                </th>
-            </tr>
-        </thead>
-        <tbody>
-            @foreach (var item in Model.Companies)
-            {
-                <tr>
-                    <td>
-                        @Html.DisplayFor(modelItem => item.CompanyName)
-                    </td>
-                    <td>
-                        @Html.DisplayFor(modelItem => item.Email)
-                    </td>
-                    <td>
-                        @Html.DisplayFor(modelItem => item.Phone)
-                    </td>
-                    <td>
-                        @Html.DisplayFor(modelItem => item.Country)
-                    </td>
-                    <td>
-                        @Html.DisplayFor(modelItem => item.City)
-                    </td>
-                    <td>
-                        @Html.DisplayFor(modelItem => item.PostCode)
-                    </td>
-                    <td>
-                        @Html.DisplayFor(modelItem => item.Address)
-                    </td>
-                    <td>
-                        @Html.DisplayFor(modelItem => item.NumberOfApartment)
-                    </td>
-                    <td>
-                        @Html.ActionLink("Szczegóły", "CompanyDetails", "Companies", new { companyIdentificator = item.CompanyIdentificator }, new { @class = "btn btn-info" })
-                        @Html.ActionLink("Aktualizuj", "EditCompany", "Companies", new { companyIdentificator = item.CompanyIdentificator }, new { @class = "btn btn-warning" })
-                    </td>
-                </tr>
-            }
-        </tbody>
-    </table>
 </div>
+
+
+@if (Model.Companies.Count != 0)
+{
+    <div class="col-12 table-responsive">
+        <table id="listCompanies" class="table table-striped table-bordered display" style="width: 100%;" role="grid">
+            <thead>
+                <tr>
+                    <th>
+                        @Html.DisplayNameFor(model => model.Companies.First().CompanyName)
+                    </th>
+                    <th>
+                        @Html.DisplayNameFor(model => model.Companies.First().Email)
+                    </th>
+                    <th>
+                        @Html.DisplayNameFor(model => model.Companies.First().Phone)
+                    </th>
+                    <th>
+                        @Html.DisplayNameFor(model => model.Companies.First().Country)
+                    </th>
+                    <th>
+                        @Html.DisplayNameFor(model => model.Companies.First().City)
+                    </th>
+                    <th>
+                        @Html.DisplayNameFor(model => model.Companies.First().PostCode)
+                    </th>
+                    <th>
+                        @Html.DisplayNameFor(model => model.Companies.First().Address)
+                    </th>
+                    <th>
+                        @Html.DisplayNameFor(model => model.Companies.First().NumberOfApartment)
+                    </th>
+                    <th>
+                        Operacje
+                    </th>
+                </tr>
+            </thead>
+            <tbody>
+                @foreach (var item in Model.Companies)
+                {
+                    <tr>
+                        <td>
+                            @Html.DisplayFor(modelItem => item.CompanyName)
+                        </td>
+                        <td>
+                            @Html.DisplayFor(modelItem => item.Email)
+                        </td>
+                        <td>
+                            @Html.DisplayFor(modelItem => item.Phone)
+                        </td>
+                        <td>
+                            @Html.DisplayFor(modelItem => item.Country)
+                        </td>
+                        <td>
+                            @Html.DisplayFor(modelItem => item.City)
+                        </td>
+                        <td>
+                            @Html.DisplayFor(modelItem => item.PostCode)
+                        </td>
+                        <td>
+                            @Html.DisplayFor(modelItem => item.Address)
+                        </td>
+                        <td>
+                            @Html.DisplayFor(modelItem => item.NumberOfApartment)
+                        </td>
+                        <td>
+                            @Html.ActionLink("Szczegóły", "CompanyDetails", "Companies", new { companyIdentificator = item.CompanyIdentificator }, new { @class = "btn btn-info" })
+                            @Html.ActionLink("Aktualizuj", "EditCompany", "Companies", new { companyIdentificator = item.CompanyIdentificator }, new { @class = "btn btn-warning" })
+                        </td>
+                    </tr>
+                }
+            </tbody>
+        </table>
+    </div>
+}
+else
+{
+    <div class="mt-4 mb-4 alert alert-warning">Użytkownik nie jest zrzeszony z żadnym przedsiębiorstwem</div>
+}
 
 @section Scripts{
     <script>
