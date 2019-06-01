@@ -312,6 +312,12 @@ namespace Certification_System.DAL
             _context.db.GetCollection<Course>(_coursesCollectionName).ReplaceOne(filter, course);
         }
 
+        public ICollection<Meeting> GetMeetings()
+        {
+            _meetings = _context.db.GetCollection<Meeting>(_meetingsCollectionName);
+            return _meetings.AsQueryable().ToList();
+        }
+
         #endregion
 
         #region Users
