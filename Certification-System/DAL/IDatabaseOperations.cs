@@ -66,6 +66,7 @@ namespace Certification_System.DAL
         Meeting GetMeetingById(string meetingsIdentificators);
         void AddMeeting(Meeting meeting);
         void AddMeetingToCourse(string meetingIdentificator, string courseIdentificator);
+        void UpdateMeeting(Meeting meeting);
 
         #endregion
 

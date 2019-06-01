@@ -286,6 +286,12 @@ namespace Certification_System.DAL
             _meetings.InsertOne(meeting);
         }
 
+        public void UpdateMeeting(Meeting meeting)
+        {
+            var filter = Builders<Meeting>.Filter.Eq(x => x.MeetingIdentificator, meeting.MeetingIdentificator);
+            var result = _context.db.GetCollection<Meeting>(_meetingsCollectionName).ReplaceOne(filter, meeting);
+        }
+
         public Meeting GetMeetingById(string meetingsIdentificators)
         {
             Meeting Meeting = new Meeting();

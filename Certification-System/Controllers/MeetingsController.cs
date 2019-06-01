@@ -104,12 +104,67 @@ namespace Certification_System.Controllers
                 _context.AddMeeting(meeting);
                 _context.AddMeetingToCourse(meeting.MeetingIdentificator, newMeeting.SelectedCourse);
 
-                return RedirectToAction("AddNewMeetingConfirmation", new { meetingIdentificator = meeting.MeetingIdentificator });
+                return RedirectToAction("AddNewMeetingConfirmation", new { meetingIdentificator = meeting.MeetingIdentificator, TypeOfAction = "Add" });
             }
 
             newMeeting.AvailableCourses = _context.GetCoursesAsSelectList().ToList();
             newMeeting.AvailableInstructors = _context.GetInstructorsAsSelectList().ToList();
             return View(newMeeting);
+        }
+
+
+        // GET: EditMeeting
+        [Authorize(Roles = "Admin")]
+        public ActionResult EditMeeting(string meetingIdentificator)
+        {
+          var Meeting = _context.GetMeetingById(meetingIdentificator);
+
+            EditMeetingViewModel meetingViewModel = new EditMeetingViewModel
+            {
+                MeetingIdentificator = Meeting.MeetingIdentificator,
+
+                MeetingIndexer = Meeting.MeetingIndexer,
+                Description = Meeting.Description,
+                DateOfMeeting = Meeting.DateOfMeeting,
+                Country = Meeting.Country,
+                City = Meeting.City,
+                Address = Meeting.Address,
+                NumberOfApartment = Meeting.NumberOfApartment,
+                PostCode = Meeting.PostCode,
+
+                AvailableInstructors = _context.GetInstructorsAsSelectList().ToList(),
+                SelectedInstructors = Meeting.Instructors
+            };
+
+            return View(meetingViewModel);
+        }
+
+        // POST: EditMeeting
+        [ValidateAntiForgeryToken]
+        [Authorize(Roles = "Admin")]
+        [HttpPost]
+        public ActionResult EditMeeting(EditMeetingViewModel editedMeeting)
+        {
+            if (ModelState.IsValid)
+            {
+                var OriginMeeting = _context.GetMeetingById(editedMeeting.MeetingIdentificator);
+
+                OriginMeeting.MeetingIndexer = editedMeeting.MeetingIndexer;
+                OriginMeeting.Description = editedMeeting.Description;
+                OriginMeeting.DateOfMeeting = editedMeeting.DateOfMeeting;
+                OriginMeeting.Country = editedMeeting.Country;
+                OriginMeeting.City = editedMeeting.City;
+                OriginMeeting.PostCode = editedMeeting.PostCode;
+                OriginMeeting.NumberOfApartment = editedMeeting.NumberOfApartment;
+                OriginMeeting.Address = editedMeeting.Address;
+                OriginMeeting.Instructors = editedMeeting.SelectedInstructors;
+
+                _context.UpdateMeeting(OriginMeeting);
+
+                return RedirectToAction("AddNewMeetingConfirmation", "Meetings", new { meetingIdentificator = editedMeeting.MeetingIdentificator, TypeOfAction = "Update" });
+            }
+
+            return View(editedMeeting);
         }
     }
 }
