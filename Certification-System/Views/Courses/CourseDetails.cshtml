@@ -127,7 +127,7 @@
                         @Html.DisplayNameFor(model => model.Meetings.First().NumberOfApartment)
                     </th>
                     <th>
-                        @Html.DisplayNameFor(model => model.Meetings.First().Instructors)
+                        @Html.DisplayNameFor(model => model.Meetings.First().InstructorsCredentials)
                     </th>
                     <th>
                         Operacje
@@ -164,7 +164,7 @@
                         </td>
                         <td>
                             <ul>
-                                @foreach (var instructor in item.Instructors)
+                                @foreach (var instructor in item.InstructorsCredentials)
                                 {
                                     <li>@instructor</li>
                                 }

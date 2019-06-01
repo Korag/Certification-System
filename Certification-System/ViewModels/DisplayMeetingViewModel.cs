@@ -35,6 +35,14 @@ namespace Certification_System.ViewModels
         public string NumberOfApartment { get; set; }
 
         [Display(Name = "Instruktorzy")]
-        public ICollection<string> Instructors { get; set; }
+        public ICollection<string> InstructorsCredentials { get; set; }
+
+        public ICollection<string> InstructorsIdentificators { get; set; }
+
+        [Display(Name = "Identyfikator kursu")]
+        public string CourseIndexer { get; set; }
+
+        [Display(Name = "Nazwa kursu")]
+        public string CourseName { get; set; }
     }
 }
