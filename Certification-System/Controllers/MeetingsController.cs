@@ -166,5 +166,44 @@ namespace Certification_System.Controllers
 
             return View(editedMeeting);
         }
+
+        // GET: DisplayAllMeetings
+        [Authorize(Roles = "Admin")]
+        public ActionResult DisplayAllMeetings()
+        {
+            var Meetings = _context.GetMeetings();
+            List<DisplayMeetingViewModel> ListOfMeetings = new List<DisplayMeetingViewModel>();
+
+            foreach (var meeting in Meetings)
+            {
+                Course RelatedCourse = _context.GetCourseByMeetingId(meeting.MeetingIdentificator);
+                List<Instructor> RelatedInstructors = _context.GetInstructorsById(meeting.Instructors).ToList();
+
+                DisplayMeetingViewModel singleMeeting = new DisplayMeetingViewModel
+                {
+                    MeetingIdentificator = meeting.MeetingIdentificator,
+
+                    MeetingIndexer = meeting.MeetingIndexer,
+                    Description = meeting.Description,
+                    DateOfMeeting = meeting.DateOfMeeting,
+                    Country = meeting.Country,
+                    City = meeting.City,
+                    Address = meeting.Address,
+                    NumberOfApartment = meeting.NumberOfApartment,
+                    PostCode = meeting.PostCode,
+
+                    CourseIdentificator = RelatedCourse.CourseIdentificator,
+                    CourseIndexer = RelatedCourse.CourseIndexer,
+                    CourseName = RelatedCourse.Name,
+
+                    InstructorsIdentificators = RelatedInstructors.Select(z=> z.InstructorIdentificator).ToList(),
+                    InstructorsCredentials = RelatedInstructors.Select(z => z.FirstName + " " + z.LastName).ToList()
+                };
+
+                ListOfMeetings.Add(singleMeeting);
+            }
+
+            return View(ListOfMeetings);
+        }
     }
 }

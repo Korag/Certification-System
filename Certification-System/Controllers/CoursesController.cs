@@ -242,7 +242,7 @@ namespace Certification_System.Controllers
                     PostCode = meeting.PostCode,
 
                     CourseIdentificator = Course.CourseIdentificator,
-                    Instructors = _context.GetInstructorsById(meeting.Instructors).Select(z => z.FirstName + " " + z.LastName).ToList()
+                    InstructorsCredentials = _context.GetInstructorsById(meeting.Instructors).Select(z => z.FirstName + " " + z.LastName).ToList()
                 };
 
                 meetingsViewModel.Add(singleMeeting);
