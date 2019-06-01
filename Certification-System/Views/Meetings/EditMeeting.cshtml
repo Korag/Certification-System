@@ -1,0 +1,153 @@
+﻿@model Certification_System.ViewModels.EditMeetingViewModel
+
+@{
+    ViewData["Title"] = "EditMeeting";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+<h2>Edycja spotkania</h2>
+<hr/>
+
+@using (Html.BeginForm())
+{
+    @Html.AntiForgeryToken()
+
+    <div class="form-horizontal">
+
+        <div class="col-md-6 col-xl-6 col-sm-8 col-xs-10 m-auto p-3 shadow p-3 mb-5 bg-light rounded border border-primary rounded-bottom" style="opacity:0.80">
+
+            <div class="form-group">
+                @Html.LabelFor(model => model.MeetingIndexer, htmlAttributes: new { @class = "control-label" })
+                <div>
+                    @Html.EditorFor(model => model.MeetingIndexer, new { htmlAttributes = new { @class = "form-control col-12" } })
+                    <div class="row justify-content-center">
+                        <span asp-validation-for="MeetingIndexer" class="text-danger"></span>
+                    </div>
+                </div>
+            </div>
+
+            <div class="form-group">
+                @Html.LabelFor(model => model.Description, htmlAttributes: new { @class = "control-label" })
+                <div>
+                    <textarea asp-for="Description" class="form-control col-12" style="width:100%; min-width:100%;"></textarea>
+                    <div class="row justify-content-center">
+                        <span asp-validation-for="Description" class="text-danger"></span>
+                    </div>
+                </div>
+            </div>
+
+
+            <div class="form-group">
+                <label asp-for="DateOfMeeting" class="control-label"></label>
+                <div>
+                    <div class='input-group date' id='DateOfMeeting'>
+                        <input type='text' class="form-control col-12" name="ReceiptDate" value="@DateTime.Now.ToShortDateString() @DateTime.Now.ToShortTimeString()" />
+                        <span class="input-group-addon">
+                            <span class="fa fa-calendar pl-1 pt-0.5" style="font-size:34px"></span>
+                        </span>
+                    </div>
+                    <div class="row justify-content-center">
+                        <span asp-validation-for="DateOfMeeting" class="text-danger"></span>
+                    </div>
+                </div>
+            </div>
+
+            <div class="form-group">
+                @Html.LabelFor(model => model.Country, htmlAttributes: new { @class = "control-label" })
+                <div>
+                    @Html.EditorFor(model => model.Country, new { htmlAttributes = new { @class = "form-control col-12" } })
+                    <div class="row justify-content-center">
+                        <span asp-validation-for="Country" class="text-danger"></span>
+                    </div>
+                </div>
+            </div>
+
+            <div class="form-group">
+                @Html.LabelFor(model => model.City, htmlAttributes: new { @class = "control-label" })
+                <div>
+                    @Html.EditorFor(model => model.City, new { htmlAttributes = new { @class = "form-control col-12" } })
+                    <div class="row justify-content-center">
+                        <span asp-validation-for="City" class="text-danger"></span>
+                    </div>
+                </div>
+            </div>
+
+            <div class="form-group">
+                @Html.LabelFor(model => model.PostCode, htmlAttributes: new { @class = "control-label" })
+                <div>
+                    @Html.EditorFor(model => model.PostCode, new { htmlAttributes = new { @class = "form-control col-12" } })
+                    <div class="row justify-content-center">
+                        <span asp-validation-for="PostCode" class="text-danger"></span>
+                    </div>
+                </div>
+            </div>
+
+            <div class="form-group">
+                @Html.LabelFor(model => model.Address, htmlAttributes: new { @class = "control-label" })
+                <div>
+                    @Html.EditorFor(model => model.Address, new { htmlAttributes = new { @class = "form-control col-12" } })
+                    <div class="row justify-content-center">
+                        <span asp-validation-for="Address" class="text-danger"></span>
+                    </div>
+                </div>
+            </div>
+
+            <div class="form-group">
+                @Html.LabelFor(model => model.NumberOfApartment, htmlAttributes: new { @class = "control-label" })
+                <div>
+                    @Html.EditorFor(model => model.NumberOfApartment, new { htmlAttributes = new { @class = "form-control col-12" } })
+                    <div class="row justify-content-center">
+                        <span asp-validation-for="NumberOfApartment" class="text-danger"></span>
+                    </div>
+                </div>
+            </div>
+
+            <div class="form-group">
+                <label asp-for="AvailableInstructors" class="control-label"></label>
+                <div>
+                    <select asp-for="SelectedInstructors" asp-items="@Model.AvailableInstructors" data-style="btn-white" data-container="body" data-width="auto" data-header="Wybierz instruktora" data-live-search="true" title="Nie wybrano instruktora" multiple class="form-control selectpicker show-tick w-100"> </select>
+                    <div class="row justify-content-center">
+                        <span asp-validation-for="SelectedInstructors" class="text-danger"></span>
+                    </div>
+                </div>
+            </div>
+
+            <div class="form-group mb-0">
+                <div class="row justify-content-center">
+                    <input type="submit" value="Utwórz" class="btn btn-primary" />
+                </div>
+            </div>
+
+        </div>
+
+        <div class="row justify-content-center">
+            <div asp-validation-summary="All" class="text-danger"></div>
+        </div>
+
+    </div>
+}
+
+<div class="mt-3">
+    @Html.ActionLink("Przejdź do listy spotkań", "DisplayAllMeetings", "Meetings", null, new { @class = "btn btn-info" })
+</div>
+
+<div>
+    @*jeżeli było to przekierowanie to możemy wrócić
+        @Html.ActionLink("Wróć do listy spotkań szkolenia", "Index")
+
+        jeżeli panel został ręcznie wywołany możemy z tego poziomu przejść do widoku aktywnych kursów
+        @Html.ActionLink("Przeglądaj aktywne kursy", "Index")*@
+</div>
+
+@section Scripts {
+    <script>
+        $(function () {
+            $('#DateOfMeeting').datetimepicker({
+                format: 'DD.MM.YYYY HH:mm',
+                locale: moment.locale('pl', {
+                    week: { dow: 1 }
+                })
+            });
+        });
+    </script>
+}
