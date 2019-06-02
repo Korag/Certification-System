@@ -20,8 +20,8 @@ namespace Certification_System.ViewModels
         public ICollection<string> Branches { get; set; }
 
 
-
         public ICollection<DisplayListOfCertificatesViewModel> RequiredCertificates { get; set; }
         public ICollection<DisplayDegreeViewModel> RequiredDegrees { get; set; }
+        public ICollection<DisplayUsersViewModel> UsersWithDegree { get; set; }
     }
 }
