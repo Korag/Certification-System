@@ -21,7 +21,7 @@ namespace Certification_System.Controllers
 
         // GET: AddNewDegree
         [Authorize(Roles = "Admin")]
-        public IActionResult AddNewDegree()
+        public ActionResult AddNewDegree()
         {
             AddDegreeViewModel newDegree = new AddDegreeViewModel
             {
@@ -39,7 +39,7 @@ namespace Certification_System.Controllers
         [ValidateAntiForgeryToken]
         [Authorize(Roles = "Admin")]
         [HttpPost]
-        public IActionResult AddNewDegree(AddDegreeViewModel newDegree)
+        public ActionResult AddNewDegree(AddDegreeViewModel newDegree)
         {
             if (ModelState.IsValid)
             {
@@ -67,7 +67,7 @@ namespace Certification_System.Controllers
 
                 _context.AddDegree(degree);
 
-                return RedirectToAction("AddNewDegreeConfirmation", new { degreeIdentificator = degree.DegreeIdentificator });
+                return RedirectToAction("AddNewDegreeConfirmation", new { degreeIdentificator = degree.DegreeIdentificator, TypeOfAction = "Add" });
             }
 
             newDegree.AvailableBranches = _context.GetBranchesAsSelectList().ToList();
@@ -80,10 +80,12 @@ namespace Certification_System.Controllers
 
         // GET: AddNewDegreeConfirmation
         [Authorize(Roles = "Admin")]
-        public IActionResult AddNewDegreeConfirmation(string degreeIdentificator)
+        public ActionResult AddNewDegreeConfirmation(string degreeIdentificator, string TypeOfAction)
         {
             if (degreeIdentificator != null)
             {
+                ViewBag.TypeOfAction = TypeOfAction;
+
                 var Degree = _context.GetDegreeById(degreeIdentificator);
 
                 var RequiredCertificates = _context.GetCertificatesById(Degree.RequiredCertificates);
@@ -110,7 +112,7 @@ namespace Certification_System.Controllers
 
         // GET: DisplayAllDegrees
         [Authorize(Roles = "Admin")]
-        public IActionResult DisplayAllDegrees()
+        public ActionResult DisplayAllDegrees()
         {
             var Degrees = _context.GetDegrees();
             List<DisplayDegreeViewModel> ListOfDegrees = new List<DisplayDegreeViewModel>();
