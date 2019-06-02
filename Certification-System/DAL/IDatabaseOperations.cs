@@ -109,7 +109,7 @@ namespace Certification_System.DAL
         void AddDegree(Degree degree);
         Degree GetDegreeById(string degreeIdentificator);
         ICollection<Degree> GetDegreesById(ICollection<string> degreeIdentificators);
-
+        void UpdateDegree(Degree degree);
         #endregion
 
     }

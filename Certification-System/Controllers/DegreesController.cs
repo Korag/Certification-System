@@ -130,7 +130,7 @@ namespace Certification_System.Controllers
                     Description = degree.Description,
 
                     RequiredCertificates = RequiredCertificates.Select(z => z.CertificateIndexer + " " + z.Name).ToList(),
-                    RequiredDegrees = RequiredDegrees.Select(z => z.DegreeIdentificator + " " + z.Name).ToList(),
+                    RequiredDegrees = RequiredDegrees.Select(z => z.DegreeIndexer + " " + z.Name).ToList(),
                     Branches = Branches
                 };
 
@@ -138,6 +138,59 @@ namespace Certification_System.Controllers
             }
 
             return View(ListOfDegrees);
+        }
+
+        // GET: EditDegree
+        [Authorize(Roles = "Admin")]
+        public ActionResult EditDegree(string degreeIdentificator)
+        {
+            var Degree = _context.GetDegreeById(degreeIdentificator);
+
+            AddDegreeViewModel degreeViewModel = new AddDegreeViewModel
+            {
+                DegreeIdentificator = Degree.DegreeIdentificator,
+                DegreeIndexer = Degree.DegreeIndexer,
+                Name = Degree.Name,
+                Description = Degree.Description,
+                SelectedBranches = Degree.Branches,
+                SelectedCertificates = Degree.RequiredCertificates,
+                SelectedDegrees = Degree.RequiredDegrees,
+
+                AvailableBranches = _context.GetBranchesAsSelectList().ToList(),
+                AvailableCertificates = _context.GetCertificatesAsSelectList().ToList(),
+                AvailableDegrees = _context.GetDegreesAsSelectList().ToList(),
+            };
+
+            return View(degreeViewModel);
+        }
+
+        // POST: EditDegree
+        [ValidateAntiForgeryToken]
+        [Authorize(Roles = "Admin")]
+        [HttpPost]
+        public ActionResult EditDegree(AddDegreeViewModel editedDegree)
+        {
+            if (ModelState.IsValid)
+            {
+                var OriginDegree = _context.GetDegreeById(editedDegree.DegreeIdentificator);
+
+                OriginDegree.DegreeIndexer = editedDegree.DegreeIndexer;
+                OriginDegree.Name = editedDegree.Name;
+                OriginDegree.Description = editedDegree.Description;
+                OriginDegree.RequiredCertificates = editedDegree.SelectedCertificates;
+                OriginDegree.RequiredDegrees = editedDegree.SelectedDegrees;
+                OriginDegree.Branches = editedDegree.SelectedBranches;
+
+                _context.UpdateDegree(OriginDegree);
+
+                return RedirectToAction("AddNewDegreeConfirmation", "Degrees", new { degreeIdentificator = editedDegree.DegreeIdentificator, TypeOfAction = "Update" });
+            }
+
+            editedDegree.AvailableBranches = _context.GetBranchesAsSelectList().ToList();
+            editedDegree.AvailableCertificates = _context.GetCertificatesAsSelectList().ToList();
+            editedDegree.AvailableDegrees = _context.GetDegreesAsSelectList().ToList();
+
+            return View(editedDegree);
         }
     }
 }

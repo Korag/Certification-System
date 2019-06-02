@@ -646,6 +646,12 @@ namespace Certification_System.DAL
             return Degrees;
         }
 
+        public void UpdateDegree(Degree degree)
+        {
+            var filter = Builders<Degree>.Filter.Eq(x => x.DegreeIdentificator, degree.DegreeIdentificator);
+            var result = _context.db.GetCollection<Degree>(_degreesCollectionName).ReplaceOne(filter, degree);
+        }
+
         #endregion
     }
 }
