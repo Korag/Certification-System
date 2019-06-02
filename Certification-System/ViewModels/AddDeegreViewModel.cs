@@ -6,6 +6,8 @@ namespace Certification_System.ViewModels
 {
     public class AddDegreeViewModel
     {
+        public string DegreeIdentificator { get; set; }
+
         [Required]
         [Display(Name = "Identyfikator")]
         public string DegreeIndexer { get; set; }
