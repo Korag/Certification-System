@@ -119,7 +119,6 @@ namespace Certification_System.Controllers
             {
                 var RequiredCertificates = _context.GetCertificatesById(degree.RequiredCertificates);
                 var RequiredDegrees = _context.GetDegreesById(degree.RequiredDegrees);
-                var Branches = _context.GetBranchesById(degree.Branches);
 
                 DisplayDegreeViewModel singleDegree = new DisplayDegreeViewModel
                 {
@@ -131,7 +130,7 @@ namespace Certification_System.Controllers
 
                     RequiredCertificates = RequiredCertificates.Select(z => z.CertificateIndexer + " " + z.Name).ToList(),
                     RequiredDegrees = RequiredDegrees.Select(z => z.DegreeIndexer + " " + z.Name).ToList(),
-                    Branches = Branches
+                    Branches = _context.GetBranchesById(degree.Branches)
                 };
 
                 ListOfDegrees.Add(singleDegree);
@@ -191,6 +190,100 @@ namespace Certification_System.Controllers
             editedDegree.AvailableDegrees = _context.GetDegreesAsSelectList().ToList();
 
             return View(editedDegree);
+        }
+
+        // GET: DegreeDetails
+        [Authorize(Roles = "Admin")]
+        public ActionResult DegreeDetails(string degreeIdentificator)
+        {
+            var Degree = _context.GetDegreeById(degreeIdentificator);
+
+            var RequiredDegrees = _context.GetDegreesById(Degree.RequiredDegrees);
+            var RequiredCertificates = _context.GetCertificatesById(Degree.RequiredCertificates);
+
+            var GivenDegreesInstances = _context.GetGivenDegreesByIdOfDegree(degreeIdentificator);
+            var GivenDegreesIdentificators = GivenDegreesInstances.Select(z => z.GivenDegreeIdentificator);
+            var UsersWithDegree = _context.GetUsersByGivenDegreeId(GivenDegreesIdentificators.ToList());
+
+            List<DisplayListOfCertificatesViewModel> ListOfCertificates = new List<DisplayListOfCertificatesViewModel>();
+
+            if (RequiredCertificates.Count != 0)
+            {
+                foreach (var certificate in RequiredCertificates)
+                {
+                    DisplayListOfCertificatesViewModel singleCertificate = new DisplayListOfCertificatesViewModel
+                    {
+                        CertificateIdentificator = certificate.CertificateIdentificator,
+
+                        CertificateIndexer = certificate.CertificateIndexer,
+                        Name = certificate.Name,
+                        Description = certificate.Description,
+                        Branches = _context.GetBranchesById(certificate.Branches),
+                        Depreciated = certificate.Depreciated
+                    };
+
+                    ListOfCertificates.Add(singleCertificate);
+                }
+            }
+
+            List<DisplayDegreeViewModel> ListOfDegrees = new List<DisplayDegreeViewModel>();
+
+            if (RequiredDegrees.Count != 0)
+            {
+                foreach (var degree in RequiredDegrees)
+                {
+                    DisplayDegreeViewModel singleDegree = new DisplayDegreeViewModel
+                    {
+                        DegreeIdentificator = degree.DegreeIdentificator,
+
+                        DegreeIndexer = degree.DegreeIndexer,
+                        Name = degree.Name,
+                        Description = degree.Description,
+
+                        Branches = _context.GetBranchesById(degree.Branches)
+                    };
+
+                    ListOfDegrees.Add(singleDegree);
+                }
+            }
+
+            List<DisplayUsersViewModel> ListOfUsers = new List<DisplayUsersViewModel>();
+
+            foreach (var user in UsersWithDegree)
+            {
+                DisplayUsersViewModel singleUser = new DisplayUsersViewModel
+                {
+                    UserIdentificator = user.Id,
+
+                    Email = user.Email,
+                    FirstName = user.FirstName,
+                    LastName = user.LastName,
+
+                    Roles = user.Roles,
+
+                    CompanyRoleManager = _context.GetCompaniesById(user.CompanyRoleManager).Select(s => s.CompanyName).ToList(),
+                    CompanyRoleWorker = _context.GetCompaniesById(user.CompanyRoleWorker).Select(s => s.CompanyName).ToList()
+                };
+
+                ListOfUsers.Add(singleUser);
+            }
+
+            DegreeDetailsViewModel DegreeDetails = new DegreeDetailsViewModel
+            {
+                DegreeIdentificator = Degree.DegreeIdentificator,
+
+                DegreeIndexer = Degree.DegreeIndexer,
+                Name = Degree.Name,
+                Description = Degree.Description,
+
+                Branches = _context.GetBranchesById(Degree.Branches),
+
+                RequiredCertificates = ListOfCertificates,
+                RequiredDegrees = ListOfDegrees,
+                UsersWithDegree = ListOfUsers
+            };
+
+            return View(DegreeDetails);
         }
     }
 }

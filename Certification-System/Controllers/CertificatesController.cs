@@ -113,6 +113,7 @@ namespace Certification_System.Controllers
                 DisplayListOfCertificatesViewModel singleCertificate = new DisplayListOfCertificatesViewModel
                 {
                     CertificateIdentificator = certificate.CertificateIdentificator,
+
                     CertificateIndexer = certificate.CertificateIndexer,
                     Name = certificate.Name,
                     Description = certificate.Description,
@@ -389,9 +390,9 @@ namespace Certification_System.Controllers
         }
 
 
-        // GET: CertificateDetails
+        // GET: DegreeDetails
         [Authorize(Roles = "Admin")]
-        public ActionResult CertificateDetails(string certificateIdentificator)
+        public ActionResult DegreeDetails(string certificateIdentificator)
         {
             var Certificate = _context.GetCertificateById(certificateIdentificator);
             var GivenCertificatesInstances = _context.GetGivenCertificatesByIdOfCertificate(certificateIdentificator);
