@@ -22,6 +22,7 @@ namespace Certification_System.DAL
         private string _companiesCollectionName = "Companies";
         private string _givenCertificatesCollectionName = "GivenCertificates";
         private string _degreesCollectionName = "Degrees";
+        private string _givenDegreesCollectionName = "Degrees";
 
         //Collections
         private IMongoCollection<CertificationPlatformUser> _users;
@@ -33,6 +34,7 @@ namespace Certification_System.DAL
         private IMongoCollection<Company> _companies;
         private IMongoCollection<GivenCertificate> _givenCertificates;
         private IMongoCollection<Degree> _degrees;
+        private IMongoCollection<GivenDegree> _givenDegrees;
 
         public MongoOperations()
         {
@@ -409,6 +411,20 @@ namespace Certification_System.DAL
             return Users;
         }
 
+        public ICollection<CertificationPlatformUser> GetUsersByGivenDegreeId(ICollection<string> degreeIdentificators)
+        {
+            List<CertificationPlatformUser> Users = new List<CertificationPlatformUser>();
+
+            foreach (var degreeIdentificator in degreeIdentificators)
+            {
+                var filter = Builders<CertificationPlatformUser>.Filter.Where(x => x.Degrees.Contains(degreeIdentificator));
+                CertificationPlatformUser singleUser = _context.db.GetCollection<CertificationPlatformUser>(_usersCollectionName).Find<CertificationPlatformUser>(filter).FirstOrDefault();
+                Users.Add(singleUser);
+            }
+
+            return Users;
+        }
+
         public void UpdateUser(CertificationPlatformUser user)
         {
             var filter = Builders<CertificationPlatformUser>.Filter.Eq(x => x.Id, user.Id);
@@ -650,6 +666,17 @@ namespace Certification_System.DAL
         {
             var filter = Builders<Degree>.Filter.Eq(x => x.DegreeIdentificator, degree.DegreeIdentificator);
             var result = _context.db.GetCollection<Degree>(_degreesCollectionName).ReplaceOne(filter, degree);
+        }
+
+        #endregion
+
+        #region GivenDegrees
+
+        public ICollection<GivenDegree> GetGivenDegreesByIdOfDegree(string degreeIdentificator)
+        {
+            var filter = Builders<GivenDegree>.Filter.Eq(x => x.Degree, degreeIdentificator);
+            var givenDegrees = _context.db.GetCollection<GivenDegree>(_givenDegreesCollectionName).Find<GivenDegree>(filter).ToList();
+            return givenDegrees;
         }
 
         #endregion
