@@ -1,17 +1,19 @@
 ﻿@model Certification_System.ViewModels.AddDegreeViewModel
 
 @{
-    ViewData["Title"] = "AddNewDegree";
+    ViewData["Title"] = "EditDegree";
     Layout = "~/Views/Shared/_Layout.cshtml";
 }
 
-<h2>Dodaj nowy stopień zawodowy</h2>
+<h2>Edytuj stopień zawodowy</h2>
 <hr />
 
 <div>
-    <form asp-action="AddNewDegree">
+    <form asp-action="EditDegree">
 
         <div class="col-md-6 col-xl-6 col-sm-8 col-xs-10 m-auto p-3 shadow p-3 mb-5 bg-light rounded border border-primary rounded-bottom" style="opacity:0.80">
+
+            <input asp-for="DegreeIdentificator" class="form-control" hidden />
 
             <div class="form-group">
                 <label asp-for="DegreeIndexer" class="control-label"></label>
@@ -37,6 +39,7 @@
                 </div>
             </div>
 
+
             <div class="form-group">
                 <label asp-for="AvailableCertificates" class="control-label"></label>
                 <div>
@@ -59,21 +62,6 @@
 
             <div class="form-group">
                 @Html.LabelFor(model => model.AvailableBranches, htmlAttributes: new { @class = "control-label" })
-                @*<div>
-            <div class="btn-group btn-group-toggle" data-toggle="buttons">
-                @foreach (var availableBranch in Model.AvailableBranches)
-                {
-                    <label class="btn btn-outline-secondary m-2">
-                        <input type="checkbox"
-                               name="SelectedBranches"
-                               value="@availableBranch.Value"
-                               autocomplete="off"
-                               @if (Model.SelectedBranches.Contains(availableBranch.Value)) { <text> checked </text> } />
-                        <span>@availableBranch.Text</span>
-                    </label>
-                }
-            </div>
-        </div>*@
 
                 <div>
                     <select asp-for="SelectedBranches" asp-items="@Model.AvailableBranches" data-style="btn-white" data-container="body" data-width="auto" data-header="Wybierz obszary certyfikacji" data-live-search="true" title="Nie wybrano żadnego elementu" class="form-control selectpicker show-tick w-100"> </select>
@@ -85,7 +73,7 @@
 
             <div class="form-group mb-0">
                 <div class="row justify-content-center">
-                    <input type="submit" value="Dodaj" class="btn btn-primary" />
+                    <input type="submit" value="Edytuj" class="btn btn-primary" />
                 </div>
             </div>
 
@@ -98,10 +86,10 @@
     </form>
 </div>
 
-
-<div class=mt-3>
+<div class="mt-3">
     @Html.ActionLink("Przejdź do listy stopni zawodowych", "DisplayAllDegrees", "Degrees", null, new { @class = "btn btn-info" })
 </div>
+
 
 @section Scripts {
     @{await Html.RenderPartialAsync("_ValidationScriptsPartial");}

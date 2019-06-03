@@ -109,6 +109,14 @@ namespace Certification_System.DAL
         void AddDegree(Degree degree);
         Degree GetDegreeById(string degreeIdentificator);
         ICollection<Degree> GetDegreesById(ICollection<string> degreeIdentificators);
+        void UpdateDegree(Degree degree);
+        ICollection<CertificationPlatformUser> GetUsersByGivenDegreeId(ICollection<string> degreeIdentificators);
+
+        #endregion
+
+        #region GivenDegree
+
+        ICollection<GivenDegree> GetGivenDegreesByIdOfDegree(string degreeIdentificator);
 
         #endregion
 

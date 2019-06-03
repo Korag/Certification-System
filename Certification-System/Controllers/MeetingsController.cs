@@ -205,5 +205,77 @@ namespace Certification_System.Controllers
 
             return View(ListOfMeetings);
         }
+
+        // GET: MeetingDetails
+        [Authorize(Roles = "Admin")]
+        public ActionResult MeetingDetails(string meetingIdentificator)
+        {
+            var Meeting = _context.GetMeetingById(meetingIdentificator);
+            var RelatedInstructors = _context.GetInstructorsById(Meeting.Instructors);
+            var EnrolledUsersIdentificators = _context.GetCourseByMeetingId(meetingIdentificator).EnrolledUsers;
+
+            var EnrolledUsersList = _context.GetUsersById(EnrolledUsersIdentificators);
+
+            List<AddInstructorViewModel> ListOfInstructors = new List<AddInstructorViewModel>();
+
+            if (RelatedInstructors.Count != 0)
+            {  
+                foreach (var instructor in RelatedInstructors)
+                {
+                    AddInstructorViewModel singleInstructor = new AddInstructorViewModel
+                    {
+                        FirstName = instructor.FirstName,
+                        LastName = instructor.LastName,
+                        Email = instructor.Email,
+                        Phone = instructor.Phone,
+                        Country = instructor.Country,
+                        City = instructor.City,
+                        PostCode = instructor.PostCode,
+                        Address = instructor.Address,
+                        NumberOfApartment = instructor.NumberOfApartment
+                    };
+
+                    ListOfInstructors.Add(singleInstructor);
+                }
+            }
+    
+            List<DisplayUsersViewModel> ListOfUsers = new List<DisplayUsersViewModel>();
+
+            if (EnrolledUsersList.Count != 0)
+            {
+                foreach (var user in EnrolledUsersList)
+                {
+                    DisplayUsersViewModel singleUser = new DisplayUsersViewModel
+                    {
+                        UserIdentificator = user.Id,
+                        FirstName = user.FirstName,
+                        LastName = user.LastName,
+                        Email = user.Email,
+                    };
+
+                    ListOfUsers.Add(singleUser);
+                }
+            }
+
+            MeetingDetailsViewModel MeetingDetails = new MeetingDetailsViewModel
+            {
+                MeetingIdentificator = Meeting.MeetingIdentificator,
+
+                MeetingIndexer = Meeting.MeetingIndexer,
+                Description = Meeting.Description,
+                DateOfMeeting = Meeting.DateOfMeeting,
+                Country = Meeting.Country,
+                City = Meeting.City,
+                Address = Meeting.Address,
+                NumberOfApartment = Meeting.NumberOfApartment,
+                PostCode = Meeting.PostCode,
+
+                Instructors = ListOfInstructors,
+                AttendanceList = Meeting.AttendanceList,
+                AllCourseParticipants = ListOfUsers
+            };
+
+            return View(MeetingDetails);
+        }
     }
 }
