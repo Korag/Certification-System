@@ -130,7 +130,7 @@
                             @Html.DisplayFor(model => item.Course.CourseIndexer) @Html.DisplayFor(model => item.Course.Name)
                         </td>
                         <td>
-                            @Html.ActionLink("Edytuj certyfikat", "EditGivenCertificate", "Certificates", new { givenCertificateIdentificator = item.Certificate.CertificateIdentificator }, new { @class = "btn btn-warning m-1" })
+                            @Html.ActionLink("Edytuj certyfikat", "EditGivenCertificate", "Certificates", new { givenCertificateIdentificator = item.GivenCertificateIdentificator }, new { @class = "btn btn-warning m-1" })
                         </td>
                     </tr>
                 }
