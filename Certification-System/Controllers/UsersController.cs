@@ -392,5 +392,69 @@ namespace Certification_System.Controllers
 
             return View(UserDetails);
         }
+
+
+        // GET: AnonymousVerificationOfUser
+        [AllowAnonymous]
+        public ActionResult AnonymousVerificationOfUser(string userIdentificator)
+        {
+            var User = _context.GetUserById(userIdentificator);
+
+            var GivenCertificates = _context.GetGivenCertificatesById(User.Certificates);
+
+            List<DisplayGivenCertificateViewModel> ListOfGivenCertificates = new List<DisplayGivenCertificateViewModel>();
+
+            if (GivenCertificates.Count != 0)
+            {
+                foreach (var givenCertificate in GivenCertificates)
+                {
+                    var Course = _context.GetCourseById(givenCertificate.Course);
+                    var Certificate = _context.GetCertificateById(givenCertificate.Certificate);
+
+                    DisplayListOfCoursesViewModel courseViewModel = new DisplayListOfCoursesViewModel
+                    {
+                        CourseIdentificator = Course.CourseIdentificator,
+
+                        CourseIndexer = Course.CourseIndexer,
+                        Name = Course.Name,
+                    };
+
+                    DisplayListOfCertificatesViewModel certificateViewModel = new DisplayListOfCertificatesViewModel
+                    {
+                        CertificateIdentificator = Certificate.CertificateIdentificator,
+
+                        CertificateIndexer = Certificate.CertificateIndexer,
+                        Name = Certificate.Name
+                    };
+
+                    DisplayGivenCertificateViewModel singleGivenCertificate = new DisplayGivenCertificateViewModel
+                    {
+                        GivenCertificateIdentificator = givenCertificate.GivenCertificateIdentificator,
+
+                        GivenCertificateIndexer = givenCertificate.GivenCertificateIndexer,
+                        ReceiptDate = givenCertificate.ReceiptDate,
+                        ExpirationDate = givenCertificate.ExpirationDate,
+
+                        Certificate = certificateViewModel,
+                        Course = courseViewModel
+                    };
+
+                    ListOfGivenCertificates.Add(singleGivenCertificate);
+                }
+            }   
+
+            UserDetailsViewModel UserDetails = new UserDetailsViewModel
+            {
+                Email = User.Email,
+
+                FirstName = User.FirstName,
+                LastName = User.LastName,
+                DateOfBirth = User.DateOfBirth,
+
+                Certificates = ListOfGivenCertificates
+            };
+
+            return View(UserDetails);
+        }
     }
 }

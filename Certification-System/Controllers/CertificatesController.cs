@@ -463,5 +463,19 @@ namespace Certification_System.Controllers
 
             return View(CertificateDetails);
         }
+
+        // GET: VerifyUserCompetencesByQR
+        [AllowAnonymous]
+        public ActionResult VerifyUserCompetencesByQR(string userIdentificator)
+        {
+            if (this.User.IsInRole("Admin"))
+            {
+                return RedirectToAction("UserDetails", "Users", new { userIdentificator = userIdentificator});
+            }
+            else
+            {
+                return RedirectToAction("AnonymousVerificationOfUser", "Users", new { userIdentificator = userIdentificator });
+            }
+        }
     }
 }
