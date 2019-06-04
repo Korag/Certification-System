@@ -6,7 +6,7 @@ namespace Certification_System.ViewModels
     public class DisplayUsersViewModel
     {
         [Required]
-        [EmailAddress]
+        [EmailAddress(ErrorMessage = "W polu \"{0}\" nie znajduje się poprawny adres email.")]
         [Display(Name = "Adres email")]
         public string Email { get; set; }
 

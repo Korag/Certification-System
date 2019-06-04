@@ -6,7 +6,7 @@ namespace Certification_System.ViewModels.AccountViewModels
     {
         [Required(ErrorMessage = "Pole \"{0}\" jest wymagane.")]
         [Display(Name = "Adres e-mail")]
-        [EmailAddress]
+        [EmailAddress(ErrorMessage = "W polu \"{0}\" nie znajduje się poprawny adres email.")]
         public string Email { get; set; }
 
         [Required(ErrorMessage = "Pole \"{0}\" jest wymagane.")]

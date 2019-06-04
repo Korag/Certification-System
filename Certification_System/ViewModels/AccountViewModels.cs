@@ -50,7 +50,7 @@ namespace Certification_System.ViewModels
     {
         [Required]
         [Display(Name = "Adres email")]
-        [EmailAddress]
+        [EmailAddress(ErrorMessage = "W polu \"{0}\" nie znajduje się poprawny adres email.")]
         public string Email { get; set; }
 
         [Required]
@@ -65,7 +65,7 @@ namespace Certification_System.ViewModels
     public class RegisterViewModel
     {
         [Required]
-        [EmailAddress]
+        [EmailAddress(ErrorMessage = "W polu \"{0}\" nie znajduje się poprawny adres email.")]
         [Display(Name = "Adres email")]
         public string Email { get; set; }
 
@@ -138,7 +138,7 @@ namespace Certification_System.ViewModels
     public class ResetPasswordViewModel
     {
         [Required]
-        [EmailAddress]
+        [EmailAddress(ErrorMessage = "W polu \"{0}\" nie znajduje się poprawny adres email.")]
         [Display(Name = "Adres email")]
         public string Email { get; set; }
 
@@ -159,7 +159,7 @@ namespace Certification_System.ViewModels
     public class ForgotPasswordViewModel
     {
         [Required]
-        [EmailAddress]
+        [EmailAddress(ErrorMessage = "W polu \"{0}\" nie znajduje się poprawny adres email.")]
         [Display(Name = "Email")]
         public string Email { get; set; }
     }

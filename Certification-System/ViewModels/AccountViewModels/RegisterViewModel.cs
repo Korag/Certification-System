@@ -5,7 +5,7 @@ namespace Certification_System.ViewModels.AccountViewModels
     public class RegisterViewModel
     {
         [Required(ErrorMessage = "Pole \"{0}\" jest wymagane.")]
-        [EmailAddress]
+        [EmailAddress(ErrorMessage = "W polu \"{0}\" nie znajduje się poprawny adres email.")]
         [Display(Name = "Adres email")]
         public string Email { get; set; }
 

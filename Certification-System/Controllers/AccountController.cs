@@ -82,7 +82,7 @@ namespace Certification_System.Controllers
                 }
                 else
                 {
-                    ModelState.AddModelError(string.Empty, "Invalid login attempt.");
+                    ModelState.AddModelError(string.Empty, "Adres email lub hasło są błędne.");
                     return View(model);
                 }
             }

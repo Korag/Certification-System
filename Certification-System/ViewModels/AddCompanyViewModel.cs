@@ -12,7 +12,7 @@ namespace Certification_System.ViewModels
         public string CompanyName { get; set; }
 
         [Required(ErrorMessage = "Pole \"{0}\" jest wymagane.")]
-        [EmailAddress]
+        [EmailAddress(ErrorMessage = "W polu \"{0}\" nie znajduje się poprawny adres email.")]
         [Display(Name = "Adres email")]
         public string Email { get; set; }
 
