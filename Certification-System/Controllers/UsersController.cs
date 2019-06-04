@@ -9,6 +9,7 @@ using System.Linq;
 using System.Threading.Tasks;
 using Microsoft.AspNetCore.Identity;
 using AspNetCore.Identity.Mongo.Model;
+using System;
 
 namespace Certification_System.Controllers
 {
@@ -128,6 +129,7 @@ namespace Certification_System.Controllers
                     NumberOfApartment = newUser.NumberOfApartment,
                     DateOfBirth = newUser.DateOfBirth,
                     PhoneNumber = newUser.PhoneNumber,
+                    SecurityStamp = Guid.NewGuid().ToString(),
 
                     Courses = new List<string>(),
                     Certificates = new List<string>(),
@@ -170,6 +172,9 @@ namespace Certification_System.Controllers
                 {
                     return RedirectToAction("AddNewUserConfirmation", "Users", new { userIdentificator = user.Id, TypeOfAction = "Add" });
                 }
+
+                newUser.AvailableRoles = _context.GetRolesAsSelectList().ToList();
+                newUser.AvailableCompanies = _context.GetCompaniesAsSelectList().ToList();
                 return View(newUser);
             }
 
