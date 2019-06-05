@@ -125,3 +125,6 @@
     @Html.ActionLink("Przejdź do listy wszystkich instruktorów", "DisplayAllInstructors", "Instructors", null, new { @class = "btn btn-info" })
 </div>
 
+@section Scripts {
+    @{await Html.RenderPartialAsync("_ValidationScriptsPartial");}
+}
