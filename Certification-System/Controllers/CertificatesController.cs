@@ -522,5 +522,12 @@ namespace Certification_System.Controllers
 
             return RedirectToAction("Login", "Account");
         }
+
+        // GET: VerifyUserOrSingleCertificateManual
+        [AllowAnonymous]
+        public ActionResult VerifyUserOrSingleCertificateManual()
+        {   
+            return View();
+        }
     }
 }

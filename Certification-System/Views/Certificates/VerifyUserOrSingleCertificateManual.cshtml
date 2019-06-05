@@ -1,0 +1,63 @@
+﻿
+@{
+    ViewData["Title"] = "VerifyUserOrSingleCertificateManual";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+<h1 class="pb-3">Weryfikacja certyfikatu przy pomocy systemu</h1>
+
+<div class="col-md-8 col-xl-8 col-sm-8 col-xs-10 m-auto p-3 shadow p-3 mb-5 bg-light rounded border border-primary rounded-bottom" style="opacity:0.80">
+
+    <div class="alert alert-info col-12" role="alert">
+        <p>Zwyczajowo weryfikacja odbywa się poprzez wykorzystywanie kodów QR. </p>
+
+        <p>Szukaj kodu QR wyglądającego tak jak ten:</p>
+
+        
+
+        <p>
+            Po skanowaniu zostaniesz automatycznie przekierowany do strony zawierającej
+            wszelkie niezbędne informacje.
+        </p>
+
+        <p>
+            Jeżeli nie masz dostępu do kodów QR natomiast dysponujesz odpowiednio:
+            <ul>
+                <li>identyfikatorem pracownika</li>
+                <li>identyfikatorem nadanego certyfikatu</li>
+            </ul>
+
+            Możesz dokonać ręcznej weryfikacji wykorzystując jeden z poniższych przycisków.
+        </p>
+    </div>
+
+    <div class="row">
+
+        <div class="card m-auto" style="width: 18rem; height: 22rem">
+            <div class="card-body d-flex flex-column">
+                <h5 class="card-title">Weryfikuj pojedynczy certyfikat</h5>
+                <p class="card-text">
+                    Chcąc zweryfikować uprawnienia użytkownika poproś go o możliwość zeskanowania kodu znajdującego się
+                    na jego identyfikatorze lub wprowadź ręcznie identyfikator użytkownika.
+                </p>
+                <div class="row justify-content-center">
+                    <a href="#" class="btn btn-primary" style="margin-top:17%">Weryfikuj</a>
+                </div>
+            </div>
+        </div>
+
+        <div class="card m-auto" style="width: 18rem; height: 22rem">
+            <div class="card-body d-flex flex-column">
+                <h5 class="card-title">Weryfikuj uprawnienia użytkownika</h5>
+                <p class="card-text">
+                    Chcąć zweryfikować ważność pojedynczego certyfikatu poproś użytkownika platformy o możliwość zeskanowania
+                    kodu znajdującego się na nadanym certyfikacie lub wprowadź ręcznie identyfikator nadanego certyfikatu.
+                </p>
+                <div class="row justify-content-center">
+                    <a href="#" class="btn btn-primary">Weryfikuj</a>
+                </div>
+            </div>
+        </div>
+
+    </div>
+</div>
