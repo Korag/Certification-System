@@ -45,7 +45,7 @@
 @if (Model.Certificates.Count != 0)
 {
     <div class="col-12 table-responsive">
-        <table id="listGivenCertificates" class="table table-striped table-bordered display" style="width: 100%;" role="grid">
+        <table id="listGivenCertificates" class="table table-bordered display" style="width: 100%;" role="grid">
             <thead>
                 <tr>
                     <th>
@@ -65,33 +65,33 @@
                     </th>
                 </tr>
             </thead>
-            <tbody>
+            <tbody class="text-secondary">
                 @foreach (var item in Model.Certificates)
                 {
-                <tr class="alert @if (item.ExpirationDate < DateTime.Now) { <text> alert-warning </text>} else { <text> alert-success </text> }">
-                    <td>
-                        @Html.DisplayFor(modelItem => item.GivenCertificateIndexer)
-                    </td>
-                    <td>
-                        @Html.DisplayFor(modelItem => item.ReceiptDate)
-                    </td>
-                    <td>
-                        @Html.DisplayFor(modelItem => item.ExpirationDate)
-                    </td>
-                    <td>
-                        @Html.DisplayFor(model => item.Certificate.CertificateIndexer) @Html.DisplayFor(model => item.Certificate.Name)
-                    </td>
-                    <td>
-                        @if (item.ExpirationDate < DateTime.Now)
-                        {
-                            <span class="fas fa-times" style="font-size:34px"></span>
-                        }
-                        else
-                        {
-                            <span class="fas fa-check-circle" style="font-size:34px"></span>
-                        }
-                    </td>
-                </tr>
+                    <tr class="alert @if (item.ExpirationDate < DateTime.Now) { <text> table-danger </text>} else { <text> table-success </text> }">
+                        <td>
+                            @Html.DisplayFor(modelItem => item.GivenCertificateIndexer)
+                        </td>
+                        <td>
+                            @Html.DisplayFor(modelItem => item.ReceiptDate)
+                        </td>
+                        <td>
+                            @Html.DisplayFor(modelItem => item.ExpirationDate)
+                        </td>
+                        <td>
+                            @Html.DisplayFor(model => item.Certificate.CertificateIndexer) @Html.DisplayFor(model => item.Certificate.Name)
+                        </td>
+                        <td>
+                            @if (item.ExpirationDate < DateTime.Now)
+                            {
+                                <span class="fas fa-times" style="font-size:34px"></span>
+                            }
+                            else
+                            {
+                                <span class="fas fa-check-circle" style="font-size:34px"></span>
+                            }
+                        </td>
+                    </tr>
                 }
             </tbody>
         </table>
@@ -101,4 +101,18 @@
 else
 {
     <div class="mt-4 mb-4 alert alert-warning">Użytkownikowi nie przyznano żadnych certyfikatów</div>
+}
+
+@section Scripts{
+    <script>
+        $(document).ready(function () {
+
+            $('#listGivenCertificates').DataTable({
+                "language": {
+                    "url": "//cdn.datatables.net/plug-ins/1.10.19/i18n/Polish.json"
+                },
+            }
+            );
+        });
+    </script>
 }

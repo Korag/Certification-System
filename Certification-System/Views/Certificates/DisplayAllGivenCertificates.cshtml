@@ -53,13 +53,13 @@
                         @Html.DisplayFor(modelItem => item.ExpirationDate)
                     </td>
                     <td>
-                        @Html.DisplayFor(model => item.Certificate.CertificateIndexer) @Html.DisplayNameFor(model => item.Certificate.Name)
+                        @Html.DisplayFor(model => item.Certificate.CertificateIndexer) @Html.DisplayFor(model => item.Certificate.Name)
                     </td>
                     <td>
-                        @Html.DisplayFor(model => item.User.FirstName) @Html.DisplayNameFor(model => item.User.LastName)
+                        @Html.DisplayFor(model => item.User.FirstName) @Html.DisplayFor(model => item.User.LastName)
                     </td>
                     <td>
-                        @Html.DisplayFor(model => item.Course.CourseIndexer) @Html.DisplayNameFor(model => item.Course.Name)
+                        @Html.DisplayFor(model => item.Course.CourseIndexer) @Html.DisplayFor(model => item.Course.Name)
                     </td>
                     <td>
                         @Html.ActionLink("Szczegóły użytkownika", "UserDetails", "Users", new { userIdentificator = item.User.UserIdentificator }, new { @class = "btn btn-info m-1" })

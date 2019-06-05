@@ -217,8 +217,7 @@ namespace Certification_System.Controllers
         }
 
         [HttpPost]
-        //[AllowAnonymous]
-        [Authorize]
+        [AllowAnonymous]
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> Register(RegisterViewModel model, string returnUrl = null)
         {
