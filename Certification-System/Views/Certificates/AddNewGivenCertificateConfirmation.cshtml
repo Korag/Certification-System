@@ -36,9 +36,6 @@ else
                 <th>
                     @Html.DisplayNameFor(model => model.Course.CourseIndexer) i @Html.DisplayNameFor(model => model.Course.Name)
                 </th>
-                <th>
-                    Operacje
-                </th>
             </tr>
         </thead>
         <tbody>
@@ -60,11 +57,6 @@ else
                 </td>
                 <td>
                     @Html.DisplayFor(model => model.Course.CourseIndexer) @Html.DisplayFor(model => model.Course.Name)
-                </td>
-                <td>
-                    @Html.ActionLink("Edit", "Edit", new { /* id=item.PrimaryKey */ }) |
-                    @Html.ActionLink("Details", "Details", new { /* id=item.PrimaryKey */ }) |
-                    @Html.ActionLink("Delete", "Delete", new { /* id=item.PrimaryKey */ })
                 </td>
             </tr>
         </tbody>

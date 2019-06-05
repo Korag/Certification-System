@@ -507,6 +507,8 @@ namespace Certification_System.Controllers
 
                 DisplayGivenCertificateViewModel VerifiedGivenCertificate = new DisplayGivenCertificateViewModel
                 {
+                    GivenCertificateIdentificator = GivenCertificate.GivenCertificateIdentificator,
+
                     GivenCertificateIndexer = GivenCertificate.GivenCertificateIndexer,
                     ReceiptDate = GivenCertificate.ReceiptDate,
                     ExpirationDate = GivenCertificate.ExpirationDate,

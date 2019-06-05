@@ -33,12 +33,6 @@ else
                 <th>
                     @Html.DisplayNameFor(model => model.User.FirstName) i @Html.DisplayNameFor(model => model.User.LastName)
                 </th>
-                @if (this.User.IsInRole("Admin"))
-                {
-                    <th>
-                        Operacje
-                    </th>
-                }
             </tr>
         </thead>
         <tbody>
@@ -58,14 +52,6 @@ else
                 <td>
                     @Html.DisplayFor(model => model.User.FirstName) @Html.DisplayFor(model => model.User.LastName)
                 </td>
-                @if (this.User.IsInRole("Admin"))
-                {
-                    <td>
-                        @Html.ActionLink("Edit", "Edit", new { /* id=item.PrimaryKey */ }) |
-                        @Html.ActionLink("Details", "Details", new { /* id=item.PrimaryKey */ }) |
-                        @Html.ActionLink("Delete", "Delete", new { /* id=item.PrimaryKey */ })
-                    </td>
-                }
             </tr>
         </tbody>
     </table>
@@ -73,9 +59,11 @@ else
 
 @if (this.User.IsInRole("Admin"))
 {
-    <div class="mt-3">
-        <a asp-action="AddNewGivenCertificate" asp-controller="Certificates">Przyznaj następny certfikat</a>
-    </div>
+<div class="mt-3">
+        @Html.ActionLink("Nadaj certyfikat", "AddNewGivenCertificate", "Certificates", null, new { @class = "btn btn-primary" })
+        @Html.ActionLink("Aktualizuj", "EditGivenCertificate", "Certificates", new { givenCertificateIdentificator = Model.GivenCertificateIdentificator }, new { @class = "btn btn-warning" })
+        @Html.ActionLink("Lista wszystkich nadanych certyfikatów", "DisplayAllGivenCertificate", "Certificates", null, new { @class = "btn btn-success" })
+</div>
 }
 
 @section Scripts{
