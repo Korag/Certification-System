@@ -81,6 +81,7 @@
                         @Html.ActionLink("Edytuj", "EditUser", "Users", new { userIdentificator = item.UserIdentificator }, new { @class = "btn btn-warning m-1" })
                         @Html.ActionLink("Nadaj certyfikat", "", "Certificates", new { userIdentificator = item.UserIdentificator }, new { @class = "btn btn-primary m-1" })
                         @Html.ActionLink("Nadaj stopień zawodowy", "", "Degrees", new { userIdentificator = item.UserIdentificator }, new { @class = "btn btn-secondary m-1" })
+                        @Html.ActionLink("Generuj kod QR", "GenerateUserQR", "Certificates", new { userIdentificator = item.UserIdentificator }, new { @class = "btn btn-dark m-1" })
                     </td>
                 </tr>
             }

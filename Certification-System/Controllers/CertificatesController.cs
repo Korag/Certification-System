@@ -1,11 +1,13 @@
 ﻿using Certification_System.DAL;
 using Certification_System.Models;
+using Certification_System.Services.QR;
 using Certification_System.ViewModels;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using MongoDB.Bson;
 using System;
 using System.Collections.Generic;
+using System.IO;
 using System.Linq;
 
 namespace Certification_System.Controllers
@@ -567,6 +569,22 @@ namespace Certification_System.Controllers
                 return RedirectToAction("VerifyUserCertificateByQR", "Certificates", new { givenCertificateIdentificator = certificateToVerify.CertificateIdentificator });
             }
             return View(certificateToVerify);
+        }
+
+        // GET: GenerateUserQR
+        [AllowAnonymous]
+        public ActionResult GenerateUserQR(string userIdentificator)
+        {
+            string URL = @"https://certification-system.azurewebsites.net/Certificates/VerifyUserCompetencesByQR?userIdentificator=" + $"{userIdentificator}";
+            var QRBitmap = GeneratorQR.GenerateQRCode(URL);
+
+            using (MemoryStream stream = new MemoryStream())
+            {
+                QRBitmap.Save(stream, System.Drawing.Imaging.ImageFormat.Png);
+                var ByteArray = stream.ToArray();
+
+                return File(ByteArray, "image/jpeg");
+            }
         }
     }
 }
