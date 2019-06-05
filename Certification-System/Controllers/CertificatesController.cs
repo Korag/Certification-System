@@ -151,7 +151,7 @@ namespace Certification_System.Controllers
                 DisplayListOfCertificatesViewModel certificateViewModel = new DisplayListOfCertificatesViewModel
                 {
                     CertificateIdentificator = Certificate.CertificateIdentificator,
-   
+
                     CertificateIndexer = Certificate.CertificateIndexer,
                     Name = Certificate.Name
                 };
@@ -470,12 +470,55 @@ namespace Certification_System.Controllers
         {
             if (this.User.IsInRole("Admin"))
             {
-                return RedirectToAction("UserDetails", "Users", new { userIdentificator = userIdentificator});
+                return RedirectToAction("UserDetails", "Users", new { userIdentificator = userIdentificator });
             }
             else
             {
                 return RedirectToAction("AnonymousVerificationOfUser", "Users", new { userIdentificator = userIdentificator });
             }
+        }
+
+        // GET: VerifyUserCertificateByQR
+        [AllowAnonymous]
+        public ActionResult VerifyUserCertificateByQR(string givenCertificateIdentificator)
+        {
+            if (givenCertificateIdentificator != null)
+            {
+                var GivenCertificate = _context.GetGivenCertificateById(givenCertificateIdentificator);
+
+                var Certificate = _context.GetCertificateById(GivenCertificate.Certificate);
+                var User = _context.GetUserByGivenCertificateId(GivenCertificate.GivenCertificateIdentificator);
+
+                DisplayUsersViewModel userViewModel = new DisplayUsersViewModel
+                {
+                    UserIdentificator = User.Id,
+
+                    FirstName = User.FirstName,
+                    LastName = User.LastName
+                };
+
+                DisplayListOfCertificatesViewModel certificateViewModel = new DisplayListOfCertificatesViewModel
+                {
+                    CertificateIdentificator = Certificate.CertificateIdentificator,
+
+                    CertificateIndexer = Certificate.CertificateIndexer,
+                    Name = Certificate.Name
+                };
+
+                DisplayGivenCertificateViewModel VerifiedGivenCertificate = new DisplayGivenCertificateViewModel
+                {
+                    GivenCertificateIndexer = GivenCertificate.GivenCertificateIndexer,
+                    ReceiptDate = GivenCertificate.ReceiptDate,
+                    ExpirationDate = GivenCertificate.ExpirationDate,
+
+                    Certificate = certificateViewModel,
+                    User = userViewModel
+                };
+
+                return View(VerifiedGivenCertificate);
+            }
+
+            return RedirectToAction("Login", "Account");
         }
     }
 }
