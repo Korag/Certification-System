@@ -526,8 +526,47 @@ namespace Certification_System.Controllers
         // GET: VerifyUserOrSingleCertificateManual
         [AllowAnonymous]
         public ActionResult VerifyUserOrSingleCertificateManual()
-        {   
+        {
             return View();
+        }
+
+        // GET: VerifyUser
+        [AllowAnonymous]
+        public ActionResult VerifyUser()
+        {
+            return View();
+        }
+
+        // GET: VerifyCertificate
+        [AllowAnonymous]
+        public ActionResult VerifyCertificate()
+        {
+            return View();
+        }
+
+
+        // POST: VerifyUser
+        [AllowAnonymous]
+        [HttpPost]
+        public ActionResult VerifyUser(VerifyUserViewModel userToVerify)
+        {
+            if (ModelState.IsValid)
+            {
+                return RedirectToAction("VerifyUserCompetencesByQR", "Certificates", new { userIdentificator = userToVerify.UserIdentificator });
+            }
+            return View(userToVerify);
+        }
+
+        // POST: VerifyCertificate
+        [AllowAnonymous]
+        [HttpPost]
+        public ActionResult VerifyCertificate(VerifyCertificateViewModel certificateToVerify)
+        {
+            if (ModelState.IsValid)
+            {
+                return RedirectToAction("VerifyUserCertificateByQR", "Certificates", new { givenCertificateIdentificator = certificateToVerify.CertificateIdentificator });
+            }
+            return View(certificateToVerify);
         }
     }
 }
