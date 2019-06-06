@@ -14,18 +14,6 @@ namespace Certification_System.ViewModels
         public string Email { get; set; }
 
         [Required(ErrorMessage = "Pole \"{0}\" jest wymagane.")]
-        [StringLength(100, ErrorMessage = "Hasło musi mieć długość conajmniej {2} znaków.", MinimumLength = 6)]
-        [DataType(DataType.Password)]
-        [Display(Name = "Hasło")]
-        public string Password { get; set; }
-
-        [Required(ErrorMessage = "Pole \"{0}\" jest wymagane.")]
-        [DataType(DataType.Password)]
-        [Display(Name = "Potwierdź hasło")]
-        [Compare("Password", ErrorMessage = "Wprowadzone hasła różnią się.")]
-        public string ConfirmPassword { get; set; }
-
-        [Required(ErrorMessage = "Pole \"{0}\" jest wymagane.")]
         [StringLength(100, MinimumLength = 3, ErrorMessage = "Imię powinno zawierać od 3 do 100 znaków.")]
         [DataType(DataType.Text)]
         [Display(Name = "Imię")]

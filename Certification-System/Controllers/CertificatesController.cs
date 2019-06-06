@@ -385,7 +385,7 @@ namespace Certification_System.Controllers
 
                 _context.UpdateGivenCertificate(givenCertificate);
 
-                return RedirectToAction("AddNewGivenCertificateConfirmation", "Certificates", new { certificateIdentificator = editedGivenCertificate.GivenCertificateIdentificator, TypeOfAction = "Update" });
+                return RedirectToAction("AddNewGivenCertificateConfirmation", "Certificates", new { givenCertificateIdentificator = OriginGivenCertificate.GivenCertificateIdentificator, TypeOfAction = "Update" });
             }
 
             return View(editedGivenCertificate);

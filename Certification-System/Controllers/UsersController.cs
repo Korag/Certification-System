@@ -71,6 +71,8 @@ namespace Certification_System.Controllers
 
                 DisplayAllUserInformationViewModel addedUser = new DisplayAllUserInformationViewModel
                 {
+                    UserIdentificator = userIdentificator,
+
                     Email = User.Email,
                     FirstName = User.FirstName,
                     LastName = User.LastName,
@@ -228,8 +230,11 @@ namespace Certification_System.Controllers
             {
                 var OriginUser = _context.GetUserById(editedUser.UserIdentificator);
 
-                _userManager.RemoveFromRolesAsync(OriginUser, OriginUser.Roles).Wait();
-
+                //if (OriginUser.Roles.Count != 0)
+                //{
+                //    _userManager.RemoveFromRolesAsync(OriginUser, OriginUser.Roles).Wait();
+                //}
+              
                 OriginUser.UserName = editedUser.Email;
                 OriginUser.Email = editedUser.Email;
                 OriginUser.NormalizedUserName = editedUser.Email.ToUpper();
@@ -253,7 +258,7 @@ namespace Certification_System.Controllers
 
                 _context.UpdateUser(OriginUser);
 
-                return RedirectToAction("AddNewUserConfirmation", "Users", new { userIdentificator = editedUser.UserIdentificator, TypeOfAction = "Update" });
+                return RedirectToAction("AddNewUserConfirmation", "Users", new { userIdentificator = OriginUser.Id, TypeOfAction = "Update" });
             }
 
             editedUser.AvailableRoles = _context.GetRolesAsSelectList().ToList();
