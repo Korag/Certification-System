@@ -42,7 +42,7 @@
 
   <ItemGroup>
     <Folder Include="Extensions\" />
-    <Folder Include="Services\Mailing\" />
+    <Folder Include="Services\" />
     <Folder Include="ViewModels\AccountViewModels\" />
     <Folder Include="ViewModels\ManageViewModels\" />
     <Folder Include="Views\Account\" />

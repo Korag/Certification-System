@@ -1,7 +1,7 @@
 ﻿using Certification_System.DAL;
 using Certification_System.DTOViewModels;
 using Certification_System.Models;
-using Certification_System.Services.QR;
+using Certification_System.ServicesInterfaces.IGeneratorQR;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using MongoDB.Bson;
@@ -15,9 +15,11 @@ namespace Certification_System.Controllers
     public class CertificatesController : Controller
     {
         public IDatabaseOperations _context { get; set; }
+        public IGeneratorQR _generatorQR { get; set; }
 
-        public CertificatesController()
+        public CertificatesController(IGeneratorQR generatorQR)
         {
+            _generatorQR = generatorQR;
             _context = new MongoOperations();
         }
 
@@ -576,7 +578,7 @@ namespace Certification_System.Controllers
         public ActionResult GenerateUserQR(string userIdentificator)
         {
             string URL = @"https://certification-system.azurewebsites.net/Certificates/VerifyUserCompetencesByQR?userIdentificator=" + $"{userIdentificator}";
-            var QRBitmap = GeneratorQR.GenerateQRCode(URL);
+            var QRBitmap = _generatorQR.GenerateQRCode(URL);
 
             using (MemoryStream stream = new MemoryStream())
             {

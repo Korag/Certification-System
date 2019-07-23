@@ -1,12 +1,13 @@
-﻿using QRCoder;
+﻿using Certification_System.ServicesInterfaces.IGeneratorQR;
+using QRCoder;
 using System.Drawing;
 using static QRCoder.PayloadGenerator;
 
-namespace Certification_System.Services.QR
+namespace Certification_System.Services
 {
-    public static class GeneratorQR
+    public class GeneratorQR : IGeneratorQR
     {
-        public static Bitmap GenerateQRCode(string Url)
+        public Bitmap GenerateQRCode(string Url)
         {
             Url generator = new Url(Url);
             string payload = generator.ToString();
