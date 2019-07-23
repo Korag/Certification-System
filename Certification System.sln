@@ -42,6 +42,18 @@ Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Architecture Scheme", "Arch
 		MongoDB Scheme\certification-system_architectureScheme.vsdx = MongoDB Scheme\certification-system_architectureScheme.vsdx
 	EndProjectSection
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Certification-System.RepositoryInterfaces", "Certification-System.RepositoryInterfaces\Certification-System.RepositoryInterfaces.csproj", "{96923ED7-0C77-4D19-9B43-961D7AD8F624}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Certification-System.Repository", "Certification-System.Repository\Certification-System.Repository.csproj", "{4E3A4129-5C9E-4B27-9DE0-AE736D136AB5}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Certification-System.ServicesInterfaces", "Certification-System.ServicesInterfaces\Certification-System.ServicesInterfaces.csproj", "{81EFDACC-65F8-40A7-AB73-4AE5C44EE402}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Certification-System.Services", "Certification-System.Services\Certification-System.Services.csproj", "{847537FA-B8B0-451D-8460-2A04D8A641E7}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Certification-System.DataEntities", "Certification-System.DataEntities\Certification-System.DataEntities.csproj", "{907FA13A-FEA2-4556-97EC-CEBDE3EA053E}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Certification-System.DTOViewModels", "Certification-System.DTOViewModels\Certification-System.DTOViewModels.csproj", "{5836DE2A-0609-4690-B916-E18EEFF8953C}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -72,6 +84,30 @@ Global
 		{B5592562-F731-45A6-874D-AD1988E9F206}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{B5592562-F731-45A6-874D-AD1988E9F206}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{B5592562-F731-45A6-874D-AD1988E9F206}.Release|Any CPU.Build.0 = Release|Any CPU
+		{96923ED7-0C77-4D19-9B43-961D7AD8F624}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{96923ED7-0C77-4D19-9B43-961D7AD8F624}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{96923ED7-0C77-4D19-9B43-961D7AD8F624}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{96923ED7-0C77-4D19-9B43-961D7AD8F624}.Release|Any CPU.Build.0 = Release|Any CPU
+		{4E3A4129-5C9E-4B27-9DE0-AE736D136AB5}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{4E3A4129-5C9E-4B27-9DE0-AE736D136AB5}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{4E3A4129-5C9E-4B27-9DE0-AE736D136AB5}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{4E3A4129-5C9E-4B27-9DE0-AE736D136AB5}.Release|Any CPU.Build.0 = Release|Any CPU
+		{81EFDACC-65F8-40A7-AB73-4AE5C44EE402}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{81EFDACC-65F8-40A7-AB73-4AE5C44EE402}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{81EFDACC-65F8-40A7-AB73-4AE5C44EE402}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{81EFDACC-65F8-40A7-AB73-4AE5C44EE402}.Release|Any CPU.Build.0 = Release|Any CPU
+		{847537FA-B8B0-451D-8460-2A04D8A641E7}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{847537FA-B8B0-451D-8460-2A04D8A641E7}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{847537FA-B8B0-451D-8460-2A04D8A641E7}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{847537FA-B8B0-451D-8460-2A04D8A641E7}.Release|Any CPU.Build.0 = Release|Any CPU
+		{907FA13A-FEA2-4556-97EC-CEBDE3EA053E}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{907FA13A-FEA2-4556-97EC-CEBDE3EA053E}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{907FA13A-FEA2-4556-97EC-CEBDE3EA053E}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{907FA13A-FEA2-4556-97EC-CEBDE3EA053E}.Release|Any CPU.Build.0 = Release|Any CPU
+		{5836DE2A-0609-4690-B916-E18EEFF8953C}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{5836DE2A-0609-4690-B916-E18EEFF8953C}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{5836DE2A-0609-4690-B916-E18EEFF8953C}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{5836DE2A-0609-4690-B916-E18EEFF8953C}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

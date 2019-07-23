@@ -31,6 +31,12 @@
 
   <ItemGroup>
     <ProjectReference Include="..\AspNetCore.Identity.Mongo\AspNetCore.Identity.Mongo.csproj" />
+    <ProjectReference Include="..\Certification-System.DataEntities\Certification-System.DataEntities.csproj" />
+    <ProjectReference Include="..\Certification-System.DTOViewModels\Certification-System.DTOViewModels.csproj" />
+    <ProjectReference Include="..\Certification-System.RepositoryInterfaces\Certification-System.RepositoryInterfaces.csproj" />
+    <ProjectReference Include="..\Certification-System.Repository\Certification-System.Repository.csproj" />
+    <ProjectReference Include="..\Certification-System.ServicesInterfaces\Certification-System.ServicesInterfaces.csproj" />
+    <ProjectReference Include="..\Certification-System.Services\Certification-System.Services.csproj" />
   </ItemGroup>
 
 
