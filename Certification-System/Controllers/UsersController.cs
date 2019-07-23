@@ -1,6 +1,6 @@
 ﻿using Certification_System.DAL;
 using Certification_System.Models;
-using Certification_System.ViewModels;
+using Certification_System.DTOViewModels;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using MongoDB.Bson;
@@ -10,6 +10,7 @@ using System.Threading.Tasks;
 using Microsoft.AspNetCore.Identity;
 using AspNetCore.Identity.Mongo.Model;
 using System;
+using Certification_System.DTOViewModels;
 
 namespace Certification_System.Controllers
 {

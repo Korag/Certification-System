@@ -2,7 +2,7 @@
 using Microsoft.AspNetCore.Authentication;
 using Microsoft.AspNetCore.Identity;
 
-namespace Certification_System.ViewModels.ManageViewModels
+namespace Certification_System.DTOViewModels.ManageViewModels
 {
     public class ExternalLoginsViewModel
     {

@@ -1,6 +1,6 @@
 ﻿using System.ComponentModel.DataAnnotations;
 
-namespace Certification_System.ViewModels.ManageViewModels
+namespace Certification_System.DTOViewModels.ManageViewModels
 {
     public class ChangePasswordViewModel
     {

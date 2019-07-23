@@ -1,7 +1,7 @@
 ﻿using System;
 using System.Security.Claims;
 using System.Threading.Tasks;
-using Certification_System.ViewModels.AccountViewModels;
+using Certification_System.DTOViewModels.AccountViewModels;
 using Microsoft.AspNetCore.Authentication;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Identity;
