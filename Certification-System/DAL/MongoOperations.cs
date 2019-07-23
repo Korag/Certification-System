@@ -1,4 +1,4 @@
-﻿using Certification_System.Models;
+﻿using Certification_System.Entitities;
 using Microsoft.AspNetCore.Mvc.Rendering;
 using MongoDB.Driver;
 using System;

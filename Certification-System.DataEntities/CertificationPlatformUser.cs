@@ -6,7 +6,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 
-namespace Certification_System.Models
+namespace Certification_System.Entitities
 {
     public class CertificationPlatformUser : MongoUser
     {

@@ -7,7 +7,7 @@ using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Logging;
-using Certification_System.Models;
+using Certification_System.Entitities;
 using Certification_System.ServicesInterfaces.IEmailSender;
 using Certification_System.Extensions;
 using AspNetCore.Identity.Mongo.Model;

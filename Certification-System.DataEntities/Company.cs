@@ -1,17 +1,15 @@
 ﻿using MongoDB.Bson;
 using MongoDB.Bson.Serialization.Attributes;
-using System;
 
-namespace Certification_System.Models
+namespace Certification_System.Entitities
 {
-    public class Instructor
+    public class Company
     {
         [BsonId]
         [BsonRepresentation(BsonType.ObjectId)]
-        public string InstructorIdentificator { get; set; }
+        public string CompanyIdentificator { get; set; }
 
-        public string FirstName { get; set; }
-        public string LastName { get; set; }
+        public string CompanyName { get; set; }
         public string Email { get; set; }
         public string Phone { get; set; }
         public string Country { get; set; }

@@ -1,6 +1,6 @@
 ﻿using Certification_System.DAL;
 using Certification_System.DTOViewModels;
-using Certification_System.Models;
+using Certification_System.Entitities;
 using Certification_System.DTOViewModels;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;

@@ -12,7 +12,7 @@ using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using AspNetCore.Identity.Mongo;
-using Certification_System.Models;
+using Certification_System.Entitities;
 using Certification_System.ServicesInterfaces.IEmailSender;
 using Certification_System.DAL;
 using Certification_System.Services;

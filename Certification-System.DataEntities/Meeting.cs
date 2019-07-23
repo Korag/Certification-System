@@ -3,7 +3,7 @@ using MongoDB.Bson.Serialization.Attributes;
 using System;
 using System.Collections.Generic;
 
-namespace Certification_System.Models
+namespace Certification_System.Entitities
 {
     public class Meeting
     {

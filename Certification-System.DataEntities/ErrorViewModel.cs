@@ -1,6 +1,6 @@
 using System;
 
-namespace Certification_System.Models
+namespace Certification_System.Entitities
 {
     public class ErrorViewModel
     {

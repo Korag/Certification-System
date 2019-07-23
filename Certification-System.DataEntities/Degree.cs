@@ -2,7 +2,7 @@
 using MongoDB.Bson.Serialization.Attributes;
 using System.Collections.Generic;
 
-namespace Certification_System.Models
+namespace Certification_System.Entitities
 {
     public class Degree
     {

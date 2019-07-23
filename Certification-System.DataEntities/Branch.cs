@@ -1,7 +1,7 @@
 ﻿using MongoDB.Bson;
 using MongoDB.Bson.Serialization.Attributes;
 
-namespace Certification_System.Models
+namespace Certification_System.Entitities
 {
     public class Branch
     {

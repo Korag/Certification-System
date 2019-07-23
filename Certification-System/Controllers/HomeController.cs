@@ -4,7 +4,7 @@ using System.Diagnostics;
 using System.Linq;
 using System.Threading.Tasks;
 using Microsoft.AspNetCore.Mvc;
-using Certification_System.Models;
+using Certification_System.Entitities;
 
 namespace Certification_System.Controllers
 {
