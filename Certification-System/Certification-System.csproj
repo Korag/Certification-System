@@ -43,8 +43,7 @@
   <ItemGroup>
     <Folder Include="Extensions\" />
     <Folder Include="Services\" />
-    <Folder Include="ViewModels\AccountViewModels\" />
-    <Folder Include="ViewModels\ManageViewModels\" />
+    <Folder Include="ViewModels\" />
     <Folder Include="Views\Account\" />
   </ItemGroup>
 
