@@ -1,27 +1,27 @@
-﻿using Certification_System.DAL;
-using Certification_System.Entitities;
+﻿using Certification_System.Entities;
 using Certification_System.DTOViewModels;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using MongoDB.Bson;
 using System.Collections.Generic;
+using Certification_System.Repository.DAL;
 
 namespace Certification_System.Controllers
 {
     public class InstructorsController : Controller
     {
-        private IDatabaseOperations _context;
+        private MongoOperations _context;
 
-        public InstructorsController()
+        public InstructorsController(MongoOperations context)
         {
-            _context = new MongoOperations();
+            _context = context;
         }
 
         // GET: DisplayAllInstructors
         [Authorize(Roles = "Admin")]
         public IActionResult DisplayAllInstructors()
         {
-            var Instructors = _context.GetInstructors();
+            var Instructors = _context.instructorRepository.GetInstructors();
             List<AddInstructorViewModel> DisplayInstructors = new List<AddInstructorViewModel>();
 
             foreach (var instructor in Instructors)
@@ -59,7 +59,7 @@ namespace Certification_System.Controllers
         {
             if (instructorIdentificator != null)
             {
-                Instructor instructor = _context.GetInstructorById(instructorIdentificator);
+                Instructor instructor = _context.instructorRepository.GetInstructorById(instructorIdentificator);
 
                 AddInstructorViewModel singleInstructor = new AddInstructorViewModel
                 {
@@ -102,7 +102,7 @@ namespace Certification_System.Controllers
                     NumberOfApartment = newInstructor.NumberOfApartment
                 };
 
-                _context.AddInstructor(instructor);
+                _context.instructorRepository.AddInstructor(instructor);
 
                 return RedirectToAction("AddNewInstructorConfirmation", new { instructorIdentificator = instructor.InstructorIdentificator });
             }

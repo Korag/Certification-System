@@ -12,11 +12,14 @@ using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using AspNetCore.Identity.Mongo;
-using Certification_System.Entitities;
+using Certification_System.Entities;
 using Certification_System.ServicesInterfaces.IEmailSender;
-using Certification_System.DAL;
 using Certification_System.Services;
 using Certification_System.ServicesInterfaces.IGeneratorQR;
+using Certification_System.Repository.DAL;
+using Certification_System.RepositoryInterfaces;
+using Certification_System.Repository;
+using Certification_System.Repository.Context;
 
 namespace Certification_System
 {
@@ -56,7 +59,19 @@ namespace Certification_System
 
             services.AddTransient<IEmailSender, EmailSender>();
             services.AddTransient<IGeneratorQR, GeneratorQR>();
-            services.AddSingleton<IDatabaseOperations, MongoOperations>();
+            services.AddSingleton<MongoOperations, MongoOperations>();
+            services.AddSingleton<MongoContext, MongoContext>();
+
+            services.AddTransient<IBranchRepository, BranchRepository>();
+            services.AddTransient<ICertificateRepository, CertificateRepository>();
+            services.AddTransient<ICompanyRepository, CompanyRepository>();
+            services.AddTransient<ICourseRepository, CourseRepository>();
+            services.AddTransient<IDegreeRepository, DegreeRepository>();
+            services.AddTransient<IGivenCertificateRepository, GivenCertificateRepository>();
+            services.AddTransient<IGivenDegreeRepository, GivenDegreeRepository>();
+            services.AddTransient<IInstructorRepository, InstructorRepository>();
+            services.AddTransient<IMeetingRepository, MeetingRepository>();
+            services.AddTransient<IUserRepository, UserRepository>();
 
             services.AddMvc().SetCompatibilityVersion(CompatibilityVersion.Version_2_2)
                 .AddDataAnnotationsLocalization(); 

@@ -1,27 +1,27 @@
-﻿using Certification_System.DAL;
-using Certification_System.Entitities;
+﻿using Certification_System.Entities;
 using Certification_System.DTOViewModels;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using MongoDB.Bson;
 using System.Collections.Generic;
+using Certification_System.Repository.DAL;
 
 namespace Certification_System.Controllers
 {
     public class BranchesController : Controller
     {
-        private IDatabaseOperations _context;
+        private MongoOperations _context;
 
-        public BranchesController()
+        public BranchesController(MongoOperations context)
         {
-            _context = new MongoOperations();
+            _context = context;
         }
 
         // GET: DisplayAllBranches
         [Authorize(Roles = "Admin")]
         public ActionResult DisplayAllBranches()
         {
-            var BranchesList = _context.GetBranches();
+            var BranchesList = _context.branchRepository.GetBranches();
 
             List<DisplayBranchViewModel> existingBranches = new List<DisplayBranchViewModel>();
 
@@ -43,7 +43,7 @@ namespace Certification_System.Controllers
         {
             ViewBag.TypeOfAction = TypeOfAction;
 
-            var Branch = _context.GetBranchById(BranchIdentificator);
+            var Branch = _context.branchRepository.GetBranchById(BranchIdentificator);
 
             if (BranchIdentificator == null)
             {
@@ -75,7 +75,7 @@ namespace Certification_System.Controllers
                     Name = newBranch.Name
                 };
 
-                _context.AddBranch(branch);
+                _context.branchRepository.AddBranch(branch);
                 return RedirectToAction("AddNewBranchConfirmation", "Branches", new { BranchIdentificator = branch.BranchIdentificator, TypeOfAction = "Add" });
             }
 
@@ -87,7 +87,7 @@ namespace Certification_System.Controllers
         [HttpGet]
         public ActionResult EditBranch(string BranchIdentificator)
         {
-            var Branch = _context.GetBranchById(BranchIdentificator);
+            var Branch = _context.branchRepository.GetBranchById(BranchIdentificator);
 
             AddBranchViewModel branchToUpdate = new AddBranchViewModel
             {
@@ -106,10 +106,10 @@ namespace Certification_System.Controllers
         {
             if (ModelState.IsValid)
             {
-                var OriginBranch = _context.GetBranchById(editedBranch.BranchIdentificator);
+                var OriginBranch = _context.branchRepository.GetBranchById(editedBranch.BranchIdentificator);
                 OriginBranch.Name = editedBranch.Name;
 
-                _context.UpdateBranch(OriginBranch);
+                _context.branchRepository.UpdateBranch(OriginBranch);
 
                 return RedirectToAction("AddNewBranchConfirmation", "Branches" , new { BranchIdentificator = OriginBranch.BranchIdentificator, TypeOfAction = "Update" });
             }

@@ -1,11 +1,10 @@
-﻿using Certification_System.DAL;
-using Certification_System.DTOViewModels;
-using Certification_System.Entitities;
+﻿using Certification_System.DTOViewModels;
+using Certification_System.Entities;
+using Certification_System.Repository.DAL;
 using Certification_System.ServicesInterfaces.IGeneratorQR;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using MongoDB.Bson;
-using System;
 using System.Collections.Generic;
 using System.IO;
 using System.Linq;
@@ -14,13 +13,13 @@ namespace Certification_System.Controllers
 {
     public class CertificatesController : Controller
     {
-        public IDatabaseOperations _context { get; set; }
+        private MongoOperations _context { get; set; }
         public IGeneratorQR _generatorQR { get; set; }
 
-        public CertificatesController(IGeneratorQR generatorQR)
+        public CertificatesController(IGeneratorQR generatorQR, MongoOperations context)
         {
             _generatorQR = generatorQR;
-            _context = new MongoOperations();
+            _context = context;
         }
 
         // GET: BlankMenu
@@ -36,7 +35,7 @@ namespace Certification_System.Controllers
         {
             AddCertificateToDbViewModel newCertificate = new AddCertificateToDbViewModel
             {
-                AvailableBranches = _context.GetBranchesAsSelectList().ToList(),
+                AvailableBranches = _context.branchRepository.GetBranchesAsSelectList().ToList(),
                 SelectedBranches = new List<string>()
             };
 
@@ -53,7 +52,7 @@ namespace Certification_System.Controllers
             {
                 ViewBag.TypeOfAction = TypeOfAction;
 
-                var Certificate = _context.GetCertificateById(certificateIdentificator);
+                var Certificate = _context.certificateRepository.GetCertificateById(certificateIdentificator);
 
                 AddCertificateToDbViewModel addedCertificate = new AddCertificateToDbViewModel
                 {
@@ -62,7 +61,7 @@ namespace Certification_System.Controllers
                     Description = Certificate.Description,
                 };
 
-                var BranchNames = _context.GetBranchesById(Certificate.Branches);
+                var BranchNames = _context.branchRepository.GetBranchesById(Certificate.Branches);
 
                 addedCertificate.SelectedBranches = BranchNames;
 
@@ -92,12 +91,12 @@ namespace Certification_System.Controllers
                     Branches = newCertificate.SelectedBranches
                 };
 
-                _context.AddCertificate(certificate);
+                _context.certificateRepository.AddCertificate(certificate);
 
                 return RedirectToAction("AddNewCertificateConfirmation", new { certificateIdentificator = certificate.CertificateIdentificator, TypeOfAction = "Add" });
             }
 
-            newCertificate.AvailableBranches = _context.GetBranchesAsSelectList().ToList();
+            newCertificate.AvailableBranches = _context.branchRepository.GetBranchesAsSelectList().ToList();
             if (newCertificate.SelectedBranches == null)
             {
                 newCertificate.SelectedBranches = new List<string>();
@@ -109,7 +108,7 @@ namespace Certification_System.Controllers
         [Authorize(Roles = "Admin")]
         public ActionResult DisplayAllCertificates()
         {
-            var Certificates = _context.GetCertificates();
+            var Certificates = _context.certificateRepository.GetCertificates();
             List<DisplayListOfCertificatesViewModel> ListOfCertificates = new List<DisplayListOfCertificatesViewModel>();
 
             foreach (var certificate in Certificates)
@@ -121,7 +120,7 @@ namespace Certification_System.Controllers
                     CertificateIndexer = certificate.CertificateIndexer,
                     Name = certificate.Name,
                     Description = certificate.Description,
-                    Branches = _context.GetBranchesById(certificate.Branches),
+                    Branches = _context.branchRepository.GetBranchesById(certificate.Branches),
                     Depreciated = certificate.Depreciated
                 };
 
@@ -135,14 +134,14 @@ namespace Certification_System.Controllers
         [Authorize(Roles = "Admin")]
         public ActionResult DisplayAllGivenCertificates()
         {
-            var GivenCertificates = _context.GetGivenCertificates();
+            var GivenCertificates = _context.givenCertificateRepository.GetGivenCertificates();
             List<DisplayGivenCertificateViewModel> ListOfGivenCertificates = new List<DisplayGivenCertificateViewModel>();
 
             foreach (var givenCertificate in GivenCertificates)
             {
-                var Course = _context.GetCourseById(givenCertificate.Course);
-                var Certificate = _context.GetCertificateById(givenCertificate.Certificate);
-                var User = _context.GetUserByGivenCertificateId(givenCertificate.GivenCertificateIdentificator);
+                var Course = _context.courseRepository.GetCourseById(givenCertificate.Course);
+                var Certificate = _context.certificateRepository.GetCertificateById(givenCertificate.Certificate);
+                var User = _context.userRepository.GetUserByGivenCertificateId(givenCertificate.GivenCertificateIdentificator);
 
                 DisplayListOfCoursesViewModel courseViewModel = new DisplayListOfCoursesViewModel
                 {
@@ -193,9 +192,9 @@ namespace Certification_System.Controllers
         {
             AddNewGivenCertificateViewModel newGivenCertificate = new AddNewGivenCertificateViewModel
             {
-                AvailableCertificates = _context.GetCertificatesAsSelectList().ToList(),
-                AvailableUsers = _context.GetUsersAsSelectList().ToList(),
-                AvailableCourses = _context.GetCoursesAsSelectList().ToList()
+                AvailableCertificates = _context.certificateRepository.GetCertificatesAsSelectList().ToList(),
+                AvailableUsers = _context.userRepository.GetUsersAsSelectList().ToList(),
+                AvailableCourses = _context.courseRepository.GetCoursesAsSelectList().ToList()
             };
 
             return View(newGivenCertificate);
@@ -217,19 +216,19 @@ namespace Certification_System.Controllers
                     ReceiptDate = newGivenCertificate.ReceiptDate,
                     ExpirationDate = newGivenCertificate.ExpirationDate,
 
-                    Course = _context.GetCourseById(newGivenCertificate.SelectedCourses).CourseIdentificator,
-                    Certificate = _context.GetCertificateById(newGivenCertificate.SelectedCertificate).CertificateIdentificator
+                    Course = _context.courseRepository.GetCourseById(newGivenCertificate.SelectedCourses).CourseIdentificator,
+                    Certificate = _context.certificateRepository.GetCertificateById(newGivenCertificate.SelectedCertificate).CertificateIdentificator
                 };
 
-                _context.AddGivenCertificate(givenCertificate);
-                _context.AddUserCertificate(newGivenCertificate.SelectedUser, givenCertificate.GivenCertificateIdentificator);
+                _context.givenCertificateRepository.AddGivenCertificate(givenCertificate);
+                _context.userRepository.AddUserCertificate(newGivenCertificate.SelectedUser, givenCertificate.GivenCertificateIdentificator);
 
                 return RedirectToAction("AddNewGivenCertificateConfirmation", new { givenCertificateIdentificator = givenCertificate.GivenCertificateIdentificator, TypeOfAction = "Update" });
             }
 
-            newGivenCertificate.AvailableCertificates = _context.GetCertificatesAsSelectList().ToList();
-            newGivenCertificate.AvailableUsers = _context.GetUsersAsSelectList().ToList();
-            newGivenCertificate.AvailableCourses = _context.GetCoursesAsSelectList().ToList();
+            newGivenCertificate.AvailableCertificates = _context.certificateRepository.GetCertificatesAsSelectList().ToList();
+            newGivenCertificate.AvailableUsers = _context.userRepository.GetUsersAsSelectList().ToList();
+            newGivenCertificate.AvailableCourses = _context.courseRepository.GetCoursesAsSelectList().ToList();
 
             return View(newGivenCertificate);
         }
@@ -242,11 +241,11 @@ namespace Certification_System.Controllers
             {
                 ViewBag.TypeOfAction = TypeOfAction;
 
-                var GivenCertificate = _context.GetGivenCertificateById(givenCertificateIdentificator);
+                var GivenCertificate = _context.givenCertificateRepository.GetGivenCertificateById(givenCertificateIdentificator);
 
-                var Course = _context.GetCourseById(GivenCertificate.Course);
-                var Certificate = _context.GetCertificateById(GivenCertificate.Certificate);
-                var User = _context.GetUserByGivenCertificateId(GivenCertificate.GivenCertificateIdentificator);
+                var Course = _context.courseRepository.GetCourseById(GivenCertificate.Course);
+                var Certificate = _context.certificateRepository.GetCertificateById(GivenCertificate.Certificate);
+                var User = _context.userRepository.GetUserByGivenCertificateId(GivenCertificate.GivenCertificateIdentificator);
 
                 DisplayUsersViewModel userViewModel = new DisplayUsersViewModel
                 {
@@ -294,7 +293,7 @@ namespace Certification_System.Controllers
         [Authorize(Roles = "Admin")]
         public ActionResult EditCertificate(string certificateIdentificator)
         {
-            var Certificate = _context.GetCertificateById(certificateIdentificator);
+            var Certificate = _context.certificateRepository.GetCertificateById(certificateIdentificator);
 
             AddCertificateToDbViewModel certificateToUpdate = new AddCertificateToDbViewModel
             {
@@ -305,7 +304,7 @@ namespace Certification_System.Controllers
                 Depreciated = Certificate.Depreciated,
 
                 SelectedBranches = Certificate.Branches,
-                AvailableBranches = _context.GetBranchesAsSelectList().ToList()
+                AvailableBranches = _context.branchRepository.GetBranchesAsSelectList().ToList()
             };
 
             return View(certificateToUpdate);
@@ -333,12 +332,12 @@ namespace Certification_System.Controllers
                     Branches = editedCertificate.SelectedBranches
                 };
 
-                _context.UpdateCertificate(certificate);
+                _context.certificateRepository.UpdateCertificate(certificate);
 
                 return RedirectToAction("AddNewCertificateConfirmation", "Certificates", new { certificateIdentificator = editedCertificate.CertificateIdentificator, TypeOfAction = "Update" });
             }
 
-            editedCertificate.AvailableBranches = _context.GetBranchesAsSelectList().ToList();
+            editedCertificate.AvailableBranches = _context.branchRepository.GetBranchesAsSelectList().ToList();
             if (editedCertificate.SelectedBranches == null)
             {
                 editedCertificate.SelectedBranches = new List<string>();
@@ -350,7 +349,7 @@ namespace Certification_System.Controllers
         [Authorize(Roles = "Admin")]
         public ActionResult EditGivenCertificate(string givenCertificateIdentificator)
         {
-            var GivenCertificate = _context.GetGivenCertificateById(givenCertificateIdentificator);
+            var GivenCertificate = _context.givenCertificateRepository.GetGivenCertificateById(givenCertificateIdentificator);
 
             EditGivenCertificateViewModel givenCertificateToUpdate = new EditGivenCertificateViewModel
             {
@@ -371,7 +370,7 @@ namespace Certification_System.Controllers
         {
             if (ModelState.IsValid)
             {
-                var OriginGivenCertificate = _context.GetGivenCertificateById(editedGivenCertificate.GivenCertificateIdentificator);
+                var OriginGivenCertificate = _context.givenCertificateRepository.GetGivenCertificateById(editedGivenCertificate.GivenCertificateIdentificator);
 
                 GivenCertificate givenCertificate = new GivenCertificate
                 {
@@ -385,7 +384,7 @@ namespace Certification_System.Controllers
                     Course = OriginGivenCertificate.Course
                 };
 
-                _context.UpdateGivenCertificate(givenCertificate);
+                _context.givenCertificateRepository.UpdateGivenCertificate(givenCertificate);
 
                 return RedirectToAction("AddNewGivenCertificateConfirmation", "Certificates", new { givenCertificateIdentificator = OriginGivenCertificate.GivenCertificateIdentificator, TypeOfAction = "Update" });
             }
@@ -398,11 +397,11 @@ namespace Certification_System.Controllers
         [Authorize(Roles = "Admin")]
         public ActionResult DegreeDetails(string certificateIdentificator)
         {
-            var Certificate = _context.GetCertificateById(certificateIdentificator);
-            var GivenCertificatesInstances = _context.GetGivenCertificatesByIdOfCertificate(certificateIdentificator);
+            var Certificate = _context.certificateRepository.GetCertificateById(certificateIdentificator);
+            var GivenCertificatesInstances = _context.givenCertificateRepository.GetGivenCertificatesByIdOfCertificate(certificateIdentificator);
 
             var GivenCertificatesIdentificators = GivenCertificatesInstances.Select(z => z.GivenCertificateIdentificator);
-            var UsersWithCertificate = _context.GetUsersByGivenCertificateId(GivenCertificatesIdentificators.ToList());
+            var UsersWithCertificate = _context.userRepository.GetUsersByGivenCertificateId(GivenCertificatesIdentificators.ToList());
 
             List<DisplayUsersViewModel> ListOfUsers = new List<DisplayUsersViewModel>();
 
@@ -424,7 +423,7 @@ namespace Certification_System.Controllers
                 }
             }
 
-            var CoursesWhichEndedWithSuchCertificate = _context.GetCoursesById(GivenCertificatesInstances.Select(z => z.Course).ToList());
+            var CoursesWhichEndedWithSuchCertificate = _context.courseRepository.GetCoursesById(GivenCertificatesInstances.Select(z => z.Course).ToList());
 
             List<DisplayListOfCoursesViewModel> ListOfCourses = new List<DisplayListOfCoursesViewModel>();
 
@@ -445,7 +444,7 @@ namespace Certification_System.Controllers
                         EnrolledUsersLimit = course.EnrolledUsersLimit,
                         EnrolledUsersQuantity = course.EnrolledUsers.Count,
 
-                        SelectedBranches = _context.GetBranchesById(course.Branches)
+                        SelectedBranches = _context.branchRepository.GetBranchesById(course.Branches)
                     };
 
                     ListOfCourses.Add(singleCourse);
@@ -460,7 +459,7 @@ namespace Certification_System.Controllers
                 Description = Certificate.Description,
                 Depreciated = Certificate.Depreciated,
 
-                Branches = _context.GetBranchesById(Certificate.Branches),
+                Branches = _context.branchRepository.GetBranchesById(Certificate.Branches),
                 CoursesWhichEndedWithCertificate = ListOfCourses,
                 UsersWithCertificate = ListOfUsers
             };
@@ -488,10 +487,10 @@ namespace Certification_System.Controllers
         {
             if (givenCertificateIdentificator != null)
             {
-                var GivenCertificate = _context.GetGivenCertificateById(givenCertificateIdentificator);
+                var GivenCertificate = _context.givenCertificateRepository.GetGivenCertificateById(givenCertificateIdentificator);
 
-                var Certificate = _context.GetCertificateById(GivenCertificate.Certificate);
-                var User = _context.GetUserByGivenCertificateId(GivenCertificate.GivenCertificateIdentificator);
+                var Certificate = _context.certificateRepository.GetCertificateById(GivenCertificate.Certificate);
+                var User = _context.userRepository.GetUserByGivenCertificateId(GivenCertificate.GivenCertificateIdentificator);
 
                 DisplayUsersViewModel userViewModel = new DisplayUsersViewModel
                 {

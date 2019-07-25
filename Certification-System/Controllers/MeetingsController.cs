@@ -1,23 +1,21 @@
-﻿using Certification_System.DAL;
-using Certification_System.Entitities;
+﻿using Certification_System.Entities;
 using Certification_System.DTOViewModels;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using MongoDB.Bson;
-using System;
 using System.Collections.Generic;
 using System.Linq;
-
+using Certification_System.Repository.DAL;
 
 namespace Certification_System.Controllers
 {
     public class MeetingsController : Controller
     {
-        public IDatabaseOperations _context { get; set; }
+        public MongoOperations _context { get; set; }
 
-        public MeetingsController()
+        public MeetingsController(MongoOperations context)
         {
-            _context = new MongoOperations();
+            _context = context;
         }
 
         // GET: AddNewMeetingConfirmation
@@ -26,13 +24,13 @@ namespace Certification_System.Controllers
         {
             if (meetingIdentificator != null)
             {
-                var Meeting = _context.GetMeetingById(meetingIdentificator);
+                var Meeting = _context.meetingRepository.GetMeetingById(meetingIdentificator);
 
                 AddMeetingViewModel addedMeeting = new AddMeetingViewModel
                 {
                     MeetingIdentificator = Meeting.MeetingIdentificator,
 
-                    SelectedCourse = _context.GetCourseByMeetingId(meetingIdentificator).CourseIndexer,
+                    SelectedCourse = _context.courseRepository.GetCourseByMeetingId(meetingIdentificator).CourseIndexer,
                     MeetingIndexer = Meeting.MeetingIndexer,
                     Description = Meeting.Description,
                     DateOfMeeting = Meeting.DateOfMeeting,
@@ -46,8 +44,8 @@ namespace Certification_System.Controllers
 
                 if (addedMeeting.SelectedInstructors != null)
                 {
-                    var Instructors = _context.GetInstructorsById(Meeting.Instructors);
-                    addedMeeting.SelectedInstructors = Instructors.Select(z => z.FirstName + " " +  z.LastName).ToList();
+                    var Instructors = _context.instructorRepository.GetInstructorsById(Meeting.Instructors);
+                    addedMeeting.SelectedInstructors = Instructors.Select(z => z.FirstName + " " + z.LastName).ToList();
                 }
 
                 return View(addedMeeting);
@@ -70,8 +68,8 @@ namespace Certification_System.Controllers
         {
             AddMeetingViewModel newMeeting = new AddMeetingViewModel
             {
-                AvailableCourses = _context.GetCoursesAsSelectList().ToList(),
-                AvailableInstructors = _context.GetInstructorsAsSelectList().ToList()
+                AvailableCourses = _context.courseRepository.GetCoursesAsSelectList().ToList(),
+                AvailableInstructors = _context.instructorRepository.GetInstructorsAsSelectList().ToList()
             };
 
             return View(newMeeting);
@@ -101,14 +99,14 @@ namespace Certification_System.Controllers
                     Instructors = newMeeting.SelectedInstructors
                 };
 
-                _context.AddMeeting(meeting);
-                _context.AddMeetingToCourse(meeting.MeetingIdentificator, newMeeting.SelectedCourse);
+                _context.meetingRepository.AddMeeting(meeting);
+                _context.courseRepository.AddMeetingToCourse(meeting.MeetingIdentificator, newMeeting.SelectedCourse);
 
                 return RedirectToAction("AddNewMeetingConfirmation", new { meetingIdentificator = meeting.MeetingIdentificator, TypeOfAction = "Add" });
             }
 
-            newMeeting.AvailableCourses = _context.GetCoursesAsSelectList().ToList();
-            newMeeting.AvailableInstructors = _context.GetInstructorsAsSelectList().ToList();
+            newMeeting.AvailableCourses = _context.courseRepository.GetCoursesAsSelectList().ToList();
+            newMeeting.AvailableInstructors = _context.instructorRepository.GetInstructorsAsSelectList().ToList();
             return View(newMeeting);
         }
 
@@ -117,7 +115,7 @@ namespace Certification_System.Controllers
         [Authorize(Roles = "Admin")]
         public ActionResult EditMeeting(string meetingIdentificator)
         {
-          var Meeting = _context.GetMeetingById(meetingIdentificator);
+            var Meeting = _context.meetingRepository.GetMeetingById(meetingIdentificator);
 
             EditMeetingViewModel meetingViewModel = new EditMeetingViewModel
             {
@@ -132,7 +130,7 @@ namespace Certification_System.Controllers
                 NumberOfApartment = Meeting.NumberOfApartment,
                 PostCode = Meeting.PostCode,
 
-                AvailableInstructors = _context.GetInstructorsAsSelectList().ToList(),
+                AvailableInstructors = _context.instructorRepository.GetInstructorsAsSelectList().ToList(),
                 SelectedInstructors = Meeting.Instructors
             };
 
@@ -147,7 +145,7 @@ namespace Certification_System.Controllers
         {
             if (ModelState.IsValid)
             {
-                var OriginMeeting = _context.GetMeetingById(editedMeeting.MeetingIdentificator);
+                var OriginMeeting = _context.meetingRepository.GetMeetingById(editedMeeting.MeetingIdentificator);
 
                 OriginMeeting.MeetingIndexer = editedMeeting.MeetingIndexer;
                 OriginMeeting.Description = editedMeeting.Description;
@@ -159,7 +157,7 @@ namespace Certification_System.Controllers
                 OriginMeeting.Address = editedMeeting.Address;
                 OriginMeeting.Instructors = editedMeeting.SelectedInstructors;
 
-                _context.UpdateMeeting(OriginMeeting);
+                _context.meetingRepository.UpdateMeeting(OriginMeeting);
 
                 return RedirectToAction("AddNewMeetingConfirmation", "Meetings", new { meetingIdentificator = editedMeeting.MeetingIdentificator, TypeOfAction = "Update" });
             }
@@ -171,13 +169,13 @@ namespace Certification_System.Controllers
         [Authorize(Roles = "Admin")]
         public ActionResult DisplayAllMeetings()
         {
-            var Meetings = _context.GetMeetings();
+            var Meetings = _context.meetingRepository.GetMeetings();
             List<DisplayMeetingViewModel> ListOfMeetings = new List<DisplayMeetingViewModel>();
 
             foreach (var meeting in Meetings)
             {
-                Course RelatedCourse = _context.GetCourseByMeetingId(meeting.MeetingIdentificator);
-                List<Instructor> RelatedInstructors = _context.GetInstructorsById(meeting.Instructors).ToList();
+                Course RelatedCourse = _context.courseRepository.GetCourseByMeetingId(meeting.MeetingIdentificator);
+                List<Instructor> RelatedInstructors = _context.instructorRepository.GetInstructorsById(meeting.Instructors).ToList();
 
                 DisplayMeetingViewModel singleMeeting = new DisplayMeetingViewModel
                 {
@@ -196,7 +194,7 @@ namespace Certification_System.Controllers
                     CourseIndexer = RelatedCourse.CourseIndexer,
                     CourseName = RelatedCourse.Name,
 
-                    InstructorsIdentificators = RelatedInstructors.Select(z=> z.InstructorIdentificator).ToList(),
+                    InstructorsIdentificators = RelatedInstructors.Select(z => z.InstructorIdentificator).ToList(),
                     InstructorsCredentials = RelatedInstructors.Select(z => z.FirstName + " " + z.LastName).ToList()
                 };
 
@@ -210,16 +208,16 @@ namespace Certification_System.Controllers
         [Authorize(Roles = "Admin")]
         public ActionResult MeetingDetails(string meetingIdentificator)
         {
-            var Meeting = _context.GetMeetingById(meetingIdentificator);
-            var RelatedInstructors = _context.GetInstructorsById(Meeting.Instructors);
-            var EnrolledUsersIdentificators = _context.GetCourseByMeetingId(meetingIdentificator).EnrolledUsers;
+            var Meeting = _context.meetingRepository.GetMeetingById(meetingIdentificator);
+            var RelatedInstructors = _context.instructorRepository.GetInstructorsById(Meeting.Instructors);
+            var EnrolledUsersIdentificators = _context.courseRepository.GetCourseByMeetingId(meetingIdentificator).EnrolledUsers;
 
-            var EnrolledUsersList = _context.GetUsersById(EnrolledUsersIdentificators);
+            var EnrolledUsersList = _context.userRepository.GetUsersById(EnrolledUsersIdentificators);
 
             List<AddInstructorViewModel> ListOfInstructors = new List<AddInstructorViewModel>();
 
             if (RelatedInstructors.Count != 0)
-            {  
+            {
                 foreach (var instructor in RelatedInstructors)
                 {
                     AddInstructorViewModel singleInstructor = new AddInstructorViewModel
@@ -238,7 +236,7 @@ namespace Certification_System.Controllers
                     ListOfInstructors.Add(singleInstructor);
                 }
             }
-    
+
             List<DisplayUsersViewModel> ListOfUsers = new List<DisplayUsersViewModel>();
 
             if (EnrolledUsersList.Count != 0)

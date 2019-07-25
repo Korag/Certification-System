@@ -1,27 +1,27 @@
-﻿using Certification_System.DAL;
-using Certification_System.Entitities;
+﻿using Certification_System.Entities;
 using Certification_System.DTOViewModels;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using MongoDB.Bson;
 using System.Collections.Generic;
+using Certification_System.Repository.DAL;
 
 namespace Certification_System.Controllers
 {
     public class CompaniesController : Controller
     {
-        private IDatabaseOperations _context;
+        private MongoOperations _context;
 
-        public CompaniesController()
+        public CompaniesController(MongoOperations context)
         {
-            _context = new MongoOperations();
+            _context = context;
         }
 
         // GET: DisplayAllCompanies
         [Authorize(Roles = "Admin")]
         public ActionResult DisplayAllCompanies()
         {
-            var Companies = _context.GetCompanies();
+            var Companies = _context.companyRepository.GetCompanies();
             List<AddCompanyViewModel> DisplayCompanies = new List<AddCompanyViewModel>();
 
             foreach (var company in Companies)
@@ -61,7 +61,7 @@ namespace Certification_System.Controllers
             {
                 ViewBag.TypeOfAction = TypeOfAction;
 
-                Company company = _context.GetCompanyById(companyIdentificator);
+                Company company = _context.companyRepository.GetCompanyById(companyIdentificator);
 
                 AddCompanyViewModel addedCompany = new AddCompanyViewModel
                 {
@@ -105,7 +105,7 @@ namespace Certification_System.Controllers
                     NumberOfApartment = newCompany.NumberOfApartment
                 };
 
-                _context.AddCompany(company);
+                _context.companyRepository.AddCompany(company);
 
                 return RedirectToAction("AddNewCompanyConfirmation", new { companyIdentificator = company.CompanyIdentificator, TypeOfAction = "Add" });
             }
@@ -117,7 +117,7 @@ namespace Certification_System.Controllers
         [Authorize(Roles = "Admin")]
         public ActionResult EditCompany(string companyIdentificator)
         {
-            var Company = _context.GetCompanyById(companyIdentificator);
+            var Company = _context.companyRepository.GetCompanyById(companyIdentificator);
 
             AddCompanyViewModel companyToUpdate = new AddCompanyViewModel
             {
@@ -157,7 +157,7 @@ namespace Certification_System.Controllers
                     NumberOfApartment = editedCompany.NumberOfApartment
                 };
 
-                _context.UpdateCompany(company);
+                _context.companyRepository.UpdateCompany(company);
 
                 return RedirectToAction("AddNewCompanyConfirmation", "Companies", new { companyIdentificator = editedCompany.CompanyIdentificator, TypeOfAction = "Update" });
             }
@@ -169,9 +169,9 @@ namespace Certification_System.Controllers
         [Authorize(Roles = "Admin")]
         public ActionResult CompanyDetails(string companyIdentificator)
         {
-            var Company = _context.GetCompanyById(companyIdentificator);
+            var Company = _context.companyRepository.GetCompanyById(companyIdentificator);
 
-            var UsersConnectedToCompany = _context.GetUsersConnectedToCompany(companyIdentificator);
+            var UsersConnectedToCompany = _context.userRepository.GetUsersConnectedToCompany(companyIdentificator);
 
             List<DisplayUsersViewModel> ListOfUsers = new List<DisplayUsersViewModel>();
 

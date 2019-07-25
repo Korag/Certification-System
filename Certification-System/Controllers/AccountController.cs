@@ -7,7 +7,7 @@ using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Logging;
-using Certification_System.Entitities;
+using Certification_System.Entities;
 using Certification_System.ServicesInterfaces.IEmailSender;
 using Certification_System.Extensions;
 using AspNetCore.Identity.Mongo.Model;
@@ -368,7 +368,7 @@ namespace Certification_System.Controllers
         {
             if (userId == null || code == null)
             {
-                return RedirectToAction(nameof(HomeController.Index), "Home");
+                return RedirectToAction("BlankMenu", "Certificates");
             }
             var user = await _userManager.FindByIdAsync(userId);
             if (user == null)

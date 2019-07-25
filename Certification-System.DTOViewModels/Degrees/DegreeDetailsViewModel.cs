@@ -1,5 +1,4 @@
-﻿using Certification_System.DTOViewModels;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
 
 namespace Certification_System.DTOViewModels

@@ -1,5 +1,4 @@
-﻿using Certification_System.DAL;
-using Certification_System.Entitities;
+﻿using Certification_System.Entities;
 using Certification_System.DTOViewModels;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
@@ -10,29 +9,28 @@ using System.Threading.Tasks;
 using Microsoft.AspNetCore.Identity;
 using AspNetCore.Identity.Mongo.Model;
 using System;
-using Certification_System.DTOViewModels;
+using Certification_System.Repository.DAL;
 
 namespace Certification_System.Controllers
 {
     public class UsersController : Controller
     {
-        private IDatabaseOperations _context;
+        private MongoOperations _context;
         private UserManager<CertificationPlatformUser> _userManager;
         private readonly RoleManager<MongoRole> _roleManager;
 
-        public UsersController(UserManager<CertificationPlatformUser> userManager, RoleManager<MongoRole> roleManager)
+        public UsersController(UserManager<CertificationPlatformUser> userManager, RoleManager<MongoRole> roleManager, MongoOperations context)
         {
             _userManager = userManager;
             _roleManager = roleManager;
-
-            _context = new MongoOperations();
+            _context = context;
         }
 
         // GET: DisplayAllUsers
         [Authorize(Roles = "Admin")]
         public ActionResult DisplayAllUsers()
         {
-            var Users = _context.GetUsers();
+            var Users = _context.userRepository.GetUsers();
             List<DisplayUsersViewModel> usersToDisplay = new List<DisplayUsersViewModel>();
 
             foreach (var user in Users)
@@ -51,8 +49,8 @@ namespace Certification_System.Controllers
                     CompanyRoleWorker = new List<string>()
                 };
 
-                singleUser.CompanyRoleManager = _context.GetCompaniesById(user.CompanyRoleManager).Select(s => s.CompanyName).ToList();
-                singleUser.CompanyRoleWorker = _context.GetCompaniesById(user.CompanyRoleWorker).Select(s => s.CompanyName).ToList();
+                singleUser.CompanyRoleManager = _context.companyRepository.GetCompaniesById(user.CompanyRoleManager).Select(s => s.CompanyName).ToList();
+                singleUser.CompanyRoleWorker = _context.companyRepository.GetCompaniesById(user.CompanyRoleWorker).Select(s => s.CompanyName).ToList();
 
                 usersToDisplay.Add(singleUser);
             }
@@ -68,7 +66,7 @@ namespace Certification_System.Controllers
             {
                 ViewBag.TypeOfAction = TypeOfAction;
 
-                var User = _context.GetUserById(userIdentificator);
+                var User = _context.userRepository.GetUserById(userIdentificator);
 
                 DisplayAllUserInformationViewModel addedUser = new DisplayAllUserInformationViewModel
                 {
@@ -88,8 +86,8 @@ namespace Certification_System.Controllers
                     Roles = User.Roles
                 };
 
-                addedUser.CompanyRoleWorker = _context.GetCompaniesById(User.CompanyRoleWorker).Select(z=> z.CompanyName).ToList();
-                addedUser.CompanyRoleManager = _context.GetCompaniesById(User.CompanyRoleManager).Select(z=> z.CompanyName).ToList();
+                addedUser.CompanyRoleWorker = _context.companyRepository.GetCompaniesById(User.CompanyRoleWorker).Select(z=> z.CompanyName).ToList();
+                addedUser.CompanyRoleManager = _context.companyRepository.GetCompaniesById(User.CompanyRoleManager).Select(z=> z.CompanyName).ToList();
 
                 return View(addedUser);
             }
@@ -102,8 +100,8 @@ namespace Certification_System.Controllers
         {
             AddUserViewModel newUser = new AddUserViewModel
             {
-                AvailableRoles = _context.GetRolesAsSelectList().ToList(),
-                AvailableCompanies = _context.GetCompaniesAsSelectList().ToList()  
+                AvailableRoles = _context.userRepository.GetRolesAsSelectList().ToList(),
+                AvailableCompanies = _context.companyRepository.GetCompaniesAsSelectList().ToList()  
             };
 
             return View(newUser);
@@ -176,13 +174,13 @@ namespace Certification_System.Controllers
                     return RedirectToAction("AddNewUserConfirmation", "Users", new { userIdentificator = user.Id, TypeOfAction = "Add" });
                 }
 
-                newUser.AvailableRoles = _context.GetRolesAsSelectList().ToList();
-                newUser.AvailableCompanies = _context.GetCompaniesAsSelectList().ToList();
+                newUser.AvailableRoles = _context.userRepository.GetRolesAsSelectList().ToList();
+                newUser.AvailableCompanies = _context.companyRepository.GetCompaniesAsSelectList().ToList();
                 return View(newUser);
             }
 
-            newUser.AvailableRoles = _context.GetRolesAsSelectList().ToList();
-            newUser.AvailableCompanies = _context.GetCompaniesAsSelectList().ToList();
+            newUser.AvailableRoles = _context.userRepository.GetRolesAsSelectList().ToList();
+            newUser.AvailableCompanies = _context.companyRepository.GetCompaniesAsSelectList().ToList();
             return View(newUser);
         }
 
@@ -190,7 +188,7 @@ namespace Certification_System.Controllers
         [Authorize(Roles = "Admin")]
         public ActionResult EditUser(string userIdentificator)
         {
-            var User = _context.GetUserById(userIdentificator);
+            var User = _context.userRepository.GetUserById(userIdentificator);
 
             EditUserViewModel userToUpdate = new EditUserViewModel
             {
@@ -209,8 +207,8 @@ namespace Certification_System.Controllers
                 Address = User.Address,
                 NumberOfApartment = User.NumberOfApartment,
                 
-                AvailableCompanies = _context.GetCompaniesAsSelectList().ToList(),
-                AvailableRoles = _context.GetRolesAsSelectList().ToList(),
+                AvailableCompanies = _context.companyRepository.GetCompaniesAsSelectList().ToList(),
+                AvailableRoles = _context.userRepository.GetRolesAsSelectList().ToList(),
 
                 CompanyRoleManager = User.CompanyRoleManager,
                 CompanyRoleWorker = User.CompanyRoleWorker,
@@ -229,7 +227,7 @@ namespace Certification_System.Controllers
         {
             if (ModelState.IsValid)
             {
-                var OriginUser = _context.GetUserById(editedUser.UserIdentificator);
+                var OriginUser = _context.userRepository.GetUserById(editedUser.UserIdentificator);
 
                 //if (OriginUser.Roles.Count != 0)
                 //{
@@ -257,13 +255,13 @@ namespace Certification_System.Controllers
 
                 _userManager.AddToRolesAsync(OriginUser, editedUser.SelectedRole).Wait();    
 
-                _context.UpdateUser(OriginUser);
+                _context.userRepository.UpdateUser(OriginUser);
 
                 return RedirectToAction("AddNewUserConfirmation", "Users", new { userIdentificator = OriginUser.Id, TypeOfAction = "Update" });
             }
 
-            editedUser.AvailableRoles = _context.GetRolesAsSelectList().ToList();
-            editedUser.AvailableCompanies = _context.GetCompaniesAsSelectList().ToList();
+            editedUser.AvailableRoles = _context.userRepository.GetRolesAsSelectList().ToList();
+            editedUser.AvailableCompanies = _context.companyRepository.GetCompaniesAsSelectList().ToList();
             return View(editedUser);
         }
 
@@ -271,14 +269,14 @@ namespace Certification_System.Controllers
         [Authorize(Roles = "Admin")]
         public ActionResult UserDetails(string userIdentificator)
         {
-            var User = _context.GetUserById(userIdentificator);
-            var GivenCertificates = _context.GetGivenCertificatesById(User.Certificates);
+            var User = _context.userRepository.GetUserById(userIdentificator);
+            var GivenCertificates = _context.givenCertificateRepository.GetGivenCertificatesById(User.Certificates);
 
-            var Courses = _context.GetCoursesById(User.Courses);
+            var Courses = _context.courseRepository.GetCoursesById(User.Courses);
             //var GivenDegrees  
 
-            var CompaniesRoleWorker = _context.GetCompaniesById(User.CompanyRoleWorker);
-            var CompaniesRoleManager = _context.GetCompaniesById(User.CompanyRoleManager);
+            var CompaniesRoleWorker = _context.companyRepository.GetCompaniesById(User.CompanyRoleWorker);
+            var CompaniesRoleManager = _context.companyRepository.GetCompaniesById(User.CompanyRoleManager);
 
             var Companies = CompaniesRoleWorker.Concat(CompaniesRoleManager);
 
@@ -301,7 +299,7 @@ namespace Certification_System.Controllers
                         EnrolledUsersLimit = course.EnrolledUsersLimit,
                         EnrolledUsersQuantity = course.EnrolledUsers.Count,
 
-                        SelectedBranches = _context.GetBranchesById(course.Branches)
+                        SelectedBranches = _context.branchRepository.GetBranchesById(course.Branches)
                     };
 
                     ListOfCourses.Add(singleCourse);
@@ -314,8 +312,8 @@ namespace Certification_System.Controllers
             {
                 foreach (var givenCertificate in GivenCertificates)
                 {
-                    var Course = _context.GetCourseById(givenCertificate.Course);
-                    var Certificate = _context.GetCertificateById(givenCertificate.Certificate);
+                    var Course = _context.courseRepository.GetCourseById(givenCertificate.Course);
+                    var Certificate = _context.certificateRepository.GetCertificateById(givenCertificate.Certificate);
 
                     DisplayListOfCoursesViewModel courseViewModel = new DisplayListOfCoursesViewModel
                     {
@@ -404,9 +402,9 @@ namespace Certification_System.Controllers
         [AllowAnonymous]
         public ActionResult AnonymousVerificationOfUser(string userIdentificator)
         {
-            var User = _context.GetUserById(userIdentificator);
+            var User = _context.userRepository.GetUserById(userIdentificator);
 
-            var GivenCertificates = _context.GetGivenCertificatesById(User.Certificates);
+            var GivenCertificates = _context.givenCertificateRepository.GetGivenCertificatesById(User.Certificates);
 
             List<DisplayGivenCertificateViewModel> ListOfGivenCertificates = new List<DisplayGivenCertificateViewModel>();
 
@@ -414,8 +412,8 @@ namespace Certification_System.Controllers
             {
                 foreach (var givenCertificate in GivenCertificates)
                 {
-                    var Course = _context.GetCourseById(givenCertificate.Course);
-                    var Certificate = _context.GetCertificateById(givenCertificate.Certificate);
+                    var Course = _context.courseRepository.GetCourseById(givenCertificate.Course);
+                    var Certificate = _context.certificateRepository.GetCertificateById(givenCertificate.Certificate);
 
                     DisplayListOfCoursesViewModel courseViewModel = new DisplayListOfCoursesViewModel
                     {

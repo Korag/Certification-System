@@ -1,6 +1,6 @@
 ﻿using AspNetCore.Identity.Mongo.Model;
 
-namespace Certification_System.Entitities
+namespace Certification_System.Entities
 {
     public class CertificationPlatformUserRole : MongoRole
     {

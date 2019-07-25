@@ -1,7 +1,7 @@
 ﻿using MongoDB.Driver;
 using System.Configuration;
 
-namespace Certification_System.DAL
+namespace Certification_System.Repository.Context
 {
     public class MongoContext
     {
