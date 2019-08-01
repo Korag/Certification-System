@@ -1,12 +1,13 @@
 ﻿using MongoDB.Driver;
-using System.Configuration;
+using Newtonsoft.Json;
+using System;
+using System.Collections.Generic;
+using System.IO;
 
 namespace Certification_System.Repository.Context
 {
     public class MongoContext
     {
-        private string _user;
-        private string _password;
         private string _database;
         private string _connectionstring;
 
@@ -22,10 +23,19 @@ namespace Certification_System.Repository.Context
 
         private void InitializeDatabaseCredentials()
         {
-            _user = "Admin";
-            _password = "certification_admin1";
-            _database = "certification_system";
-            _connectionstring = $"mongodb://{_user}:{_password}@ds026898.mlab.com:26898/{_database}";
+            using (StreamReader sr = new StreamReader("../Certification-System.Repository/DAL/dbCredentials.json"))
+            {
+                var json = sr.ReadToEnd();
+                try
+                {
+                    dynamic deserializedObject = JsonConvert.DeserializeObject(json);
+                    _database = deserializedObject.DatabaseName;
+                    _connectionstring = deserializedObject.ConnectionString;
+                }
+                catch (Exception e)
+                {
+                }
+            }
         }
 
         private void InitializeContextInstantion()
