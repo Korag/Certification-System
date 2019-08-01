@@ -1,4 +1,4 @@
-﻿using Certification_System.ServicesInterfaces.IGeneratorQR;
+﻿using Certification_System.ServicesInterfaces;
 using QRCoder;
 using System.Drawing;
 using static QRCoder.PayloadGenerator;

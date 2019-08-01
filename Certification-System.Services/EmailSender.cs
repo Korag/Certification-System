@@ -1,4 +1,4 @@
-﻿using Certification_System.ServicesInterfaces.IEmailSender;
+﻿using Certification_System.ServicesInterfaces;
 using System.Threading.Tasks;
 
 namespace Certification_System.Services

@@ -1,7 +1,7 @@
 ﻿using System.Drawing;
 using System;
 
-namespace Certification_System.ServicesInterfaces.IGeneratorQR
+namespace Certification_System.ServicesInterfaces
 {
     public interface IGeneratorQR
     {

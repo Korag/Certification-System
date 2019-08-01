@@ -1,7 +1,7 @@
 ﻿using Certification_System.DTOViewModels;
 using Certification_System.Entities;
 using Certification_System.Repository.DAL;
-using Certification_System.ServicesInterfaces.IGeneratorQR;
+using Certification_System.ServicesInterfaces;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using MongoDB.Bson;

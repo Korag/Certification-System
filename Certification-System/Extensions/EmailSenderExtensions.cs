@@ -1,4 +1,4 @@
-using Certification_System.ServicesInterfaces.IEmailSender;
+using Certification_System.ServicesInterfaces;
 using System.Text.Encodings.Web;
 using System.Threading.Tasks;
 

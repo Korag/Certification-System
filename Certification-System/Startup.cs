@@ -13,13 +13,13 @@ using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using AspNetCore.Identity.Mongo;
 using Certification_System.Entities;
-using Certification_System.ServicesInterfaces.IEmailSender;
 using Certification_System.Services;
-using Certification_System.ServicesInterfaces.IGeneratorQR;
+using Certification_System.ServicesInterfaces;
 using Certification_System.Repository.DAL;
 using Certification_System.RepositoryInterfaces;
 using Certification_System.Repository;
 using Certification_System.Repository.Context;
+using AutoMapper;
 
 namespace Certification_System
 {
@@ -57,11 +57,25 @@ namespace Certification_System
                 mongo.ConnectionString = ConnectionString;
             });
 
+            // Auto Mapper Configurations
+            var mappingConfig = new MapperConfiguration(mc =>
+            {
+                mc.AddProfile(new MappingProfile());
+            });
+
+            IMapper mapper = mappingConfig.CreateMapper();
+            services.AddSingleton(mapper);
+
+            // Services Layer
             services.AddTransient<IEmailSender, EmailSender>();
             services.AddTransient<IGeneratorQR, GeneratorQR>();
+            services.AddTransient<IKeyGenerator, KeyGenerator>();
+
+            // DAL Layer
             services.AddSingleton<MongoOperations, MongoOperations>();
             services.AddSingleton<MongoContext, MongoContext>();
 
+            // Data Layer
             services.AddTransient<IBranchRepository, BranchRepository>();
             services.AddTransient<ICertificateRepository, CertificateRepository>();
             services.AddTransient<ICompanyRepository, CompanyRepository>();
@@ -73,8 +87,12 @@ namespace Certification_System
             services.AddTransient<IMeetingRepository, MeetingRepository>();
             services.AddTransient<IUserRepository, UserRepository>();
 
-            services.AddMvc().SetCompatibilityVersion(CompatibilityVersion.Version_2_2)
-                .AddDataAnnotationsLocalization(); 
+            services.AddMvc(options =>
+            {
+                options.Filters.Add(new AutoValidateAntiforgeryTokenAttribute());
+            })
+            .SetCompatibilityVersion(CompatibilityVersion.Version_2_2)
+            .AddDataAnnotationsLocalization(); 
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.

@@ -1,6 +1,6 @@
 ﻿using System.Threading.Tasks;
 
-namespace Certification_System.ServicesInterfaces.IEmailSender
+namespace Certification_System.ServicesInterfaces
 {
     public interface IEmailSender
     {

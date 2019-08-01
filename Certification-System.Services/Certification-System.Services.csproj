@@ -6,10 +6,13 @@
   </PropertyGroup>
 
   <ItemGroup>
+    <PackageReference Include="AutoMapper" Version="8.1.1" />
     <PackageReference Include="QRCoder" Version="1.3.5" />
   </ItemGroup>
 
   <ItemGroup>
+    <ProjectReference Include="..\Certification-System.DataEntities\Certification-System.DataEntities.csproj" />
+    <ProjectReference Include="..\Certification-System.DTOViewModels\Certification-System.DTOViewModels.csproj" />
     <ProjectReference Include="..\Certification-System.ServicesInterfaces\Certification-System.ServicesInterfaces.csproj" />
   </ItemGroup>
 
