@@ -3,7 +3,6 @@ using Certification_System.DTOViewModels;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Rendering;
-using MongoDB.Bson;
 using System.Collections.Generic;
 using System.Linq;
 using Certification_System.Repository.DAL;
@@ -14,10 +13,10 @@ namespace Certification_System.Controllers
 {
     public class CoursesController : Controller
     {
-        private MongoOperations _context { get; set; }
+        private readonly MongoOperations _context;
 
-        private IMapper _mapper;
-        private IKeyGenerator _keyGenerator;
+        private readonly IMapper _mapper;
+        private readonly IKeyGenerator _keyGenerator;
 
         public CoursesController(MongoOperations context, IMapper mapper, IKeyGenerator keyGenerator)
         {
@@ -96,6 +95,7 @@ namespace Certification_System.Controllers
 
                 return View(modifiedCourse);
             }
+
             return RedirectToAction(nameof(AddNewCourse));
         }
 

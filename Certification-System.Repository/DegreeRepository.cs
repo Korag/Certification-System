@@ -9,9 +9,9 @@ namespace Certification_System.Repository
 {
     public class DegreeRepository : IDegreeRepository
     {
-        private MongoContext _context;
+        private readonly MongoContext _context;
 
-        private string _degreesCollectionName = "Degrees";
+        private readonly string _degreesCollectionName = "Degrees";
         private IMongoCollection<Degree> _degrees;
 
         public DegreeRepository(MongoContext context)
@@ -22,6 +22,7 @@ namespace Certification_System.Repository
         public ICollection<Degree> GetDegrees()
         {
             _degrees = _context.db.GetCollection<Degree>(_degreesCollectionName);
+
             return _degrees.AsQueryable().ToList();
         }
 
@@ -55,6 +56,7 @@ namespace Certification_System.Repository
         {
             var filter = Builders<Degree>.Filter.Eq(x => x.DegreeIdentificator, degreeIdentificator);
             Degree degree = _context.db.GetCollection<Degree>(_degreesCollectionName).Find<Degree>(filter).FirstOrDefault();
+
             return degree;
         }
 
@@ -71,7 +73,6 @@ namespace Certification_System.Repository
 
                     Degrees.Add(degree);
                 }
-
             }
 
             return Degrees;

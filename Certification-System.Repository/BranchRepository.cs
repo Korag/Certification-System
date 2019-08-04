@@ -10,9 +10,9 @@ namespace Certification_System.Repository
 {
     public class BranchRepository : IBranchRepository
     {
-        private MongoContext _context;
+        private readonly MongoContext _context;
 
-        private string _branchCollectionName = "Branches";
+        private readonly string _branchCollectionName = "Branches";
         private IMongoCollection<Branch> _branches;
 
         public BranchRepository(MongoContext context)
@@ -35,6 +35,7 @@ namespace Certification_System.Repository
         public ICollection<Branch> GetBranches()
         {
             _branches = _context.db.GetCollection<Branch>(_branchCollectionName);
+
             return _branches.AsQueryable().ToList();
         }
 
@@ -62,6 +63,7 @@ namespace Certification_System.Repository
         {
             var filter = Builders<Branch>.Filter.Eq(x => x.BranchIdentificator, branchIdentificator);
             Branch branch = _context.db.GetCollection<Branch>(_branchCollectionName).Find<Branch>(filter).FirstOrDefault();
+
             return branch;
         }
 

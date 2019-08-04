@@ -1,4 +1,3 @@
-using System;
 
 namespace Certification_System.Entities
 {

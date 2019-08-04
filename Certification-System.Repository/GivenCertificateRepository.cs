@@ -8,9 +8,9 @@ namespace Certification_System.Repository
 {
     public class GivenCertificateRepository : IGivenCertificateRepository
     {
-        private MongoContext _context;
+        private readonly MongoContext _context;
 
-        private string _givenCertificatesCollectionName = "GivenCertificates";
+        private readonly string _givenCertificatesCollectionName = "GivenCertificates";
         private IMongoCollection<GivenCertificate> _givenCertificates;
 
         public GivenCertificateRepository(MongoContext context)
@@ -34,6 +34,7 @@ namespace Certification_System.Repository
         {
             var filter = Builders<GivenCertificate>.Filter.Eq(x => x.GivenCertificateIdentificator, givenCertificateIdentificator);
             GivenCertificate givenCertificate = _context.db.GetCollection<GivenCertificate>(_givenCertificatesCollectionName).Find<GivenCertificate>(filter).FirstOrDefault();
+
             return givenCertificate;
         }
 
@@ -47,12 +48,14 @@ namespace Certification_System.Repository
                 GivenCertificate singleGivenCertificate = _context.db.GetCollection<GivenCertificate>(_givenCertificatesCollectionName).Find<GivenCertificate>(filter).FirstOrDefault();
                 GivenCertificates.Add(singleGivenCertificate);
             }
+
             return GivenCertificates;
         }
 
         public ICollection<GivenCertificate> GetGivenCertificates()
         {
             _givenCertificates = _context.db.GetCollection<GivenCertificate>(_givenCertificatesCollectionName);
+
             return _givenCertificates.AsQueryable().ToList();
         }
 
@@ -60,6 +63,7 @@ namespace Certification_System.Repository
         {
             var filter = Builders<GivenCertificate>.Filter.Eq(x => x.Certificate, certificateIdentificator);
             var givenCertificates = _context.db.GetCollection<GivenCertificate>(_givenCertificatesCollectionName).Find<GivenCertificate>(filter).ToList();
+
             return givenCertificates;
         }
     }

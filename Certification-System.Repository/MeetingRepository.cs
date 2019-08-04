@@ -8,9 +8,9 @@ namespace Certification_System.Repository
 {
     public class MeetingRepository : IMeetingRepository
     {
-        private MongoContext _context;
+        private readonly MongoContext _context;
 
-        private string _meetingsCollectionName = "Meetings";
+        private readonly string _meetingsCollectionName = "Meetings";
         private IMongoCollection<Meeting> _meetings;
 
         public MeetingRepository(MongoContext context)
@@ -28,6 +28,7 @@ namespace Certification_System.Repository
                 Meeting singleMeeting = _context.db.GetCollection<Meeting>(_meetingsCollectionName).Find<Meeting>(filter).FirstOrDefault();
                 Meetings.Add(singleMeeting);
             }
+
             return Meetings;
         }
 

@@ -10,9 +10,9 @@ namespace Certification_System.Repository
 {
     public class InstructorRepository : IInstructorRepository
     {
-        private MongoContext _context;
+        private readonly MongoContext _context;
 
-        private string _instructorsCollectionName = "Instructors";
+        private readonly string _instructorsCollectionName = "Instructors";
         private IMongoCollection<Instructor> _instructors;
 
         public InstructorRepository(MongoContext context)
@@ -30,6 +30,7 @@ namespace Certification_System.Repository
                 Instructor singleInstructor = _context.db.GetCollection<Instructor>(_instructorsCollectionName).Find<Instructor>(filter).FirstOrDefault();
                 Instructors.Add(singleInstructor);
             }
+
             return Instructors;
         }
 
@@ -37,6 +38,7 @@ namespace Certification_System.Repository
         {
             var filter = Builders<Instructor>.Filter.Eq(x => x.InstructorIdentificator, instructorIdentificator);
             Instructor instructor = _context.db.GetCollection<Instructor>(_instructorsCollectionName).Find<Instructor>(filter).FirstOrDefault();
+
             return instructor;
         }
 
@@ -49,6 +51,7 @@ namespace Certification_System.Repository
         public ICollection<Instructor> GetInstructors()
         {
             _instructors = _context.db.GetCollection<Instructor>(_instructorsCollectionName);
+
             return _instructors.AsQueryable().ToList();
         }
 

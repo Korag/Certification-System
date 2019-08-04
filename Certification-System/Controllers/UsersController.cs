@@ -2,13 +2,11 @@
 using Certification_System.DTOViewModels;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
-using MongoDB.Bson;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 using Microsoft.AspNetCore.Identity;
 using AspNetCore.Identity.Mongo.Model;
-using System;
 using Certification_System.Repository.DAL;
 using AutoMapper;
 using Certification_System.ServicesInterfaces;
@@ -25,8 +23,12 @@ namespace Certification_System.Controllers
         private readonly IMapper _mapper;
         private readonly IKeyGenerator _keyGenerator;
 
-        public UsersController(UserManager<CertificationPlatformUser> userManager, RoleManager<MongoRole> roleManager, MongoOperations context
-           ,IMapper mapper, IKeyGenerator keyGenerator)
+        public UsersController(
+            UserManager<CertificationPlatformUser> userManager,
+            RoleManager<MongoRole> roleManager,
+            MongoOperations context,
+            IMapper mapper,
+            IKeyGenerator keyGenerator)
         {
             _userManager = userManager;
             _roleManager = roleManager;
@@ -73,6 +75,7 @@ namespace Certification_System.Controllers
 
                 return View(modifiedUser);
             }
+
             return RedirectToAction(nameof(AddNewUser));
         }
 

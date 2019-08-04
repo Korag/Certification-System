@@ -9,9 +9,9 @@ namespace Certification_System.Repository
 {
     public class CompanyRepository : ICompanyRepository
     {
-        private MongoContext _context;
+        private readonly MongoContext _context;
 
-        private string _companiesCollectionName = "Companies";
+        private readonly string _companiesCollectionName = "Companies";
         private IMongoCollection<Company> _companies;
 
         public CompanyRepository(MongoContext context)
@@ -43,6 +43,7 @@ namespace Certification_System.Repository
         public ICollection<Company> GetCompanies()
         {
             _companies = _context.db.GetCollection<Company>(_companiesCollectionName);
+
             return _companies.AsQueryable().ToList();
         }
 
@@ -62,6 +63,7 @@ namespace Certification_System.Repository
         {
             var filter = Builders<Company>.Filter.Eq(x => x.CompanyIdentificator, companyIdentificator);
             Company company = _context.db.GetCollection<Company>(_companiesCollectionName).Find<Company>(filter).FirstOrDefault();
+
             return company;
         }
 

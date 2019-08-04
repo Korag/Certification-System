@@ -10,9 +10,9 @@ namespace Certification_System.Repository
 {
     public class CertificateRepository : ICertificateRepository
     {
-        private MongoContext _context;
+        private readonly MongoContext _context;
 
-        private string _certificatesCollectionName = "Certificates";
+        private readonly string _certificatesCollectionName = "Certificates";
         private IMongoCollection<Certificate> _certificates;
 
         public CertificateRepository(MongoContext context)
@@ -23,6 +23,7 @@ namespace Certification_System.Repository
         public ICollection<Certificate> GetCertificates()
         {
             _certificates = _context.db.GetCollection<Certificate>(_certificatesCollectionName);
+
             return _certificates.AsQueryable().ToList();
         }
 
@@ -42,6 +43,7 @@ namespace Certification_System.Repository
         {
             var filter = Builders<Certificate>.Filter.Eq(x => x.CertificateIdentificator, certificateIdentificator);
             Certificate certificate = _context.db.GetCollection<Certificate>(_certificatesCollectionName).Find<Certificate>(filter).FirstOrDefault();
+
             return certificate;
         }
 

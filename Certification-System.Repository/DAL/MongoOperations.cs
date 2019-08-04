@@ -4,22 +4,28 @@ namespace Certification_System.Repository.DAL
 {
     public class MongoOperations
     {
-        public IBranchRepository branchRepository {get; set;}
-        public ICertificateRepository certificateRepository {get; set;}
-        public ICompanyRepository companyRepository {get; set;}
-        public ICourseRepository courseRepository { get; set;}
-        public IDegreeRepository degreeRepository { get; set;}
-        public IGivenCertificateRepository givenCertificateRepository { get; set;}
-        public IGivenDegreeRepository givenDegreeRepository { get; set;}
-        public IInstructorRepository instructorRepository { get; set;}
-        public IMeetingRepository meetingRepository { get; set;}
-        public IUserRepository userRepository { get; set;}
+        public readonly IBranchRepository branchRepository;
+        public readonly ICertificateRepository certificateRepository;
+        public readonly ICompanyRepository companyRepository;
+        public readonly ICourseRepository courseRepository;
+        public readonly IDegreeRepository degreeRepository;
+        public readonly IGivenCertificateRepository givenCertificateRepository;
+        public readonly IGivenDegreeRepository givenDegreeRepository;
+        public readonly IInstructorRepository instructorRepository;
+        public readonly IMeetingRepository meetingRepository;
+        public readonly IUserRepository userRepository;
 
-        public MongoOperations(IBranchRepository branchRepository, ICertificateRepository certificateRepository,
-           ICompanyRepository companyRepository, ICourseRepository courseRepository,
-           IDegreeRepository degreeRepository, IGivenCertificateRepository givenCertificateRepository,
-           IGivenDegreeRepository givenDegreeRepository, IInstructorRepository instructorRepository,
-           IMeetingRepository meetingRepository, IUserRepository userRepository)
+        public MongoOperations(
+           IBranchRepository branchRepository,
+           ICertificateRepository certificateRepository,
+           ICompanyRepository companyRepository,
+           ICourseRepository courseRepository,
+           IDegreeRepository degreeRepository,
+           IGivenCertificateRepository givenCertificateRepository,
+           IGivenDegreeRepository givenDegreeRepository,
+           IInstructorRepository instructorRepository,
+           IMeetingRepository meetingRepository,
+           IUserRepository userRepository)
         {
             this.branchRepository = branchRepository;
             this.certificateRepository = certificateRepository;

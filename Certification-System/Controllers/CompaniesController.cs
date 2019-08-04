@@ -12,10 +12,10 @@ namespace Certification_System.Controllers
 {
     public class CompaniesController : Controller
     {
-        private MongoOperations _context;
+        private readonly MongoOperations _context;
 
-        private IMapper _mapper;
-        private IKeyGenerator _keyGenerator;
+        private readonly IMapper _mapper;
+        private readonly IKeyGenerator _keyGenerator;
 
         public CompaniesController(MongoOperations context, IMapper mapper, IKeyGenerator keyGenerator)
         {

@@ -8,9 +8,9 @@ namespace Certification_System.Repository
 {
     public class GivenDegreeRepository : IGivenDegreeRepository
     {
-        private MongoContext _context;
+        private readonly MongoContext _context;
 
-        private string _givenDegreesCollectionName = "GivenDegrees";
+        private readonly string _givenDegreesCollectionName = "GivenDegrees";
         private IMongoCollection<GivenDegree> _givenDegrees;
 
         public GivenDegreeRepository()
@@ -22,6 +22,7 @@ namespace Certification_System.Repository
         {
             var filter = Builders<GivenDegree>.Filter.Eq(x => x.Degree, degreeIdentificator);
             var givenDegrees = _context.db.GetCollection<GivenDegree>(_givenDegreesCollectionName).Find<GivenDegree>(filter).ToList();
+
             return givenDegrees;
         }
     }

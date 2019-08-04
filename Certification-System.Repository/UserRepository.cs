@@ -10,9 +10,9 @@ namespace Certification_System.Repository
 {
     public class UserRepository : IUserRepository
     {
-        private MongoContext _context;
+        private readonly MongoContext _context;
 
-        private string _usersCollectionName = "Users";
+        private readonly string _usersCollectionName = "Users";
         private IMongoCollection<CertificationPlatformUser> _users;
 
         public UserRepository(MongoContext context)
@@ -47,6 +47,7 @@ namespace Certification_System.Repository
         public ICollection<CertificationPlatformUser> GetUsers()
         {
             _users = _context.db.GetCollection<CertificationPlatformUser>(_usersCollectionName);
+
             return _users.AsQueryable().ToList();
         }
 
@@ -54,6 +55,7 @@ namespace Certification_System.Repository
         {
             var filter = Builders<CertificationPlatformUser>.Filter.Eq(x => x.Id, userIdentificator);
             CertificationPlatformUser user = _context.db.GetCollection<CertificationPlatformUser>(_usersCollectionName).Find<CertificationPlatformUser>(filter).FirstOrDefault();
+
             return user;
         }
 
@@ -105,6 +107,7 @@ namespace Certification_System.Repository
         {
             var filter = Builders<CertificationPlatformUser>.Filter.Where(z => z.Certificates.Contains(givenCertificateIdentificator));
             CertificationPlatformUser user = _context.db.GetCollection<CertificationPlatformUser>(_usersCollectionName).Find<CertificationPlatformUser>(filter).FirstOrDefault();
+
             return user;
         }
 

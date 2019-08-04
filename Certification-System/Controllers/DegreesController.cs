@@ -12,10 +12,10 @@ namespace Certification_System.Controllers
 {
     public class DegreesController : Controller
     {
-        private MongoOperations _context { get; set; }
+        private readonly MongoOperations _context;
 
-        private IMapper _mapper;
-        private IKeyGenerator _keyGenerator;
+        private readonly IMapper _mapper;
+        private readonly IKeyGenerator _keyGenerator;
 
         public DegreesController(MongoOperations context, IMapper mapper, IKeyGenerator keyGenerator)
         {
@@ -49,17 +49,6 @@ namespace Certification_System.Controllers
             {
                 Degree degree = _mapper.Map<Degree>(newDegree);
                 degree.DegreeIdentificator = _keyGenerator.GenerateNewId();
-
-                // AutoMapper nie wrzuca nulli tylko pustą kolekcje
-
-                //if (degree.RequiredDegrees == null)
-                //{
-                //    degree.RequiredDegrees = new List<string>();
-                //}
-                //if (degree.RequiredCertificates == null)
-                //{
-                //    degree.RequiredCertificates = new List<string>();
-                //}
 
                 _context.degreeRepository.AddDegree(degree);
 

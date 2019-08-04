@@ -10,9 +10,9 @@ namespace Certification_System.Repository
 {
     public class CourseRepository : ICourseRepository
     {
-        private MongoContext _context;
+        private readonly MongoContext _context;
 
-        private string _coursesCollectionName = "Courses";
+        private readonly string _coursesCollectionName = "Courses";
         private IMongoCollection<Course> _courses;
 
         public CourseRepository(MongoContext context)
@@ -36,6 +36,7 @@ namespace Certification_System.Repository
         {
             var filter = Builders<Course>.Filter.Eq(x => x.CourseIdentificator, courseIdentificator);
             Course course = _context.db.GetCollection<Course>(_coursesCollectionName).Find<Course>(filter).FirstOrDefault();
+
             return course;
         }
 
@@ -43,12 +44,14 @@ namespace Certification_System.Repository
         {
             var filter = Builders<Course>.Filter.Eq(x => x.CourseEnded, false);
             ICollection<Course> course = _context.db.GetCollection<Course>(_coursesCollectionName).Find<Course>(filter).ToList();
+
             return course;
         }
 
         public ICollection<Course> GetCourses()
         {
             _courses = _context.db.GetCollection<Course>(_coursesCollectionName);
+
             return _courses.AsQueryable().ToList();
         }
 
@@ -77,6 +80,7 @@ namespace Certification_System.Repository
         {
             var filter = Builders<Course>.Filter.Where(x => x.Meetings.Contains(meetingIdentificator));
             Course course = _context.db.GetCollection<Course>(_coursesCollectionName).Find<Course>(filter).FirstOrDefault();
+
             return course;
         }
 
@@ -90,6 +94,7 @@ namespace Certification_System.Repository
                 Course singleCourse = _context.db.GetCollection<Course>(_coursesCollectionName).Find<Course>(filter).FirstOrDefault();
                 Courses.Add(singleCourse);
             }
+
             return Courses;
         }
 

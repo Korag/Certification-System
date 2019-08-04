@@ -11,10 +11,10 @@ namespace Certification_System.Controllers
 {
     public class BranchesController : Controller
     {
-        private MongoOperations _context;
+        private readonly MongoOperations _context;
 
-        private IMapper _mapper;
-        private IKeyGenerator _keyGenerator;
+        private readonly IMapper _mapper;
+        private readonly IKeyGenerator _keyGenerator;
 
         public BranchesController(MongoOperations context, IMapper mapper, IKeyGenerator keyGenerator)
         {
@@ -35,13 +35,13 @@ namespace Certification_System.Controllers
 
         // GET: ConfirmationOfActionOnBranch
         [Authorize(Roles = "Admin")]
-        public ActionResult ConfirmationOfActionOnBranch(string BranchIdentificator, string TypeOfAction)
+        public ActionResult ConfirmationOfActionOnBranch(string branchIdentificator, string typeOfAction)
         {
-            ViewBag.TypeOfAction = TypeOfAction;
+            ViewBag.TypeOfAction = typeOfAction;
 
-            var Branch = _context.branchRepository.GetBranchById(BranchIdentificator);
+            var Branch = _context.branchRepository.GetBranchById(branchIdentificator);
 
-            if (BranchIdentificator == null)
+            if (branchIdentificator == null)
             {
                 return RedirectToAction(nameof(AddNewBranch));
             }
@@ -70,7 +70,8 @@ namespace Certification_System.Controllers
                 branch.BranchIdentificator = _keyGenerator.GenerateNewId();
 
                 _context.branchRepository.AddBranch(branch);
-                return RedirectToAction("ConfirmationOfActionOnBranch", "Branches", new { BranchIdentificator = branch.BranchIdentificator, TypeOfAction = "Add" });
+
+                return RedirectToAction("ConfirmationOfActionOnBranch", "Branches", new { branchIdentificator = branch.BranchIdentificator, typeOfAction = "Add" });
             }
 
             return View(newBranch);
@@ -79,9 +80,9 @@ namespace Certification_System.Controllers
         // GET: EditBranch
         [Authorize(Roles = "Admin")]
         [HttpGet]
-        public ActionResult EditBranch(string BranchIdentificator)
+        public ActionResult EditBranch(string branchIdentificator)
         {
-            var Branch = _context.branchRepository.GetBranchById(BranchIdentificator);
+            var Branch = _context.branchRepository.GetBranchById(branchIdentificator);
             EditBranchViewModel branchToUpdate = _mapper.Map<EditBranchViewModel>(Branch);
 
             return View(branchToUpdate);
@@ -97,9 +98,10 @@ namespace Certification_System.Controllers
                 var OriginBranch = _context.branchRepository.GetBranchById(editedBranch.BranchIdentificator);
 
                 OriginBranch = _mapper.Map<EditBranchViewModel, Branch>(editedBranch, OriginBranch);
+
                 _context.branchRepository.UpdateBranch(OriginBranch);
 
-                return RedirectToAction("ConfirmationOfActionOnBranch", "Branches" , new { BranchIdentificator = OriginBranch.BranchIdentificator, TypeOfAction = "Update" });
+                return RedirectToAction("ConfirmationOfActionOnBranch", "Branches" , new { branchIdentificator = OriginBranch.BranchIdentificator, typeOfAction = "Update" });
             }
 
             return View(editedBranch);

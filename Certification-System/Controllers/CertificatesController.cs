@@ -5,7 +5,6 @@ using Certification_System.Repository.DAL;
 using Certification_System.ServicesInterfaces;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
-using MongoDB.Bson;
 using System.Collections.Generic;
 using System.IO;
 using System.Linq;
@@ -14,11 +13,11 @@ namespace Certification_System.Controllers
 {
     public class CertificatesController : Controller
     {
-        private MongoOperations _context { get; set; }
+        private readonly MongoOperations _context;
 
-        private IGeneratorQR _generatorQR { get; set; }
-        private IMapper _mapper;
-        private IKeyGenerator _keyGenerator;
+        private readonly IGeneratorQR _generatorQR;
+        private readonly IMapper _mapper;
+        private readonly IKeyGenerator _keyGenerator;
 
         public CertificatesController(IGeneratorQR generatorQR, MongoOperations context, IMapper mapper, IKeyGenerator keyGenerator)
         {
@@ -68,6 +67,7 @@ namespace Certification_System.Controllers
             {
                 newCertificate.SelectedBranches = new List<string>();
             }
+
             return View(newCertificate);
         }
 
@@ -86,6 +86,7 @@ namespace Certification_System.Controllers
 
                 return View(modifiedCertificate);
             }
+
             return RedirectToAction(nameof(AddNewCertificate));
         }
 
@@ -193,6 +194,7 @@ namespace Certification_System.Controllers
 
                 return View(modifiedGivenCertificate);
             }
+
             return RedirectToAction(nameof(AddNewGivenCertificate));
         }
 
@@ -226,6 +228,7 @@ namespace Certification_System.Controllers
             {
                 editedCertificate.SelectedBranches = new List<string>();
             }
+
             return View(editedCertificate);
         }
 
@@ -325,6 +328,7 @@ namespace Certification_System.Controllers
             {
                 return RedirectToAction("VerifyUserCompetencesByQR", "Certificates", new { userIdentificator = userToVerify.UserIdentificator });
             }
+
             return View(userToVerify);
         }
 
@@ -337,6 +341,7 @@ namespace Certification_System.Controllers
             {
                 return RedirectToAction("VerifyUserCertificateByQR", "Certificates", new { givenCertificateIdentificator = certificateToVerify.CertificateIdentificator });
             }
+
             return View(certificateToVerify);
         }
 
