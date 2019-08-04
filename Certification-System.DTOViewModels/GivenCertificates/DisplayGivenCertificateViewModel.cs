@@ -18,12 +18,12 @@ namespace Certification_System.DTOViewModels
         public DateTime ExpirationDate { get; set; }
 
         [Display(Name = "Nadany certyfikat")]
-        public DisplayListOfCertificatesViewModel Certificate { get; set; }
+        public DisplayCrucialDataCertificateViewModel Certificate { get; set; }
 
         [Display(Name = "Użytkownik")]
-        public DisplayUsersViewModel User { get; set; }
+        public DisplayCrucialDataUsersViewModel User { get; set; }
 
         [Display(Name = "Szkolenie")]
-        public DisplayListOfCoursesViewModel Course { get; set; }
+        public DisplayCrucialDataCourseViewModel Course { get; set; }
     }
 }

@@ -6,9 +6,9 @@ namespace Certification_System.DTOViewModels
 {
     public class DisplayMeetingViewModel
     {
-        public string CourseIdentificator { get; set; }
-
         public string MeetingIdentificator { get; set; }
+
+        public string CourseIdentificator { get; set; }
 
         [Display(Name = "Identyfikator")]
         public string MeetingIndexer { get; set; }

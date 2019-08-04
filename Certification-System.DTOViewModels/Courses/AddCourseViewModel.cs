@@ -40,7 +40,6 @@ namespace Certification_System.DTOViewModels
 
         public int CourseLength { get; set; }
 
-
         [Required(ErrorMessage = "Należy zaznaczyć conajmniej jeden Obszar.")]
         public ICollection<string> SelectedBranches { get; set; }
 

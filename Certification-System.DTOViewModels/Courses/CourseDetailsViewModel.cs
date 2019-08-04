@@ -42,6 +42,6 @@ namespace Certification_System.DTOViewModels
         public ICollection<DisplayMeetingViewModel> Meetings { get; set; }
 
         [Display(Name = "Zarejestrowani uczestnicy")]
-        public ICollection<DisplayUsersViewModel> EnrolledUsers { get; set; }
+        public ICollection<DisplayCrucialDataWithCompaniesRoleViewModel> EnrolledUsers { get; set; }
     }
 }

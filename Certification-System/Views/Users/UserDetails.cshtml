@@ -196,7 +196,7 @@ else
                         @Html.DisplayNameFor(model => model.Courses.First().CourseLength)
                     </th>
                     <th>
-                        @Html.DisplayNameFor(model => model.Courses.First().SelectedBranches)
+                        @Html.DisplayNameFor(model => model.Courses.First().Branches)
                     </th>
                     <th>
                         Operacje
@@ -236,7 +236,7 @@ else
                         </td>
                         <td>
                             <ul>
-                                @foreach (var branch in item.SelectedBranches)
+                                @foreach (var branch in item.Branches)
                                 {
                                     <li>@branch</li>
                                 }
