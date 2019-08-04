@@ -10,20 +10,30 @@ using Microsoft.AspNetCore.Identity;
 using AspNetCore.Identity.Mongo.Model;
 using System;
 using Certification_System.Repository.DAL;
+using AutoMapper;
+using Certification_System.ServicesInterfaces;
 
 namespace Certification_System.Controllers
 {
     public class UsersController : Controller
     {
-        private MongoOperations _context;
-        private UserManager<CertificationPlatformUser> _userManager;
+        private readonly MongoOperations _context;
+
+        private readonly UserManager<CertificationPlatformUser> _userManager;
         private readonly RoleManager<MongoRole> _roleManager;
 
-        public UsersController(UserManager<CertificationPlatformUser> userManager, RoleManager<MongoRole> roleManager, MongoOperations context)
+        private readonly IMapper _mapper;
+        private readonly IKeyGenerator _keyGenerator;
+
+        public UsersController(UserManager<CertificationPlatformUser> userManager, RoleManager<MongoRole> roleManager, MongoOperations context
+           ,IMapper mapper, IKeyGenerator keyGenerator)
         {
             _userManager = userManager;
             _roleManager = roleManager;
             _context = context;
+
+            _mapper = mapper;
+            _keyGenerator = keyGenerator;
         }
 
         // GET: DisplayAllUsers
@@ -31,23 +41,11 @@ namespace Certification_System.Controllers
         public ActionResult DisplayAllUsers()
         {
             var Users = _context.userRepository.GetUsers();
-            List<DisplayUsersViewModel> usersToDisplay = new List<DisplayUsersViewModel>();
+            List<DisplayUserViewModel> usersToDisplay = new List<DisplayUserViewModel>();
 
             foreach (var user in Users)
             {
-                DisplayUsersViewModel singleUser = new DisplayUsersViewModel
-                {
-                    UserIdentificator = user.Id,
-
-                    Email = user.Email,
-                    FirstName = user.FirstName,
-                    LastName = user.LastName,
-
-                    Roles = user.Roles,
-
-                    CompanyRoleManager = new List<string>(),
-                    CompanyRoleWorker = new List<string>()
-                };
+                DisplayUserViewModel singleUser = _mapper.Map<DisplayUserViewModel>(user);
 
                 singleUser.CompanyRoleManager = _context.companyRepository.GetCompaniesById(user.CompanyRoleManager).Select(s => s.CompanyName).ToList();
                 singleUser.CompanyRoleWorker = _context.companyRepository.GetCompaniesById(user.CompanyRoleWorker).Select(s => s.CompanyName).ToList();
@@ -58,9 +56,9 @@ namespace Certification_System.Controllers
             return View(usersToDisplay);
         }
 
-        // GET: AddNewUserConfirmation
+        // GET: ConfirmationOfActionOnUser
         [Authorize(Roles = "Admin")]
-        public ActionResult AddNewUserConfirmation(string userIdentificator, string TypeOfAction)
+        public ActionResult ConfirmationOfActionOnUser(string userIdentificator, string TypeOfAction)
         {
             if (userIdentificator != null)
             {
@@ -68,28 +66,12 @@ namespace Certification_System.Controllers
 
                 var User = _context.userRepository.GetUserById(userIdentificator);
 
-                DisplayAllUserInformationViewModel addedUser = new DisplayAllUserInformationViewModel
-                {
-                    UserIdentificator = userIdentificator,
+                DisplayAllUserInformationViewModel modifiedUser = _mapper.Map<DisplayAllUserInformationViewModel>(User);
 
-                    Email = User.Email,
-                    FirstName = User.FirstName,
-                    LastName = User.LastName,
-                    Country = User.Country,
-                    City = User.City,
-                    PostCode = User.PostCode,
-                    Address = User.Address,
-                    NumberOfApartment = User.NumberOfApartment,
-                    DateOfBirth = User.DateOfBirth,
-                    PhoneNumber = User.PhoneNumber,
+                modifiedUser.CompanyRoleWorker = _context.companyRepository.GetCompaniesById(User.CompanyRoleWorker).Select(z=> z.CompanyName).ToList();
+                modifiedUser.CompanyRoleManager = _context.companyRepository.GetCompaniesById(User.CompanyRoleManager).Select(z=> z.CompanyName).ToList();
 
-                    Roles = User.Roles
-                };
-
-                addedUser.CompanyRoleWorker = _context.companyRepository.GetCompaniesById(User.CompanyRoleWorker).Select(z=> z.CompanyName).ToList();
-                addedUser.CompanyRoleManager = _context.companyRepository.GetCompaniesById(User.CompanyRoleManager).Select(z=> z.CompanyName).ToList();
-
-                return View(addedUser);
+                return View(modifiedUser);
             }
             return RedirectToAction(nameof(AddNewUser));
         }
@@ -108,48 +90,15 @@ namespace Certification_System.Controllers
         }
 
         // POST: AddNewUser
-        [ValidateAntiForgeryToken]
         [Authorize(Roles = "Admin")]
         [HttpPost]
         public async Task<ActionResult> AddNewUser(AddUserViewModel newUser)
         {
             if (ModelState.IsValid)
             {
-                var user = new CertificationPlatformUser
-                {
-                    Id = ObjectId.GenerateNewId().ToString(),
-
-                    UserName = newUser.Email,
-                    Email = newUser.Email,
-                    FirstName = newUser.FirstName,
-                    LastName = newUser.LastName,
-                    Country = newUser.Country,
-                    City = newUser.City,
-                    PostCode = newUser.PostCode,
-                    Address = newUser.Address,
-                    NumberOfApartment = newUser.NumberOfApartment,
-                    DateOfBirth = newUser.DateOfBirth,
-                    PhoneNumber = newUser.PhoneNumber,
-                    SecurityStamp = Guid.NewGuid().ToString(),
-
-                    Courses = new List<string>(),
-                    Certificates = new List<string>(),
-                    Degrees = new List<string>(),
-                    CompanyRoleWorker = new List<string>(),
-                    CompanyRoleManager = new List<string>()
-                };
-
-                if (newUser.CompanyRoleWorker != null)
-                {
-                    //user.CompanyRoleWorker.Add(newUser.CompanyRoleWorker);
-                    user.CompanyRoleWorker = newUser.CompanyRoleWorker;
-                }
-
-                if (newUser.CompanyRoleManager != null)
-                {
-                    //user.CompanyRoleManager.Add(newUser.CompanyRoleManager);
-                    user.CompanyRoleManager = newUser.CompanyRoleManager;
-                }
+                CertificationPlatformUser user = _mapper.Map<CertificationPlatformUser>(newUser);
+                user.Id = _keyGenerator.GenerateNewId();
+                user.SecurityStamp = _keyGenerator.GenerateNewGuid();
 
                 if (!await _roleManager.RoleExistsAsync(newUser.SelectedRole))
                 {
@@ -171,16 +120,18 @@ namespace Certification_System.Controllers
                 var result = await _userManager.CreateAsync(user, newUser.Password);
                 if (result.Succeeded)
                 {
-                    return RedirectToAction("AddNewUserConfirmation", "Users", new { userIdentificator = user.Id, TypeOfAction = "Add" });
+                    return RedirectToAction("ConfirmationOfActionOnUser", "Users", new { userIdentificator = user.Id, TypeOfAction = "Add" });
                 }
 
                 newUser.AvailableRoles = _context.userRepository.GetRolesAsSelectList().ToList();
                 newUser.AvailableCompanies = _context.companyRepository.GetCompaniesAsSelectList().ToList();
+
                 return View(newUser);
             }
 
             newUser.AvailableRoles = _context.userRepository.GetRolesAsSelectList().ToList();
             newUser.AvailableCompanies = _context.companyRepository.GetCompaniesAsSelectList().ToList();
+
             return View(newUser);
         }
 
@@ -190,78 +141,34 @@ namespace Certification_System.Controllers
         {
             var User = _context.userRepository.GetUserById(userIdentificator);
 
-            EditUserViewModel userToUpdate = new EditUserViewModel
-            {
-                UserIdentificator = User.Id,
-
-                Email = User.Email,
-                PhoneNumber = User.PhoneNumber,
-
-                FirstName = User.FirstName,
-                LastName = User.LastName,
-                DateOfBirth = User.DateOfBirth,
-
-                Country = User.Country,
-                City = User.City,
-                PostCode = User.PostCode,
-                Address = User.Address,
-                NumberOfApartment = User.NumberOfApartment,
-                
-                AvailableCompanies = _context.companyRepository.GetCompaniesAsSelectList().ToList(),
-                AvailableRoles = _context.userRepository.GetRolesAsSelectList().ToList(),
-
-                CompanyRoleManager = User.CompanyRoleManager,
-                CompanyRoleWorker = User.CompanyRoleWorker,
-
-                SelectedRole = User.Roles
-            };
+            EditUserViewModel userToUpdate = _mapper.Map<EditUserViewModel>(User);
+            userToUpdate.AvailableCompanies = _context.companyRepository.GetCompaniesAsSelectList().ToList();
+            userToUpdate.AvailableRoles = _context.userRepository.GetRolesAsSelectList().ToList();
 
             return View(userToUpdate);
         }
 
         // POST: EditUser
-        [ValidateAntiForgeryToken]
         [Authorize(Roles = "Admin")]
         [HttpPost]
         public ActionResult EditUser(EditUserViewModel editedUser)
         {
             if (ModelState.IsValid)
             {
-                var OriginUser = _context.userRepository.GetUserById(editedUser.UserIdentificator);
+                var OriginUser = _userManager.FindByIdAsync(editedUser.UserIdentificator).Result;
+                _userManager.RemoveFromRolesAsync(OriginUser, _userManager.GetRolesAsync(OriginUser).Result.ToArray()).Wait();
+                _userManager.AddToRolesAsync(OriginUser, editedUser.SelectedRole).Wait();
 
-                //if (OriginUser.Roles.Count != 0)
-                //{
-                //    _userManager.RemoveFromRolesAsync(OriginUser, OriginUser.Roles).Wait();
-                //}
-              
-                OriginUser.UserName = editedUser.Email;
-                OriginUser.Email = editedUser.Email;
-                OriginUser.NormalizedUserName = editedUser.Email.ToUpper();
-                OriginUser.NormalizedEmail = editedUser.Email.ToUpper();
-
-                OriginUser.FirstName = editedUser.FirstName;
-                OriginUser.LastName = editedUser.LastName;
-                OriginUser.PhoneNumber = editedUser.PhoneNumber;
-                OriginUser.DateOfBirth = editedUser.DateOfBirth;
-
-                OriginUser.Country = editedUser.Country;
-                OriginUser.City = editedUser.City;
-                OriginUser.PostCode = editedUser.PostCode;
-                OriginUser.Address = editedUser.Address;
-                OriginUser.NumberOfApartment = editedUser.NumberOfApartment;
-
-                OriginUser.CompanyRoleManager = editedUser.CompanyRoleManager;
-                OriginUser.CompanyRoleWorker = editedUser.CompanyRoleWorker;
-
-                _userManager.AddToRolesAsync(OriginUser, editedUser.SelectedRole).Wait();    
+                OriginUser = _mapper.Map<EditUserViewModel, CertificationPlatformUser>(editedUser, OriginUser);
 
                 _context.userRepository.UpdateUser(OriginUser);
 
-                return RedirectToAction("AddNewUserConfirmation", "Users", new { userIdentificator = OriginUser.Id, TypeOfAction = "Update" });
+                return RedirectToAction("ConfirmationOfActionOnUser", "Users", new { userIdentificator = OriginUser.Id, TypeOfAction = "Update" });
             }
 
             editedUser.AvailableRoles = _context.userRepository.GetRolesAsSelectList().ToList();
             editedUser.AvailableCompanies = _context.companyRepository.GetCompaniesAsSelectList().ToList();
+
             return View(editedUser);
         }
 
@@ -271,7 +178,6 @@ namespace Certification_System.Controllers
         {
             var User = _context.userRepository.GetUserById(userIdentificator);
             var GivenCertificates = _context.givenCertificateRepository.GetGivenCertificatesById(User.Certificates);
-
             var Courses = _context.courseRepository.GetCoursesById(User.Courses);
             //var GivenDegrees  
 
@@ -280,33 +186,20 @@ namespace Certification_System.Controllers
 
             var Companies = CompaniesRoleWorker.Concat(CompaniesRoleManager);
 
-            List<DisplayListOfCoursesViewModel> ListOfCourses = new List<DisplayListOfCoursesViewModel>();
+            List<DisplayCourseViewModel> ListOfCourses = new List<DisplayCourseViewModel>();
 
             if (Courses.Count != 0)
             {
                 foreach (var course in Courses)
                 {
-                    DisplayListOfCoursesViewModel singleCourse = new DisplayListOfCoursesViewModel
-                    {
-                        CourseIdentificator = course.CourseIdentificator,
-                        CourseIndexer = course.CourseIndexer,
-                        Name = course.Name,
-                        Description = course.Description,
-                        DateOfStart = course.DateOfStart,
-                        DateOfEnd = course.DateOfEnd,
-                        CourseLength = course.CourseLength,
-                        CourseEnded = course.CourseEnded,
-                        EnrolledUsersLimit = course.EnrolledUsersLimit,
-                        EnrolledUsersQuantity = course.EnrolledUsers.Count,
-
-                        SelectedBranches = _context.branchRepository.GetBranchesById(course.Branches)
-                    };
+                    DisplayCourseViewModel singleCourse = _mapper.Map<DisplayCourseViewModel>(course);
+                    singleCourse.Branches = _context.branchRepository.GetBranchesById(course.Branches);
 
                     ListOfCourses.Add(singleCourse);
                 }
             }
 
-            List<DisplayGivenCertificateViewModel> ListOfGivenCertificates = new List<DisplayGivenCertificateViewModel>();
+            List<DisplayGivenCertificateToUserViewModel> ListOfGivenCertificates = new List<DisplayGivenCertificateToUserViewModel>();
 
             if (GivenCertificates.Count != 0)
             {
@@ -315,84 +208,24 @@ namespace Certification_System.Controllers
                     var Course = _context.courseRepository.GetCourseById(givenCertificate.Course);
                     var Certificate = _context.certificateRepository.GetCertificateById(givenCertificate.Certificate);
 
-                    DisplayListOfCoursesViewModel courseViewModel = new DisplayListOfCoursesViewModel
-                    {
-                        CourseIdentificator = Course.CourseIdentificator,
+                    DisplayCrucialDataCourseViewModel courseViewModel = _mapper.Map<DisplayCrucialDataCourseViewModel>(Course);
 
-                        CourseIndexer = Course.CourseIndexer,
-                        Name = Course.Name,
-                    };
+                    DisplayCrucialDataCertificateViewModel certificateViewModel = _mapper.Map<DisplayCrucialDataCertificateViewModel>(Certificate);
 
-                    DisplayListOfCertificatesViewModel certificateViewModel = new DisplayListOfCertificatesViewModel
-                    {
-                        CertificateIdentificator = Certificate.CertificateIdentificator,
-
-                        CertificateIndexer = Certificate.CertificateIndexer,
-                        Name = Certificate.Name
-                    };
-
-                    DisplayGivenCertificateViewModel singleGivenCertificate = new DisplayGivenCertificateViewModel
-                    {
-                        GivenCertificateIdentificator = givenCertificate.GivenCertificateIdentificator,
-
-                        GivenCertificateIndexer = givenCertificate.GivenCertificateIndexer,
-                        ReceiptDate = givenCertificate.ReceiptDate,
-                        ExpirationDate = givenCertificate.ExpirationDate,
-
-                        Certificate = certificateViewModel,
-                        Course = courseViewModel
-                    };
+                    DisplayGivenCertificateToUserViewModel singleGivenCertificate = _mapper.Map<DisplayGivenCertificateToUserViewModel>(givenCertificate);
+                    singleGivenCertificate.Certificate = certificateViewModel;
+                    singleGivenCertificate.Course = courseViewModel;
 
                     ListOfGivenCertificates.Add(singleGivenCertificate);
                 }
             }
 
-            List<AddCompanyViewModel> ListOfCompanies = new List<AddCompanyViewModel>();
+            List<DisplayCompanyViewModel> ListOfCompanies = _mapper.Map<List<DisplayCompanyViewModel>>(Companies);
 
-            foreach (var company in Companies)
-            {
-                AddCompanyViewModel singleCompany = new AddCompanyViewModel
-                {
-                    CompanyIdentificator = company.CompanyIdentificator,
-                    CompanyName = company.CompanyName,
-                    Email = company.Email,
-                    Phone = company.Phone,
-                    Country = company.Country,
-                    City = company.City,
-                    PostCode = company.PostCode,
-                    Address = company.Address,
-                    NumberOfApartment = company.NumberOfApartment
-                };
-
-                ListOfCompanies.Add(singleCompany);
-            }
-
-            UserDetailsViewModel UserDetails = new UserDetailsViewModel
-            {
-                UserIdentificator = User.Id,
-
-                Email = User.Email,
-                PhoneNumber = User.PhoneNumber,
-
-                FirstName = User.FirstName,
-                LastName = User.LastName,
-                DateOfBirth = User.DateOfBirth,
-
-                Country = User.Country,
-                City = User.City,
-                PostCode = User.PostCode,
-                Address = User.Address,
-                NumberOfApartment = User.NumberOfApartment,
-
-                CompanyRoleManager = User.CompanyRoleManager,
-                CompanyRoleWorker = User.CompanyRoleWorker,
-
-                Roles = User.Roles,
-
-                Certificates = ListOfGivenCertificates,
-                Courses = ListOfCourses,
-                Companies = ListOfCompanies
-            };
+            UserDetailsViewModel UserDetails = _mapper.Map<UserDetailsViewModel>(User);
+            UserDetails.Certificates = ListOfGivenCertificates;
+            UserDetails.Courses = ListOfCourses;
+            UserDetails.Companies = ListOfCompanies;
 
             return View(UserDetails);
         }
@@ -403,10 +236,9 @@ namespace Certification_System.Controllers
         public ActionResult AnonymousVerificationOfUser(string userIdentificator)
         {
             var User = _context.userRepository.GetUserById(userIdentificator);
-
             var GivenCertificates = _context.givenCertificateRepository.GetGivenCertificatesById(User.Certificates);
 
-            List<DisplayGivenCertificateViewModel> ListOfGivenCertificates = new List<DisplayGivenCertificateViewModel>();
+            List<DisplayGivenCertificateToUserViewModel> ListOfGivenCertificates = new List<DisplayGivenCertificateToUserViewModel>();
 
             if (GivenCertificates.Count != 0)
             {
@@ -415,48 +247,20 @@ namespace Certification_System.Controllers
                     var Course = _context.courseRepository.GetCourseById(givenCertificate.Course);
                     var Certificate = _context.certificateRepository.GetCertificateById(givenCertificate.Certificate);
 
-                    DisplayListOfCoursesViewModel courseViewModel = new DisplayListOfCoursesViewModel
-                    {
-                        CourseIdentificator = Course.CourseIdentificator,
+                    DisplayCrucialDataCourseViewModel courseViewModel = _mapper.Map<DisplayCrucialDataCourseViewModel>(Course);
 
-                        CourseIndexer = Course.CourseIndexer,
-                        Name = Course.Name,
-                    };
+                    DisplayCrucialDataCertificateViewModel certificateViewModel = _mapper.Map<DisplayCrucialDataCertificateViewModel>(Certificate);
 
-                    DisplayListOfCertificatesViewModel certificateViewModel = new DisplayListOfCertificatesViewModel
-                    {
-                        CertificateIdentificator = Certificate.CertificateIdentificator,
-
-                        CertificateIndexer = Certificate.CertificateIndexer,
-                        Name = Certificate.Name
-                    };
-
-                    DisplayGivenCertificateViewModel singleGivenCertificate = new DisplayGivenCertificateViewModel
-                    {
-                        GivenCertificateIdentificator = givenCertificate.GivenCertificateIdentificator,
-
-                        GivenCertificateIndexer = givenCertificate.GivenCertificateIndexer,
-                        ReceiptDate = givenCertificate.ReceiptDate,
-                        ExpirationDate = givenCertificate.ExpirationDate,
-
-                        Certificate = certificateViewModel,
-                        Course = courseViewModel
-                    };
+                    DisplayGivenCertificateToUserViewModel singleGivenCertificate = _mapper.Map<DisplayGivenCertificateToUserViewModel>(givenCertificate);
+                    singleGivenCertificate.Certificate = certificateViewModel;
+                    singleGivenCertificate.Course = courseViewModel;
 
                     ListOfGivenCertificates.Add(singleGivenCertificate);
                 }
-            }   
+            }
 
-            UserDetailsViewModel UserDetails = new UserDetailsViewModel
-            {
-                Email = User.Email,
-
-                FirstName = User.FirstName,
-                LastName = User.LastName,
-                DateOfBirth = User.DateOfBirth,
-
-                Certificates = ListOfGivenCertificates
-            };
+            UserDetailsForAnonymousViewModel UserDetails = _mapper.Map<UserDetailsForAnonymousViewModel>(User);
+            UserDetails.Certificates = ListOfGivenCertificates;
 
             return View(UserDetails);
         }

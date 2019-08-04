@@ -48,15 +48,15 @@ namespace Certification_System.DTOViewModels
 
 
         [Display(Name = "Kursy")]
-        public ICollection<DisplayListOfCoursesViewModel> Courses { get; set; }
+        public ICollection<DisplayCourseViewModel> Courses { get; set; }
 
         [Display(Name = "Certyfikaty")]
-        public ICollection<DisplayGivenCertificateViewModel> Certificates { get; set; }
+        public ICollection<DisplayGivenCertificateToUserViewModel> Certificates { get; set; }
 
         //[Display(Name = "Stopnie zawodowe")]
         //public ICollection<DisplayGivenCertificateViewModel> Degrees { get; set; }
 
         [Display(Name = "Przedsiębiorstwa")]
-        public ICollection<AddCompanyViewModel> Companies { get; set; }
+        public ICollection<DisplayCompanyViewModel> Companies { get; set; }
     }
 }

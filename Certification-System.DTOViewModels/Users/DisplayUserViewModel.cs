@@ -3,7 +3,7 @@ using System.ComponentModel.DataAnnotations;
 
 namespace Certification_System.DTOViewModels
 {
-    public class DisplayUsersViewModel
+    public class DisplayUserViewModel
     {
         public string UserIdentificator { get; set; }
 
@@ -18,7 +18,6 @@ namespace Certification_System.DTOViewModels
 
         [Display(Name = "Role użytkownika")]
         public ICollection<string> Roles { get; set; }
-
 
         [Display(Name = "Zrzeszony z przedsiębiorstwem")]
         public ICollection<string> CompanyRoleWorker { get; set; }
