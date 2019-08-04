@@ -1,5 +1,6 @@
 ﻿using Certification_System.ServicesInterfaces;
 using MongoDB.Bson;
+using System;
 
 namespace Certification_System.Services
 {
@@ -8,6 +9,11 @@ namespace Certification_System.Services
         public string GenerateNewId()
         {
             return ObjectId.GenerateNewId().ToString();
+        }
+
+        public string GenerateNewGuid()
+        {
+            return Guid.NewGuid().ToString();
         }
     }
 }

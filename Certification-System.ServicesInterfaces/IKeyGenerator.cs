@@ -3,5 +3,6 @@
     public interface IKeyGenerator
     {
         string GenerateNewId();
+        string GenerateNewGuid();
     }
 }
