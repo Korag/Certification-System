@@ -84,7 +84,7 @@
                         @Html.DisplayNameFor(model => model.Instructors.First().Email)
                     </th>
                     <th>
-                        @Html.DisplayNameFor(model => model.Instructors.First().Phone)
+                        @Html.DisplayNameFor(model => model.Instructors.First().PhoneNumber)
                     </th>
                     <th>
                         Operacje
@@ -105,7 +105,7 @@
                             @Html.DisplayFor(modelItem => item.Email)
                         </td>
                         <td>
-                            @Html.DisplayFor(modelItem => item.Phone)
+                            @Html.DisplayFor(modelItem => item.PhoneNumber)
                         </td>
                         <td>
                             @Html.ActionLink("Szczegóły", "InstructorDetails", "Certificates", null, new { @class = "btn btn-info m-1" })

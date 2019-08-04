@@ -1,7 +1,7 @@
-﻿@model Certification_System.DTOViewModels.AddMeetingViewModel
+﻿@model Certification_System.DTOViewModels.DisplayMeetingViewModel
 
 @{
-    ViewData["Title"] = "AddNewMeetingConfirmation";
+    ViewData["Title"] = "ConfirmationOfActionOnMeeting";
     Layout = "~/Views/Shared/_Layout.cshtml";
 }
 
@@ -19,7 +19,7 @@ else
         <thead>
             <tr>
                 <th>
-                    @Html.DisplayNameFor(model => model.SelectedCourse)
+                    @Html.DisplayNameFor(model => model.CourseIndexer)
                 </th>
                 <th>
                     @Html.DisplayNameFor(model => model.MeetingIndexer)
@@ -49,14 +49,14 @@ else
                     @Html.DisplayNameFor(model => model.NumberOfApartment)
                 </th>
                 <th>
-                    @Html.DisplayNameFor(model => model.SelectedInstructors)
+                    @Html.DisplayNameFor(model => model.InstructorsCredentials)
                 </th>
             </tr>
         </thead>
         <tbody>
             <tr>
                 <td>
-                    @Html.DisplayFor(model => model.SelectedCourse)
+                    @Html.DisplayFor(model => model.CourseIndexer)
                 </td>
                 <td>
                     @Html.DisplayFor(model => model.MeetingIndexer)
@@ -87,9 +87,9 @@ else
                 </td>
                 <td>
                     <ul>
-                        @foreach (var instructor in Model.SelectedInstructors)
+                        @foreach (var instructor in Model.InstructorsCredentials)
                         {
-                            <li>@instructor</li>
+                        <li>@instructor</li>
                         }
                     </ul>
                 </td>

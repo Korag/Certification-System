@@ -10,8 +10,6 @@
 
 @using (Html.BeginForm())
 {
-    @Html.AntiForgeryToken()
-
     <div class="form-horizontal">
 
         <div class="col-md-6 col-xl-6 col-sm-8 col-xs-10 m-auto p-3 shadow p-3 mb-5 bg-light rounded border border-primary rounded-bottom" style="opacity:0.80">
@@ -51,7 +49,7 @@
                 <label asp-for="DateOfMeeting" class="control-label"></label>
                 <div>
                     <div class='input-group date' id='DateOfMeeting'>
-                        <input type='text' class="form-control col-12" name="ReceiptDate" value="@DateTime.Now.ToShortDateString() @DateTime.Now.ToShortTimeString()" />
+                        <input type='text' class="form-control col-12" name="DateOfMeeting" value="@DateTime.Now.ToShortDateString() @DateTime.Now.ToShortTimeString()" />
                         <span class="input-group-addon">
                             <span class="fa fa-calendar pl-1 pt-0.5" style="font-size:34px"></span>
                         </span>
