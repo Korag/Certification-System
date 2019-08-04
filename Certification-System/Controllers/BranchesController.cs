@@ -2,7 +2,6 @@
 using Certification_System.DTOViewModels;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
-using MongoDB.Bson;
 using System.Collections.Generic;
 using Certification_System.Repository.DAL;
 using AutoMapper;
@@ -13,6 +12,7 @@ namespace Certification_System.Controllers
     public class BranchesController : Controller
     {
         private MongoOperations _context;
+
         private IMapper _mapper;
         private IKeyGenerator _keyGenerator;
 
@@ -33,9 +33,9 @@ namespace Certification_System.Controllers
             return View(existingBranches);
         }
 
-        // GET: AddNewBranchConfirmation
+        // GET: ConfirmationOfActionOnBranch
         [Authorize(Roles = "Admin")]
-        public ActionResult AddNewBranchConfirmation(string BranchIdentificator, string TypeOfAction)
+        public ActionResult ConfirmationOfActionOnBranch(string BranchIdentificator, string TypeOfAction)
         {
             ViewBag.TypeOfAction = TypeOfAction;
 
@@ -46,7 +46,9 @@ namespace Certification_System.Controllers
                 return RedirectToAction(nameof(AddNewBranch));
             }
 
-            return View(Branch);
+            DisplayBranchViewModel modifiedBranch = _mapper.Map<DisplayBranchViewModel>(Branch);
+
+            return View(modifiedBranch);
         }
 
         // GET: AddNewBranch
@@ -68,7 +70,7 @@ namespace Certification_System.Controllers
                 branch.BranchIdentificator = _keyGenerator.GenerateNewId();
 
                 _context.branchRepository.AddBranch(branch);
-                return RedirectToAction("AddNewBranchConfirmation", "Branches", new { BranchIdentificator = branch.BranchIdentificator, TypeOfAction = "Add" });
+                return RedirectToAction("ConfirmationOfActionOnBranch", "Branches", new { BranchIdentificator = branch.BranchIdentificator, TypeOfAction = "Add" });
             }
 
             return View(newBranch);
@@ -86,7 +88,6 @@ namespace Certification_System.Controllers
         }
 
         // POST: EditBranch
-        [ValidateAntiForgeryToken]
         [Authorize(Roles = "Admin")]
         [HttpPost]
         public ActionResult EditBranch(EditBranchViewModel editedBranch)
@@ -98,7 +99,7 @@ namespace Certification_System.Controllers
                 OriginBranch = _mapper.Map<EditBranchViewModel, Branch>(editedBranch, OriginBranch);
                 _context.branchRepository.UpdateBranch(OriginBranch);
 
-                return RedirectToAction("AddNewBranchConfirmation", "Branches" , new { BranchIdentificator = OriginBranch.BranchIdentificator, TypeOfAction = "Update" });
+                return RedirectToAction("ConfirmationOfActionOnBranch", "Branches" , new { BranchIdentificator = OriginBranch.BranchIdentificator, TypeOfAction = "Update" });
             }
 
             return View(editedBranch);
