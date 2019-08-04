@@ -12,6 +12,7 @@ using Certification_System.ServicesInterfaces;
 using Certification_System.Extensions;
 using AspNetCore.Identity.Mongo.Model;
 using System.Collections.Generic;
+using AutoMapper;
 
 namespace Certification_System.Controllers
 {
@@ -24,21 +25,25 @@ namespace Certification_System.Controllers
         private readonly RoleManager<MongoRole> _roleManager;
         private readonly IEmailSender _emailSender;
         private readonly ILogger _logger;
-
-
+        private readonly IMapper _mapper;
+        private readonly IKeyGenerator _keyGenerator;
 
         public AccountController(
             UserManager<CertificationPlatformUser> userManager,
             SignInManager<CertificationPlatformUser> signInManager,
              RoleManager<MongoRole> roleManager,
             IEmailSender emailSender,
-            ILogger<AccountController> logger)
+            ILogger<AccountController> logger,
+            IMapper mapper,
+            IKeyGenerator keyGenerator)
         {
             _userManager = userManager;
             _signInManager = signInManager;
             _roleManager = roleManager;
             _emailSender = emailSender;
             _logger = logger;
+            _mapper = mapper;
+            _keyGenerator = keyGenerator;
         }
 
         [TempData]
@@ -57,7 +62,6 @@ namespace Certification_System.Controllers
 
         [HttpPost]
         [AllowAnonymous]
-        [ValidateAntiForgeryToken]
         public async Task<IActionResult> Login(LoginViewModel model, string returnUrl = null)
         {
             ViewData["ReturnUrl"] = returnUrl;
@@ -111,7 +115,6 @@ namespace Certification_System.Controllers
 
         [HttpPost]
         [AllowAnonymous]
-        [ValidateAntiForgeryToken]
         public async Task<IActionResult> LoginWith2fa(LoginWith2faViewModel model, bool rememberMe, string returnUrl = null)
         {
             if (!ModelState.IsValid)
@@ -165,7 +168,6 @@ namespace Certification_System.Controllers
 
         [HttpPost]
         [AllowAnonymous]
-        [ValidateAntiForgeryToken]
         public async Task<IActionResult> LoginWithRecoveryCode(LoginWithRecoveryCodeViewModel model, string returnUrl = null)
         {
             if (!ModelState.IsValid)
@@ -218,34 +220,15 @@ namespace Certification_System.Controllers
 
         [HttpPost]
         [AllowAnonymous]
-        [ValidateAntiForgeryToken]
         public async Task<IActionResult> Register(RegisterViewModel model, string returnUrl = null)
         {
             ViewData["ReturnUrl"] = returnUrl;
             if (ModelState.IsValid)
             {
-                var user = new CertificationPlatformUser
-                {
-                    UserName = model.Email,
-                    Email = model.Email,
-                    FirstName = model.FirstName,
-                    LastName = model.LastName,
-                    Country = model.Country,
-                    City = model.City,
-                    PostCode = model.PostCode,
-                    Address = model.Address,
-                    NumberOfApartment = model.NumberOfApartment,
-                    DateOfBirth = model.DateOfBirth,
-                    PhoneNumber = model.PhoneNumber,
+                var user = _mapper.Map<CertificationPlatformUser>(model);
+                user.Id = _keyGenerator.GenerateNewId();
+                user.SecurityStamp = _keyGenerator.GenerateNewGuid();
 
-                    Certificates = new List<string>(),
-                    Courses = new List<string>(),
-                    Degrees = new List<string>(),
-                    CompanyRoleManager = new List<string>(),
-                    CompanyRoleWorker = new List<string>()
-                };
-
-    
                 var result = await _userManager.CreateAsync(user, model.Password);
 
                 if (!await _roleManager.RoleExistsAsync("Worker"))
@@ -275,7 +258,6 @@ namespace Certification_System.Controllers
         }
 
         [HttpPost]
-        [ValidateAntiForgeryToken]
         public async Task<IActionResult> Logout()
         {
             await _signInManager.SignOutAsync();
@@ -285,7 +267,6 @@ namespace Certification_System.Controllers
 
         [HttpPost]
         [AllowAnonymous]
-        [ValidateAntiForgeryToken]
         public IActionResult ExternalLogin(string provider, string returnUrl = null)
         {
             // Request a redirect to the external login provider.
@@ -332,7 +313,6 @@ namespace Certification_System.Controllers
 
         [HttpPost]
         [AllowAnonymous]
-        [ValidateAntiForgeryToken]
         public async Task<IActionResult> ExternalLoginConfirmation(ExternalLoginViewModel model, string returnUrl = null)
         {
             if (ModelState.IsValid)
@@ -388,7 +368,6 @@ namespace Certification_System.Controllers
 
         [HttpPost]
         [AllowAnonymous]
-        [ValidateAntiForgeryToken]
         public async Task<IActionResult> ForgotPassword(ForgotPasswordViewModel model)
         {
             if (ModelState.IsValid)
@@ -434,7 +413,6 @@ namespace Certification_System.Controllers
 
         [HttpPost]
         [AllowAnonymous]
-        [ValidateAntiForgeryToken]
         public async Task<IActionResult> ResetPassword(ResetPasswordViewModel model)
         {
             if (!ModelState.IsValid)
@@ -470,11 +448,12 @@ namespace Certification_System.Controllers
             return View();
         }
 
-        //
         // GET: /Account/GenerateMenu
         [Authorize]
         public ActionResult GenerateMenu()
         {
+            // todo: change for switch with additional instructor and examinator role.
+
             if (this.User.IsInRole("Admin"))
             {
                 return PartialView("_AdminMenu");
@@ -489,7 +468,6 @@ namespace Certification_System.Controllers
             }
         }
 
-        //
         // GET: /Account/_AdminMenu
         [Authorize(Roles = "Admin")]
         public IActionResult _AdminMenu()
@@ -497,7 +475,6 @@ namespace Certification_System.Controllers
             return PartialView();
         }
 
-        //
         // GET: /Account/_CompanyMenu
         [Authorize(Roles = "Company")]
         public IActionResult _CompanyMenu()
@@ -505,7 +482,6 @@ namespace Certification_System.Controllers
             return PartialView();
         }
 
-        //
         // GET: /Account/_WorkerMenu
         [Authorize(Roles = "Worker")]
         public IActionResult _WorkerMenu()
