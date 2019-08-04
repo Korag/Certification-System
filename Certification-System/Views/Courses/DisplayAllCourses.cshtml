@@ -1,4 +1,4 @@
-﻿@model IEnumerable<Certification_System.DTOViewModels.DisplayListOfCoursesViewModel>
+﻿@model IEnumerable<Certification_System.DTOViewModels.DisplayCourseViewModel>
 
 @{
     ViewData["Title"] = "DisplayAllCourses";
@@ -44,7 +44,7 @@
                     @Html.DisplayNameFor(model => model.CourseLength)
                 </th>
                 <th>
-                    @Html.DisplayNameFor(model => model.SelectedBranches)
+                    @Html.DisplayNameFor(model => model.Branches)
                 </th>
                 <th>
                     Operacje
@@ -84,7 +84,7 @@
                     </td>
                     <td>
                         <ul>
-                            @foreach (var branch in item.SelectedBranches)
+                            @foreach (var branch in item.Branches)
                             {
                                 <li>@branch</li>
                             }

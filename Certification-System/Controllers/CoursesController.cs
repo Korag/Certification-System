@@ -7,16 +7,23 @@ using MongoDB.Bson;
 using System.Collections.Generic;
 using System.Linq;
 using Certification_System.Repository.DAL;
+using AutoMapper;
+using Certification_System.ServicesInterfaces;
 
 namespace Certification_System.Controllers
 {
     public class CoursesController : Controller
     {
-        public MongoOperations _context { get; set; }
+        private MongoOperations _context { get; set; }
 
-        public CoursesController(MongoOperations context)
+        private IMapper _mapper;
+        private IKeyGenerator _keyGenerator;
+
+        public CoursesController(MongoOperations context, IMapper mapper, IKeyGenerator keyGenerator)
         {
             _context = context;
+            _mapper = mapper;
+            _keyGenerator = keyGenerator;
         }
 
         // GET: AddNewCourse
@@ -27,7 +34,6 @@ namespace Certification_System.Controllers
             {
                 AvailableBranches = new List<SelectListItem>(),
                 SelectedBranches = new List<string>(),
-
                 MeetingsViewModels = new List<AddMeetingViewModel>()
             };
 
@@ -38,9 +44,9 @@ namespace Certification_System.Controllers
             return View(newCourse);
         }
 
-        // GET: AddNewCourseConfirmation
+        // GET: ConfirmationOfActionOnCourse
         [Authorize(Roles = "Admin")]
-        public ActionResult AddNewCourseConfirmation(string courseIdentificator, ICollection<string> meetingsIdentificators, string TypeOfAction)
+        public ActionResult ConfirmationOfActionOnCourse(string courseIdentificator, ICollection<string> meetingsIdentificators, string TypeOfAction)
         {
             if (courseIdentificator != null)
             {
@@ -48,17 +54,8 @@ namespace Certification_System.Controllers
 
                 var Course = _context.courseRepository.GetCourseById(courseIdentificator);
 
-                AddCourseViewModel addedCourse = new AddCourseViewModel
-                {
-                    CourseIndexer = Course.CourseIndexer,
-                    Name = Course.Name,
-                    Description = Course.Description,
-                    DateOfStart = Course.DateOfStart,
-                    DateOfEnd = Course.DateOfEnd,
-
-                    MeetingsViewModels = new List<AddMeetingViewModel>()
-                };
-
+                DisplayCourseWithMeetingsViewModel modifiedCourse = _mapper.Map<DisplayCourseWithMeetingsViewModel>(Course);
+               
                 if (Course.Meetings != null)
                 {
                     //    var MeetingsId = _context.GetMeetingsById(Course.Meetings);
@@ -95,60 +92,30 @@ namespace Certification_System.Controllers
                 }
 
                 var BranchNames = _context.branchRepository.GetBranchesById(Course.Branches);
-                addedCourse.SelectedBranches = BranchNames;
+                modifiedCourse.Branches = BranchNames;
 
-                return View(addedCourse);
+                return View(modifiedCourse);
             }
             return RedirectToAction(nameof(AddNewCourse));
         }
 
         // POST: AddNewCourse
-        [ValidateAntiForgeryToken]
         [Authorize(Roles = "Admin")]
         [HttpPost]
         public ActionResult AddNewCourse(AddCourseViewModel newCourse)
         {
             if (ModelState.IsValid)
             {
-                Course course = new Course
-                {
-                    CourseIdentificator = ObjectId.GenerateNewId().ToString(),
-
-                    Name = newCourse.Name,
-                    Description = newCourse.Description,
-                    CourseIndexer = newCourse.CourseIndexer,
-
-                    DateOfStart = newCourse.DateOfStart,
-                    DateOfEnd = newCourse.DateOfEnd,
-                    
-                    EnrolledUsersLimit = newCourse.EnrolledUsersLimit,
-                    CourseLength = newCourse.CourseLength,
-                    CourseEnded = false,
-
-                    Branches = newCourse.SelectedBranches,
-                    Meetings = new List<string>(),
-                    EnrolledUsers = new List<string>()
-                };
+                Course course = _mapper.Map<Course>(newCourse);
+                course.CourseIdentificator = _keyGenerator.GenerateNewId();
 
                 if (newCourse.MeetingsViewModels != null)
                 {
                     foreach (var meeting in newCourse.MeetingsViewModels)
                     {
-                        Meeting singleMeeting = new Meeting
-                        {
-                            MeetingIdentificator = ObjectId.GenerateNewId().ToString(),
-
-                            MeetingIndexer = meeting.MeetingIndexer,
-                            Description = meeting.Description,
-                            DateOfMeeting = meeting.DateOfMeeting,
-                            Country = meeting.Country,
-                            City = meeting.City,
-                            PostCode = meeting.PostCode,
-                            Address = meeting.Address,
-                            NumberOfApartment = meeting.NumberOfApartment,
-
-                            Instructors = new List<string>()
-                        };
+                        Meeting singleMeeting = _mapper.Map<Meeting>(meeting);
+                        singleMeeting.MeetingIdentificator = _keyGenerator.GenerateNewId();
+                        singleMeeting.Instructors = new List<string>();
 
                         //foreach (var instructor in Instructor)
                         //{
@@ -172,7 +139,7 @@ namespace Certification_System.Controllers
 
                 _context.courseRepository.AddCourse(course);
 
-                return RedirectToAction("AddNewCourseConfirmation", new { courseIdentificator = course.CourseIdentificator, meetingsIdentificators = new List<string>(), TypeOfAction = "Update" });
+                return RedirectToAction("ConfirmationOfActionOnCourse", new { courseIdentificator = course.CourseIdentificator, meetingsIdentificators = new List<string>(), TypeOfAction = "Update" });
             }
 
             newCourse.AvailableBranches = _context.branchRepository.GetBranchesAsSelectList().ToList();
@@ -180,6 +147,7 @@ namespace Certification_System.Controllers
             {
                 newCourse.SelectedBranches = new List<string>();
             }
+
             return View(newCourse);
         }
 
@@ -188,37 +156,19 @@ namespace Certification_System.Controllers
         public ActionResult DisplayAllCourses()
         {
             var Courses = _context.courseRepository.GetCourses();
-            List<DisplayListOfCoursesViewModel> ListOfCourses = new List<DisplayListOfCoursesViewModel>();
+            List<DisplayCourseViewModel> ListOfCourses = new List<DisplayCourseViewModel>();
 
             if (Courses.Count != 0)
             {
-                foreach (var course in Courses)
-                {
-                    DisplayListOfCoursesViewModel singleCourse = new DisplayListOfCoursesViewModel
-                    {
-                        CourseIdentificator = course.CourseIdentificator,
-                        CourseIndexer = course.CourseIndexer,
-                        Name = course.Name,
-                        Description = course.Description,
-                        DateOfStart = course.DateOfStart,
-                        DateOfEnd = course.DateOfEnd,
-                        CourseLength = course.CourseLength,
-                        CourseEnded = course.CourseEnded,
-                        EnrolledUsersLimit = course.EnrolledUsersLimit,
-                        EnrolledUsersQuantity = course.EnrolledUsers.Count,
-
-                        SelectedBranches = _context.branchRepository.GetBranchesById(course.Branches)
-                    };
-
-                    ListOfCourses.Add(singleCourse);
-                }
+                ListOfCourses = _mapper.Map<List<DisplayCourseViewModel>>(Courses);
+                ListOfCourses.ForEach(z => z.Branches = _context.branchRepository.GetBranchesById(z.Branches));
             }
 
             return View(ListOfCourses);
         }
 
 
-        // GET:   CourseDetails
+        // GET: CourseDetails
         [Authorize(Roles = "Admin")]
         public ActionResult CourseDetails(string CourseIdentificator)
         {
@@ -227,65 +177,26 @@ namespace Certification_System.Controllers
 
             List<DisplayMeetingViewModel> meetingsViewModel = new List<DisplayMeetingViewModel>();
 
+            // przemyśleć nad zmniejszeniem ViewModelu -> niepotrzebne pola
             foreach (var meeting in Meetings)
             {
-                DisplayMeetingViewModel singleMeeting = new DisplayMeetingViewModel
-                {
-                    MeetingIdentificator = meeting.MeetingIdentificator,
-                    MeetingIndexer = meeting.MeetingIndexer,
-                    Description = meeting.Description,
-                    DateOfMeeting = meeting.DateOfMeeting,
-                    Country = meeting.Country,
-                    City = meeting.City,
-                    Address = meeting.Address,
-                    NumberOfApartment = meeting.NumberOfApartment,
-                    PostCode = meeting.PostCode,
-
-                    CourseIdentificator = Course.CourseIdentificator,
-                    InstructorsCredentials = _context.instructorRepository.GetInstructorsById(meeting.Instructors).Select(z => z.FirstName + " " + z.LastName).ToList()
-                };
-
+                DisplayMeetingViewModel singleMeeting = _mapper.Map<DisplayMeetingViewModel>(meeting);
+                singleMeeting.CourseIdentificator = Course.CourseIdentificator;
+                singleMeeting.InstructorsCredentials = _context.instructorRepository.GetInstructorsById(meeting.Instructors).Select(z => z.FirstName + " " + z.LastName).ToList();
+             
                 meetingsViewModel.Add(singleMeeting);
             }
 
             var Users = _context.userRepository.GetUsersById(Course.EnrolledUsers);
+            List<DisplayCrucialDataWithCompaniesRoleViewModel> usersViewModel = _mapper.Map<List<DisplayCrucialDataWithCompaniesRoleViewModel>>(Users);
 
-            List<DisplayUsersViewModel> usersViewModel = new List<DisplayUsersViewModel>();
+            CourseDetailsViewModel courseDetails = _mapper.Map<CourseDetailsViewModel>(Course);
 
-            foreach (var user in Users)
-            {
-                DisplayUsersViewModel singleUser = new DisplayUsersViewModel
-                {
-                    UserIdentificator = user.Id,
-                    FirstName = user.FirstName,
-                    LastName = user.LastName,
-                    Email = user.Email,
-                    CompanyRoleWorker = user.CompanyRoleWorker,
-                    CompanyRoleManager = user.CompanyRoleManager
-                };
-
-                usersViewModel.Add(singleUser);
-            }
-
-            CourseDetailsViewModel courseDetails = new CourseDetailsViewModel
-            {
-                CourseIdentificator = Course.CourseIdentificator,
-
-                CourseIndexer = Course.CourseIndexer,
-                Name = Course.Name,
-                Description = Course.Description,
-                DateOfStart = Course.DateOfStart,
-                DateOfEnd = Course.DateOfEnd,
-                CourseLength = Course.CourseLength,
-                CourseEnded = Course.CourseEnded,
-                EnrolledUsersLimit = Course.EnrolledUsersLimit,
-                EnrolledUsersQuantity = Course.EnrolledUsers.Count,
-
-                Branches = _context.branchRepository.GetBranchesById(Course.Branches),
-                Meetings = meetingsViewModel,
-                EnrolledUsers = usersViewModel
-            };
-
+            courseDetails.EnrolledUsersQuantity = Course.EnrolledUsers.Count;
+            courseDetails.Branches = _context.branchRepository.GetBranchesById(Course.Branches);
+            courseDetails.Meetings = meetingsViewModel;
+            courseDetails.EnrolledUsers = usersViewModel;
+          
             return View(courseDetails);
         }
 
@@ -295,59 +206,26 @@ namespace Certification_System.Controllers
         {
             var Course = _context.courseRepository.GetCourseById(courseIdentificator);
 
-            AddCourseViewModel courseToUpdate = new AddCourseViewModel
-            {
-                CourseIdentificator = Course.CourseIdentificator,
-
-                CourseIndexer = Course.CourseIndexer,
-                Name = Course.Name,
-                Description = Course.Description,
-                DateOfStart = Course.DateOfStart,
-                DateOfEnd = Course.DateOfEnd,
-                
-                CourseLength = Course.CourseLength,
-        
-                SelectedBranches = Course.Branches,
-                AvailableBranches = _context.branchRepository.GetBranchesAsSelectList().ToList()
-            };
-
+            EditCourseViewModel courseToUpdate = _mapper.Map<EditCourseViewModel>(Course);
+            courseToUpdate.AvailableBranches = _context.branchRepository.GetBranchesAsSelectList().ToList();
+          
             return View(courseToUpdate);
         }
 
-
         // POST: EditCourse
-        [ValidateAntiForgeryToken]
         [Authorize(Roles = "Admin")]
         [HttpPost]
-        public ActionResult EditCourse(AddCourseViewModel editedCourse)
+        public ActionResult EditCourse(EditCourseViewModel editedCourse)
         {
             var OriginCourse = _context.courseRepository.GetCourseById(editedCourse.CourseIdentificator);
 
             if (ModelState.IsValid)
             {
-                Course course = new Course
-                {
-                    CourseIdentificator = editedCourse.CourseIdentificator,
+                OriginCourse = _mapper.Map<EditCourseViewModel, Course>(editedCourse, OriginCourse);
+         
+                _context.courseRepository.UpdateCourse(OriginCourse);
 
-                    Name = editedCourse.Name,
-                    Description = editedCourse.Description,
-                    CourseIndexer = editedCourse.CourseIndexer,
-
-                    DateOfStart = editedCourse.DateOfStart,
-                    DateOfEnd = editedCourse.DateOfEnd,
-                    EnrolledUsersLimit = editedCourse.EnrolledUsersLimit,
-                    
-                    CourseEnded = OriginCourse.CourseEnded,
-                    CourseLength = editedCourse.CourseLength,
-
-                    Branches = editedCourse.SelectedBranches,
-                    Meetings = OriginCourse.Meetings,
-                    EnrolledUsers = OriginCourse.EnrolledUsers
-                };
-
-                _context.courseRepository.UpdateCourse(course);
-
-                return RedirectToAction("AddNewCourseConfirmation", "Courses", new { courseIdentificator = editedCourse.CourseIdentificator, TypeOfAction = "Update" });
+                return RedirectToAction("ConfirmationOfActionOnCourse", "Courses", new { courseIdentificator = editedCourse.CourseIdentificator, TypeOfAction = "Update" });
             }
 
             editedCourse.AvailableBranches = _context.branchRepository.GetBranchesAsSelectList().ToList();
@@ -355,16 +233,14 @@ namespace Certification_System.Controllers
             {
                 editedCourse.SelectedBranches = new List<string>();
             }
+
             return View(editedCourse);
         }
 
         [Authorize(Roles = "Admin")]
         public ActionResult Test()
         {
-
-
             return Ok();
         }
-
     }
 }

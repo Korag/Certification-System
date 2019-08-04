@@ -1,7 +1,7 @@
-﻿@model Certification_System.DTOViewModels.AddCourseViewModel
+﻿@model Certification_System.DTOViewModels.DisplayCourseWithMeetingsViewModel
 
 @{
-    ViewBag.Title = "AddNewCourseConfirmation";
+    ViewBag.Title = "ConfirmationOfActionOnCourse";
 }
 
 @if (ViewBag.TypeOfAction == "Update")
@@ -36,7 +36,7 @@ else
                     @Html.DisplayNameFor(model => model.DateOfEnd)
                 </th>
                 <th>
-                    @Html.DisplayNameFor(model => model.AvailableBranches)
+                    @Html.DisplayNameFor(model => model.Branches)
                 </th>
             </tr>
         </thead>
@@ -62,7 +62,7 @@ else
                 </td>
                 <td>
                     <ul>
-                        @foreach (var branch in Model.SelectedBranches)
+                        @foreach (var branch in Model.Branches)
                         {
                             <li>@branch</li>
                         }
@@ -72,7 +72,7 @@ else
         </tbody>
     </table>
 
-    @if (Model.MeetingsViewModels.Count() != 0)
+    @if (Model.Meetings.Count() != 0)
     {
         <table class="table table-responsive">
             <thead>
@@ -81,33 +81,33 @@ else
                 </tr>
                 <tr>
                     <th>
-                        @Html.DisplayNameFor(model => Model.MeetingsViewModels.FirstOrDefault().MeetingIndexer)
+                        @Html.DisplayNameFor(model => Model.Meetings.FirstOrDefault().MeetingIndexer)
                     </th>
                     <th>
-                        @Html.DisplayNameFor(model => Model.MeetingsViewModels.FirstOrDefault().DateOfMeeting)
+                        @Html.DisplayNameFor(model => Model.Meetings.FirstOrDefault().DateOfMeeting)
                     </th>
                     <th>
-                        @Html.DisplayNameFor(model => Model.MeetingsViewModels.FirstOrDefault().Country)
+                        @Html.DisplayNameFor(model => Model.Meetings.FirstOrDefault().Country)
                     </th>
                     <th>
-                        @Html.DisplayNameFor(model => Model.MeetingsViewModels.FirstOrDefault().City)
+                        @Html.DisplayNameFor(model => Model.Meetings.FirstOrDefault().City)
                     </th>
                     <th>
-                        @Html.DisplayNameFor(model => Model.MeetingsViewModels.FirstOrDefault().PostCode)
+                        @Html.DisplayNameFor(model => Model.Meetings.FirstOrDefault().PostCode)
                     </th>
                     <th>
-                        @Html.DisplayNameFor(model => Model.MeetingsViewModels.FirstOrDefault().Address)
+                        @Html.DisplayNameFor(model => Model.Meetings.FirstOrDefault().Address)
                     </th>
                     <th>
-                        @Html.DisplayNameFor(model => Model.MeetingsViewModels.FirstOrDefault().NumberOfApartment)
+                        @Html.DisplayNameFor(model => Model.Meetings.FirstOrDefault().NumberOfApartment)
                     </th>
                     <th>
-                        @Html.DisplayNameFor(model => Model.MeetingsViewModels.FirstOrDefault().SelectedInstructors)
+                        @Html.DisplayNameFor(model => Model.Meetings.FirstOrDefault().InstructorsCredentials)
                     </th>
                 </tr>
             </thead>
             <tbody>
-                @foreach (var Meeting in Model.MeetingsViewModels)
+                @foreach (var Meeting in Model.Meetings)
                 {
                     <tr>
                         <td>
@@ -133,7 +133,7 @@ else
                         </td>
                         <td>
                             <ul>
-                                @foreach (var instructor in Meeting.SelectedInstructors)
+                                @foreach (var instructor in Meeting.InstructorsCredentials)
                                 {
                                     <li>@instructor</li>
                                 }

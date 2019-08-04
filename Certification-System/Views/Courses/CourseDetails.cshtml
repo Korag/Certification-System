@@ -171,7 +171,7 @@
                             </ul>
                         </td>
                         <td>
-                            @Html.ActionLink("Szczegóły spotkania", "MeetingDetail", "Meetings", new { meetingIdentificator = item.MeetingIdentificator }, new { @class = "btn btn-info m-1" })
+                            @Html.ActionLink("Szczegóły spotkania", "MeetingDetails", "Meetings", new { meetingIdentificator = item.MeetingIdentificator }, new { @class = "btn btn-info m-1" })
                             @*@Html.ActionLink("Szczegóły instruktora", "InstructorDetail", new { instructorIdentificator = item.Instructors }, new { @class = "btn btn-secondary" })*@
                             @Html.ActionLink("Edytuj spotkanie", "EditMeeting", "Meetings", new { meetingIdentificator = item.MeetingIdentificator }, new { @class = "btn btn-warning m-1" })
                             @*@Html.ActionLink("Usuń spotkanie ze szkolenia", "DeleteMeeting", new { meetingIdentificator = item.MeetingIdentificator }) |*@
