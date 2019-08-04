@@ -23,9 +23,9 @@ namespace Certification_System.DTOViewModels
         public ICollection<string> Branches { get; set; }
 
         [Display(Name = "Użytkownicy posiadający certyfikat")]
-        public ICollection<DisplayUsersViewModel> UsersWithCertificate { get; set; }
+        public ICollection<DisplayUserViewModel> UsersWithCertificate { get; set; }
 
         [Display(Name = "Kursy, które zakończyły się nadaniem takiego certyfikatu")]
-        public ICollection<DisplayListOfCoursesViewModel> CoursesWhichEndedWithCertificate { get; set; }
+        public ICollection<DisplayCourseViewModel> CoursesWhichEndedWithCertificate { get; set; }
     }
 }

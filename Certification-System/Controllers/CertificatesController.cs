@@ -1,4 +1,5 @@
-﻿using Certification_System.DTOViewModels;
+﻿using AutoMapper;
+using Certification_System.DTOViewModels;
 using Certification_System.Entities;
 using Certification_System.Repository.DAL;
 using Certification_System.ServicesInterfaces;
@@ -14,17 +15,22 @@ namespace Certification_System.Controllers
     public class CertificatesController : Controller
     {
         private MongoOperations _context { get; set; }
-        public IGeneratorQR _generatorQR { get; set; }
 
-        public CertificatesController(IGeneratorQR generatorQR, MongoOperations context)
+        private IGeneratorQR _generatorQR { get; set; }
+        private IMapper _mapper;
+        private IKeyGenerator _keyGenerator;
+
+        public CertificatesController(IGeneratorQR generatorQR, MongoOperations context, IMapper mapper, IKeyGenerator keyGenerator)
         {
             _generatorQR = generatorQR;
             _context = context;
+            _mapper = mapper;
+            _keyGenerator = keyGenerator;
         }
 
         // GET: BlankMenu
         [Authorize]
-        public IActionResult BlankMenu()
+        public ActionResult BlankMenu()
         {
             return View();
         }
@@ -33,67 +39,28 @@ namespace Certification_System.Controllers
         [Authorize(Roles = "Admin")]
         public ActionResult AddNewCertificate()
         {
-            AddCertificateToDbViewModel newCertificate = new AddCertificateToDbViewModel
+            AddCertificateViewModel newCertificate = new AddCertificateViewModel
             {
                 AvailableBranches = _context.branchRepository.GetBranchesAsSelectList().ToList(),
                 SelectedBranches = new List<string>()
             };
 
-            //newCertificate.AvailableBranches = _context.GetBranchesAsSelectList().ToList();
-
             return View(newCertificate);
         }
 
-        // GET: AddNewCertificateConfirmation
-        [Authorize(Roles = "Admin")]
-        public ActionResult AddNewCertificateConfirmation(string certificateIdentificator, string TypeOfAction)
-        {
-            if (certificateIdentificator != null)
-            {
-                ViewBag.TypeOfAction = TypeOfAction;
-
-                var Certificate = _context.certificateRepository.GetCertificateById(certificateIdentificator);
-
-                AddCertificateToDbViewModel addedCertificate = new AddCertificateToDbViewModel
-                {
-                    CertificateIndexer = Certificate.CertificateIndexer,
-                    Name = Certificate.Name,
-                    Description = Certificate.Description,
-                };
-
-                var BranchNames = _context.branchRepository.GetBranchesById(Certificate.Branches);
-
-                addedCertificate.SelectedBranches = BranchNames;
-
-                return View(addedCertificate);
-            }
-            return RedirectToAction(nameof(AddNewCertificate));
-        }
-
         // POST: AddNewCertificate
-        [ValidateAntiForgeryToken]
         [Authorize(Roles = "Admin")]
         [HttpPost]
-        public ActionResult AddNewCertificate(AddCertificateToDbViewModel newCertificate)
+        public ActionResult AddNewCertificate(AddCertificateViewModel newCertificate)
         {
             if (ModelState.IsValid)
             {
-                Certificate certificate = new Certificate
-                {
-                    CertificateIdentificator = ObjectId.GenerateNewId().ToString(),
-
-                    CertificateIndexer = newCertificate.CertificateIndexer,
-                    Name = newCertificate.Name,
-                    Description = newCertificate.Description,
-
-                    Depreciated = newCertificate.Depreciated,
-
-                    Branches = newCertificate.SelectedBranches
-                };
+                Certificate certificate = _mapper.Map<Certificate>(newCertificate);
+                certificate.CertificateIdentificator = _keyGenerator.GenerateNewId();
 
                 _context.certificateRepository.AddCertificate(certificate);
 
-                return RedirectToAction("AddNewCertificateConfirmation", new { certificateIdentificator = certificate.CertificateIdentificator, TypeOfAction = "Add" });
+                return RedirectToAction("ConfirmationOfActionOnCertificate", new { certificateIdentificator = certificate.CertificateIdentificator, TypeOfAction = "Add" });
             }
 
             newCertificate.AvailableBranches = _context.branchRepository.GetBranchesAsSelectList().ToList();
@@ -104,28 +71,32 @@ namespace Certification_System.Controllers
             return View(newCertificate);
         }
 
+        // GET: ConfirmationOfActionOnCertificate
+        [Authorize(Roles = "Admin")]
+        public ActionResult ConfirmationOfActionOnCertificate(string certificateIdentificator, string TypeOfAction)
+        {
+            if (certificateIdentificator != null)
+            {
+                ViewBag.TypeOfAction = TypeOfAction;
+
+                var Certificate = _context.certificateRepository.GetCertificateById(certificateIdentificator);
+                DisplayCertificateViewModel modifiedCertificate = _mapper.Map<DisplayCertificateViewModel>(Certificate);
+
+                modifiedCertificate.Branches = _context.branchRepository.GetBranchesById(Certificate.Branches);
+
+                return View(modifiedCertificate);
+            }
+            return RedirectToAction(nameof(AddNewCertificate));
+        }
+
         // GET: DisplayAllCertificates
         [Authorize(Roles = "Admin")]
         public ActionResult DisplayAllCertificates()
         {
             var Certificates = _context.certificateRepository.GetCertificates();
-            List<DisplayListOfCertificatesViewModel> ListOfCertificates = new List<DisplayListOfCertificatesViewModel>();
 
-            foreach (var certificate in Certificates)
-            {
-                DisplayListOfCertificatesViewModel singleCertificate = new DisplayListOfCertificatesViewModel
-                {
-                    CertificateIdentificator = certificate.CertificateIdentificator,
-
-                    CertificateIndexer = certificate.CertificateIndexer,
-                    Name = certificate.Name,
-                    Description = certificate.Description,
-                    Branches = _context.branchRepository.GetBranchesById(certificate.Branches),
-                    Depreciated = certificate.Depreciated
-                };
-
-                ListOfCertificates.Add(singleCertificate);
-            }
+            List<DisplayCertificateViewModel> ListOfCertificates = _mapper.Map<List<DisplayCertificateViewModel>>(Certificates);
+            ListOfCertificates.ForEach(z => z.Branches = _context.branchRepository.GetBranchesById(z.Branches));
 
             return View(ListOfCertificates);
         }
@@ -143,42 +114,14 @@ namespace Certification_System.Controllers
                 var Certificate = _context.certificateRepository.GetCertificateById(givenCertificate.Certificate);
                 var User = _context.userRepository.GetUserByGivenCertificateId(givenCertificate.GivenCertificateIdentificator);
 
-                DisplayListOfCoursesViewModel courseViewModel = new DisplayListOfCoursesViewModel
-                {
-                    CourseIdentificator = Course.CourseIdentificator,
+                DisplayCrucialDataCourseViewModel courseViewModel  = _mapper.Map<DisplayCrucialDataCourseViewModel>(Course);
+                DisplayCrucialDataCertificateViewModel certificateViewModel = _mapper.Map<DisplayCrucialDataCertificateViewModel>(Certificate);
+                DisplayCrucialDataUsersViewModel userViewModel = _mapper.Map<DisplayCrucialDataUsersViewModel>(User);
 
-                    CourseIndexer = Course.CourseIndexer,
-                    Name = Course.Name,
-                };
-
-                DisplayListOfCertificatesViewModel certificateViewModel = new DisplayListOfCertificatesViewModel
-                {
-                    CertificateIdentificator = Certificate.CertificateIdentificator,
-
-                    CertificateIndexer = Certificate.CertificateIndexer,
-                    Name = Certificate.Name
-                };
-
-                DisplayUsersViewModel userViewModel = new DisplayUsersViewModel
-                {
-                    UserIdentificator = User.Id,
-
-                    FirstName = User.FirstName,
-                    LastName = User.LastName
-                };
-
-                DisplayGivenCertificateViewModel singleGivenCertificate = new DisplayGivenCertificateViewModel
-                {
-                    GivenCertificateIdentificator = givenCertificate.GivenCertificateIdentificator,
-
-                    GivenCertificateIndexer = givenCertificate.GivenCertificateIndexer,
-                    ReceiptDate = givenCertificate.ReceiptDate,
-                    ExpirationDate = givenCertificate.ExpirationDate,
-
-                    Certificate = certificateViewModel,
-                    Course = courseViewModel,
-                    User = userViewModel
-                };
+                DisplayGivenCertificateViewModel singleGivenCertificate = _mapper.Map<DisplayGivenCertificateViewModel>(givenCertificate);
+                singleGivenCertificate.Certificate = certificateViewModel;
+                singleGivenCertificate.Course = courseViewModel;
+                singleGivenCertificate.User = userViewModel;
 
                 ListOfGivenCertificates.Add(singleGivenCertificate);
             }
@@ -190,7 +133,7 @@ namespace Certification_System.Controllers
         [Authorize(Roles = "Admin")]
         public ActionResult AddNewGivenCertificate()
         {
-            AddNewGivenCertificateViewModel newGivenCertificate = new AddNewGivenCertificateViewModel
+            AddGivenCertificateViewModel newGivenCertificate = new AddGivenCertificateViewModel
             {
                 AvailableCertificates = _context.certificateRepository.GetCertificatesAsSelectList().ToList(),
                 AvailableUsers = _context.userRepository.GetUsersAsSelectList().ToList(),
@@ -201,29 +144,21 @@ namespace Certification_System.Controllers
         }
 
         // POST: AddNewGivenCertificate
-        [ValidateAntiForgeryToken]
         [Authorize(Roles = "Admin")]
         [HttpPost]
-        public ActionResult AddNewGivenCertificate(AddNewGivenCertificateViewModel newGivenCertificate)
+        public ActionResult AddNewGivenCertificate(AddGivenCertificateViewModel newGivenCertificate)
         {
             if (ModelState.IsValid)
             {
-                GivenCertificate givenCertificate = new GivenCertificate
-                {
-                    GivenCertificateIdentificator = ObjectId.GenerateNewId().ToString(),
-                    GivenCertificateIndexer = newGivenCertificate.GivenCertificateIndexer,
-
-                    ReceiptDate = newGivenCertificate.ReceiptDate,
-                    ExpirationDate = newGivenCertificate.ExpirationDate,
-
-                    Course = _context.courseRepository.GetCourseById(newGivenCertificate.SelectedCourses).CourseIdentificator,
-                    Certificate = _context.certificateRepository.GetCertificateById(newGivenCertificate.SelectedCertificate).CertificateIdentificator
-                };
+                GivenCertificate givenCertificate = _mapper.Map<GivenCertificate>(newGivenCertificate);
+                givenCertificate.GivenCertificateIdentificator = _keyGenerator.GenerateNewId();
+                givenCertificate.Course = _context.courseRepository.GetCourseById(newGivenCertificate.SelectedCourses).CourseIdentificator;
+                givenCertificate.Certificate = _context.certificateRepository.GetCertificateById(newGivenCertificate.SelectedCertificate).CertificateIdentificator;
 
                 _context.givenCertificateRepository.AddGivenCertificate(givenCertificate);
                 _context.userRepository.AddUserCertificate(newGivenCertificate.SelectedUser, givenCertificate.GivenCertificateIdentificator);
 
-                return RedirectToAction("AddNewGivenCertificateConfirmation", new { givenCertificateIdentificator = givenCertificate.GivenCertificateIdentificator, TypeOfAction = "Update" });
+                return RedirectToAction("ConfirmationOfActionOnGivenCertificate", new { givenCertificateIdentificator = givenCertificate.GivenCertificateIdentificator, TypeOfAction = "Update" });
             }
 
             newGivenCertificate.AvailableCertificates = _context.certificateRepository.GetCertificatesAsSelectList().ToList();
@@ -233,9 +168,9 @@ namespace Certification_System.Controllers
             return View(newGivenCertificate);
         }
 
-        // GET: AddNewGivenCertificateConfirmation
+        // GET: ConfirmationOfActionOnGivenCertificate
         [Authorize(Roles = "Admin")]
-        public ActionResult AddNewGivenCertificateConfirmation(string givenCertificateIdentificator, string TypeOfAction)
+        public ActionResult ConfirmationOfActionOnGivenCertificate(string givenCertificateIdentificator, string TypeOfAction)
         {
             if (givenCertificateIdentificator != null)
             {
@@ -247,47 +182,19 @@ namespace Certification_System.Controllers
                 var Certificate = _context.certificateRepository.GetCertificateById(GivenCertificate.Certificate);
                 var User = _context.userRepository.GetUserByGivenCertificateId(GivenCertificate.GivenCertificateIdentificator);
 
-                DisplayUsersViewModel userViewModel = new DisplayUsersViewModel
-                {
-                    UserIdentificator = User.Id,
+                DisplayCrucialDataUsersViewModel userViewModel = _mapper.Map<DisplayCrucialDataUsersViewModel>(User);
+                DisplayCrucialDataCourseViewModel courseViewModel = _mapper.Map<DisplayCrucialDataCourseViewModel>(Course);
+                DisplayCrucialDataCertificateViewModel certificateViewModel = _mapper.Map<DisplayCrucialDataCertificateViewModel>(Certificate);
 
-                    FirstName = User.FirstName,
-                    LastName = User.LastName
-                };
+                DisplayGivenCertificateViewModel modifiedGivenCertificate = _mapper.Map<DisplayGivenCertificateViewModel>(GivenCertificate);
+                modifiedGivenCertificate.Course = courseViewModel;
+                modifiedGivenCertificate.Certificate = certificateViewModel;
+                modifiedGivenCertificate.User = userViewModel;
 
-                DisplayListOfCoursesViewModel courseViewModel = new DisplayListOfCoursesViewModel
-                {
-                    CourseIdentificator = Course.CourseIdentificator,
-
-                    CourseIndexer = Course.CourseIndexer,
-                    Name = Course.Name
-                };
-
-                DisplayListOfCertificatesViewModel certificateViewModel = new DisplayListOfCertificatesViewModel
-                {
-                    CertificateIdentificator = Certificate.CertificateIdentificator,
-
-                    CertificateIndexer = Certificate.CertificateIndexer,
-                    Name = Certificate.Name
-                };
-
-                DisplayGivenCertificateViewModel addedGivenCertificate = new DisplayGivenCertificateViewModel
-                {
-                    GivenCertificateIndexer = GivenCertificate.GivenCertificateIndexer,
-                    ReceiptDate = GivenCertificate.ReceiptDate,
-                    ExpirationDate = GivenCertificate.ExpirationDate,
-
-                    Course = courseViewModel,
-                    Certificate = certificateViewModel,
-                    User = userViewModel
-                };
-
-
-                return View(addedGivenCertificate);
+                return View(modifiedGivenCertificate);
             }
             return RedirectToAction(nameof(AddNewGivenCertificate));
         }
-
 
         // GET: EditCertificate
         [Authorize(Roles = "Admin")]
@@ -295,46 +202,23 @@ namespace Certification_System.Controllers
         {
             var Certificate = _context.certificateRepository.GetCertificateById(certificateIdentificator);
 
-            AddCertificateToDbViewModel certificateToUpdate = new AddCertificateToDbViewModel
-            {
-                CertificateIdentificator = Certificate.CertificateIdentificator,
-                CertificateIndexer = Certificate.CertificateIndexer,
-                Description = Certificate.Description,
-                Name = Certificate.Name,
-                Depreciated = Certificate.Depreciated,
-
-                SelectedBranches = Certificate.Branches,
-                AvailableBranches = _context.branchRepository.GetBranchesAsSelectList().ToList()
-            };
+            EditCertificateViewModel certificateToUpdate = _mapper.Map<EditCertificateViewModel>(Certificate);
+            certificateToUpdate.AvailableBranches = _context.branchRepository.GetBranchesAsSelectList().ToList();
 
             return View(certificateToUpdate);
         }
 
-
         // POST: EditCertificate
-        [ValidateAntiForgeryToken]
         [Authorize(Roles = "Admin")]
         [HttpPost]
-        public ActionResult EditCertificate(AddCertificateToDbViewModel editedCertificate)
+        public ActionResult EditCertificate(EditCertificateViewModel editedCertificate)
         {
             if (ModelState.IsValid)
             {
-                Certificate certificate = new Certificate
-                {
-                    CertificateIdentificator = editedCertificate.CertificateIdentificator,
-
-                    CertificateIndexer = editedCertificate.CertificateIndexer,
-                    Name = editedCertificate.Name,
-                    Description = editedCertificate.Description,
-
-                    Depreciated = editedCertificate.Depreciated,
-
-                    Branches = editedCertificate.SelectedBranches
-                };
-
+                Certificate certificate = _mapper.Map<Certificate>(editedCertificate);
                 _context.certificateRepository.UpdateCertificate(certificate);
 
-                return RedirectToAction("AddNewCertificateConfirmation", "Certificates", new { certificateIdentificator = editedCertificate.CertificateIdentificator, TypeOfAction = "Update" });
+                return RedirectToAction("ConfirmationOfActionOnCertificate", "Certificates", new { certificateIdentificator = editedCertificate.CertificateIdentificator, TypeOfAction = "Update" });
             }
 
             editedCertificate.AvailableBranches = _context.branchRepository.GetBranchesAsSelectList().ToList();
@@ -350,20 +234,12 @@ namespace Certification_System.Controllers
         public ActionResult EditGivenCertificate(string givenCertificateIdentificator)
         {
             var GivenCertificate = _context.givenCertificateRepository.GetGivenCertificateById(givenCertificateIdentificator);
-
-            EditGivenCertificateViewModel givenCertificateToUpdate = new EditGivenCertificateViewModel
-            {
-                GivenCertificateIdentificator = GivenCertificate.GivenCertificateIdentificator,
-                GivenCertificateIndexer = GivenCertificate.GivenCertificateIndexer,
-                ReceiptDate = GivenCertificate.ReceiptDate,
-                ExpirationDate = GivenCertificate.ExpirationDate
-            };
+            EditGivenCertificateViewModel givenCertificateToUpdate = _mapper.Map<EditGivenCertificateViewModel>(GivenCertificate);
 
             return View(givenCertificateToUpdate);
         }
 
         // POST: EditGivenCertificate
-        [ValidateAntiForgeryToken]
         [Authorize(Roles = "Admin")]
         [HttpPost]
         public ActionResult EditGivenCertificate(EditGivenCertificateViewModel editedGivenCertificate)
@@ -372,99 +248,13 @@ namespace Certification_System.Controllers
             {
                 var OriginGivenCertificate = _context.givenCertificateRepository.GetGivenCertificateById(editedGivenCertificate.GivenCertificateIdentificator);
 
-                GivenCertificate givenCertificate = new GivenCertificate
-                {
-                    GivenCertificateIdentificator = OriginGivenCertificate.GivenCertificateIdentificator,
+                OriginGivenCertificate = _mapper.Map<EditGivenCertificateViewModel, GivenCertificate>(editedGivenCertificate, OriginGivenCertificate);
+                _context.givenCertificateRepository.UpdateGivenCertificate(OriginGivenCertificate);
 
-                    GivenCertificateIndexer = editedGivenCertificate.GivenCertificateIndexer,
-                    ReceiptDate = editedGivenCertificate.ReceiptDate,
-                    ExpirationDate = editedGivenCertificate.ExpirationDate,
-
-                    Certificate = OriginGivenCertificate.Certificate,
-                    Course = OriginGivenCertificate.Course
-                };
-
-                _context.givenCertificateRepository.UpdateGivenCertificate(givenCertificate);
-
-                return RedirectToAction("AddNewGivenCertificateConfirmation", "Certificates", new { givenCertificateIdentificator = OriginGivenCertificate.GivenCertificateIdentificator, TypeOfAction = "Update" });
+                return RedirectToAction("ConfirmationOfActionOnGivenCertificate", "Certificates", new { givenCertificateIdentificator = OriginGivenCertificate.GivenCertificateIdentificator, TypeOfAction = "Update" });
             }
 
             return View(editedGivenCertificate);
-        }
-
-
-        // GET: DegreeDetails
-        [Authorize(Roles = "Admin")]
-        public ActionResult DegreeDetails(string certificateIdentificator)
-        {
-            var Certificate = _context.certificateRepository.GetCertificateById(certificateIdentificator);
-            var GivenCertificatesInstances = _context.givenCertificateRepository.GetGivenCertificatesByIdOfCertificate(certificateIdentificator);
-
-            var GivenCertificatesIdentificators = GivenCertificatesInstances.Select(z => z.GivenCertificateIdentificator);
-            var UsersWithCertificate = _context.userRepository.GetUsersByGivenCertificateId(GivenCertificatesIdentificators.ToList());
-
-            List<DisplayUsersViewModel> ListOfUsers = new List<DisplayUsersViewModel>();
-
-            if (UsersWithCertificate.Count != 0)
-            {
-                foreach (var user in UsersWithCertificate)
-                {
-                    DisplayUsersViewModel singleUser = new DisplayUsersViewModel
-                    {
-                        UserIdentificator = user.Id,
-                        FirstName = user.FirstName,
-                        LastName = user.LastName,
-                        Email = user.Email,
-                        CompanyRoleWorker = user.CompanyRoleWorker,
-                        CompanyRoleManager = user.CompanyRoleManager
-                    };
-
-                    ListOfUsers.Add(singleUser);
-                }
-            }
-
-            var CoursesWhichEndedWithSuchCertificate = _context.courseRepository.GetCoursesById(GivenCertificatesInstances.Select(z => z.Course).ToList());
-
-            List<DisplayListOfCoursesViewModel> ListOfCourses = new List<DisplayListOfCoursesViewModel>();
-
-            if (CoursesWhichEndedWithSuchCertificate.Count != 0)
-            {
-                foreach (var course in CoursesWhichEndedWithSuchCertificate)
-                {
-                    DisplayListOfCoursesViewModel singleCourse = new DisplayListOfCoursesViewModel
-                    {
-                        CourseIdentificator = course.CourseIdentificator,
-                        CourseIndexer = course.CourseIndexer,
-                        Name = course.Name,
-                        Description = course.Description,
-                        DateOfStart = course.DateOfStart,
-                        DateOfEnd = course.DateOfEnd,
-                        CourseLength = course.CourseLength,
-                        CourseEnded = course.CourseEnded,
-                        EnrolledUsersLimit = course.EnrolledUsersLimit,
-                        EnrolledUsersQuantity = course.EnrolledUsers.Count,
-
-                        SelectedBranches = _context.branchRepository.GetBranchesById(course.Branches)
-                    };
-
-                    ListOfCourses.Add(singleCourse);
-                }
-            }
-
-            CertificateDetailsViewModel CertificateDetails = new CertificateDetailsViewModel
-            {
-                CertificateIdentificator = Certificate.CertificateIdentificator,
-                CertificateIndexer = Certificate.CertificateIndexer,
-                Name = Certificate.Name,
-                Description = Certificate.Description,
-                Depreciated = Certificate.Depreciated,
-
-                Branches = _context.branchRepository.GetBranchesById(Certificate.Branches),
-                CoursesWhichEndedWithCertificate = ListOfCourses,
-                UsersWithCertificate = ListOfUsers
-            };
-
-            return View(CertificateDetails);
         }
 
         // GET: VerifyUserCompetencesByQR
@@ -492,33 +282,12 @@ namespace Certification_System.Controllers
                 var Certificate = _context.certificateRepository.GetCertificateById(GivenCertificate.Certificate);
                 var User = _context.userRepository.GetUserByGivenCertificateId(GivenCertificate.GivenCertificateIdentificator);
 
-                DisplayUsersViewModel userViewModel = new DisplayUsersViewModel
-                {
-                    UserIdentificator = User.Id,
+                DisplayCrucialDataUsersViewModel userViewModel = _mapper.Map<DisplayCrucialDataUsersViewModel>(User);
+                DisplayCrucialDataCertificateViewModel certificateViewModel = _mapper.Map<DisplayCrucialDataCertificateViewModel>(Certificate);
 
-                    FirstName = User.FirstName,
-                    LastName = User.LastName
-                };
-
-                DisplayListOfCertificatesViewModel certificateViewModel = new DisplayListOfCertificatesViewModel
-                {
-                    CertificateIdentificator = Certificate.CertificateIdentificator,
-
-                    CertificateIndexer = Certificate.CertificateIndexer,
-                    Name = Certificate.Name
-                };
-
-                DisplayGivenCertificateViewModel VerifiedGivenCertificate = new DisplayGivenCertificateViewModel
-                {
-                    GivenCertificateIdentificator = GivenCertificate.GivenCertificateIdentificator,
-
-                    GivenCertificateIndexer = GivenCertificate.GivenCertificateIndexer,
-                    ReceiptDate = GivenCertificate.ReceiptDate,
-                    ExpirationDate = GivenCertificate.ExpirationDate,
-
-                    Certificate = certificateViewModel,
-                    User = userViewModel
-                };
+                DisplayGivenCertificateViewModel VerifiedGivenCertificate = _mapper.Map<DisplayGivenCertificateViewModel>(GivenCertificate);
+                VerifiedGivenCertificate.Certificate = certificateViewModel;
+                VerifiedGivenCertificate.User = userViewModel;
 
                 return View(VerifiedGivenCertificate);
             }
@@ -546,7 +315,6 @@ namespace Certification_System.Controllers
         {
             return View();
         }
-
 
         // POST: VerifyUser
         [AllowAnonymous]

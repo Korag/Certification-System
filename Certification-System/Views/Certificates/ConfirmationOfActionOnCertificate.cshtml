@@ -1,7 +1,7 @@
-﻿@model Certification_System.DTOViewModels.AddCertificateToDbViewModel
+﻿@model Certification_System.DTOViewModels.DisplayCertificateViewModel
 
 @{
-    ViewBag.Title = "AddNewCertificateConfirmation";
+    ViewBag.Title = "ConfirmationOfActionOnCertificate";
 }
 
 @if (ViewBag.TypeOfAction == "Update")
@@ -27,7 +27,7 @@ else
                     @Html.DisplayNameFor(model => model.Description)
                 </th>
                 <th>
-                    @Html.DisplayNameFor(model => model.AvailableBranches)
+                    @Html.DisplayNameFor(model => model.Branches)
                 </th>
             </tr>
         </thead>
@@ -44,7 +44,7 @@ else
                 </td>
                 <td>
                     <ul>
-                        @foreach (var branch in Model.SelectedBranches)
+                        @foreach (var branch in Model.Branches)
                         {
                             <li>@branch</li>
                         }
