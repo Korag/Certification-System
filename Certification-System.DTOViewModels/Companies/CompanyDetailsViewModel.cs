@@ -32,6 +32,6 @@ namespace Certification_System.DTOViewModels
         public string NumberOfApartment { get; set; }
 
         [Display(Name = "Użytkownicy zrzeszeni z przedsiębiorstwem")]
-        public ICollection<DisplayUsersViewModel> UsersConnectedToCompany{ get; set; }
+        public ICollection<DisplayUserViewModel> UsersConnectedToCompany{ get; set; }
     }
 }

@@ -2,9 +2,11 @@
 using Certification_System.DTOViewModels;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
-using MongoDB.Bson;
 using System.Collections.Generic;
 using Certification_System.Repository.DAL;
+using AutoMapper;
+using Certification_System.ServicesInterfaces;
+using System.Linq;
 
 namespace Certification_System.Controllers
 {
@@ -12,9 +14,14 @@ namespace Certification_System.Controllers
     {
         private MongoOperations _context;
 
-        public CompaniesController(MongoOperations context)
+        private IMapper _mapper;
+        private IKeyGenerator _keyGenerator;
+
+        public CompaniesController(MongoOperations context, IMapper mapper, IKeyGenerator keyGenerator)
         {
             _context = context;
+            _mapper = mapper;
+            _keyGenerator = keyGenerator;
         }
 
         // GET: DisplayAllCompanies
@@ -22,29 +29,10 @@ namespace Certification_System.Controllers
         public ActionResult DisplayAllCompanies()
         {
             var Companies = _context.companyRepository.GetCompanies();
-            List<AddCompanyViewModel> DisplayCompanies = new List<AddCompanyViewModel>();
-
-            foreach (var company in Companies)
-            {
-                AddCompanyViewModel singleCompany = new AddCompanyViewModel
-                {
-                    CompanyIdentificator = company.CompanyIdentificator,
-                    CompanyName = company.CompanyName,
-                    Email = company.Email,
-                    Phone = company.Phone,
-                    Country = company.Country,
-                    City = company.City,
-                    PostCode = company.PostCode,
-                    Address = company.Address,
-                    NumberOfApartment = company.NumberOfApartment
-                };
-
-                DisplayCompanies.Add(singleCompany);
-            }
+            List<DisplayCompanyViewModel> DisplayCompanies = _mapper.Map<List<DisplayCompanyViewModel>>(Companies);
 
             return View(DisplayCompanies);
         }
-
 
         // GET: AddNewCompany
         [Authorize(Roles = "Admin")]
@@ -53,61 +41,36 @@ namespace Certification_System.Controllers
             return View();
         }
 
-        // GET: AddNewCompanyConfirmation
+        // GET: ConfirmationOfActionOnCompany
         [Authorize(Roles = "Admin")]
-        public ActionResult AddNewCompanyConfirmation(string companyIdentificator, string TypeOfAction)
+        public ActionResult ConfirmationOfActionOnCompany(string companyIdentificator, string TypeOfAction)
         {
             if (companyIdentificator != null)
             {
                 ViewBag.TypeOfAction = TypeOfAction;
 
                 Company company = _context.companyRepository.GetCompanyById(companyIdentificator);
+                DisplayCompanyViewModel modifiedCompany = _mapper.Map<DisplayCompanyViewModel>(company);
 
-                AddCompanyViewModel addedCompany = new AddCompanyViewModel
-                {
-                    CompanyIdentificator = company.CompanyIdentificator,
-
-                    CompanyName = company.CompanyName,
-                    Email = company.Email,
-                    Phone = company.Phone,
-                    Country = company.Country,
-                    City = company.City,
-                    PostCode = company.PostCode,
-                    Address = company.PostCode,
-                    NumberOfApartment = company.NumberOfApartment
-                };
-
-                return View(addedCompany);
+                return View(modifiedCompany);
             }
 
             return RedirectToAction(nameof(AddNewCompany));
         }
 
         // GET: AddNewCompany
-        [ValidateAntiForgeryToken]
         [Authorize(Roles = "Admin")]
         [HttpPost]
         public ActionResult AddNewCompany(AddCompanyViewModel newCompany)
         {
             if (ModelState.IsValid)
             {
-                Company company = new Company
-                {
-                    CompanyIdentificator = ObjectId.GenerateNewId().ToString(),
-
-                    CompanyName = newCompany.CompanyName,
-                    Email = newCompany.Email,
-                    Phone = newCompany.Phone,
-                    Country = newCompany.Country,
-                    City = newCompany.City,
-                    PostCode = newCompany.PostCode,
-                    Address = newCompany.Address,
-                    NumberOfApartment = newCompany.NumberOfApartment
-                };
+                Company company = _mapper.Map<Company>(newCompany);
+                company.CompanyIdentificator = _keyGenerator.GenerateNewId();
 
                 _context.companyRepository.AddCompany(company);
 
-                return RedirectToAction("AddNewCompanyConfirmation", new { companyIdentificator = company.CompanyIdentificator, TypeOfAction = "Add" });
+                return RedirectToAction("ConfirmationOfActionOnCompany", new { companyIdentificator = company.CompanyIdentificator, TypeOfAction = "Add" });
             }
 
             return View(newCompany);
@@ -118,95 +81,45 @@ namespace Certification_System.Controllers
         public ActionResult EditCompany(string companyIdentificator)
         {
             var Company = _context.companyRepository.GetCompanyById(companyIdentificator);
-
-            AddCompanyViewModel companyToUpdate = new AddCompanyViewModel
-            {
-                CompanyIdentificator = Company.CompanyIdentificator,
-
-                CompanyName = Company.CompanyName,
-                Email = Company.Email,
-                Phone = Company.Phone,
-                Country = Company.Country,
-                City = Company.City,
-                PostCode = Company.PostCode,
-                Address = Company.Address,
-                NumberOfApartment = Company.NumberOfApartment
-            };
+            EditCompanyViewModel companyToUpdate = _mapper.Map<EditCompanyViewModel>(Company);
 
             return View(companyToUpdate);
         }
 
         // POST: EditCompany
-        [ValidateAntiForgeryToken]
         [Authorize(Roles = "Admin")]
         [HttpPost]
-        public ActionResult EditCompany(AddCompanyViewModel editedCompany)
+        public ActionResult EditCompany(EditCompanyViewModel editedCompany)
         {
             if (ModelState.IsValid)
             {
-                Company company = new Company
-                {
-                    CompanyIdentificator = editedCompany.CompanyIdentificator,
-                    CompanyName = editedCompany.CompanyName,
-                    Email = editedCompany.Email,
-                    Phone = editedCompany.Phone,
-                    Country = editedCompany.Country,
-                    City = editedCompany.City,
-                    PostCode = editedCompany.PostCode,
-                    Address = editedCompany.Address,
-                    NumberOfApartment = editedCompany.NumberOfApartment
-                };
-
+                Company company = _mapper.Map<Company>(editedCompany);
                 _context.companyRepository.UpdateCompany(company);
 
-                return RedirectToAction("AddNewCompanyConfirmation", "Companies", new { companyIdentificator = editedCompany.CompanyIdentificator, TypeOfAction = "Update" });
+                return RedirectToAction("ConfirmationOfActionOnCompany", "Companies", new { companyIdentificator = editedCompany.CompanyIdentificator, TypeOfAction = "Update" });
             }
 
             return View(editedCompany);
         }
 
-        // GET: CertificateDetails
+        // GET: CompanyDetails
         [Authorize(Roles = "Admin")]
         public ActionResult CompanyDetails(string companyIdentificator)
         {
             var Company = _context.companyRepository.GetCompanyById(companyIdentificator);
-
             var UsersConnectedToCompany = _context.userRepository.GetUsersConnectedToCompany(companyIdentificator);
 
-            List<DisplayUsersViewModel> ListOfUsers = new List<DisplayUsersViewModel>();
+            List<DisplayUserViewModel> ListOfUsers = new List<DisplayUserViewModel>();
 
             if (UsersConnectedToCompany.Count != 0)
             {
-                foreach (var user in UsersConnectedToCompany)
-                {
-                    DisplayUsersViewModel singleUser = new DisplayUsersViewModel
-                    {
-                        UserIdentificator = user.Id,
-                        FirstName = user.FirstName,
-                        LastName = user.LastName,
-                        Email = user.Email,
-                        CompanyRoleWorker = user.CompanyRoleWorker,
-                        CompanyRoleManager = user.CompanyRoleManager
-                    };
-
-                    ListOfUsers.Add(singleUser);
-                }
+                ListOfUsers = _mapper.Map<List<DisplayUserViewModel>>(UsersConnectedToCompany);
+                ListOfUsers.ForEach(z => z.CompanyRoleManager = _context.companyRepository.GetCompaniesById(z.CompanyRoleManager).ToList().Select(s => s.CompanyName).ToList());
+                ListOfUsers.ForEach(z => z.CompanyRoleWorker = _context.companyRepository.GetCompaniesById(z.CompanyRoleWorker).ToList().Select(s => s.CompanyName).ToList());
             }
 
-            CompanyDetailsViewModel companyDetails = new CompanyDetailsViewModel
-            {
-                CompanyIdentificator = Company.CompanyIdentificator,
-                CompanyName = Company.CompanyName,
-                Email = Company.Email,
-                Phone = Company.Phone,
-                Country = Company.Country,
-                City = Company.City,
-                PostCode = Company.PostCode,
-                Address = Company.Address,
-                NumberOfApartment = Company.NumberOfApartment,
-
-                UsersConnectedToCompany = ListOfUsers
-            };
+            CompanyDetailsViewModel companyDetails = _mapper.Map<CompanyDetailsViewModel>(Company);
+            companyDetails.UsersConnectedToCompany = ListOfUsers;
 
             return View(companyDetails);
         }

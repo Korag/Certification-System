@@ -1,18 +1,18 @@
-﻿@model Certification_System.DTOViewModels.AddCompanyViewModel
+﻿@model Certification_System.DTOViewModels.DisplayCompanyViewModel
 
 @{
-    ViewBag.Title = "AddNewCompanyConfirmation";
+    ViewBag.Title = "ConfirmationOfActionOnCompany";
     Layout = "~/Views/Shared/_Layout.cshtml";
 }
 
 
 @if (ViewBag.TypeOfAction == "Update")
 {
-    <h2 class="alert alert-info" role="alert">Zaktualizowano wpis dotyczący przedsiębiorstwa:</h2>
+<h2 class="alert alert-info" role="alert">Zaktualizowano wpis dotyczący przedsiębiorstwa:</h2>
 }
 else
 {
-    <h2 class="alert alert-success" role="alert">Dodano następujący wpis dotyczący przedsiębiorstwa:</h2>
+<h2 class="alert alert-success" role="alert">Dodano następujący wpis dotyczący przedsiębiorstwa:</h2>
 }
 
 <div class="col-12 table-responsive">
@@ -81,16 +81,16 @@ else
     @Html.ActionLink("Przeglądaj przedsiębiorstwa", "DisplayAllCompanies", "Companies", null, new { @class = "btn btn-info" }))
 </div>
 
-    @section Scripts{
-        <script>
-            $(document).ready(function () {
+@section Scripts{
+    <script>
+        $(document).ready(function () {
 
-                $('#companyConfirmation').DataTable({
-                    "language": {
-                        "url": "//cdn.datatables.net/plug-ins/1.10.19/i18n/Polish.json"
-                    },
-                }
-                );
-            });
-        </script>
-    }
+            $('#companyConfirmation').DataTable({
+                "language": {
+                    "url": "//cdn.datatables.net/plug-ins/1.10.19/i18n/Polish.json"
+                },
+            }
+            );
+        });
+    </script>
+}
