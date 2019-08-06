@@ -260,6 +260,49 @@ namespace Certification_System.Controllers
             return View(editedGivenCertificate);
         }
 
+        // GET: CertificateDetails
+        [Authorize(Roles = "Admin")]
+        public ActionResult CertificateDetails(string certificateIdentificator)
+        {
+            var Certificate = _context.certificateRepository.GetCertificateById(certificateIdentificator);
+
+            var GivenCertificatesInstances = _context.givenCertificateRepository.GetGivenCertificatesByIdOfCertificate(certificateIdentificator);
+            var GivenCertificatesIdentificators = GivenCertificatesInstances.Select(z => z.GivenCertificateIdentificator);
+
+            var UsersWithCertificate = _context.userRepository.GetUsersByGivenCertificateId(GivenCertificatesIdentificators.ToList());
+
+            List<DisplayCrucialDataWithCompaniesRoleViewModel> ListOfUsers = new List<DisplayCrucialDataWithCompaniesRoleViewModel>();
+
+            if (UsersWithCertificate.Count != 0)
+            {
+                foreach (var user in UsersWithCertificate)
+                {
+                    DisplayCrucialDataWithCompaniesRoleViewModel singleUser = _mapper.Map<DisplayCrucialDataWithCompaniesRoleViewModel>(user);
+                    singleUser.CompanyRoleManager = _context.companyRepository.GetCompaniesById(user.CompanyRoleManager).Select(s => s.CompanyName).ToList();
+                    singleUser.CompanyRoleWorker = _context.companyRepository.GetCompaniesById(user.CompanyRoleWorker).Select(s => s.CompanyName).ToList();
+
+                    ListOfUsers.Add(singleUser);
+                }
+            }
+
+            var CoursesWhichEndedWithSuchCertificate = _context.courseRepository.GetCoursesById(GivenCertificatesInstances.Select(z => z.Course).ToList());
+
+            List<DisplayCourseViewModel> ListOfCourses = new List<DisplayCourseViewModel>();
+
+            if (CoursesWhichEndedWithSuchCertificate.Count != 0)
+            {
+                ListOfCourses = _mapper.Map<List<DisplayCourseViewModel>>(CoursesWhichEndedWithSuchCertificate);
+                ListOfCourses.ForEach(z => z.Branches = _context.branchRepository.GetBranchesById(z.Branches));
+            }
+
+            CertificateDetailsViewModel CertificateDetails = _mapper.Map<CertificateDetailsViewModel>(Certificate);
+            CertificateDetails.Branches = _context.branchRepository.GetBranchesById(Certificate.Branches);
+            CertificateDetails.CoursesWhichEndedWithCertificate = ListOfCourses;
+            CertificateDetails.UsersWithCertificate = ListOfUsers;
+
+            return View(CertificateDetails);
+        }
+
         // GET: VerifyUserCompetencesByQR
         [AllowAnonymous]
         public ActionResult VerifyUserCompetencesByQR(string userIdentificator)

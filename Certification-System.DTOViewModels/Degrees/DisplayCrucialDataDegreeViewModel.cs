@@ -12,11 +12,5 @@ namespace Certification_System.DTOViewModels
 
         [Display(Name = "Nazwa stopnia zawodowego")]
         public string Name { get; set; }
-
-        [Display(Name = "Opis")]
-        public string Description { get; set; }
-
-        [Display(Name = "Obszary stopnia zawodowego")]
-        public ICollection<string> Branches { get; set; }
     }
 }
