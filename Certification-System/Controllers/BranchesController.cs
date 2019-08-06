@@ -9,6 +9,7 @@ using Certification_System.ServicesInterfaces;
 
 namespace Certification_System.Controllers
 {
+    [Route("[controller]/[action]")]
     public class BranchesController : Controller
     {
         private readonly MongoOperations _context;

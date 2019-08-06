@@ -1,0 +1,80 @@
+﻿@model IEnumerable<Certification_System.DTOViewModels.DisplayGivenDegreeViewModel>
+
+@{
+    ViewData["Title"] = "DisplayAllGivenDegrees";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+<h1>Lista wszystkich nadanych stopni zawodowych</h1>
+<hr />
+
+<div class="m-3">
+    @Html.ActionLink("Przyznaj stopień zawodowy", "AddNewGivenDegree", "Degrees", null, new { @class = "btn btn-primary" })
+</div>
+
+<div class="col-12 table-responsive">
+    <table id="listGivenDegrees" class="table table-striped table-bordered display" style="width: 100%;" role="grid">
+        <thead>
+            <tr>
+                <th>
+                    @Html.DisplayNameFor(model => model.GivenDegreeIndexer)
+                </th>
+                <th>
+                    @Html.DisplayNameFor(model => model.ReceiptDate)
+                </th>
+                <th>
+                    @Html.DisplayNameFor(model => model.ExpirationDate)
+                </th>
+                <th>
+                    @Html.DisplayNameFor(model => model.Degree.DegreeIndexer) i @Html.DisplayNameFor(model => model.Degree.Name)
+                </th>
+                <th>
+                    @Html.DisplayNameFor(model => model.User.FirstName) i @Html.DisplayNameFor(model => model.User.LastName)
+                </th>
+                <th>
+                    Operacje
+                </th>
+            </tr>
+        </thead>
+        <tbody>
+            @foreach (var item in Model)
+            {
+                <tr>
+                    <td>
+                        @Html.DisplayFor(modelItem => item.GivenDegreeIndexer)
+                    </td>
+                    <td>
+                        @Html.DisplayFor(modelItem => item.ReceiptDate)
+                    </td>
+                    <td>
+                        @Html.DisplayFor(modelItem => item.ExpirationDate)
+                    </td>
+                    <td>
+                        @Html.DisplayFor(model => item.Degree.DegreeIndexer) @Html.DisplayFor(model => item.Degree.Name)
+                    </td>
+                    <td>
+                        @Html.DisplayFor(model => item.User.FirstName) @Html.DisplayFor(model => item.User.LastName)
+                    </td>
+                    <td>
+                        @Html.ActionLink("Szczegóły użytkownika", "UserDetails", "Users", new { userIdentificator = item.User.UserIdentificator }, new { @class = "btn btn-info m-1" })
+                        @Html.ActionLink("Edytuj stopień zawodowy", "EditGivenDegree", "Degrees", new { givenDegreeIdentificator = item.GivenDegreeIdentificator }, new { @class = "btn btn-warning m-1" })
+                    </td>
+                </tr>
+            }
+        </tbody>
+    </table>
+</div>
+
+@section Scripts{
+    <script>
+        $(document).ready(function () {
+
+            $('#listGivenDegrees').DataTable({
+                "language": {
+                    "url": "//cdn.datatables.net/plug-ins/1.10.19/i18n/Polish.json"
+                },
+            }
+            );
+        });
+    </script>
+}

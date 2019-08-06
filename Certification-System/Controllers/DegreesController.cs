@@ -163,7 +163,7 @@ namespace Certification_System.Controllers
 
             var GivenDegreesInstances = _context.givenDegreeRepository.GetGivenDegreesByIdOfDegree(degreeIdentificator);
             var GivenDegreesIdentificators = GivenDegreesInstances.Select(z => z.GivenDegreeIdentificator);
-            var UsersWithDegree = _context.userRepository.GetUsersByGivenDegreeId(GivenDegreesIdentificators.ToList());
+            var UsersWithDegree = _context.userRepository.GetUsersByDegreeId(GivenDegreesIdentificators.ToList());
 
             List<DisplayCertificateViewModel> ListOfCertificates = new List<DisplayCertificateViewModel>();
 
@@ -211,6 +211,31 @@ namespace Certification_System.Controllers
             DegreeDetails.UsersWithDegree = ListOfUsers;
 
             return View(DegreeDetails);
+        }
+
+        // GET: DisplayAllGivenDegrees
+        [Authorize(Roles = "Admin")]
+        public ActionResult DisplayAllGivenDegrees()
+        {
+            var GivenDegrees = _context.givenDegreeRepository.GetGivenDegrees();
+            List<DisplayGivenDegreeViewModel> ListOfGivenDegrees= new List<DisplayGivenDegreeViewModel>();
+
+            foreach (var givenDegree in GivenDegrees)
+            {
+                var Degree = _context.degreeRepository.GetDegreeById(givenDegree.Degree);
+                var User = _context.userRepository.GetUserByGivenDegreeId(givenDegree.GivenDegreeIdentificator);
+
+                DisplayCrucialDataDegreeViewModel degreeViewModel = _mapper.Map<DisplayCrucialDataDegreeViewModel>(Degree);
+                DisplayCrucialDataUsersViewModel userViewModel = _mapper.Map<DisplayCrucialDataUsersViewModel>(User);
+
+                DisplayGivenDegreeViewModel singleGivenDegree = _mapper.Map<DisplayGivenDegreeViewModel>(givenDegree);
+                singleGivenDegree.Degree = degreeViewModel;
+                singleGivenDegree.User = userViewModel;
+
+                ListOfGivenDegrees.Add(singleGivenDegree);
+            }
+
+            return View(ListOfGivenDegrees);
         }
     }
 }

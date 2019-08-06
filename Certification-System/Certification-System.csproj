@@ -10,10 +10,6 @@
     <Win32Resource />
   </PropertyGroup>
 
-  <ItemGroup>
-    <Compile Remove="Controllers\HomeController.cs" />
-  </ItemGroup>
-
 
   <ItemGroup>
     <PackageReference Include="AutoMapper" Version="8.1.1" />
