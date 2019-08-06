@@ -237,5 +237,41 @@ namespace Certification_System.Controllers
 
             return View(ListOfGivenDegrees);
         }
+
+        // GET: AddNewGivenDegree
+        [Authorize(Roles = "Admin")]
+        public ActionResult AddNewGivenDegree()
+        {
+            AddGivenDegreeViewModel newGivenDegree = new AddGivenDegreeViewModel
+            {
+                AvailableUsers = _context.userRepository.GetUsersAsSelectList().ToList(),
+                AvailableDegrees = _context.degreeRepository.GetDegreesAsSelectList().ToList()
+            };
+
+            return View(newGivenDegree);
+        }
+
+        // POST: AddNewGivenDegree
+        [Authorize(Roles = "Admin")]
+        [HttpPost]
+        public ActionResult AddNewGivenDegree(AddGivenDegreeViewModel newGivenDegree)
+        {
+            if (ModelState.IsValid)
+            {
+                GivenDegree givenDegree = _mapper.Map<GivenDegree>(newGivenDegree);
+                givenDegree.GivenDegreeIdentificator = _keyGenerator.GenerateNewId();
+                givenDegree.Degree = _context.degreeRepository.GetDegreeById(newGivenDegree.SelectedDegree).DegreeIdentificator;
+
+                _context.givenDegreeRepository.AddGivenDegree(givenDegree);
+                _context.userRepository.AddUserDegree(newGivenDegree.SelectedUser, givenDegree.GivenDegreeIdentificator);
+
+                return RedirectToAction("ConfirmationOfActionOnGivenDegree", new { givenDegreeIdentificator = givenDegree.GivenDegreeIdentificator, TypeOfAction = "Add" });
+            }
+
+            newGivenDegree.AvailableDegrees = _context.degreeRepository.GetDegreesAsSelectList().ToList();
+            newGivenDegree.AvailableUsers = _context.userRepository.GetUsersAsSelectList().ToList();
+
+            return View(newGivenDegree);
+        }
     }
 }
