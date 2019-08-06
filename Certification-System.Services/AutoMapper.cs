@@ -134,6 +134,9 @@ namespace Certification_System.Services
             CreateMap<GivenDegree, DisplayGivenDegreeViewModel>()
                       .ForMember(dest => dest.Degree, opts => opts.Ignore())
                       .ForMember(dest => dest.User, opts => opts.Ignore());
+
+            CreateMap<AddGivenDegreeViewModel, GivenDegree>()
+                     .ForMember(dest => dest.Degree, opts => opts.MapFrom(src => src.SelectedDegree));
             #endregion
 
             #region Meetings

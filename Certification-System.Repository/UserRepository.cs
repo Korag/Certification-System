@@ -103,6 +103,16 @@ namespace Certification_System.Repository
             _context.db.GetCollection<CertificationPlatformUser>(_usersCollectionName).ReplaceOne(filter, User);
         }
 
+        public void AddUserDegree(string userIdentificator, string givenDegreeIdentificator)
+        {
+            var User = GetUserById(userIdentificator);
+            User.Degrees.Add(givenDegreeIdentificator);
+
+            var filter = Builders<CertificationPlatformUser>.Filter.Eq(x => x.Id, userIdentificator);
+
+            _context.db.GetCollection<CertificationPlatformUser>(_usersCollectionName).ReplaceOne(filter, User);
+        }
+
         public CertificationPlatformUser GetUserByGivenCertificateId(string givenCertificateIdentificator)
         {
             var filter = Builders<CertificationPlatformUser>.Filter.Where(z => z.Certificates.Contains(givenCertificateIdentificator));

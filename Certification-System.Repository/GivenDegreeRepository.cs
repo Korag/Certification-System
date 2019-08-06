@@ -1,6 +1,7 @@
 ﻿using Certification_System.Entities;
 using Certification_System.Repository.Context;
 using Certification_System.RepositoryInterfaces;
+using Microsoft.AspNetCore.Mvc.Rendering;
 using MongoDB.Driver;
 using System.Collections.Generic;
 
@@ -31,6 +32,12 @@ namespace Certification_System.Repository
             _givenDegrees = _context.db.GetCollection<GivenDegree>(_givenDegreesCollectionName);
 
             return _givenDegrees.AsQueryable().ToList();
+        }
+
+        public void AddGivenDegree(GivenDegree givenDegree)
+        {
+            _givenDegrees = _context.db.GetCollection<GivenDegree>(_givenDegreesCollectionName);
+            _givenDegrees.InsertOne(givenDegree);
         }
     }
 }
