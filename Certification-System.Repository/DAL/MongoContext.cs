@@ -22,6 +22,9 @@ namespace Certification_System.Repository.Context
 
         private void InitializeDatabaseCredentials()
         {
+            //"../wwwroot/DAL/dbCredentials.json"
+            //"../Certification-System.Repository/DAL/dbCredentials.json"
+
             using (StreamReader sr = new StreamReader("../Certification-System.Repository/DAL/dbCredentials.json"))
             {
                 var json = sr.ReadToEnd();

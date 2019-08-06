@@ -35,6 +35,11 @@ namespace Certification_System.Services
 
             CreateMap<Certificate, EditCertificateViewModel>()
                      .ForMember(dest => dest.SelectedBranches, opts => opts.MapFrom(src => src.Branches));
+
+            CreateMap<Certificate, CertificateDetailsViewModel>()
+                     .ForMember(dest => dest.Branches, opts => opts.Ignore())
+                     .ForMember(dest => dest.CoursesWhichEndedWithCertificate, opts => opts.Ignore())
+                     .ForMember(dest => dest.UsersWithCertificate, opts => opts.Ignore());
             #endregion
 
             #region Companies
@@ -104,6 +109,8 @@ namespace Certification_System.Services
                      .ForMember(dest => dest.RequiredCertificates, opts => opts.MapFrom(src => new List<string>()))
                      .ForMember(dest => dest.RequiredDegrees, opts => opts.MapFrom(src => new List<string>()))
                      .ForMember(dest => dest.UsersWithDegree, opts => opts.MapFrom(src => new List<string>()));
+
+            CreateMap<Degree, DisplayCrucialDataDegreeViewModel>();
             #endregion
 
             #region GivenCertificates
@@ -124,7 +131,9 @@ namespace Certification_System.Services
             #endregion
 
             #region GivenDegrees
-
+            CreateMap<GivenDegree, DisplayGivenDegreeViewModel>()
+                      .ForMember(dest => dest.Degree, opts => opts.Ignore())
+                      .ForMember(dest => dest.User, opts => opts.Ignore());
             #endregion
 
             #region Meetings
@@ -166,7 +175,6 @@ namespace Certification_System.Services
                      .ForMember(dest => dest.NormalizedEmail, opts => opts.MapFrom(src => src.Email.ToUpper()))
                      .ForMember(dest => dest.UserName, opts => opts.MapFrom(src => src.Email));
 
-            // +/- to check
             CreateMap<CertificationPlatformUser, DisplayCrucialDataWithCompaniesRoleViewModel>()
                      .ForMember(dest => dest.UserIdentificator, opts => opts.MapFrom(src => src.Id));
 

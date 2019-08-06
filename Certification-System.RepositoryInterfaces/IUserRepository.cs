@@ -17,6 +17,7 @@ namespace Certification_System.RepositoryInterfaces
         CertificationPlatformUser GetUserByGivenCertificateId(string givenCertificateIdentificator);
         ICollection<CertificationPlatformUser> GetUsersByGivenCertificateId(ICollection<string> givenCertificatesIdentificators);
         ICollection<CertificationPlatformUser> GetUsersConnectedToCompany(string companyIdentificator);
-        ICollection<CertificationPlatformUser> GetUsersByGivenDegreeId(ICollection<string> degreeIdentificators);
+        ICollection<CertificationPlatformUser> GetUsersByDegreeId(ICollection<string> degreeIdentificators);
+        CertificationPlatformUser GetUserByGivenDegreeId(string givenDegreeIdentificator);
     }
 }

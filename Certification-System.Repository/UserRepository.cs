@@ -135,7 +135,7 @@ namespace Certification_System.Repository
             return Users;
         }
 
-        public ICollection<CertificationPlatformUser> GetUsersByGivenDegreeId(ICollection<string> degreeIdentificators)
+        public ICollection<CertificationPlatformUser> GetUsersByDegreeId(ICollection<string> degreeIdentificators)
         {
             List<CertificationPlatformUser> Users = new List<CertificationPlatformUser>();
 
@@ -147,6 +147,14 @@ namespace Certification_System.Repository
             }
 
             return Users;
+        }
+
+        public CertificationPlatformUser GetUserByGivenDegreeId(string givenDegreeIdentificator)
+        {
+            var filter = Builders<CertificationPlatformUser>.Filter.Where(z => z.Degrees.Contains(givenDegreeIdentificator));
+            CertificationPlatformUser user = _context.db.GetCollection<CertificationPlatformUser>(_usersCollectionName).Find<CertificationPlatformUser>(filter).FirstOrDefault();
+
+            return user;
         }
 
         public void UpdateUser(CertificationPlatformUser user)

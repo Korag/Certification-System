@@ -25,5 +25,12 @@ namespace Certification_System.Repository
 
             return givenDegrees;
         }
+
+        public ICollection<GivenDegree> GetGivenDegrees()
+        {
+            _givenDegrees = _context.db.GetCollection<GivenDegree>(_givenDegreesCollectionName);
+
+            return _givenDegrees.AsQueryable().ToList();
+        }
     }
 }
