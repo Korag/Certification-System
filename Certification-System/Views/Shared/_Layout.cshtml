@@ -48,6 +48,10 @@
         if (this.User.IsInRole("Admin"))
             {@await Component.InvokeAsync("AdminMenu")}
 
+        // Menu Pracodawca-Pracownik
+        else if (this.User.IsInRole("Company") && this.User.IsInRole("Worker"))
+        {@await Component.InvokeAsync("CompanyWorkerMenu")}
+
         // Menu Pracodawca
         else if (this.User.IsInRole("Company"))
             {@await Component.InvokeAsync("CompanyMenu")}

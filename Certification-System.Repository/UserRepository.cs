@@ -26,19 +26,30 @@ namespace Certification_System.Repository
             {
                  new SelectListItem()
                         {
-                            Text = "Worker",
+                            Text = "Pracownik",
                             Value = "Worker"
                         },
                   new SelectListItem()
                         {
                             Text = "Company",
                             Value = "Company"
+                            // text from ResourceFile with Localization
                         },
                    new SelectListItem()
                         {
-                            Text = "Admin",
+                            Text = "Administrator",
                             Value = "Admin"
-                        }
+                        },
+                    new SelectListItem()
+                        {
+                            Text = "Instruktor",
+                            Value = "Instructor"
+                        },
+                  new SelectListItem()
+                        {
+                            Text = "Egzaminator",
+                            Value = "Examiner"
+                        },
             };
 
             return SelectList;
