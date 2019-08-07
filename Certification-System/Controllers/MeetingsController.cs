@@ -164,11 +164,11 @@ namespace Certification_System.Controllers
                ListOfInstructors = _mapper.Map<List<DisplayCrucialDataWithContactUsersViewModel>>(RelatedInstructors);
             }
 
-            List<DisplayCrucialDataUsersViewModel> ListOfUsers = new List<DisplayCrucialDataUsersViewModel>();
+            List<DisplayCrucialDataUserViewModel> ListOfUsers = new List<DisplayCrucialDataUserViewModel>();
 
             if (EnrolledUsersList.Count != 0)
             {
-                ListOfUsers = _mapper.Map<List<DisplayCrucialDataUsersViewModel>>(EnrolledUsersList);
+                ListOfUsers = _mapper.Map<List<DisplayCrucialDataUserViewModel>>(EnrolledUsersList);
             }
 
             MeetingDetailsViewModel MeetingDetails = _mapper.Map<MeetingDetailsViewModel>(Meeting);

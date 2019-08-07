@@ -188,7 +188,7 @@ namespace Certification_System.Controllers
             }
 
             var Users = _context.userRepository.GetUsersById(Course.EnrolledUsers);
-            List<DisplayCrucialDataWithCompaniesRoleViewModel> usersViewModel = _mapper.Map<List<DisplayCrucialDataWithCompaniesRoleViewModel>>(Users);
+            List<DisplayCrucialDataWithCompaniesRoleUserViewModel> usersViewModel = _mapper.Map<List<DisplayCrucialDataWithCompaniesRoleUserViewModel>>(Users);
 
             CourseDetailsViewModel courseDetails = _mapper.Map<CourseDetailsViewModel>(Course);
 

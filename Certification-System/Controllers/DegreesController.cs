@@ -213,6 +213,37 @@ namespace Certification_System.Controllers
             return View(DegreeDetails);
         }
 
+        // GET: EditGivenDegree
+        [Authorize(Roles = "Admin")]
+        public ActionResult EditGivenDegree(string givenDegreeIdentificator)
+        {
+            var GivenDegree = _context.givenDegreeRepository.GetGivenDegreeById(givenDegreeIdentificator);
+            EditGivenDegreeViewModel givenDegreeToUpdate = _mapper.Map<EditGivenDegreeViewModel>(GivenDegree);
+
+            givenDegreeToUpdate.User = _mapper.Map<DisplayCrucialDataUserViewModel>(_context.userRepository.GetUserByGivenDegreeId(GivenDegree.GivenDegreeIdentificator)); 
+            givenDegreeToUpdate.Degree = _mapper.Map<DisplayCrucialDataDegreeViewModel>(_context.degreeRepository.GetDegreeById(GivenDegree.Degree));
+
+            return View(givenDegreeToUpdate);
+        }
+
+        // POST: EditGivenDegree
+        [Authorize(Roles = "Admin")]
+        [HttpPost]
+        public ActionResult EditGivenDegree(EditGivenDegreeViewModel editedGivenDegree)
+        {
+            if (ModelState.IsValid)
+            {
+                var OriginGivenDegree = _context.givenDegreeRepository.GetGivenDegreeById(editedGivenDegree.GivenDegreeIdentificator);
+
+                OriginGivenDegree = _mapper.Map<EditGivenDegreeViewModel, GivenDegree>(editedGivenDegree, OriginGivenDegree);
+                _context.givenDegreeRepository.UpdateGivenDegree(OriginGivenDegree);
+
+                return RedirectToAction("ConfirmationOfActionOnGivenDegree", "Degrees", new { givenDegreeIdentificator = OriginGivenDegree.GivenDegreeIdentificator, TypeOfAction = "Update" });
+            }
+
+            return View(editedGivenDegree);
+        }
+
         // GET: ConfirmationOfActionOnGivenDegree
         [Authorize(Roles = "Admin")]
         public ActionResult ConfirmationOfActionOnGivenDegree(string givenDegreeIdentificator, string TypeOfAction)
@@ -226,7 +257,7 @@ namespace Certification_System.Controllers
                 var Degree = _context.degreeRepository.GetDegreeById(GivenDegree.Degree);
                 var User = _context.userRepository.GetUserByGivenDegreeId(GivenDegree.GivenDegreeIdentificator);
 
-                DisplayCrucialDataUsersViewModel userViewModel = _mapper.Map<DisplayCrucialDataUsersViewModel>(User);
+                DisplayCrucialDataUserViewModel userViewModel = _mapper.Map<DisplayCrucialDataUserViewModel>(User);
                 DisplayCrucialDataDegreeViewModel degreeViewModel = _mapper.Map<DisplayCrucialDataDegreeViewModel>(Degree);
 
                 DisplayGivenDegreeViewModel modifiedGivenDegree = _mapper.Map<DisplayGivenDegreeViewModel>(GivenDegree);
@@ -252,7 +283,7 @@ namespace Certification_System.Controllers
                 var User = _context.userRepository.GetUserByGivenDegreeId(givenDegree.GivenDegreeIdentificator);
 
                 DisplayCrucialDataDegreeViewModel degreeViewModel = _mapper.Map<DisplayCrucialDataDegreeViewModel>(Degree);
-                DisplayCrucialDataUsersViewModel userViewModel = _mapper.Map<DisplayCrucialDataUsersViewModel>(User);
+                DisplayCrucialDataUserViewModel userViewModel = _mapper.Map<DisplayCrucialDataUserViewModel>(User);
 
                 DisplayGivenDegreeViewModel singleGivenDegree = _mapper.Map<DisplayGivenDegreeViewModel>(givenDegree);
                 singleGivenDegree.Degree = degreeViewModel;
