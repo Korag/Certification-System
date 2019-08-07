@@ -31,7 +31,7 @@ namespace Certification_System.Repository
                         },
                   new SelectListItem()
                         {
-                            Text = "Company",
+                            Text = "Pracodawca",
                             Value = "Company"
                             // text from ResourceFile with Localization
                         },
