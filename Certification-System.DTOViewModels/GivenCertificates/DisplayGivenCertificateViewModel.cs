@@ -21,7 +21,7 @@ namespace Certification_System.DTOViewModels
         public DisplayCrucialDataCertificateViewModel Certificate { get; set; }
 
         [Display(Name = "Użytkownik")]
-        public DisplayCrucialDataUsersViewModel User { get; set; }
+        public DisplayCrucialDataUserViewModel User { get; set; }
 
         [Display(Name = "Szkolenie")]
         public DisplayCrucialDataCourseViewModel Course { get; set; }

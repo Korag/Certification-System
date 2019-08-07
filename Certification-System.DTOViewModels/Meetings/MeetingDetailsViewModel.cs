@@ -36,7 +36,7 @@ namespace Certification_System.DTOViewModels
         public ICollection<string> AttendanceList { get; set; }
 
         [Display(Name = "Uczestnicy kursu")]
-        public ICollection<DisplayCrucialDataUsersViewModel> AllCourseParticipants { get; set; }
+        public ICollection<DisplayCrucialDataUserViewModel> AllCourseParticipants { get; set; }
 
         [Display(Name = "Instruktorzy")]
         public ICollection<DisplayCrucialDataWithContactUsersViewModel> Instructors { get; set; }

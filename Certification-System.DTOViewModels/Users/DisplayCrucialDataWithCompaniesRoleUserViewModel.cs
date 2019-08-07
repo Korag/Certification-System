@@ -3,7 +3,7 @@ using System.ComponentModel.DataAnnotations;
 
 namespace Certification_System.DTOViewModels
 {
-    public class DisplayCrucialDataWithCompaniesRoleViewModel
+    public class DisplayCrucialDataWithCompaniesRoleUserViewModel
     {
         public string UserIdentificator { get; set; }
 

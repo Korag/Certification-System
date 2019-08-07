@@ -137,6 +137,14 @@ namespace Certification_System.Services
 
             CreateMap<AddGivenDegreeViewModel, GivenDegree>()
                      .ForMember(dest => dest.Degree, opts => opts.MapFrom(src => src.SelectedDegree));
+
+            CreateMap<GivenDegree, EditGivenDegreeViewModel>()
+                      .ForMember(dest => dest.User, opts => opts.Ignore())
+                      .ForMember(dest => dest.Degree, opts => opts.Ignore());
+
+            CreateMap<EditGivenDegreeViewModel, GivenDegree>()
+                     .ForMember(dest => dest.Degree, opts => opts.Ignore())
+                     .ForMember(dest => dest.GivenDegreeIdentificator, opts => opts.Ignore());
             #endregion
 
             #region Meetings
@@ -165,7 +173,7 @@ namespace Certification_System.Services
             CreateMap<CertificationPlatformUser, DisplayUserViewModel>()
                      .ForMember(dest => dest.UserIdentificator, opts => opts.MapFrom(src => src.Id));
 
-            CreateMap<CertificationPlatformUser, DisplayCrucialDataUsersViewModel>()
+            CreateMap<CertificationPlatformUser, DisplayCrucialDataUserViewModel>()
                      .ForMember(dest => dest.UserIdentificator, opts => opts.MapFrom(src => src.Id));
 
             CreateMap<RegisterViewModel, CertificationPlatformUser>()
@@ -178,7 +186,7 @@ namespace Certification_System.Services
                      .ForMember(dest => dest.NormalizedEmail, opts => opts.MapFrom(src => src.Email.ToUpper()))
                      .ForMember(dest => dest.UserName, opts => opts.MapFrom(src => src.Email));
 
-            CreateMap<CertificationPlatformUser, DisplayCrucialDataWithCompaniesRoleViewModel>()
+            CreateMap<CertificationPlatformUser, DisplayCrucialDataWithCompaniesRoleUserViewModel>()
                      .ForMember(dest => dest.UserIdentificator, opts => opts.MapFrom(src => src.Id));
 
             CreateMap<CertificationPlatformUser, DisplayCrucialDataWithContactUsersViewModel>();

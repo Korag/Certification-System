@@ -20,6 +20,6 @@ namespace Certification_System.DTOViewModels
         public DisplayCrucialDataDegreeViewModel Degree { get; set; }
 
         [Display(Name = "Użytkownik")]
-        public DisplayCrucialDataUsersViewModel User { get; set; }
+        public DisplayCrucialDataUserViewModel User { get; set; }
     }
 }
