@@ -237,7 +237,14 @@ namespace Certification_System.Controllers
         public ActionResult EditGivenCertificate(string givenCertificateIdentificator)
         {
             var GivenCertificate = _context.givenCertificateRepository.GetGivenCertificateById(givenCertificateIdentificator);
+            var OwnerOfTheCertificate = _context.userRepository.GetUserByGivenCertificateId(givenCertificateIdentificator);
+            var CourseWhichEndedWithSuchCertificate = _context.courseRepository.GetCourseById(GivenCertificate.Course);
+            var Certificate = _context.certificateRepository.GetCertificateById(GivenCertificate.Certificate);
+
             EditGivenCertificateViewModel givenCertificateToUpdate = _mapper.Map<EditGivenCertificateViewModel>(GivenCertificate);
+            givenCertificateToUpdate.User = _mapper.Map<DisplayCrucialDataUserViewModel>(OwnerOfTheCertificate);
+            givenCertificateToUpdate.Course = _mapper.Map<DisplayCrucialDataCourseViewModel>(CourseWhichEndedWithSuchCertificate);
+            givenCertificateToUpdate.Certificate = _mapper.Map<DisplayCrucialDataCertificateViewModel>(Certificate);
 
             return View(givenCertificateToUpdate);
         }

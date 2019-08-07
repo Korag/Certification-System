@@ -125,9 +125,14 @@ namespace Certification_System.Services
                      .ForMember(dest => dest.Certificate, opts => opts.Ignore())
                      .ForMember(dest => dest.Course, opts => opts.Ignore());
 
-            CreateMap<EditGivenCertificateViewModel, GivenCertificate>();
+            CreateMap<EditGivenCertificateViewModel, GivenCertificate>()
+                 .ForMember(dest => dest.GivenCertificateIdentificator, opts => opts.Ignore())
+                 .ForMember(dest => dest.Certificate, opts => opts.Ignore())
+                 .ForMember(dest => dest.Course, opts => opts.Ignore());
 
-            CreateMap<GivenCertificate, EditGivenCertificateViewModel>();
+            CreateMap<GivenCertificate, EditGivenCertificateViewModel>()
+                     .ForMember(dest => dest.Certificate, opts => opts.Ignore())
+                     .ForMember(dest => dest.Course, opts => opts.Ignore());
             #endregion
 
             #region GivenDegrees

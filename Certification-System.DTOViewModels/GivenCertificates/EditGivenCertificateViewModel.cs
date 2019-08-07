@@ -21,5 +21,14 @@ namespace Certification_System.DTOViewModels
         [DataType(DataType.Date)]
         [Display(Name = "Data wygaśnięcia")]
         public DateTime ExpirationDate { get; set; }
+
+        [Display(Name = "Użytkownik")]
+        public DisplayCrucialDataUserViewModel User { get; set; }
+
+        [Display(Name = "Certyfikat")]
+        public DisplayCrucialDataCertificateViewModel Certificate { get; set; }
+
+        [Display(Name = "Kurs")]
+        public DisplayCrucialDataCourseViewModel Course { get; set; }
     }
 }
