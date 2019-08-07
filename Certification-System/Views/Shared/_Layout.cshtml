@@ -44,25 +44,33 @@
     {
         //@Html.Action("GenerateMenu", "Account");
 
-        // Menu Pracownik
-        if (this.User.IsInRole("Worker"))
-        {
-            @await Component.InvokeAsync("WorkerMenu")
-        }
+        // Menu Admin
+        if (this.User.IsInRole("Admin"))
+            {@await Component.InvokeAsync("AdminMenu")}
+
         // Menu Pracodawca
         else if (this.User.IsInRole("Company"))
-        {
-            @await Component.InvokeAsync("CompanyMenu")
-        }
-        // Menu Admin
-        else if (this.User.IsInRole("Admin"))
-        {
-            @await Component.InvokeAsync("AdminMenu")
-        }
+            {@await Component.InvokeAsync("CompanyMenu")}
+
+        // Menu Pracownik
+        else if (this.User.IsInRole("Worker"))
+            {@await Component.InvokeAsync("WorkerMenu")}
+
+        // Menu Instruktor-Egzaminator
+        else if (this.User.IsInRole("Instructor") && this.User.IsInRole("Examiner"))
+            {@await Component.InvokeAsync("InstructorExaminerMenu")}
+
+        // Menu Instruktor
+        else if (this.User.IsInRole("Instructor"))
+            {@await Component.InvokeAsync("InstructorMenu")}
+
+        // Menu Egzaminator
+        else if (this.User.IsInRole("Examiner"))
+            {@await Component.InvokeAsync("ExaminerMenu")}
     }
     else
     {
-        <partial name="_CertificationSystemBanner" />
+    <partial name="_CertificationSystemBanner" />
     }
     <div class="container body-content background-image mt-2">
         @RenderBody()
@@ -72,7 +80,7 @@
     <div id="footer-bottom" class="clr no-footer-nav control" style="color: #ffffff">
         <div id="footer-bottom-inner" class="container clr">
             <div id="copyright" class="clr" role="contentinfo">
-                © Copyright Łukasz Czepielik 2019
+                © Copyright Łukasz Czepielik 2019/2020
             </div><!-- #copyright -->
         </div><!-- #footer-bottom-inner -->
     </div>
@@ -123,7 +131,7 @@
     <script src="~/js/dataTables.bootstrap4.js"></script>
 
     @*<script src="~/js/responsive.bootstrap.js"></script>
-    <script src="~/js/dataTables.responsive.js"></script>*@
+        <script src="~/js/dataTables.responsive.js"></script>*@
 
     @RenderSection("Scripts", required: false)
 </body>

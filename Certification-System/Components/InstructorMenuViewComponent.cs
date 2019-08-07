@@ -2,11 +2,11 @@
 
 namespace Certification_System.Components
 {
-    public class WorkerMenuViewComponent : ViewComponent
+    public class InstructorMenuViewComponent : ViewComponent
     {
         public IViewComponentResult Invoke()
         {
-            return View("_WorkerMenu");
+            return View("_InstructorMenu");
         }
     }
 }
