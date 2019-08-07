@@ -150,6 +150,9 @@ namespace Certification_System.Services
             CreateMap<EditGivenDegreeViewModel, GivenDegree>()
                      .ForMember(dest => dest.Degree, opts => opts.Ignore())
                      .ForMember(dest => dest.GivenDegreeIdentificator, opts => opts.Ignore());
+
+            CreateMap<GivenDegree, DisplayGivenDegreeToUserViewModel>()
+                     .ForMember(dest => dest.Degree, opts => opts.Ignore());
             #endregion
 
             #region Meetings
@@ -222,8 +225,9 @@ namespace Certification_System.Services
             CreateMap<CertificationPlatformUser, UserDetailsViewModel>()
                      .ForMember(dest => dest.UserIdentificator, opts => opts.MapFrom(src => src.Id))
                      .ForMember(dest => dest.Courses, opts => opts.Ignore())
-                     .ForMember(dest => dest.Certificates, opts => opts.Ignore())
-                     .ForMember(dest => dest.Companies, opts => opts.Ignore());
+                     .ForMember(dest => dest.GivenCertificates, opts => opts.Ignore())
+                     .ForMember(dest => dest.Companies, opts => opts.Ignore())
+                     .ForMember(dest => dest.GivenDegrees, opts => opts.Ignore());
 
             CreateMap<CertificationPlatformUser, UserDetailsForAnonymousViewModel>()
                      .ForMember(dest => dest.UserIdentificator, opts => opts.MapFrom(src => src.Id))

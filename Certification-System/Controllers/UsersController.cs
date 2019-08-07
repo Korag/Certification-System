@@ -182,7 +182,7 @@ namespace Certification_System.Controllers
             var User = _context.userRepository.GetUserById(userIdentificator);
             var GivenCertificates = _context.givenCertificateRepository.GetGivenCertificatesById(User.Certificates);
             var Courses = _context.courseRepository.GetCoursesById(User.Courses);
-            //var GivenDegrees  
+            var GivenDegrees = _context.givenDegreeRepository.GetGivenDegreesById(User.Degrees);
 
             var CompaniesRoleWorker = _context.companyRepository.GetCompaniesById(User.CompanyRoleWorker);
             var CompaniesRoleManager = _context.companyRepository.GetCompaniesById(User.CompanyRoleManager);
@@ -223,10 +223,28 @@ namespace Certification_System.Controllers
                 }
             }
 
+            List<DisplayGivenDegreeToUserViewModel> ListOfGivenDegrees = new List<DisplayGivenDegreeToUserViewModel>();
+
+            if (GivenDegrees.Count != 0)
+            {
+                foreach (var givenDegree in GivenDegrees)
+                {
+                    var Degree = _context.degreeRepository.GetDegreeById(givenDegree.Degree);
+
+                    DisplayCrucialDataDegreeViewModel degreeViewModel = _mapper.Map<DisplayCrucialDataDegreeViewModel>(Degree);
+
+                    DisplayGivenDegreeToUserViewModel singleGivenDegree = _mapper.Map<DisplayGivenDegreeToUserViewModel>(givenDegree);
+                    singleGivenDegree.Degree = degreeViewModel;
+
+                    ListOfGivenDegrees.Add(singleGivenDegree);
+                }
+            }
+
             List<DisplayCompanyViewModel> ListOfCompanies = _mapper.Map<List<DisplayCompanyViewModel>>(Companies);
 
             UserDetailsViewModel UserDetails = _mapper.Map<UserDetailsViewModel>(User);
-            UserDetails.Certificates = ListOfGivenCertificates;
+            UserDetails.GivenCertificates = ListOfGivenCertificates;
+            UserDetails.GivenDegrees = ListOfGivenDegrees;
             UserDetails.Courses = ListOfCourses;
             UserDetails.Companies = ListOfCompanies;
 

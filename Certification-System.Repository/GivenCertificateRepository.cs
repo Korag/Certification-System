@@ -44,8 +44,7 @@ namespace Certification_System.Repository
 
             foreach (var givenCertificateIdentificator in givenCertificatesIdentificators)
             {
-                var filter = Builders<GivenCertificate>.Filter.Eq(x => x.GivenCertificateIdentificator, givenCertificateIdentificator);
-                GivenCertificate singleGivenCertificate = _context.db.GetCollection<GivenCertificate>(_givenCertificatesCollectionName).Find<GivenCertificate>(filter).FirstOrDefault();
+                GivenCertificate singleGivenCertificate = GetGivenCertificateById(givenCertificateIdentificator);
                 GivenCertificates.Add(singleGivenCertificate);
             }
 

@@ -46,15 +46,14 @@ namespace Certification_System.DTOViewModels
         [Display(Name = "Zarządza przedsiębiorstwem")]
         public ICollection<string> CompanyRoleManager { get; set; }
 
-
         [Display(Name = "Kursy")]
         public ICollection<DisplayCourseViewModel> Courses { get; set; }
 
         [Display(Name = "Certyfikaty")]
-        public ICollection<DisplayGivenCertificateToUserViewModel> Certificates { get; set; }
+        public ICollection<DisplayGivenCertificateToUserViewModel> GivenCertificates { get; set; }
 
-        //[Display(Name = "Stopnie zawodowe")]
-        //public ICollection<DisplayGivenCertificateViewModel> Degrees { get; set; }
+        [Display(Name = "Stopnie zawodowe")]
+        public ICollection<DisplayGivenDegreeToUserViewModel> GivenDegrees { get; set; }
 
         [Display(Name = "Przedsiębiorstwa")]
         public ICollection<DisplayCompanyViewModel> Companies { get; set; }

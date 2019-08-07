@@ -42,23 +42,23 @@
 
 <h2 class="mt-4 mb-4">Certyfikaty użytkownika</h2>
 
-@if (Model.Certificates.Count != 0)
+@if (Model.GivenCertificates.Count != 0)
 {
     <div class="col-12 table-responsive">
         <table id="listGivenCertificates" class="table table-bordered display" style="width: 100%;" role="grid">
             <thead>
                 <tr>
                     <th>
-                        @Html.DisplayNameFor(model => model.Certificates.First().GivenCertificateIndexer)
+                        @Html.DisplayNameFor(model => model.GivenCertificates.First().GivenCertificateIndexer)
                     </th>
                     <th>
-                        @Html.DisplayNameFor(model => model.Certificates.First().ReceiptDate)
+                        @Html.DisplayNameFor(model => model.GivenCertificates.First().ReceiptDate)
                     </th>
                     <th>
-                        @Html.DisplayNameFor(model => model.Certificates.First().ExpirationDate)
+                        @Html.DisplayNameFor(model => model.GivenCertificates.First().ExpirationDate)
                     </th>
                     <th>
-                        @Html.DisplayNameFor(model => model.Certificates.First().Certificate.CertificateIndexer) i @Html.DisplayNameFor(model => model.Certificates.First().Certificate.Name)
+                        @Html.DisplayNameFor(model => model.GivenCertificates.First().Certificate.CertificateIndexer) i @Html.DisplayNameFor(model => model.GivenCertificates.First().Certificate.Name)
                     </th>
                     <th>
                         Certyfikat jest ważny ?
@@ -66,7 +66,7 @@
                 </tr>
             </thead>
             <tbody class="text-secondary">
-                @foreach (var item in Model.Certificates)
+                @foreach (var item in Model.GivenCertificates)
                 {
                     <tr class="alert @if (item.ExpirationDate < DateTime.Now) { <text> table-danger </text>} else { <text> table-success </text> }">
                         <td>
