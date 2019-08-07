@@ -9,5 +9,6 @@ namespace Certification_System.RepositoryInterfaces
         ICollection<GivenDegree> GetGivenDegreesByIdOfDegree(string degreeIdentificator);
         ICollection<GivenDegree> GetGivenDegrees();
         void AddGivenDegree(GivenDegree givenDegree);
+        GivenDegree GetGivenDegreeById(string givenDegreeIdentificator);
     }
 }

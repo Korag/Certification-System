@@ -213,6 +213,32 @@ namespace Certification_System.Controllers
             return View(DegreeDetails);
         }
 
+        // GET: ConfirmationOfActionOnGivenDegree
+        [Authorize(Roles = "Admin")]
+        public ActionResult ConfirmationOfActionOnGivenDegree(string givenDegreeIdentificator, string TypeOfAction)
+        {
+            if (givenDegreeIdentificator != null)
+            {
+                ViewBag.TypeOfAction = TypeOfAction;
+
+                var GivenDegree = _context.givenDegreeRepository.GetGivenDegreeById(givenDegreeIdentificator);
+
+                var Degree = _context.degreeRepository.GetDegreeById(GivenDegree.Degree);
+                var User = _context.userRepository.GetUserByGivenDegreeId(GivenDegree.GivenDegreeIdentificator);
+
+                DisplayCrucialDataUsersViewModel userViewModel = _mapper.Map<DisplayCrucialDataUsersViewModel>(User);
+                DisplayCrucialDataDegreeViewModel degreeViewModel = _mapper.Map<DisplayCrucialDataDegreeViewModel>(Degree);
+
+                DisplayGivenDegreeViewModel modifiedGivenDegree = _mapper.Map<DisplayGivenDegreeViewModel>(GivenDegree);
+                modifiedGivenDegree.Degree = degreeViewModel;
+                modifiedGivenDegree.User = userViewModel;
+
+                return View(modifiedGivenDegree);
+            }
+
+            return RedirectToAction(nameof(AddNewGivenDegree));
+        }
+
         // GET: DisplayAllGivenDegrees
         [Authorize(Roles = "Admin")]
         public ActionResult DisplayAllGivenDegrees()
@@ -260,7 +286,6 @@ namespace Certification_System.Controllers
             {
                 GivenDegree givenDegree = _mapper.Map<GivenDegree>(newGivenDegree);
                 givenDegree.GivenDegreeIdentificator = _keyGenerator.GenerateNewId();
-                givenDegree.Degree = _context.degreeRepository.GetDegreeById(newGivenDegree.SelectedDegree).DegreeIdentificator;
 
                 _context.givenDegreeRepository.AddGivenDegree(givenDegree);
                 _context.userRepository.AddUserDegree(newGivenDegree.SelectedUser, givenDegree.GivenDegreeIdentificator);

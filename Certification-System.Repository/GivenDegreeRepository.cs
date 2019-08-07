@@ -39,5 +39,13 @@ namespace Certification_System.Repository
             _givenDegrees = _context.db.GetCollection<GivenDegree>(_givenDegreesCollectionName);
             _givenDegrees.InsertOne(givenDegree);
         }
+
+        public GivenDegree GetGivenDegreeById(string givenDegreeIdentificator)
+        {
+            var filter = Builders<GivenDegree>.Filter.Eq(x => x.GivenDegreeIdentificator, givenDegreeIdentificator);
+            GivenDegree givenDegree = _context.db.GetCollection<GivenDegree>(_givenDegreesCollectionName).Find<GivenDegree>(filter).FirstOrDefault();
+
+            return givenDegree;
+        }
     }
 }
