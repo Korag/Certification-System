@@ -20,39 +20,42 @@ namespace Certification_System.Repository
             _context = context;
         }
 
-        public ICollection<Certificate> GetCertificates()
+        private IMongoCollection<Certificate> GetCertificates()
         {
-            _certificates = _context.db.GetCollection<Certificate>(_certificatesCollectionName);
+            return _certificates = _context.db.GetCollection<Certificate>(_certificatesCollectionName);
+        }
 
-            return _certificates.AsQueryable().ToList();
+        public ICollection<Certificate> GetListOfCertificates()
+        {
+            return GetCertificates().AsQueryable().ToList();
         }
 
         public void AddCertificate(Certificate certificate)
         {
-            _certificates = _context.db.GetCollection<Certificate>(_certificatesCollectionName);
+            GetCertificates();
             _certificates.InsertOne(certificate);
         }
 
         public void UpdateCertificate(Certificate editedCertificate)
         {
             var filter = Builders<Certificate>.Filter.Eq(x => x.CertificateIdentificator, editedCertificate.CertificateIdentificator);
-            var result = _context.db.GetCollection<Certificate>(_certificatesCollectionName).ReplaceOne(filter, editedCertificate);
+            var result = GetCertificates().ReplaceOne(filter, editedCertificate);
         }
 
         public Certificate GetCertificateById(string certificateIdentificator)
         {
             var filter = Builders<Certificate>.Filter.Eq(x => x.CertificateIdentificator, certificateIdentificator);
-            Certificate certificate = _context.db.GetCollection<Certificate>(_certificatesCollectionName).Find<Certificate>(filter).FirstOrDefault();
+            var resultCertificate = GetCertificates().Find<Certificate>(filter).FirstOrDefault();
 
-            return certificate;
+            return resultCertificate;
         }
 
         public ICollection<SelectListItem> GetCertificatesAsSelectList()
         {
-            List<Certificate> Certificates = GetCertificates().ToList();
+            GetCertificates();
             List<SelectListItem> SelectList = new List<SelectListItem>();
 
-            foreach (var certificate in Certificates)
+            foreach (var certificate in _certificates.AsQueryable().ToList())
             {
                 SelectList.Add
                     (
@@ -69,6 +72,7 @@ namespace Certification_System.Repository
 
         public ICollection<Certificate> GetCertificatesById(ICollection<string> certificateIdentificators)
         {
+            GetCertificates();
             List<Certificate> Certificates = new List<Certificate>();
 
             if (certificateIdentificators != null)
@@ -76,9 +80,7 @@ namespace Certification_System.Repository
                 foreach (var certificateIdentificator in certificateIdentificators)
                 {
                     var filter = Builders<Certificate>.Filter.Eq(x => x.CertificateIdentificator, certificateIdentificator);
-                    Certificate certificate = _context.db.GetCollection<Certificate>(_certificatesCollectionName).Find<Certificate>(filter).FirstOrDefault();
-
-                    Certificates.Add(certificate);
+                    Certificates.Add(_certificates.Find<Certificate>(filter).FirstOrDefault());
                 }
             }
 

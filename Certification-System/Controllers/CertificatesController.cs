@@ -94,7 +94,7 @@ namespace Certification_System.Controllers
         [Authorize(Roles = "Admin")]
         public ActionResult DisplayAllCertificates()
         {
-            var Certificates = _context.certificateRepository.GetCertificates();
+            var Certificates = _context.certificateRepository.GetListOfCertificates();
 
             List<DisplayCertificateViewModel> ListOfCertificates = _mapper.Map<List<DisplayCertificateViewModel>>(Certificates);
             ListOfCertificates.ForEach(z => z.Branches = _context.branchRepository.GetBranchesById(z.Branches));

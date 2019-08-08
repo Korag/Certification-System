@@ -76,15 +76,15 @@ namespace Certification_System.Repository
         public ICollection<string> GetBranchesById(ICollection<string> branchesIdentificators)
         {
             GetBranches();
-            List<string> BranchesNames = new List<string>();
+            List<string> Branches = new List<string>();
 
             foreach (var branch in branchesIdentificators)
             {
                 var filter = Builders<Branch>.Filter.Eq(x => x.BranchIdentificator, branch);
-                BranchesNames.Add(_branches.Find<Branch>(filter).Project(z => z.Name).FirstOrDefault());
+                Branches.Add(_branches.Find<Branch>(filter).Project(z => z.Name).FirstOrDefault());
             }
 
-            return BranchesNames.AsQueryable().ToList();
+            return Branches.AsQueryable().ToList();
         }
     }
 }

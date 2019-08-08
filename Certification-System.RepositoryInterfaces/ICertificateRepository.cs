@@ -6,7 +6,7 @@ namespace Certification_System.RepositoryInterfaces
 {
     public interface ICertificateRepository
     {
-        ICollection<Certificate> GetCertificates();
+        ICollection<Certificate> GetListOfCertificates();
         void AddCertificate(Certificate certificate);
         void UpdateCertificate(Certificate editedCertificate);
         Certificate GetCertificateById(string certificateIdentificator);
