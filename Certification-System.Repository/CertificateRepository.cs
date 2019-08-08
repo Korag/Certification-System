@@ -32,8 +32,7 @@ namespace Certification_System.Repository
 
         public void AddCertificate(Certificate certificate)
         {
-            GetCertificates();
-            _certificates.InsertOne(certificate);
+            GetCertificates().InsertOne(certificate);
         }
 
         public void UpdateCertificate(Certificate editedCertificate)
@@ -72,20 +71,10 @@ namespace Certification_System.Repository
 
         public ICollection<Certificate> GetCertificatesById(ICollection<string> certificateIdentificators)
         {
-            GetCertificates();
-            List<Certificate> Certificates = new List<Certificate>();
+            var filter = Builders<Certificate>.Filter.Where(z => certificateIdentificators.Contains(z.CertificateIdentificator));
+            var result = GetCertificates().Find<Certificate>(filter).ToList();
 
-            if (certificateIdentificators != null)
-            {
-                foreach (var certificateIdentificator in certificateIdentificators)
-                {
-                    var filter = Builders<Certificate>.Filter.Eq(x => x.CertificateIdentificator, certificateIdentificator);
-                    var singleCertificate = _certificates.Find<Certificate>(filter).FirstOrDefault();
-                    Certificates.Add(singleCertificate);
-                }
-            }
-
-            return Certificates;
+            return result;
         }
     }
 }

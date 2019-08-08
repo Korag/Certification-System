@@ -32,8 +32,7 @@ namespace Certification_System.Repository
 
         public void AddCourse(Course course)
         {
-            GetCourses();
-            _courses.InsertOne(course);
+            GetCourses().InsertOne(course);
         }
 
         public void UpdateCourse(Course course)
@@ -109,17 +108,10 @@ namespace Certification_System.Repository
 
         public ICollection<Course> GetCoursesById(ICollection<string> coursesIdentificators)
         {
-            GetCourses();
-            ICollection<Course> Courses = new List<Course>();
+            var filter = Builders<Course>.Filter.Where(z => coursesIdentificators.Contains(z.CourseIdentificator));
+            var result = GetCourses().Find<Course>(filter).ToList();
 
-            foreach (var courseIdentificator in coursesIdentificators)
-            {
-                var filter = Builders<Course>.Filter.Eq(x => x.CourseIdentificator, courseIdentificator);
-                var singleCourse = _courses.Find<Course>(filter).FirstOrDefault();
-                Courses.Add(singleCourse);
-            }
-
-            return Courses;
+            return result;
         }
 
         public void AddMeetingToCourse(string meetingIdentificator, string courseIdentificator)

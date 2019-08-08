@@ -51,8 +51,7 @@ namespace Certification_System.Repository
 
         public void AddDegree(Degree degree)
         {
-            GetDegrees();
-            _degrees.InsertOne(degree);
+            GetDegrees().InsertOne(degree);
         }
 
         public Degree GetDegreeById(string degreeIdentificator)
@@ -65,21 +64,10 @@ namespace Certification_System.Repository
 
         public ICollection<Degree> GetDegreesById(ICollection<string> degreeIdentificators)
         {
-            GetDegrees();
-            List<Degree> Degrees = new List<Degree>();
+            var filter = Builders<Degree>.Filter.Where(z => degreeIdentificators.Contains(z.DegreeIdentificator));
+            var result = GetDegrees().Find<Degree>(filter).ToList();
 
-            if (degreeIdentificators != null)
-            {
-                foreach (var degreeIdentificator in degreeIdentificators)
-                {
-                    var filter = Builders<Degree>.Filter.Eq(x => x.DegreeIdentificator, degreeIdentificator);
-                    var singleDegree = _degrees.Find<Degree>(filter).FirstOrDefault();
-
-                    Degrees.Add(singleDegree);
-                }
-            }
-
-            return Degrees;
+            return result;
         }
 
         public void UpdateDegree(Degree degree)

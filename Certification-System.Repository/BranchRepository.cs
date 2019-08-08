@@ -32,8 +32,7 @@ namespace Certification_System.Repository
 
         public void AddBranch(Branch branch)
         {
-            GetBranches();
-            _branches.InsertOne(branch);
+            GetBranches().InsertOne(branch);
         }
 
         public void UpdateBranch(Branch branch)
@@ -72,16 +71,10 @@ namespace Certification_System.Repository
 
         public ICollection<string> GetBranchesById(ICollection<string> branchesIdentificators)
         {
-            GetBranches();
-            List<string> Branches = new List<string>();
+            var filter = Builders<Branch>.Filter.Where(z => branchesIdentificators.Contains(z.BranchIdentificator));
+            var result = GetBranches().Find<Branch>(filter).Project(z => z.Name).ToList();
 
-            foreach (var branch in branchesIdentificators)
-            {
-                var filter = Builders<Branch>.Filter.Eq(x => x.BranchIdentificator, branch);
-                Branches.Add(_branches.Find<Branch>(filter).Project(z => z.Name).FirstOrDefault());
-            }
-
-            return Branches.AsQueryable().ToList();
+            return result;
         }
     }
 }

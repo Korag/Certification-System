@@ -50,8 +50,7 @@ namespace Certification_System.Repository
 
         public void AddCompany(Company company)
         {
-            GetCompanies();
-            _companies.InsertOne(company);
+            GetCompanies().InsertOne(company);
         }
 
         public void UpdateCompany(Company company)
@@ -70,21 +69,10 @@ namespace Certification_System.Repository
 
         public ICollection<Company> GetCompaniesById(ICollection<string> companyIdentificators)
         {
-            GetCompanies();
-            List<Company> Companies = new List<Company>();
+            var filter = Builders<Company>.Filter.Where(z => companyIdentificators.Contains(z.CompanyIdentificator));
+            var result = GetCompanies().Find<Company>(filter).ToList();
 
-            if (companyIdentificators != null)
-            {
-                foreach (var companyIdentificator in companyIdentificators)
-                {
-                    var filter = Builders<Company>.Filter.Eq(x => x.CompanyIdentificator, companyIdentificator);
-                    var resultCompany = _companies.Find<Company>(filter).FirstOrDefault();
-
-                    Companies.Add(resultCompany);
-                }
-            }
-
-            return Companies;
+            return result;
         }
     }
 }
