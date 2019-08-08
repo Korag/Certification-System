@@ -187,7 +187,15 @@ namespace Certification_System.Controllers
             var CompaniesRoleWorker = _context.companyRepository.GetCompaniesById(User.CompanyRoleWorker);
             var CompaniesRoleManager = _context.companyRepository.GetCompaniesById(User.CompanyRoleManager);
 
-            var Companies = CompaniesRoleWorker.Concat(CompaniesRoleManager);
+            List<Company> Companies = CompaniesRoleWorker.ToList();
+
+            foreach (var company in CompaniesRoleManager)
+            {
+                if (Companies.Where(z=> z.CompanyIdentificator == company.CompanyIdentificator).Count() == 0)
+                {
+                    Companies.Add(company);
+                }
+            }
 
             List<DisplayCourseViewModel> ListOfCourses = new List<DisplayCourseViewModel>();
 
@@ -242,6 +250,7 @@ namespace Certification_System.Controllers
 
             List<DisplayCompanyViewModel> ListOfCompanies = _mapper.Map<List<DisplayCompanyViewModel>>(Companies);
 
+            //todo: translate user roles
             UserDetailsViewModel UserDetails = _mapper.Map<UserDetailsViewModel>(User);
             UserDetails.GivenCertificates = ListOfGivenCertificates;
             UserDetails.GivenDegrees = ListOfGivenDegrees;
