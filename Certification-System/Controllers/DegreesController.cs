@@ -274,7 +274,7 @@ namespace Certification_System.Controllers
         [Authorize(Roles = "Admin")]
         public ActionResult DisplayAllGivenDegrees()
         {
-            var GivenDegrees = _context.givenDegreeRepository.GetGivenDegrees();
+            var GivenDegrees = _context.givenDegreeRepository.GetListOfGivenDegrees();
             List<DisplayGivenDegreeViewModel> ListOfGivenDegrees= new List<DisplayGivenDegreeViewModel>();
 
             foreach (var givenDegree in GivenDegrees)

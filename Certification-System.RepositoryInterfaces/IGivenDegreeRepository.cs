@@ -6,8 +6,8 @@ namespace Certification_System.RepositoryInterfaces
 {
     public interface IGivenDegreeRepository
     {
+        ICollection<GivenDegree> GetListOfGivenDegrees();
         ICollection<GivenDegree> GetGivenDegreesByIdOfDegree(string degreeIdentificator);
-        ICollection<GivenDegree> GetGivenDegrees();
         void AddGivenDegree(GivenDegree givenDegree);
         GivenDegree GetGivenDegreeById(string givenDegreeIdentificator);
         void UpdateGivenDegree(GivenDegree givenDegree);

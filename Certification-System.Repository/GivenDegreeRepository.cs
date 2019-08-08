@@ -19,52 +19,49 @@ namespace Certification_System.Repository
             _context = new MongoContext();
         }
 
+        private IMongoCollection<GivenDegree> GetGivenDegrees()
+        {
+            return _givenDegrees = _context.db.GetCollection<GivenDegree>(_givenDegreesCollectionName);
+        }
+
+        public ICollection<GivenDegree> GetListOfGivenDegrees()
+        {
+            return GetGivenDegrees().AsQueryable().ToList();
+        }
+
         public ICollection<GivenDegree> GetGivenDegreesByIdOfDegree(string degreeIdentificator)
         {
             var filter = Builders<GivenDegree>.Filter.Eq(x => x.Degree, degreeIdentificator);
-            var givenDegrees = _context.db.GetCollection<GivenDegree>(_givenDegreesCollectionName).Find<GivenDegree>(filter).ToList();
+            var resultGivenDegrees = GetGivenDegrees().Find<GivenDegree>(filter).ToList();
 
-            return givenDegrees;
-        }
-
-        public ICollection<GivenDegree> GetGivenDegrees()
-        {
-            _givenDegrees = _context.db.GetCollection<GivenDegree>(_givenDegreesCollectionName);
-
-            return _givenDegrees.AsQueryable().ToList();
+            return resultGivenDegrees;
         }
 
         public void AddGivenDegree(GivenDegree givenDegree)
         {
-            _givenDegrees = _context.db.GetCollection<GivenDegree>(_givenDegreesCollectionName);
-            _givenDegrees.InsertOne(givenDegree);
+            GetGivenDegrees().InsertOne(givenDegree);
         }
 
         public GivenDegree GetGivenDegreeById(string givenDegreeIdentificator)
         {
             var filter = Builders<GivenDegree>.Filter.Eq(x => x.GivenDegreeIdentificator, givenDegreeIdentificator);
-            GivenDegree givenDegree = _context.db.GetCollection<GivenDegree>(_givenDegreesCollectionName).Find<GivenDegree>(filter).FirstOrDefault();
+            var resultGivenDegree = GetGivenDegrees().Find<GivenDegree>(filter).FirstOrDefault();
 
-            return givenDegree;
+            return resultGivenDegree;
         }
 
         public void UpdateGivenDegree(GivenDegree givenDegree)
         {
             var filter = Builders<GivenDegree>.Filter.Eq(x => x.GivenDegreeIdentificator, givenDegree.GivenDegreeIdentificator);
-            var result = _context.db.GetCollection<GivenDegree>(_givenDegreesCollectionName).ReplaceOne(filter, givenDegree);
+            var result = GetGivenDegrees().ReplaceOne(filter, givenDegree);
         }
 
         public ICollection<GivenDegree> GetGivenDegreesById(ICollection<string> givenDegreeIdentificators)
         {
-            List<GivenDegree> GivenDegrees = new List<GivenDegree>();
+            var filter = Builders<GivenDegree>.Filter.Where(z => givenDegreeIdentificators.Contains(z.GivenDegreeIdentificator));
+            var result = GetGivenDegrees().Find<GivenDegree>(filter).ToList();
 
-            foreach (var givenDegreeIdentificator in givenDegreeIdentificators)
-            {
-                GivenDegree singleGivenDegree= GetGivenDegreeById(givenDegreeIdentificator);
-                GivenDegrees.Add(singleGivenDegree);
-            }
-
-            return GivenDegrees;
+            return result;
         }
     }
 }
