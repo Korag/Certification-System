@@ -267,30 +267,61 @@ namespace Certification_System.Controllers
         {
             var User = _context.userRepository.GetUserById(userIdentificator);
             var GivenCertificates = _context.givenCertificateRepository.GetGivenCertificatesById(User.Certificates);
+            var GivenDegrees = _context.givenDegreeRepository.GetGivenDegreesById(User.Degrees);
 
-            List<DisplayGivenCertificateToUserViewModel> ListOfGivenCertificates = new List<DisplayGivenCertificateToUserViewModel>();
+            var CompaniesRoleWorker = _context.companyRepository.GetCompaniesById(User.CompanyRoleWorker);
+            var CompaniesRoleManager = _context.companyRepository.GetCompaniesById(User.CompanyRoleManager);
+
+            List<Company> Companies = CompaniesRoleWorker.ToList();
+
+            foreach (var company in CompaniesRoleManager)
+            {
+                if (Companies.Where(z => z.CompanyIdentificator == company.CompanyIdentificator).Count() == 0)
+                {
+                    Companies.Add(company);
+                }
+            }
+
+            List<DisplayGivenCertificateToUserWithoutCourseViewModel> ListOfGivenCertificates = new List<DisplayGivenCertificateToUserWithoutCourseViewModel>();
 
             if (GivenCertificates.Count != 0)
             {
                 foreach (var givenCertificate in GivenCertificates)
                 {
-                    var Course = _context.courseRepository.GetCourseById(givenCertificate.Course);
                     var Certificate = _context.certificateRepository.GetCertificateById(givenCertificate.Certificate);
-
-                    DisplayCrucialDataCourseViewModel courseViewModel = _mapper.Map<DisplayCrucialDataCourseViewModel>(Course);
 
                     DisplayCrucialDataCertificateViewModel certificateViewModel = _mapper.Map<DisplayCrucialDataCertificateViewModel>(Certificate);
 
-                    DisplayGivenCertificateToUserViewModel singleGivenCertificate = _mapper.Map<DisplayGivenCertificateToUserViewModel>(givenCertificate);
+                    DisplayGivenCertificateToUserWithoutCourseViewModel singleGivenCertificate = _mapper.Map<DisplayGivenCertificateToUserWithoutCourseViewModel>(givenCertificate);
                     singleGivenCertificate.Certificate = certificateViewModel;
-                    singleGivenCertificate.Course = courseViewModel;
 
                     ListOfGivenCertificates.Add(singleGivenCertificate);
                 }
             }
 
+            List<DisplayGivenDegreeToUserViewModel> ListOfGivenDegrees = new List<DisplayGivenDegreeToUserViewModel>();
+
+            if (GivenDegrees.Count != 0)
+            {
+                foreach (var givenDegree in GivenDegrees)
+                {
+                    var Degree = _context.degreeRepository.GetDegreeById(givenDegree.Degree);
+
+                    DisplayCrucialDataDegreeViewModel degreeViewModel = _mapper.Map<DisplayCrucialDataDegreeViewModel>(Degree);
+
+                    DisplayGivenDegreeToUserViewModel singleGivenDegree = _mapper.Map<DisplayGivenDegreeToUserViewModel>(givenDegree);
+                    singleGivenDegree.Degree = degreeViewModel;
+
+                    ListOfGivenDegrees.Add(singleGivenDegree);
+                }
+            }
+
+            List<DisplayCompanyViewModel> ListOfCompanies = _mapper.Map<List<DisplayCompanyViewModel>>(Companies);
+
             UserDetailsForAnonymousViewModel UserDetails = _mapper.Map<UserDetailsForAnonymousViewModel>(User);
             UserDetails.GivenCertificates = ListOfGivenCertificates;
+            UserDetails.GivenDegrees = ListOfGivenDegrees;
+            UserDetails.Companies = ListOfCompanies;
 
             return View(UserDetails);
         }

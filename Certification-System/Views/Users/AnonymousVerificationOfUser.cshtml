@@ -1,4 +1,4 @@
-﻿@model Certification_System.DTOViewModels.UserDetailsViewModel
+﻿@model Certification_System.DTOViewModels.UserDetailsForAnonymousViewModel
 
 @{
     ViewData["Title"] = "AnonymousVerificationOfUser";
@@ -39,6 +39,93 @@
         </div>
     </form>
 </div>
+
+<h2 class="mt-4 mb-4">Przedsiębiorstwa powiązane z użytkownikiem</h2>
+
+@if (Model.Companies.Count != 0)
+{
+    <div class="col-12 table-responsive">
+        <table id="listCompanies" class="table table-striped table-bordered display" style="width: 100%;" role="grid">
+            <thead>
+                <tr>
+                    <th>
+                        @Html.DisplayNameFor(model => model.Companies.First().CompanyName)
+                    </th>
+                    <th>
+                        @Html.DisplayNameFor(model => model.Companies.First().Email)
+                    </th>
+                    <th>
+                        @Html.DisplayNameFor(model => model.Companies.First().Phone)
+                    </th>
+                    <th>
+                        @Html.DisplayNameFor(model => model.Companies.First().Country)
+                    </th>
+                    <th>
+                        @Html.DisplayNameFor(model => model.Companies.First().City)
+                    </th>
+                    <th>
+                        @Html.DisplayNameFor(model => model.Companies.First().PostCode)
+                    </th>
+                    <th>
+                        @Html.DisplayNameFor(model => model.Companies.First().Address)
+                    </th>
+                    <th>
+                        @Html.DisplayNameFor(model => model.Companies.First().NumberOfApartment)
+                    </th>
+                    <th>
+                        Rola użytkownika w przesiębiorstwie
+                    </th>
+                </tr>
+            </thead>
+            <tbody>
+                @foreach (var item in Model.Companies)
+                {
+                    <tr>
+                        <td>
+                            @Html.DisplayFor(modelItem => item.CompanyName)
+                        </td>
+                        <td>
+                            @Html.DisplayFor(modelItem => item.Email)
+                        </td>
+                        <td>
+                            @Html.DisplayFor(modelItem => item.Phone)
+                        </td>
+                        <td>
+                            @Html.DisplayFor(modelItem => item.Country)
+                        </td>
+                        <td>
+                            @Html.DisplayFor(modelItem => item.City)
+                        </td>
+                        <td>
+                            @Html.DisplayFor(modelItem => item.PostCode)
+                        </td>
+                        <td>
+                            @Html.DisplayFor(modelItem => item.Address)
+                        </td>
+                        <td>
+                            @Html.DisplayFor(modelItem => item.NumberOfApartment)
+                        </td>
+                        <td>
+                            @if (Model.CompanyRoleWorker.Contains(item.CompanyIdentificator))
+                            {
+                                <p>@Html.DisplayNameFor(model => model.CompanyRoleWorker)</p>
+                            }
+                            @if (Model.CompanyRoleManager.Contains(item.CompanyIdentificator))
+                            {
+                                <p>@Html.DisplayNameFor(model => model.CompanyRoleManager)</p>
+                            }
+                        </td>
+                    </tr>
+                }
+            </tbody>
+        </table>
+    </div>
+}
+
+else
+{
+    <div class="mt-4 mb-4 alert alert-warning">Użytkownik nie jest zrzeszony z żadnym przedsiębiorstwem</div>
+}
 
 <h2 class="mt-4 mb-4">Certyfikaty użytkownika</h2>
 
@@ -81,7 +168,7 @@
                         <td>
                             @Html.DisplayFor(model => item.Certificate.CertificateIndexer) @Html.DisplayFor(model => item.Certificate.Name)
                         </td>
-                        <td>
+                        <td style="text-align:center">
                             @if (item.ExpirationDate < DateTime.Now)
                             {
                                 <span class="fas fa-times" style="font-size:34px"></span>
@@ -103,11 +190,88 @@ else
     <div class="mt-4 mb-4 alert alert-warning">Użytkownikowi nie przyznano żadnych certyfikatów</div>
 }
 
+<h2 class="mt-4 mb-4">Stopnie zawodowe użytkownika</h2>
+
+@if (Model.GivenDegrees.Count != 0)
+{
+    <div class="col-12 table-responsive">
+        <table id="listGivenDegrees" class="table table-striped table-bordered display" style="width: 100%;" role="grid">
+            <thead>
+                <tr>
+                    <th>
+                        @Html.DisplayNameFor(model => model.GivenDegrees.First().GivenDegreeIndexer)
+                    </th>
+                    <th>
+                        @Html.DisplayNameFor(model => model.GivenDegrees.First().ReceiptDate)
+                    </th>
+                    <th>
+                        @Html.DisplayNameFor(model => model.GivenDegrees.First().ExpirationDate)
+                    </th>
+                    <th>
+                        @Html.DisplayNameFor(model => model.GivenDegrees.First().Degree.DegreeIndexer) i @Html.DisplayNameFor(model => model.GivenDegrees.First().Degree.Name)
+                    </th>
+                    <th>
+                        Stopień zawodowy jest ważny ?
+                    </th>
+                </tr>
+            </thead>
+            <tbody>
+                @foreach (var item in Model.GivenDegrees)
+                {
+                    <tr class="alert @if (item.ExpirationDate < DateTime.Now) { <text> table-danger </text>} else { <text> table-success </text> }">
+                        <td>
+                            @Html.DisplayFor(modelItem => item.GivenDegreeIndexer)
+                        </td>
+                        <td>
+                            @Html.DisplayFor(modelItem => item.ReceiptDate)
+                        </td>
+                        <td>
+                            @Html.DisplayFor(modelItem => item.ExpirationDate)
+                        </td>
+                        <td>
+                            @Html.DisplayFor(model => item.Degree.DegreeIndexer) @Html.DisplayFor(model => item.Degree.Name)
+                        </td>
+                        <td style="text-align:center">
+                            @if (item.ExpirationDate < DateTime.Now)
+                            {
+                                <span class="fas fa-times" style="font-size:34px"></span>
+                            }
+                            else
+                            {
+                                <span class="fas fa-check-circle" style="font-size:34px"></span>
+                            }
+                        </td>
+                    </tr>
+                }
+            </tbody>
+        </table>
+    </div>
+}
+
+else
+{
+    <div class="mt-4 mb-4 alert alert-warning">Użytkownikowi nie przyznano żadnych stopni zawodowych</div>
+}
+
 @section Scripts{
     <script>
         $(document).ready(function () {
 
             $('#listGivenCertificates').DataTable({
+                "language": {
+                    "url": "//cdn.datatables.net/plug-ins/1.10.19/i18n/Polish.json"
+                },
+            }
+            );
+
+            $('#listGivenDegrees').DataTable({
+                "language": {
+                    "url": "//cdn.datatables.net/plug-ins/1.10.19/i18n/Polish.json"
+                },
+            }
+            );
+
+            $('#listCompanies').DataTable({
                 "language": {
                     "url": "//cdn.datatables.net/plug-ins/1.10.19/i18n/Polish.json"
                 },

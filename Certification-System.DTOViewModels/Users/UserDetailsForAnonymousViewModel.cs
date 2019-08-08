@@ -19,7 +19,19 @@ namespace Certification_System.DTOViewModels
         [Display(Name = "Nazwisko")]
         public string LastName { get; set; }
 
+        [Display(Name = "Pracownik przedsiębiorstwa")]
+        public ICollection<string> CompanyRoleWorker { get; set; }
+
+        [Display(Name = "Zarządzający przedsiębiorstwem")]
+        public ICollection<string> CompanyRoleManager { get; set; }
+
         [Display(Name = "Certyfikaty")]
-        public ICollection<DisplayGivenCertificateToUserViewModel> GivenCertificates { get; set; }
+        public ICollection<DisplayGivenCertificateToUserWithoutCourseViewModel> GivenCertificates { get; set; }
+
+        [Display(Name = "Certyfikaty")]
+        public ICollection<DisplayGivenDegreeToUserViewModel> GivenDegrees { get; set; }
+
+        [Display(Name = "Przedsiębiorstwa")]
+        public ICollection<DisplayCompanyViewModel> Companies { get; set; }
     }
 }

@@ -40,10 +40,10 @@ namespace Certification_System.DTOViewModels
         [Display(Name = "Data urodzenia")]
         public string DateOfBirth { get; set; }
 
-        [Display(Name = "Zrzeszony z przedsiębiorstwem")]
+        [Display(Name = "Pracownik przedsiębiorstwa")]
         public ICollection<string> CompanyRoleWorker { get; set; }
 
-        [Display(Name = "Zarządza przedsiębiorstwem")]
+        [Display(Name = "Zarządzający przedsiębiorstwem")]
         public ICollection<string> CompanyRoleManager { get; set; }
 
         [Display(Name = "Kursy")]

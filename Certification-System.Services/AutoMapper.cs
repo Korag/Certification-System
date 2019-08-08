@@ -125,6 +125,9 @@ namespace Certification_System.Services
                      .ForMember(dest => dest.Certificate, opts => opts.Ignore())
                      .ForMember(dest => dest.Course, opts => opts.Ignore());
 
+            CreateMap<GivenCertificate, DisplayGivenCertificateToUserWithoutCourseViewModel>()
+                 .ForMember(dest => dest.Certificate, opts => opts.Ignore());
+
             CreateMap<EditGivenCertificateViewModel, GivenCertificate>()
                  .ForMember(dest => dest.GivenCertificateIdentificator, opts => opts.Ignore())
                  .ForMember(dest => dest.Certificate, opts => opts.Ignore())
