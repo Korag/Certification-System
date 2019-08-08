@@ -155,7 +155,7 @@ namespace Certification_System.Controllers
         [Authorize(Roles = "Admin")]
         public ActionResult DisplayAllCourses()
         {
-            var Courses = _context.courseRepository.GetCourses();
+            var Courses = _context.courseRepository.GetListOfCourses();
             List<DisplayCourseViewModel> ListOfCourses = new List<DisplayCourseViewModel>();
 
             if (Courses.Count != 0)

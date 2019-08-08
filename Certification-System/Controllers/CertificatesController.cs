@@ -138,7 +138,7 @@ namespace Certification_System.Controllers
             {
                 AvailableCertificates = _context.certificateRepository.GetCertificatesAsSelectList().ToList(),
                 AvailableUsers = _context.userRepository.GetUsersAsSelectList().ToList(),
-                AvailableCourses = _context.courseRepository.GetCoursesAsSelectList().ToList()
+                AvailableCourses = _context.courseRepository.GetActiveCoursesAsSelectList().ToList()
             };
 
             return View(newGivenCertificate);
@@ -164,7 +164,7 @@ namespace Certification_System.Controllers
 
             newGivenCertificate.AvailableCertificates = _context.certificateRepository.GetCertificatesAsSelectList().ToList();
             newGivenCertificate.AvailableUsers = _context.userRepository.GetUsersAsSelectList().ToList();
-            newGivenCertificate.AvailableCourses = _context.courseRepository.GetCoursesAsSelectList().ToList();
+            newGivenCertificate.AvailableCourses = _context.courseRepository.GetActiveCoursesAsSelectList().ToList();
 
             return View(newGivenCertificate);
         }

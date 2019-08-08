@@ -6,14 +6,15 @@ namespace Certification_System.RepositoryInterfaces
 {
     public interface ICourseRepository
     {
+        ICollection<Course> GetListOfCourses();
         void AddCourse(Course course);
         void UpdateCourse(Course course);
         Course GetCourseById(string courseIdentificator);
         ICollection<Course> GetCoursesById(ICollection<string> coursesIdentificators);
-        ICollection<SelectListItem> GetCoursesAsSelectList();
+        ICollection<SelectListItem> GetActiveCoursesAsSelectList();
+        ICollection<SelectListItem> GetAllCoursesAsSelectList();
         ICollection<Course> GetActiveCourses();
         Course GetCourseByMeetingId(string meetingIdentificator);
-        ICollection<Course> GetCourses();
         void AddMeetingToCourse(string meetingIdentificator, string courseIdentificator);
     }
 }

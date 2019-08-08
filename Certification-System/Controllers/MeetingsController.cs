@@ -62,7 +62,7 @@ namespace Certification_System.Controllers
         {
             AddMeetingViewModel newMeeting = new AddMeetingViewModel
             {
-                AvailableCourses = _context.courseRepository.GetCoursesAsSelectList().ToList(),
+                AvailableCourses = _context.courseRepository.GetActiveCoursesAsSelectList().ToList(),
                 AvailableInstructors = _context.instructorRepository.GetInstructorsAsSelectList().ToList()
             };
 
@@ -85,7 +85,7 @@ namespace Certification_System.Controllers
                 return RedirectToAction("ConfirmationOfActionOnMeeting", new { meetingIdentificator = meeting.MeetingIdentificator, TypeOfAction = "Add" });
             }
 
-            newMeeting.AvailableCourses = _context.courseRepository.GetCoursesAsSelectList().ToList();
+            newMeeting.AvailableCourses = _context.courseRepository.GetActiveCoursesAsSelectList().ToList();
             newMeeting.AvailableInstructors = _context.instructorRepository.GetInstructorsAsSelectList().ToList();
 
             return View(newMeeting);
