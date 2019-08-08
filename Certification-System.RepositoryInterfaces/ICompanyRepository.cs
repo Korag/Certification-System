@@ -6,7 +6,7 @@ namespace Certification_System.RepositoryInterfaces
 {
     public interface ICompanyRepository
     {
-        ICollection<Company> GetCompanies();
+        ICollection<Company> GetListOfCompanies();
         ICollection<Company> GetCompaniesById(ICollection<string> companyIdentificators);
         void AddCompany(Company company);
         void UpdateCompany(Company company);

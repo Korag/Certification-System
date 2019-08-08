@@ -19,13 +19,21 @@ namespace Certification_System.Repository
             _context = context;
         }
 
+        private IMongoCollection<Company> GetCompanies()
+        {
+            return _companies = _context.db.GetCollection<Company>(_companiesCollectionName);
+        }
+
+        public ICollection<Company> GetListOfCompanies()
+        {
+            return GetCompanies().AsQueryable().ToList();
+        }
         public ICollection<SelectListItem> GetCompaniesAsSelectList()
         {
-            var Companies = GetCompanies();
+            GetCompanies();
             List<SelectListItem> SelectList = new List<SelectListItem>();
-            //SelectList.Add(new SelectListItem { Text = "---", Value = null });
 
-            foreach (var company in Companies)
+            foreach (var company in _companies.AsQueryable().ToList())
             {
                 SelectList.Add
                     (
@@ -40,35 +48,29 @@ namespace Certification_System.Repository
             return SelectList;
         }
 
-        public ICollection<Company> GetCompanies()
-        {
-            _companies = _context.db.GetCollection<Company>(_companiesCollectionName);
-
-            return _companies.AsQueryable().ToList();
-        }
-
         public void AddCompany(Company company)
         {
-            _companies = _context.db.GetCollection<Company>(_companiesCollectionName);
+            GetCompanies();
             _companies.InsertOne(company);
         }
 
         public void UpdateCompany(Company company)
         {
             var filter = Builders<Company>.Filter.Eq(x => x.CompanyIdentificator, company.CompanyIdentificator);
-            var result = _context.db.GetCollection<Company>(_companiesCollectionName).ReplaceOne(filter, company);
+            var result = GetCompanies().ReplaceOne(filter, company);
         }
 
         public Company GetCompanyById(string companyIdentificator)
         {
             var filter = Builders<Company>.Filter.Eq(x => x.CompanyIdentificator, companyIdentificator);
-            Company company = _context.db.GetCollection<Company>(_companiesCollectionName).Find<Company>(filter).FirstOrDefault();
+            var resultCompany = GetCompanies().Find<Company>(filter).FirstOrDefault();
 
-            return company;
+            return resultCompany;
         }
 
         public ICollection<Company> GetCompaniesById(ICollection<string> companyIdentificators)
         {
+            GetCompanies();
             List<Company> Companies = new List<Company>();
 
             if (companyIdentificators != null)
@@ -76,11 +78,10 @@ namespace Certification_System.Repository
                 foreach (var companyIdentificator in companyIdentificators)
                 {
                     var filter = Builders<Company>.Filter.Eq(x => x.CompanyIdentificator, companyIdentificator);
-                    Company company = _context.db.GetCollection<Company>(_companiesCollectionName).Find<Company>(filter).FirstOrDefault();
+                    var resultCompany = _companies.Find<Company>(filter).FirstOrDefault();
 
-                    Companies.Add(company);
+                    Companies.Add(resultCompany);
                 }
-
             }
 
             return Companies;

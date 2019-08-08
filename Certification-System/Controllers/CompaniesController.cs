@@ -28,7 +28,7 @@ namespace Certification_System.Controllers
         [Authorize(Roles = "Admin")]
         public ActionResult DisplayAllCompanies()
         {
-            var Companies = _context.companyRepository.GetCompanies();
+            var Companies = _context.companyRepository.GetListOfCompanies();
             List<DisplayCompanyViewModel> DisplayCompanies = _mapper.Map<List<DisplayCompanyViewModel>>(Companies);
 
             return View(DisplayCompanies);
