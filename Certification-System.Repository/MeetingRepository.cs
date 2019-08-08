@@ -18,46 +18,41 @@ namespace Certification_System.Repository
             _context = context;
         }
 
+        private IMongoCollection<Meeting> GetMeetings()
+        {
+            return _meetings = _context.db.GetCollection<Meeting>(_meetingsCollectionName);
+        }
+
+        public ICollection<Meeting> GetListOfMeetings()
+        {
+            return GetMeetings().AsQueryable().ToList();
+        }
+
         public ICollection<Meeting> GetMeetingsById(ICollection<string> meetingsIdentificators)
         {
-            ICollection<Meeting> Meetings = new List<Meeting>();
+            var filter = Builders<Meeting>.Filter.Where(z => meetingsIdentificators.Contains(z.MeetingIdentificator));
+            var result = GetMeetings().Find<Meeting>(filter).ToList();
 
-            foreach (var meeting in meetingsIdentificators)
-            {
-                var filter = Builders<Meeting>.Filter.Eq(x => x.MeetingIdentificator, meeting);
-                Meeting singleMeeting = _context.db.GetCollection<Meeting>(_meetingsCollectionName).Find<Meeting>(filter).FirstOrDefault();
-                Meetings.Add(singleMeeting);
-            }
-
-            return Meetings;
+            return result;
         }
 
         public void AddMeeting(Meeting meeting)
         {
-            _meetings = _context.db.GetCollection<Meeting>(_meetingsCollectionName);
-            _meetings.InsertOne(meeting);
+            GetMeetings().InsertOne(meeting);
         }
 
         public void UpdateMeeting(Meeting meeting)
         {
             var filter = Builders<Meeting>.Filter.Eq(x => x.MeetingIdentificator, meeting.MeetingIdentificator);
-            var result = _context.db.GetCollection<Meeting>(_meetingsCollectionName).ReplaceOne(filter, meeting);
+            var result = GetMeetings().ReplaceOne(filter, meeting);
         }
 
         public Meeting GetMeetingById(string meetingsIdentificators)
         {
-            Meeting Meeting = new Meeting();
-
             var filter = Builders<Meeting>.Filter.Eq(x => x.MeetingIdentificator, meetingsIdentificators);
-            Meeting = _context.db.GetCollection<Meeting>(_meetingsCollectionName).Find<Meeting>(filter).FirstOrDefault();
+            var result = GetMeetings().Find<Meeting>(filter).FirstOrDefault();
 
-            return Meeting;
-        }
-
-        public ICollection<Meeting> GetMeetings()
-        {
-            _meetings = _context.db.GetCollection<Meeting>(_meetingsCollectionName);
-            return _meetings.AsQueryable().ToList();
+            return result;
         }
     }
 }

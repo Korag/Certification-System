@@ -125,7 +125,7 @@ namespace Certification_System.Controllers
         [Authorize(Roles = "Admin")]
         public ActionResult DisplayAllMeetings()
         {
-            var Meetings = _context.meetingRepository.GetMeetings();
+            var Meetings = _context.meetingRepository.GetListOfMeetings();
             List<DisplayMeetingViewModel> ListOfMeetings = new List<DisplayMeetingViewModel>();
 
             foreach (var meeting in Meetings)
