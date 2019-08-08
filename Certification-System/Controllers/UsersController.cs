@@ -42,7 +42,7 @@ namespace Certification_System.Controllers
         [Authorize(Roles = "Admin")]
         public ActionResult DisplayAllUsers()
         {
-            var Users = _context.userRepository.GetUsers();
+            var Users = _context.userRepository.GetListOfUsers();
             List<DisplayUserViewModel> usersToDisplay = new List<DisplayUserViewModel>();
 
             foreach (var user in Users)

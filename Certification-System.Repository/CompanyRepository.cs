@@ -28,6 +28,7 @@ namespace Certification_System.Repository
         {
             return GetCompanies().AsQueryable().ToList();
         }
+
         public ICollection<SelectListItem> GetCompaniesAsSelectList()
         {
             GetCompanies();
@@ -70,9 +71,9 @@ namespace Certification_System.Repository
         public ICollection<Company> GetCompaniesById(ICollection<string> companyIdentificators)
         {
             var filter = Builders<Company>.Filter.Where(z => companyIdentificators.Contains(z.CompanyIdentificator));
-            var result = GetCompanies().Find<Company>(filter).ToList();
+            var resultListOfCompanies = GetCompanies().Find<Company>(filter).ToList();
 
-            return result;
+            return resultListOfCompanies;
         }
     }
 }

@@ -72,9 +72,9 @@ namespace Certification_System.Repository
         public ICollection<Certificate> GetCertificatesById(ICollection<string> certificateIdentificators)
         {
             var filter = Builders<Certificate>.Filter.Where(z => certificateIdentificators.Contains(z.CertificateIdentificator));
-            var result = GetCertificates().Find<Certificate>(filter).ToList();
+            var resultListOfCertificates = GetCertificates().Find<Certificate>(filter).ToList();
 
-            return result;
+            return resultListOfCertificates;
         }
     }
 }

@@ -65,9 +65,9 @@ namespace Certification_System.Repository
         public ICollection<Degree> GetDegreesById(ICollection<string> degreeIdentificators)
         {
             var filter = Builders<Degree>.Filter.Where(z => degreeIdentificators.Contains(z.DegreeIdentificator));
-            var result = GetDegrees().Find<Degree>(filter).ToList();
+            var resultListOfDegrees = GetDegrees().Find<Degree>(filter).ToList();
 
-            return result;
+            return resultListOfDegrees;
         }
 
         public void UpdateDegree(Degree degree)

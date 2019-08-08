@@ -32,9 +32,9 @@ namespace Certification_System.Repository
         public ICollection<GivenDegree> GetGivenDegreesByIdOfDegree(string degreeIdentificator)
         {
             var filter = Builders<GivenDegree>.Filter.Eq(x => x.Degree, degreeIdentificator);
-            var resultGivenDegrees = GetGivenDegrees().Find<GivenDegree>(filter).ToList();
+            var resultListOfGivenDegrees = GetGivenDegrees().Find<GivenDegree>(filter).ToList();
 
-            return resultGivenDegrees;
+            return resultListOfGivenDegrees;
         }
 
         public void AddGivenDegree(GivenDegree givenDegree)
@@ -59,9 +59,9 @@ namespace Certification_System.Repository
         public ICollection<GivenDegree> GetGivenDegreesById(ICollection<string> givenDegreeIdentificators)
         {
             var filter = Builders<GivenDegree>.Filter.Where(z => givenDegreeIdentificators.Contains(z.GivenDegreeIdentificator));
-            var result = GetGivenDegrees().Find<GivenDegree>(filter).ToList();
+            var resultListOfGivenDegrees = GetGivenDegrees().Find<GivenDegree>(filter).ToList();
 
-            return result;
+            return resultListOfGivenDegrees;
         }
     }
 }

@@ -52,7 +52,7 @@ namespace Certification_System.Repository
         public ICollection<Course> GetActiveCourses()
         {
             var filter = Builders<Course>.Filter.Eq(x => x.CourseEnded, false);
-            ICollection<Course> resultListOfCourses = GetCourses().Find<Course>(filter).ToList();
+            var resultListOfCourses = GetCourses().Find<Course>(filter).ToList();
 
             return resultListOfCourses;
         }
@@ -109,9 +109,9 @@ namespace Certification_System.Repository
         public ICollection<Course> GetCoursesById(ICollection<string> coursesIdentificators)
         {
             var filter = Builders<Course>.Filter.Where(z => coursesIdentificators.Contains(z.CourseIdentificator));
-            var result = GetCourses().Find<Course>(filter).ToList();
+            var resultListOfCourses = GetCourses().Find<Course>(filter).ToList();
 
-            return result;
+            return resultListOfCourses;
         }
 
         public void AddMeetingToCourse(string meetingIdentificator, string courseIdentificator)

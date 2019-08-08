@@ -6,9 +6,8 @@ namespace Certification_System.RepositoryInterfaces
 {
     public interface IUserRepository
     {
+        ICollection<CertificationPlatformUser> GetListOfUsers();
         ICollection<SelectListItem> GetRolesAsSelectList();
-
-        ICollection<CertificationPlatformUser> GetUsers();
         void UpdateUser(CertificationPlatformUser user);
         CertificationPlatformUser GetUserById(string userIdentificator);
         ICollection<CertificationPlatformUser> GetUsersById(ICollection<string> userIdentificators);

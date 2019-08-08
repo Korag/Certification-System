@@ -50,17 +50,17 @@ namespace Certification_System.Repository
         public ICollection<GivenCertificate> GetGivenCertificatesById(ICollection<string> givenCertificatesIdentificators)
         {
             var filter = Builders<GivenCertificate>.Filter.Where(z => givenCertificatesIdentificators.Contains(z.GivenCertificateIdentificator));
-            var result = GetGivenCertificates().Find<GivenCertificate>(filter).ToList();
+            var resultListOfGivenCertificate = GetGivenCertificates().Find<GivenCertificate>(filter).ToList();
 
-            return result;
+            return resultListOfGivenCertificate;
         }
 
         public ICollection<GivenCertificate> GetGivenCertificatesByIdOfCertificate(string certificateIdentificator)
         {
             var filter = Builders<GivenCertificate>.Filter.Eq(x => x.Certificate, certificateIdentificator);
-            var resultGivenCertificates = GetGivenCertificates().Find<GivenCertificate>(filter).ToList();
+            var resultListOfGivenCertificate = GetGivenCertificates().Find<GivenCertificate>(filter).ToList();
 
-            return resultGivenCertificates;
+            return resultListOfGivenCertificate;
         }
     }
 }

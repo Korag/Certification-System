@@ -72,9 +72,9 @@ namespace Certification_System.Repository
         public ICollection<string> GetBranchesById(ICollection<string> branchesIdentificators)
         {
             var filter = Builders<Branch>.Filter.Where(z => branchesIdentificators.Contains(z.BranchIdentificator));
-            var result = GetBranches().Find<Branch>(filter).Project(z => z.Name).ToList();
+            var resultListOfBranches = GetBranches().Find<Branch>(filter).Project(z => z.Name).ToList();
 
-            return result;
+            return resultListOfBranches;
         }
     }
 }

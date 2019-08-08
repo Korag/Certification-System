@@ -20,6 +20,16 @@ namespace Certification_System.Repository
             _context = context;
         }
 
+        private IMongoCollection<CertificationPlatformUser> GetUsers()
+        {
+            return _users = _context.db.GetCollection<CertificationPlatformUser>(_usersCollectionName);
+        }
+
+        public ICollection<CertificationPlatformUser> GetListOfUsers()
+        {
+            return GetUsers().AsQueryable().ToList();
+        }
+
         public ICollection<SelectListItem> GetRolesAsSelectList()
         {
             List<SelectListItem> SelectList = new List<SelectListItem>
@@ -55,41 +65,28 @@ namespace Certification_System.Repository
             return SelectList;
         }
 
-        public ICollection<CertificationPlatformUser> GetUsers()
-        {
-            _users = _context.db.GetCollection<CertificationPlatformUser>(_usersCollectionName);
-
-            return _users.AsQueryable().ToList();
-        }
-
         public CertificationPlatformUser GetUserById(string userIdentificator)
         {
             var filter = Builders<CertificationPlatformUser>.Filter.Eq(x => x.Id, userIdentificator);
-            CertificationPlatformUser user = _context.db.GetCollection<CertificationPlatformUser>(_usersCollectionName).Find<CertificationPlatformUser>(filter).FirstOrDefault();
+            var result = GetUsers().Find<CertificationPlatformUser>(filter).FirstOrDefault();
 
-            return user;
+            return result;
         }
 
         public ICollection<CertificationPlatformUser> GetUsersById(ICollection<string> userIdentificators)
         {
-            List<CertificationPlatformUser> Users = new List<CertificationPlatformUser>();
+            var filter = Builders<CertificationPlatformUser>.Filter.Where(z => userIdentificators.Contains(z.Id));
+            var resultListOfUsers = GetUsers().Find<CertificationPlatformUser>(filter).ToList();
 
-            foreach (var user in userIdentificators)
-            {
-                var filter = Builders<CertificationPlatformUser>.Filter.Eq(x => x.Id, user);
-                CertificationPlatformUser singleUser = _context.db.GetCollection<CertificationPlatformUser>(_usersCollectionName).Find<CertificationPlatformUser>(filter).FirstOrDefault();
-                Users.Add(singleUser);
-            }
-
-            return Users;
+            return resultListOfUsers;
         }
 
         public ICollection<SelectListItem> GetUsersAsSelectList()
         {
-            List<CertificationPlatformUser> Users = GetUsers().ToList();
+            GetUsers();
             List<SelectListItem> SelectList = new List<SelectListItem>();
 
-            foreach (var user in Users)
+            foreach (var user in _users.AsQueryable().ToList())
             {
                 SelectList.Add
                     (
@@ -110,8 +107,7 @@ namespace Certification_System.Repository
             User.Certificates.Add(givenCertificateIdentificator);
 
             var filter = Builders<CertificationPlatformUser>.Filter.Eq(x => x.Id, userIdentificator);
-
-            _context.db.GetCollection<CertificationPlatformUser>(_usersCollectionName).ReplaceOne(filter, User);
+            GetUsers().ReplaceOne(filter, User);
         }
 
         public void AddUserDegree(string userIdentificator, string givenDegreeIdentificator)
@@ -120,68 +116,69 @@ namespace Certification_System.Repository
             User.Degrees.Add(givenDegreeIdentificator);
 
             var filter = Builders<CertificationPlatformUser>.Filter.Eq(x => x.Id, userIdentificator);
-
-            _context.db.GetCollection<CertificationPlatformUser>(_usersCollectionName).ReplaceOne(filter, User);
+            GetUsers().ReplaceOne(filter, User);
         }
 
         public CertificationPlatformUser GetUserByGivenCertificateId(string givenCertificateIdentificator)
         {
             var filter = Builders<CertificationPlatformUser>.Filter.Where(z => z.Certificates.Contains(givenCertificateIdentificator));
-            CertificationPlatformUser user = _context.db.GetCollection<CertificationPlatformUser>(_usersCollectionName).Find<CertificationPlatformUser>(filter).FirstOrDefault();
+            var resultUser = GetUsers().Find<CertificationPlatformUser>(filter).FirstOrDefault();
 
-            return user;
+            return resultUser;
         }
 
         public ICollection<CertificationPlatformUser> GetUsersByGivenCertificateId(ICollection<string> givenCertificatesIdentificators)
         {
-            List<CertificationPlatformUser> Users = new List<CertificationPlatformUser>();
+            GetUsers();
+            List<CertificationPlatformUser> resultListOfUsers = new List<CertificationPlatformUser>();
 
             foreach (var givenCertificateIdentificator in givenCertificatesIdentificators)
             {
                 var filter = Builders<CertificationPlatformUser>.Filter.Where(x => x.Certificates.Contains(givenCertificateIdentificator));
-                CertificationPlatformUser singleUser = _context.db.GetCollection<CertificationPlatformUser>(_usersCollectionName).Find<CertificationPlatformUser>(filter).FirstOrDefault();
-                Users.Add(singleUser);
+                var resultUser = _users.Find<CertificationPlatformUser>(filter).FirstOrDefault();
+                resultListOfUsers.Add(resultUser);
             }
+            //var resultListOfUsers = GetUsers().AsQueryable().ToList().Where(z => z.Certificates.Where(x => givenCertificatesIdentificators.Contains(x)).Count() != 0).ToList();
 
-            return Users;
+            return resultListOfUsers;
         }
+
 
         public ICollection<CertificationPlatformUser> GetUsersConnectedToCompany(string companyIdentificator)
         {
-            List<CertificationPlatformUser> Users = new List<CertificationPlatformUser>();
-
             var filter = Builders<CertificationPlatformUser>.Filter.Where(x => x.CompanyRoleManager.Contains(companyIdentificator) || x.CompanyRoleWorker.Contains(companyIdentificator));
-            Users = _context.db.GetCollection<CertificationPlatformUser>(_usersCollectionName).Find<CertificationPlatformUser>(filter).ToList();
+            var resultListOfUsers = GetUsers().Find<CertificationPlatformUser>(filter).ToList();
 
-            return Users;
+            return resultListOfUsers;
         }
 
         public ICollection<CertificationPlatformUser> GetUsersByDegreeId(ICollection<string> degreeIdentificators)
         {
-            List<CertificationPlatformUser> Users = new List<CertificationPlatformUser>();
+            GetUsers();
+            List<CertificationPlatformUser> resultListOfUsers = new List<CertificationPlatformUser>();
 
             foreach (var degreeIdentificator in degreeIdentificators)
             {
                 var filter = Builders<CertificationPlatformUser>.Filter.Where(x => x.Degrees.Contains(degreeIdentificator));
-                CertificationPlatformUser singleUser = _context.db.GetCollection<CertificationPlatformUser>(_usersCollectionName).Find<CertificationPlatformUser>(filter).FirstOrDefault();
-                Users.Add(singleUser);
+                var resultUser = _users.Find<CertificationPlatformUser>(filter).FirstOrDefault();
+                resultListOfUsers.Add(resultUser);
             }
 
-            return Users;
+            return resultListOfUsers;
         }
 
         public CertificationPlatformUser GetUserByGivenDegreeId(string givenDegreeIdentificator)
         {
             var filter = Builders<CertificationPlatformUser>.Filter.Where(z => z.Degrees.Contains(givenDegreeIdentificator));
-            CertificationPlatformUser user = _context.db.GetCollection<CertificationPlatformUser>(_usersCollectionName).Find<CertificationPlatformUser>(filter).FirstOrDefault();
+            var resultUser = GetUsers().Find<CertificationPlatformUser>(filter).FirstOrDefault();
 
-            return user;
+            return resultUser;
         }
 
         public void UpdateUser(CertificationPlatformUser user)
         {
             var filter = Builders<CertificationPlatformUser>.Filter.Eq(x => x.Id, user.Id);
-            var result = _context.db.GetCollection<CertificationPlatformUser>(_usersCollectionName).ReplaceOne(filter, user);
+            var result = GetUsers().ReplaceOne(filter, user);
         }
     }
 }
