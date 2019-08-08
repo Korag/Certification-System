@@ -27,9 +27,7 @@ namespace Certification_System.Repository
 
         public ICollection<Branch> GetListOfBranches()
         {
-            GetBranches();
-
-            return _branches.AsQueryable().ToList();
+            return GetBranches().AsQueryable().ToList();
         }
 
         public void AddBranch(Branch branch)
@@ -43,7 +41,6 @@ namespace Certification_System.Repository
             var filter = Builders<Branch>.Filter.Eq(x => x.BranchIdentificator, branch.BranchIdentificator);
             var result = GetBranches().ReplaceOne(filter, branch);
         }
- 
 
         public ICollection<SelectListItem> GetBranchesAsSelectList()
         {

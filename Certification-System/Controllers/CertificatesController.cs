@@ -106,7 +106,7 @@ namespace Certification_System.Controllers
         [Authorize(Roles = "Admin")]
         public ActionResult DisplayAllGivenCertificates()
         {
-            var GivenCertificates = _context.givenCertificateRepository.GetGivenCertificates();
+            var GivenCertificates = _context.givenCertificateRepository.GetListOfGivenCertificates();
             List<DisplayGivenCertificateViewModel> ListOfGivenCertificates = new List<DisplayGivenCertificateViewModel>();
 
             foreach (var givenCertificate in GivenCertificates)

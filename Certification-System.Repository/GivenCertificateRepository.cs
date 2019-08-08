@@ -18,52 +18,49 @@ namespace Certification_System.Repository
             _context = context;
         }
 
+        private IMongoCollection<GivenCertificate> GetGivenCertificates()
+        {
+            return _givenCertificates = _context.db.GetCollection<GivenCertificate>(_givenCertificatesCollectionName);
+        }
+
+        public ICollection<GivenCertificate> GetListOfGivenCertificates()
+        {
+            return GetGivenCertificates().AsQueryable().ToList();
+        }
+
         public void AddGivenCertificate(GivenCertificate givenCertificate)
         {
-            _givenCertificates = _context.db.GetCollection<GivenCertificate>(_givenCertificatesCollectionName);
-            _givenCertificates.InsertOne(givenCertificate);
+            GetGivenCertificates().InsertOne(givenCertificate);
         }
 
         public void UpdateGivenCertificate(GivenCertificate givenCertificate)
         {
             var filter = Builders<GivenCertificate>.Filter.Eq(x => x.GivenCertificateIdentificator, givenCertificate.GivenCertificateIdentificator);
-            var result = _context.db.GetCollection<GivenCertificate>(_givenCertificatesCollectionName).ReplaceOne(filter, givenCertificate);
+            var result = GetGivenCertificates().ReplaceOne(filter, givenCertificate);
         }
 
         public GivenCertificate GetGivenCertificateById(string givenCertificateIdentificator)
         {
             var filter = Builders<GivenCertificate>.Filter.Eq(x => x.GivenCertificateIdentificator, givenCertificateIdentificator);
-            GivenCertificate givenCertificate = _context.db.GetCollection<GivenCertificate>(_givenCertificatesCollectionName).Find<GivenCertificate>(filter).FirstOrDefault();
+            var resultGivenCertificate = GetGivenCertificates().Find<GivenCertificate>(filter).FirstOrDefault();
 
-            return givenCertificate;
+            return resultGivenCertificate;
         }
 
         public ICollection<GivenCertificate> GetGivenCertificatesById(ICollection<string> givenCertificatesIdentificators)
         {
-            List<GivenCertificate> GivenCertificates = new List<GivenCertificate>();
+            var filter = Builders<GivenCertificate>.Filter.Where(z => givenCertificatesIdentificators.Contains(z.GivenCertificateIdentificator));
+            var result = GetGivenCertificates().Find<GivenCertificate>(filter).ToList();
 
-            foreach (var givenCertificateIdentificator in givenCertificatesIdentificators)
-            {
-                GivenCertificate singleGivenCertificate = GetGivenCertificateById(givenCertificateIdentificator);
-                GivenCertificates.Add(singleGivenCertificate);
-            }
-
-            return GivenCertificates;
-        }
-
-        public ICollection<GivenCertificate> GetGivenCertificates()
-        {
-            _givenCertificates = _context.db.GetCollection<GivenCertificate>(_givenCertificatesCollectionName);
-
-            return _givenCertificates.AsQueryable().ToList();
+            return result;
         }
 
         public ICollection<GivenCertificate> GetGivenCertificatesByIdOfCertificate(string certificateIdentificator)
         {
             var filter = Builders<GivenCertificate>.Filter.Eq(x => x.Certificate, certificateIdentificator);
-            var givenCertificates = _context.db.GetCollection<GivenCertificate>(_givenCertificatesCollectionName).Find<GivenCertificate>(filter).ToList();
+            var resultGivenCertificates = GetGivenCertificates().Find<GivenCertificate>(filter).ToList();
 
-            return givenCertificates;
+            return resultGivenCertificates;
         }
     }
 }

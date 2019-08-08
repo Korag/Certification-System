@@ -80,7 +80,8 @@ namespace Certification_System.Repository
                 foreach (var certificateIdentificator in certificateIdentificators)
                 {
                     var filter = Builders<Certificate>.Filter.Eq(x => x.CertificateIdentificator, certificateIdentificator);
-                    Certificates.Add(_certificates.Find<Certificate>(filter).FirstOrDefault());
+                    var singleCertificate = _certificates.Find<Certificate>(filter).FirstOrDefault();
+                    Certificates.Add(singleCertificate);
                 }
             }
 
