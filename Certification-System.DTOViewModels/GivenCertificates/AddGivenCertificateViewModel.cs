@@ -7,8 +7,6 @@ namespace Certification_System.DTOViewModels
 {
     public class AddGivenCertificateViewModel
     {
-        public string GivenCertificateIdentificator { get; set; }
-
         [Required(ErrorMessage = "Pole \"{0}\" jest wymagane.")]
         [Display(Name = "Identyfikator nadawanego certyfikatu")]
         public string GivenCertificateIndexer { get; set; }

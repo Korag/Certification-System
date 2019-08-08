@@ -33,7 +33,7 @@ namespace Certification_System.Controllers
             {
                 AvailableBranches = new List<SelectListItem>(),
                 SelectedBranches = new List<string>(),
-                MeetingsViewModels = new List<AddMeetingViewModel>()
+                Meetings = new List<AddMeetingViewModel>()
             };
 
             newCourse.AvailableBranches = _context.branchRepository.GetBranchesAsSelectList().ToList();
@@ -109,9 +109,9 @@ namespace Certification_System.Controllers
                 Course course = _mapper.Map<Course>(newCourse);
                 course.CourseIdentificator = _keyGenerator.GenerateNewId();
 
-                if (newCourse.MeetingsViewModels != null)
+                if (newCourse.Meetings != null)
                 {
-                    foreach (var meeting in newCourse.MeetingsViewModels)
+                    foreach (var meeting in newCourse.Meetings)
                     {
                         Meeting singleMeeting = _mapper.Map<Meeting>(meeting);
                         singleMeeting.MeetingIdentificator = _keyGenerator.GenerateNewId();

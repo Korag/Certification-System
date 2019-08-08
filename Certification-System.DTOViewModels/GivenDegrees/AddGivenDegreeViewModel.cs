@@ -7,8 +7,6 @@ namespace Certification_System.DTOViewModels
 {
     public class AddGivenDegreeViewModel
     {
-        public string GivenDegreeIdentificator { get; set; }
-
         [Required(ErrorMessage = "Pole \"{0}\" jest wymagane.")]
         [Display(Name = "Identyfikator nadawanego stopnia zawodowego")]
         public string GivenDegreeIndexer { get; set; }

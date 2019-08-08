@@ -6,8 +6,6 @@ namespace Certification_System.DTOViewModels
 {
     public class AddCertificateViewModel
     {
-        public string CertificateIdentificator { get; set; }
-
         [Required(ErrorMessage = "Pole \"{0}\" jest wymagane.")]
         [Display(Name="Identyfikator")]
         public string CertificateIndexer { get; set; }

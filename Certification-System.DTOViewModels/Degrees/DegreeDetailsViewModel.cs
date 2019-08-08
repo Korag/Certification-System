@@ -19,7 +19,6 @@ namespace Certification_System.DTOViewModels
         [Display(Name = "Obszary stopnia zawodowego")]
         public ICollection<string> Branches { get; set; }
 
-
         public ICollection<DisplayCertificateViewModel> RequiredCertificates { get; set; }
         public ICollection<DisplayDegreeViewModel> RequiredDegrees { get; set; }
         public ICollection<DisplayUserViewModel> UsersWithDegree { get; set; }

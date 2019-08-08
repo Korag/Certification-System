@@ -290,7 +290,7 @@ namespace Certification_System.Controllers
             }
 
             UserDetailsForAnonymousViewModel UserDetails = _mapper.Map<UserDetailsForAnonymousViewModel>(User);
-            UserDetails.Certificates = ListOfGivenCertificates;
+            UserDetails.GivenCertificates = ListOfGivenCertificates;
 
             return View(UserDetails);
         }

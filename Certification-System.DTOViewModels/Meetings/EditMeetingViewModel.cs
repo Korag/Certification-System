@@ -55,7 +55,6 @@ namespace Certification_System.DTOViewModels
         [Display(Name = "Instruktorzy")]
         public IList<SelectListItem> AvailableInstructors { get; set; }
 
-
         [Display(Name = "Instruktor")]
         [Required(ErrorMessage = "Należy wybrać conajmniej jednego instruktora.")]
         public ICollection<string> SelectedInstructors { get; set; }

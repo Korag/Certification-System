@@ -32,6 +32,6 @@ namespace Certification_System.DTOViewModels
         public string NumberOfApartment { get; set; }
 
         [Display(Name = "Rola użytkownika w przesiębiorstwie")]
-        public ICollection<string> CompanyRoles { get; set; }
+        public ICollection<string> UserRoles { get; set; }
     }
 }

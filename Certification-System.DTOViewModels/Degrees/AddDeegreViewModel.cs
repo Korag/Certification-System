@@ -6,8 +6,6 @@ namespace Certification_System.DTOViewModels
 {
     public class AddDegreeViewModel
     {
-        public string DegreeIdentificator { get; set; }
-
         [Required(ErrorMessage = "Pole \"{0}\" jest wymagane.")]
         [Display(Name = "Identyfikator")]
         public string DegreeIndexer { get; set; }
@@ -26,12 +24,10 @@ namespace Certification_System.DTOViewModels
         [Display(Name = "Obszary stopnia zawodowego")]
         public IList<SelectListItem> AvailableBranches { get; set; }
 
-
         public ICollection<string> SelectedCertificates { get; set; }
 
         [Display(Name = "Wymagane certyfikaty")]
         public IList<SelectListItem> AvailableCertificates { get; set; }
-
 
         public ICollection<string> SelectedDegrees{ get; set; }
 

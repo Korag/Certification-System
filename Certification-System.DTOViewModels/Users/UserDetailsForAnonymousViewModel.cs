@@ -20,6 +20,6 @@ namespace Certification_System.DTOViewModels
         public string LastName { get; set; }
 
         [Display(Name = "Certyfikaty")]
-        public ICollection<DisplayGivenCertificateToUserViewModel> Certificates { get; set; }
+        public ICollection<DisplayGivenCertificateToUserViewModel> GivenCertificates { get; set; }
     }
 }

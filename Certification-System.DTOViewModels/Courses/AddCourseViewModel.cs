@@ -7,8 +7,6 @@ namespace Certification_System.DTOViewModels
 {
     public class AddCourseViewModel
     {
-        public string CourseIdentificator { get; set; }
-
         [Required]
         [Display(Name = "Identyfikator")]
         public string CourseIndexer { get; set; }
@@ -48,6 +46,6 @@ namespace Certification_System.DTOViewModels
 
         public ICollection<string> EnrolledUsers { get; set; }
 
-        public ICollection<AddMeetingViewModel> MeetingsViewModels { get; set; }
+        public ICollection<AddMeetingViewModel> Meetings { get; set; }
     }
 }

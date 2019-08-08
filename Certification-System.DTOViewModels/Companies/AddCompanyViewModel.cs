@@ -4,8 +4,6 @@ namespace Certification_System.DTOViewModels
 {
     public class AddCompanyViewModel
     {
-        public string CompanyIdentificator { get; set; }
-
         [Required(ErrorMessage = "Pole \"{0}\" jest wymagane.")]
         [Display(Name = "Nazwa przedsiębiorstwa")]
         [MaxLength(100)]
