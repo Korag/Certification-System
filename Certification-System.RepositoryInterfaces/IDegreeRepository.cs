@@ -6,7 +6,7 @@ namespace Certification_System.RepositoryInterfaces
 {
     public interface IDegreeRepository
     {
-        ICollection<Degree> GetDegrees();
+        ICollection<Degree> GetListOfDegrees();
         ICollection<SelectListItem> GetDegreesAsSelectList();
         void AddDegree(Degree degree);
         Degree GetDegreeById(string degreeIdentificator);

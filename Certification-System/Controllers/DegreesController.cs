@@ -94,7 +94,7 @@ namespace Certification_System.Controllers
         [Authorize(Roles = "Admin")]
         public ActionResult DisplayAllDegrees()
         {
-            var Degrees = _context.degreeRepository.GetDegrees();
+            var Degrees = _context.degreeRepository.GetListOfDegrees();
             List<DisplayDegreeViewModel> ListOfDegrees = new List<DisplayDegreeViewModel>();
 
             foreach (var degree in Degrees)

@@ -19,19 +19,22 @@ namespace Certification_System.Repository
             _context = context;
         }
 
-        public ICollection<Degree> GetDegrees()
+        private IMongoCollection<Degree> GetDegrees()
         {
-            _degrees = _context.db.GetCollection<Degree>(_degreesCollectionName);
+            return _degrees = _context.db.GetCollection<Degree>(_degreesCollectionName);
+        }
 
-            return _degrees.AsQueryable().ToList();
+        public ICollection<Degree> GetListOfDegrees()
+        {
+            return GetDegrees().AsQueryable().ToList();
         }
 
         public ICollection<SelectListItem> GetDegreesAsSelectList()
         {
-            var Degrees = GetDegrees();
+            GetDegrees();
             List<SelectListItem> SelectList = new List<SelectListItem>();
 
-            foreach (var degree in Degrees)
+            foreach (var degree in _degrees.AsQueryable().ToList())
             {
                 SelectList.Add
                     (
@@ -48,20 +51,21 @@ namespace Certification_System.Repository
 
         public void AddDegree(Degree degree)
         {
-            _degrees = _context.db.GetCollection<Degree>(_degreesCollectionName);
+            GetDegrees();
             _degrees.InsertOne(degree);
         }
 
         public Degree GetDegreeById(string degreeIdentificator)
         {
             var filter = Builders<Degree>.Filter.Eq(x => x.DegreeIdentificator, degreeIdentificator);
-            Degree degree = _context.db.GetCollection<Degree>(_degreesCollectionName).Find<Degree>(filter).FirstOrDefault();
+            var resultDegree = GetDegrees().Find<Degree>(filter).FirstOrDefault();
 
-            return degree;
+            return resultDegree;
         }
 
         public ICollection<Degree> GetDegreesById(ICollection<string> degreeIdentificators)
         {
+            GetDegrees();
             List<Degree> Degrees = new List<Degree>();
 
             if (degreeIdentificators != null)
@@ -69,9 +73,9 @@ namespace Certification_System.Repository
                 foreach (var degreeIdentificator in degreeIdentificators)
                 {
                     var filter = Builders<Degree>.Filter.Eq(x => x.DegreeIdentificator, degreeIdentificator);
-                    Degree degree = _context.db.GetCollection<Degree>(_degreesCollectionName).Find<Degree>(filter).FirstOrDefault();
+                    var singleDegree = _degrees.Find<Degree>(filter).FirstOrDefault();
 
-                    Degrees.Add(degree);
+                    Degrees.Add(singleDegree);
                 }
             }
 
@@ -81,7 +85,7 @@ namespace Certification_System.Repository
         public void UpdateDegree(Degree degree)
         {
             var filter = Builders<Degree>.Filter.Eq(x => x.DegreeIdentificator, degree.DegreeIdentificator);
-            var result = _context.db.GetCollection<Degree>(_degreesCollectionName).ReplaceOne(filter, degree);
+            var result = GetDegrees().ReplaceOne(filter, degree);
         }
     }
 }
