@@ -27,7 +27,7 @@ namespace Certification_System.Controllers
         [Authorize(Roles = "Admin")]
         public ActionResult DisplayAllBranches()
         {
-            var BranchesList = _context.branchRepository.GetBranches();
+            var BranchesList = _context.branchRepository.GetListOfBranches();
             List<DisplayBranchViewModel> existingBranches = _mapper.Map<List<DisplayBranchViewModel>>(BranchesList);
 
             return View(existingBranches);

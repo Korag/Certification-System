@@ -20,31 +20,37 @@ namespace Certification_System.Repository
             _context = context;
         }
 
+        private IMongoCollection<Branch> GetBranches()
+        {
+            return _branches = _context.db.GetCollection<Branch>(_branchCollectionName);
+        }
+
+        public ICollection<Branch> GetListOfBranches()
+        {
+            GetBranches();
+
+            return _branches.AsQueryable().ToList();
+        }
+
         public void AddBranch(Branch branch)
         {
-            _branches = _context.db.GetCollection<Branch>(_branchCollectionName);
+            GetBranches();
             _branches.InsertOne(branch);
         }
 
         public void UpdateBranch(Branch branch)
         {
             var filter = Builders<Branch>.Filter.Eq(x => x.BranchIdentificator, branch.BranchIdentificator);
-            var result = _context.db.GetCollection<Branch>(_branchCollectionName).ReplaceOne(filter, branch);
+            var result = GetBranches().ReplaceOne(filter, branch);
         }
-
-        public ICollection<Branch> GetBranches()
-        {
-            _branches = _context.db.GetCollection<Branch>(_branchCollectionName);
-
-            return _branches.AsQueryable().ToList();
-        }
+ 
 
         public ICollection<SelectListItem> GetBranchesAsSelectList()
         {
-            var Branches = GetBranches();
+            GetBranches();
             List<SelectListItem> SelectList = new List<SelectListItem>();
 
-            foreach (var branch in Branches)
+            foreach (var branch in _branches.AsQueryable().ToList())
             {
                 SelectList.Add
                     (
@@ -62,14 +68,14 @@ namespace Certification_System.Repository
         public Branch GetBranchById(string branchIdentificator)
         {
             var filter = Builders<Branch>.Filter.Eq(x => x.BranchIdentificator, branchIdentificator);
-            Branch branch = _context.db.GetCollection<Branch>(_branchCollectionName).Find<Branch>(filter).FirstOrDefault();
+            var resultBranch = GetBranches().Find<Branch>(filter).FirstOrDefault();
 
-            return branch;
+            return resultBranch;
         }
 
         public ICollection<string> GetBranchesById(ICollection<string> branchesIdentificators)
         {
-            _branches = _context.db.GetCollection<Branch>(_branchCollectionName);
+            GetBranches();
             List<string> BranchesNames = new List<string>();
 
             foreach (var branch in branchesIdentificators)
