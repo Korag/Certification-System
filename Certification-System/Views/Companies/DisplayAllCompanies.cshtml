@@ -9,7 +9,7 @@
 <hr />
 
 <div class="m-3">
-    @Html.ActionLink("Dodaj nowe przedsiębiorstwo", "AddNewCompany", "Companies", null, new { @class = "btn btn-primary" })
+    <a asp-action="AddNewCompany" asp-controller="Companies" class="btn btn-primary">Dodaj nowe przedsiębiorstwo</a>
 </div>
 
 <div class="col-12 table-responsive">
@@ -46,36 +46,36 @@
             </tr>
         </thead>
         <tbody>
-            @foreach (var item in Model)
+            @foreach (var company in Model)
             {
                 <tr>
                     <td>
-                        @Html.DisplayFor(modelItem => item.CompanyName)
+                        @Html.DisplayFor(modelItem => company.CompanyName)
                     </td>
                     <td>
-                        @Html.DisplayFor(modelItem => item.Email)
+                        @Html.DisplayFor(modelItem => company.Email)
                     </td>
                     <td>
-                        @Html.DisplayFor(modelItem => item.Phone)
+                        @Html.DisplayFor(modelItem => company.Phone)
                     </td>
                     <td>
-                        @Html.DisplayFor(modelItem => item.Country)
+                        @Html.DisplayFor(modelItem => company.Country)
                     </td>
                     <td>
-                        @Html.DisplayFor(modelItem => item.City)
+                        @Html.DisplayFor(modelItem => company.City)
                     </td>
                     <td>
-                        @Html.DisplayFor(modelItem => item.PostCode)
+                        @Html.DisplayFor(modelItem => company.PostCode)
                     </td>
                     <td>
-                        @Html.DisplayFor(modelItem => item.Address)
+                        @Html.DisplayFor(modelItem => company.Address)
                     </td>
                     <td>
-                        @Html.DisplayFor(modelItem => item.NumberOfApartment)
+                        @Html.DisplayFor(modelItem => company.NumberOfApartment)
                     </td>
                     <td>
-                        @Html.ActionLink("Szczegóły", "CompanyDetails", "Companies", new { companyIdentificator = item.CompanyIdentificator }, new { @class = "btn btn-info mt-1 mb-1" })
-                        @Html.ActionLink("Aktualizuj", "EditCompany", "Companies", new { companyIdentificator = item.CompanyIdentificator }, new { @class = "btn btn-warning mt-1 mb-1" })
+                        <a asp-action="CompanyDetails" asp-route-companyIdentificator="@company.CompanyIdentificator" asp-controller="Companies" class="btn btn-info m-1">Szczegóły</a>
+                        <a asp-action="EditCompany" asp-route-companyIdentificator="@company.CompanyIdentificator" asp-controller="Companies" class="btn btn-warning m-1">Aktualizuj</a>
                     </td>
                 </tr>
             }

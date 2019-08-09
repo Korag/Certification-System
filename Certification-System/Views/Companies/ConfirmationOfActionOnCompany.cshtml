@@ -8,11 +8,11 @@
 
 @if (ViewBag.TypeOfAction == "Update")
 {
-<h2 class="alert alert-info" role="alert">Zaktualizowano wpis dotyczący przedsiębiorstwa:</h2>
+    <h2 class="alert alert-info" role="alert">Zaktualizowano wpis dotyczący przedsiębiorstwa:</h2>
 }
 else
 {
-<h2 class="alert alert-success" role="alert">Dodano następujący wpis dotyczący przedsiębiorstwa:</h2>
+    <h2 class="alert alert-success" role="alert">Dodano następujący wpis dotyczący przedsiębiorstwa:</h2>
 }
 
 <div class="col-12 table-responsive">
@@ -77,8 +77,8 @@ else
 </div>
 
 <div class="mt-3">
-    @Html.ActionLink("Utwórz nowy wpis dotyczący przedsiębiorstwa", "AddNewCompany", "Companies", null, new { @class = "btn btn-primary" })
-    @Html.ActionLink("Przeglądaj przedsiębiorstwa", "DisplayAllCompanies", "Companies", null, new { @class = "btn btn-info" }))
+    <a asp-action="AddNewCompany" asp-controller="Companies" class="btn btn-primary">Utwórz nowy wpis dotyczący przedsiębiorstwa</a>
+    <a asp-action="DisplayAllCompanies" asp-controller="Companies" class="btn btn-info">Przeglądaj przedsiębiorstwa</a>
 </div>
 
 @section Scripts{
