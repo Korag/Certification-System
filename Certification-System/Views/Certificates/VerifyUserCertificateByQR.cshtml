@@ -59,11 +59,11 @@ else
 
 @if (this.User.IsInRole("Admin"))
 {
-<div class="mt-3">
-        @Html.ActionLink("Nadaj certyfikat", "AddNewGivenCertificate", "Certificates", null, new { @class = "btn btn-primary" })
-        @Html.ActionLink("Aktualizuj", "EditGivenCertificate", "Certificates", new { givenCertificateIdentificator = Model.GivenCertificateIdentificator }, new { @class = "btn btn-warning" })
-        @Html.ActionLink("Lista wszystkich nadanych certyfikatów", "DisplayAllGivenCertificate", "Certificates", null, new { @class = "btn btn-success" })
-</div>
+    <div class="mt-3">
+        <a asp-action="AddNewGivenCertificate" asp-controller="Certificates" class="btn btn-primary">Nadaj certyfikat</a>
+        <a asp-action="EditGivenCertificate" asp-route-givenCertificateIdentificator="@Model.GivenCertificateIdentificator" asp-controller="Certificates" class="btn btn-warning">Aktualizuj</a>
+        <a asp-action="DisplayAllGivenCertificate" asp-controller="Certificates" class="btn btn-success">Lista wszystkich nadanych certyfikatów</a>
+    </div>
 }
 
 @section Scripts{
