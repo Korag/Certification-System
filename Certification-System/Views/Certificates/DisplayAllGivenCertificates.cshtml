@@ -6,10 +6,10 @@
 }
 
 <h1>Lista wszystkich nadanych certyfikatów</h1>
-<hr/>
+<hr />
 
 <div class="m-3">
-    @Html.ActionLink("Przyznaj certyfikat", "AddNewGivenCertificate", "Certificates", null, new { @class = "btn btn-primary" })
+    <a asp-action="AddNewGivenCertificate" asp-controller="Certificates" class="btn btn-primary">Przyznaj certyfikat</a>
 </div>
 
 <div class="col-12 table-responsive">
@@ -40,31 +40,31 @@
             </tr>
         </thead>
         <tbody>
-            @foreach (var item in Model)
+            @foreach (var givenCertificate in Model)
             {
                 <tr>
                     <td>
-                        @Html.DisplayFor(modelItem => item.GivenCertificateIndexer)
+                        @Html.DisplayFor(modelItem => givenCertificate.GivenCertificateIndexer)
                     </td>
                     <td>
-                        @Html.DisplayFor(modelItem => item.ReceiptDate)
+                        @Html.DisplayFor(modelItem => givenCertificate.ReceiptDate)
                     </td>
                     <td>
-                        @Html.DisplayFor(modelItem => item.ExpirationDate)
+                        @Html.DisplayFor(modelItem => givenCertificate.ExpirationDate)
                     </td>
                     <td>
-                        @Html.DisplayFor(model => item.Certificate.CertificateIndexer) @Html.DisplayFor(model => item.Certificate.Name)
+                        @Html.DisplayFor(model => givenCertificate.Certificate.CertificateIndexer) @Html.DisplayFor(model => givenCertificate.Certificate.Name)
                     </td>
                     <td>
-                        @Html.DisplayFor(model => item.User.FirstName) @Html.DisplayFor(model => item.User.LastName)
+                        @Html.DisplayFor(model => givenCertificate.User.FirstName) @Html.DisplayFor(model => givenCertificate.User.LastName)
                     </td>
                     <td>
-                        @Html.DisplayFor(model => item.Course.CourseIndexer) @Html.DisplayFor(model => item.Course.Name)
+                        @Html.DisplayFor(model => givenCertificate.Course.CourseIndexer) @Html.DisplayFor(model => givenCertificate.Course.Name)
                     </td>
                     <td>
-                        @Html.ActionLink("Szczegóły użytkownika", "UserDetails", "Users", new { userIdentificator = item.User.UserIdentificator }, new { @class = "btn btn-info m-1" })
-                        @Html.ActionLink("Edytuj certyfikat", "EditGivenCertificate", "Certificates", new { givenCertificateIdentificator = item.GivenCertificateIdentificator }, new { @class = "btn btn-warning m-1" })
-                        @Html.ActionLink("Szczegóły kursu", "CourseDetails", "Courses", new { courseIdentificator = item.Course.CourseIdentificator }, new { @class = "btn btn-secondary m-1" })
+                        <a asp-action="UserDetails" asp-route-userIdentificator="@givenCertificate.User.UserIdentificator" asp-controller="Users" class="btn btn-info m-1">Szczegóły użytkownika</a>
+                        <a asp-action="EditGivenCertificate" asp-route-givenCertificateIdentificator="@givenCertificate.GivenCertificateIdentificator" asp-controller="Certificates" class="btn btn-warning  m-1">Edytuj certyfikat</a>
+                        <a asp-action="CourseDetails" asp-route-courseIdentificator="@givenCertificate.Course.CourseIdentificator" asp-controller="Courses" class="btn btn-secondary m-1">Szczegóły kursu</a>
                     </td>
                 </tr>
             }

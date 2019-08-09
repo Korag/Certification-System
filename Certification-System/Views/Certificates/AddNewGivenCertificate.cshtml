@@ -83,23 +83,22 @@
                 </div>
             </div>
 
+            <div asp-validation-summary="ModelOnly" class="row justify-content-center alert alert-danger validation-model"></div>
+
             <div class="row justify-content-center">
                 <input type="submit" value="Nadaj certyfikat" class="btn btn-primary" />
             </div>
 
         </div>
 
-        <div class="row justify-content-center">
-            <div asp-validation-summary="All" class="text-danger"></div>
-        </div>
-
     </form>
 </div>
 
+Refactored validation and used tag helpers instead of html helpers in Branches Views.
 
 <div class="mt-3">
-    @Html.ActionLink("Wyświetl listę nadanych certyfikatów", "DisplayAllGivenCertificates", "Certificates", null, new { @class = "btn btn-info" })
-    @Html.ActionLink("Wyświetl listę użytkowników", "DisplayAllUsers", "Users", null, new { @class = "btn btn-secondary" })
+    <a asp-action="DisplayAllGivenCertificates" asp-controller="Certificates" class="btn btn-info">Wyświetl listę nadanych certyfikatów</a>
+    <a asp-action="DisplayAllUsers" asp-controller="Users" class="btn btn-secondary">Wyświetl listę użytkowników</a>
 </div>
 
 @section Scripts {
