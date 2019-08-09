@@ -56,10 +56,10 @@ else
 </div>
 
 <div class="mt-3">
-    @Html.ActionLink("Dodaj certyfikat", "AddNewCertificate", "Certificates", null , new { @class = "btn btn-primary" })
-    @Html.ActionLink("Szczegóły", "CertificateDetails", "Certificates", new { certificateIdentificator = Model.CertificateIdentificator }, new { @class = "btn btn-info" })
-    @Html.ActionLink("Aktualizuj", "EditCertificate", "Certificates", new { certificateIdentificator = Model.CertificateIdentificator }, new { @class = "btn btn-warning" })
-    @Html.ActionLink("Lista wszystkich certyfikatów", "DisplayAllCertificates", "Certificates", null , new { @class = "btn btn-success" })
+    <a asp-action="AddNewCertificate" asp-controller="Certificates" class="btn btn-primary">Dodaj certyfikat</a>
+    <a asp-action="CertificateDetails" asp-route-certificateIdentificator="@Model.CertificateIdentificator" asp-controller="Certificates" class="btn btn-info">Szczegóły</a>
+    <a asp-action="EditCertificate" asp-route-certificateIdentificator="@Model.CertificateIdentificator" asp-controller="Certificates" class="btn btn-warning">Aktualizuj</a>
+    <a asp-action="DisplayAllCertificates" asp-controller="Certificates" class="btn btn-success">Lista wszystkich certyfikatów</a>
 </div>
 
 @section Scripts{

@@ -6,10 +6,10 @@
 }
 
 <h2>Lista certyfikatów</h2>
-<hr/>
+<hr />
 
 <div class="m-3">
-    @Html.ActionLink("Dodaj nowy certyfikat", "AddNewCertificate", "Certificates", null , new { @class = "btn btn-primary" })
+    <a asp-action="AddNewCertificate" asp-controller="Certificates" class="btn btn-primary">Dodaj nowy certyfikat</a>
 </div>
 
 <div class="col-12 table-responsive">
@@ -37,32 +37,32 @@
             </tr>
         </thead>
         <tbody>
-            @foreach (var item in Model)
+            @foreach (var certificate in Model)
             {
                 <tr>
                     <td>
-                        @Html.DisplayFor(modelItem => item.CertificateIndexer)
+                        @Html.DisplayFor(modelItem => certificate.CertificateIndexer)
                     </td>
                     <td>
-                        @Html.DisplayFor(modelItem => item.Name)
+                        @Html.DisplayFor(modelItem => certificate.Name)
                     </td>
                     <td>
-                        @Html.DisplayFor(modelItem => item.Description)
+                        @Html.DisplayFor(modelItem => certificate.Description)
                     </td>
                     <td>
-                        @Html.DisplayFor(modelItem => item.Depreciated)
+                        @Html.DisplayFor(modelItem => certificate.Depreciated)
                     </td>
                     <td>
                         <ul>
-                            @foreach (var branch in item.Branches)
+                            @foreach (var branch in certificate.Branches)
                             {
                                 <li>@branch</li>
                             }
                         </ul>
                     </td>
                     <td>
-                        @Html.ActionLink("Szczegóły", "CertificateDetails", "Certificates", new { certificateIdentificator = item.CertificateIdentificator }, new { @class = "btn btn-info m-1" })
-                        @Html.ActionLink("Aktualizuj", "EditCertificate", "Certificates", new { certificateIdentificator = item.CertificateIdentificator }, new { @class = "btn btn-warning m-1" })
+                        <a asp-action="CertificateDetails" asp-route-certificateIdentificator="@certificate.CertificateIdentificator" asp-controller="Certificates" class="btn btn-info m-1">Szczegóły</a>
+                        <a asp-action="EditCertificate" asp-route-certificateIdentificator="@certificate.CertificateIdentificator" asp-controller="Certificates" class="btn btn-warning m-1">Aktualizuj</a>
                         @*@Html.ActionLink("Usuń", "MarkCertificateAsDepreciated", "Certificates", new { CertificateIdentificator = item.CertificateIndexer }, new { @class = "btn btn-danger" })*@
                     </td>
                 </tr>
