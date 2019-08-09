@@ -10,6 +10,30 @@
     min-height: 32vw;
 }
 
+/*@media (min-width: 1200px) {
+    .container {
+        max-width: 70vw;
+    }
+}
+
+@media (min-width: 992px) {
+    .container {
+        max-width: 80vw;
+    }
+}
+
+@media (min-width: 768px) {
+    .container {
+        max-width: 90vw;
+    }
+}
+
+@media (min-width: 576px) {
+    .container {
+        max-width: 90vw;
+    }
+}*/
+
 .background-image {
     background-image: url('../Image/logo_ziad_big_transparent.png');
     background-size: 40vw 30vw;

@@ -24,7 +24,7 @@ namespace Certification_System.Entities
         public ICollection<string> CompanyRoleManager { get; set; }
         public ICollection<string> CompanyRoleWorker { get; set; }
         public ICollection<string> Courses { get; set; }
-        public ICollection<string> Certificates { get; set; }
-        public ICollection<string> Degrees { get; set; }
+        public ICollection<string> GivenCertificates { get; set; }
+        public ICollection<string> GivenDegrees { get; set; }
     }
 }

@@ -143,7 +143,7 @@ namespace Certification_System.Repository
         public void AddUserCertificate(string userIdentificator, string givenCertificateIdentificator)
         {
             var User = GetUserById(userIdentificator);
-            User.Certificates.Add(givenCertificateIdentificator);
+            User.GivenCertificates.Add(givenCertificateIdentificator);
 
             var filter = Builders<CertificationPlatformUser>.Filter.Eq(x => x.Id, userIdentificator);
             GetUsers().ReplaceOne(filter, User);
@@ -152,7 +152,7 @@ namespace Certification_System.Repository
         public void AddUserDegree(string userIdentificator, string givenDegreeIdentificator)
         {
             var User = GetUserById(userIdentificator);
-            User.Degrees.Add(givenDegreeIdentificator);
+            User.GivenDegrees.Add(givenDegreeIdentificator);
 
             var filter = Builders<CertificationPlatformUser>.Filter.Eq(x => x.Id, userIdentificator);
             GetUsers().ReplaceOne(filter, User);
@@ -160,7 +160,7 @@ namespace Certification_System.Repository
 
         public CertificationPlatformUser GetUserByGivenCertificateId(string givenCertificateIdentificator)
         {
-            var filter = Builders<CertificationPlatformUser>.Filter.Where(z => z.Certificates.Contains(givenCertificateIdentificator));
+            var filter = Builders<CertificationPlatformUser>.Filter.Where(z => z.GivenCertificates.Contains(givenCertificateIdentificator));
             var resultUser = GetUsers().Find<CertificationPlatformUser>(filter).FirstOrDefault();
 
             return resultUser;
@@ -173,7 +173,7 @@ namespace Certification_System.Repository
 
             foreach (var givenCertificateIdentificator in givenCertificatesIdentificators)
             {
-                var filter = Builders<CertificationPlatformUser>.Filter.Where(x => x.Certificates.Contains(givenCertificateIdentificator));
+                var filter = Builders<CertificationPlatformUser>.Filter.Where(x => x.GivenCertificates.Contains(givenCertificateIdentificator));
                 var resultUser = _users.Find<CertificationPlatformUser>(filter).FirstOrDefault();
                 resultListOfUsers.Add(resultUser);
             }
@@ -198,7 +198,7 @@ namespace Certification_System.Repository
 
             foreach (var degreeIdentificator in degreeIdentificators)
             {
-                var filter = Builders<CertificationPlatformUser>.Filter.Where(x => x.Degrees.Contains(degreeIdentificator));
+                var filter = Builders<CertificationPlatformUser>.Filter.Where(x => x.GivenDegrees.Contains(degreeIdentificator));
                 var resultUser = _users.Find<CertificationPlatformUser>(filter).FirstOrDefault();
                 resultListOfUsers.Add(resultUser);
             }
@@ -208,7 +208,7 @@ namespace Certification_System.Repository
 
         public CertificationPlatformUser GetUserByGivenDegreeId(string givenDegreeIdentificator)
         {
-            var filter = Builders<CertificationPlatformUser>.Filter.Where(z => z.Degrees.Contains(givenDegreeIdentificator));
+            var filter = Builders<CertificationPlatformUser>.Filter.Where(z => z.GivenDegrees.Contains(givenDegreeIdentificator));
             var resultUser = GetUsers().Find<CertificationPlatformUser>(filter).FirstOrDefault();
 
             return resultUser;

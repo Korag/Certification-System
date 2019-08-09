@@ -180,9 +180,9 @@ namespace Certification_System.Controllers
         public ActionResult UserDetails(string userIdentificator)
         {
             var User = _context.userRepository.GetUserById(userIdentificator);
-            var GivenCertificates = _context.givenCertificateRepository.GetGivenCertificatesById(User.Certificates);
+            var GivenCertificates = _context.givenCertificateRepository.GetGivenCertificatesById(User.GivenCertificates);
             var Courses = _context.courseRepository.GetCoursesById(User.Courses);
-            var GivenDegrees = _context.givenDegreeRepository.GetGivenDegreesById(User.Degrees);
+            var GivenDegrees = _context.givenDegreeRepository.GetGivenDegreesById(User.GivenDegrees);
 
             var CompaniesRoleWorker = _context.companyRepository.GetCompaniesById(User.CompanyRoleWorker);
             var CompaniesRoleManager = _context.companyRepository.GetCompaniesById(User.CompanyRoleManager);
@@ -266,8 +266,8 @@ namespace Certification_System.Controllers
         public ActionResult AnonymousVerificationOfUser(string userIdentificator)
         {
             var User = _context.userRepository.GetUserById(userIdentificator);
-            var GivenCertificates = _context.givenCertificateRepository.GetGivenCertificatesById(User.Certificates);
-            var GivenDegrees = _context.givenDegreeRepository.GetGivenDegreesById(User.Degrees);
+            var GivenCertificates = _context.givenCertificateRepository.GetGivenCertificatesById(User.GivenCertificates);
+            var GivenDegrees = _context.givenDegreeRepository.GetGivenDegreesById(User.GivenDegrees);
 
             var CompaniesRoleWorker = _context.companyRepository.GetCompaniesById(User.CompanyRoleWorker);
             var CompaniesRoleManager = _context.companyRepository.GetCompaniesById(User.CompanyRoleManager);
