@@ -12,12 +12,12 @@
     <div>
         @foreach (var branch in Model)
         {
-            @Html.ActionLink(branch.Name, "EditBranch", "Branches", new { BranchIdentificator=branch.BranchIdentificator}, new { @class = "btn btn-outline-secondary m-2" })
+            <a asp-action="EditBranch" asp-controller="Branches" asp-route-branchIdentificator="@branch.BranchIdentificator" class="btn btn-outline-secondary m-2">@branch.Name</a>
         }
     </div>
 
     <div class="mt-3">
-        @Html.ActionLink("Dodaj nowy obszar", "AddNewBranch", "Branches", null, new { @class = "btn btn-primary mt-3" })
+        <a asp-action="AddNewBranch" asp-controller="Branches" class="btn btn-primary">Dodaj nowy obszar</a>
     </div>
 </div>
 

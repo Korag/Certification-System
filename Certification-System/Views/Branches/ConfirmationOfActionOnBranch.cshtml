@@ -14,7 +14,6 @@ else
     <h2 class="alert alert-success" role="alert">Dodano następujący obszar certyfikacji:</h2>
 }
 
-
 <div class="container col-12">
     <div class="row justify-content-center mb-2">
         <div class="btn-group btn-group-toggle" data-toggle="buttons">
@@ -25,9 +24,9 @@ else
     </div>
 
     <div class="mt-3">
-        @Html.ActionLink("Dodaj obszar certyfikacji", "AddNewBranch", "Branches", null, new { @class = "btn btn-primary" })
-        @Html.ActionLink("Edytuj istniejący obszar certyfikacji", "EditBranch", "Branches", new { branchIdentificator = Model.BranchIdentificator }, new { @class = "btn btn-warning" })
-        @Html.ActionLink("Lista wszystkich obszarów", "DisplayAllBranches", "Certificates", null, new { @class = "btn btn-success" })
+        <a asp-action="AddNewBranch" asp-controller="Branches" class="btn btn-primary">Dodaj obszar certyfikacji</a>
+        <a asp-action="EditBranch" asp-route-branchIdentificator="@Model.BranchIdentificator" asp-controller="Branches" class="btn btn-warning">Edytuj istniejący obszar certyfikacji</a>
+        <a asp-action="DisplayAllBranches" asp-controller="Branches" class="btn btn-success">Lista wszystkich obszarów</a>
     </div>
 </div>
 
