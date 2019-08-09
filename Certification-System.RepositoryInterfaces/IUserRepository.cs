@@ -7,6 +7,7 @@ namespace Certification_System.RepositoryInterfaces
     public interface IUserRepository
     {
         ICollection<CertificationPlatformUser> GetListOfUsers();
+        ICollection<CertificationPlatformUser> GetListOfInstructors();
         ICollection<SelectListItem> GetRolesAsSelectList();
         void UpdateUser(CertificationPlatformUser user);
         CertificationPlatformUser GetUserById(string userIdentificator);
@@ -19,5 +20,8 @@ namespace Certification_System.RepositoryInterfaces
         ICollection<CertificationPlatformUser> GetUsersByDegreeId(ICollection<string> degreeIdentificators);
         CertificationPlatformUser GetUserByGivenDegreeId(string givenDegreeIdentificator);
         void AddUserDegree(string userIdentificator, string givenDegreeIdentificator);
+        CertificationPlatformUser GetInstructorById(string userIdentificator);
+        ICollection<CertificationPlatformUser> GetInstructorsById(ICollection<string> userIdentificators);
+        ICollection<SelectListItem> GetInstructorsAsSelectList();
     }
 }

@@ -235,9 +235,6 @@ namespace Certification_System.Services
             CreateMap<CertificationPlatformUser, UserDetailsForAnonymousViewModel>()
                      .ForMember(dest => dest.UserIdentificator, opts => opts.MapFrom(src => src.Id))
                      .ForMember(dest => dest.GivenCertificates, opts => opts.Ignore());
-
-            //....
-            CreateMap<Instructor, DisplayCrucialDataWithContactUsersViewModel>();
             #endregion
         }
     }

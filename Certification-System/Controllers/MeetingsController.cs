@@ -38,7 +38,7 @@ namespace Certification_System.Controllers
           
                 if (Meeting.Instructors != null)
                 {
-                    var Instructors = _context.instructorRepository.GetInstructorsById(Meeting.Instructors);
+                    var Instructors = _context.userRepository.GetInstructorsById(Meeting.Instructors);
                     modifiedMeeting.InstructorsCredentials = Instructors.Select(z => z.FirstName + " " + z.LastName).ToList();
                 }
 
@@ -63,7 +63,7 @@ namespace Certification_System.Controllers
             AddMeetingViewModel newMeeting = new AddMeetingViewModel
             {
                 AvailableCourses = _context.courseRepository.GetActiveCoursesAsSelectList().ToList(),
-                AvailableInstructors = _context.instructorRepository.GetInstructorsAsSelectList().ToList()
+                AvailableInstructors = _context.userRepository.GetInstructorsAsSelectList().ToList()
             };
 
             return View(newMeeting);
@@ -86,7 +86,7 @@ namespace Certification_System.Controllers
             }
 
             newMeeting.AvailableCourses = _context.courseRepository.GetActiveCoursesAsSelectList().ToList();
-            newMeeting.AvailableInstructors = _context.instructorRepository.GetInstructorsAsSelectList().ToList();
+            newMeeting.AvailableInstructors = _context.userRepository.GetInstructorsAsSelectList().ToList();
 
             return View(newMeeting);
         }
@@ -98,7 +98,7 @@ namespace Certification_System.Controllers
             var Meeting = _context.meetingRepository.GetMeetingById(meetingIdentificator);
 
             EditMeetingViewModel meetingViewModel = _mapper.Map<EditMeetingViewModel>(Meeting);
-            meetingViewModel.AvailableInstructors = _context.instructorRepository.GetInstructorsAsSelectList().ToList();
+            meetingViewModel.AvailableInstructors = _context.userRepository.GetInstructorsAsSelectList().ToList();
 
             return View(meetingViewModel);
         }
@@ -131,14 +131,14 @@ namespace Certification_System.Controllers
             foreach (var meeting in Meetings)
             {
                 Course RelatedCourse = _context.courseRepository.GetCourseByMeetingId(meeting.MeetingIdentificator);
-                List<Instructor> RelatedInstructors = _context.instructorRepository.GetInstructorsById(meeting.Instructors).ToList();
+                List<CertificationPlatformUser> RelatedInstructors = _context.userRepository.GetInstructorsById(meeting.Instructors).ToList();
 
                 DisplayMeetingViewModel singleMeeting = _mapper.Map<DisplayMeetingViewModel>(meeting);
                 singleMeeting.CourseIdentificator = RelatedCourse.CourseIdentificator;
                 singleMeeting.CourseIndexer = RelatedCourse.CourseIndexer;
                 singleMeeting.CourseName = RelatedCourse.Name;
 
-                singleMeeting.InstructorsIdentificators = RelatedInstructors.Select(z => z.InstructorIdentificator).ToList();
+                singleMeeting.InstructorsIdentificators = RelatedInstructors.Select(z => z.Id).ToList();
                 singleMeeting.InstructorsCredentials = RelatedInstructors.Select(z => z.FirstName + " " + z.LastName).ToList();
 
                 ListOfMeetings.Add(singleMeeting);
@@ -152,7 +152,7 @@ namespace Certification_System.Controllers
         public ActionResult MeetingDetails(string meetingIdentificator)
         {
             var Meeting = _context.meetingRepository.GetMeetingById(meetingIdentificator);
-            var RelatedInstructors = _context.instructorRepository.GetInstructorsById(Meeting.Instructors);
+            var RelatedInstructors = _context.userRepository.GetInstructorsById(Meeting.Instructors);
             
             var EnrolledUsersIdentificators = _context.courseRepository.GetCourseByMeetingId(meetingIdentificator).EnrolledUsers;
             var EnrolledUsersList = _context.userRepository.GetUsersById(EnrolledUsersIdentificators);

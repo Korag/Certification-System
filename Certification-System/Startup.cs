@@ -83,7 +83,6 @@ namespace Certification_System
             services.AddTransient<IDegreeRepository, DegreeRepository>();
             services.AddTransient<IGivenCertificateRepository, GivenCertificateRepository>();
             services.AddTransient<IGivenDegreeRepository, GivenDegreeRepository>();
-            services.AddTransient<IInstructorRepository, InstructorRepository>();
             services.AddTransient<IMeetingRepository, MeetingRepository>();
             services.AddTransient<IUserRepository, UserRepository>();
 

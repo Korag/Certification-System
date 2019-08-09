@@ -182,7 +182,7 @@ namespace Certification_System.Controllers
             {
                 DisplayMeetingViewModel singleMeeting = _mapper.Map<DisplayMeetingViewModel>(meeting);
                 singleMeeting.CourseIdentificator = Course.CourseIdentificator;
-                singleMeeting.InstructorsCredentials = _context.instructorRepository.GetInstructorsById(meeting.Instructors).Select(z => z.FirstName + " " + z.LastName).ToList();
+                singleMeeting.InstructorsCredentials = _context.userRepository.GetInstructorsById(meeting.Instructors).Select(z => z.FirstName + " " + z.LastName).ToList();
              
                 meetingsViewModel.Add(singleMeeting);
             }

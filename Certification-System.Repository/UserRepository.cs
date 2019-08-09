@@ -25,6 +25,11 @@ namespace Certification_System.Repository
             return _users = _context.db.GetCollection<CertificationPlatformUser>(_usersCollectionName);
         }
 
+        public ICollection<CertificationPlatformUser> GetListOfInstructors()
+        {
+            return  GetUsers().AsQueryable().Where(z => z.Roles.Contains("INSTRUCTOR")).ToList();
+        }
+
         public ICollection<CertificationPlatformUser> GetListOfUsers()
         {
             return GetUsers().AsQueryable().ToList();
@@ -69,6 +74,40 @@ namespace Certification_System.Repository
         {
             var filter = Builders<CertificationPlatformUser>.Filter.Eq(x => x.Id, userIdentificator);
             var result = GetUsers().Find<CertificationPlatformUser>(filter).FirstOrDefault();
+
+            return result;
+        }
+
+        public CertificationPlatformUser GetInstructorById(string userIdentificator)
+        {
+            var result = GetListOfInstructors().Where(z => z.Id == userIdentificator).FirstOrDefault();
+
+            return result;
+        }
+
+        public ICollection<SelectListItem> GetInstructorsAsSelectList()
+        {
+            var Instructors = GetListOfInstructors();
+            List<SelectListItem> SelectList = new List<SelectListItem>();
+
+            foreach (var instructor in Instructors)
+            {
+                SelectList.Add
+                    (
+                        new SelectListItem()
+                        {
+                            Text = instructor.FirstName + " " + instructor.LastName,
+                            Value = instructor.Id
+                        }
+                    );
+            };
+
+            return SelectList;
+        }
+
+        public ICollection<CertificationPlatformUser> GetInstructorsById(ICollection<string> userIdentificators)
+        {
+            var result = GetListOfInstructors().Where(z => userIdentificators.Contains(z.Id)).ToList();
 
             return result;
         }

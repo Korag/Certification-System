@@ -72,15 +72,6 @@
 
             <div class="form-group">
                 <label asp-for="Roles" class="control-label"></label>
-                <div>
-                    <select asp-for="Roles" disabled data-style="btn-white" data-container="body" data-width="auto" data-header="Wybierz użytkownika" data-live-search="true" title="Nie wybrano żadnego elementu" class="form-control selectpicker show-tick w-100">
-                        <option selected></option>
-                    </select>
-                </div>
-            </div>
-
-            <div class="form-group">
-                <label asp-for="Roles" class="control-label"></label>
                 <div class="row mb-2 ml-0 mr-0">
                     <div>
                         @foreach (var role in Model.Roles)
