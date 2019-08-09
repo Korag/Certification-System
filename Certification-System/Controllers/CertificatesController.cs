@@ -5,6 +5,7 @@ using Certification_System.Repository.DAL;
 using Certification_System.ServicesInterfaces;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
+using MongoDB.Bson;
 using System.Collections.Generic;
 using System.IO;
 using System.Linq;
@@ -115,7 +116,7 @@ namespace Certification_System.Controllers
                 var Certificate = _context.certificateRepository.GetCertificateById(givenCertificate.Certificate);
                 var User = _context.userRepository.GetUserByGivenCertificateId(givenCertificate.GivenCertificateIdentificator);
 
-                DisplayCrucialDataCourseViewModel courseViewModel  = _mapper.Map<DisplayCrucialDataCourseViewModel>(Course);
+                DisplayCrucialDataCourseViewModel courseViewModel = _mapper.Map<DisplayCrucialDataCourseViewModel>(Course);
                 DisplayCrucialDataCertificateViewModel certificateViewModel = _mapper.Map<DisplayCrucialDataCertificateViewModel>(Certificate);
                 DisplayCrucialDataUserViewModel userViewModel = _mapper.Map<DisplayCrucialDataUserViewModel>(User);
 
@@ -357,15 +358,19 @@ namespace Certification_System.Controllers
 
         // GET: VerifyUser
         [AllowAnonymous]
-        public ActionResult VerifyUser()
+        public ActionResult VerifyUser(bool userIdentificatorNotValid)
         {
+            ViewBag.UserIdentificatorNotValid = userIdentificatorNotValid;
+
             return View();
         }
 
         // GET: VerifyCertificate
         [AllowAnonymous]
-        public ActionResult VerifyCertificate()
+        public ActionResult VerifyCertificate(bool certificateIdentificatorNotValid)
         {
+            ViewBag.CertificateIdentificatorNotValid = certificateIdentificatorNotValid;
+
             return View();
         }
 
@@ -376,7 +381,14 @@ namespace Certification_System.Controllers
         {
             if (ModelState.IsValid)
             {
-                return RedirectToAction("VerifyUserCompetencesByQR", "Certificates", new { userIdentificator = userToVerify.UserIdentificator });
+                if (_context.userRepository.GetUserById(userToVerify.UserIdentificator) != null)
+                {
+                    return RedirectToAction("VerifyUserCompetencesByQR", "Certificates", new { userIdentificator = userToVerify.UserIdentificator });
+                }
+                else
+                {
+                    return RedirectToAction("VerifyUser", "Certificates", new { userIdentificatorNotValid = true });
+                }
             }
 
             return View(userToVerify);
@@ -389,7 +401,25 @@ namespace Certification_System.Controllers
         {
             if (ModelState.IsValid)
             {
-                return RedirectToAction("VerifyUserCertificateByQR", "Certificates", new { givenCertificateIdentificator = certificateToVerify.CertificateIdentificator });
+                try
+                {
+                    ObjectId TryObjectIdParse;
+                    ObjectId.TryParse(certificateToVerify.CertificateIdentificator, out TryObjectIdParse);
+                }
+                catch (System.Exception)
+                {
+                    ModelState.AddModelError("UserIdentificator", "Wprowadzony identyfikator został wprowadzony nieprawidłowo");
+                    return View(certificateToVerify);
+                }
+
+                if (_context.certificateRepository.GetCertificateById(certificateToVerify.CertificateIdentificator) != null)
+                {
+                    return RedirectToAction("VerifyUserCertificateByQR", "Certificates", new { givenCertificateIdentificator = certificateToVerify.CertificateIdentificator });
+                }
+                else
+                {
+                    return RedirectToAction("VerifyCertificate", "Certificates", new { certificatesIdentificatorNotValid = true });
+                }
             }
 
             return View(certificateToVerify);

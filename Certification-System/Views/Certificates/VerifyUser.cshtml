@@ -23,6 +23,13 @@
                 </div>
             </div>
 
+            @if (ViewBag.UserIdentificatorNotValid == true)
+            {
+            <div class="row justify-content-center alert alert-danger validation-model">Nie ma użytkownika o podanym identyfikatorze</div>
+            }
+
+            <div asp-validation-summary="ModelOnly" class="row justify-content-center alert alert-danger validation-model"></div>
+
             <div class="row justify-content-center">
                 <input type="submit" value="Weryfikuj" class="btn btn-primary" />
             </div>
