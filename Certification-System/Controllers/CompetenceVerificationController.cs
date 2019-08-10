@@ -58,7 +58,7 @@ namespace Certification_System.Controllers
                 }
                 else
                 {
-                    return RedirectToAction("AnonymouslyVerificationOfUser", "CompetenceVerification", new { userIdentificator = userIdentificator });
+                    return RedirectToAction("AnonymouslyVerificationOfUser", "Users", new { userIdentificator = userIdentificator });
                 }
             }
             else
@@ -97,9 +97,16 @@ namespace Certification_System.Controllers
 
         // GET: VerifyCertificate
         [AllowAnonymous]
-        public ActionResult VerifyCertificate()
+        public ActionResult VerifyCertificate(string givenCertificateIdentificator, bool certificateIdentificatorNotExist, bool certificateIdentificatorBadFormat)
         {
-            return View();
+            VerifyCertificateViewModel certificateToVerify = new VerifyCertificateViewModel
+            {
+                GivenCertificateIdentificator = givenCertificateIdentificator,
+                CertificateIdentificatorNotExist = certificateIdentificatorNotExist,
+                CertificateIdentificatorBadFormat = certificateIdentificatorBadFormat
+            };
+
+            return View(certificateToVerify);
         }
 
         // POST: VerifyCertificate
@@ -111,34 +118,64 @@ namespace Certification_System.Controllers
             {
                 try
                 {
-                    ObjectId TryObjectIdParse;
-                    ObjectId.TryParse(certificateToVerify.CertificateIdentificator, out TryObjectIdParse);
+                    ObjectId.Parse(certificateToVerify.GivenCertificateIdentificator);
                 }
                 catch (System.Exception)
                 {
-                    ModelState.AddModelError("UserIdentificator", "Wprowadzony identyfikator ma niewłaściwy format");
+                    certificateToVerify.CertificateIdentificatorBadFormat = true;
                     return View(certificateToVerify);
                 }
 
-                if (_context.certificateRepository.GetCertificateById(certificateToVerify.CertificateIdentificator) != null)
+                if (_context.givenCertificateRepository.GetGivenCertificateById(certificateToVerify.GivenCertificateIdentificator) != null)
                 {
                     if (this.User.IsInRole("Admin"))
                     {
-                        //GivenCertificateDetails
+                        return RedirectToAction("GivenCertificateDetails", "Certificates", new { givenCertificateIdentificator = certificateToVerify.GivenCertificateIdentificator });
                     }
                     else
                     {
-                        return RedirectToAction("AnonymouslyVerificationOfCertificate", "Certificates", new { givenCertificateIdentificator = certificateToVerify.CertificateIdentificator });
+                        return RedirectToAction("AnonymouslyVerificationOfCertificate", "Certificates", new { givenCertificateIdentificator = certificateToVerify.GivenCertificateIdentificator });
                     }
                 }
                 else
                 {
-                    ModelState.AddModelError("Overall", "Nie istnieje certyfikat o podanym identyfikatorze");
+                    certificateToVerify.CertificateIdentificatorNotExist = true;
                     return View(certificateToVerify);
                 }
             }
 
             return View(certificateToVerify);
+        }
+
+        // CompetenceVerification/VerifyCertificateByQR?givenCertificateIdentificator=5ce002107e5ac431745de4cd
+        // POST: VerifyCertificateByQR
+        [AllowAnonymous]
+        public ActionResult VerifyCertificateByQR(string givenCertificateIdentificator)
+        {
+            try
+            {
+                ObjectId.Parse(givenCertificateIdentificator);
+            }
+            catch (System.Exception)
+            {
+                return RedirectToAction("VerifyCertificate", "CompetenceVerification", new { givenCertificateIdentificator = givenCertificateIdentificator, certificateIdentificatorBadFormat = true });
+            }
+
+            if (_context.givenCertificateRepository.GetGivenCertificateById(givenCertificateIdentificator) != null)
+            {
+                if (this.User.IsInRole("Admin"))
+                {
+                    return RedirectToAction("GivenCertificateDetails", "Certificates", new { givenCertificateIdentificator = givenCertificateIdentificator });
+                }
+                else
+                {
+                    return RedirectToAction("AnonymouslyVerificationOfCertificate", "Certificates", new { givenCertificateIdentificator = givenCertificateIdentificator });
+                }
+            }
+            else
+            {
+                return RedirectToAction("VerifyCertificate", "CompetenceVerification", new { givenCertificateIdentificator = givenCertificateIdentificator, certificateIdentificatorNotExist = true });
+            }
         }
 
         // GET: GenerateQRCodeFromGivenURL
@@ -161,14 +198,14 @@ namespace Certification_System.Controllers
         {
             string URL = @"https://certification-system.azurewebsites.net/CompetenceVerification/VerifyUserCompetencesByQR?userIdentificator=" + $"{userIdentificator}";
 
-            return RedirectToAction("GenerateQRCodeFromGivenURL", "CompetenceVerification", new { URL = URL});
+            return RedirectToAction("GenerateQRCodeFromGivenURL", "CompetenceVerification", new { URL = URL });
         }
 
         // GET: GenerateCertificateQR
         [AllowAnonymous]
-        public ActionResult GenerateCertificateQR(string certificationIdentificator)
+        public ActionResult GenerateCertificateQR(string givenCertificateIdentificator)
         {
-            string URL = @"https://certification-system.azurewebsites.net/CompetenceVerification/VerifyCertificate?CertificateIdentificator=" + $"{certificationIdentificator}";
+            string URL = @"https://certification-system.azurewebsites.net/CompetenceVerification/VerifyCertificateByQR?givenCertificateIdentificator=" + $"{givenCertificateIdentificator}";
 
             return RedirectToAction("GenerateQRCodeFromGivenURL", "CompetenceVerification", new { URL = URL });
         }
