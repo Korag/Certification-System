@@ -8,191 +8,189 @@
 <h2>Edytuj dane użytkownika systemu</h2>
 <hr />
 
-@using (Html.BeginForm())
-{
-    @Html.AntiForgeryToken()
+<div>
+    <form asp-action="AddNewGivenCertificate">
 
-    <div class="col-md-6 col-xl-6 col-sm-8 col-xs-10 m-auto p-3 shadow p-3 mb-5 bg-light rounded border border-primary rounded-bottom" style="opacity:0.80">
+        <div class="col-md-6 col-xl-6 col-sm-8 col-xs-10 m-auto p-3 shadow p-3 mb-5 bg-light rounded border border-primary rounded-bottom" style="opacity:0.80">
 
-        <input asp-for="UserIdentificator" class="form-control" hidden />
+            <input asp-for="UserIdentificator" class="form-control" hidden />
 
-        <div class="form-group">
-            <div>
-                @Html.LabelFor(m => m.Email, new { @class = "control-label" })
-            </div>
-            <div>
-                @Html.TextBoxFor(m => m.Email, new { @class = "form-control col-12" })
-            </div>
-            <div class="row justify-content-center">
-                @Html.ValidationMessageFor(m => m.Email, "", new { @class = "text-danger" })
-            </div>
-        </div>
-
-        <div class="form-group">
-            <div>
-                @Html.LabelFor(m => m.FirstName, new { @class = "control-label" })
-            </div>
-            <div>
-                @Html.TextBoxFor(m => m.FirstName, new { @class = "form-control col-12" })
-            </div>
-            <div class="row justify-content-center">
-                @Html.ValidationMessageFor(m => m.FirstName, "", new { @class = "text-danger" })
-            </div>
-        </div>
-
-        <div class="form-group">
-            <div>
-                @Html.LabelFor(m => m.LastName, new { @class = " control-label" })
-            </div>
-            <div>
-                @Html.TextBoxFor(m => m.LastName, new { @class = "form-control col-12" })
-            </div>
-            <div class="row justify-content-center">
-                @Html.ValidationMessageFor(m => m.LastName, "", new { @class = "text-danger" })
-            </div>
-        </div>
-
-        <div class="form-group">
-            <div>
-                @Html.LabelFor(m => m.Country, new { @class = "control-label" })
-            </div>
-            <div>
-                @Html.TextBoxFor(m => m.Country, new { @class = "form-control col-12" })
-            </div>
-            <div class="row justify-content-center">
-                @Html.ValidationMessageFor(m => m.Country, "", new { @class = "text-danger" })
-            </div>
-        </div>
-
-        <div class="form-group">
-            <div>
-                @Html.LabelFor(m => m.City, new { @class = "control-label" })
-            </div>
-            <div>
-                @Html.TextBoxFor(m => m.City, new { @class = "form-control col-12" })
-            </div>
-            <div class="row justify-content-center">
-                @Html.ValidationMessageFor(m => m.City, "", new { @class = "text-danger" })
-            </div>
-        </div>
-
-        <div class="form-group">
-            <div>
-                @Html.LabelFor(m => m.PostCode, new { @class = "control-labe" })
-            </div>
-            <div>
-                @Html.TextBoxFor(m => m.PostCode, new { @class = "form-control col-12" })
-            </div>
-            <div class="row justify-content-center">
-                @Html.ValidationMessageFor(m => m.PostCode, "", new { @class = "text-danger" })
-            </div>
-        </div>
-
-        <div class="form-group">
-            <div>
-                @Html.LabelFor(m => m.Address, new { @class = "control-label" })
-            </div>
-            <div>
-                @Html.TextBoxFor(m => m.Address, new { @class = "form-control col-12" })
-            </div>
-            <div class="row justify-content-center">
-                @Html.ValidationMessageFor(m => m.Address, "", new { @class = "text-danger" })
-            </div>
-        </div>
-
-        <div class="form-group">
-            <div>
-                @Html.LabelFor(m => m.NumberOfApartment, new { @class = "control-label" })
-            </div>
-            <div>
-                @Html.TextBoxFor(m => m.NumberOfApartment, new { @class = "form-control col-12" })
-            </div>
-            <div class="row justify-content-center">
-                @Html.ValidationMessageFor(m => m.NumberOfApartment, "", new { @class = "text-danger" })
-            </div>
-        </div>
-
-        <div class="form-group">
-            <div>
-                @Html.LabelFor(m => m.PhoneNumber, new { @class = "control-label" })
-            </div>
-            <div>
-                @Html.TextBoxFor(m => m.PhoneNumber, new { @class = "form-control col-12" })
-            </div>
-            <div class="row justify-content-center">
-                @Html.ValidationMessageFor(m => m.PhoneNumber, "", new { @class = "text-danger" })
-            </div>
-        </div>
-
-        <div class="form-group">
-            <div>
-                @Html.LabelFor(m => m.DateOfBirth, new { @class = "control-label" })
-            </div>
-            <div class='input-group date' id='DateOfBirth'>
-                <input type='text' class="form-control col-12" name="DateOfBirth" value="@Model.DateOfBirth" />
-                <span class="input-group-addon">
-                    <span class="fa fa-calendar pl-1 pt-0.5" style="font-size:34px"></span>
-                </span>
-            </div>
-            <div class="row justify-content-center">
-                @Html.ValidationMessageFor(m => m.DateOfBirth, "", new { @class = "text-danger" })
-            </div>
-        </div>
-
-        <div class="form-group">
-            <div>
-                <label asp-for="AvailableRoles" class="control-label"></label>
-            </div>
-            <div>
-                <select asp-for="SelectedRole" asp-items="@Model.AvailableRoles" data-style="btn-white" data-container="body" data-width="auto" data-header="Wybierz użytkownika" multiple data-live-search="true" title="Nie wybrano żadnego elementu" class="form-control selectpicker show-tick w-100"> </select>
+            <div class="form-group">
+                <div>
+                    <label asp-for="Email"></label>
+                </div>
+                <div>
+                    <input type="email" asp-for="Email" class="col-12 form-control" />
+                </div>
                 <div class="row justify-content-center">
-                    <span asp-validation-for="SelectedRole" class="text-danger"></span>
+                    <span asp-validation-for="Email" class="text-danger"></span>
                 </div>
             </div>
-        </div>
 
-        <div class="form-group">
-            <div>
-                <label asp-for="CompanyRoleWorker" class="control-label"></label>
-            </div>
-            <div>
-                <select asp-for="CompanyRoleWorker" asp-items="@Model.AvailableCompanies" data-style="btn-white" data-container="body" data-width="auto" data-header="Wybierz przedsiębiorstwo" multiple data-live-search="true" title="Nie wybrano żadnego elementu" class="form-control selectpicker show-tick w-100"> </select>
+            <div class="form-group">
+                <div>
+                    <label asp-for="FirstName"></label>
+                </div>
+                <div>
+                    <input asp-for="FirstName" class="col-12 form-control" />
+                </div>
                 <div class="row justify-content-center">
-                    <span asp-validation-for="CompanyRoleWorker" class="text-danger"></span>
+                    <span asp-validation-for="FirstName" class="text-danger"></span>
                 </div>
             </div>
-        </div>
 
-        <div class="form-group">
-            <div>
-                <label asp-for="CompanyRoleManager" class="control-label"></label>
-            </div>
-            <div>
-                <select asp-for="CompanyRoleManager" asp-items="@Model.AvailableCompanies" data-style="btn-white" data-container="body" data-width="auto" data-header="Wybierz przedsiębiorstwo" multiple data-live-search="true" title="Nie wybrano żadnego elementu" class="form-control selectpicker show-tick w-100"> </select>
+            <div class="form-group">
+                <div>
+                    <label asp-for="LastName"></label>
+                </div>
+                <div>
+                    <input asp-for="LastName" class="col-12 form-control" />
+                </div>
                 <div class="row justify-content-center">
-                    <span asp-validation-for="CompanyRoleManager" class="text-danger"></span>
+                    <span asp-validation-for="LastName" class="text-danger"></span>
                 </div>
             </div>
-        </div>
 
-        <div class="form-group mb-0">
+            <div class="form-group">
+                <div>
+                    <label asp-for="Country"></label>
+                </div>
+                <div>
+                    <input asp-for="Country" class="col-12 form-control" />
+                </div>
+                <div class="row justify-content-center">
+                    <span asp-validation-for="Country" class="text-danger"></span>
+                </div>
+            </div>
+
+            <div class="form-group">
+                <div>
+                    <label asp-for="City"></label>
+                </div>
+                <div>
+                    <input asp-for="City" class="col-12 form-control" />
+                </div>
+                <div class="row justify-content-center">
+                    <span asp-validation-for="City" class="text-danger"></span>
+                </div>
+            </div>
+
+            <div class="form-group">
+                <div>
+                    <label asp-for="PostCode"></label>
+                </div>
+                <div>
+                    <input asp-for="PostCode" class="col-12 form-control" />
+                </div>
+                <div class="row justify-content-center">
+                    <span asp-validation-for="PostCode" class="text-danger"></span>
+                </div>
+            </div>
+
+            <div class="form-group">
+                <div>
+                    <label asp-for="Address"></label>
+                </div>
+                <div>
+                    <input asp-for="Address" class="col-12 form-control" />
+                </div>
+                <div class="row justify-content-center">
+                    <span asp-validation-for="Address" class="text-danger"></span>
+                </div>
+            </div>
+
+            <div class="form-group">
+                <div>
+                    <label asp-for="NumberOfApartment"></label>
+                </div>
+                <div>
+                    <input asp-for="NumberOfApartment" class="col-12 form-control" />
+                </div>
+                <div class="row justify-content-center">
+                    <span asp-validation-for="NumberOfApartment" class="text-danger"></span>
+                </div>
+            </div>
+
+            <div class="form-group">
+                <div>
+                    <label asp-for="PhoneNumber"></label>
+                </div>
+                <div>
+                    <input asp-for="PhoneNumber" class="col-12 form-control" />
+                </div>
+                <div class="row justify-content-center">
+                    <span asp-validation-for="PhoneNumber" class="text-danger"></span>
+                </div>
+            </div>
+
+            <div class="form-group">
+                <div>
+                    <label asp-for="DateOfBirth"></label>
+                </div>
+
+                <div class='input-group date' id='DateOfBirth'>
+                    <input type='text' class="form-control col-12" name="DateOfBirth" value="@DateTime.Now.ToShortDateString() @DateTime.Now.ToShortTimeString()" />
+                    <span class="input-group-addon">
+                        <span class="fa fa-calendar pl-1 pt-0.5" style="font-size:34px"></span>
+                    </span>
+                </div>
+
+                <div class="row justify-content-center">
+                    <span asp-validation-for="DateOfBirth" class="text-danger"></span>
+                </div>
+            </div>
+
+            <div class="form-group">
+                <div>
+                    <label asp-for="AvailableRoles" class="control-label"></label>
+                </div>
+                <div>
+                    <select asp-for="SelectedRole" asp-items="@Model.AvailableRoles" data-style="btn-white" data-container="body" data-width="auto" data-header="Wybierz użytkownika" multiple data-live-search="true" title="Nie wybrano żadnego elementu" class="form-control selectpicker show-tick w-100"> </select>
+                    <div class="row justify-content-center">
+                        <span asp-validation-for="SelectedRole" class="text-danger"></span>
+                    </div>
+                </div>
+            </div>
+
+            <div class="form-group">
+                <div>
+                    <label asp-for="CompanyRoleWorker" class="control-label"></label>
+                </div>
+                <div>
+                    <select asp-for="CompanyRoleWorker" asp-items="@Model.AvailableCompanies" data-style="btn-white" data-container="body" data-width="auto" data-header="Wybierz przedsiębiorstwo" multiple data-live-search="true" title="Nie wybrano żadnego elementu" class="form-control selectpicker show-tick w-100"> </select>
+                    <div class="row justify-content-center">
+                        <span asp-validation-for="CompanyRoleWorker" class="text-danger"></span>
+                    </div>
+                </div>
+            </div>
+
+            <div class="form-group">
+                <div>
+                    <label asp-for="CompanyRoleManager" class="control-label"></label>
+                </div>
+                <div>
+                    <select asp-for="CompanyRoleManager" asp-items="@Model.AvailableCompanies" data-style="btn-white" data-container="body" data-width="auto" data-header="Wybierz przedsiębiorstwo" multiple data-live-search="true" title="Nie wybrano żadnego elementu" class="form-control selectpicker show-tick w-100"> </select>
+                    <div class="row justify-content-center">
+                        <span asp-validation-for="CompanyRoleManager" class="text-danger"></span>
+                    </div>
+                </div>
+            </div>
+
+            <div asp-validation-summary="ModelOnly" class="row justify-content-center alert alert-danger validation-model"></div>
+
             <div class="row justify-content-center">
                 <input type="submit" class="btn btn-primary" value="Edytuj użytkownika" />
             </div>
+
         </div>
 
-    </div>
-
-    <div class="row justify-content-center">
-        <div asp-validation-summary="All" class="text-danger"></div>
-    </div>
-}
-
-<div class="mt-3">
-    @Html.ActionLink("Dodaj nowego użytkownika", "AddNewUser", "Users", null, new { @class = "btn btn-secondary" })
-    @Html.ActionLink("Przejdź do listy użytkowników", "DisplayAllUsers", "Users", null, new { @class = "btn btn-info" })
+    </form>
 </div>
 
+<div class="mt-3">
+    <a asp-action="AddNewUser" asp-controller="Users" class="btn btn-secondary">Dodaj nowego użytkownika</a>
+    <a asp-action="DisplayAllUsers" asp-controller="Users" class="btn btn-info">Przejdź do listy użytkowników</a>
+</div>
 
 @section Scripts {
     @{await Html.RenderPartialAsync("_ValidationScriptsPartial");}

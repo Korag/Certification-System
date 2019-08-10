@@ -11,8 +11,7 @@
 <div>
     <h2>Informacje o użytkowniku</h2>
 
-
-    <form asp-action="UserDetails">
+    <form asp-action="AnonymousVerificationOfUser">
 
         <div class="col-md-6 col-xl-6 col-sm-8 col-xs-10 m-auto p-3 shadow p-3 mb-5 bg-light rounded border border-primary rounded-bottom" style="opacity:0.80">
 
@@ -37,6 +36,7 @@
             </div>
 
         </div>
+
     </form>
 </div>
 
@@ -78,39 +78,39 @@
                 </tr>
             </thead>
             <tbody>
-                @foreach (var item in Model.Companies)
+                @foreach (var company in Model.Companies)
                 {
                     <tr>
                         <td>
-                            @Html.DisplayFor(modelItem => item.CompanyName)
+                            @Html.DisplayFor(modelItem => company.CompanyName)
                         </td>
                         <td>
-                            @Html.DisplayFor(modelItem => item.Email)
+                            @Html.DisplayFor(modelItem => company.Email)
                         </td>
                         <td>
-                            @Html.DisplayFor(modelItem => item.Phone)
+                            @Html.DisplayFor(modelItem => company.Phone)
                         </td>
                         <td>
-                            @Html.DisplayFor(modelItem => item.Country)
+                            @Html.DisplayFor(modelItem => company.Country)
                         </td>
                         <td>
-                            @Html.DisplayFor(modelItem => item.City)
+                            @Html.DisplayFor(modelItem => company.City)
                         </td>
                         <td>
-                            @Html.DisplayFor(modelItem => item.PostCode)
+                            @Html.DisplayFor(modelItem => company.PostCode)
                         </td>
                         <td>
-                            @Html.DisplayFor(modelItem => item.Address)
+                            @Html.DisplayFor(modelItem => company.Address)
                         </td>
                         <td>
-                            @Html.DisplayFor(modelItem => item.NumberOfApartment)
+                            @Html.DisplayFor(modelItem => company.NumberOfApartment)
                         </td>
                         <td>
-                            @if (Model.CompanyRoleWorker.Contains(item.CompanyIdentificator))
+                            @if (Model.CompanyRoleWorker.Contains(company.CompanyIdentificator))
                             {
                                 <p>@Html.DisplayNameFor(model => model.CompanyRoleWorker)</p>
                             }
-                            @if (Model.CompanyRoleManager.Contains(item.CompanyIdentificator))
+                            @if (Model.CompanyRoleManager.Contains(company.CompanyIdentificator))
                             {
                                 <p>@Html.DisplayNameFor(model => model.CompanyRoleManager)</p>
                             }
@@ -153,23 +153,23 @@ else
                 </tr>
             </thead>
             <tbody class="text-secondary">
-                @foreach (var item in Model.GivenCertificates)
+                @foreach (var givenCertificate in Model.GivenCertificates)
                 {
-                    <tr class="alert @if (item.ExpirationDate < DateTime.Now) { <text> table-danger </text>} else { <text> table-success </text> }">
+                    <tr class="alert @if (givenCertificate.ExpirationDate < DateTime.Now) { <text> table-danger </text>} else { <text> table-success </text> }">
                         <td>
-                            @Html.DisplayFor(modelItem => item.GivenCertificateIndexer)
+                            @Html.DisplayFor(modelItem => givenCertificate.GivenCertificateIndexer)
                         </td>
                         <td>
-                            @Html.DisplayFor(modelItem => item.ReceiptDate)
+                            @Html.DisplayFor(modelItem => givenCertificate.ReceiptDate)
                         </td>
                         <td>
-                            @Html.DisplayFor(modelItem => item.ExpirationDate)
+                            @Html.DisplayFor(modelItem => givenCertificate.ExpirationDate)
                         </td>
                         <td>
-                            @Html.DisplayFor(model => item.Certificate.CertificateIndexer) @Html.DisplayFor(model => item.Certificate.Name)
+                            @Html.DisplayFor(model => givenCertificate.Certificate.CertificateIndexer) @Html.DisplayFor(model => givenCertificate.Certificate.Name)
                         </td>
                         <td style="text-align:center">
-                            @if (item.ExpirationDate < DateTime.Now)
+                            @if (givenCertificate.ExpirationDate < DateTime.Now)
                             {
                                 <span class="fas fa-times" style="font-size:34px"></span>
                             }
@@ -216,23 +216,23 @@ else
                 </tr>
             </thead>
             <tbody>
-                @foreach (var item in Model.GivenDegrees)
+                @foreach (var givenDegree in Model.GivenDegrees)
                 {
-                    <tr class="alert @if (item.ExpirationDate < DateTime.Now) { <text> table-danger </text>} else { <text> table-success </text> }">
+                    <tr class="alert @if (givenDegree.ExpirationDate < DateTime.Now) { <text> table-danger </text>} else { <text> table-success </text> }">
                         <td>
-                            @Html.DisplayFor(modelItem => item.GivenDegreeIndexer)
+                            @Html.DisplayFor(modelItem => givenDegree.GivenDegreeIndexer)
                         </td>
                         <td>
-                            @Html.DisplayFor(modelItem => item.ReceiptDate)
+                            @Html.DisplayFor(modelItem => givenDegree.ReceiptDate)
                         </td>
                         <td>
-                            @Html.DisplayFor(modelItem => item.ExpirationDate)
+                            @Html.DisplayFor(modelItem => givenDegree.ExpirationDate)
                         </td>
                         <td>
-                            @Html.DisplayFor(model => item.Degree.DegreeIndexer) @Html.DisplayFor(model => item.Degree.Name)
+                            @Html.DisplayFor(model => givenDegree.Degree.DegreeIndexer) @Html.DisplayFor(model => givenDegree.Degree.Name)
                         </td>
                         <td style="text-align:center">
-                            @if (item.ExpirationDate < DateTime.Now)
+                            @if (givenDegree.ExpirationDate < DateTime.Now)
                             {
                                 <span class="fas fa-times" style="font-size:34px"></span>
                             }

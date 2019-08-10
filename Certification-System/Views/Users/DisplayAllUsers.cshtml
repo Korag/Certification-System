@@ -8,8 +8,8 @@
 <h2>Lista użytkowników systemu</h2>
 <hr />
 
-<div class="m-3">
-    @Html.ActionLink("Dodaj użytkownika", "AddNewUser", "Users", null, new { @class = "btn btn-primary" })
+<div class="mt-3">
+    <a asp-action="AddNewUser" asp-controller="Users" class="btn btn-primary">Dodaj użytkownika</a>
 </div>
 
 <div class="col-12 table-responsive">
@@ -40,21 +40,21 @@
             </tr>
         </thead>
         <tbody>
-            @foreach (var item in Model)
+            @foreach (var user in Model)
             {
                 <tr>
                     <td>
-                        @Html.DisplayFor(modelItem => item.Email)
+                        @Html.DisplayFor(modelItem => user.Email)
                     </td>
                     <td>
-                        @Html.DisplayFor(modelItem => item.FirstName)
+                        @Html.DisplayFor(modelItem => user.FirstName)
                     </td>
                     <td>
-                        @Html.DisplayFor(modelItem => item.LastName)
+                        @Html.DisplayFor(modelItem => user.LastName)
                     </td>
                     <td>
                         <ul>
-                            @foreach (var role in item.Roles)
+                            @foreach (var role in user.Roles)
                             {
                                 <li>@role</li>
                             }
@@ -62,7 +62,7 @@
                     </td>
                     <td>
                         <ul>
-                            @foreach (var companyWorker in item.CompanyRoleWorker)
+                            @foreach (var companyWorker in user.CompanyRoleWorker)
                             {
                                 <li>@companyWorker</li>
                             }
@@ -70,25 +70,24 @@
                     </td>
                     <td>
                         <ul>
-                            @foreach (var companyManager in item.CompanyRoleManager)
+                            @foreach (var companyManager in user.CompanyRoleManager)
                             {
                                 <li>@companyManager</li>
                             }
                         </ul>
                     </td>
                     <td>
-                        @Html.ActionLink("Szczegóły", "UserDetails", "Users", new { userIdentificator = item.UserIdentificator }, new { @class = "btn btn-info m-1" })
-                        @Html.ActionLink("Edytuj", "EditUser", "Users", new { userIdentificator = item.UserIdentificator }, new { @class = "btn btn-warning m-1" })
-                        @Html.ActionLink("Nadaj certyfikat", "", "Certificates", new { userIdentificator = item.UserIdentificator }, new { @class = "btn btn-primary m-1" })
-                        @Html.ActionLink("Nadaj stopień zawodowy", "", "Degrees", new { userIdentificator = item.UserIdentificator }, new { @class = "btn btn-secondary m-1" })
-                        @Html.ActionLink("Generuj kod QR", "GenerateUserQR", "Certificates", new { userIdentificator = item.UserIdentificator }, new { @class = "btn btn-dark m-1" })
+                        <a asp-action="UserDetails" asp-route-userIdentificator="@user.UserIdentificator" asp-controller="Users" class="btn btn-info m-1">Szczegóły</a>
+                        <a asp-action="EditUser" asp-route-userIdentificator="@user.UserIdentificator" asp-controller="Users" class="btn btn-warning m-1">Edytuj</a>
+                        <a asp-action="" asp-route-userIdentificator="@user.UserIdentificator" asp-controller="Certificates" class="btn btn-primary m-1">Nadaj certyfikat</a>
+                        <a asp-action="" asp-route-userIdentificator="@user.UserIdentificator" asp-controller="Degrees" class="btn btn-secondary m-1">Nadaj stopień zawodowy</a>
+                        <a asp-action="GenerateUserQR" asp-route-userIdentificator="@user.UserIdentificator" asp-controller="Certificates" class="btn btn-dark m-1">Generuj kod QR</a>
                     </td>
                 </tr>
             }
         </tbody>
     </table>
 </div>
-
 
 @section Scripts{
     <script>
