@@ -89,7 +89,7 @@ else
                     <ul>
                         @foreach (var instructor in Model.InstructorsCredentials)
                         {
-                        <li>@instructor</li>
+                            <li>@instructor</li>
                         }
                     </ul>
                 </td>
@@ -99,12 +99,11 @@ else
 </div>
 
 <div class="mt-3">
-    @Html.ActionLink("Dodaj spotkanie", "AddNewMeeting", "Meetings", null, new { @class = "btn btn-primary" })
-    @Html.ActionLink("Szczegóły", "MeetingDetails", "Meetings", new { meetingIdentificator = Model.MeetingIdentificator }, new { @class = "btn btn-info" })
-    @Html.ActionLink("Aktualizuj", "EditMeeting", "Certificates", new { meetingIdentificator = Model.MeetingIdentificator }, new { @class = "btn btn-warning" })
-    @Html.ActionLink("Lista wszystkich spotkań", "DisplayAllMeetings", "Meetings", null, new { @class = "btn btn-success" })
+    <a asp-action="AddNewMeeting" asp-controller="Meetings" class="btn btn-primary">Dodaj spotkanie</a>
+    <a asp-action="MeetingDetails" asp-route-meetingIdentificator="@Model.MeetingIdentificator" asp-controller="Meetings" class="btn btn-info">Szczegóły</a>
+    <a asp-action="EditMeeting" asp-route-meetingIdentificator="@Model.MeetingIdentificator" asp-controller="Certificates" class="btn btn-warning">Aktualizuj</a>
+    <a asp-action="DisplayAllMeetings" asp-controller="Meetings" class="btn btn-success">Lista wszystkich spotkań</a>
 </div>
-
 
 @section Scripts{
     <script>

@@ -9,7 +9,7 @@
 <hr />
 
 <div class="m-3">
-    @Html.ActionLink("Dodaj nowe spotkanie", "AddNewMeeting", "Meetings", null, new { @class = "btn btn-primary" })
+    <a asp-action="AddNewMeeting" asp-controller="Meetings" class="btn btn-primary">Dodaj nowe spotkanie</a>
 </div>
 
 <div class="col-12 table-responsive">
@@ -55,51 +55,51 @@
             </tr>
         </thead>
         <tbody>
-            @foreach (var item in Model)
+            @foreach (var meeting in Model)
             {
                 <tr>
                     <td>
-                        @Html.DisplayFor(modelItem => item.MeetingIndexer)
+                        @Html.DisplayFor(modelItem => meeting.MeetingIndexer)
                     </td>
                     <td>
-                        @Html.DisplayFor(modelItem => item.Description)
+                        @Html.DisplayFor(modelItem => meeting.Description)
                     </td>
                     <td>
-                        @Html.DisplayFor(modelItem => item.DateOfMeeting)
+                        @Html.DisplayFor(modelItem => meeting.DateOfMeeting)
                     </td>
                     <td>
-                        @Html.DisplayFor(modelItem => item.Country)
+                        @Html.DisplayFor(modelItem => meeting.Country)
                     </td>
                     <td>
-                        @Html.DisplayFor(modelItem => item.City)
+                        @Html.DisplayFor(modelItem => meeting.City)
                     </td>
                     <td>
-                        @Html.DisplayFor(modelItem => item.PostCode)
+                        @Html.DisplayFor(modelItem => meeting.PostCode)
                     </td>
                     <td>
-                        @Html.DisplayFor(modelItem => item.Address)
+                        @Html.DisplayFor(modelItem => meeting.Address)
                     </td>
                     <td>
-                        @Html.DisplayFor(modelItem => item.NumberOfApartment)
+                        @Html.DisplayFor(modelItem => meeting.NumberOfApartment)
                     </td>
                     <td>
-                        @Html.DisplayFor(modelItem => item.CourseIndexer)
+                        @Html.DisplayFor(modelItem => meeting.CourseIndexer)
                     </td>
                     <td>
-                        @Html.DisplayFor(modelItem => item.CourseName)
+                        @Html.DisplayFor(modelItem => meeting.CourseName)
                     </td>
                     <td>
                         <ul>
-                            @foreach (var instructor in item.InstructorsCredentials)
+                            @foreach (var instructor in meeting.InstructorsCredentials)
                             {
                                 <li>@instructor</li>
                             }
                         </ul>
                     </td>
                     <td>
-                        @Html.ActionLink("Szczegóły", "MeetingDetails", "Meetings", new { meetingIdentificator = item.MeetingIdentificator }, new { @class = "btn btn-info m-1" })
-                        @Html.ActionLink("Aktualizuj", "EditMeeting", "Meetings", new { meetingIdentificator = item.MeetingIdentificator }, new { @class = "btn btn-warning m-1" })
-                        @Html.ActionLink("Sprawdź obecność", "CheckUsersPresence", new { meetingIdentificator = item.MeetingIdentificator }, new { @class = "btn btn-primary m-1" })
+                        <a asp-action="MeetingDetails" asp-route-meetingIdentificator="@meeting.MeetingIdentificator" asp-controller="Meetings" class="btn btn-info m-1">Szczegóły</a>
+                        <a asp-action="EditMeeting" asp-route-meetingIdentificator="@meeting.MeetingIdentificator" asp-controller="Meetings" class="btn btn-warning m-1">Aktualizuj</a>
+                        <a asp-action="CheckUsersPresence" asp-route-meetingIdentificator="@meeting.MeetingIdentificator" asp-controller="Meetings" class="btn btn-primary m-1">Sprawdź obecność</a>
                     </td>
                 </tr>
             }
