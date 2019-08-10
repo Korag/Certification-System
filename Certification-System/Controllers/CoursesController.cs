@@ -190,13 +190,22 @@ namespace Certification_System.Controllers
             var Users = _context.userRepository.GetUsersById(Course.EnrolledUsers);
             List<DisplayCrucialDataWithCompaniesRoleUserViewModel> usersViewModel = _mapper.Map<List<DisplayCrucialDataWithCompaniesRoleUserViewModel>>(Users);
 
+            var InstructorsIdentificators = new List<string>();
+            Meetings.ToList().ForEach(z => z.Instructors.ToList().ForEach(s => InstructorsIdentificators.Add(s)));
+
+            var Instructors = _context.userRepository.GetUsersById(InstructorsIdentificators.Distinct().ToList());
+
+            List<DisplayCrucialDataWithContactUsersViewModel> instructorsViewModel = _mapper.Map<List<DisplayCrucialDataWithContactUsersViewModel>>(Instructors);
+
             CourseDetailsViewModel courseDetails = _mapper.Map<CourseDetailsViewModel>(Course);
 
             courseDetails.EnrolledUsersQuantity = Course.EnrolledUsers.Count;
             courseDetails.Branches = _context.branchRepository.GetBranchesById(Course.Branches);
             courseDetails.Meetings = meetingsViewModel;
             courseDetails.EnrolledUsers = usersViewModel;
-          
+            courseDetails.EnrolledUsers = usersViewModel;
+            courseDetails.Instructors = instructorsViewModel;
+
             return View(courseDetails);
         }
 

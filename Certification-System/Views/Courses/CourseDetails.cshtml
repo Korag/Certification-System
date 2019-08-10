@@ -93,6 +93,59 @@
     <a asp-action="DisplayAllCourses" asp-controller="Courses" class="btn btn-info">Powrót do listy kursów</a>
 </div>
 
+<h2 class="mt-4 mb-4">Instruktorzy</h2>
+@if (Model.Instructors.Count != 0)
+{
+    <div class="col-12 table-responsive">
+        <table id="listInstructors" class="table table-striped table-bordered display" style="width: 100%;" role="grid">
+            <thead>
+                <tr>
+                    <th>
+                        @Html.DisplayNameFor(model => model.Instructors.First().FirstName)
+                    </th>
+                    <th>
+                        @Html.DisplayNameFor(model => model.Instructors.First().LastName)
+                    </th>
+                    <th>
+                        @Html.DisplayNameFor(model => model.Instructors.First().Email)
+                    </th>
+                    <th>
+                        @Html.DisplayNameFor(model => model.Instructors.First().PhoneNumber)
+                    </th>
+                    <th>
+                        Operacje
+                    </th>
+                </tr>
+            </thead>
+            <tbody>
+                @foreach (var instructor in Model.Instructors)
+                {
+                <tr>
+                    <td>
+                        @Html.DisplayFor(modelItem => instructor.FirstName)
+                    </td>
+                    <td>
+                        @Html.DisplayFor(modelItem => instructor.LastName)
+                    </td>
+                    <td>
+                        @Html.DisplayFor(modelItem => instructor.Email)
+                    </td>
+                    <td>
+                        @Html.DisplayFor(modelItem => instructor.PhoneNumber)
+                    </td>
+                    <td>
+                        <a asp-action="InstructorDetails" asp-route-instructorIdentificator="@instructor.UserIdentificator" asp-controller="Users" class="btn btn-info m-1">Szczegóły użytkownika</a>
+                    </td>
+                </tr>
+                }
+            </tbody>
+        </table>
+    </div>
+}
+else
+{
+    <div class="mt-4 mb-4 alert alert-warning">Brak instruktorów przypisanych do kursu</div>
+}
 
 <h2 class="mt-4 mb-4">Spotkania w ramach kursu</h2>
 @if (Model.Meetings.Count != 0)
@@ -275,6 +328,13 @@ else
             );
 
             $('#listUsers').DataTable({
+                "language": {
+                    "url": "//cdn.datatables.net/plug-ins/1.10.19/i18n/Polish.json"
+                },
+            }
+            );
+
+            $('#listInstructors').DataTable({
                 "language": {
                     "url": "//cdn.datatables.net/plug-ins/1.10.19/i18n/Polish.json"
                 },
