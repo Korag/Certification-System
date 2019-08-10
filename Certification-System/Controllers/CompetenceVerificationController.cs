@@ -34,9 +34,37 @@ namespace Certification_System.Controllers
 
         // GET: VerifyUser
         [AllowAnonymous]
-        public ActionResult VerifyUser()
+        public ActionResult VerifyUser(string userIdentificator, bool userIdentificatorNotExist)
         {
-            return View();
+            VerifyUserViewModel userToVerify = new VerifyUserViewModel
+            {
+                UserIdentificator = userIdentificator,
+                UserIdentificatorNotExist = userIdentificatorNotExist
+            };
+
+            return View(userToVerify);
+        }
+
+        // CompetenceVerification/VerifyUserCompetencesByQR?userIdentificator=b38ce91a-1cab-43e5-b430-0434d7a542a0
+        // GET: VerifyUserCompetencesByQR
+        [AllowAnonymous]
+        public ActionResult VerifyUserCompetencesByQR(string userIdentificator)
+        {
+            if (_context.userRepository.GetUserById(userIdentificator) != null)
+            {
+                if (this.User.IsInRole("Admin"))
+                {
+                    return RedirectToAction("UserDetails", "Users", new { userIdentificator = userIdentificator });
+                }
+                else
+                {
+                    return RedirectToAction("AnonymouslyVerificationOfUser", "CompetenceVerification", new { userIdentificator = userIdentificator });
+                }
+            }
+            else
+            {
+                return RedirectToAction("VerifyUser", "CompetenceVerification", new { userIdentificator = userIdentificator, userIdentificatorNotExist = true });
+            }
         }
 
         // POST: VerifyUser
@@ -60,27 +88,12 @@ namespace Certification_System.Controllers
                 else
                 {
                     userToVerify.UserIdentificatorNotExist = true;
-                    ModelState.AddModelError("Overall", "Nie istnieje użytkownik o podanym identyfikatorze");
                     return View(userToVerify);
                 }
             }
 
             return View(userToVerify);
         }
-
-        // GET: VerifyUserCompetencesByQR
-        //[AllowAnonymous]
-        //public ActionResult VerifyUserCompetencesByQR(string userIdentificator)
-        //{
-        //    if (this.User.IsInRole("Admin"))
-        //    {
-        //        return RedirectToAction("UserDetails", "Users", new { userIdentificator = userIdentificator });
-        //    }
-        //    else
-        //    {
-        //        return RedirectToAction("AnonymouslyVerificationOfUser", "Users", new { userIdentificator = userIdentificator });
-        //    }
-        //}
 
         // GET: VerifyCertificate
         [AllowAnonymous]
@@ -128,11 +141,9 @@ namespace Certification_System.Controllers
             return View(certificateToVerify);
         }
 
-        // GET: GenerateUserQR
-        [AllowAnonymous]
-        public ActionResult GenerateUserQR(string userIdentificator)
+        // GET: GenerateQRCodeFromGivenURL
+        public ActionResult GenerateQRCodeFromGivenURL(string URL)
         {
-            string URL = @"https://certification-system.azurewebsites.net/Certificates/VerifyUser?UserIdentificator=" + $"{userIdentificator}";
             var QRBitmap = _generatorQR.GenerateQRCode(URL);
 
             using (MemoryStream stream = new MemoryStream())
@@ -142,6 +153,24 @@ namespace Certification_System.Controllers
 
                 return File(ByteArray, "image/jpeg");
             }
+        }
+
+        // GET: GenerateUserQR
+        [AllowAnonymous]
+        public ActionResult GenerateUserQR(string userIdentificator)
+        {
+            string URL = @"https://certification-system.azurewebsites.net/CompetenceVerification/VerifyUserCompetencesByQR?userIdentificator=" + $"{userIdentificator}";
+
+            return RedirectToAction("GenerateQRCodeFromGivenURL", "CompetenceVerification", new { URL = URL});
+        }
+
+        // GET: GenerateCertificateQR
+        [AllowAnonymous]
+        public ActionResult GenerateCertificateQR(string certificationIdentificator)
+        {
+            string URL = @"https://certification-system.azurewebsites.net/CompetenceVerification/VerifyCertificate?CertificateIdentificator=" + $"{certificationIdentificator}";
+
+            return RedirectToAction("GenerateQRCodeFromGivenURL", "CompetenceVerification", new { URL = URL });
         }
     }
 }
