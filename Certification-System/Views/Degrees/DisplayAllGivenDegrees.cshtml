@@ -9,7 +9,7 @@
 <hr />
 
 <div class="m-3">
-    @Html.ActionLink("Przyznaj stopień zawodowy", "AddNewGivenDegree", "Degrees", null, new { @class = "btn btn-primary" })
+    <a asp-action="AddNewGivenDegree" asp-controller="Degrees" class="btn btn-primary">Przyznaj stopień zawodowy</a>
 </div>
 
 <div class="col-12 table-responsive">
@@ -37,27 +37,27 @@
             </tr>
         </thead>
         <tbody>
-            @foreach (var item in Model)
+            @foreach (var givenDegree in Model)
             {
                 <tr>
                     <td>
-                        @Html.DisplayFor(modelItem => item.GivenDegreeIndexer)
+                        @Html.DisplayFor(modelItem => givenDegree.GivenDegreeIndexer)
                     </td>
                     <td>
-                        @Html.DisplayFor(modelItem => item.ReceiptDate)
+                        @Html.DisplayFor(modelItem => givenDegree.ReceiptDate)
                     </td>
                     <td>
-                        @Html.DisplayFor(modelItem => item.ExpirationDate)
+                        @Html.DisplayFor(modelItem => givenDegree.ExpirationDate)
                     </td>
                     <td>
-                        @Html.DisplayFor(model => item.Degree.DegreeIndexer) @Html.DisplayFor(model => item.Degree.Name)
+                        @Html.DisplayFor(model => givenDegree.Degree.DegreeIndexer) @Html.DisplayFor(model => givenDegree.Degree.Name)
                     </td>
                     <td>
-                        @Html.DisplayFor(model => item.User.FirstName) @Html.DisplayFor(model => item.User.LastName)
+                        @Html.DisplayFor(model => givenDegree.User.FirstName) @Html.DisplayFor(model => givenDegree.User.LastName)
                     </td>
                     <td>
-                        @Html.ActionLink("Szczegóły użytkownika", "UserDetails", "Users", new { userIdentificator = item.User.UserIdentificator }, new { @class = "btn btn-info m-1" })
-                        @Html.ActionLink("Edytuj stopień zawodowy", "EditGivenDegree", "Degrees", new { givenDegreeIdentificator = item.GivenDegreeIdentificator }, new { @class = "btn btn-warning m-1" })
+                        <a asp-action="UserDetails" asp-route-userIdentificator="@givenDegree.User.UserIdentificator" asp-controller="Users" class="btn btn-info m-1">Szczegóły użytkownika</a>
+                        <a asp-action="EditGivenDegree" asp-route-givenDegreeIdentificator="@givenDegree.GivenDegreeIdentificator" asp-controller="Degrees" class="btn btn-warning m-1">Edytuj stopień zawodowy</a>
                     </td>
                 </tr>
             }
