@@ -12,7 +12,7 @@
     <h2>Informacje o stopniu zawodowym</h2>
 
     <div class="mt-3 mb-3">
-        @Html.ActionLink("Edytuj", "EditDegree", "Degrees", new { degreeIdentificator = Model.DegreeIdentificator }, new { @class = "btn btn-warning" })
+        <a asp-action="EditDegree" asp-route-degreeIdentificator="@Model.DegreeIdentificator" asp-controller="Degrees" class="btn btn-warning">Edytuj</a>
     </div>
 
     <form asp-action="DegreeDetails">
@@ -33,7 +33,6 @@
                 <label asp-for="Description" class="control-label"></label>
                 <textarea asp-for="Description" class="form-control col-12" style="width:100%; min-width:100%;" disabled></textarea>
             </div>
-
 
             <div>
                 <label asp-for="Branches" class="control-label col-12 p-0"></label>
@@ -61,7 +60,7 @@
 </div>
 
 <div class="mt-3">
-    @Html.ActionLink("Powrót do listy stopni zawodowych", "DisplayAllDegrees", "Degrees", null, new { @class = "btn btn-info" })
+    <a asp-action="DisplayAllDegrees" asp-controller="Degrees" class="btn btn-info">Powrót do listy stopni zawodowych</a>
 </div>
 
 <h2 class="mt-4 mb-4">Certyfikaty wymagane do uzyskania stopnia zawodowego</h2>
@@ -93,32 +92,32 @@
                 </tr>
             </thead>
             <tbody>
-                @foreach (var item in Model.RequiredCertificates)
+                @foreach (var certificate in Model.RequiredCertificates)
                 {
                     <tr>
                         <td>
-                            @Html.DisplayFor(modelItem => item.CertificateIndexer)
+                            @Html.DisplayFor(modelItem => certificate.CertificateIndexer)
                         </td>
                         <td>
-                            @Html.DisplayFor(modelItem => item.Name)
+                            @Html.DisplayFor(modelItem => certificate.Name)
                         </td>
                         <td>
-                            @Html.DisplayFor(modelItem => item.Description)
+                            @Html.DisplayFor(modelItem => certificate.Description)
                         </td>
                         <td>
-                            @Html.DisplayFor(modelItem => item.Depreciated)
+                            @Html.DisplayFor(modelItem => certificate.Depreciated)
                         </td>
                         <td>
                             <ul>
-                                @foreach (var branch in item.Branches)
+                                @foreach (var branch in certificate.Branches)
                                 {
                                     <li>@branch</li>
                                 }
                             </ul>
                         </td>
                         <td>
-                            @Html.ActionLink("Szczegóły", "CertificateDetails", "Certificates", new { certificateIdentificator = item.CertificateIdentificator }, new { @class = "btn btn-info m-1" })
-                            @Html.ActionLink("Aktualizuj", "EditCertificate", "Certificates", new { certificateIdentificator = item.CertificateIdentificator }, new { @class = "btn btn-warning m-1" })
+                            <a asp-action="CertificateDetails" asp-route-certificateIdentificator="@certificate.CertificateIdentificator" asp-controller="Certificates" class="btn btn-info m-1">Szczegóły</a>
+                            <a asp-action="EditCertificate" asp-route-certificateIdentificator="@certificate.CertificateIdentificator" asp-controller="Certificates" class="btn btn-warning m-1">Aktualizuj</a>
                             @*@Html.ActionLink("Usuń", "MarkCertificateAsDepreciated", "Certificates", new { CertificateIdentificator = item.CertificateIndexer }, new { @class = "btn btn-danger" })*@
                         </td>
                     </tr>
@@ -163,45 +162,45 @@ else
                 </tr>
             </thead>
             <tbody>
-                @foreach (var item in Model.RequiredDegrees)
+                @foreach (var degree in Model.RequiredDegrees)
                 {
                     <tr>
                         <td>
-                            @Html.DisplayFor(modelItem => item.DegreeIndexer)
+                            @Html.DisplayFor(modelItem => degree.DegreeIndexer)
                         </td>
                         <td>
-                            @Html.DisplayFor(modelItem => item.Name)
+                            @Html.DisplayFor(modelItem => degree.Name)
                         </td>
                         <td>
-                            @Html.DisplayFor(modelItem => item.Description)
+                            @Html.DisplayFor(modelItem => degree.Description)
                         </td>
                         <td>
                             <ul>
-                                @foreach (var certificate in item.RequiredCertificates)
+                                @foreach (var requiredCertificate in degree.RequiredCertificates)
                                 {
-                                    <li>@certificate</li>
+                                    <li>@requiredCertificate</li>
                                 }
                             </ul>
                         </td>
                         <td>
                             <ul>
-                                @foreach (var degree in item.RequiredDegrees)
+                                @foreach (var requiredDegree in degree.RequiredDegrees)
                                 {
-                                    <li>@degree</li>
+                                    <li>@requiredDegree</li>
                                 }
                             </ul>
                         </td>
                         <td>
                             <ul>
-                                @foreach (var branch in item.Branches)
+                                @foreach (var branch in degree.Branches)
                                 {
                                     <li>@branch</li>
                                 }
                             </ul>
                         </td>
                         <td>
-                            @Html.ActionLink("Szczegóły", "DegreeDetails", "Degrees", new { degreeIdentificator = item.DegreeIdentificator }, new { @class = "btn btn-info m-1" })
-                            @Html.ActionLink("Aktualizuj", "EditDegree", "Degrees", new { degreeIdentificator = item.DegreeIdentificator }, new { @class = "btn btn-warning m-1" })
+                            <a asp-action="DegreeDetails" asp-route-degreeIdentificator="@degree.DegreeIdentificator" asp-controller="Degrees" class="btn btn-info m-1">Szczegóły</a>
+                            <a asp-action="EditDegree" asp-route-degreeIdentificator="@degree.DegreeIdentificator" asp-controller="Degrees" class="btn btn-warning m-1">Aktualizuj</a>
                         </td>
                     </tr>
                 }
@@ -273,7 +272,7 @@ else
                             </ul>
                         </td>
                         <td>
-                            @Html.ActionLink("Szczegóły", "UserDetails", "Users", new { userIdentificator = user.UserIdentificator }, new { @class = "btn btn-info" })
+                            <a asp-action="UserDetails" asp-route-userIdentificator="@user.UserIdentificator" asp-controller="Users" class="btn btn-info m-1">Szczegóły</a>
                         </td>
                     </tr>
                 }
@@ -285,7 +284,6 @@ else
 {
     <div class="mt-4 mb-4 alert alert-warning">Brak użytkowników posiadających dany stopień zawodowy</div>
 }
-
 
 @section Scripts{
     <script>

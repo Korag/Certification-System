@@ -8,7 +8,7 @@
 <h2>Lista wszystkich stopni zawodowych</h2>
 
 <div class="m-3">
-    @Html.ActionLink("Dodaj kolejny stopień zawodowy", "AddNewDegree", "Degrees", null, new { @class = "btn btn-primary" })
+    <a asp-action="AddNewDegree" asp-controller="Degrees" class="btn btn-primary">Dodaj kolejny stopień zawodowy</a>
 </div>
 
 <div class="col-12 table-responsive">
@@ -39,45 +39,45 @@
             </tr>
         </thead>
         <tbody>
-            @foreach (var item in Model)
+            @foreach (var degree in Model)
             {
                 <tr>
                     <td>
-                        @Html.DisplayFor(modelItem => item.DegreeIndexer)
+                        @Html.DisplayFor(modelItem => degree.DegreeIndexer)
                     </td>
                     <td>
-                        @Html.DisplayFor(modelItem => item.Name)
+                        @Html.DisplayFor(modelItem => degree.Name)
                     </td>
                     <td>
-                        @Html.DisplayFor(modelItem => item.Description)
+                        @Html.DisplayFor(modelItem => degree.Description)
                     </td>
                     <td>
                         <ul>
-                            @foreach (var certificate in item.RequiredCertificates)
+                            @foreach (var requiredCertificate in degree.RequiredCertificates)
                             {
-                                <li>@certificate</li>
+                                <li>@requiredCertificate</li>
                             }
                         </ul>
                     </td>
                     <td>
                         <ul>
-                            @foreach (var degree in item.RequiredDegrees)
+                            @foreach (var requiredDegree in degree.RequiredDegrees)
                             {
-                                <li>@degree</li>
+                                <li>@requiredDegree</li>
                             }
                         </ul>
                     </td>
                     <td>
                         <ul>
-                            @foreach (var branch in item.Branches)
+                            @foreach (var branch in degree.Branches)
                             {
                                 <li>@branch</li>
                             }
                         </ul>
                     </td>
                     <td>
-                        @Html.ActionLink("Szczegóły", "DegreeDetails", "Degrees", new { degreeIdentificator = item.DegreeIdentificator }, new { @class = "btn btn-info m-1" })
-                        @Html.ActionLink("Aktualizuj", "EditDegree", "Degrees", new { degreeIdentificator = item.DegreeIdentificator }, new { @class = "btn btn-warning m-1" })
+                        <a asp-action="DegreeDetails" asp-route-degreeIdentificator="@degree.DegreeIdentificator" asp-controller="Degrees" class="btn btn-info m-1">Szczegóły</a>
+                        <a asp-action="EditDegree" asp-route-degreeIdentificator="@degree.DegreeIdentificator" asp-controller="Degrees" class="btn btn-warning m-1">Aktualizuj</a>
                     </td>
                 </tr>
             }

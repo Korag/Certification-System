@@ -78,8 +78,8 @@ else
                     </ul>
                 </td>
                 <td>
-                    @Html.ActionLink("Szczegóły", "DegreeDetails", "Degrees", new { degreeIdentificator = Model.DegreeIdentificator }, new { @class = "btn btn-info m-1" })
-                    @Html.ActionLink("Aktualizuj", "EditDegree", "DegreeDetailsDegrees", new { degreeIdentificator = Model.DegreeIdentificator }, new { @class = "btn btn-warning m-1" })
+                    <a asp-action="DegreeDetails" asp-route-degreeIdentificator="@Model.DegreeIdentificator" asp-controller="Degrees" class="btn btn-info m-1">Szczegóły</a>
+                    <a asp-action="EditDegree" asp-route-degreeIdentificator="@Model.DegreeIdentificator" asp-controller="Degrees" class="btn btn-warning m-1">Aktualizuj</a>
                 </td>
             </tr>
         </tbody>
@@ -87,8 +87,8 @@ else
 </div>
 
 <div class="mt-3">
-    @Html.ActionLink("Dodaj stopień zawodowy", "AddNewDegree", "Degrees", null, new { @class = "btn btn-primary" })
-    @Html.ActionLink("Powrót do listy stopni zawodowych", "DisplayAllDegrees", "Degrees", null, new { @class = "btn btn-info" })
+    <a asp-action="AddNewDegree" asp-controller="Degrees" class="btn btn-primary">Dodaj stopień zawodowy</a>
+    <a asp-action="DisplayAllDegrees" asp-controller="Degrees" class="btn btn-info">Powrót do listy stopni zawodowych</a>
 </div>
 
 @section Scripts{
