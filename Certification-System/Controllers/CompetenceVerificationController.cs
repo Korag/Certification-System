@@ -95,62 +95,62 @@ namespace Certification_System.Controllers
             return View(userToVerify);
         }
 
-        // GET: VerifyCertificate
+        // GET: VerifyGivenCertificate
         [AllowAnonymous]
-        public ActionResult VerifyCertificate(string givenCertificateIdentificator, bool certificateIdentificatorNotExist, bool certificateIdentificatorBadFormat)
+        public ActionResult VerifyGivenCertificate(string givenCertificateIdentificator, bool givenCertificateIdentificatorNotExist, bool givenCertificateIdentificatorBadFormat)
         {
-            VerifyCertificateViewModel certificateToVerify = new VerifyCertificateViewModel
+            VerifyGivenCertificateViewModel givenCertificateToVerify = new VerifyGivenCertificateViewModel
             {
                 GivenCertificateIdentificator = givenCertificateIdentificator,
-                CertificateIdentificatorNotExist = certificateIdentificatorNotExist,
-                CertificateIdentificatorBadFormat = certificateIdentificatorBadFormat
+                GivenCertificateIdentificatorNotExist = givenCertificateIdentificatorNotExist,
+                GivenCertificateIdentificatorBadFormat = givenCertificateIdentificatorBadFormat
             };
 
-            return View(certificateToVerify);
+            return View(givenCertificateToVerify);
         }
 
-        // POST: VerifyCertificate
+        // POST: VerifyGivenCertificate
         [AllowAnonymous]
         [HttpPost]
-        public ActionResult VerifyCertificate(VerifyCertificateViewModel certificateToVerify)
+        public ActionResult VerifyGivenCertificate(VerifyGivenCertificateViewModel givenCertificateToVerify)
         {
             if (ModelState.IsValid)
             {
                 try
                 {
-                    ObjectId.Parse(certificateToVerify.GivenCertificateIdentificator);
+                    ObjectId.Parse(givenCertificateToVerify.GivenCertificateIdentificator);
                 }
                 catch (System.Exception)
                 {
-                    certificateToVerify.CertificateIdentificatorBadFormat = true;
-                    return View(certificateToVerify);
+                    givenCertificateToVerify.GivenCertificateIdentificatorBadFormat = true;
+                    return View(givenCertificateToVerify);
                 }
 
-                if (_context.givenCertificateRepository.GetGivenCertificateById(certificateToVerify.GivenCertificateIdentificator) != null)
+                if (_context.givenCertificateRepository.GetGivenCertificateById(givenCertificateToVerify.GivenCertificateIdentificator) != null)
                 {
                     if (this.User.IsInRole("Admin"))
                     {
-                        return RedirectToAction("GivenCertificateDetails", "Certificates", new { givenCertificateIdentificator = certificateToVerify.GivenCertificateIdentificator });
+                        return RedirectToAction("GivenCertificateDetails", "Certificates", new { givenCertificateIdentificator = givenCertificateToVerify.GivenCertificateIdentificator });
                     }
                     else
                     {
-                        return RedirectToAction("AnonymouslyVerificationOfCertificate", "Certificates", new { givenCertificateIdentificator = certificateToVerify.GivenCertificateIdentificator });
+                        return RedirectToAction("AnonymouslyVerificationOfGivenCertificate", "Certificates", new { givenCertificateIdentificator = givenCertificateToVerify.GivenCertificateIdentificator });
                     }
                 }
                 else
                 {
-                    certificateToVerify.CertificateIdentificatorNotExist = true;
-                    return View(certificateToVerify);
+                    givenCertificateToVerify.GivenCertificateIdentificatorNotExist = true;
+                    return View(givenCertificateToVerify);
                 }
             }
 
-            return View(certificateToVerify);
+            return View(givenCertificateToVerify);
         }
 
-        // CompetenceVerification/VerifyCertificateByQR?givenCertificateIdentificator=5ce002107e5ac431745de4cd
-        // POST: VerifyCertificateByQR
+        // CompetenceVerification/VerifyGivenCertificateByQR?givenCertificateIdentificator=5ce002107e5ac431745de4cd
+        // GET: VerifyGivenCertificateByQR
         [AllowAnonymous]
-        public ActionResult VerifyCertificateByQR(string givenCertificateIdentificator)
+        public ActionResult VerifyGivenCertificateByQR(string givenCertificateIdentificator)
         {
             try
             {
@@ -158,7 +158,7 @@ namespace Certification_System.Controllers
             }
             catch (System.Exception)
             {
-                return RedirectToAction("VerifyCertificate", "CompetenceVerification", new { givenCertificateIdentificator = givenCertificateIdentificator, certificateIdentificatorBadFormat = true });
+                return RedirectToAction("VerifyGivenCertificate", "CompetenceVerification", new { givenCertificateIdentificator = givenCertificateIdentificator, givenCertificateIdentificatorBadFormat = true });
             }
 
             if (_context.givenCertificateRepository.GetGivenCertificateById(givenCertificateIdentificator) != null)
@@ -169,12 +169,95 @@ namespace Certification_System.Controllers
                 }
                 else
                 {
-                    return RedirectToAction("AnonymouslyVerificationOfCertificate", "Certificates", new { givenCertificateIdentificator = givenCertificateIdentificator });
+                    return RedirectToAction("AnonymouslyVerificationOfGivenCertificate", "Certificates", new { givenCertificateIdentificator = givenCertificateIdentificator });
                 }
             }
             else
             {
-                return RedirectToAction("VerifyCertificate", "CompetenceVerification", new { givenCertificateIdentificator = givenCertificateIdentificator, certificateIdentificatorNotExist = true });
+                return RedirectToAction("VerifyGivenCertificate", "CompetenceVerification", new { givenCertificateIdentificator = givenCertificateIdentificator, givenCertificateIdentificatorNotExist = true });
+            }
+        }
+
+        // GET: VerifyGivenDegree
+        [AllowAnonymous]
+        public ActionResult VerifyGivenDegree(string givenDegreeIdentificator, bool givenDegreeIdentificatorNotExist, bool givenDegreeIdentificatorBadFormat)
+        {
+            VerifyGivenDegreeViewModel givenDegreeToVerify = new VerifyGivenDegreeViewModel
+            {
+                GivenDegreeIdentificator = givenDegreeIdentificator,
+                GivenDegreeIdentificatorNotExist = givenDegreeIdentificatorNotExist,
+                GivenDegreeIdentificatorBadFormat = givenDegreeIdentificatorBadFormat
+            };
+
+            return View(givenDegreeToVerify);
+        }
+
+        // POST: VerifyGivenDegree
+        [AllowAnonymous]
+        [HttpPost]
+        public ActionResult VerifyGivenDegree(VerifyGivenDegreeViewModel givenDegreeToVerify)
+        {
+            if (ModelState.IsValid)
+            {
+                try
+                {
+                    ObjectId.Parse(givenDegreeToVerify.GivenDegreeIdentificator);
+                }
+                catch (System.Exception)
+                {
+                    givenDegreeToVerify.GivenDegreeIdentificatorBadFormat = true;
+                    return View(givenDegreeToVerify);
+                }
+
+                if (_context.givenDegreeRepository.GetGivenDegreeById(givenDegreeToVerify.GivenDegreeIdentificator) != null)
+                {
+                    if (this.User.IsInRole("Admin"))
+                    {
+                        return RedirectToAction("GivenDegreeDetails", "GivenDegree", new { givenDegreeIdentificator = givenDegreeToVerify.GivenDegreeIdentificator });
+                    }
+                    else
+                    {
+                        return RedirectToAction("AnonymouslyVerificationOfGivenDegree", "GivenDegree", new { givenDegreeIdentificator = givenDegreeToVerify.GivenDegreeIdentificator });
+                    }
+                }
+                else
+                {
+                    givenDegreeToVerify.GivenDegreeIdentificatorNotExist = true;
+                    return View(givenDegreeToVerify);
+                }
+            }
+
+            return View(givenDegreeToVerify);
+        }
+
+        // CompetenceVerification/VerifyGivenDegreeByQR?givenDegreeIdentificator=5d4aa2399dd655477c2c8877
+        // GET: VerifyGivenDegreeByQR
+        [AllowAnonymous]
+        public ActionResult VerifyGivenDegreeByQR(VerifyGivenDegreeViewModel givenDegreeToVerify)
+        {
+            try
+            {
+                ObjectId.Parse(givenDegreeToVerify.GivenDegreeIdentificator);
+            }
+            catch (System.Exception)
+            {
+                return RedirectToAction("VerifyGivenDegree", "CompetenceVerification", new { givenDegreeIdentificator = givenDegreeToVerify.GivenDegreeIdentificator, givenDegreeIdentificatorBadForma = true });
+            }
+
+            if (_context.givenDegreeRepository.GetGivenDegreeById(givenDegreeToVerify.GivenDegreeIdentificator) != null)
+            {
+                if (this.User.IsInRole("Admin"))
+                {
+                    return RedirectToAction("GivenDegreeDetails", "GivenDegree", new { givenDegreeIdentificator = givenDegreeToVerify.GivenDegreeIdentificator });
+                }
+                else
+                {
+                    return RedirectToAction("AnonymouslyVerificationOfGivenDegree", "GivenDegree", new { givenDegreeIdentificator = givenDegreeToVerify.GivenDegreeIdentificator });
+                }
+            }
+            else
+            {
+                return RedirectToAction("VerifyGivenDegree", "CompetenceVerification", new { givenDegreeIdentificator = givenDegreeToVerify.GivenDegreeIdentificator, givenDegreeIdentificatorNotExist = true });
             }
         }
 
@@ -201,11 +284,20 @@ namespace Certification_System.Controllers
             return RedirectToAction("GenerateQRCodeFromGivenURL", "CompetenceVerification", new { URL = URL });
         }
 
-        // GET: GenerateCertificateQR
+        // GET: GenerateGivenCertificateQR
         [AllowAnonymous]
-        public ActionResult GenerateCertificateQR(string givenCertificateIdentificator)
+        public ActionResult GenerateGivenCertificateQR(string givenCertificateIdentificator)
         {
-            string URL = @"https://certification-system.azurewebsites.net/CompetenceVerification/VerifyCertificateByQR?givenCertificateIdentificator=" + $"{givenCertificateIdentificator}";
+            string URL = @"https://certification-system.azurewebsites.net/CompetenceVerification/VerifyGivenCertificateByQR?givenCertificateIdentificator=" + $"{givenCertificateIdentificator}";
+
+            return RedirectToAction("GenerateQRCodeFromGivenURL", "CompetenceVerification", new { URL = URL });
+        }
+
+        // GET: GenerateGivenDegreeQR
+        [AllowAnonymous]
+        public ActionResult GenerateGivenDegreeQR(string givenDegreeIdentificator)
+        {
+            string URL = @"https://certification-system.azurewebsites.net/CompetenceVerification/VerifyGivenDegreeByQR?givenDegreeIdentificator=" + $"{givenDegreeIdentificator}";
 
             return RedirectToAction("GenerateQRCodeFromGivenURL", "CompetenceVerification", new { URL = URL });
         }

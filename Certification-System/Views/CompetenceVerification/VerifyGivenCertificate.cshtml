@@ -1,0 +1,52 @@
+﻿@model Certification_System.DTOViewModels.VerifyGivenCertificateViewModel
+
+@{
+    ViewData["Title"] = "VerifyGivenCertificate";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+<h1>Weryfikuj certyfikat</h1>
+<hr />
+
+<div>
+    <form asp-action="VerifyGivenCertificate">
+
+        <div class="col-md-6 col-xl-6 col-sm-8 col-xs-10 m-auto p-3 shadow p-3 mb-5 bg-light rounded border border-primary rounded-bottom" style="opacity:0.80">
+
+            <div class="form-group">
+                <label asp-for="GivenCertificateIdentificator" class="control-label"></label>
+                <div>
+                    <input asp-for="GivenCertificateIdentificator" class="form-control col-12" />
+                    <div class="row justify-content-center">
+                        <span asp-validation-for="GivenCertificateIdentificator" class="text-danger"></span>
+                    </div>
+                </div>
+            </div>
+
+            @if (Model.GivenCertificateIdentificatorNotExist == true)
+            {
+                <div class="row justify-content-center alert alert-danger validation-model">Nie istnieje certyfikat o podanym identyfikatorze</div>
+            }
+
+            @if (Model.GivenCertificateIdentificatorBadFormat == true)
+            {
+                <div class="row justify-content-center alert alert-danger validation-model">Wprowadzony identyfikator certyfikatu ma niepoprawny format</div>
+            }
+
+            <div asp-validation-summary="ModelOnly" class="row justify-content-center alert alert-danger validation-model"></div>
+
+            <div class="row justify-content-center">
+                <input type="submit" value="Weryfikuj" class="btn btn-primary" />
+            </div>
+        </div>
+
+    </form>
+</div>
+
+<div class="mt-3">
+    <a asp-action="VerifyCompetenceManual" asp-controller="CompetenceVerification" class="btn btn-info">Powrót do panelu weryfikacji</a>
+</div>
+
+@section Scripts {
+    @{await Html.RenderPartialAsync("_ValidationScriptsPartial");}
+}

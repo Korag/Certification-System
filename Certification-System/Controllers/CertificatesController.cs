@@ -311,9 +311,9 @@ namespace Certification_System.Controllers
             return View(CertificateDetails);
         }
 
-        // GET: AnonymouslyVerificationOfCertificate
+        // GET: AnonymouslyVerificationOfGivenCertificate
         [AllowAnonymous]
-        public ActionResult AnonymouslyVerificationOfCertificate(string givenCertificateIdentificator)
+        public ActionResult AnonymouslyVerificationOfGivenCertificate(string givenCertificateIdentificator)
         {
             var GivenCertificate = _context.givenCertificateRepository.GetGivenCertificateById(givenCertificateIdentificator);
 

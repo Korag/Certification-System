@@ -1,34 +1,34 @@
-﻿@model Certification_System.DTOViewModels.VerifyCertificateViewModel
+﻿@model Certification_System.DTOViewModels.VerifyGivenDegreeViewModel
 
 @{
-    ViewData["Title"] = "VerifyCertificate";
+    ViewData["Title"] = "VerifyGivenDegree";
     Layout = "~/Views/Shared/_Layout.cshtml";
 }
 
-<h1>Weryfikuj certyfikat</h1>
+<h1>Weryfikuj stopień zawodowy</h1>
 <hr />
 
 <div>
-    <form asp-action="VerifyCertificate">
+    <form asp-action="VerifyGivenDegree">
 
         <div class="col-md-6 col-xl-6 col-sm-8 col-xs-10 m-auto p-3 shadow p-3 mb-5 bg-light rounded border border-primary rounded-bottom" style="opacity:0.80">
 
             <div class="form-group">
-                <label asp-for="GivenCertificateIdentificator" class="control-label"></label>
+                <label asp-for="GivenDegreeIdentificator" class="control-label"></label>
                 <div>
-                    <input asp-for="GivenCertificateIdentificator" class="form-control col-12" />
+                    <input asp-for="GivenDegreeIdentificator" class="form-control col-12" />
                     <div class="row justify-content-center">
-                        <span asp-validation-for="GivenCertificateIdentificator" class="text-danger"></span>
+                        <span asp-validation-for="GivenDegreeIdentificator" class="text-danger"></span>
                     </div>
                 </div>
             </div>
 
-            @if (Model.CertificateIdentificatorNotExist == true)
+            @if (Model.GivenDegreeIdentificatorNotExist == true)
             {
                 <div class="row justify-content-center alert alert-danger validation-model">Nie istnieje certyfikat o podanym identyfikatorze</div>
             }
 
-            @if (Model.CertificateIdentificatorBadFormat == true)
+            @if (Model.GivenDegreeIdentificatorBadFormat == true)
             {
                 <div class="row justify-content-center alert alert-danger validation-model">Wprowadzony identyfikator certyfikatu ma niepoprawny format</div>
             }
