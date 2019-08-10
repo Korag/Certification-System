@@ -6,5 +6,7 @@ namespace Certification_System.DTOViewModels
     {
         [Display(Name="Identyfikator użytkownika")]
         public string UserIdentificator { get; set; }
+
+        public bool UserIdentificatorNotExist { get; set; }
     }
 }

@@ -81,7 +81,7 @@
                         <a asp-action="EditUser" asp-route-userIdentificator="@user.UserIdentificator" asp-controller="Users" class="btn btn-warning m-1">Edytuj</a>
                         <a asp-action="" asp-route-userIdentificator="@user.UserIdentificator" asp-controller="Certificates" class="btn btn-primary m-1">Nadaj certyfikat</a>
                         <a asp-action="" asp-route-userIdentificator="@user.UserIdentificator" asp-controller="Degrees" class="btn btn-secondary m-1">Nadaj stopień zawodowy</a>
-                        <a asp-action="GenerateUserQR" asp-route-userIdentificator="@user.UserIdentificator" asp-controller="Certificates" class="btn btn-dark m-1">Generuj kod QR</a>
+                        <a asp-action="GenerateUserQR" asp-route-userIdentificator="@user.UserIdentificator" asp-controller="CompetenceVerificationController" class="btn btn-dark m-1">Generuj kod QR</a>
                     </td>
                 </tr>
             }

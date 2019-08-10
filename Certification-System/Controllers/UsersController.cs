@@ -261,9 +261,9 @@ namespace Certification_System.Controllers
         }
 
 
-        // GET: AnonymousVerificationOfUser
+        // GET: AnonymouslyVerificationOfUser
         [AllowAnonymous]
-        public ActionResult AnonymousVerificationOfUser(string userIdentificator)
+        public ActionResult AnonymouslyVerificationOfUser(string userIdentificator)
         {
             var User = _context.userRepository.GetUserById(userIdentificator);
             var GivenCertificates = _context.givenCertificateRepository.GetGivenCertificatesById(User.GivenCertificates);

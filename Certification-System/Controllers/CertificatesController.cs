@@ -311,134 +311,23 @@ namespace Certification_System.Controllers
             return View(CertificateDetails);
         }
 
-        // GET: VerifyUserCompetencesByQR
+        // GET: AnonymouslyVerificationOfCertificate
         [AllowAnonymous]
-        public ActionResult VerifyUserCompetencesByQR(string userIdentificator)
+        public ActionResult AnonymouslyVerificationOfCertificate(string givenCertificateIdentificator)
         {
-            if (this.User.IsInRole("Admin"))
-            {
-                return RedirectToAction("UserDetails", "Users", new { userIdentificator = userIdentificator });
-            }
-            else
-            {
-                return RedirectToAction("AnonymousVerificationOfUser", "Users", new { userIdentificator = userIdentificator });
-            }
-        }
+            var GivenCertificate = _context.givenCertificateRepository.GetGivenCertificateById(givenCertificateIdentificator);
 
-        // GET: VerifyUserCertificateByQR
-        [AllowAnonymous]
-        public ActionResult VerifyUserCertificateByQR(string givenCertificateIdentificator)
-        {
-            if (givenCertificateIdentificator != null)
-            {
-                var GivenCertificate = _context.givenCertificateRepository.GetGivenCertificateById(givenCertificateIdentificator);
+            var Certificate = _context.certificateRepository.GetCertificateById(GivenCertificate.Certificate);
+            var User = _context.userRepository.GetUserByGivenCertificateId(GivenCertificate.GivenCertificateIdentificator);
 
-                var Certificate = _context.certificateRepository.GetCertificateById(GivenCertificate.Certificate);
-                var User = _context.userRepository.GetUserByGivenCertificateId(GivenCertificate.GivenCertificateIdentificator);
+            DisplayCrucialDataUserViewModel userViewModel = _mapper.Map<DisplayCrucialDataUserViewModel>(User);
+            DisplayCrucialDataCertificateViewModel certificateViewModel = _mapper.Map<DisplayCrucialDataCertificateViewModel>(Certificate);
 
-                DisplayCrucialDataUserViewModel userViewModel = _mapper.Map<DisplayCrucialDataUserViewModel>(User);
-                DisplayCrucialDataCertificateViewModel certificateViewModel = _mapper.Map<DisplayCrucialDataCertificateViewModel>(Certificate);
+            DisplayGivenCertificateViewModel VerifiedGivenCertificate = _mapper.Map<DisplayGivenCertificateViewModel>(GivenCertificate);
+            VerifiedGivenCertificate.Certificate = certificateViewModel;
+            VerifiedGivenCertificate.User = userViewModel;
 
-                DisplayGivenCertificateViewModel VerifiedGivenCertificate = _mapper.Map<DisplayGivenCertificateViewModel>(GivenCertificate);
-                VerifiedGivenCertificate.Certificate = certificateViewModel;
-                VerifiedGivenCertificate.User = userViewModel;
-
-                return View(VerifiedGivenCertificate);
-            }
-
-            return RedirectToAction("Login", "Account");
-        }
-
-        // GET: VerifyUserOrSingleCertificateManual
-        [AllowAnonymous]
-        public ActionResult VerifyUserOrSingleCertificateManual()
-        {
-            return View();
-        }
-
-        // GET: VerifyUser
-        [AllowAnonymous]
-        public ActionResult VerifyUser(bool userIdentificatorNotValid)
-        {
-            ViewBag.UserIdentificatorNotValid = userIdentificatorNotValid;
-
-            return View();
-        }
-
-        // GET: VerifyCertificate
-        [AllowAnonymous]
-        public ActionResult VerifyCertificate(bool certificateIdentificatorNotValid)
-        {
-            ViewBag.CertificateIdentificatorNotValid = certificateIdentificatorNotValid;
-
-            return View();
-        }
-
-        // POST: VerifyUser
-        [AllowAnonymous]
-        [HttpPost]
-        public ActionResult VerifyUser(VerifyUserViewModel userToVerify)
-        {
-            if (ModelState.IsValid)
-            {
-                if (_context.userRepository.GetUserById(userToVerify.UserIdentificator) != null)
-                {
-                    return RedirectToAction("VerifyUserCompetencesByQR", "Certificates", new { userIdentificator = userToVerify.UserIdentificator });
-                }
-                else
-                {
-                    return RedirectToAction("VerifyUser", "Certificates", new { userIdentificatorNotValid = true });
-                }
-            }
-
-            return View(userToVerify);
-        }
-
-        // POST: VerifyCertificate
-        [AllowAnonymous]
-        [HttpPost]
-        public ActionResult VerifyCertificate(VerifyCertificateViewModel certificateToVerify)
-        {
-            if (ModelState.IsValid)
-            {
-                try
-                {
-                    ObjectId TryObjectIdParse;
-                    ObjectId.TryParse(certificateToVerify.CertificateIdentificator, out TryObjectIdParse);
-                }
-                catch (System.Exception)
-                {
-                    ModelState.AddModelError("UserIdentificator", "Wprowadzony identyfikator został wprowadzony nieprawidłowo");
-                    return View(certificateToVerify);
-                }
-
-                if (_context.certificateRepository.GetCertificateById(certificateToVerify.CertificateIdentificator) != null)
-                {
-                    return RedirectToAction("VerifyUserCertificateByQR", "Certificates", new { givenCertificateIdentificator = certificateToVerify.CertificateIdentificator });
-                }
-                else
-                {
-                    return RedirectToAction("VerifyCertificate", "Certificates", new { certificatesIdentificatorNotValid = true });
-                }
-            }
-
-            return View(certificateToVerify);
-        }
-
-        // GET: GenerateUserQR
-        [AllowAnonymous]
-        public ActionResult GenerateUserQR(string userIdentificator)
-        {
-            string URL = @"https://certification-system.azurewebsites.net/Certificates/VerifyUserCompetencesByQR?userIdentificator=" + $"{userIdentificator}";
-            var QRBitmap = _generatorQR.GenerateQRCode(URL);
-
-            using (MemoryStream stream = new MemoryStream())
-            {
-                QRBitmap.Save(stream, System.Drawing.Imaging.ImageFormat.Png);
-                var ByteArray = stream.ToArray();
-
-                return File(ByteArray, "image/jpeg");
-            }
+            return View(VerifiedGivenCertificate);
         }
     }
 }
