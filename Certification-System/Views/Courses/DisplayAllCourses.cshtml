@@ -9,7 +9,7 @@
 <hr/>
 
 <div class="m-3">
-    @Html.ActionLink("Dodaj nowy kurs", "AddNewCourse", "Courses", null, new { @class = "btn btn-primary" })
+    <a asp-action="AddNewCourse" asp-controller="Courses" class="btn btn-primary">Dodaj nowy kurs</a>
 </div>
 
 <div class="col-12 table-responsive">
@@ -52,47 +52,47 @@
             </tr>
         </thead>
         <tbody>
-            @foreach (var item in Model)
+            @foreach (var course in Model)
             {
                 <tr>
                     <td>
-                        @Html.DisplayFor(modelItem => item.CourseIndexer)
+                        @Html.DisplayFor(modelItem => course.CourseIndexer)
                     </td>
                     <td>
-                        @Html.DisplayFor(modelItem => item.Name)
+                        @Html.DisplayFor(modelItem => course.Name)
                     </td>
                     <td>
-                        @Html.DisplayFor(modelItem => item.Description)
+                        @Html.DisplayFor(modelItem => course.Description)
                     </td>
                     <td>
-                        @Html.DisplayFor(modelItem => item.DateOfStart)
+                        @Html.DisplayFor(modelItem => course.DateOfStart)
                     </td>
                     <td>
-                        @Html.DisplayFor(modelItem => item.DateOfEnd)
+                        @Html.DisplayFor(modelItem => course.DateOfEnd)
                     </td>
                     <td>
-                        @Html.DisplayFor(modelItem => item.EnrolledUsersLimit)
+                        @Html.DisplayFor(modelItem => course.EnrolledUsersLimit)
                     </td>
                     <td>
-                        @Html.DisplayFor(modelItem => item.EnrolledUsersQuantity)
+                        @Html.DisplayFor(modelItem => course.EnrolledUsersQuantity)
                     </td>
                     <td>
-                        @Html.DisplayFor(modelItem => item.CourseEnded)
+                        @Html.DisplayFor(modelItem => course.CourseEnded)
                     </td>
                     <td>
-                        @Html.DisplayFor(modelItem => item.CourseLength)
+                        @Html.DisplayFor(modelItem => course.CourseLength)
                     </td>
                     <td>
                         <ul>
-                            @foreach (var branch in item.Branches)
+                            @foreach (var branch in course.Branches)
                             {
                                 <li>@branch</li>
                             }
                         </ul>
                     </td>
                     <td>
-                        @Html.ActionLink("Szczegóły", "CourseDetails", new { courseIdentificator = item.CourseIdentificator }, new { @class = "btn btn-info m-1" })
-                        @Html.ActionLink("Edytuj", "EditCourse", new { courseIdentificator = item.CourseIdentificator }, new { @class = "btn btn-warning m-1" })
+                        <a asp-action="CourseDetails" asp-route-courseIdentificator="@course.CourseIdentificator" asp-controller="Courses" class="btn btn-info m-1">Szczegóły</a>
+                        <a asp-action="EditCourse" asp-route-courseIdentificator="@course.CourseIdentificator" asp-controller="Courses" class="btn btn-warning m-1">Edytuj</a>
                     </td>
                 </tr>
             }

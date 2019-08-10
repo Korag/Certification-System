@@ -107,33 +107,33 @@ else
                 </tr>
             </thead>
             <tbody>
-                @foreach (var Meeting in Model.Meetings)
+                @foreach (var meeting in Model.Meetings)
                 {
                     <tr>
                         <td>
-                            @Html.DisplayFor(model => Meeting.MeetingIndexer)
+                            @Html.DisplayFor(model => meeting.MeetingIndexer)
                         </td>
                         <td>
-                            @Html.DisplayFor(model => Meeting.DateOfMeeting)
+                            @Html.DisplayFor(model => meeting.DateOfMeeting)
                         </td>
                         <td>
-                            @Html.DisplayFor(model => Meeting.Country)
+                            @Html.DisplayFor(model => meeting.Country)
                         </td>
                         <td>
-                            @Html.DisplayFor(model => Meeting.City)
+                            @Html.DisplayFor(model => meeting.City)
                         </td>
                         <td>
-                            @Html.DisplayFor(model => Meeting.PostCode)
+                            @Html.DisplayFor(model => meeting.PostCode)
                         </td>
                         <td>
-                            @Html.DisplayFor(model => Meeting.Address)
+                            @Html.DisplayFor(model => meeting.Address)
                         </td>
                         <td>
-                            @Html.DisplayFor(model => Meeting.NumberOfApartment)
+                            @Html.DisplayFor(model => meeting.NumberOfApartment)
                         </td>
                         <td>
                             <ul>
-                                @foreach (var instructor in Meeting.InstructorsCredentials)
+                                @foreach (var instructor in meeting.InstructorsCredentials)
                                 {
                                     <li>@instructor</li>
                                 }
@@ -147,10 +147,10 @@ else
 </div>
 
 <div class="mt-3">
-    @Html.ActionLink("Dodaj kurs", "AddNewCourse", "Courses", null, new { @class = "btn btn-primary m-1" })
-    @Html.ActionLink("Szczegóły", "CourseDetails", "Courses", new { courseIdentificator = Model.CourseIdentificator }, new { @class = "btn btn-info m-1" })
-    @Html.ActionLink("Aktualizuj", "EditCourse", "Courses", new { courseIdentificator = Model.CourseIdentificator }, new { @class = "btn btn-warning m-1" })
-    @Html.ActionLink("Lista wszystkich kursów", "DisplayAllCourses", "Courses", null, new { @class = "btn btn-success m-1" })
+    <a asp-action="AddNewCourse" asp-controller="Courses" class="btn btn-primary m-1">Dodaj kurs"</a>
+    <a asp-action="CourseDetails" asp-route-courseIdentificator="@Model.CourseIdentificator" asp-controller="Courses" class="btn btn-info m-1">Szczegóły</a>
+    <a asp-action="EditCourse" asp-route-courseIdentificator="@Model.CourseIdentificator" asp-controller="Courses" class="btn btn-warning m-1">Aktualizuj</a>
+    <a asp-action="DisplayAllCourses" asp-controller="Courses" class="btn btn-success m-1">Lista wszystkich kursów</a>
 </div>
 
 @section Scripts{

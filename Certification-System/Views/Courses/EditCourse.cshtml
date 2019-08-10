@@ -17,30 +17,36 @@
 
             <div class="form-group">
                 <label asp-for="CourseIndexer" class="control-label"></label>
-                <input asp-for="CourseIndexer" class="form-control col-12" />
-                <div class="row justify-content-center">
-                    <span asp-validation-for="CourseIndexer" class="text-danger"></span>
+                <div>
+                    <input asp-for="CourseIndexer" class="form-control col-12" />
+                    <div class="row justify-content-center">
+                        <span asp-validation-for="CourseIndexer" class="text-danger"></span>
+                    </div>
                 </div>
             </div>
 
             <div class="form-group">
                 <label asp-for="Name" class="control-label"></label>
-                <input asp-for="Name" class="form-control col-12" />
-                <div class="row justify-content-center">
-                    <span asp-validation-for="Name" class="text-danger"></span>
+                <div>
+                    <input asp-for="Name" class="form-control col-12" />
+                    <div class="row justify-content-center">
+                        <span asp-validation-for="Name" class="text-danger"></span>
+                    </div>
                 </div>
             </div>
 
             <div class="form-group">
                 <label asp-for="Description" class="control-label"></label>
-                <input asp-for="Description" class="form-control col-12" />
-                <div class="row justify-content-center">
-                    <span asp-validation-for="Description" class="text-danger"></span>
+                <div>
+                    <input asp-for="Description" class="form-control col-12" />
+                    <div class="row justify-content-center">
+                        <span asp-validation-for="Description" class="text-danger"></span>
+                    </div>
                 </div>
             </div>
 
             <div class="form-group">
-                @Html.LabelFor(model => model.DateOfStart, htmlAttributes: new { @class = "control-label" })
+                <label asp-for="DateOfStart" class="control-label"></label>
                 <div>
                     <div class='input-group date' id='DateOfStart'>
                         <input type='text' class="form-control col-12" name="DateOfStart" value="@Model.DateOfStart" />
@@ -49,13 +55,13 @@
                         </span>
                     </div>
                     <div class="row justify-content-center">
-                        @Html.ValidationMessageFor(model => model.DateOfStart, "", new { @class = "text-danger" })
+                        <span asp-validation-for="DateOfStart" class="text-danger"></span>
                     </div>
                 </div>
             </div>
 
             <div class="form-group">
-                @Html.LabelFor(model => model.DateOfEnd, htmlAttributes: new { @class = "control-label" })
+                <label asp-for="DateOfEnd" class="control-label"></label>
                 <div>
                     <div class='input-group date' id='DateOfEnd'>
                         <input type='text' class="form-control col-12" name="DateOfEnd" value="@Model.DateOfEnd" />
@@ -64,35 +70,39 @@
                         </span>
                     </div>
                     <div class="row justify-content-center">
-                        @Html.ValidationMessageFor(model => model.DateOfEnd, "", new { @class = "text-danger" })
+                        <span asp-validation-for="DateOfEnd" class="text-danger"></span>
                     </div>
                 </div>
             </div>
 
             <div class="form-group">
                 <label asp-for="EnrolledUsersLimit" class="control-label"></label>
-                <input asp-for="EnrolledUsersLimit" class="form-control col-12" />
-                <div class="row justify-content-center">
-                    <span asp-validation-for="EnrolledUsersLimit" class="text-danger"></span>
+                <div>
+                    <input asp-for="EnrolledUsersLimit" class="form-control col-12" />
+                    <div class="row justify-content-center">
+                        <span asp-validation-for="EnrolledUsersLimit" class="text-danger"></span>
+                    </div>
                 </div>
             </div>
 
             <div class="form-group form-check">
                 <label class="form-check-label">
-                    <input class="form-check-input" asp-for="CourseEnded" /> @Html.DisplayNameFor(model => model.CourseEnded)
+                    <input asp-for="CourseEnded" class="form-check-input" /> @Html.DisplayNameFor(model => model.CourseEnded)
                 </label>
             </div>
 
             <div class="form-group">
                 <label asp-for="CourseLength" class="control-label"></label>
-                <input asp-for="CourseLength" class="form-control col-12" />
-                <div class="row justify-content-center">
-                    <span asp-validation-for="CourseLength" class="text-danger"></span>
+                <div>
+                    <input asp-for="CourseLength" class="form-control col-12" />
+                    <div class="row justify-content-center">
+                        <span asp-validation-for="CourseLength" class="text-danger"></span>
+                    </div>
                 </div>
             </div>
 
             <div class="form-group">
-                @Html.LabelFor(model => model.AvailableBranches, htmlAttributes: new { @class = "control-label" })
+                <label asp-for="AvailableBranches" class="control-label"></label>
                 @*<div>
                     <div class="btn-group btn-group-toggle" data-toggle="buttons">
                         @foreach (var availableBranch in Model.AvailableBranches)
@@ -120,22 +130,19 @@
 
             </div>
 
-            <div class="row justify-content-center mb-0">
+            <div asp-validation-summary="ModelOnly" class="row justify-content-center alert alert-danger validation-model"></div>
+
+            <div class="row justify-content-center">
                 <input type="submit" value="Edytuj" class="btn btn-primary" />
             </div>
 
         </div>
 
-        <div class="row justify-content-center">
-            <div asp-validation-summary="All" class="text-danger"></div>
-        </div>
-
     </form>
 </div>
 
-
 <div class="mt-3">
-    @Html.ActionLink("Powrót do listy wszystkich kursów", "DisplayAllCourses", "Courses", null, new { @class = "btn btn-info" })
+    <a asp-action="DisplayAllCourses" asp-controller="Courses" class="btn btn-info">Powrót do listy wszystkich kursów</a>
 </div>
 
 @section Scripts {

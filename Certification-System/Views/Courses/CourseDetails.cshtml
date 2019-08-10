@@ -11,7 +11,7 @@
 <h2>Informacje o kursie</h2>
 
 <div class="mt-3 mb-3">
-    @Html.ActionLink("Edytuj", "EditCourse", "Courses", new { courseIdentificator = Model.CourseIdentificator }, new { @class = "btn btn-warning" })
+    <a asp-action="EditCourse" asp-route-courseIdentificator="@Model.CourseIdentificator" asp-controller="Courses" class="btn btn-warning">Edytuj</a>
 </div>
 
 <div>
@@ -56,7 +56,7 @@
 
             <div class="form-group form-check">
                 <label class="form-check-label">
-                    <input class="form-check-input" asp-for="CourseEnded" disabled /> @Html.DisplayNameFor(model => model.CourseEnded)
+                    <input asp-for="CourseEnded" class="form-check-input" disabled /> @Html.DisplayNameFor(model => model.CourseEnded)
                 </label>
             </div>
 
@@ -86,12 +86,11 @@
             </div>
 
         </div>
-
     </form>
 </div>
 
 <div class="mt-3">
-    @Html.ActionLink("Powrót do listy kursów", "DisplayAllCourses", "Courses", null, new { @class = "btn btn-info" })
+    <a asp-action="DisplayAllCourses" asp-controller="Courses" class="btn btn-info">Powrót do listy kursów</a>
 </div>
 
 
@@ -135,47 +134,48 @@
                 </tr>
             </thead>
             <tbody>
-                @foreach (var item in Model.Meetings)
+                @foreach (var meeting in Model.Meetings)
                 {
                     <tr>
                         <td>
-                            @Html.DisplayFor(modelItem => item.MeetingIndexer)
+                            @Html.DisplayFor(modelItem => meeting.MeetingIndexer)
                         </td>
                         <td>
-                            @Html.DisplayFor(modelItem => item.Description)
+                            @Html.DisplayFor(modelItem => meeting.Description)
                         </td>
                         <td>
-                            @Html.DisplayFor(modelItem => item.DateOfMeeting)
+                            @Html.DisplayFor(modelItem => meeting.DateOfMeeting)
                         </td>
                         <td>
-                            @Html.DisplayFor(modelItem => item.Country)
+                            @Html.DisplayFor(modelItem => meeting.Country)
                         </td>
                         <td>
-                            @Html.DisplayFor(modelItem => item.City)
+                            @Html.DisplayFor(modelItem => meeting.City)
                         </td>
                         <td>
-                            @Html.DisplayFor(modelItem => item.PostCode)
+                            @Html.DisplayFor(modelItem => meeting.PostCode)
                         </td>
                         <td>
-                            @Html.DisplayFor(modelItem => item.Address)
+                            @Html.DisplayFor(modelItem => meeting.Address)
                         </td>
                         <td>
-                            @Html.DisplayFor(modelItem => item.NumberOfApartment)
+                            @Html.DisplayFor(modelItem => meeting.NumberOfApartment)
                         </td>
                         <td>
                             <ul>
-                                @foreach (var instructor in item.InstructorsCredentials)
+                                @foreach (var instructor in meeting.InstructorsCredentials)
                                 {
                                     <li>@instructor</li>
                                 }
                             </ul>
                         </td>
                         <td>
-                            @Html.ActionLink("Szczegóły spotkania", "MeetingDetails", "Meetings", new { meetingIdentificator = item.MeetingIdentificator }, new { @class = "btn btn-info m-1" })
+                            <a asp-action="MeetingDetails" asp-route-meetingIdentificator="@meeting.MeetingIdentificator" asp-controller="Users" class="btn btn-info m-1">Szczegóły spotkania</a>
+                            <a asp-action="EditMeeting" asp-route-meetingIdentificator="@meeting.MeetingIdentificator" asp-controller="Users" class="btn btn-warning m-1">Edytuj spotkanie</a>
+                            <a asp-action="CheckUsersPresence" asp-route-meetingIdentificator="@meeting.MeetingIdentificator" asp-controller="Users" class="btn btn-primary m-1">Sprawdź obecność</a>
+
                             @*@Html.ActionLink("Szczegóły instruktora", "InstructorDetail", new { instructorIdentificator = item.Instructors }, new { @class = "btn btn-secondary" })*@
-                            @Html.ActionLink("Edytuj spotkanie", "EditMeeting", "Meetings", new { meetingIdentificator = item.MeetingIdentificator }, new { @class = "btn btn-warning m-1" })
                             @*@Html.ActionLink("Usuń spotkanie ze szkolenia", "DeleteMeeting", new { meetingIdentificator = item.MeetingIdentificator }) |*@
-                            @Html.ActionLink("Sprawdź obecność", "CheckUsersPresence", new { meetingIdentificator = item.MeetingIdentificator }, new { @class = "btn btn-primary m-1" })
                         </td>
                     </tr>
                 }
@@ -190,7 +190,7 @@ else
 
 <h2 class="mt-4 mb-4">Użytkownicy zapisani na kurs</h2>
 <div class="mt-3">
-    @Html.ActionLink("Dodaj użytkownika do kursu", "AssignUserToCourse", new { CourseIdentificator = Model.Meetings.First() }, new { @class = "btn btn-primary" })
+    <a asp-action="AssignUserToCourse" asp-route-courseIdentificator="@Model.Meetings.First()" asp-controller="Courses" class="btn btn-primary">Dodaj użytkownika do kursu</a>
 </div>
 
 @if (Model.EnrolledUsers.Count != 0)
@@ -220,21 +220,21 @@ else
                 </tr>
             </thead>
             <tbody>
-                @foreach (var item in Model.EnrolledUsers)
+                @foreach (var user in Model.EnrolledUsers)
                 {
                     <tr>
                         <td>
-                            @Html.DisplayFor(modelItem => item.Email)
+                            @Html.DisplayFor(modelItem => user.Email)
                         </td>
                         <td>
-                            @Html.DisplayFor(modelItem => item.FirstName)
+                            @Html.DisplayFor(modelItem => user.FirstName)
                         </td>
                         <td>
-                            @Html.DisplayFor(modelItem => item.LastName)
+                            @Html.DisplayFor(modelItem => user.LastName)
                         </td>
                         <td>
                             <ul>
-                                @foreach (var companyWorker in item.CompanyRoleWorker)
+                                @foreach (var companyWorker in user.CompanyRoleWorker)
                                 {
                                     <li>@companyWorker</li>
                                 }
@@ -242,15 +242,15 @@ else
                         </td>
                         <td>
                             <ul>
-                                @foreach (var companyManager in item.CompanyRoleManager)
+                                @foreach (var companyManager in user.CompanyRoleManager)
                                 {
                                     <li>@companyManager</li>
                                 }
                             </ul>
                         </td>
                         <td>
-                            @Html.ActionLink("Szczegóły użytkownika", "UserDetails", "Users", new { userIdentificator = item.UserIdentificator }, new { @class = "btn btn-info m-1" }))
-                            @Html.ActionLink("Usuń z kursu", "DeleteUserFromCourse", "Courses", new { userIdentificator = item.UserIdentificator }, new { @class = "btn btn-warning m-1" }))
+                            <a asp-action="UserDetails" asp-route-userIdentificator="@user.UserIdentificator" asp-controller="Users" class="btn btn-info m-1">Szczegóły użytkownika</a>
+                            <a asp-action="DeleteUserFromCourse" asp-route-userIdentificator="@user.UserIdentificator" asp-controller="Courses" class="btn btn-warning m-1">Usuń z kursu</a>
                         </td>
                     </tr>
                 }
