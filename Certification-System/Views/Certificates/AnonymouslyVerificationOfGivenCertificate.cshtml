@@ -5,14 +5,37 @@
     Layout = "~/Views/Shared/_Layout.cshtml";
 }
 
-@if (Model.ExpirationDate < DateTime.Now)
-{
-    <h2 class="alert alert-info" role="alert">Certyfikat utracił swoją ważność</h2>
-}
-else
-{
-    <h2 class="alert alert-success" role="alert">Certyfikat jest ważny</h2>
-}
+<h1>Weryfikacja certyfikatu</h1>
+<hr />
+
+<div>
+    <h2>Informacje o użytkowniku</h2>
+
+    <form asp-action="AnonymouslyVerificationOfGivenCertificate">
+
+        <div class="col-md-6 col-xl-6 col-sm-8 col-xs-10 m-auto p-3 shadow p-3 mb-5 bg-light rounded border border-primary rounded-bottom" style="opacity:0.80">
+
+            <div class="form-group">
+                <label asp-for="User.FirstName" class="control-label"></label>
+                <input asp-for="User.FirstName" class="form-control col-12" disabled />
+            </div>
+
+            <div class="form-group">
+                <label asp-for="User.LastName" class="control-label"></label>
+                <input asp-for="User.LastName" class="form-control col-12" disabled />
+            </div>
+
+            <div class="form-group">
+                <label asp-for="User.Email" class="control-label"></label>
+                <input asp-for="User.Email" class="form-control col-12" disabled />
+            </div>
+
+        </div>
+
+    </form>
+</div>
+
+<h2 class="mt-4 mb-4">Weryfikowany certyfikat</h2>
 
 <div class="col-12 table-responsive">
     <table id="givenCertificateConfirmation" class="table table-striped table-bordered display" style="width: 100%;" role="grid">
@@ -71,13 +94,13 @@ else
 </div>
 
 @*@if (this.User.IsInRole("Admin"))
-{
-    <div class="mt-3">
-        <a asp-action="AddNewGivenCertificate" asp-controller="Certificates" class="btn btn-primary">Nadaj certyfikat</a>
-        <a asp-action="EditGivenCertificate" asp-route-givenCertificateIdentificator="@Model.GivenCertificateIdentificator" asp-controller="Certificates" class="btn btn-warning">Aktualizuj</a>
-        <a asp-action="DisplayAllGivenCertificate" asp-controller="Certificates" class="btn btn-success">Lista wszystkich nadanych certyfikatów</a>
-    </div>
-}*@
+    {
+        <div class="mt-3">
+            <a asp-action="AddNewGivenCertificate" asp-controller="Certificates" class="btn btn-primary">Nadaj certyfikat</a>
+            <a asp-action="EditGivenCertificate" asp-route-givenCertificateIdentificator="@Model.GivenCertificateIdentificator" asp-controller="Certificates" class="btn btn-warning">Aktualizuj</a>
+            <a asp-action="DisplayAllGivenCertificate" asp-controller="Certificates" class="btn btn-success">Lista wszystkich nadanych certyfikatów</a>
+        </div>
+    }*@
 
 @section Scripts{
     <script>

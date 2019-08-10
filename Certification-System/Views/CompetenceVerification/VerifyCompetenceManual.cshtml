@@ -26,30 +26,18 @@
             <ul>
                 <li>identyfikatorem pracownika</li>
                 <li>identyfikatorem nadanego certyfikatu</li>
+                <li>identyfikatorem nadanego stopnia zawodowego</li>
             </ul>
 
-            Możesz dokonać ręcznej weryfikacji wykorzystując jeden z poniższych przycisków.
+            Możesz dokonać ręcznej weryfikacji wykorzystując jedną z poniższych opcji.
         </p>
     </div>
 
     <div class="row">
 
-        <div class="card m-auto" style="width: 18rem; height: 22rem">
+        <div class="card m-auto mb-3" style="width: 18rem; height: 22rem">
             <div class="card-body d-flex flex-column">
-                <h5 class="card-title">Weryfikuj uprawnienia użytkownika</h5>
-                <p class="card-text">
-                    Chcąc zweryfikować uprawnienia użytkownika poproś go o możliwość zeskanowania kodu znajdującego się
-                    na jego identyfikatorze lub wprowadź ręcznie identyfikator użytkownika.
-                </p>
-                <div class="row justify-content-center">
-                    <a asp-action="VerifyUser" asp-controller="CompetenceVerification" class="btn btn-primary" style="margin-top:17%">Weryfikuj</a>
-                </div>
-            </div>
-        </div>
-
-        <div class="card m-auto" style="width: 18rem; height: 22rem">
-            <div class="card-body d-flex flex-column">
-                <h5 class="card-title">Weryfikuj pojedynczy certyfikat</h5>
+                <h5 class="card-title text-center">Weryfikuj pojedynczy certyfikat</h5>
                 <p class="card-text">
                     Chcąć zweryfikować ważność pojedynczego certyfikatu poproś użytkownika platformy o możliwość zeskanowania
                     kodu znajdującego się na nadanym certyfikacie lub wprowadź ręcznie identyfikator nadanego certyfikatu.
@@ -60,18 +48,44 @@
             </div>
         </div>
 
+        <div class="card m-auto mb-3" style="width: 18rem; height: 22rem">
+            <div class="card-body d-flex flex-column">
+                <h5 class="card-title text-center">Weryfikuj pojedynczy stopień zawodowy</h5>
+                <p class="card-text">
+                    Chcąć zweryfikować ważność pojedynczego stopnia zawodowego poproś użytkownika platformy o możliwość zeskanowania
+                    kodu znajdującego się na stopniu zawodowym lub wprowadź ręcznie identyfikator stopnia zawodowego.
+                </p>
+                <div class="row justify-content-center">
+                    <a asp-action="VerifyGivenDegree" asp-controller="CompetenceVerification" class="btn btn-primary">Weryfikuj</a>
+                </div>
+            </div>
+        </div>
+
+        <div class="card m-auto mb-3" style="width: 18rem; height: 22rem; top:10px">
+            <div class="card-body d-flex flex-column">
+                <h5 class="card-title text-center">Weryfikuj uprawnienia użytkownika</h5>
+                <p class="card-text">
+                    Chcąc zweryfikować uprawnienia użytkownika poproś go o możliwość zeskanowania kodu znajdującego się
+                    na jego identyfikatorze lub wprowadź ręcznie identyfikator użytkownika.
+                </p>
+                <div class="row justify-content-center">
+                    <a asp-action="VerifyUser" asp-controller="CompetenceVerification" class="btn btn-primary" style="margin-top:17%">Weryfikuj</a>
+                </div>
+            </div>
+        </div>
+
     </div>
 </div>
 
 @if (this.User.Identity.IsAuthenticated)
 {
-    <div class="mt-3">
+    <div class="mt-3 row justify-content-center">
         <a asp-action="BlankMenu" asp-controller="Certificates" class="btn btn-info">Powrót do menu</a>
     </div>
 }
 else
 {
-    <div class="mt-3">
+    <div class="mt-3 row justify-content-center">
         <a asp-action="Login" asp-controller="Account" class="btn btn-info">Powrót do panelu logowania</a>
     </div>
 }
