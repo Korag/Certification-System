@@ -14,7 +14,7 @@
                 <a asp-controller="Home" asp-action="Index" class="dropdown-item">Weryfikuj certyfikat QR</a>
                 <a asp-controller="Home" asp-action="Index" class="dropdown-item">Wyświetl listę pracowników z danym certyfikatem</a>
                 <div class="dropdown-divider"></div>
-                <a asp-controller="Certificates" asp-action="AddNewGivenCertificate" class="dropdown-item">Przyznaj pracownikowi certyfikat *</a>
+                <a asp-controller="GivenCertificates" asp-action="AddNewGivenCertificate" class="dropdown-item">Przyznaj pracownikowi certyfikat *</a>
                 <a asp-controller="Certificates" asp-action="AddNewCertificate" class="dropdown-item">Utwórz nowy certyfikat *</a>
             </div>
         </li>
@@ -46,7 +46,7 @@
                 <a asp-controller="Companies" asp-action="AddNewCompany" class="dropdown-item">Utwórz przedsiębiorstwo*</a>
                 <a asp-controller="Courses" asp-action="AddNewCourse" class="dropdown-item">Dodaj szkolenie *</a>
                 <a asp-controller="Meetings" asp-action="AddNewMeeting" class="dropdown-item">Dodaj spotkanie do szkolenia *</a>
-                <a asp-controller="Certificates" asp-action="AddNewGivenCertificate" class="dropdown-item">Przyznaj pracownikowi certyfikat *</a>
+                <a asp-controller="GivenCertificates" asp-action="AddNewGivenCertificate" class="dropdown-item">Przyznaj pracownikowi certyfikat *</a>
                 <a asp-controller="Certificates" asp-action="AddNewCertificate" class="dropdown-item">Utwórz nowy certyfikat *</a>
                 <a asp-controller="Branches" asp-action="AddNewBranch" class="dropdown-item">Dodaj nowy obszar certyfikacji *</a>
                 <a asp-controller="Branches" asp-action="DisplayAllBranches" class="dropdown-item">Wyświetl obszary certyfikacji *</a>
@@ -58,7 +58,7 @@
                 <a asp-controller="Courses" asp-action="DisplayAllCourses" class="dropdown-item">Wyświetl wszystkie kursy *</a>
                 <a asp-controller="Users" asp-action="AddNewUser" class="dropdown-item">Dodaj nowego użytkownika *</a>
                 <a asp-controller="Users" asp-action="DisplayAllUsers" class="dropdown-item">Wyświetl wszystkich użytkowników *</a>
-                <a asp-controller="Certificates" asp-action="DisplayAllGivenCertificates" class="dropdown-item">Wyświetl wszystkie nadane certyfikaty *</a>
+                <a asp-controller="GivenCertificates" asp-action="DisplayAllGivenCertificates" class="dropdown-item">Wyświetl wszystkie nadane certyfikaty *</a>
                 <a asp-controller="Meetings" asp-action="DisplayAllMeetings" class="dropdown-item">Wyświetl wszystkie spotkania *</a>
             </div>
         </li>*@
@@ -72,8 +72,8 @@
                     <div class="dropdown-divider"></div>
                     <p class="dropdown-header mt-1">Przyznane Certyfikaty</p>
                     <div class="dropdown-divider"></div>
-                    <a asp-controller="Certificates" asp-action="AddNewGivenCertificate" class="dropdown-item">Przyznaj pracownikowi certyfikat *</a>
-                    <a asp-controller="Certificates" asp-action="DisplayAllGivenCertificates" class="dropdown-item">Wyświetl wszystkie nadane certyfikaty *</a>
+                    <a asp-controller="GivenCertificates" asp-action="AddNewGivenCertificate" class="dropdown-item">Przyznaj pracownikowi certyfikat *</a>
+                    <a asp-controller="GivenCertificates" asp-action="DisplayAllGivenCertificates" class="dropdown-item">Wyświetl wszystkie nadane certyfikaty *</a>
                     <div class="dropdown-divider"></div>
                     <p class="dropdown-header mt-1">Stopnie zawodowe</p>
                     <div class="dropdown-divider"></div>
