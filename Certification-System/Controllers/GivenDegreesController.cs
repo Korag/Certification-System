@@ -1,0 +1,146 @@
+﻿using AutoMapper;
+using Certification_System.DTOViewModels;
+using Certification_System.Entities;
+using Certification_System.Repository.DAL;
+using Certification_System.ServicesInterfaces;
+using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Mvc;
+using System.Collections.Generic;
+using System.Linq;
+
+namespace Certification_System.Controllers
+{
+    public class GivenDegreesController : Controller
+    {
+        private readonly MongoOperations _context;
+
+        private readonly IGeneratorQR _generatorQR;
+        private readonly IMapper _mapper;
+        private readonly IKeyGenerator _keyGenerator;
+
+        public GivenDegreesController(IGeneratorQR generatorQR, MongoOperations context, IMapper mapper, IKeyGenerator keyGenerator)
+        {
+            _generatorQR = generatorQR;
+            _context = context;
+            _mapper = mapper;
+            _keyGenerator = keyGenerator;
+        }
+
+        // GET: EditGivenDegree
+        [Authorize(Roles = "Admin")]
+        public ActionResult EditGivenDegree(string givenDegreeIdentificator)
+        {
+            var GivenDegree = _context.givenDegreeRepository.GetGivenDegreeById(givenDegreeIdentificator);
+            EditGivenDegreeViewModel givenDegreeToUpdate = _mapper.Map<EditGivenDegreeViewModel>(GivenDegree);
+
+            givenDegreeToUpdate.User = _mapper.Map<DisplayCrucialDataUserViewModel>(_context.userRepository.GetUserByGivenDegreeId(GivenDegree.GivenDegreeIdentificator));
+            givenDegreeToUpdate.Degree = _mapper.Map<DisplayCrucialDataDegreeViewModel>(_context.degreeRepository.GetDegreeById(GivenDegree.Degree));
+
+            return View(givenDegreeToUpdate);
+        }
+
+        // POST: EditGivenDegree
+        [Authorize(Roles = "Admin")]
+        [HttpPost]
+        public ActionResult EditGivenDegree(EditGivenDegreeViewModel editedGivenDegree)
+        {
+            if (ModelState.IsValid)
+            {
+                var OriginGivenDegree = _context.givenDegreeRepository.GetGivenDegreeById(editedGivenDegree.GivenDegreeIdentificator);
+
+                OriginGivenDegree = _mapper.Map<EditGivenDegreeViewModel, GivenDegree>(editedGivenDegree, OriginGivenDegree);
+                _context.givenDegreeRepository.UpdateGivenDegree(OriginGivenDegree);
+
+                return RedirectToAction("ConfirmationOfActionOnGivenDegree", "Degrees", new { givenDegreeIdentificator = OriginGivenDegree.GivenDegreeIdentificator, TypeOfAction = "Update" });
+            }
+
+            return View(editedGivenDegree);
+        }
+
+        // GET: ConfirmationOfActionOnGivenDegree
+        [Authorize(Roles = "Admin")]
+        public ActionResult ConfirmationOfActionOnGivenDegree(string givenDegreeIdentificator, string TypeOfAction)
+        {
+            if (givenDegreeIdentificator != null)
+            {
+                ViewBag.TypeOfAction = TypeOfAction;
+
+                var GivenDegree = _context.givenDegreeRepository.GetGivenDegreeById(givenDegreeIdentificator);
+
+                var Degree = _context.degreeRepository.GetDegreeById(GivenDegree.Degree);
+                var User = _context.userRepository.GetUserByGivenDegreeId(GivenDegree.GivenDegreeIdentificator);
+
+                DisplayCrucialDataUserViewModel userViewModel = _mapper.Map<DisplayCrucialDataUserViewModel>(User);
+                DisplayCrucialDataDegreeViewModel degreeViewModel = _mapper.Map<DisplayCrucialDataDegreeViewModel>(Degree);
+
+                DisplayGivenDegreeViewModel modifiedGivenDegree = _mapper.Map<DisplayGivenDegreeViewModel>(GivenDegree);
+                modifiedGivenDegree.Degree = degreeViewModel;
+                modifiedGivenDegree.User = userViewModel;
+
+                return View(modifiedGivenDegree);
+            }
+
+            return RedirectToAction(nameof(AddNewGivenDegree));
+        }
+
+        // GET: DisplayAllGivenDegrees
+        [Authorize(Roles = "Admin")]
+        public ActionResult DisplayAllGivenDegrees()
+        {
+            var GivenDegrees = _context.givenDegreeRepository.GetListOfGivenDegrees();
+            List<DisplayGivenDegreeViewModel> ListOfGivenDegrees = new List<DisplayGivenDegreeViewModel>();
+
+            foreach (var givenDegree in GivenDegrees)
+            {
+                var Degree = _context.degreeRepository.GetDegreeById(givenDegree.Degree);
+                var User = _context.userRepository.GetUserByGivenDegreeId(givenDegree.GivenDegreeIdentificator);
+
+                DisplayCrucialDataDegreeViewModel degreeViewModel = _mapper.Map<DisplayCrucialDataDegreeViewModel>(Degree);
+                DisplayCrucialDataUserViewModel userViewModel = _mapper.Map<DisplayCrucialDataUserViewModel>(User);
+
+                DisplayGivenDegreeViewModel singleGivenDegree = _mapper.Map<DisplayGivenDegreeViewModel>(givenDegree);
+                singleGivenDegree.Degree = degreeViewModel;
+                singleGivenDegree.User = userViewModel;
+
+                ListOfGivenDegrees.Add(singleGivenDegree);
+            }
+
+            return View(ListOfGivenDegrees);
+        }
+
+        // GET: AddNewGivenDegree
+        [Authorize(Roles = "Admin")]
+        public ActionResult AddNewGivenDegree()
+        {
+            AddGivenDegreeViewModel newGivenDegree = new AddGivenDegreeViewModel
+            {
+                AvailableUsers = _context.userRepository.GetUsersAsSelectList().ToList(),
+                AvailableDegrees = _context.degreeRepository.GetDegreesAsSelectList().ToList()
+            };
+
+            return View(newGivenDegree);
+        }
+
+        // POST: AddNewGivenDegree
+        [Authorize(Roles = "Admin")]
+        [HttpPost]
+        public ActionResult AddNewGivenDegree(AddGivenDegreeViewModel newGivenDegree)
+        {
+            if (ModelState.IsValid)
+            {
+                GivenDegree givenDegree = _mapper.Map<GivenDegree>(newGivenDegree);
+                givenDegree.GivenDegreeIdentificator = _keyGenerator.GenerateNewId();
+
+                _context.givenDegreeRepository.AddGivenDegree(givenDegree);
+                _context.userRepository.AddUserDegree(newGivenDegree.SelectedUser, givenDegree.GivenDegreeIdentificator);
+
+                return RedirectToAction("ConfirmationOfActionOnGivenDegree", new { givenDegreeIdentificator = givenDegree.GivenDegreeIdentificator, TypeOfAction = "Add" });
+            }
+
+            newGivenDegree.AvailableDegrees = _context.degreeRepository.GetDegreesAsSelectList().ToList();
+            newGivenDegree.AvailableUsers = _context.userRepository.GetUsersAsSelectList().ToList();
+
+            return View(newGivenDegree);
+        }
+    }
+}
