@@ -318,12 +318,12 @@ namespace Certification_System.Controllers
 
             List<DisplayCompanyViewModel> ListOfCompanies = _mapper.Map<List<DisplayCompanyViewModel>>(Companies);
 
-            UserDetailsForAnonymousViewModel UserDetails = _mapper.Map<UserDetailsForAnonymousViewModel>(User);
-            UserDetails.GivenCertificates = ListOfGivenCertificates;
-            UserDetails.GivenDegrees = ListOfGivenDegrees;
-            UserDetails.Companies = ListOfCompanies;
+            UserDetailsForAnonymousViewModel VerifiedUser = _mapper.Map<UserDetailsForAnonymousViewModel>(User);
+            VerifiedUser.GivenCertificates = ListOfGivenCertificates;
+            VerifiedUser.GivenDegrees = ListOfGivenDegrees;
+            VerifiedUser.Companies = ListOfCompanies;
 
-            return View(UserDetails);
+            return View(VerifiedUser);
         }
     }
 }

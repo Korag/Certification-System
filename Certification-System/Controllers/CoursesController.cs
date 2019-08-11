@@ -195,7 +195,7 @@ namespace Certification_System.Controllers
 
             var Instructors = _context.userRepository.GetUsersById(InstructorsIdentificators.Distinct().ToList());
 
-            List<DisplayCrucialDataWithContactUsersViewModel> instructorsViewModel = _mapper.Map<List<DisplayCrucialDataWithContactUsersViewModel>>(Instructors);
+            List<DisplayCrucialDataWithContactUserViewModel> instructorsViewModel = _mapper.Map<List<DisplayCrucialDataWithContactUserViewModel>>(Instructors);
 
             CourseDetailsViewModel courseDetails = _mapper.Map<CourseDetailsViewModel>(Course);
 

@@ -320,12 +320,28 @@ namespace Certification_System.Controllers
             var Certificate = _context.certificateRepository.GetCertificateById(GivenCertificate.Certificate);
             var User = _context.userRepository.GetUserByGivenCertificateId(GivenCertificate.GivenCertificateIdentificator);
 
-            DisplayCrucialDataUserViewModel userViewModel = _mapper.Map<DisplayCrucialDataUserViewModel>(User);
+            var CompaniesRoleWorker = _context.companyRepository.GetCompaniesById(User.CompanyRoleWorker);
+            var CompaniesRoleManager = _context.companyRepository.GetCompaniesById(User.CompanyRoleManager);
+
+            List<Company> Companies = CompaniesRoleWorker.ToList();
+
+            foreach (var company in CompaniesRoleManager)
+            {
+                if (Companies.Where(z => z.CompanyIdentificator == company.CompanyIdentificator).Count() == 0)
+                {
+                    Companies.Add(company);
+                }
+            }
+
+            List<DisplayCompanyViewModel> companiesViewModel = _mapper.Map<List<DisplayCompanyViewModel>>(Companies);
+
+            DisplayCrucialDataWithBirthDateUserViewModel userViewModel = _mapper.Map<DisplayCrucialDataWithBirthDateUserViewModel>(User);
             DisplayCrucialDataCertificateViewModel certificateViewModel = _mapper.Map<DisplayCrucialDataCertificateViewModel>(Certificate);
 
-            DisplayGivenCertificateViewModel VerifiedGivenCertificate = _mapper.Map<DisplayGivenCertificateViewModel>(GivenCertificate);
+            GivenCertificateDetailsForAnonymousViewModel VerifiedGivenCertificate = _mapper.Map<GivenCertificateDetailsForAnonymousViewModel>(GivenCertificate);
             VerifiedGivenCertificate.Certificate = certificateViewModel;
             VerifiedGivenCertificate.User = userViewModel;
+            VerifiedGivenCertificate.Companies = companiesViewModel;
 
             return View(VerifiedGivenCertificate);
         }

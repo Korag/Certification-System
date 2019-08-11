@@ -157,11 +157,11 @@ namespace Certification_System.Controllers
             var EnrolledUsersIdentificators = _context.courseRepository.GetCourseByMeetingId(meetingIdentificator).EnrolledUsers;
             var EnrolledUsersList = _context.userRepository.GetUsersById(EnrolledUsersIdentificators);
 
-            List<DisplayCrucialDataWithContactUsersViewModel> ListOfInstructors = new List<DisplayCrucialDataWithContactUsersViewModel>();
+            List<DisplayCrucialDataWithContactUserViewModel> ListOfInstructors = new List<DisplayCrucialDataWithContactUserViewModel>();
 
             if (RelatedInstructors.Count != 0)
             {
-               ListOfInstructors = _mapper.Map<List<DisplayCrucialDataWithContactUsersViewModel>>(RelatedInstructors);
+               ListOfInstructors = _mapper.Map<List<DisplayCrucialDataWithContactUserViewModel>>(RelatedInstructors);
             }
 
             List<DisplayCrucialDataUserViewModel> ListOfUsers = new List<DisplayCrucialDataUserViewModel>();

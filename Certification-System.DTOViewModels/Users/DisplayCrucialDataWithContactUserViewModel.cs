@@ -2,7 +2,7 @@
 
 namespace Certification_System.DTOViewModels
 {
-    public class DisplayCrucialDataWithContactUsersViewModel
+    public class DisplayCrucialDataWithContactUserViewModel
     {
         public string UserIdentificator { get; set; }
 

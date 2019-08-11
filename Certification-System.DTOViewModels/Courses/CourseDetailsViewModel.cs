@@ -45,7 +45,7 @@ namespace Certification_System.DTOViewModels
         public ICollection<DisplayCrucialDataWithCompaniesRoleUserViewModel> EnrolledUsers { get; set; }
 
         [Display(Name = "Instruktorzy")]
-        public ICollection<DisplayCrucialDataWithContactUsersViewModel> Instructors { get; set; }
+        public ICollection<DisplayCrucialDataWithContactUserViewModel> Instructors { get; set; }
 
     }
 }

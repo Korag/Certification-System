@@ -121,6 +121,11 @@ namespace Certification_System.Services
                      .ForMember(dest => dest.Course, opts => opts.Ignore())
                      .ForMember(dest => dest.User, opts => opts.Ignore());
 
+            CreateMap<GivenCertificate, GivenCertificateDetailsForAnonymousViewModel>()
+                    .ForMember(dest => dest.Certificate, opts => opts.Ignore())
+                    .ForMember(dest => dest.Companies, opts => opts.Ignore())
+                    .ForMember(dest => dest.User, opts => opts.Ignore());
+
             CreateMap<GivenCertificate, DisplayGivenCertificateToUserViewModel>()
                      .ForMember(dest => dest.Certificate, opts => opts.Ignore())
                      .ForMember(dest => dest.Course, opts => opts.Ignore());
@@ -200,7 +205,9 @@ namespace Certification_System.Services
             CreateMap<CertificationPlatformUser, DisplayCrucialDataWithCompaniesRoleUserViewModel>()
                      .ForMember(dest => dest.UserIdentificator, opts => opts.MapFrom(src => src.Id));
 
-            CreateMap<CertificationPlatformUser, DisplayCrucialDataWithContactUsersViewModel>();
+            CreateMap<CertificationPlatformUser, DisplayCrucialDataWithContactUserViewModel>();
+
+            CreateMap<CertificationPlatformUser, DisplayCrucialDataWithBirthDateUserViewModel>();
 
             CreateMap<CertificationPlatformUser, DisplayAllUserInformationViewModel>()
                      .ForMember(dest => dest.UserIdentificator, opts => opts.MapFrom(src => src.Id))
