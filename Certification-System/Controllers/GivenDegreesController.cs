@@ -211,5 +211,31 @@ namespace Certification_System.Controllers
 
             return View(GivenDegreeDetails);
         }
+        
+        // GET: AnonymouslyVerificationOfGivenDegree
+        [AllowAnonymous]
+        public ActionResult AnonymouslyVerificationOfGivenDegree(string givenDegreeIdentificator)
+        {
+            var GivenDegree = _context.givenDegreeRepository.GetGivenDegreeById(givenDegreeIdentificator);
+
+            var Degree = _context.degreeRepository.GetDegreeById(GivenDegree.Degree);
+
+            var User = _context.userRepository.GetUserByGivenDegreeId(givenDegreeIdentificator);
+            var Companies = _context.companyRepository.GetCompaniesById(User.CompanyRoleManager.Concat(User.CompanyRoleWorker).Distinct().ToList());
+
+            DisplayDegreeWithoutRequirementsViewModel degreeViewModel = _mapper.Map<DisplayDegreeWithoutRequirementsViewModel>(Degree);
+            degreeViewModel.Branches = _context.branchRepository.GetBranchesById(Degree.Branches);
+
+            DisplayCrucialDataWithBirthDateUserViewModel userViewModel = _mapper.Map<DisplayCrucialDataWithBirthDateUserViewModel>(User);
+
+            List<DisplayCompanyViewModel> companiesViewModel = _mapper.Map<List<DisplayCompanyViewModel>>(Companies);
+
+            GivenDegreeDetailsForAnonymousViewModel GivenDegreeDetails = _mapper.Map<GivenDegreeDetailsForAnonymousViewModel>(GivenDegree);
+            GivenDegreeDetails.Degree = degreeViewModel;
+            GivenDegreeDetails.User = userViewModel;
+            GivenDegreeDetails.Companies = companiesViewModel;
+
+            return View(GivenDegreeDetails);
+        }
     }
 }

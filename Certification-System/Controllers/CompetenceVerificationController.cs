@@ -213,11 +213,11 @@ namespace Certification_System.Controllers
                 {
                     if (this.User.IsInRole("Admin"))
                     {
-                        return RedirectToAction("GivenDegreeDetails", "GivenDegree", new { givenDegreeIdentificator = givenDegreeToVerify.GivenDegreeIdentificator });
+                        return RedirectToAction("GivenDegreeDetails", "GivenDegrees", new { givenDegreeIdentificator = givenDegreeToVerify.GivenDegreeIdentificator });
                     }
                     else
                     {
-                        return RedirectToAction("AnonymouslyVerificationOfGivenDegree", "GivenDegree", new { givenDegreeIdentificator = givenDegreeToVerify.GivenDegreeIdentificator });
+                        return RedirectToAction("AnonymouslyVerificationOfGivenDegree", "GivenDegrees", new { givenDegreeIdentificator = givenDegreeToVerify.GivenDegreeIdentificator });
                     }
                 }
                 else
@@ -241,18 +241,18 @@ namespace Certification_System.Controllers
             }
             catch (System.Exception)
             {
-                return RedirectToAction("VerifyGivenDegree", "CompetenceVerification", new { givenDegreeIdentificator = givenDegreeToVerify.GivenDegreeIdentificator, givenDegreeIdentificatorBadForma = true });
+                return RedirectToAction("VerifyGivenDegree", "CompetenceVerification", new { givenDegreeIdentificator = givenDegreeToVerify.GivenDegreeIdentificator, givenDegreeIdentificatorBadFormat = true });
             }
 
             if (_context.givenDegreeRepository.GetGivenDegreeById(givenDegreeToVerify.GivenDegreeIdentificator) != null)
             {
                 if (this.User.IsInRole("Admin"))
                 {
-                    return RedirectToAction("GivenDegreeDetails", "GivenDegree", new { givenDegreeIdentificator = givenDegreeToVerify.GivenDegreeIdentificator });
+                    return RedirectToAction("GivenDegreeDetails", "GivenDegrees", new { givenDegreeIdentificator = givenDegreeToVerify.GivenDegreeIdentificator });
                 }
                 else
                 {
-                    return RedirectToAction("AnonymouslyVerificationOfGivenDegree", "GivenDegree", new { givenDegreeIdentificator = givenDegreeToVerify.GivenDegreeIdentificator });
+                    return RedirectToAction("AnonymouslyVerificationOfGivenDegree", "GivenDegrees", new { givenDegreeIdentificator = givenDegreeToVerify.GivenDegreeIdentificator });
                 }
             }
             else

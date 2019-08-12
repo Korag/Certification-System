@@ -4,7 +4,7 @@ using System.ComponentModel.DataAnnotations;
 
 namespace Certification_System.DTOViewModels
 {
-    public class GivenDegreeDetailsViewModel
+    public class GivenDegreeDetailsForAnonymousViewModel
     {
         public string GivenDegreeIdentificator { get; set; }
 
@@ -20,14 +20,8 @@ namespace Certification_System.DTOViewModels
         [Display(Name = "Szablon stopnia zawodowego")]
         public DisplayDegreeWithoutRequirementsViewModel Degree { get; set; }
 
-        [Display(Name = "Wymagane certyfikaty")]
-        public ICollection<DisplayGivenCertificateToUserWithoutCourseViewModel> RequiredCertificatesWithGivenInstances { get; set; }
-
-        [Display(Name = "Wymagane stopnie zawodowe")]
-        public ICollection<DisplayGivenDegreeToUserViewModel> RequiredDegreesWithGivenInstances { get; set; }
-
         [Display(Name = "Posiadacz stopnia zawodowego")]
-        public DisplayAllUserInformationViewModel User { get; set; }
+        public DisplayCrucialDataWithBirthDateUserViewModel User { get; set; }
 
         [Display(Name = "Przedsiębiorstwa")]
         public ICollection<DisplayCompanyViewModel> Companies { get; set; }
