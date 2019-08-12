@@ -130,11 +130,11 @@ namespace Certification_System.Controllers
                 {
                     if (this.User.IsInRole("Admin"))
                     {
-                        return RedirectToAction("GivenCertificateDetails", "Certificates", new { givenCertificateIdentificator = givenCertificateToVerify.GivenCertificateIdentificator });
+                        return RedirectToAction("GivenCertificateDetails", "GivenCertificates", new { givenCertificateIdentificator = givenCertificateToVerify.GivenCertificateIdentificator });
                     }
                     else
                     {
-                        return RedirectToAction("AnonymouslyVerificationOfGivenCertificate", "Certificates", new { givenCertificateIdentificator = givenCertificateToVerify.GivenCertificateIdentificator });
+                        return RedirectToAction("AnonymouslyVerificationOfGivenCertificate", "GivenCertificates", new { givenCertificateIdentificator = givenCertificateToVerify.GivenCertificateIdentificator });
                     }
                 }
                 else
@@ -165,11 +165,11 @@ namespace Certification_System.Controllers
             {
                 if (this.User.IsInRole("Admin"))
                 {
-                    return RedirectToAction("GivenCertificateDetails", "Certificates", new { givenCertificateIdentificator = givenCertificateIdentificator });
+                    return RedirectToAction("GivenCertificateDetails", "GivenCertificates", new { givenCertificateIdentificator = givenCertificateIdentificator });
                 }
                 else
                 {
-                    return RedirectToAction("AnonymouslyVerificationOfGivenCertificate", "Certificates", new { givenCertificateIdentificator = givenCertificateIdentificator });
+                    return RedirectToAction("AnonymouslyVerificationOfGivenCertificate", "GivenCertificates", new { givenCertificateIdentificator = givenCertificateIdentificator });
                 }
             }
             else

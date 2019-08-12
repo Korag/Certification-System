@@ -128,6 +128,14 @@ namespace Certification_System.Services
                     .ForMember(dest => dest.Companies, opts => opts.Ignore())
                     .ForMember(dest => dest.User, opts => opts.Ignore());
 
+            CreateMap<GivenCertificate, GivenCertificateDetailsViewModel>()
+                 .ForMember(dest => dest.Certificate, opts => opts.Ignore())
+                 .ForMember(dest => dest.Companies, opts => opts.Ignore())
+                 .ForMember(dest => dest.User, opts => opts.Ignore())
+                 .ForMember(dest => dest.Instructors, opts => opts.Ignore())
+                 .ForMember(dest => dest.Course, opts => opts.Ignore())
+                 .ForMember(dest => dest.Meetings, opts => opts.Ignore());
+
             CreateMap<GivenCertificate, DisplayGivenCertificateToUserViewModel>()
                      .ForMember(dest => dest.Certificate, opts => opts.Ignore())
                      .ForMember(dest => dest.Course, opts => opts.Ignore());
@@ -181,6 +189,8 @@ namespace Certification_System.Services
             #region Meetings
             CreateMap<Meeting, DisplayMeetingViewModel>();
 
+            CreateMap<Meeting, DisplayMeetingWithInstructorsViewModel>();
+   
             CreateMap<AddMeetingViewModel, Meeting>()
                      .ForMember(dest => dest.MeetingIdentificator, opts => opts.Ignore())
                      .ForMember(dest => dest.Instructors, opts => opts.MapFrom(src => src.SelectedInstructors));
