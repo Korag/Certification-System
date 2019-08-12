@@ -1,0 +1,467 @@
+﻿@model Certification_System.DTOViewModels.GivenDegreeDetailsViewModel
+
+@{
+    ViewData["Title"] = "GivenDegreeDetails";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+<h1>Szczegóły stopnia zawodowego</h1>
+<hr />
+
+<div>
+
+    <h2>Informacje o użytkowniku</h2>
+
+    <div class="mt-3 mb-3">
+        <a asp-action="EditUser" asp-route-userIdentificator="@Model.User.UserIdentificator" asp-controller="Users" class="btn btn-warning">Edytuj</a>
+        <a asp-action="UserDetails" asp-route-userIdentificator="@Model.User.UserIdentificator" asp-controller="Users" class="btn btn-info">Szczegóły</a>
+    </div>
+
+    <form>
+        <div class="col-md-6 col-xl-6 col-sm-8 col-xs-10 m-auto p-3 shadow p-3 mb-5 bg-light rounded border border-primary rounded-bottom" style="opacity:0.80">
+
+            <div class="form-group">
+                <label asp-for="User.Email" class="control-label"></label>
+                <input asp-for="User.Email" class="form-control col-12" disabled />
+            </div>
+
+            <div class="form-group">
+                <label asp-for="User.FirstName" class="control-label"></label>
+                <input asp-for="User.FirstName" class="form-control col-12" disabled />
+            </div>
+
+            <div class="form-group">
+                <label asp-for="User.LastName" class="control-label"></label>
+                <input asp-for="User.LastName" class="form-control col-12" disabled />
+            </div>
+
+            <div class="form-group">
+                <label asp-for="User.PhoneNumber" class="control-label"></label>
+                <input asp-for="User.PhoneNumber" class="form-control col-12" disabled />
+            </div>
+
+            <div class="form-group">
+                <label asp-for="User.Country" class="control-label"></label>
+                <input asp-for="User.Country" class="form-control col-12" disabled />
+            </div>
+
+            <div class="form-group">
+                <label asp-for="User.City" class="control-label"></label>
+                <input asp-for="User.City" class="form-control col-12" disabled />
+            </div>
+
+            <div class="form-group">
+                <label asp-for="User.PostCode" class="control-label"></label>
+                <input asp-for="User.PostCode" class="form-control col-12" disabled />
+            </div>
+
+            <div class="form-group">
+                <label asp-for="User.Address" class="control-label"></label>
+                <input asp-for="User.Address" class="form-control col-12" disabled />
+            </div>
+
+            <div class="form-group">
+                <label asp-for="User.NumberOfApartment" class="control-label"></label>
+                <input asp-for="User.NumberOfApartment" class="form-control col-12" disabled />
+            </div>
+
+            <div class="form-group">
+                <label asp-for="User.DateOfBirth" class="control-label"></label>
+                <input asp-for="User.DateOfBirth" class="form-control col-12" disabled />
+            </div>
+
+            <div class="form-group">
+                <label asp-for="User.Roles" class="control-label"></label>
+                <div class="row mb-2 ml-0 mr-0">
+                    <div>
+                        @foreach (var role in Model.User.Roles)
+                        {
+                            <label class="btn btn-secondary align-content-center">
+                                <span>@role</span>
+                            </label>
+                        }
+                    </div>
+                </div>
+            </div>
+
+        </div>
+    </form>
+
+</div>
+
+<h2 class="mt-4 mb-4">Przedsiębiorstwa powiązane z użytkownikiem</h2>
+
+@if (Model.Companies.Count != 0)
+{
+    <div class="col-12 table-responsive">
+        <table id="listCompanies" class="table table-striped table-bordered display" style="width: 100%;" role="grid">
+            <thead>
+                <tr>
+                    <th>
+                        @Html.DisplayNameFor(model => model.Companies.First().CompanyName)
+                    </th>
+                    <th>
+                        @Html.DisplayNameFor(model => model.Companies.First().Email)
+                    </th>
+                    <th>
+                        @Html.DisplayNameFor(model => model.Companies.First().Phone)
+                    </th>
+                    <th>
+                        @Html.DisplayNameFor(model => model.Companies.First().Country)
+                    </th>
+                    <th>
+                        @Html.DisplayNameFor(model => model.Companies.First().City)
+                    </th>
+                    <th>
+                        @Html.DisplayNameFor(model => model.Companies.First().PostCode)
+                    </th>
+                    <th>
+                        @Html.DisplayNameFor(model => model.Companies.First().Address)
+                    </th>
+                    <th>
+                        @Html.DisplayNameFor(model => model.Companies.First().NumberOfApartment)
+                    </th>
+                    <th>
+                        Rola użytkownika w przesiębiorstwie
+                    </th>
+                    <th>
+                        Operacje
+                    </th>
+                </tr>
+            </thead>
+            <tbody>
+                @foreach (var company in Model.Companies)
+                {
+                    <tr>
+                        <td>
+                            @Html.DisplayFor(modelItem => company.CompanyName)
+                        </td>
+                        <td>
+                            @Html.DisplayFor(modelItem => company.Email)
+                        </td>
+                        <td>
+                            @Html.DisplayFor(modelItem => company.Phone)
+                        </td>
+                        <td>
+                            @Html.DisplayFor(modelItem => company.Country)
+                        </td>
+                        <td>
+                            @Html.DisplayFor(modelItem => company.City)
+                        </td>
+                        <td>
+                            @Html.DisplayFor(modelItem => company.PostCode)
+                        </td>
+                        <td>
+                            @Html.DisplayFor(modelItem => company.Address)
+                        </td>
+                        <td>
+                            @Html.DisplayFor(modelItem => company.NumberOfApartment)
+                        </td>
+                        <td>
+                            @if (Model.User.CompanyRoleWorker.Contains(company.CompanyIdentificator))
+                            {
+                                <p>@Html.DisplayNameFor(model => model.User.CompanyRoleWorker)</p>
+                            }
+                            @if (Model.User.CompanyRoleManager.Contains(company.CompanyIdentificator))
+                            {
+                                <p>@Html.DisplayNameFor(model => model.User.CompanyRoleManager)</p>
+                            }
+                        </td>
+                        <td>
+                            <a asp-action="EditCompany" asp-route-companyIdentificator="@company.CompanyIdentificator" asp-controller="Companies" class="btn btn-warning m-1">Edytuj</a>
+                            <a asp-action="CompanyDetails" asp-route-companyIdentificator="@company.CompanyIdentificator" asp-controller="Companies" class="btn btn-info m-1">Szczegóły</a>
+                        </td>
+                    </tr>
+                }
+            </tbody>
+        </table>
+    </div>
+}
+
+else
+{
+    <div class="mt-4 mb-4 alert alert-warning">Użytkownik nie jest zrzeszony z żadnym przedsiębiorstwem</div>
+}
+
+<h2 class="mt-4 mb-4">Szczegóły nadanego stopnia zawodowego</h2>
+
+<div class="m-3">
+    <a asp-action="EditGivenDegree" asp-route-givenDegreeIdentificator="@Model.GivenDegreeIdentificator" asp-controller="GivenDegrees" class="btn btn-warning">Edytuj nadany stopień</a>
+    <a asp-action="DegreeDetails" asp-route-degreeIdentificator="@Model.Degree.DegreeIdentificator" asp-controller="Degrees" class="btn btn-info">Szczegóły stopnia zawodowego</a>
+</div>
+
+<div class="col-12 table-responsive">
+    <table id="listGivenCertificate" class="table table-striped table-bordered display" style="width: 100%;" role="grid">
+        <thead>
+            <tr>
+                <th>
+                    @Html.DisplayNameFor(model => model.GivenDegreeIndexer)
+                </th>
+                <th>
+                    @Html.DisplayNameFor(model => model.ReceiptDate)
+                </th>
+                <th>
+                    @Html.DisplayNameFor(model => model.ExpirationDate)
+                </th>
+                <th>
+                    @Html.DisplayNameFor(model => model.Degree.DegreeIndexer)
+                </th>
+                <th>
+                    @Html.DisplayNameFor(model => model.Degree.Name)
+                </th>
+                <th>
+                    @Html.DisplayNameFor(model => model.Degree.Description)
+                </th>
+                <th>
+                    @Html.DisplayNameFor(model => model.Degree.Branches)
+                </th>
+                <th>
+                    Stopień zawodowy jest ważny ?
+                </th>
+                <th>
+                    Operacje
+                </th>
+            </tr>
+        </thead>
+        <tbody>
+            <tr class="alert @if (Model.ExpirationDate < DateTime.Now) { <text> table-danger </text>} else { <text> table-success </text> }">
+                <td>
+                    @Html.DisplayFor(model => model.GivenDegreeIndexer)
+                </td>
+                <td>
+                    @Html.DisplayFor(model => model.ReceiptDate)
+                </td>
+                <td>
+                    @Html.DisplayFor(model => model.ExpirationDate)
+                </td>
+                <td>
+                    @Html.DisplayFor(model => model.Degree.DegreeIndexer)
+                </td>
+                <td>
+                    @Html.DisplayFor(model => model.Degree.Name)
+                </td>
+                <td>
+                    @Html.DisplayFor(model => model.Degree.Description)
+                </td>
+                <td>
+                    <div class="btn-group btn-group-toggle" data-toggle="buttons">
+                        @foreach (var branch in Model.Degree.Branches)
+                        {
+                            <label class="btn btn-outline-secondary m-2 active">
+                                <input type="checkbox"
+                                       name="SelectedBranches"
+                                       value="@branch"
+                                       autocomplete="off"
+                                       disabled
+                                       checked />
+                                <span>@branch</span>
+                            </label>
+                        }
+                    </div>
+                </td>
+                <td style="text-align:center">
+                    @if (Model.ExpirationDate < DateTime.Now)
+                    {
+                        <span class="fas fa-times" style="font-size:34px"></span>
+                    }
+                    else
+                    {
+                        <span class="fas fa-check-circle" style="font-size:34px"></span>
+                    }
+                </td>
+                <td>
+                    <a asp-action="EditGivenDegree" asp-route-givenDegreeIdentificator="@Model.GivenDegreeIdentificator" asp-controller="GivenDegrees" class="btn btn-warning m-1">Edytuj nadany stopień</a>
+                    <a asp-action="DegreeDetails" asp-route-degreeIdentificator="@Model.Degree.DegreeIdentificator" asp-controller="Degrees" class="btn btn-info m-1">Szczegóły stopnia zawodowego</a>
+                    <a asp-action="GivenDegreeDetails" asp-route-givenDegreeIdentificator="@Model.GivenDegreeIdentificator" asp-controller="GivenDegrees" class="btn btn-secondary m-1">Szczegóły przyznanego stopnia zawodowego</a>
+                </td>
+            </tr>
+        </tbody>
+    </table>
+</div>
+
+<h2 class="mt-4 mb-4">Certyfikaty wymagane do uzyskania stopnia zawodowego</h2>
+
+@if (Model.RequiredCertificatesWithGivenInstances.Count != 0)
+{
+    <div class="col-12 table-responsive">
+        <table id="listRequiredCertificates" class="table table-striped table-bordered display" style="width: 100%;" role="grid">
+            <thead>
+                <tr>
+                    <th>
+                        @Html.DisplayNameFor(model => model.RequiredCertificatesWithGivenInstances.First().GivenCertificateIndexer)
+                    </th>
+                    <th>
+                        @Html.DisplayNameFor(model => model.RequiredCertificatesWithGivenInstances.First().ReceiptDate)
+                    </th>
+                    <th>
+                        @Html.DisplayNameFor(model => model.RequiredCertificatesWithGivenInstances.First().ExpirationDate)
+                    </th>
+                    <th>
+                        @Html.DisplayNameFor(model => model.RequiredCertificatesWithGivenInstances.First().Certificate.CertificateIndexer)
+                    </th>
+                    <th>
+                        @Html.DisplayNameFor(model => model.RequiredCertificatesWithGivenInstances.First().Certificate.Name)
+                    </th>
+                    <th>
+                        Certyfikat jest ważny ?
+                    </th>
+                    <th>
+                        Operacje
+                    </th>
+                </tr>
+            </thead>
+            <tbody>
+                @foreach (var certificate in Model.RequiredCertificatesWithGivenInstances)
+                {
+                    <tr class="alert @if (certificate.ExpirationDate < DateTime.Now) { <text> table-danger </text>} else { <text> table-success </text> }">
+                        <td>
+                            @Html.DisplayFor(modelItem => certificate.GivenCertificateIndexer)
+                        </td>
+                        <td>
+                            @Html.DisplayFor(modelItem => certificate.ReceiptDate)
+                        </td>
+                        <td>
+                            @Html.DisplayFor(modelItem => certificate.ExpirationDate)
+                        </td>
+                        <td>
+                            @Html.DisplayFor(modelItem => certificate.Certificate.CertificateIndexer)
+                        </td>
+                        <td>
+                            @Html.DisplayFor(modelItem => certificate.Certificate.Name)
+                        </td>
+                        <td style="text-align:center">
+                            @if (certificate.ExpirationDate < DateTime.Now)
+                            {
+                                <span class="fas fa-times" style="font-size:34px"></span>
+                            }
+                            else
+                            {
+                                <span class="fas fa-check-circle" style="font-size:34px"></span>
+                            }
+                        </td>
+                        <td>
+                            <a asp-action="EditGivenCertificate" asp-route-givenCertificateIdentificator="@certificate.GivenCertificateIdentificator" asp-controller="GivenCertificate" class="btn btn-warning m-1">Edytuj nadany certyfikat</a>
+                            <a asp-action="CertificateDetails" asp-route-certificateIdentificator="@certificate.Certificate.CertificateIdentificator" asp-controller="Certificate" class="btn btn-info m-1">Szczegóły certyfikatu</a>
+                            <a asp-action="GivenCertificateDetails" asp-route-certificateIdentificator="@certificate.GivenCertificateIdentificator" asp-controller="GivenCertificate" class="btn btn-secondary m-1">Szczegóły przyznanego certyfikatu</a>
+                        </td>
+                    </tr>
+                }
+            </tbody>
+        </table>
+    </div>
+}
+else
+{
+    <div class="mt-4 mb-4 alert alert-warning">Do nadania stopnia zawodowego nie jest wymagane posiadanie jakiegokolwiek certyfikatu</div>
+}
+
+<h2 class="mt-4 mb-4">Stopnie zawodowe wymagane do uzyskania wymienionego stopnia zawodowego</h2>
+
+@if (Model.RequiredDegreesWithGivenInstances.Count != 0)
+{
+    <div class="col-12 table-responsive">
+        <table id="listRequiredDegrees" class="table table-striped table-bordered display" style="width: 100%;" role="grid">
+            <thead>
+                <tr>
+                    <th>
+                        @Html.DisplayNameFor(model => model.RequiredDegreesWithGivenInstances.First().GivenDegreeIndexer)
+                    </th>
+                    <th>
+                        @Html.DisplayNameFor(model => model.RequiredDegreesWithGivenInstances.First().ReceiptDate)
+                    </th>
+                    <th>
+                        @Html.DisplayNameFor(model => model.RequiredDegreesWithGivenInstances.First().ExpirationDate)
+                    </th>
+                    <th>
+                        @Html.DisplayNameFor(model => model.RequiredDegreesWithGivenInstances.First().Degree.DegreeIndexer)
+                    </th>
+                    <th>
+                        @Html.DisplayNameFor(model => model.RequiredDegreesWithGivenInstances.First().Degree.Name)
+                    </th>
+                    <th>
+                        Stopień zawodowy jest ważny ?
+                    </th>
+                    <th>
+                        Operacje
+                    </th>
+                </tr>
+            </thead>
+            <tbody>
+                @foreach (var degree in Model.RequiredDegreesWithGivenInstances)
+                {
+                    <tr class="alert @if (degree.ExpirationDate < DateTime.Now) { <text> table-danger </text>} else { <text> table-success </text> }">
+                        <td>
+                            @Html.DisplayFor(modelItem => degree.GivenDegreeIndexer)
+                        </td>
+                        <td>
+                            @Html.DisplayFor(modelItem => degree.ReceiptDate)
+                        </td>
+                        <td>
+                            @Html.DisplayFor(modelItem => degree.ExpirationDate)
+                        </td>
+                        <td>
+                            @Html.DisplayFor(modelItem => degree.Degree.DegreeIndexer)
+                        </td>
+                        <td>
+                            @Html.DisplayFor(modelItem => degree.Degree.Name)
+                        </td>
+                        <td style="text-align:center">
+                            @if (degree.ExpirationDate < DateTime.Now)
+                            {
+                                <span class="fas fa-times" style="font-size:34px"></span>
+                            }
+                            else
+                            {
+                                <span class="fas fa-check-circle" style="font-size:34px"></span>
+                            }
+                        </td>
+                        <td>
+                            <a asp-action="EditGivenDegree" asp-route-givenDegreeIdentificator="@degree.GivenDegreeIdentificator" asp-controller="GivenDegrees" class="btn btn-warning m-1">Edytuj nadany stopień</a>
+                            <a asp-action="DegreeDetails" asp-route-degreeIdentificator="@degree.Degree.DegreeIdentificator" asp-controller="Degrees" class="btn btn-info m-1">Szczegóły stopnia zawodowego</a>
+                            <a asp-action="GivenDegreeDetails" asp-route-givenDegreeIdentificator="@degree.GivenDegreeIdentificator" asp-controller="GivenDegrees" class="btn btn-secondary m-1">Szczegóły przyznanego stopnia zawodowego</a>
+                        </td>
+                    </tr>
+                }
+            </tbody>
+        </table>
+    </div>
+}
+else
+{
+    <div class="mt-4 mb-4 alert alert-warning">Do nadania stopnia zawodowego nie jest wymagane posiadanie jakiegokolwiek stopnia zawodowego</div>
+}
+
+@section Scripts{
+    <script>
+        $(document).ready(function () {
+
+            $('#listGivenCertificate').DataTable({
+                "language": {
+                    "url": "//cdn.datatables.net/plug-ins/1.10.19/i18n/Polish.json"
+                },
+            }
+            );
+
+            $('#listCompanies').DataTable({
+                "language": {
+                    "url": "//cdn.datatables.net/plug-ins/1.10.19/i18n/Polish.json"
+                },
+            }
+            );
+
+            $('#listRequiredCertificates').DataTable({
+                "language": {
+                    "url": "//cdn.datatables.net/plug-ins/1.10.19/i18n/Polish.json"
+                },
+            }
+            );
+
+            $('#listRequiredDegrees').DataTable({
+                "language": {
+                    "url": "//cdn.datatables.net/plug-ins/1.10.19/i18n/Polish.json"
+                },
+            }
+            );
+        });
+    </script>
+}

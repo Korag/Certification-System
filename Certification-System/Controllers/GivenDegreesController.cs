@@ -142,5 +142,74 @@ namespace Certification_System.Controllers
 
             return View(newGivenDegree);
         }
+
+        // GET: GivenDegreeDetails
+        [Authorize(Roles = "Admin")]
+        public ActionResult GivenDegreeDetails(string givenDegreeIdentificator)
+        {
+            var GivenDegree = _context.givenDegreeRepository.GetGivenDegreeById(givenDegreeIdentificator);
+
+            var Degree = _context.degreeRepository.GetDegreeById(GivenDegree.Degree);
+
+            var RequiredDegrees = _context.degreeRepository.GetDegreesById(Degree.RequiredDegrees);
+            var RequiredCertificates = _context.certificateRepository.GetCertificatesById(Degree.RequiredCertificates);
+
+            var User = _context.userRepository.GetUserByGivenDegreeId(givenDegreeIdentificator);
+            var Companies = _context.companyRepository.GetCompaniesById(User.CompanyRoleManager.Concat(User.CompanyRoleWorker).Distinct().ToList());
+
+            DisplayDegreeWithoutRequirementsViewModel degreeViewModel = _mapper.Map<DisplayDegreeWithoutRequirementsViewModel>(Degree);
+            degreeViewModel.Branches = _context.branchRepository.GetBranchesById(Degree.Branches);
+
+            DisplayAllUserInformationViewModel userViewModel = _mapper.Map<DisplayAllUserInformationViewModel>(User);
+
+            List<DisplayCompanyViewModel> companiesViewModel = _mapper.Map<List<DisplayCompanyViewModel>>(Companies);
+
+
+            List<DisplayGivenCertificateToUserWithoutCourseViewModel> ListOfRequiredCertificatesWithInstances = new List<DisplayGivenCertificateToUserWithoutCourseViewModel>();
+            var UsersGivenCertificate = _context.givenCertificateRepository.GetGivenCertificatesById(User.GivenCertificates);
+
+            if (RequiredCertificates.Count != 0)
+            {
+                foreach (var certificate in RequiredCertificates)
+                {
+                    DisplayCrucialDataCertificateViewModel certificateViewModel = _mapper.Map<DisplayCrucialDataCertificateViewModel>(certificate);
+
+                    var RequiredGivenCertificate = UsersGivenCertificate.Where(z => z.Certificate == certificate.CertificateIdentificator).FirstOrDefault();
+
+                    DisplayGivenCertificateToUserWithoutCourseViewModel requiredCertificateWithInstance = _mapper.Map<DisplayGivenCertificateToUserWithoutCourseViewModel>(RequiredGivenCertificate);
+                    requiredCertificateWithInstance.Certificate = certificateViewModel;
+
+                    ListOfRequiredCertificatesWithInstances.Add(requiredCertificateWithInstance);
+                }
+            }
+
+            List<DisplayGivenDegreeToUserViewModel> ListOfRequiredDegreesWithInstances = new List<DisplayGivenDegreeToUserViewModel>();
+            var UsersGivenDegrees = _context.givenDegreeRepository.GetGivenDegreesById(User.GivenDegrees);
+
+            if (RequiredDegrees.Count != 0)
+            {
+                foreach (var degree in RequiredDegrees)
+                {
+                    DisplayCrucialDataDegreeViewModel singleDegreeViewModel = _mapper.Map<DisplayCrucialDataDegreeViewModel>(degree);
+
+                    var RequiredGivenDegree = UsersGivenDegrees.Where(z => z.Degree == degree.DegreeIdentificator).FirstOrDefault();
+
+                    DisplayGivenDegreeToUserViewModel requiredDegreeWithInstance = _mapper.Map<DisplayGivenDegreeToUserViewModel>(singleDegreeViewModel);
+                    requiredDegreeWithInstance.Degree = singleDegreeViewModel;
+
+                    ListOfRequiredDegreesWithInstances.Add(requiredDegreeWithInstance);
+                }
+            }
+
+            GivenDegreeDetailsViewModel GivenDegreeDetails = _mapper.Map<GivenDegreeDetailsViewModel>(GivenDegree);
+            GivenDegreeDetails.Degree = degreeViewModel;
+            GivenDegreeDetails.User = userViewModel;
+            GivenDegreeDetails.Companies = companiesViewModel;
+
+            GivenDegreeDetails.RequiredCertificatesWithGivenInstances = ListOfRequiredCertificatesWithInstances;
+            GivenDegreeDetails.RequiredDegreesWithGivenInstances = ListOfRequiredDegreesWithInstances;
+
+            return View(GivenDegreeDetails);
+        }
     }
 }

@@ -56,7 +56,8 @@
                         @Html.DisplayFor(model => givenDegree.User.FirstName) @Html.DisplayFor(model => givenDegree.User.LastName)
                     </td>
                     <td>
-                        <a asp-action="UserDetails" asp-route-userIdentificator="@givenDegree.User.UserIdentificator" asp-controller="Users" class="btn btn-info m-1">Szczegóły użytkownika</a>
+                        <a asp-action="GivenDegreeDetails" asp-route-givenDegreeIdentificator="@givenDegree.GivenDegreeIdentificator" asp-controller="GivenDegrees" class="btn btn-info m-1">Szczegóły nadanego stopnia zawodowego</a>
+                        <a asp-action="UserDetails" asp-route-userIdentificator="@givenDegree.User.UserIdentificator" asp-controller="Users" class="btn btn-secondary m-1">Szczegóły użytkownika</a>
                         <a asp-action="EditGivenDegree" asp-route-givenDegreeIdentificator="@givenDegree.GivenDegreeIdentificator" asp-controller="GivenDegrees" class="btn btn-warning m-1">Edytuj stopień zawodowy</a>
                     </td>
                 </tr>
