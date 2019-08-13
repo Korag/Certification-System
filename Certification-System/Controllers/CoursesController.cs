@@ -248,5 +248,76 @@ namespace Certification_System.Controllers
             return View(editedCourse);
         }
 
+        // GET: AssignUserToCourse
+        [Authorize(Roles = "Admin")]
+        public ActionResult AssignUserToCourse(ICollection<string> userIdentificators, string courseIdentificator)
+        {
+            ICollection<string> ChosenUsers;
+            string ChosenCourse = "";
+
+            if (userIdentificators.Count() != 0)
+                ChosenUsers = _context.userRepository.GetUsersById(userIdentificators).Select(z => z.Id).ToList();
+            else
+                ChosenUsers = new List<string>();
+
+            if (courseIdentificator != null)
+                ChosenCourse = _context.courseRepository.GetCourseById(courseIdentificator).CourseIdentificator;
+
+            var AvailableUsers = _context.userRepository.GetWorkersAsSelectList().ToList();
+            var AvailableCourses = _context.courseRepository.GetActiveCoursesWithVacantSeatsAsSelectList().ToList();
+
+            AssignUserToCourseViewModel usersToAssignToCourse = new AssignUserToCourseViewModel
+            {
+                AvailableCourses = AvailableCourses,
+                SelectedCourse = ChosenCourse,
+
+                AvailableUsers = AvailableUsers,
+                SelectedUsers = ChosenUsers
+            };
+
+            return View(usersToAssignToCourse);
+        }
+
+        // POST: AssignUserToCourse
+        [Authorize(Roles = "Admin")]
+        [HttpPost]
+        public ActionResult AssignUserToCourse(AssignUserToCourseViewModel usersAssignedToCourse)
+        {
+            if (ModelState.IsValid)
+            {
+                var UsersAlreadyInChosenCourse = _context.userRepository.GetUsersById(usersAssignedToCourse.SelectedUsers.ToList()).Where(z => z.Courses.Contains(usersAssignedToCourse.SelectedCourse)).ToList();
+
+                if (UsersAlreadyInChosenCourse.Count() == 0)
+                {
+                    var Course = _context.courseRepository.GetCourseById(usersAssignedToCourse.SelectedCourse);
+                    var VacantSeats = Course.EnrolledUsersLimit - Course.EnrolledUsers.Count();
+
+                    if (VacantSeats < usersAssignedToCourse.SelectedUsers.Count())
+                    {
+                        ModelState.AddModelError("", "Brak wystarczającej liczby miejsc dla wybranych użytkowników");
+                        ModelState.AddModelError("", $"Do wybranego kursu maksymalnie możesz zapisać jeszcze: {VacantSeats} użytkowników");
+                    }
+                    else
+                    {
+                        _context.userRepository.AddUsersToCourse(usersAssignedToCourse.SelectedCourse, usersAssignedToCourse.SelectedUsers);
+                        _context.courseRepository.AddEnrolledUsersToCourse(usersAssignedToCourse.SelectedCourse, usersAssignedToCourse.SelectedUsers);
+
+                        return RedirectToAction("CourseDetails", new { courseIdentificator = usersAssignedToCourse.SelectedCourse });
+                    }
+                }
+                else
+                {
+                    foreach (var user in UsersAlreadyInChosenCourse)
+                    {
+                        ModelState.AddModelError("", user.FirstName + " " + user.LastName + " już jest zapisany/a do wybranego kursu");
+                    }
+                }
+            }
+
+            usersAssignedToCourse.AvailableUsers = _context.userRepository.GetWorkersAsSelectList().ToList();
+            usersAssignedToCourse.AvailableCourses = _context.courseRepository.GetActiveCoursesAsSelectList().ToList();
+
+            return View(usersAssignedToCourse);
+        }
     }
 }

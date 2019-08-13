@@ -1,0 +1,49 @@
+﻿@model Certification_System.DTOViewModels.AssignUserToCourseViewModel
+
+@{
+    ViewBag.Title = "AssignUserToCourse";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+<h1>Dodawanie użytkowników do kursu</h1>
+<hr />
+
+<div>
+    <form asp-action="AssignUserToCourse">
+
+        <div class="col-md-6 col-xl-6 col-sm-8 col-xs-10 m-auto p-3 shadow p-3 mb-5 bg-light rounded border border-primary rounded-bottom" style="opacity:0.80">
+
+            <div class="form-group">
+                <label asp-for="SelectedCourse" class="control-label"></label>
+                <div>
+                    <select asp-for="SelectedCourse" asp-items="@Model.AvailableCourses" data-style="btn-white" data-container="body" data-width="auto" data-header="Wybierz kurs" data-live-search="true" title="Nie wybrano żadnego elementu" class="form-control selectpicker show-tick w-100"> </select>
+                    <div class="row justify-content-center">
+                        <span asp-validation-for="SelectedCourse" class="text-danger"></span>
+                    </div>
+                </div>
+            </div>
+
+            <div class="form-group">
+                <label asp-for="SelectedUsers" class="control-label"></label>
+                <div>
+                    <select asp-for="SelectedUsers" asp-items="@Model.AvailableUsers" data-style="btn-white" data-container="body" data-width="auto" data-header="Wybierz użytkownika" data-live-search="true" title="Nie wybrano żadnego elementu" class="form-control selectpicker show-tick w-100"> </select>
+                    <div class="row justify-content-center">
+                        <span asp-validation-for="SelectedUsers" class="text-danger"></span>
+                    </div>
+                </div>
+            </div>
+
+            <div asp-validation-summary="ModelOnly" class="row justify-content-center alert alert-danger validation-model"></div>
+
+            <div class="row justify-content-center">
+                <input type="submit" value="Przypisz do kursu" class="btn btn-primary" />
+            </div>
+
+        </div>
+
+    </form>
+</div>
+
+@section Scripts {
+    @await Html.PartialAsync("_ValidationScriptsPartial")
+}
