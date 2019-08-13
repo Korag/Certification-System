@@ -30,6 +30,11 @@ namespace Certification_System.Repository
             return  GetUsers().AsQueryable().Where(z => z.Roles.Contains("INSTRUCTOR")).ToList();
         }
 
+        public ICollection<CertificationPlatformUser> GetListOfWorkers()
+        {
+            return GetUsers().AsQueryable().Where(z => z.Roles.Contains("WORKER")).ToList();
+        }
+
         public ICollection<CertificationPlatformUser> GetListOfUsers()
         {
             return GetUsers().AsQueryable().ToList();
@@ -105,6 +110,26 @@ namespace Certification_System.Repository
             return SelectList;
         }
 
+        public ICollection<SelectListItem> GetWorkersAsSelectList()
+        {
+            var Workers = GetListOfWorkers();
+            List<SelectListItem> SelectList = new List<SelectListItem>();
+
+            foreach (var worker in Workers)
+            {
+                SelectList.Add
+                    (
+                        new SelectListItem()
+                        {
+                            Text = worker.FirstName + " " + worker.LastName,
+                            Value = worker.Id
+                        }
+                    );
+            };
+
+            return SelectList;
+        }
+
         public ICollection<CertificationPlatformUser> GetInstructorsById(ICollection<string> userIdentificators)
         {
             var result = GetListOfInstructors().Where(z => userIdentificators.Contains(z.Id)).ToList();
@@ -156,6 +181,14 @@ namespace Certification_System.Repository
 
             var filter = Builders<CertificationPlatformUser>.Filter.Eq(x => x.Id, userIdentificator);
             GetUsers().ReplaceOne(filter, User);
+        }
+
+        public void AddUsersToCourse(string courseIdentificator, ICollection<string> usersIdentificators)
+        {
+            var filter = Builders<CertificationPlatformUser>.Filter.Where(z => usersIdentificators.Contains(z.Id));
+            var update = Builders<CertificationPlatformUser>.Update.AddToSet(x => x.Courses, courseIdentificator);
+
+            var result = GetUsers().UpdateOne(filter, update);
         }
 
         public CertificationPlatformUser GetUserByGivenCertificateId(string givenCertificateIdentificator)

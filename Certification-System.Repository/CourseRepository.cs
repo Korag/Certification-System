@@ -77,6 +77,27 @@ namespace Certification_System.Repository
             return SelectList;
         }
 
+        public ICollection<SelectListItem> GetActiveCoursesWithVacantSeatsAsSelectList()
+        {
+            List<Course> Courses = GetActiveCourses().ToList();
+            List<SelectListItem> SelectList = new List<SelectListItem>();
+
+            foreach (var course in Courses)
+            {
+                var VacantSeats = course.EnrolledUsersLimit - course.EnrolledUsers.Count();
+
+                SelectList.Add
+                    (
+                        new SelectListItem()
+                        {
+                            Text = course.CourseIndexer + " " + course.Name + " |wm.: " + VacantSeats,
+                            Value = course.CourseIdentificator
+                        }
+                    );
+            };
+
+            return SelectList;
+        }
 
         public ICollection<SelectListItem> GetAllCoursesAsSelectList()
         {
@@ -96,6 +117,14 @@ namespace Certification_System.Repository
             };
 
             return SelectList;
+        }
+
+        public void AddEnrolledUsersToCourse(string courseIdentificator, ICollection<string> usersIdentificators)
+        {
+            var filter = Builders<Course>.Filter.Where(z => z.CourseIdentificator == courseIdentificator);
+            var update = Builders<Course>.Update.AddToSetEach(x => x.EnrolledUsers, usersIdentificators);
+
+            var result = GetCourses().UpdateOne(filter, update);
         }
 
         public Course GetCourseByMeetingId(string meetingIdentificator)

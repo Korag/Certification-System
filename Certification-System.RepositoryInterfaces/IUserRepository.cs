@@ -23,5 +23,7 @@ namespace Certification_System.RepositoryInterfaces
         CertificationPlatformUser GetInstructorById(string userIdentificator);
         ICollection<CertificationPlatformUser> GetInstructorsById(ICollection<string> userIdentificators);
         ICollection<SelectListItem> GetInstructorsAsSelectList();
+        ICollection<SelectListItem> GetWorkersAsSelectList();
+        void AddUsersToCourse(string courseIdentificator, ICollection<string> usersIdentificators);
     }
 }
