@@ -54,7 +54,7 @@ namespace Certification_System.Controllers
                 var Course = _context.courseRepository.GetCourseById(courseIdentificator);
 
                 DisplayCourseWithMeetingsViewModel modifiedCourse = _mapper.Map<DisplayCourseWithMeetingsViewModel>(Course);
-               
+
                 if (Course.Meetings != null)
                 {
                     //    var MeetingsId = _context.GetMeetingsById(Course.Meetings);
@@ -183,12 +183,14 @@ namespace Certification_System.Controllers
                 DisplayMeetingViewModel singleMeeting = _mapper.Map<DisplayMeetingViewModel>(meeting);
                 singleMeeting.CourseIdentificator = Course.CourseIdentificator;
                 singleMeeting.InstructorsCredentials = _context.userRepository.GetInstructorsById(meeting.Instructors).Select(z => z.FirstName + " " + z.LastName).ToList();
-             
+
                 meetingsViewModel.Add(singleMeeting);
             }
 
             var Users = _context.userRepository.GetUsersById(Course.EnrolledUsers);
             List<DisplayCrucialDataWithCompaniesRoleUserViewModel> usersViewModel = _mapper.Map<List<DisplayCrucialDataWithCompaniesRoleUserViewModel>>(Users);
+            usersViewModel.ForEach(z => z.CompanyRoleManager = _context.companyRepository.GetCompaniesById(z.CompanyRoleManager).Select(s => s.CompanyName).ToList());
+            usersViewModel.ForEach(z => z.CompanyRoleWorker = _context.companyRepository.GetCompaniesById(z.CompanyRoleWorker).Select(s => s.CompanyName).ToList());
 
             var InstructorsIdentificators = new List<string>();
             Meetings.ToList().ForEach(z => z.Instructors.ToList().ForEach(s => InstructorsIdentificators.Add(s)));
@@ -217,7 +219,7 @@ namespace Certification_System.Controllers
 
             EditCourseViewModel courseToUpdate = _mapper.Map<EditCourseViewModel>(Course);
             courseToUpdate.AvailableBranches = _context.branchRepository.GetBranchesAsSelectList().ToList();
-          
+
             return View(courseToUpdate);
         }
 
@@ -231,7 +233,7 @@ namespace Certification_System.Controllers
             if (ModelState.IsValid)
             {
                 OriginCourse = _mapper.Map<EditCourseViewModel, Course>(editedCourse, OriginCourse);
-         
+
                 _context.courseRepository.UpdateCourse(OriginCourse);
 
                 return RedirectToAction("ConfirmationOfActionOnCourse", "Courses", new { courseIdentificator = editedCourse.CourseIdentificator, TypeOfAction = "Update" });
@@ -246,10 +248,5 @@ namespace Certification_System.Controllers
             return View(editedCourse);
         }
 
-        [Authorize(Roles = "Admin")]
-        public ActionResult Test()
-        {
-            return Ok();
-        }
     }
 }
