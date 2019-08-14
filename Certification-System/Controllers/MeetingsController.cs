@@ -149,8 +149,10 @@ namespace Certification_System.Controllers
 
         // GET: MeetingDetails
         [Authorize(Roles = "Admin")]
-        public ActionResult MeetingDetails(string meetingIdentificator)
+        public ActionResult MeetingDetails(string meetingIdentificator, bool checkedPresence)
         {
+            ViewBag.CheckedPresence = checkedPresence;
+
             var Meeting = _context.meetingRepository.GetMeetingById(meetingIdentificator);
             var RelatedInstructors = _context.userRepository.GetInstructorsById(Meeting.Instructors);
             
@@ -177,6 +179,43 @@ namespace Certification_System.Controllers
             MeetingDetails.AllCourseParticipants = ListOfUsers;
 
             return View(MeetingDetails);
+        }
+
+        // GET: CheckUsersPresence
+        [Authorize(Roles = "Admin")]
+        public ActionResult CheckUsersPresence(string meetingIdentificator)
+        {
+            var Meeting = _context.meetingRepository.GetMeetingById(meetingIdentificator);
+
+            var EnrolledUsersIdentificators = _context.courseRepository.GetCourseByMeetingId(meetingIdentificator).EnrolledUsers;
+            var EnrolledUsersList = _context.userRepository.GetUsersById(EnrolledUsersIdentificators);
+
+            List<DisplayCrucialDataUserViewModel> ListOfUsers = new List<DisplayCrucialDataUserViewModel>();
+
+            if (EnrolledUsersList.Count != 0)
+            {
+                ListOfUsers = _mapper.Map<List<DisplayCrucialDataUserViewModel>>(EnrolledUsersList);
+            }
+
+            CheckMeetingPresenceViewModel MeetingPresence = _mapper.Map<CheckMeetingPresenceViewModel>(Meeting);
+
+            MeetingPresence.AttendanceList = _mapper.Map<PresenceCheckBoxViewModel[]>(ListOfUsers);
+            MeetingPresence.AttendanceList.ToList().ForEach(z => z.IsPresent = Meeting.AttendanceList.Contains(z.UserIdentificator));
+
+            MeetingPresence.AllCourseParticipants = ListOfUsers;
+
+            return View(MeetingPresence);
+        }
+
+        // POST: CheckUsersPresence
+        [Authorize(Roles = "Admin")]
+        [HttpPost]
+        public ActionResult CheckUsersPresence(CheckMeetingPresenceCrucialDataViewModel meetingWithPresenceToCheck)
+        {
+            var PresentUsersIdentificators = meetingWithPresenceToCheck.AttendanceList.ToList().Where(z => z.IsPresent == true).Select(z => z.UserIdentificator).ToList();
+            _context.meetingRepository.ChangeUsersPresenceOnMeetings(meetingWithPresenceToCheck.MeetingIdentificator, PresentUsersIdentificators);
+
+            return RedirectToAction("MeetingDetails", "Meetings", new { meetingIdentificator = meetingWithPresenceToCheck.MeetingIdentificator, checkedPresence = true });
         }
     }
 }

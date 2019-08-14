@@ -8,6 +8,11 @@
 <h2>Szczegóły spotkania</h2>
 <hr />
 
+@if (ViewBag.CheckedPresence == true)
+{
+    <h2 class="alert alert-info" role="alert">Dokonano sprawdzenia obecności na spotkaniu</h2>
+}
+
 <div>
 
     <h2>Informacje o spotkaniu</h2>
@@ -19,11 +24,6 @@
     <form asp-action="MeetingDetails">
 
         <div class="col-md-6 col-xl-6 col-sm-8 col-xs-10 m-auto p-3 shadow p-3 mb-5 bg-light rounded border border-primary rounded-bottom" style="opacity:0.80">
-
-            <div class="form-group">
-                <label asp-for="MeetingIdentificator" class="control-label"></label>
-                <input asp-for="MeetingIdentificator" class="form-control disabled" />
-            </div>
 
             <div class="form-group">
                 <label asp-for="MeetingIndexer" class="control-label"></label>
@@ -133,6 +133,10 @@ else
 
 <h2 class="mt-4 mb-4">Uczestnicy kursu</h2>
 
+<div class="mt-3 mb-3">
+    <a asp-action="CheckUsersPresence" asp-route-meetingIdentificator="@Model.MeetingIdentificator" asp-controller="Meetings" class="btn btn-primary">Sprawdź obecność</a>
+</div>
+
 @if (Model.AllCourseParticipants.Count != 0)
 {
     <div class="col-12 table-responsive">
@@ -170,27 +174,36 @@ else
                             @Html.DisplayFor(modelItem => user.LastName)
                         </td>
                         <td>
-                            @if (Model.AttendanceList.Count != 0)
+                            @if (Model.AttendanceList.Contains(user.UserIdentificator))
                             {
-                                @if (Model.AttendanceList.Contains(user.UserIdentificator))
-                                {
-                                    <span class="fas fa-clipboard-check" style="font-size:34px"></span>
-                                }
-                                else
-                                {
-                                    <span class="fas fa-times" style="font-size:34px"></span>
-                                }
+                                <input type="checkbox" checked data-toggle="toggle" data-on="<i class='fas fa-clipboard-check'></i> Obecny" data-off="<i class='fas fa-times'></i> Nieobecny" data-size="sm" disabled />
                             }
                             else
                             {
-                                <span class="fas fa-file-signature" style="font-size:34px"></span>
+                                <input type="checkbox" data-toggle="toggle" data-on="<i class='fas fa-clipboard-check'></i> Obecny" data-off="<i class='fas fa-times'></i> Nieobecny" data-size="sm" disabled />
                             }
+
+                            @*@if (Model.AttendanceList.Count != 0)
+                                {
+                                    @if (Model.AttendanceList.Contains(user.UserIdentificator))
+                                    {
+                                        <span class="fas fa-clipboard-check" style="font-size:34px"></span>
+                                    }
+                                    else
+                                    {
+                                        <span class="fas fa-times" style="font-size:34px"></span>
+                                    }
+                                }
+                                else
+                                {
+                                    <span class="fas fa-file-signature" style="font-size:34px"></span>
+                                }*@
                         </td>
                         <td>
-                            <a asp-action="UserDetails" asp-route-userIdentificatorIdentificator="@user.UserIdentificator" asp-controller="Users" class="btn btn-info m-1">Szczegóły</a>
-                            <a asp-action="EditUser" asp-route-userIdentificatorIdentificator="@user.UserIdentificator" asp-controller="Users" class="btn btn-warning m-1">Edytuj</a>
-                            <a asp-action="" asp-route-userIdentificatorIdentificator="@user.UserIdentificator" asp-controller="Certificates" class="btn btn-primary m-1">Nadaj certyfikaty</a>
-                            <a asp-action="" asp-route-userIdentificatorIdentificator="@user.UserIdentificator" asp-controller="Degrees" class="btn btn-secondary m-1">Nadaj stopień zawodowy</a>
+                            <a asp-action="UserDetails" asp-route-userIdentificator="@user.UserIdentificator" asp-controller="Users" class="btn btn-info m-1">Szczegóły</a>
+                            <a asp-action="EditUser" asp-route-userIdentificator="@user.UserIdentificator" asp-controller="Users" class="btn btn-warning m-1">Edytuj</a>
+                            <a asp-action="AddNewGivenCertificate" asp-route-userIdentificator="@user.UserIdentificator" asp-controller="GivenCertificates" class="btn btn-primary m-1">Nadaj certyfikaty</a>
+                            <a asp-action="AddNewGivenDegree" asp-route-userIdentificator="@user.UserIdentificator" asp-controller="GivenDegrees" class="btn btn-secondary m-1">Nadaj stopień zawodowy</a>
                         </td>
                     </tr>
                 }

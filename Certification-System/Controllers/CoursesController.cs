@@ -170,9 +170,11 @@ namespace Certification_System.Controllers
 
         // GET: CourseDetails
         [Authorize(Roles = "Admin")]
-        public ActionResult CourseDetails(string CourseIdentificator)
+        public ActionResult CourseDetails(string courseIdentificator, bool addedNewUsersToCourse)
         {
-            var Course = _context.courseRepository.GetCourseById(CourseIdentificator);
+            ViewBag.AddedNewUsersToCourse = addedNewUsersToCourse;
+
+            var Course = _context.courseRepository.GetCourseById(courseIdentificator);
             var Meetings = _context.meetingRepository.GetMeetingsById(Course.Meetings);
 
             List<DisplayMeetingViewModel> meetingsViewModel = new List<DisplayMeetingViewModel>();
@@ -302,7 +304,7 @@ namespace Certification_System.Controllers
                         _context.userRepository.AddUsersToCourse(usersAssignedToCourse.SelectedCourse, usersAssignedToCourse.SelectedUsers);
                         _context.courseRepository.AddEnrolledUsersToCourse(usersAssignedToCourse.SelectedCourse, usersAssignedToCourse.SelectedUsers);
 
-                        return RedirectToAction("CourseDetails", new { courseIdentificator = usersAssignedToCourse.SelectedCourse });
+                        return RedirectToAction("CourseDetails", new { courseIdentificator = usersAssignedToCourse.SelectedCourse, addedNewUsersToCourse= true });
                     }
                 }
                 else

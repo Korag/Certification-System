@@ -8,6 +8,11 @@
 <h1>Szczegóły szkolenia</h1>
 <hr />
 
+@if (ViewBag.AddedNewUsersToCourse == true)
+{
+    <h2 class="alert alert-info" role="alert">Zapisano nowych użytkowników na kurs</h2>
+}
+
 <h2>Informacje o kursie</h2>
 
 <div class="mt-3 mb-3">
@@ -94,6 +99,7 @@
 </div>
 
 <h2 class="mt-4 mb-4">Instruktorzy</h2>
+
 @if (Model.Instructors.Count != 0)
 {
     <div class="col-12 table-responsive">
@@ -120,23 +126,23 @@
             <tbody>
                 @foreach (var instructor in Model.Instructors)
                 {
-                <tr>
-                    <td>
-                        @Html.DisplayFor(modelItem => instructor.FirstName)
-                    </td>
-                    <td>
-                        @Html.DisplayFor(modelItem => instructor.LastName)
-                    </td>
-                    <td>
-                        @Html.DisplayFor(modelItem => instructor.Email)
-                    </td>
-                    <td>
-                        @Html.DisplayFor(modelItem => instructor.PhoneNumber)
-                    </td>
-                    <td>
-                        <a asp-action="InstructorDetails" asp-route-instructorIdentificator="@instructor.UserIdentificator" asp-controller="Users" class="btn btn-info m-1">Szczegóły użytkownika</a>
-                    </td>
-                </tr>
+                    <tr>
+                        <td>
+                            @Html.DisplayFor(modelItem => instructor.FirstName)
+                        </td>
+                        <td>
+                            @Html.DisplayFor(modelItem => instructor.LastName)
+                        </td>
+                        <td>
+                            @Html.DisplayFor(modelItem => instructor.Email)
+                        </td>
+                        <td>
+                            @Html.DisplayFor(modelItem => instructor.PhoneNumber)
+                        </td>
+                        <td>
+                            <a asp-action="InstructorDetails" asp-route-instructorIdentificator="@instructor.UserIdentificator" asp-controller="Users" class="btn btn-info m-1">Szczegóły użytkownika</a>
+                        </td>
+                    </tr>
                 }
             </tbody>
         </table>
@@ -243,7 +249,7 @@ else
 
 <h2 class="mt-4 mb-4">Użytkownicy zapisani na kurs</h2>
 
-<div class="mt-3">
+<div class="mt-3 mb-3">
     <a asp-action="AssignUserToCourse" asp-route-courseIdentificator="@Model.CourseIdentificator" asp-controller="Courses" class="btn btn-primary">Dodaj użytkownika do kursu</a>
 </div>
 
