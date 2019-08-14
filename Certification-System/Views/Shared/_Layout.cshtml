@@ -26,6 +26,8 @@
     <link href="~/css/dataTables.bootstrap4.css" rel="stylesheet" />
     <link href="~/css/responsive.bootstrap4.css" rel="stylesheet" />
 
+    <link href="~/css/bootstrap4-toggle.min.css" rel="stylesheet" />
+
 </head>
 <body>
     <div id="top-bar-wrap" class="clr p-3">
@@ -46,36 +48,36 @@
 
         // Menu Admin
         if (this.User.IsInRole("Admin"))
-            {@await Component.InvokeAsync("AdminMenu")}
+        {@await Component.InvokeAsync("AdminMenu")}
 
-        // Menu Pracodawca-Pracownik
-        else if (this.User.IsInRole("Company") && this.User.IsInRole("Worker"))
-        {@await Component.InvokeAsync("CompanyWorkerMenu")}
+    // Menu Pracodawca-Pracownik
+    else if (this.User.IsInRole("Company") && this.User.IsInRole("Worker"))
+    {@await Component.InvokeAsync("CompanyWorkerMenu")}
 
-        // Menu Pracodawca
-        else if (this.User.IsInRole("Company"))
-            {@await Component.InvokeAsync("CompanyMenu")}
-
-        // Menu Pracownik
-        else if (this.User.IsInRole("Worker"))
-            {@await Component.InvokeAsync("WorkerMenu")}
-
-        // Menu Instruktor-Egzaminator
-        else if (this.User.IsInRole("Instructor") && this.User.IsInRole("Examiner"))
-            {@await Component.InvokeAsync("InstructorExaminerMenu")}
-
-        // Menu Instruktor
-        else if (this.User.IsInRole("Instructor"))
-            {@await Component.InvokeAsync("InstructorMenu")}
-
-        // Menu Egzaminator
-        else if (this.User.IsInRole("Examiner"))
-            {@await Component.InvokeAsync("ExaminerMenu")}
-    }
-    else
-    {
+    // Menu Pracodawca
+    else if (this.User.IsInRole("Company"))
+    {@await Component.InvokeAsync("CompanyMenu")}
+    
+    // Menu Pracownik
+    else if (this.User.IsInRole("Worker"))
+    {@await Component.InvokeAsync("WorkerMenu")}
+    
+    // Menu Instruktor-Egzaminator
+    else if (this.User.IsInRole("Instructor") && this.User.IsInRole("Examiner"))
+    {@await Component.InvokeAsync("InstructorExaminerMenu")}
+    
+    // Menu Instruktor
+    else if (this.User.IsInRole("Instructor"))
+    {@await Component.InvokeAsync("InstructorMenu")}
+    
+    // Menu Egzaminator
+    else if (this.User.IsInRole("Examiner"))
+    {@await Component.InvokeAsync("ExaminerMenu")}
+}
+else
+{
     <partial name="_CertificationSystemBanner" />
-    }
+}
     <div class="container body-content background-image mt-2">
         @RenderBody()
     </div>
@@ -133,6 +135,8 @@
 
     <script src="~/js/jquery.dataTables.js"></script>
     <script src="~/js/dataTables.bootstrap4.js"></script>
+
+    <script src="~/js/bootstrap4-toggle.min.js"></script>
 
     @*<script src="~/js/responsive.bootstrap.js"></script>
         <script src="~/js/dataTables.responsive.js"></script>*@

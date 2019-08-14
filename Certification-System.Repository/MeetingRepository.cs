@@ -54,5 +54,15 @@ namespace Certification_System.Repository
 
             return resultMeeting;
         }
+
+        public void ChangeUsersPresenceOnMeetings(string meetingIdentificator, ICollection<string> usersIdentificators)
+        {
+            var filter = Builders<Meeting>.Filter.Where(z => z.MeetingIdentificator == meetingIdentificator);
+            var clearCollection = Builders<Meeting>.Update.Unset(x => x.AttendanceList);
+            var update = Builders<Meeting>.Update.AddToSetEach(x => x.AttendanceList, usersIdentificators);
+
+            var resultClear = GetMeetings().UpdateOne(filter, clearCollection);
+            var resultUpdate = GetMeetings().UpdateOne(filter, update);
+        }
     }
 }

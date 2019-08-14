@@ -209,6 +209,9 @@ namespace Certification_System.Services
                      .ForMember(dest => dest.AttendanceList, opts => opts.Ignore())
                      .ForMember(dest => dest.AllCourseParticipants, opts => opts.Ignore());
 
+            CreateMap<Meeting, CheckMeetingPresenceViewModel>()
+                     .ForMember(dest => dest.AttendanceList, opts => opts.Ignore())
+                     .ForMember(dest => dest.AllCourseParticipants, opts => opts.Ignore());
             #endregion
 
             #region Users
@@ -270,6 +273,11 @@ namespace Certification_System.Services
                      .ForMember(dest => dest.GivenCertificates, opts => opts.Ignore())
                       .ForMember(dest => dest.Companies, opts => opts.Ignore())
                      .ForMember(dest => dest.GivenDegrees, opts => opts.Ignore());
+            #endregion
+
+            #region ViewModels to ViewModels 
+            CreateMap<DisplayCrucialDataUserViewModel, PresenceCheckBoxViewModel>()
+              .ForMember(dest => dest.IsPresent, opts => opts.Ignore());
             #endregion
         }
     }
