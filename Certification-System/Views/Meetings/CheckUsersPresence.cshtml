@@ -106,11 +106,11 @@
                                 @Html.DisplayFor(model => model.AllCourseParticipants.ElementAt(i).LastName)
                             </td>
                             <td>
-                              @*<div class="checkbox btn btn-outline-primary">
-                                    <input asp-for="@Model.AttendanceList[i].IsPresent" />
-                                    <label asp-for="@Model.AttendanceList[i].IsPresent" hidden></label>
-                                    <input type="hidden" asp-for="@Model.AttendanceList[i].UserIdentificator" />
-                                </div>*@
+                                @*<div class="checkbox btn btn-outline-primary">
+                                        <input asp-for="@Model.AttendanceList[i].IsPresent" />
+                                        <label asp-for="@Model.AttendanceList[i].IsPresent" hidden></label>
+                                        <input type="hidden" asp-for="@Model.AttendanceList[i].UserIdentificator" />
+                                    </div>*@
 
                                 <input type="checkbox" asp-for="@Model.AttendanceList[i].IsPresent" data-toggle="toggle" data-on="Obecny" data-off="Nieobecny" data-size="sm" />
                                 <input type="hidden" asp-for="@Model.AttendanceList[i].UserIdentificator" />
@@ -136,4 +136,15 @@
 
 @section Scripts {
     @{await Html.RenderPartialAsync("_ValidationScriptsPartial");}
+
+    <script>
+        $(document).ready(function () {
+
+            $('#listUsers').DataTable({
+                "language": {
+                    "url": "//cdn.datatables.net/plug-ins/1.10.19/i18n/Polish.json"
+                },
+            });
+        });
+    </script>
 }

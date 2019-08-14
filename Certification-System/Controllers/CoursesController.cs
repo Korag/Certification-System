@@ -321,5 +321,14 @@ namespace Certification_System.Controllers
 
             return View(usersAssignedToCourse);
         }
+
+
+        // GET: EndCourseAndDispenseGivenCertificates
+        [Authorize(Roles = "Admin")]
+        public ActionResult EndCourseAndDispenseGivenCertificates()
+        {
+           
+            return View();
+        }
     }
 }
