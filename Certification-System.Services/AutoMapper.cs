@@ -81,6 +81,12 @@ namespace Certification_System.Services
                      .ForMember(dest => dest.Meetings, opts => opts.Ignore())
                      .ForMember(dest => dest.EnrolledUsers, opts => opts.Ignore())
                      .ForMember(dest => dest.Branches, opts => opts.MapFrom(src => src.SelectedBranches));
+
+
+            CreateMap<Course, DispenseGivenCertificatesViewModel>()
+                    .ForMember(dest => dest.DispensedGivenCertificates, opts => opts.Ignore())
+                    .ForMember(dest => dest.AvailableCertificates, opts => opts.Ignore())
+                    .ForMember(dest => dest.AllCourseParticipants, opts => opts.Ignore());
             #endregion
 
             #region Degrees
@@ -271,14 +277,22 @@ namespace Certification_System.Services
             CreateMap<CertificationPlatformUser, UserDetailsForAnonymousViewModel>()
                      .ForMember(dest => dest.UserIdentificator, opts => opts.MapFrom(src => src.Id))
                      .ForMember(dest => dest.GivenCertificates, opts => opts.Ignore())
-                      .ForMember(dest => dest.Companies, opts => opts.Ignore())
+                     .ForMember(dest => dest.Companies, opts => opts.Ignore())
                      .ForMember(dest => dest.GivenDegrees, opts => opts.Ignore());
+
+            CreateMap<CertificationPlatformUser, DisplayUserWithCourseResultsViewModel>()
+                     .ForMember(dest => dest.UserIdentificator, opts => opts.MapFrom(src => src.Id));
             #endregion
 
             #region ViewModels to ViewModels 
             CreateMap<DisplayCrucialDataUserViewModel, PresenceCheckBoxViewModel>()
-              .ForMember(dest => dest.IsPresent, opts => opts.Ignore());
+                     .ForMember(dest => dest.IsPresent, opts => opts.Ignore());
+       
+            CreateMap<DisplayUserWithCourseResultsViewModel, DispenseGivenCertificateCheckBoxViewModel>()
+                     .ForMember(dest => dest.GivenCertificateIsEarned, opts => opts.Ignore());
             #endregion
         }
     }
 }
+
+ 
