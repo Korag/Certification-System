@@ -239,7 +239,7 @@ else
                         <td>
                             <a asp-action="MeetingDetails" asp-route-meetingIdentificator="@meeting.MeetingIdentificator" asp-controller="Users" class="btn btn-info m-1">Szczegóły spotkania</a>
                             <a asp-action="EditMeeting" asp-route-meetingIdentificator="@meeting.MeetingIdentificator" asp-controller="Users" class="btn btn-warning m-1">Edytuj spotkanie</a>
-                            <a asp-action="CheckUsersPresence" asp-route-meetingIdentificator="@meeting.MeetingIdentificator" asp-controller="Users" class="btn btn-primary m-1">Sprawdź obecność</a>
+                            <a asp-action="CheckUsersPresence" asp-route-meetingIdentificator="@meeting.MeetingIdentificator" asp-controller="Meetings" class="btn btn-primary m-1">Sprawdź obecność</a>
 
                             @*@Html.ActionLink("Szczegóły instruktora", "InstructorDetail", new { instructorIdentificator = item.Instructors }, new { @class = "btn btn-secondary" })*@
                             @*@Html.ActionLink("Usuń spotkanie ze szkolenia", "DeleteMeeting", new { meetingIdentificator = item.MeetingIdentificator }) |*@
@@ -282,6 +282,12 @@ else
                     <th>
                         @Html.DisplayNameFor(model => model.EnrolledUsers.First().CompanyRoleManager)
                     </th>
+                    @if (Model.CourseEnded)
+                    {
+                        <th>
+                            @Html.DisplayNameFor(model => model.DispensedGivenCertificates)
+                        </th>
+                    }
                     <th>
                         Operacje
                     </th>
@@ -316,6 +322,12 @@ else
                                 }
                             </ul>
                         </td>
+                        @if (Model.CourseEnded)
+                        {
+                            <td>
+                                <input type="checkbox" asp-for="@Model.DispensedGivenCertificates.Where(z=> z.UserIdentificator == user.UserIdentificator).Select(z=> z.GivenCertificateIsEarned)FirstOrDefault()" data-toggle="toggle" data-on="Przyznano" data-off="Nie przyznano" data-size="sm" />
+                            </td>
+                        }
                         <td>
                             <a asp-action="UserDetails" asp-route-userIdentificator="@user.UserIdentificator" asp-controller="Users" class="btn btn-info m-1">Szczegóły użytkownika</a>
                             <a asp-action="DeleteUserFromCourse" asp-route-userIdentificator="@user.UserIdentificator" asp-controller="Courses" class="btn btn-warning m-1">Usuń z kursu</a>

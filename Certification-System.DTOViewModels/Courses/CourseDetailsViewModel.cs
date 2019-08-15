@@ -47,5 +47,7 @@ namespace Certification_System.DTOViewModels
         [Display(Name = "Instruktorzy")]
         public ICollection<DisplayCrucialDataWithContactUserViewModel> Instructors { get; set; }
 
+        [Display(Name = "Lista przyznanych certyfikatów")]
+        public DispenseGivenCertificateCheckBoxViewModel[] DispensedGivenCertificates { get; set; }
     }
 }
