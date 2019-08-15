@@ -38,6 +38,7 @@
                     <a asp-controller="Courses" asp-action="AddNewCourse" class="dropdown-item">Dodaj szkolenie *</a>
                     <a asp-controller="Courses" asp-action="DisplayAllCourses" class="dropdown-item">Wyświetl wszystkie kursy *</a>
                     <a asp-controller="Courses" asp-action="AssignUserToCourse" class="dropdown-item">Dodaj użytkownika do kursu *</a>
+                    <a asp-controller="" asp-action="" class="dropdown-item" >Kalendarz</a>
                     <div class="dropdown-divider"></div>
                     <p class="dropdown-header mt-1">Spotkania kursowe</p>
                     <div class="dropdown-divider"></div>
@@ -66,18 +67,22 @@
                     <div class="dropdown-divider"></div>
                     <a asp-controller="Branches" asp-action="AddNewBranch" class="dropdown-item">Dodaj nowy obszar certyfikacji *</a>
                     <a asp-controller="Branches" asp-action="DisplayAllBranches" class="dropdown-item">Wyświetl obszary certyfikacji *</a>
+                    <div class="dropdown-divider"></div>
+                    <p class="dropdown-header mt-1">Powiadomienia</p>
+                    <div class="dropdown-divider"></div>
+                    <a asp-controller="" asp-action="" class="dropdown-item">Centrum powiadomień</a>
                 </div>
             </li>
-            <li class="nav-item">
+            @*<li class="nav-item">
                 <a class="nav-link" id="navbarItem" href="#">Kalendarz</a>
-            </li>
+            </li>*@
             <li class="nav-item dropdown">
-                <a class="nav-link dropdown-toggle" href="#" id="navbarDropdown" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">Weryfikacja użytkownika/dokumentu</a>
+                <a class="nav-link dropdown-toggle" href="#" id="navbarDropdown" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">Weryfikacja kompetencji</a>
                 <div class="dropdown-menu">
                     <p class="dropdown-header">Weryfikacja</p>
                     <div class="dropdown-divider"></div>
                     <a asp-controller="CompetenceVerification" asp-action="VerifyCompetenceManual" class="dropdown-item">Instrukcja z menu weryfikacji *</a>
-                    <a asp-controller="CompetenceVerification" asp-action="VerifyUser" class="dropdown-item">Weryfikacja użytkownia *</a>
+                    <a asp-controller="CompetenceVerification" asp-action="VerifyUser" class="dropdown-item">Weryfikacja użytkownika *</a>
                     <a asp-controller="CompetenceVerification" asp-action="VerifyGivenCertificate" class="dropdown-item">Weryfikacja certyfikatu *</a>
                     <a asp-controller="CompetenceVerification" asp-action="VerifyGivenDegree" class="dropdown-item">Weryfikacja stopnia zawodowego *</a>
                 </div>

@@ -7,52 +7,58 @@
     <div class="collapse navbar-collapse" id="navbarSupportedContent">
         <ul class="navbar-nav mr-auto">
             <li class="nav-item dropdown">
-                <a class="nav-link dropdown-toggle" href="#" id="navbarDropdown" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">Certyfikaty</a>
+                <a class="nav-link dropdown-toggle" href="#" id="navbarDropdown" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">Certyfikacja</a>
                 <div class="dropdown-menu">
-                    <a asp-controller="Home" asp-action="Index" class="dropdown-item">Moje certyfikaty</a>
-                    <a asp-controller="Home" asp-action="Index" class="dropdown-item">Generuj kod QR</a>
+                    <p class="dropdown-header">Certyfikaty i stopnie zawodowe</p>
                     <div class="dropdown-divider"></div>
-                    <a asp-controller="Home" asp-action="Index" class="dropdown-item">Wyszukaj certyfikat pracownika</a>
-                    <a asp-controller="Home" asp-action="Index" class="dropdown-item">Weryfikuj certyfikat po numerze</a>
-                    <a asp-controller="Home" asp-action="Index" class="dropdown-item">Weryfikuj certyfikat QR</a>
-                    <a asp-controller="Home" asp-action="Index" class="dropdown-item">Wyświetl listę pracowników z danym certyfikatem</a>
+                    <a asp-controller="" asp-action="" class="dropdown-item">Uzyskane certyfikaty i stopnie zawodowe</a>
+                    <div class="dropdown-divider"></div>
+                    <p class="dropdown-header mt-1">Połączone przedsiębiorstwa</p>
+                    <div class="dropdown-divider"></div>
+                    <a asp-controller="" asp-action="" class="dropdown-item">Moje przedsiębiorstwa</a>
                 </div>
             </li>
             <li class="nav-item dropdown">
-                <a class="nav-link dropdown-toggle" href="#" id="navbarDropdown" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">Szkolenia</a>
+                <a class="nav-link dropdown-toggle" href="#" id="navbarDropdown" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">Zarządzanie</a>
                 <div class="dropdown-menu">
-                    <a asp-controller="Home" asp-action="Index" class="dropdown-item">Moje aktywne szkolenia</a>
-                    <a asp-controller="Home" asp-action="Index" class="dropdown-item">Moje archiwalne szkolenia</a>
-                    <a asp-controller="Home" asp-action="Index" class="dropdown-item">Dostępne szkolenia</a>
-                    <a asp-controller="Home" asp-action="Index" class="dropdown-item">Zapisz się na szkolenie</a>
+                    <p class="dropdown-header">Przedsiębiorstwo i pracownicy</p>
                     <div class="dropdown-divider"></div>
-                    <a asp-controller="Home" asp-action="Index" class="dropdown-item">Aktywne szkolenia pracowników"</a>
-                    <a asp-controller="Home" asp-action="Index" class="dropdown-item">Aktywne szkolenia wybranego pracownika</a>
-                    <a asp-controller="Home" asp-action="Index" class="dropdown-item">Historia szkoleń wybranego pracownika</a>
-                    <a asp-controller="Home" asp-action="Index" class="dropdown-item">Zapisz pracowników na szkolenie</a>
-                    <a asp-controller="Home" asp-action="Index" class="dropdown-item">Usuń pracownika z aktywnego szkolenia</a>
-               </div>
-            </li>
-            <li class="nav-item dropdown">
-                <a class="nav-link dropdown-toggle" href="#" id="navbarDropdown" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">Zarządzaj</a>
-                <div class="dropdown-menu">
-                    <a asp-controller="Home" asp-action="Index" class="dropdown-item">Utwórz konto dla pracownika</a>
-                    <a asp-controller="Home" asp-action="Index" class="dropdown-item">Zatwierdź zgłoszenia o przypisanie do przedsiębiorstwa</a>
-                    <a asp-controller="Home" asp-action="Index" class="dropdown-item">Usuń pracownika z przedsiębiorstwa</a>
-                    <a asp-controller="Home" asp-action="Index" class="dropdown-item">Nadaj pracownikowi uprawnienia zarządzania</a>
-                    <a asp-controller="Home" asp-action="Index" class="dropdown-item">Przeglądaj zdarzenia</a>
+                    <a asp-controller="" asp-action="" class="dropdown-item">Moje przedsiębiorstwo</a>
+                    <a asp-controller="" asp-action="" class="dropdown-item">Moi pracownicy</a>
+                    <a asp-controller="" asp-action="" class="dropdown-item">Certyfikaty i stopnie zawodowe</a>
                 </div>
             </li>
-            <li class="nav-item">
-                <a class="nav-link" id="navbarItem" href="#">Kalendarz</a>
+            <li class="nav-item dropdown">
+                <a class="nav-link dropdown-toggle" href="#" id="navbarDropdown" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">Kursy</a>
+                <div class="dropdown-menu">
+                    <p class="dropdown-header">Szkolenia zawodowe</p>
+                    <div class="dropdown-divider"></div>
+                    <a asp-controller="" asp-action="" class="dropdown-item">Moje kursy</a>
+                    <a asp-controller="" asp-action="" class="dropdown-item">Kursy pracowników</a>
+                    <a asp-controller="" asp-action="" class="dropdown-item">Oferta</a>
+                </div>
+            </li>
+            <li class="nav-item dropdown">
+                <a class="nav-link dropdown-toggle" href="#" id="navbarDropdown" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">Aktualności</a>
+                <div class="dropdown-menu">
+                    <p class="dropdown-header">Wydarzenia</p>
+                    <div class="dropdown-divider"></div>
+                    <a asp-controller="" asp-action="" class="dropdown-item">Kalendarz</a>
+                    <a asp-controller="" asp-action="" class="dropdown-item">Centrum powiadomień</a>
+                </div>
+            </li>
+            <li class="nav-item dropdown">
+                <a class="nav-link dropdown-toggle" href="#" id="navbarDropdown" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">Weryfikacja kompetencji</a>
+                <div class="dropdown-menu">
+                    <p class="dropdown-header">Weryfikacja</p>
+                    <div class="dropdown-divider"></div>
+                    <a asp-controller="CompetenceVerification" asp-action="VerifyCompetenceManual" class="dropdown-item">Instrukcja z menu weryfikacji *</a>
+                    <a asp-controller="CompetenceVerification" asp-action="VerifyUser" class="dropdown-item">Weryfikacja użytkownika *</a>
+                    <a asp-controller="CompetenceVerification" asp-action="VerifyGivenCertificate" class="dropdown-item">Weryfikacja certyfikatu *</a>
+                    <a asp-controller="CompetenceVerification" asp-action="VerifyGivenDegree" class="dropdown-item">Weryfikacja stopnia zawodowego *</a>
+                </div>
             </li>
         </ul>
-        @*<form class="form-inline">
-            <div class="md-form my-0">
-                <input class="form-control mr-sm-2" type="text" placeholder="Search" aria-label="Search">
-                <button class="btn btn-outline-success my-2 my-sm-0 mr-2" type="submit">Search</button>
-            </div>
-        </form>*@
         <partial name="_LoginPartial" />
     </div>
 </nav>
