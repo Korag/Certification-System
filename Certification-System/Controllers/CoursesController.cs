@@ -8,6 +8,7 @@ using System.Linq;
 using Certification_System.Repository.DAL;
 using AutoMapper;
 using Certification_System.ServicesInterfaces;
+using System;
 
 namespace Certification_System.Controllers
 {
@@ -162,6 +163,7 @@ namespace Certification_System.Controllers
             {
                 ListOfCourses = _mapper.Map<List<DisplayCourseViewModel>>(Courses);
                 ListOfCourses.ForEach(z => z.Branches = _context.branchRepository.GetBranchesById(z.Branches));
+                ListOfCourses.ForEach(z => z.EnrolledUsersQuantity = Courses.Where(s => s.CourseIdentificator == z.CourseIdentificator).FirstOrDefault().EnrolledUsers.Count);
             }
 
             return View(ListOfCourses);
@@ -304,7 +306,7 @@ namespace Certification_System.Controllers
                         _context.userRepository.AddUsersToCourse(usersAssignedToCourse.SelectedCourse, usersAssignedToCourse.SelectedUsers);
                         _context.courseRepository.AddEnrolledUsersToCourse(usersAssignedToCourse.SelectedCourse, usersAssignedToCourse.SelectedUsers);
 
-                        return RedirectToAction("CourseDetails", new { courseIdentificator = usersAssignedToCourse.SelectedCourse, addedNewUsersToCourse= true });
+                        return RedirectToAction("CourseDetails", new { courseIdentificator = usersAssignedToCourse.SelectedCourse, addedNewUsersToCourse = true });
                     }
                 }
                 else
@@ -325,10 +327,105 @@ namespace Certification_System.Controllers
 
         // GET: EndCourseAndDispenseGivenCertificates
         [Authorize(Roles = "Admin")]
-        public ActionResult EndCourseAndDispenseGivenCertificates()
+        public ActionResult EndCourseAndDispenseGivenCertificates(string courseIdentificator)
         {
-           
-            return View();
+            var Course = _context.courseRepository.GetCourseById(courseIdentificator);
+            var Meetings = _context.meetingRepository.GetMeetingsById(Course.Meetings);
+
+            if (Course.CourseEnded != true)
+            {
+                var EnrolledUsersList = _context.userRepository.GetUsersById(Course.EnrolledUsers);
+
+                List<DisplayUserWithCourseResultsViewModel> ListOfUsers = new List<DisplayUserWithCourseResultsViewModel>();
+
+                if (EnrolledUsersList.Count != 0)
+                {
+                    foreach (var user in EnrolledUsersList)
+                    {
+                        DisplayUserWithCourseResultsViewModel singleUser = _mapper.Map<DisplayUserWithCourseResultsViewModel>(user);
+
+                        // until Exam collection will be ready
+
+                        //singleUser.ExamPercentResult = 
+                        //singleUser.ExamAttempsQuantity = 
+
+                        try
+                        {
+                            double UserPresencePercentage = ((Meetings.Where(z => z.AttendanceList.Contains(singleUser.UserIdentificator)).Count() / Meetings.Count()) * 100);
+                            UserPresencePercentage = Math.Round(UserPresencePercentage, 2);
+                            singleUser.PercentageOfUserPresenceOnMeetings = UserPresencePercentage;
+                        }
+                        catch (Exception e)
+                        {
+                            singleUser.PercentageOfUserPresenceOnMeetings = 0.00;
+                        }
+
+                        ListOfUsers.Add(singleUser);
+                    }
+                }
+
+                // if course ended by exam - get exam result and show
+
+                DispenseGivenCertificatesViewModel courseToEndViewModel = _mapper.Map<DispenseGivenCertificatesViewModel>(Course);
+                courseToEndViewModel.AllCourseParticipants = ListOfUsers;
+                courseToEndViewModel.AvailableCertificates = _context.certificateRepository.GetCertificatesAsSelectList().ToList();
+
+                courseToEndViewModel.CourseLength = courseToEndViewModel.DateOfEnd.Subtract(courseToEndViewModel.DateOfStart).Days;
+                courseToEndViewModel.Branches = _context.branchRepository.GetBranchesById(Course.Branches);
+                courseToEndViewModel.EnrolledUsersQuantity = Course.EnrolledUsers.Count;
+
+                courseToEndViewModel.DispensedGivenCertificates = _mapper.Map<DispenseGivenCertificateCheckBoxViewModel[]>(ListOfUsers);
+
+                return View(courseToEndViewModel);
+            }
+
+            return RedirectToAction("CourseDetails", new { courseIdentificator = courseIdentificator });
+        }
+
+        // POST: EndCourseAndDispenseGivenCertificates
+        [HttpPost]
+        [Authorize(Roles = "Admin")]
+        public ActionResult EndCourseAndDispenseGivenCertificates(DispenseGivenCertificatesViewModel courseToEndViewModel)
+        {
+            if (ModelState.IsValid)
+            {
+                var Course = _context.courseRepository.GetCourseById(courseToEndViewModel.CourseIdentificator);
+                Course.CourseEnded = true;
+
+                _context.courseRepository.UpdateCourse(Course);
+
+                for (int i = 0; i < courseToEndViewModel.DispensedGivenCertificates.Count(); i++)
+                {
+                    if (courseToEndViewModel.DispensedGivenCertificates[i].GivenCertificateIsEarned == true)
+                    {
+                        GivenCertificate singleGivenCertificate = new GivenCertificate
+                        {
+                            GivenCertificateIdentificator = _keyGenerator.GenerateNewGuid(),
+                            //GivenCertificateIndexer = from generator
+                            GivenCertificateIndexer = "AAAAAAAAAA",
+
+                            ReceiptDate = courseToEndViewModel.ReceiptDate,
+                            ExpirationDate = courseToEndViewModel.ExpirationDate,
+
+                            Depreciated = false,
+                            Course = courseToEndViewModel.CourseIdentificator,
+                            //Certificate = Course.Ce
+                        };
+
+                        _context.givenCertificateRepository.AddGivenCertificate(singleGivenCertificate);
+
+                        var User = _context.userRepository.GetUserById(courseToEndViewModel.DispensedGivenCertificates[i].UserIdentificator);
+                        User.GivenCertificates.Add(singleGivenCertificate.GivenCertificateIdentificator);
+
+                        _context.userRepository.UpdateUser(User);
+                    }
+                }
+            }
+
+            //courseToEndViewModel.AllCourseParticipants = ListOfUsers;
+            courseToEndViewModel.AvailableCertificates = _context.certificateRepository.GetCertificatesAsSelectList().ToList();
+
+            return View(courseToEndViewModel);
         }
     }
 }
