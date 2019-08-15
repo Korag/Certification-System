@@ -6,10 +6,19 @@
 }
 
 <h1>Lista wszystkich kursów</h1>
-<hr/>
+<hr />
 
 <div class="m-3">
     <a asp-action="AddNewCourse" asp-controller="Courses" class="btn btn-primary">Dodaj nowy kurs</a>
+</div>
+
+<div class="row justify-content-center form-group">
+    <label class="control-label" id="labelWithSelect" style="margin-bottom:0px; margin-top:7px">Status kursu:</label>
+    <select id="select" data-style="btn-light" data-container="body" data-width="auto" data-header="Wybierz status kursu" data-live-search="true" title="Nie wybrano żadnego elementu" class="form-control selectpicker show-tick w-50">
+        <option value="" selected>Brak filtra</option>
+        <option value="1">Archiwalne kursy</option>
+        <option value="0">Aktualne kursy</option>
+    </select>
 </div>
 
 <div class="col-12 table-responsive">
@@ -77,7 +86,15 @@
                         @Html.DisplayFor(modelItem => course.EnrolledUsersQuantity)
                     </td>
                     <td>
-                        <input type="checkbox" asp-for="@course.CourseEnded" data-toggle="toggle" data-on="Tak" data-off="Nie" data-size="sm" disabled/>
+                        @if (course.CourseEnded == true)
+                        {
+                            <p hidden>1</p>
+                        }
+                        else
+                        {
+                            <p hidden>0</p>
+                        }
+                        <input type="checkbox" asp-for="@course.CourseEnded" data-toggle="toggle" data-on="Tak" data-off="Nie" data-size="sm" disabled />
                     </td>
                     <td>
                         @Html.DisplayFor(modelItem => course.CourseLength)
@@ -103,13 +120,25 @@
 @section Scripts{
     <script>
         $(document).ready(function () {
-
             $('#coursesList').DataTable({
                 "language": {
                     "url": "//cdn.datatables.net/plug-ins/1.10.19/i18n/Polish.json"
                 },
-            }
-            );
+                initComplete: function () {
+                    this.api().columns(7).every(function () {
+                        var column = this;
+
+                        $('#select').on('change', function () {
+                            var val = $.fn.dataTable.util.escapeRegex(
+                                $(this).val()
+                            );
+                            column
+                                .search(val ? val : '', true, false)
+                                .draw();
+                        });
+                    });
+                }
+            });
         });
     </script>
 }

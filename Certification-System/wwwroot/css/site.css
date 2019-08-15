@@ -96,3 +96,9 @@ textarea {
 .validation-model ul{
     margin-bottom:0px;
 }
+
+.scrollable-menu {
+    height: auto;
+    max-height: 300px;
+    overflow-x: hidden;
+}
