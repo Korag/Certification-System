@@ -50,7 +50,7 @@
                         @Html.DisplayFor(modelItem => certificate.Description)
                     </td>
                     <td>
-                        @Html.DisplayFor(modelItem => certificate.Depreciated)
+                        <input type="checkbox" asp-for="@certificate.Depreciated" class="form-control col-12" data-toggle="toggle" data-on="Tak" data-off="Nie" data-size="sm" disabled />
                     </td>
                     <td>
                         <ul>
