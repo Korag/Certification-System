@@ -102,3 +102,7 @@ textarea {
     max-height: 300px;
     overflow-x: hidden;
 }
+
+.show{
+    padding: 0px 0px 0px 0px;
+}

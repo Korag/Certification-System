@@ -108,11 +108,11 @@
                         </ul>
                     </td>
                     <td>
-                        <div class="input-group-prepend">
+                        <div class="dropdown p-0">
                             <button class="btn btn-success dropdown-toggle" type="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">Operacje</button>
                             <div class="dropdown-menu">
-                                <a asp-action="CourseDetails" asp-route-courseIdentificator="@course.CourseIdentificator" asp-controller="Courses" class="btn btn-info">Szczegóły</a>
-                                <a asp-action="EditCourse" asp-route-courseIdentificator="@course.CourseIdentificator" asp-controller="Courses" class="btn btn-warning">Edytuj</a>
+                                <a asp-action="CourseDetails" asp-route-courseIdentificator="@course.CourseIdentificator" asp-controller="Courses" class="btn btn-info w-100 mb-1">Szczegóły</a>
+                                <a asp-action="EditCourse" asp-route-courseIdentificator="@course.CourseIdentificator" asp-controller="Courses" class="btn btn-warning w-100">Edytuj</a>
                             </div>
                         </div>
 
