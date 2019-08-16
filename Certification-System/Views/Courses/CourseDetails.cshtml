@@ -241,10 +241,18 @@ else
                             </ul>
                         </td>
                         <td>
-                            <a asp-action="MeetingDetails" asp-route-meetingIdentificator="@meeting.MeetingIdentificator" asp-controller="Users" class="btn btn-info m-1">Szczegóły spotkania</a>
-                            <a asp-action="EditMeeting" asp-route-meetingIdentificator="@meeting.MeetingIdentificator" asp-controller="Users" class="btn btn-warning m-1">Edytuj spotkanie</a>
-                            <a asp-action="CheckUsersPresence" asp-route-meetingIdentificator="@meeting.MeetingIdentificator" asp-controller="Meetings" class="btn btn-primary m-1">Sprawdź obecność</a>
+                            <div class="dropdown p-0">
+                                <button class="btn btn-success dropdown-toggle" type="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">Operacje</button>
+                                <div class="dropdown-menu">
+                                    <a asp-action="MeetingDetails" asp-route-meetingIdentificator="@meeting.MeetingIdentificator" asp-controller="Users" class="btn btn-info w-100 mb-1">Szczegóły</a>
+                                    <a asp-action="EditMeeting" asp-route-meetingIdentificator="@meeting.MeetingIdentificator" asp-controller="Users" class="btn btn-warning w-100 mb-1">Edytuj</a>
+                                    <a asp-action="CheckUsersPresence" asp-route-meetingIdentificator="@meeting.MeetingIdentificator" asp-controller="Meetings" class="btn btn-primary w-100">Sprawdź obecność</a>
+                                </div>
+                            </div>
 
+                            @*<a asp-action="MeetingDetails" asp-route-meetingIdentificator="@meeting.MeetingIdentificator" asp-controller="Users" class="btn btn-info m-1">Szczegóły spotkania</a>
+                                <a asp-action="EditMeeting" asp-route-meetingIdentificator="@meeting.MeetingIdentificator" asp-controller="Users" class="btn btn-warning m-1">Edytuj spotkanie</a>*@
+                            @*<a asp-action="CheckUsersPresence" asp-route-meetingIdentificator="@meeting.MeetingIdentificator" asp-controller="Meetings" class="btn btn-primary m-1">Sprawdź obecność</a>*@
                             @*@Html.ActionLink("Szczegóły instruktora", "InstructorDetail", new { instructorIdentificator = item.Instructors }, new { @class = "btn btn-secondary" })*@
                             @*@Html.ActionLink("Usuń spotkanie ze szkolenia", "DeleteMeeting", new { meetingIdentificator = item.MeetingIdentificator }) |*@
                         </td>
@@ -333,8 +341,13 @@ else
                             </td>
                         }
                         <td>
-                            <a asp-action="UserDetails" asp-route-userIdentificator="@user.UserIdentificator" asp-controller="Users" class="btn btn-info m-1">Szczegóły użytkownika</a>
-                            <a asp-action="DeleteUserFromCourse" asp-route-userIdentificator="@user.UserIdentificator" asp-controller="Courses" class="btn btn-warning m-1">Usuń z kursu</a>
+                            <div class="dropdown p-0">
+                                <button class="btn btn-success dropdown-toggle" type="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">Operacje</button>
+                                <div class="dropdown-menu">
+                                    <a asp-action="UserDetails" asp-route-userIdentificator="@user.UserIdentificator" asp-controller="Users" class="btn btn-info w-100 mb-1">Szczegóły</a>
+                                    <a asp-action="DeleteUserFromCourse" asp-route-userIdentificator="@user.UserIdentificator" asp-controller="Courses" class="btn btn-warning w-100">Usuń z kursu</a>
+                                </div>
+                            </div>
                         </td>
                     </tr>
                 }
