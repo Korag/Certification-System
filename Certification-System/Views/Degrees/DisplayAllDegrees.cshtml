@@ -76,8 +76,13 @@
                         </ul>
                     </td>
                     <td>
-                        <a asp-action="DegreeDetails" asp-route-degreeIdentificator="@degree.DegreeIdentificator" asp-controller="Degrees" class="btn btn-info m-1">Szczegóły</a>
-                        <a asp-action="EditDegree" asp-route-degreeIdentificator="@degree.DegreeIdentificator" asp-controller="Degrees" class="btn btn-warning m-1">Aktualizuj</a>
+                        <div class="dropdown p-0">
+                            <button class="btn btn-success dropdown-toggle" type="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">Operacje</button>
+                            <div class="dropdown-menu">
+                                <a asp-action="DegreeDetails" asp-route-degreeIdentificator="@degree.DegreeIdentificator" asp-controller="Degrees" class="btn btn-info w-100 mb-11">Szczegóły</a>
+                                <a asp-action="EditDegree" asp-route-degreeIdentificator="@degree.DegreeIdentificator" asp-controller="Degrees" class="btn btn-warning w-100">Edytuj</a>
+                            </div>
+                        </div>
                     </td>
                 </tr>
             }

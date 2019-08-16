@@ -13,6 +13,7 @@
 
     <div class="mt-3 mb-3">
         <a asp-action="EditDegree" asp-route-degreeIdentificator="@Model.DegreeIdentificator" asp-controller="Degrees" class="btn btn-warning">Edytuj</a>
+        <a asp-action="DisplayAllDegrees" asp-controller="Degrees" class="btn btn-outline-info" style="float:right">Powrót do listy stopni zawodowych</a>
     </div>
 
     <form asp-action="DegreeDetails">
@@ -57,10 +58,6 @@
         </div>
 
     </form>
-</div>
-
-<div class="mt-3">
-    <a asp-action="DisplayAllDegrees" asp-controller="Degrees" class="btn btn-info">Powrót do listy stopni zawodowych</a>
 </div>
 
 <h2 class="mt-4 mb-4">Certyfikaty wymagane do uzyskania stopnia zawodowego</h2>
@@ -116,9 +113,14 @@
                             </ul>
                         </td>
                         <td>
-                            <a asp-action="CertificateDetails" asp-route-certificateIdentificator="@certificate.CertificateIdentificator" asp-controller="Certificates" class="btn btn-info m-1">Szczegóły</a>
-                            <a asp-action="EditCertificate" asp-route-certificateIdentificator="@certificate.CertificateIdentificator" asp-controller="Certificates" class="btn btn-warning m-1">Aktualizuj</a>
-                            @*@Html.ActionLink("Usuń", "MarkCertificateAsDepreciated", "Certificates", new { CertificateIdentificator = item.CertificateIndexer }, new { @class = "btn btn-danger" })*@
+                            <div class="dropdown p-0">
+                                <button class="btn btn-success dropdown-toggle" type="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">Operacje</button>
+                                <div class="dropdown-menu">
+                                    <a asp-action="CertificateDetails" asp-route-certificateIdentificator="@certificate.CertificateIdentificator" asp-controller="Certificates" class="btn btn-info w-100 mb-1">Szczegóły</a>
+                                    <a asp-action="EditCertificate" asp-route-certificateIdentificator="@certificate.CertificateIdentificator" asp-controller="Certificates" class="btn btn-warning w-100">Edytuj</a>
+                                    @*@Html.ActionLink("Usuń", "MarkCertificateAsDepreciated", "Certificates", new { CertificateIdentificator = item.CertificateIndexer }, new { @class = "btn btn-danger" })*@
+                                </div>
+                            </div>
                         </td>
                     </tr>
                 }
@@ -200,8 +202,13 @@ else
                             </ul>
                         </td>
                         <td>
-                            <a asp-action="DegreeDetails" asp-route-degreeIdentificator="@degree.DegreeIdentificator" asp-controller="Degrees" class="btn btn-info m-1">Szczegóły</a>
-                            <a asp-action="EditDegree" asp-route-degreeIdentificator="@degree.DegreeIdentificator" asp-controller="Degrees" class="btn btn-warning m-1">Aktualizuj</a>
+                            <div class="dropdown p-0">
+                                <button class="btn btn-success dropdown-toggle" type="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">Operacje</button>
+                                <div class="dropdown-menu">
+                                    <a asp-action="DegreeDetails" asp-route-degreeIdentificator="@degree.DegreeIdentificator" asp-controller="Degrees" class="btn btn-info w-100 mb-1">Szczegóły</a>
+                                    <a asp-action="EditDegree" asp-route-degreeIdentificator="@degree.DegreeIdentificator" asp-controller="Degrees" class="btn btn-warning w-100">Edytuj</a>
+                                </div>
+                            </div>
                         </td>
                     </tr>
                 }

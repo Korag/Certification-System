@@ -15,6 +15,11 @@ else
     <h2 class="alert alert-success" role="alert">Dodano następujący stopień zawodowy:</h2>
 }
 
+<div class="mt-3 mb-3">
+    <a asp-action="AddNewDegree" asp-controller="Degrees" class="btn btn-primary">Dodaj stopień zawodowy</a>
+    <a asp-action="DisplayAllDegrees" asp-controller="Degrees" class="btn btn-outline-info" style="float:right">Powrót do listy stopni zawodowych</a>
+</div>
+
 <div class="col-12 table-responsive">
     <table id="degreeConfirmation" class="table table-striped table-bordered display" style="width: 100%;" role="grid">
         <thead>
@@ -36,9 +41,6 @@ else
                 </th>
                 <th>
                     @Html.DisplayNameFor(model => model.Branches)
-                </th>
-                <th>
-                    Operacje
                 </th>
             </tr>
         </thead>
@@ -77,18 +79,14 @@ else
                         }
                     </ul>
                 </td>
-                <td>
-                    <a asp-action="DegreeDetails" asp-route-degreeIdentificator="@Model.DegreeIdentificator" asp-controller="Degrees" class="btn btn-info m-1">Szczegóły</a>
-                    <a asp-action="EditDegree" asp-route-degreeIdentificator="@Model.DegreeIdentificator" asp-controller="Degrees" class="btn btn-warning m-1">Aktualizuj</a>
-                </td>
             </tr>
         </tbody>
     </table>
 </div>
 
 <div class="mt-3">
-    <a asp-action="AddNewDegree" asp-controller="Degrees" class="btn btn-primary">Dodaj stopień zawodowy</a>
-    <a asp-action="DisplayAllDegrees" asp-controller="Degrees" class="btn btn-info">Powrót do listy stopni zawodowych</a>
+    <a asp-action="DegreeDetails" asp-route-degreeIdentificator="@Model.DegreeIdentificator" asp-controller="Degrees" class="btn btn-info">Szczegóły</a>
+    <a asp-action="EditDegree" asp-route-degreeIdentificator="@Model.DegreeIdentificator" asp-controller="Degrees" class="btn btn-warning">Edytuj</a>
 </div>
 
 @section Scripts{
