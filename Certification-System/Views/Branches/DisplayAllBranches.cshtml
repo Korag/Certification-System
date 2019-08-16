@@ -9,6 +9,10 @@
 <hr />
 
 <div class="container col-12">
+    <div class="mb-3">
+        <a asp-action="AddNewBranch" asp-controller="Branches" class="btn btn-primary">Dodaj nowy obszar</a>
+    </div>
+
     <div>
         @foreach (var branch in Model)
         {
@@ -16,8 +20,5 @@
         }
     </div>
 
-    <div class="mt-3">
-        <a asp-action="AddNewBranch" asp-controller="Branches" class="btn btn-primary">Dodaj nowy obszar</a>
-    </div>
 </div>
 
