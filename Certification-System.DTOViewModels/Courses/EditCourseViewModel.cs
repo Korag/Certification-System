@@ -36,6 +36,7 @@ namespace Certification_System.DTOViewModels
         [Display(Name = "Limit uczestników")]
         public int EnrolledUsersLimit { get; set; }
 
+        [Display(Name = "Kurs zakończony")]
         public bool CourseEnded { get; set; }
 
         public int CourseLength { get; set; }

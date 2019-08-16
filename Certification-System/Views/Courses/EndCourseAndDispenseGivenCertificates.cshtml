@@ -8,10 +8,6 @@
 <h2>Zamykanie kursu</h2>
 <hr />
 
-<div class="mt-3 mb-3">
-    <a asp-action="CourseDetails" asp-route-courseIdentificator="@Model.CourseIdentificator" asp-controller="Courses" class="btn btn-info">Szczegóły kursu</a>
-</div>
-
 <div class="col-md-6 col-xl-6 col-sm-8 col-xs-10 m-auto p-3 shadow p-3 mb-5 bg-light rounded border border-primary rounded-bottom" style="opacity:0.80">
 
     <div class="form-group">
@@ -198,11 +194,8 @@
 
             <div asp-validation-summary="ModelOnly" class="row justify-content-center alert alert-danger validation-model"></div>
 
-            <div>
-                <div class="row justify-content-center">
-                    <input type="submit" value="Zakończ kurs" class="btn btn-primary" />
-                </div>
-            </div>
+            <input type="submit" value="Zakończ kurs" class="btn btn-primary" />
+            <a asp-action="CourseDetails" asp-route-courseIdentificator="@Model.CourseIdentificator" asp-controller="Courses" class="btn btn-outline-info" style="float:right">Powrót do szczegółów</a>
 
         </div>
     }
