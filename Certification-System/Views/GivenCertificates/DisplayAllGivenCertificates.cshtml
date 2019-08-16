@@ -8,8 +8,9 @@
 <h1>Lista wszystkich nadanych certyfikatów</h1>
 <hr />
 
-<div class="m-3">
-    <a asp-action="AddNewGivenCertificate" asp-controller="GivenCertificates" class="btn btn-primary">Przyznaj certyfikat</a>
+<div class="mt-3 mb-3">
+    <a asp-action="AddNewGivenCertificate" asp-controller="GivenCertificates" class="btn btn-primary">Przyznaj nowy certyfikat</a>
+    <a asp-action="DisplayAllGivenCertificates" asp-controller="GivenCertificates" class="btn btn-outline-info" style="float:right">Powrót do listy nadanych certyfikatów</a>
 </div>
 
 <div class="col-12 table-responsive">
@@ -62,10 +63,15 @@
                         @Html.DisplayFor(model => givenCertificate.Course.CourseIndexer) @Html.DisplayFor(model => givenCertificate.Course.Name)
                     </td>
                     <td>
-                        <a asp-action="GivenCertificateDetails" asp-route-givenCertificateIdentificator="@givenCertificate.GivenCertificateIdentificator" asp-controller="GivenCertificates" class="btn btn-primary m-1">Szczegóły nadanego certyfikatu</a>
-                        <a asp-action="UserDetails" asp-route-userIdentificator="@givenCertificate.User.UserIdentificator" asp-controller="Users" class="btn btn-info m-1">Szczegóły użytkownika</a>
-                        <a asp-action="EditGivenCertificate" asp-route-givenCertificateIdentificator="@givenCertificate.GivenCertificateIdentificator" asp-controller="GivenCertificates" class="btn btn-warning  m-1">Edytuj certyfikat</a>
-                        <a asp-action="CourseDetails" asp-route-courseIdentificator="@givenCertificate.Course.CourseIdentificator" asp-controller="Courses" class="btn btn-secondary m-1">Szczegóły kursu</a>
+                        <div class="dropdown p-0">
+                            <button class="btn btn-success dropdown-toggle" type="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">Operacje</button>
+                            <div class="dropdown-menu">
+                                <a asp-action="GivenCertificateDetails" asp-route-givenCertificateIdentificator="@givenCertificate.GivenCertificateIdentificator" asp-controller="GivenCertificates" class="btn btn-primary w-100 mb-1">Szczegóły nadanego certyfikatu</a>
+                                <a asp-action="UserDetails" asp-route-userIdentificator="@givenCertificate.User.UserIdentificator" asp-controller="Users" class="btn btn-info w-100 mb-1">Szczegóły użytkownika</a>
+                                <a asp-action="CourseDetails" asp-route-courseIdentificator="@givenCertificate.Course.CourseIdentificator" asp-controller="Courses" class="btn btn-secondary w-100 mb-1">Szczegóły kursu</a>
+                                <a asp-action="EditGivenCertificate" asp-route-givenCertificateIdentificator="@givenCertificate.GivenCertificateIdentificator" asp-controller="GivenCertificates" class="btn btn-warning  w-100">Edytuj certyfikat</a>
+                            </div>
+                        </div>
                     </td>
                 </tr>
             }

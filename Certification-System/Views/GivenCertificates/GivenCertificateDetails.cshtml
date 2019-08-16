@@ -14,6 +14,7 @@
     <div class="mt-3 mb-3">
         <a asp-action="EditUser" asp-route-userIdentificator="@Model.User.UserIdentificator" asp-controller="Users" class="btn btn-warning">Edytuj</a>
         <a asp-action="UserDetails" asp-route-userIdentificator="@Model.User.UserIdentificator" asp-controller="Users" class="btn btn-info">Szczegóły</a>
+        <a asp-action="DisplayAllGivenCertificates" asp-controller="GivenCertificates" class="btn btn-outline-info" style="float:right">Powrót do listy nadanych certyfikatów</a>
     </div>
 
     <form>
@@ -167,8 +168,13 @@
                             }
                         </td>
                         <td>
-                            <a asp-action="EditCompany" asp-route-companyIdentificator="@company.CompanyIdentificator" asp-controller="Companies" class="btn btn-warning m-1">Edytuj</a>
-                            <a asp-action="CompanyDetails" asp-route-companyIdentificator="@company.CompanyIdentificator" asp-controller="Companies" class="btn btn-info m-1">Szczegóły</a>
+                            <div class="dropdown p-0">
+                                <button class="btn btn-success dropdown-toggle" type="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">Operacje</button>
+                                <div class="dropdown-menu">
+                                    <a asp-action="EditCompany" asp-route-companyIdentificator="@company.CompanyIdentificator" asp-controller="Companies" class="btn btn-warning w-100 mb-1">Edytuj</a>
+                                    <a asp-action="CompanyDetails" asp-route-companyIdentificator="@company.CompanyIdentificator" asp-controller="Companies" class="btn btn-info w-100">Szczegóły</a>
+                                </div>
+                            </div>
                         </td>
                     </tr>
                 }
@@ -184,9 +190,10 @@ else
 
 <h2 class="mt-4 mb-4">Szczegóły nadanego certyfikatu</h2>
 
-<div class="m-3">
+<div class="mt-3 mb-3">
     <a asp-action="EditGivenCertificate" asp-route-givenCertificateIdentificator="@Model.GivenCertificateIdentificator" asp-controller="GivenCertificates" class="btn btn-warning">Edytuj certyfikat</a>
     <a asp-action="CertificateDetails" asp-route-certificateIdentificator="@Model.Certificate.CertificateIdentificator" asp-controller="Certificates" class="btn btn-info">Szczegóły certyfikatu</a>
+    <a asp-action="GivenCertificateDetails" asp-route-givenCertificateIdentificator="@Model.GivenCertificateIdentificator" asp-controller="GivenCertificates" class="btn btn-secondary m-1">Szczegóły przyznanego certyfikatu</a>
 </div>
 
 <div class="col-12 table-responsive">
@@ -219,9 +226,6 @@ else
                 </th>
                 <th>
                     Stopień zawodowy jest ważny ?
-                </th>
-                <th>
-                    Operacje
                 </th>
             </tr>
         </thead>
@@ -273,11 +277,6 @@ else
                     {
                         <span class="fas fa-check-circle" style="font-size:34px"></span>
                     }
-                </td>
-                <td>
-                    <a asp-action="EditGivenCertificate" asp-route-givenCertificateIdentificator="@Model.GivenCertificateIdentificator" asp-controller="GivenCertificates" class="btn btn-warning m-1">Edytuj nadany certyfikat</a>
-                    <a asp-action="CertificateDetails" asp-route-certificateIdentificator="@Model.Certificate.CertificateIdentificator" asp-controller="Certificates" class="btn btn-info m-1">Szczegóły certyfikatu</a>
-                    <a asp-action="GivenCertificateDetails" asp-route-givenCertificateIdentificator="@Model.GivenCertificateIdentificator" asp-controller="GivenCertificates" class="btn btn-secondary m-1">Szczegóły przyznanego certyfikatu</a>
                 </td>
             </tr>
         </tbody>
@@ -363,8 +362,13 @@ else
                     </ul>
                 </td>
                 <td>
-                    <a asp-action="CourseDetails" asp-route-courseIdentificator="@Model.Course.CourseIdentificator" asp-controller="Courses" class="btn btn-info m-1">Szczegóły</a>
-                    <a asp-action="EditCourse" asp-route-courseIdentificator="@Model.Course.CourseIdentificator" asp-controller="Courses" class="btn btn-warning m-1">Edytuj</a>
+                    <div class="dropdown p-0">
+                        <button class="btn btn-success dropdown-toggle" type="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">Operacje</button>
+                        <div class="dropdown-menu">
+                            <a asp-action="CourseDetails" asp-route-courseIdentificator="@Model.Course.CourseIdentificator" asp-controller="Courses" class="btn btn-info w-100 mb-1">Szczegóły</a>
+                            <a asp-action="EditCourse" asp-route-courseIdentificator="@Model.Course.CourseIdentificator" asp-controller="Courses" class="btn btn-warning w-100">Edytuj</a>
+                        </div>
+                    </div>
                 </td>
             </tr>
         </tbody>
@@ -448,11 +452,16 @@ else
                             </ul>
                         </td>
                         <td>
-                            <a asp-action="MeetingDetails" asp-route-meetingIdentificator="@meeting.MeetingIdentificator" asp-controller="Users" class="btn btn-info m-1">Szczegóły spotkania</a>
-                            <a asp-action="EditMeeting" asp-route-meetingIdentificator="@meeting.MeetingIdentificator" asp-controller="Users" class="btn btn-warning m-1">Edytuj spotkanie</a>
-                            <a asp-action="CheckUsersPresence" asp-route-meetingIdentificator="@meeting.MeetingIdentificator" asp-controller="Users" class="btn btn-primary m-1">Sprawdź obecność</a>
-                            @*@Html.ActionLink("Szczegóły instruktora", "InstructorDetail", new { instructorIdentificator = item.Instructors }, new { @class = "btn btn-secondary" })*@
-                            @*@Html.ActionLink("Usuń spotkanie ze szkolenia", "DeleteMeeting", new { meetingIdentificator = item.MeetingIdentificator }) |*@
+                            <div class="dropdown p-0">
+                                <button class="btn btn-success dropdown-toggle" type="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">Operacje</button>
+                                <div class="dropdown-menu">
+                                    <a asp-action="MeetingDetails" asp-route-meetingIdentificator="@meeting.MeetingIdentificator" asp-controller="Users" class="btn btn-info w-100 mb-1">Szczegóły spotkania</a>
+                                    <a asp-action="EditMeeting" asp-route-meetingIdentificator="@meeting.MeetingIdentificator" asp-controller="Users" class="btn btn-warning w-100 mb-1">Edytuj spotkanie</a>
+                                    <a asp-action="CheckUsersPresence" asp-route-meetingIdentificator="@meeting.MeetingIdentificator" asp-controller="Users" class="btn btn-primary w-100">Sprawdź obecność</a>
+                                    @*@Html.ActionLink("Szczegóły instruktora", "InstructorDetail", new { instructorIdentificator = item.Instructors }, new { @class = "btn btn-secondary" })*@
+                                    @*@Html.ActionLink("Usuń spotkanie ze szkolenia", "DeleteMeeting", new { meetingIdentificator = item.MeetingIdentificator }) |*@
+                                </div>
+                            </div>
                         </td>
                     </tr>
                 }
@@ -507,8 +516,13 @@ else
                             @Html.DisplayFor(modelItem => instructor.PhoneNumber)
                         </td>
                         <td>
-                            <a asp-action="InstructorDetails" asp-route-instructorIdentificator="@instructor.UserIdentificator" asp-controller="Users" class="btn btn-info m-1">Szczegóły</a>
-                            <a asp-action="EditUser" asp-route-userIdentificator="@instructor.UserIdentificator" asp-controller="Users" class="btn btn-warning  m-1">Aktualizuj</a>
+                            <div class="dropdown p-0">
+                                <button class="btn btn-success dropdown-toggle" type="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">Operacje</button>
+                                <div class="dropdown-menu">
+                                    <a asp-action="InstructorDetails" asp-route-instructorIdentificator="@instructor.UserIdentificator" asp-controller="Users" class="btn btn-info w-100 mb-1">Szczegóły</a>
+                                    <a asp-action="EditUser" asp-route-userIdentificator="@instructor.UserIdentificator" asp-controller="Users" class="btn btn-warning w-100">Aktualizuj</a>
+                                </div>
+                            </div>
                         </td>
                     </tr>
                 }
