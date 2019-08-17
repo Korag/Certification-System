@@ -11,9 +11,9 @@
 <div>
     <h2>Informacje o przedsiębiorstwie</h2>
 
-    <div class="mt-3 mb-3">
-        <a asp-action="EditCompany" asp-route-companyIdentificator="@Model.CompanyIdentificator" asp-controller="Companies" class="btn btn-warning">Edytuj</a>
-        <a asp-action="DisplayAllCompanies" asp-controller="Companies" class="btn btn-outline-info" style="float:right">Powrót do listy przedsiębiorstw</a>
+    <div class="row m-0 mt-3 mb-3">
+        <a asp-action="EditCompany" asp-route-companyIdentificator="@Model.CompanyIdentificator" asp-controller="Companies" class="btn btn-warning mt-1 xs350px_FloatLeft">Edytuj</a>
+        <a asp-action="DisplayAllCompanies" asp-controller="Companies" class="btn btn-outline-info mt-1 xs350px_FloatRight">Powrót do listy przedsiębiorstw</a>
     </div>
 
     <form asp-action="CompanyDetails">
