@@ -11,14 +11,15 @@
 
     <h2>Informacje o użytkowniku</h2>
 
-    <div class="mt-3 mb-3">
-        <a asp-action="EditUser" asp-route-userIdentificator="@Model.User.UserIdentificator" asp-controller="Users" class="btn btn-warning">Edytuj</a>
-        <a asp-action="UserDetails" asp-route-userIdentificator="@Model.User.UserIdentificator" asp-controller="Users" class="btn btn-info">Szczegóły</a>
-        <a asp-action="DisplayAllGivenCertificates" asp-controller="GivenCertificates" class="btn btn-outline-info" style="float:right">Powrót do listy nadanych certyfikatów</a>
+    <div class="row m-0 mt-3 mb-3">
+        <a asp-action="EditUser" asp-route-userIdentificator="@Model.User.UserIdentificator" asp-controller="Users" class="btn btn-warning mt-1 md650px_FloatLeft">Edytuj</a>
+        <a asp-action="UserDetails" asp-route-userIdentificator="@Model.User.UserIdentificator" asp-controller="Users" class="btn btn-info mt-1 md650px_FloatLeft">Szczegóły</a>
+        <a asp-action="DisplayAllGivenCertificates" asp-controller="GivenCertificates" class="btn btn-outline-info mt-1 md650px_FloatRight">Powrót do listy nadanych certyfikatów</a>
     </div>
 
     <form>
-        <div class="col-md-6 col-xl-6 col-sm-8 col-xs-10 m-auto p-3 shadow p-3 mb-5 bg-light rounded border border-primary rounded-bottom" style="opacity:0.80">
+
+        <div class="col-md-8 col-xl-6 col-lg-6 col-sm-12 col-xs-10 m-auto p-3 shadow p-3 mb-5 bg-light rounded border border-primary rounded-bottom" style="opacity:0.90">
 
             <div class="form-group">
                 <label asp-for="User.Email" class="control-label"></label>
@@ -190,10 +191,10 @@ else
 
 <h2 class="mt-4 mb-4">Szczegóły nadanego certyfikatu</h2>
 
-<div class="mt-3 mb-3">
-    <a asp-action="EditGivenCertificate" asp-route-givenCertificateIdentificator="@Model.GivenCertificateIdentificator" asp-controller="GivenCertificates" class="btn btn-warning">Edytuj certyfikat</a>
-    <a asp-action="CertificateDetails" asp-route-certificateIdentificator="@Model.Certificate.CertificateIdentificator" asp-controller="Certificates" class="btn btn-info">Szczegóły certyfikatu</a>
-    <a asp-action="GivenCertificateDetails" asp-route-givenCertificateIdentificator="@Model.GivenCertificateIdentificator" asp-controller="GivenCertificates" class="btn btn-secondary m-1">Szczegóły przyznanego certyfikatu</a>
+<div class="row m-0 mt-3 mb-3">
+    <a asp-action="EditGivenCertificate" asp-route-givenCertificateIdentificator="@Model.GivenCertificateIdentificator" asp-controller="GivenCertificates" class="btn btn-warning mt-1 mr-1">Edytuj certyfikat</a>
+    <a asp-action="CertificateDetails" asp-route-certificateIdentificator="@Model.Certificate.CertificateIdentificator" asp-controller="Certificates" class="btn btn-info mt-1 mr-1">Szczegóły certyfikatu</a>
+    <a asp-action="GivenCertificateDetails" asp-route-givenCertificateIdentificator="@Model.GivenCertificateIdentificator" asp-controller="GivenCertificates" class="btn btn-secondary mt-1 mr-1">Szczegóły przyznanego certyfikatu</a>
 </div>
 
 <div class="col-12 table-responsive">
@@ -249,9 +250,9 @@ else
                 <td>
                     @Html.DisplayFor(model => model.Certificate.Description)
                 </td>
-                <th>
-                    @Html.DisplayNameFor(model => model.Certificate.Depreciated)
-                </th>
+                <td>
+                    <input type="checkbox" asp-for="Certificate.Depreciated" data-toggle="toggle" data-on="Tak" data-off="Nie" data-size="sm" disabled />
+                </td>
                 <td>
                     <div class="btn-group btn-group-toggle row" data-toggle="buttons">
                         @foreach (var branch in Model.Certificate.Branches)
@@ -348,7 +349,7 @@ else
                     @Html.DisplayFor(model => model.Course.EnrolledUsersQuantity)
                 </td>
                 <td>
-                    @Html.DisplayFor(model => model.Course.CourseEnded)
+                    <input type="checkbox" asp-for="Course.CourseEnded" data-toggle="toggle" data-on="Tak" data-off="Nie" data-size="sm" disabled />
                 </td>
                 <td>
                     @Html.DisplayFor(model => model.Course.CourseLength)
