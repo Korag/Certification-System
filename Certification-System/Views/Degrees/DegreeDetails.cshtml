@@ -11,14 +11,14 @@
 <div>
     <h2>Informacje o stopniu zawodowym</h2>
 
-    <div class="mt-3 mb-3">
-        <a asp-action="EditDegree" asp-route-degreeIdentificator="@Model.DegreeIdentificator" asp-controller="Degrees" class="btn btn-warning">Edytuj</a>
-        <a asp-action="DisplayAllDegrees" asp-controller="Degrees" class="btn btn-outline-info" style="float:right">Powrót do listy stopni zawodowych</a>
+    <div class="row m-0 mt-3 mb-3">
+        <a asp-action="EditDegree" asp-route-degreeIdentificator="@Model.DegreeIdentificator" asp-controller="Degrees" class="btn btn-warning mt-1 xs450px_FloatLeft">Edytuj</a>
+        <a asp-action="DisplayAllDegrees" asp-controller="Degrees" class="btn btn-outline-info mt-1 xs450px_FloatRight">Powrót do listy stopni zawodowych</a>
     </div>
 
     <form asp-action="DegreeDetails">
 
-        <div class="col-md-6 col-xl-6 col-sm-8 col-xs-10 m-auto p-3 shadow p-3 mb-5 bg-light rounded border border-primary rounded-bottom" style="opacity:0.80">
+        <div class="col-md-8 col-xl-6 col-lg-6 col-sm-12 col-xs-10 m-auto p-3 shadow p-3 mb-5 bg-light rounded border border-primary rounded-bottom" style="opacity:0.90">
 
             <div class="form-group">
                 <label asp-for="DegreeIndexer" class="control-label"></label>
