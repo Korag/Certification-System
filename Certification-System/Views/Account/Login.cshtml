@@ -15,7 +15,7 @@
                 <h4>Zaloguj się na swoje konto.</h4>
                 <hr />
 
-                @Html.ActionLink("Weryfikuj certyfikat", "VerifyCompetenceManual", "CompetenceVerification", null, new { @class = "btn btn-primary m-1" })
+                <a asp-action="VerifyCompetenceManual" asp-controller="CompetenceVerification" asp-route-returnurl="@ViewData["ReturnUrl"]" class="btn btn-primary mt-1 mb-1">Weryfikuj certyfikat</a>
 
                 <div class="col-md-6 col-xl-6 col-sm-8 col-xs-10 m-auto p-3 shadow p-3 mb-5 bg-light rounded border border-primary rounded-bottom" style="opacity:0.65">
 
@@ -45,10 +45,10 @@
 
                     <div class="form-group">
                         <div class="checkbox col-12 p-0">
-                            <label asp-for="RememberMe">
-                                <input asp-for="RememberMe" />
-                                @Html.DisplayNameFor(m => m.RememberMe)
-                            </label>
+                            <div class="row pl-3">
+                                <input type="checkbox" asp-for="RememberMe" class="form-control" data-toggle="toggle" data-on="Tak" data-off="Nie" data-size="sm" />
+                                <label class="control-label ml-2 mt-1">@Html.DisplayNameFor(m => m.RememberMe)</label>
+                            </div>
                         </div>
                     </div>
 
@@ -63,8 +63,8 @@
                 </div>
 
                 <div class="mt-3">
-                        <a asp-action="Register" asp-route-returnurl="@ViewData["ReturnUrl"]" class="btn btn-info">Nie posiadasz konta? Zarejestruj się.</a>
-                        <a asp-action="ForgotPassword" class="btn btn-warning">Zapomniałeś hasła?</a>
+                    <a asp-action="Register" asp-route-returnurl="@ViewData["ReturnUrl"]" class="btn btn-info mt-1">Nie posiadasz konta? Zarejestruj się.</a>
+                    <a asp-action="ForgotPassword" class="btn btn-warning mt-1">Zapomniałeś hasła?</a>
                 </div>
 
             </form>
