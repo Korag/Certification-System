@@ -105,22 +105,22 @@
             <div class="form-group">
                 <label asp-for="AvailableBranches" class="control-label"></label>
                 @*<div>
-            <div class="btn-group btn-group-toggle" data-toggle="buttons">
-                @foreach (var availableBranch in Model.AvailableBranches)
-                {*@
+                <div class="btn-group btn-group-toggle" data-toggle="buttons">
+                    @foreach (var availableBranch in Model.AvailableBranches)
+                    {*@
                 @*<div id="checkbox-list">*@
                 @*<label class="btn btn-outline-secondary m-2  @if (Model.SelectedBranches.Contains(availableBranch.Value)) { <text> active </text> }">
-                <input type="checkbox"
-                       name="SelectedBranches"
-                       value="@availableBranch.Value"
-                       autocomplete="off"
-                       @if (Model.SelectedBranches.Contains(availableBranch.Value)) { <text> checked </text> } />
-                <span>@availableBranch.Text</span>
-            </label>*@
+                    <input type="checkbox"
+                           name="SelectedBranches"
+                           value="@availableBranch.Value"
+                           autocomplete="off"
+                           @if (Model.SelectedBranches.Contains(availableBranch.Value)) { <text> checked </text> } />
+                    <span>@availableBranch.Text</span>
+                </label>*@
                 @*}*@
                 @*</div>
-                @Html.ValidationMessageFor(model => model.SelectedBranches, "", new { @class = "text-danger" })
-            </div>*@
+                    @Html.ValidationMessageFor(model => model.SelectedBranches, "", new { @class = "text-danger" })
+                </div>*@
 
                 <div>
                     <select asp-for="SelectedBranches" asp-items="@Model.AvailableBranches" data-style="btn-white" data-container="body" data-width="auto" data-header="Wybierz obszary certyfikacji" data-live-search="true" title="Nie wybrano żadnego elementu" class="form-control selectpicker show-tick w-100"> </select>
@@ -133,7 +133,7 @@
 
             <div asp-validation-summary="ModelOnly" class="row justify-content-center alert alert-danger validation-model"></div>
 
-            <div class="row m-0 mt-3 mb-3">
+            <div class="row m-0 mt-3">
                 <input type="submit" value="Edytuj" class="btn btn-primary mt-1 xs300px_JustifyContentCenter" />
                 <a asp-action="DisplayAllCourses" asp-controller="Courses" class="btn btn-outline-info mt-1 xs300px_FloatRight">Powrót do listy</a>
             </div>

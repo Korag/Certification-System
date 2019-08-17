@@ -72,7 +72,6 @@
 
 </div>
 
-
 <h2 class="mt-4 mb-4">Uczestnicy kursu</h2>
 
 <form asp-action="EndCourseAndDispenseGivenCertificates">
@@ -194,9 +193,9 @@
 
             <div asp-validation-summary="ModelOnly" class="row justify-content-center alert alert-danger validation-model"></div>
 
-            <div class="row m-0 mt-3 mb-3">
-                <input type="submit" value="Zakończ kurs" class="btn btn-primary mt-1 xs300px_JustifyContentCenter" />
-                <a asp-action="CourseDetails" asp-route-courseIdentificator="@Model.CourseIdentificator" asp-controller="Courses" class="btn btn-outline-info mt-1 xs300px_FloatRight">Powrót do szczegółów</a>
+            <div class="row m-0 mt-3">
+                <input type="submit" value="Zakończ kurs" class="btn btn-primary mt-1 mr-1 xs300px_JustifyContentCenter" />
+                <a asp-action="CourseDetails" asp-route-courseIdentificator="@Model.CourseIdentificator" asp-controller="Courses" class="btn btn-outline-info mt-1 mr-1 xs300px_FloatRight">Powrót do szczegółów</a>
             </div>
 
         </div>

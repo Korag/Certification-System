@@ -122,6 +122,9 @@ textarea {
     }
 }
 
+
+
+
 @media (max-width: 450px) {
     .xs450px_FloatRightThenJustify {
         margin: auto;
@@ -137,6 +140,7 @@ textarea {
 
     .xs450px_FloatLeft {
         margin: 0;
+        margin-right: 4px;
     }
 }
 
@@ -157,6 +161,7 @@ textarea {
 
     .xs350px_FloatLeft {
         margin: 0px;
+        margin-right:4px;
     }
 }
 
@@ -166,18 +171,23 @@ textarea {
     }
 }
 
-@media (max-width: 800px) {
-    .md800px_FloatRight {
+@media (max-width: 650px) {
+    .md650px_FloatRight {
         margin: 0px;
     }
 
-    .md800x_FloatLeft {
+    .md650px_FloatLeft {
         margin: 0px;
+        margin-right: 4px;
     }
 }
 
-@media (min-width: 802px) {
-    .md800px_FloatRight {
+@media (min-width: 652px) {
+    .md650px_FloatRight {
         margin-left: auto;
+    }
+
+    .md650px_FloatLeft {
+        margin-right: 4px;
     }
 }
