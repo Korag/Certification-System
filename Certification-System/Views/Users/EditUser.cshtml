@@ -178,18 +178,12 @@
 
             <div asp-validation-summary="ModelOnly" class="row justify-content-center alert alert-danger validation-model"></div>
 
-            <div class="row justify-content-center">
-                <input type="submit" class="btn btn-primary" value="Edytuj użytkownika" />
-            </div>
+            <input type="submit" class="btn btn-primary" value="Edytuj użytkownika" />
+            <a asp-action="DisplayAllUsers" asp-controller="Users" class="btn btn-info" style="float:right">Powrót do listy</a>
 
         </div>
 
     </form>
-</div>
-
-<div class="mt-3">
-    <a asp-action="AddNewUser" asp-controller="Users" class="btn btn-secondary">Dodaj nowego użytkownika</a>
-    <a asp-action="DisplayAllUsers" asp-controller="Users" class="btn btn-info">Przejdź do listy użytkowników</a>
 </div>
 
 @section Scripts {
