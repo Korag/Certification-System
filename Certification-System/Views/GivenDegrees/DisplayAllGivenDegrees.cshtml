@@ -10,6 +10,7 @@
 
 <div class="m-3">
     <a asp-action="AddNewGivenDegree" asp-controller="GivenDegrees" class="btn btn-primary">Przyznaj stopień zawodowy</a>
+    <a asp-action="DisplayAllGivenDegrees" asp-controller="GivenDegrees" class="btn btn-outline-info" style="float:right">Powrót do listy nadanych stopni zawodowych</a>
 </div>
 
 <div class="col-12 table-responsive">
@@ -56,9 +57,14 @@
                         @Html.DisplayFor(model => givenDegree.User.FirstName) @Html.DisplayFor(model => givenDegree.User.LastName)
                     </td>
                     <td>
-                        <a asp-action="GivenDegreeDetails" asp-route-givenDegreeIdentificator="@givenDegree.GivenDegreeIdentificator" asp-controller="GivenDegrees" class="btn btn-info m-1">Szczegóły nadanego stopnia zawodowego</a>
-                        <a asp-action="UserDetails" asp-route-userIdentificator="@givenDegree.User.UserIdentificator" asp-controller="Users" class="btn btn-secondary m-1">Szczegóły użytkownika</a>
-                        <a asp-action="EditGivenDegree" asp-route-givenDegreeIdentificator="@givenDegree.GivenDegreeIdentificator" asp-controller="GivenDegrees" class="btn btn-warning m-1">Edytuj stopień zawodowy</a>
+                        <div class="dropdown p-0">
+                            <button class="btn btn-success dropdown-toggle" type="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">Operacje</button>
+                            <div class="dropdown-menu">
+                                <a asp-action="GivenDegreeDetails" asp-route-givenDegreeIdentificator="@givenDegree.GivenDegreeIdentificator" asp-controller="GivenDegrees" class="btn btn-info w-100 mb-1">Szczegóły nadanego stopnia zawodowego</a>
+                                <a asp-action="UserDetails" asp-route-userIdentificator="@givenDegree.User.UserIdentificator" asp-controller="Users" class="btn btn-secondary w-100 mb-1">Szczegóły użytkownika</a>
+                                <a asp-action="EditGivenDegree" asp-route-givenDegreeIdentificator="@givenDegree.GivenDegreeIdentificator" asp-controller="GivenDegrees" class="btn btn-warning w-100">Edytuj stopień zawodowy</a>
+                            </div>
+                        </div>
                     </td>
                 </tr>
             }
