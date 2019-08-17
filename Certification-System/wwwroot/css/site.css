@@ -106,3 +106,78 @@ textarea {
 .show{
     padding: 0px 0px 0px 0px;
 }
+
+@media (max-width: 300px) {
+    .xs300px_FloatRight {
+        margin: auto;
+    }
+    .xs300px_JustifyContentCenter{
+        margin:auto;
+    }
+}
+
+@media (min-width: 302px) {
+    .xs300px_FloatRight {
+        margin-left: auto;
+    }
+}
+
+@media (max-width: 450px) {
+    .xs450px_FloatRightThenJustify {
+        margin: auto;
+    }
+
+    .xs450px_JustifyContentCenter {
+        margin: auto;
+    }
+
+    .xs450px_FloatRight {
+        margin: 0;
+    }
+
+    .xs450px_FloatLeft {
+        margin: 0;
+    }
+}
+
+@media (min-width: 452px) {
+    .xs450px_FloatRight {
+        margin-left: auto;
+    }
+
+    .xs450px_FloatRightThenJustify {
+        margin-left: auto;
+    }
+}
+
+@media (max-width: 350px) {
+    .xs350px_FloatRight {
+        margin: 0px;
+    }
+
+    .xs350px_FloatLeft {
+        margin: 0px;
+    }
+}
+
+@media (min-width: 352px) {
+    .xs350px_FloatRight {
+        margin-left: auto;
+    }
+}
+
+@media (max-width: 800px) {
+    .md800px_FloatRight {
+        margin: 0px;
+    }
+
+    .md800x_FloatLeft {
+        margin: 0px;
+    }
+}
+
+@media (min-width: 802px) {
+    .md800px_FloatRight {
+        margin-left: auto;
+    }
+}

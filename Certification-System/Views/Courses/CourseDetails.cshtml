@@ -16,17 +16,18 @@
 <h2>Informacje o kursie</h2>
 
 <div class="row m-0 mt-3 mb-3">
-    <a asp-action="EditCourse" asp-route-courseIdentificator="@Model.CourseIdentificator" asp-controller="Courses" class="btn btn-warning mt-1 mr-1 md800x_FloatLeft">Edytuj</a>
+    <a asp-action="EditCourse" asp-route-courseIdentificator="@Model.CourseIdentificator" asp-controller="Courses" class="btn btn-warning mt-1 mr-1 xs450px_FloatLeft">Edytuj</a>
+   
     @if (Model.CourseEnded == false)
     {
-        <a asp-action="EndCourseAndDispenseGivenCertificates" asp-route-courseIdentificator="@Model.CourseIdentificator" asp-controller="Courses" class="btn btn-secondary mt-1 mr-1 md800x_FloatLeft">Zakończ kurs</a>
+        <a asp-action="EndCourseAndDispenseGivenCertificates" asp-route-courseIdentificator="@Model.CourseIdentificator" asp-controller="Courses" class="btn btn-secondary mt-1 mr-1 xs450px_FloatLeft">Zakończ kurs</a>
     }
     else
     {
-        <a asp-action="EndCourseAndDispenseGivenCertificates" asp-route-courseIdentificator="@Model.CourseIdentificator" asp-controller="Courses" class="btn btn-secondary mt-1 mr-1 md800x_FloatLeft" disabled>Zakończ kurs</a>
+        <a asp-action="EndCourseAndDispenseGivenCertificates" asp-route-courseIdentificator="@Model.CourseIdentificator" asp-controller="Courses" class="btn btn-secondary mt-1 mr-1 xs450px_FloatLeft" disabled>Zakończ kurs</a>
     }
 
-    <a asp-action="DisplayAllCourses" asp-controller="Courses" class="btn btn-outline-info mt-1 md800px_FloatRight">Powrót do listy kursów</a>
+    <a asp-action="DisplayAllCourses" asp-controller="Courses" class="btn btn-outline-info mt-1 xs450px_FloatRight">Powrót do listy kursów</a>
 </div>
 
 <div>
