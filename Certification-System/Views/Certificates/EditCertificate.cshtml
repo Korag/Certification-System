@@ -10,9 +10,9 @@
 <div>
     <form asp-action="EditCertificate">
 
-        <div class="col-md-6 col-xl-6 col-sm-8 col-xs-10 m-auto p-3 shadow p-3 mb-5 bg-light rounded border border-primary rounded-bottom" style="opacity:0.80">
+        <div class="col-md-8 col-xl-6 col-lg-6 col-sm-12 col-xs-10 m-auto p-3 shadow p-3 mb-5 bg-light rounded border border-primary rounded-bottom" style="opacity:0.90">
 
-            <input asp-for="CertificateIdentificator" class="form-control col-12" hidden/>
+            <input asp-for="CertificateIdentificator" class="form-control col-12" hidden />
 
             <div class="form-group">
                 <label asp-for="CertificateIndexer" class="control-label"></label>
@@ -50,26 +50,26 @@
                         <span asp-validation-for="Depreciated" class="text-danger"></span>
                     </div>
                     @*@Html.RadioButtonFor(model => model.Depreciated, true)
-                @Html.RadioButtonFor(model => model.Depreciated, false)*@
+                        @Html.RadioButtonFor(model => model.Depreciated, false)*@
                 </div>
             </div>
             <div class="form-group">
                 <label asp-for="AvailableBranches" class="control-label"></label>
                 @*@Html.DropDownListFor(model => Model.SelectedBranches, Model.AvailableBranches, new { @class = "text-danger" })
-            @Html.ListBoxFor(model => Model.SelectedBranches, Model.AvailableBranches, new { @class = "text-danger" })*@
+                    @Html.ListBoxFor(model => Model.SelectedBranches, Model.AvailableBranches, new { @class = "text-danger" })*@
                 @*<div class="btn-group btn-group-toggle" data-toggle="buttons">
-                @foreach (var availableBranch in Model.AvailableBranches)
-                {
-                    <label class="btn btn-outline-secondary mr-2  @if (Model.SelectedBranches.Contains(availableBranch.Value)) { <text> active </text>} ">
-                        <input type="checkbox"
-                               name="SelectedBranches"
-                               value="@availableBranch.Value"
-                               autocomplete="off"
-                               @if (Model.SelectedBranches.Contains(availableBranch.Value)) { <text> checked </text> } />
-                        <span>@availableBranch.Text</span>
-                    </label>
-                }
-            </div>*@
+                        @foreach (var availableBranch in Model.AvailableBranches)
+                        {
+                            <label class="btn btn-outline-secondary mr-2  @if (Model.SelectedBranches.Contains(availableBranch.Value)) { <text> active </text>} ">
+                                <input type="checkbox"
+                                       name="SelectedBranches"
+                                       value="@availableBranch.Value"
+                                       autocomplete="off"
+                                       @if (Model.SelectedBranches.Contains(availableBranch.Value)) { <text> checked </text> } />
+                                <span>@availableBranch.Text</span>
+                            </label>
+                        }
+                    </div>*@
 
                 <div>
                     <select asp-for="SelectedBranches" asp-items="@Model.AvailableBranches" data-style="btn-white" data-container="body" data-width="auto" data-header="Wybierz obszary certyfikacji" data-live-search="true" title="Nie wybrano żadnego elementu" class="form-control selectpicker show-tick w-100"> </select>
@@ -82,8 +82,10 @@
 
             <div asp-validation-summary="ModelOnly" class="row justify-content-center alert alert-danger validation-model"></div>
 
-            <input type="submit" value="Edytuj" class="btn btn-primary" />
-            <a asp-action="DisplayAllCertificates" asp-controller="Certificates" class="btn btn-outline-info" style="float:right">Powrót do listy</a>
+            <div class="row m-0 mt-3 mb-3">
+                <input type="submit" value="Edytuj" class="btn btn-primary mt-1 xs300px_JustifyContentCenter" />
+                <a asp-action="DisplayAllCertificates" asp-controller="Certificates" class="btn btn-outline-info mt-1 xs300px_FloatRight">Powrót do listy</a>
+            </div>
 
         </div>
     </form>

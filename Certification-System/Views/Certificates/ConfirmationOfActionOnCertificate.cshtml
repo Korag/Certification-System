@@ -13,9 +13,9 @@ else
     <h2 class="alert alert-success" role="alert">Dodano następujący certyfikat:</h2>
 }
 
-<div class="mt-3 mb-3">
-    <a asp-action="AddNewCertificate" asp-controller="Certificates" class="btn btn-primary">Dodaj certyfikat</a>
-    <a asp-action="DisplayAllCertificates" asp-controller="Certificates" class="btn btn-outline-info" style="float:right">Powrót do listy certyfikatów</a>
+<div class="row m-0 mt-3 mb-3">
+    <a asp-action="AddNewCertificate" asp-controller="Certificates" class="btn btn-primary mt-1 xs350px_FloatLeft">Dodaj certyfikat</a>
+    <a asp-action="DisplayAllCertificates" asp-controller="Certificates" class="btn btn-outline-info mt-1 xs350px_FloatRight">Powrót do listy certyfikatów</a>
 </div>
 
 <div class="col-12 table-responsive">
@@ -60,9 +60,9 @@ else
     </table>
 </div>
 
-<div class="mt-3">
-    <a asp-action="CertificateDetails" asp-route-certificateIdentificator="@Model.CertificateIdentificator" asp-controller="Certificates" class="btn btn-info">Szczegóły</a>
-    <a asp-action="EditCertificate" asp-route-certificateIdentificator="@Model.CertificateIdentificator" asp-controller="Certificates" class="btn btn-warning">Edytuj</a>
+<div class="row m-0 mt-3">
+    <a asp-action="CertificateDetails" asp-route-certificateIdentificator="@Model.CertificateIdentificator" asp-controller="Certificates" class="btn btn-info mt-1">Szczegóły</a>
+    <a asp-action="EditCertificate" asp-route-certificateIdentificator="@Model.CertificateIdentificator" asp-controller="Certificates" class="btn btn-warning mt-1">Edytuj</a>
 </div>
 
 @section Scripts{

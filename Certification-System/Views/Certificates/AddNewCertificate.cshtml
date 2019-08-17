@@ -8,7 +8,7 @@
 <div>
     <form asp-action="AddNewCertificate">
 
-        <div class="col-md-6 col-xl-6 col-sm-8 col-xs-10 m-auto p-3 shadow p-3 mb-5 bg-light rounded border border-primary rounded-bottom" style="opacity:0.80">
+       <div class="col-md-8 col-xl-6 col-lg-6 col-sm-12 col-xs-10 m-auto p-3 shadow p-3 mb-5 bg-light rounded border border-primary rounded-bottom" style="opacity:0.90">
 
             <div class="form-group">
                 <label asp-for="CertificateIndexer" class="control-label"></label>
@@ -78,12 +78,14 @@
 
             <div asp-validation-summary="ModelOnly" class="row justify-content-center alert alert-danger validation-model"></div>
 
-            <input type="submit" value="Utwórz" class="btn btn-primary" />
-            <a asp-action="DisplayAllCertificates" asp-controller="Certificates" class="btn btn-outline-info" style="float:right">Powrót do listy</a>
+            <div class="row m-0 mt-3 mb-3">
+                <input type="submit" value="Dodaj" class="btn btn-primary mt-1 xs300px_JustifyContentCenter" />
+                <a asp-action="DisplayAllCertificates" asp-controller="Certificates" class="btn btn-outline-info mt-1 xs300px_FloatRight" style="float:right">Powrót do listy</a>
+            </div>
 
         </div>
 
-    </form>
+</form>
 </div>
 
 
