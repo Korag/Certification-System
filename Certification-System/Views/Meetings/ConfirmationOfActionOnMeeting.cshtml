@@ -14,9 +14,9 @@ else
     <h2 class="alert alert-success" role="alert">Dodano następujące spotkanie:</h2>
 }
 
-<div class="mt-3 mb-3">
-    <a asp-action="AddNewMeeting" asp-controller="Meetings" class="btn btn-primary">Dodaj spotkanie</a>
-    <a asp-action="DisplayAllMeetings" asp-controller="Meetings" class="btn btn-outline-info" style="float:right">Powrót do listy spotkań</a>
+<div class="row m-0 mt-3 mb-3">
+    <a asp-action="AddNewMeeting" asp-controller="Meetings" class="btn btn-primary mt-1 xs450px_FloatLeft">Dodaj spotkanie</a>
+    <a asp-action="DisplayAllMeetings" asp-controller="Meetings" class="btn btn-outline-info mt-1 xs450px_FloatRight">Powrót do listy spotkań</a>
 </div>
 
 <div class="col-12 table-responsive">
@@ -103,9 +103,9 @@ else
     </table>
 </div>
 
-<div class="mt-3">
-    <a asp-action="MeetingDetails" asp-route-meetingIdentificator="@Model.MeetingIdentificator" asp-controller="Meetings" class="btn btn-info">Szczegóły</a>
-    <a asp-action="EditMeeting" asp-route-meetingIdentificator="@Model.MeetingIdentificator" asp-controller="Meetings" class="btn btn-warning">Edytuj</a>
+<div class="row m-0 mt-3">
+    <a asp-action="MeetingDetails" asp-route-meetingIdentificator="@Model.MeetingIdentificator" asp-controller="Meetings" class="btn btn-info mt-1 mr-1">Szczegóły</a>
+    <a asp-action="EditMeeting" asp-route-meetingIdentificator="@Model.MeetingIdentificator" asp-controller="Meetings" class="btn btn-warning mt-1 mr-1">Edytuj</a>
 </div>
 
 @section Scripts{
