@@ -92,12 +92,35 @@
                         <div class="dropdown p-0">
                             <button class="btn btn-success dropdown-toggle" type="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">Operacje</button>
                             <div class="dropdown-menu">
-                                x
-                                <a asp-action="UserDetails" asp-route-userIdentificator="@user.UserIdentificator" asp-controller="Users" class="btn btn-info w-100 mb-1">Szczegóły</a>
+                                @if (user.Roles.Contains("ADMIN"))
+                                {<a asp-action="AccountDetails" asp-route-userIdentificator="@user.UserIdentificator" asp-controller="Users" class="btn btn-info w-100 mb-1">Szczegóły</a>}
+
+                                else if (user.Roles.Contains("COMPANY") && user.Roles.Contains("WORKER"))
+                                {<a asp-action="UserDetails" asp-route-userIdentificator="@user.UserIdentificator" asp-controller="Users" class="btn btn-info w-100 mb-1">Szczegóły</a>}
+
+                                else if (user.Roles.Contains("COMPANY"))
+                                {<a asp-action="CompanyWithAccountUserDetails" asp-route-userIdentificator="@user.UserIdentificator" asp-controller="Users" class="btn btn-info w-100 mb-1">Szczegóły</a>}
+
+                                else if (user.Roles.Contains("WORKER"))
+                                {<a asp-action="UserDetails" asp-route-userIdentificator="@user.UserIdentificator" asp-controller="Users" class="btn btn-info w-100 mb-1">Szczegóły</a>}
+
+                                else if (user.Roles.Contains("INSTRUCTOR") && this.User.IsInRole("EXAMINER"))
+                                {<a asp-action="InstructorExaminerDetails" asp-route-userIdentificator="@user.UserIdentificator" asp-controller="Users" class="btn btn-info w-100 mb-1">Szczegóły</a>}
+
+                                else if (user.Roles.Contains("INSTRUCTOR"))
+                                {<a asp-action="InstructorDetails" asp-route-userIdentificator="@user.UserIdentificator" asp-controller="Users" class="btn btn-info w-100 mb-1">Szczegóły</a>}
+
+                                else if (user.Roles.Contains("EXAMINER"))
+                                {<a asp-action="ExaminerDetails" asp-route-userIdentificator="@user.UserIdentificator" asp-controller="Users" class="btn btn-info w-100 mb-1">Szczegóły</a>}
+
                                 <a asp-action="EditUser" asp-route-userIdentificator="@user.UserIdentificator" asp-controller="Users" class="btn btn-warning w-100 mb-1">Edytuj</a>
-                                <a asp-action="" asp-route-userIdentificator="@user.UserIdentificator" asp-controller="Certificates" class="btn btn-primary w-100 mb-1">Nadaj certyfikat</a>
-                                <a asp-action="" asp-route-userIdentificator="@user.UserIdentificator" asp-controller="Degrees" class="btn btn-secondary w-100 mb-1">Nadaj stopień zawodowy</a>
-                                <a asp-action="GenerateUserQR" asp-route-userIdentificator="@user.UserIdentificator" asp-controller="CompetenceVerification" class="btn btn-dark w-100">Generuj kod QR</a>
+
+                                @if (user.Roles.Contains("WORKER"))
+                                {
+                                    <a asp-action="AddNewGivenCertificate" asp-route-userIdentificator="@user.UserIdentificator" asp-controller="Certificates" class="btn btn-primary w-100 mb-1">Nadaj certyfikat</a>
+                                    <a asp-action="AddNewGivenDegree" asp-route-userIdentificator="@user.UserIdentificator" asp-controller="Degrees" class="btn btn-secondary w-100 mb-1">Nadaj stopień zawodowy</a>
+                                    <a asp-action="GenerateUserQR" asp-route-userIdentificator="@user.UserIdentificator" asp-controller="CompetenceVerification" class="btn btn-dark w-100">Generuj kod QR</a>
+                                }
                             </div>
                         </div>
                     </td>

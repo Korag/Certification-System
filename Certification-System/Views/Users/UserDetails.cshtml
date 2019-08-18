@@ -417,7 +417,7 @@ else
                             @Html.DisplayFor(modelItem => course.EnrolledUsersQuantity)
                         </td>
                         <td>
-                            @Html.DisplayFor(modelItem => course.CourseEnded)
+                            <input type="checkbox" asp-for="@course.CourseEnded" data-toggle="toggle" data-on="Tak" data-off="Nie" data-size="sm" disabled />
                         </td>
                         <td>
                             @Html.DisplayFor(modelItem => course.CourseLength)

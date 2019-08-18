@@ -361,11 +361,11 @@ namespace Certification_System.Controllers
                 }
             }
 
-            InstructorDetailsViewModel UserDetails = _mapper.Map<InstructorDetailsViewModel>(User);
-            UserDetails.Courses = ListOfCourses;
-            UserDetails.Meetings = ListOfMeetings;
+            InstructorDetailsViewModel InstructorDetails = _mapper.Map<InstructorDetailsViewModel>(User);
+            InstructorDetails.Courses = ListOfCourses;
+            InstructorDetails.Meetings = ListOfMeetings;
 
-            return View(UserDetails);
+            return View(InstructorDetails);
         }
     }
 }

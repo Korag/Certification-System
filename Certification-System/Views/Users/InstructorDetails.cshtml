@@ -13,7 +13,7 @@
     <h2>Informacje o użytkowniku</h2>
 
     <div class="row m-0 mt-3 mb-3">
-        <a asp-action="AddNewUser" asp-controller="Users" class="btn btn-primary mt-1 xs450px_FloatLeft">Dodaj użytkownika</a>
+        <a asp-action="EditUser" asp-route-userIdentificator="UserIdentificator" asp-controller="Users" class="btn btn-primary mt-1 xs450px_FloatLeft">Edytuj</a>
         <a asp-action="DisplayAllUsers" asp-controller="Users" class="btn btn-outline-info mt-1 xs450px_FloatRight">Powrót do listy użytkowników</a>
     </div>
 
@@ -162,7 +162,7 @@
                             @Html.DisplayFor(modelItem => course.EnrolledUsersQuantity)
                         </td>
                         <td>
-                            @Html.DisplayFor(modelItem => course.CourseEnded)
+                            <input type="checkbox" asp-for="@course.CourseEnded" data-toggle="toggle" data-on="Tak" data-off="Nie" data-size="sm" disabled />
                         </td>
                         <td>
                             @Html.DisplayFor(modelItem => course.CourseLength)

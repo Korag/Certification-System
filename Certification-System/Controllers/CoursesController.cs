@@ -251,6 +251,11 @@ namespace Certification_System.Controllers
             {
                 OriginCourse = _mapper.Map<EditCourseViewModel, Course>(editedCourse, OriginCourse);
 
+                if (OriginCourse.DateOfEnd != null)
+                {
+                    OriginCourse.CourseLength = OriginCourse.DateOfEnd.Subtract(OriginCourse.DateOfStart).Days;
+                }
+
                 _context.courseRepository.UpdateCourse(OriginCourse);
 
                 return RedirectToAction("ConfirmationOfActionOnCourse", "Courses", new { courseIdentificator = editedCourse.CourseIdentificator, TypeOfAction = "Update" });
