@@ -325,5 +325,47 @@ namespace Certification_System.Controllers
 
             return View(VerifiedUser);
         }
+
+        // GET: InstructorDetails
+        [Authorize(Roles = "Admin")]
+        public ActionResult InstructorDetails(string userIdentificator)
+        {
+            var User = _context.userRepository.GetUserById(userIdentificator);
+
+            var Meetings = _context.meetingRepository.GetMeetingsByInstructorId(userIdentificator);
+            var Courses = _context.courseRepository.GetCoursesByMeetingsId(Meetings.Select(z=> z.MeetingIdentificator).ToList());
+
+            List<DisplayCourseViewModel> ListOfCourses = new List<DisplayCourseViewModel>();
+
+            if (Courses.Count != 0)
+            {
+                foreach (var course in Courses)
+                {
+                    DisplayCourseViewModel singleCourse = _mapper.Map<DisplayCourseViewModel>(course);
+                    singleCourse.Branches = _context.branchRepository.GetBranchesById(course.Branches);
+
+                    ListOfCourses.Add(singleCourse);
+                }
+            }
+
+            List<DisplayMeetingWithoutInstructorViewModel> ListOfMeetings = new List<DisplayMeetingWithoutInstructorViewModel>();
+
+            if (Meetings.Count != 0)
+            {
+                foreach (var meeting in Meetings)
+                {
+                    DisplayMeetingWithoutInstructorViewModel singleMeeting = _mapper.Map<DisplayMeetingWithoutInstructorViewModel>(meeting);
+                    singleMeeting.Course = _mapper.Map<DisplayCrucialDataCourseViewModel>(Courses.Where(z=> z.Meetings.Contains(meeting.MeetingIdentificator)).FirstOrDefault());
+
+                    ListOfMeetings.Add(singleMeeting);
+                }
+            }
+
+            InstructorDetailsViewModel UserDetails = _mapper.Map<InstructorDetailsViewModel>(User);
+            UserDetails.Courses = ListOfCourses;
+            UserDetails.Meetings = ListOfMeetings;
+
+            return View(UserDetails);
+        }
     }
 }

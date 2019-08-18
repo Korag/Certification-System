@@ -8,7 +8,7 @@
 <div>
     <form asp-action="AddNewCertificate">
 
-       <div class="col-md-8 col-xl-6 col-lg-6 col-sm-12 col-xs-10 m-auto p-3 shadow p-3 mb-5 bg-light rounded border border-primary rounded-bottom" style="opacity:0.90">
+        <div class="col-md-8 col-xl-6 col-lg-6 col-sm-12 col-xs-10 m-auto p-3 shadow p-3 mb-5 bg-light rounded border border-primary rounded-bottom" style="opacity:0.90">
 
             <div class="form-group">
                 <label asp-for="CertificateIndexer" class="control-label"></label>
@@ -46,27 +46,27 @@
                         <span asp-validation-for="Depreciated" class="text-danger"></span>
                     </div>
                     @*@Html.RadioButtonFor(model => model.Depreciated, true)
-                @Html.RadioButtonFor(model => model.Depreciated, false)*@
+                        @Html.RadioButtonFor(model => model.Depreciated, false)*@
                 </div>
             </div>
 
             <div class="form-group">
                 <label asp-for="AvailableBranches" class="control-label"></label>
                 @*@Html.DropDownListFor(model => Model.SelectedBranches, Model.AvailableBranches, new { @class = "text-danger" })
-            @Html.ListBoxFor(model => Model.SelectedBranches, Model.AvailableBranches, new { @class = "text-danger" })*@
+                    @Html.ListBoxFor(model => Model.SelectedBranches, Model.AvailableBranches, new { @class = "text-danger" })*@
                 @*<div class="btn-group btn-group-toggle d-flex" role="group" data-toggle="buttons">
-                @foreach (var availableBranch in Model.AvailableBranches)
-                {
-                    <label class="btn btn-outline-secondary m-2 w-100">
-                        <input type="checkbox"
-                               name="SelectedBranches"
-                               value="@availableBranch.Value"
-                               autocomplete="off"
-                               @if (Model.SelectedBranches.Contains(availableBranch.Value)) { <text> checked </text> } />
-                        <span>@availableBranch.Text</span>
-                    </label>
-                }
-            </div>*@
+                        @foreach (var availableBranch in Model.AvailableBranches)
+                        {
+                            <label class="btn btn-outline-secondary m-2 w-100">
+                                <input type="checkbox"
+                                       name="SelectedBranches"
+                                       value="@availableBranch.Value"
+                                       autocomplete="off"
+                                       @if (Model.SelectedBranches.Contains(availableBranch.Value)) { <text> checked </text> } />
+                                <span>@availableBranch.Text</span>
+                            </label>
+                        }
+                    </div>*@
 
                 <div>
                     <select asp-for="SelectedBranches" asp-items="@Model.AvailableBranches" data-style="btn-white" data-container="body" data-width="auto" data-header="Wybierz obszary certyfikacji" data-live-search="true" title="Nie wybrano żadnego elementu" class="form-control selectpicker show-tick w-100"> </select>
@@ -85,7 +85,7 @@
 
         </div>
 
-</form>
+    </form>
 </div>
 
 
