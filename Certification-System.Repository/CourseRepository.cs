@@ -159,5 +159,13 @@ namespace Certification_System.Repository
 
             return resultListOfCourses;
         }
+
+        public void DeleteUsersFromCourse(string courseIdentificator, ICollection<string> usersIdentificators)
+        {
+            var filter = Builders<Course>.Filter.Where(z => z.CourseIdentificator == courseIdentificator);
+            var update = Builders<Course>.Update.PullAll(x => x.EnrolledUsers, usersIdentificators);
+
+            var result = GetCourses().UpdateOne(filter, update);
+        }
     }
 }

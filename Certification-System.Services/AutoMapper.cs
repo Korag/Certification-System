@@ -88,6 +88,10 @@ namespace Certification_System.Services
                     .ForMember(dest => dest.DispensedGivenCertificates, opts => opts.Ignore())
                     .ForMember(dest => dest.AvailableCertificates, opts => opts.Ignore())
                     .ForMember(dest => dest.AllCourseParticipants, opts => opts.Ignore());
+
+            CreateMap<Course, DeleteUsersFromCourseViewModel>()
+                     .ForMember(dest => dest.UsersToDeleteFromCourse, opts => opts.Ignore())
+                     .ForMember(dest => dest.AllCourseParticipants, opts => opts.Ignore());
             #endregion
 
             #region Degrees
@@ -302,6 +306,9 @@ namespace Certification_System.Services
                      .ForMember(dest => dest.UserIdentificator, opts => opts.MapFrom(src => src.Id))
                      .ForMember(dest => dest.Courses, opts => opts.Ignore())
                      .ForMember(dest => dest.Meetings, opts => opts.Ignore());
+
+            CreateMap<DisplayCrucialDataUserViewModel, DeleteUsersFromCourseCheckBoxViewModel>()
+                     .ForMember(dest => dest.IsToDeleteFromCourse, opts => opts.Ignore());
             #endregion
         }
     }
