@@ -3,7 +3,7 @@
 @inject SignInManager<CertificationPlatformUser> SignInManager
 @inject UserManager<CertificationPlatformUser> UserManager
 
-<ul class="navbar-nav navbar-right ml-3">
+<ul class="navbar-nav navbar-right">
     @if (SignInManager.IsSignedIn(User))
     {
         <li class="nav-item mr-2 font-weight-bold">

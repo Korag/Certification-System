@@ -191,3 +191,12 @@ textarea {
         margin-right: 4px;
     }
 }
+
+@media (max-width: 352px) {
+    .navbar-toggler {
+        margin-left: auto;
+    }
+    .navbar-brand {
+        margin:auto;
+    }
+}
