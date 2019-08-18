@@ -1,0 +1,160 @@
+﻿@model Certification_System.DTOViewModels.DeleteUsersFromCourseViewModel
+
+@{
+    ViewData["Title"] = "DeleteUsersFromCourse";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+<h2>Usuwanie użytkowników z kursu</h2>
+<hr />
+
+<div class="col-md-8 col-xl-6 col-lg-6 col-sm-12 col-xs-10 m-auto p-3 shadow p-3 mb-5 bg-light rounded border border-primary rounded-bottom" style="opacity:0.90">
+
+    <h2>Informacje o kursie</h2>
+
+    <div class="form-group">
+        <label asp-for="CourseIndexer" class="control-label"></label>
+        <input asp-for="CourseIndexer" class="form-control col-12" disabled />
+    </div>
+
+    <div class="form-group">
+        <label asp-for="Name" class="control-label"></label>
+        <input asp-for="Name" class="form-control col-12" disabled />
+    </div>
+
+    <div class="form-group">
+        <label asp-for="Description" class="control-label"></label>
+        <textarea asp-for="Description" class="form-control col-12" style="width:100%; min-width:100%;" disabled></textarea>
+    </div>
+
+    <div class="form-group">
+        <label asp-for="DateOfStart" class="control-label"></label>
+        <input asp-for="DateOfStart" class="form-control col-12" disabled />
+    </div>
+
+    <div class="form-group">
+        <label asp-for="DateOfEnd" class="control-label"></label>
+        <input asp-for="DateOfEnd" class="form-control col-12" disabled />
+    </div>
+
+    <div class="form-group">
+        <label asp-for="EnrolledUsersLimit" class="control-label"></label>
+        <input asp-for="EnrolledUsersLimit" class="form-control col-12" disabled />
+    </div>
+
+    <div class="form-group">
+        <label asp-for="EnrolledUsersQuantity" class="control-label"></label>
+        <input asp-for="EnrolledUsersQuantity" class="form-control col-12" disabled />
+    </div>
+
+    <div class="form-group">
+        <label asp-for="ExamIsRequired" class="control-label"></label>
+        <div class="row pl-3">
+            <input type="checkbox" asp-for="ExamIsRequired" class="form-control col-12" data-toggle="toggle" data-on="Tak" data-off="Nie" data-size="sm" disabled />
+        </div>
+    </div>
+
+    <div class="form-group">
+        <label asp-for="CourseLength" class="control-label"></label>
+        <input asp-for="CourseLength" class="form-control col-12" disabled />
+    </div>
+
+    <div class="form-group">
+        <label asp-for="Branches" class="control-label col-12 p-0"></label>
+        <div>
+            <div class="btn-group btn-group-toggle row" data-toggle="buttons">
+                @foreach (var branch in Model.Branches)
+                {
+                    <label class="btn btn-outline-secondary m-2 active">
+                        <input type="checkbox"
+                               name="SelectedBranches"
+                               value="@branch"
+                               autocomplete="off"
+                               disabled
+                               checked />
+                        <span>@branch</span>
+                    </label>
+                }
+            </div>
+        </div>
+    </div>
+
+</div>
+
+<h2 class="mt-4 mb-4">Uczestnicy kursu</h2>
+
+<form asp-action="DeleteUsersFromCourse">
+
+    <input asp-for="CourseIdentificator" class="form-control col-12" hidden />
+
+    @if (Model.AllCourseParticipants.Count != 0)
+    {
+        <div class="col-12 table-responsive">
+            <table id="listUsers" class="table table-striped table-bordered display" style="width: 100%;" role="grid">
+                <thead>
+                    <tr>
+                        <th>
+                            @Html.DisplayNameFor(model => model.AllCourseParticipants.First().Email)
+                        </th>
+                        <th>
+                            @Html.DisplayNameFor(model => model.AllCourseParticipants.First().FirstName)
+                        </th>
+                        <th>
+                            @Html.DisplayNameFor(model => model.AllCourseParticipants.First().LastName)
+                        </th>
+                        <th>
+                            Użytkownik do usunięcia z kursu ?
+                        </th>
+                    </tr>
+                </thead>
+                <tbody>
+                    @{var UsersQuantitity = Model.AllCourseParticipants.Count();}
+                    @for (int i = 0; i < UsersQuantitity; i++)
+                    {
+                        <tr>
+                            <td>
+                                @Html.DisplayFor(model => model.AllCourseParticipants.ElementAt(i).Email)
+                            </td>
+                            <td>
+                                @Html.DisplayFor(model => model.AllCourseParticipants.ElementAt(i).FirstName)
+                            </td>
+                            <td>
+                                @Html.DisplayFor(model => model.AllCourseParticipants.ElementAt(i).LastName)
+                            </td>
+                            <td>
+                                <input type="checkbox" asp-for="@Model.UsersToDeleteFromCourse[i].IsToDeleteFromCourse" data-toggle="toggle" data-on="Tak" data-off="Nie" data-size="sm" />
+                                <input type="hidden" asp-for="@Model.UsersToDeleteFromCourse[i].UserIdentificator" />
+                            </td>
+                        </tr>
+                    }
+                </tbody>
+            </table>
+        </div>
+
+        <div>
+            <div class="row justify-content-center">
+                <input type="submit" value="Usuń użytkowników z kursu" class="btn btn-danger" />
+            </div>
+        </div>
+    }
+    else
+    {
+        <div class="mt-4 mb-4 alert alert-warning">Brak zapisanych użytkowników</div>
+    }
+
+</form>
+
+@section Scripts {
+    @{await Html.RenderPartialAsync("_ValidationScriptsPartial");}
+
+    <script>
+        $(document).ready(function () {
+
+            $('#listUsers').DataTable({
+                "language": {
+                    "url": "//cdn.datatables.net/plug-ins/1.10.19/i18n/Polish.json"
+                },
+            });
+        });
+    </script>
+}

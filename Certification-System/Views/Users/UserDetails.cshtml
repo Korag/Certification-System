@@ -13,7 +13,7 @@
     <h2>Informacje o użytkowniku</h2>
 
     <div class="row m-0 mt-3 mb-3">
-        <a asp-action="AddNewUser" asp-controller="Users" class="btn btn-primary mt-1 xs450px_FloatLeft">Dodaj użytkownika</a>
+        <a asp-action="EditUser" asp-route-userIdentificator="@Model.UserIdentificator" asp-controller="Users" class="btn btn-warning mt-1 xs450px_FloatLeft">Edytuj</a>
         <a asp-action="DisplayAllUsers" asp-controller="Users" class="btn btn-outline-info mt-1 xs450px_FloatRight">Powrót do listy użytkowników</a>
     </div>
 
@@ -435,7 +435,25 @@ else
                                 <button class="btn btn-success dropdown-toggle" type="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">Operacje</button>
                                 <div class="dropdown-menu">
                                     <a asp-action="CourseDetails" asp-route-courseIdentificator="@course.CourseIdentificator" asp-controller="Courses" class="btn btn-info w-100 mb-1">Szczegóły</a>
-                                    <a asp-action="EditCourse" asp-route-courseIdentificator="@course.CourseIdentificator" asp-controller="Courses" class="btn btn-warning w-100">Edytuj</a>
+                                    <a asp-action="EditCourse" asp-route-courseIdentificator="@course.CourseIdentificator" asp-controller="Courses" class="btn btn-warning w-100 mb-1">Edytuj</a>
+                                    @if (!course.CourseEnded)
+                                    {
+                                        <form asp-action="DeleteUsersFromCourse" asp-controller="Courses">
+                                            <input value="@Model.UserIdentificator" name="UsersToDeleteFromCourse[0].UserIdentificator" class="form-control col-12" hidden />
+                                            <input value="true" name="UsersToDeleteFromCourse[0].IsToDeleteFromCourse" class="form-control col-12" hidden />
+
+                                            <input value="@course.CourseIdentificator" name="CourseIdentificator" class="form-control col-12" hidden />
+                                            <input type="submit" value="Usuń użytkownika z kursu" class="btn btn-danger w-100" />
+                                        </form>
+
+                                        @*<form asp-action="DeleteUserFromCourse" asp-controller="Courses">
+                                                <input value="@Model.UserIdentificator" name="usersIdentificators" class="form-control col-12" hidden />
+                                                <input value="@course.CourseIdentificator" name="courseIdentificator" class="form-control col-12" hidden />
+                                                <input type="submit" value="Usuń użytkownika z kursu" class="btn btn-danger w-100" />
+                                            </form>*@
+
+                                        @*<a asp-action="DeleteUserFromCourse" asp-route-userIdentificator="@Model.UserIdentificator" asp-route-courseIdentificator="@course.CourseIdentificator" asp-controller="Courses" class="btn btn-danger w-100">Usuń użytkownika z kursu</a>*@
+                                    }
                                 </div>
                             </div>
                         </td>

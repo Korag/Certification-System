@@ -8,9 +8,9 @@
 <h1>Szczegóły szkolenia</h1>
 <hr />
 
-@if (ViewBag.AddedNewUsersToCourse == true)
+@if (ViewBag.message != "")
 {
-    <h2 class="alert alert-info" role="alert">Zapisano nowych użytkowników na kurs</h2>
+    <h2 class="alert alert-info" role="alert">@ViewBag.message</h2>
 }
 
 <h2>Informacje o kursie</h2>

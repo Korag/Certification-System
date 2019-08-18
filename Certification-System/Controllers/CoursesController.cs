@@ -171,9 +171,9 @@ namespace Certification_System.Controllers
 
         // GET: CourseDetails
         [Authorize(Roles = "Admin")]
-        public ActionResult CourseDetails(string courseIdentificator, bool addedNewUsersToCourse)
+        public ActionResult CourseDetails(string courseIdentificator, string message)
         {
-            ViewBag.AddedNewUsersToCourse = addedNewUsersToCourse;
+            ViewBag.Message = message;
 
             var Course = _context.courseRepository.GetCourseById(courseIdentificator);
             var Meetings = _context.meetingRepository.GetMeetingsById(Course.Meetings);
@@ -323,8 +323,8 @@ namespace Certification_System.Controllers
                         _context.userRepository.AddUsersToCourse(usersAssignedToCourse.SelectedCourse, usersAssignedToCourse.SelectedUsers);
                         _context.courseRepository.AddEnrolledUsersToCourse(usersAssignedToCourse.SelectedCourse, usersAssignedToCourse.SelectedUsers);
 
-                        return RedirectToAction("CourseDetails", new { courseIdentificator = usersAssignedToCourse.SelectedCourse, addedNewUsersToCourse = true });
-                    }
+                        return RedirectToAction("CourseDetails", new { courseIdentificator = usersAssignedToCourse.SelectedCourse, message = "Zapisano nowych użytkowników na kurs" });
+                        }
                 }
                 else
                 {
@@ -433,6 +433,63 @@ namespace Certification_System.Controllers
             return View(courseToEndViewModel);
         }
 
+        // GET: DeleteUserFromCourse
+        [Authorize(Roles = "Admin")]
+        public ActionResult DeleteUsersFromCourse(string courseIdentificator)
+        {
+            var Course = _context.courseRepository.GetCourseById(courseIdentificator);
+         
+            if (Course.CourseEnded != true)
+            {
+                var EnrolledUsersList = _context.userRepository.GetUsersById(Course.EnrolledUsers);
+
+                List<DisplayCrucialDataUserViewModel> ListOfUsers = new List<DisplayCrucialDataUserViewModel>();
+
+                if (EnrolledUsersList.Count != 0)
+                {
+                    ListOfUsers = _mapper.Map<List<DisplayCrucialDataUserViewModel>>(EnrolledUsersList);
+                }
+
+                DeleteUsersFromCourseViewModel deleteUsersFromCourseViewModel = _mapper.Map<DeleteUsersFromCourseViewModel>(Course);
+                deleteUsersFromCourseViewModel.AllCourseParticipants = ListOfUsers;
+
+                deleteUsersFromCourseViewModel.CourseLength = deleteUsersFromCourseViewModel.DateOfEnd.Subtract(deleteUsersFromCourseViewModel.DateOfStart).Days;
+                deleteUsersFromCourseViewModel.Branches = _context.branchRepository.GetBranchesById(Course.Branches);
+                deleteUsersFromCourseViewModel.EnrolledUsersQuantity = Course.EnrolledUsers.Count;
+
+                deleteUsersFromCourseViewModel.UsersToDeleteFromCourse = _mapper.Map<DeleteUsersFromCourseCheckBoxViewModel[]>(ListOfUsers);
+
+                return View(deleteUsersFromCourseViewModel);
+            }
+
+            return RedirectToAction("CourseDetails", new { courseIdentificator = courseIdentificator });
+        }
+
+        // POST: DeleteUserFromCourse
+        [HttpPost]
+        [Authorize(Roles = "Admin")]
+        public ActionResult DeleteUsersFromCourse(DeleteUsersFromCourseViewModel deleteUsersFromCourseViewModel)
+        {
+            if (ModelState.IsValid)
+            {
+                var UsersToDeleteFromCourseIdentificators = deleteUsersFromCourseViewModel.UsersToDeleteFromCourse.ToList().Where(z => z.IsToDeleteFromCourse == true).Select(z => z.UserIdentificator);
+
+                _context.courseRepository.DeleteUsersFromCourse(deleteUsersFromCourseViewModel.CourseIdentificator, UsersToDeleteFromCourseIdentificators.ToList());
+                _context.userRepository.DeleteCourseFromUsersCollection(deleteUsersFromCourseViewModel.CourseIdentificator, UsersToDeleteFromCourseIdentificators.ToList());
+
+                if (deleteUsersFromCourseViewModel.UsersToDeleteFromCourse.Count() == 1)
+                {
+                    return RedirectToAction("UserDetails", new { userIdentificator = deleteUsersFromCourseViewModel.UsersToDeleteFromCourse.FirstOrDefault().UserIdentificator, message = "Usunięto użytkownika z kursu" });
+                }
+                else
+                {
+                    return RedirectToAction("CourseDetails", new { courseIdentificator = deleteUsersFromCourseViewModel.CourseIdentificator, message = "Usunięto grupę użytkowników z kursu" });
+                }
+            }
+
+            return View(deleteUsersFromCourseViewModel);
+        }
+
         #region HelpersMethod
         // GetCourseListOfUsersWithStatistics
         private ICollection<DisplayUserWithCourseResultsViewModel> GetCourseListOfUsersWithStatistics(ICollection<CertificationPlatformUser> enrolledUsers, ICollection<Meeting> meetings)
@@ -464,7 +521,6 @@ namespace Certification_System.Controllers
 
             return ListOfUsers;
         }
-
         #endregion
     }
 }
