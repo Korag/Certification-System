@@ -197,7 +197,7 @@ namespace Certification_System.Services
             CreateMap<Meeting, DisplayMeetingViewModel>();
 
             CreateMap<Meeting, DisplayMeetingWithInstructorsViewModel>();
-   
+
             CreateMap<AddMeetingViewModel, Meeting>()
                      .ForMember(dest => dest.MeetingIdentificator, opts => opts.Ignore())
                      .ForMember(dest => dest.Instructors, opts => opts.MapFrom(src => src.SelectedInstructors));
@@ -209,7 +209,7 @@ namespace Certification_System.Services
                      .ForMember(dest => dest.AttendanceList, opts => opts.Ignore())
                      .ForMember(dest => dest.MeetingIdentificator, opts => opts.Ignore())
                      .ForMember(dest => dest.Instructors, opts => opts.MapFrom(src => src.SelectedInstructors));
-                     
+
             CreateMap<Meeting, MeetingDetailsViewModel>()
                      .ForMember(dest => dest.Instructors, opts => opts.Ignore())
                      .ForMember(dest => dest.AttendanceList, opts => opts.Ignore())
@@ -218,6 +218,9 @@ namespace Certification_System.Services
             CreateMap<Meeting, CheckMeetingPresenceViewModel>()
                      .ForMember(dest => dest.AttendanceList, opts => opts.Ignore())
                      .ForMember(dest => dest.AllCourseParticipants, opts => opts.Ignore());
+
+            CreateMap<Meeting, DisplayMeetingWithoutInstructorViewModel>()
+                     .ForMember(dest => dest.Course, opts => opts.Ignore());
             #endregion
 
             #region Users
@@ -287,7 +290,7 @@ namespace Certification_System.Services
             #region ViewModels to ViewModels 
             CreateMap<DisplayCrucialDataUserViewModel, PresenceCheckBoxViewModel>()
                      .ForMember(dest => dest.IsPresent, opts => opts.Ignore());
-       
+
             CreateMap<DisplayUserWithCourseResultsViewModel, DispenseGivenCertificateCheckBoxViewModel>()
                      .ForMember(dest => dest.GivenCertificateIsEarned, opts => opts.Ignore());
 
@@ -298,4 +301,4 @@ namespace Certification_System.Services
     }
 }
 
- 
+

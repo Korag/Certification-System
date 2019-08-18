@@ -31,9 +31,9 @@ namespace Certification_System.Repository
         public ICollection<Meeting> GetMeetingsById(ICollection<string> meetingsIdentificators)
         {
             var filter = Builders<Meeting>.Filter.Where(z => meetingsIdentificators.Contains(z.MeetingIdentificator));
-            var resultMeeting = GetMeetings().Find<Meeting>(filter).ToList();
+            var resultListOfMeetings = GetMeetings().Find<Meeting>(filter).ToList();
 
-            return resultMeeting;
+            return resultListOfMeetings;
         }
 
         public void AddMeeting(Meeting meeting)
@@ -63,6 +63,14 @@ namespace Certification_System.Repository
 
             var resultClear = GetMeetings().UpdateOne(filter, clearCollection);
             var resultUpdate = GetMeetings().UpdateOne(filter, update);
+        }
+
+        public ICollection<Meeting> GetMeetingsByInstructorId(string userIdentificator)
+        {
+            var filter = Builders<Meeting>.Filter.Where(z=> z.Instructors.Contains(userIdentificator));
+            var resultListOfMeetings = GetMeetings().Find<Meeting>(filter).ToList();
+
+            return resultListOfMeetings;
         }
     }
 }

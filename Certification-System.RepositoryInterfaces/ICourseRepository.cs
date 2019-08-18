@@ -18,5 +18,6 @@ namespace Certification_System.RepositoryInterfaces
         void AddMeetingToCourse(string meetingIdentificator, string courseIdentificator);
         void AddEnrolledUsersToCourse(string courseIdentificator, ICollection<string> usersIdentificators);
         ICollection<SelectListItem> GetActiveCoursesWithVacantSeatsAsSelectList();
+        ICollection<Course> GetCoursesByMeetingsId(ICollection<string> meetingsIdentificators);
     }
 }

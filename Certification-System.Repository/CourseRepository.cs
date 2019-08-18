@@ -152,5 +152,13 @@ namespace Certification_System.Repository
 
             GetCourses().ReplaceOne(filter, course);
         }
+
+        public ICollection<Course> GetCourseByMeetingId(ICollection<string> meetingsIdentificators)
+        {
+            var filter = Builders<Course>.Filter.Where(z => z.Meetings.ToList().Where(x=> meetingsIdentificators.Contains(x)).ToList().Count() != 0);
+            var resultCourse = GetCourses().Find<Course>(filter).ToList();
+
+            return resultCourse;
+        }
     }
 }
