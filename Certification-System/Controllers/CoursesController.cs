@@ -169,7 +169,6 @@ namespace Certification_System.Controllers
             return View(ListOfCourses);
         }
 
-
         // GET: CourseDetails
         [Authorize(Roles = "Admin")]
         public ActionResult CourseDetails(string courseIdentificator, bool addedNewUsersToCourse)
