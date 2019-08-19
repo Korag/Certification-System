@@ -70,8 +70,8 @@ namespace Certification_System.Controllers
 
                 DisplayAllUserInformationViewModel modifiedUser = _mapper.Map<DisplayAllUserInformationViewModel>(User);
 
-                modifiedUser.CompanyRoleWorker = _context.companyRepository.GetCompaniesById(User.CompanyRoleWorker).Select(z=> z.CompanyName).ToList();
-                modifiedUser.CompanyRoleManager = _context.companyRepository.GetCompaniesById(User.CompanyRoleManager).Select(z=> z.CompanyName).ToList();
+                modifiedUser.CompanyRoleWorker = _context.companyRepository.GetCompaniesById(User.CompanyRoleWorker).Select(z => z.CompanyName).ToList();
+                modifiedUser.CompanyRoleManager = _context.companyRepository.GetCompaniesById(User.CompanyRoleManager).Select(z => z.CompanyName).ToList();
 
                 return View(modifiedUser);
             }
@@ -86,7 +86,7 @@ namespace Certification_System.Controllers
             AddUserViewModel newUser = new AddUserViewModel
             {
                 AvailableRoles = _context.userRepository.GetRolesAsSelectList().ToList(),
-                AvailableCompanies = _context.companyRepository.GetCompaniesAsSelectList().ToList()  
+                AvailableCompanies = _context.companyRepository.GetCompaniesAsSelectList().ToList()
             };
 
             return View(newUser);
@@ -191,7 +191,7 @@ namespace Certification_System.Controllers
 
             foreach (var company in CompaniesRoleManager)
             {
-                if (Companies.Where(z=> z.CompanyIdentificator == company.CompanyIdentificator).Count() == 0)
+                if (Companies.Where(z => z.CompanyIdentificator == company.CompanyIdentificator).Count() == 0)
                 {
                     Companies.Add(company);
                 }
@@ -333,7 +333,7 @@ namespace Certification_System.Controllers
             var User = _context.userRepository.GetUserById(userIdentificator);
 
             var Meetings = _context.meetingRepository.GetMeetingsByInstructorId(userIdentificator);
-            var Courses = _context.courseRepository.GetCoursesByMeetingsId(Meetings.Select(z=> z.MeetingIdentificator).ToList());
+            var Courses = _context.courseRepository.GetCoursesByMeetingsId(Meetings.Select(z => z.MeetingIdentificator).ToList());
 
             List<DisplayCourseViewModel> ListOfCourses = new List<DisplayCourseViewModel>();
 
@@ -355,7 +355,7 @@ namespace Certification_System.Controllers
                 foreach (var meeting in Meetings)
                 {
                     DisplayMeetingWithoutInstructorViewModel singleMeeting = _mapper.Map<DisplayMeetingWithoutInstructorViewModel>(meeting);
-                    singleMeeting.Course = _mapper.Map<DisplayCrucialDataCourseViewModel>(Courses.Where(z=> z.Meetings.Contains(meeting.MeetingIdentificator)).FirstOrDefault());
+                    singleMeeting.Course = _mapper.Map<DisplayCrucialDataCourseViewModel>(Courses.Where(z => z.Meetings.Contains(meeting.MeetingIdentificator)).FirstOrDefault());
 
                     ListOfMeetings.Add(singleMeeting);
                 }
@@ -366,6 +366,26 @@ namespace Certification_System.Controllers
             InstructorDetails.Meetings = ListOfMeetings;
 
             return View(InstructorDetails);
+        }
+
+        // GET: AccountDetails
+        [Authorize]
+        public ActionResult AccountDetails(string userIdentificator)
+        {
+            CertificationPlatformUser User;
+
+            if (userIdentificator == null)
+            {
+                User = _userManager.FindByEmailAsync(this.User.Identity.Name).Result;
+            }
+            else
+            {
+                User = _context.userRepository.GetUserById(userIdentificator);
+            }
+
+            AccountDetailsViewModel AccountDetails = _mapper.Map<AccountDetailsViewModel>(User);
+
+            return View(AccountDetails);
         }
     }
 }

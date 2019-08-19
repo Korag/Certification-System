@@ -102,7 +102,7 @@
                                 {<a asp-action="CompanyWithAccountUserDetails" asp-route-userIdentificator="@user.UserIdentificator" asp-controller="Users" class="btn btn-info w-100 mb-1">Szczegóły</a>}
 
                                 else if (user.Roles.Contains("WORKER"))
-                                {<a asp-action="UserDetails" asp-route-userIdentificator="@user.UserIdentificator" asp-controller="Users" class="btn btn-info w-100 mb-1">Szczegóły</a>}
+                                {<a asp-action="AccountDetails" asp-route-userIdentificator="@user.UserIdentificator" asp-controller="Users" class="btn btn-info w-100 mb-1">Szczegóły</a>}
 
                                 else if (user.Roles.Contains("INSTRUCTOR") && this.User.IsInRole("EXAMINER"))
                                 {<a asp-action="InstructorExaminerDetails" asp-route-userIdentificator="@user.UserIdentificator" asp-controller="Users" class="btn btn-info w-100 mb-1">Szczegóły</a>}
