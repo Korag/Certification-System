@@ -48,7 +48,12 @@ namespace Certification_System.Services
             CreateMap<AddCompanyViewModel, Company>()
                      .ForMember(dest => dest.CompanyIdentificator, opts => opts.Ignore());
 
-            CreateMap<Company, CompanyDetailsViewModel>();
+            CreateMap<Company, CompanyDetailsViewModel>()
+                     .ForMember(dest => dest.UsersConnectedToCompany, opts => opts.Ignore());
+
+            CreateMap<Company, CompanyWithAccountDetailsViewModel>()
+                     .ForMember(dest => dest.UsersConnectedToCompany, opts => opts.Ignore())
+                     .ForMember(dest => dest.UserAccount, opts => opts.Ignore());
 
             CreateMap<EditCompanyViewModel, Company>();
 

@@ -387,5 +387,31 @@ namespace Certification_System.Controllers
 
             return View(AccountDetails);
         }
+
+        // GET: CompanyWithAccountDetails
+        [Authorize(Roles = "Admin")]
+        public ActionResult CompanyWithAccountDetails(string userIdentificator)
+        {
+            var User = _context.userRepository.GetUserById(userIdentificator);
+            ////////////////////////////////////////////////////////////////////////////////
+            var Company = _context.companyRepository.GetCompanyById(User.CompanyRoleManager);
+            var UsersConnectedToCompany = _context.userRepository.GetUsersConnectedToCompany(Company.CompanyIdentificator);
+
+            List<DisplayUserViewModel> ListOfUsers = new List<DisplayUserViewModel>();
+
+            if (UsersConnectedToCompany.Count != 0)
+            {
+                ListOfUsers = _mapper.Map<List<DisplayUserViewModel>>(UsersConnectedToCompany);
+                ////////////////////////////////////////////////////////////////////////////////
+                ListOfUsers.ForEach(z => z.CompanyRoleManager = _context.companyRepository.GetCompaniesById(z.CompanyRoleManager).ToList().Select(s => s.CompanyName).ToList());
+                ListOfUsers.ForEach(z => z.CompanyRoleWorker = _context.companyRepository.GetCompaniesById(z.CompanyRoleWorker).ToList().Select(s => s.CompanyName).ToList());
+            }
+
+            CompanyWithAccountDetailsViewModel companyWithAccountDetails = _mapper.Map<CompanyWithAccountDetailsViewModel>(Company);
+            companyWithAccountDetails.UsersConnectedToCompany = ListOfUsers;
+            companyWithAccountDetails.UserAccount = _mapper.Map<AccountDetailsViewModel>(User);
+
+            return View(companyWithAccountDetails);
+        }
     }
 }
