@@ -271,12 +271,7 @@ else
                             </ul>
                         </td>
                         <td>
-                            <ul>
-                                @foreach (var companyManager in user.CompanyRoleManager)
-                                {
-                                    <li>@companyManager</li>
-                                }
-                            </ul>
+                            @Html.DisplayFor(modelItem => user.CompanyRoleManager)
                         </td>
                         <td>
                             <a asp-action="UserDetails" asp-route-userIdentificator="@user.UserIdentificator" asp-controller="Users" class="btn btn-info m-1">Szczegóły</a>

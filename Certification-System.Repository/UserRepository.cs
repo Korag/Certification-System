@@ -218,7 +218,7 @@ namespace Certification_System.Repository
 
         public ICollection<CertificationPlatformUser> GetUsersConnectedToCompany(string companyIdentificator)
         {
-            var filter = Builders<CertificationPlatformUser>.Filter.Where(x => x.CompanyRoleManager.Contains(companyIdentificator) || x.CompanyRoleWorker.Contains(companyIdentificator));
+            var filter = Builders<CertificationPlatformUser>.Filter.Where(x => x.CompanyRoleManager == companyIdentificator || x.CompanyRoleWorker.Contains(companyIdentificator));
             var resultListOfUsers = GetUsers().Find<CertificationPlatformUser>(filter).ToList();
 
             return resultListOfUsers;

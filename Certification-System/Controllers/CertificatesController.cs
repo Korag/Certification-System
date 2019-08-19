@@ -153,7 +153,7 @@ namespace Certification_System.Controllers
                 foreach (var user in UsersWithCertificate)
                 {
                     DisplayCrucialDataWithCompaniesRoleUserViewModel singleUser = _mapper.Map<DisplayCrucialDataWithCompaniesRoleUserViewModel>(user);
-                    singleUser.CompanyRoleManager = _context.companyRepository.GetCompaniesById(user.CompanyRoleManager).Select(s => s.CompanyName).ToList();
+                    singleUser.CompanyRoleManager = _context.companyRepository.GetCompanyById(user.CompanyRoleManager).CompanyName;
                     singleUser.CompanyRoleWorker = _context.companyRepository.GetCompaniesById(user.CompanyRoleWorker).Select(s => s.CompanyName).ToList();
 
                     ListOfUsers.Add(singleUser);

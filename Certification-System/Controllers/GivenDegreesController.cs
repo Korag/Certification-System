@@ -155,7 +155,11 @@ namespace Certification_System.Controllers
             var RequiredCertificates = _context.certificateRepository.GetCertificatesById(Degree.RequiredCertificates);
 
             var User = _context.userRepository.GetUserByGivenDegreeId(givenDegreeIdentificator);
-            var Companies = _context.companyRepository.GetCompaniesById(User.CompanyRoleManager.Concat(User.CompanyRoleWorker).Distinct().ToList());
+
+            var CompaniesIdentificators = User.CompanyRoleWorker;
+            CompaniesIdentificators.Add(User.CompanyRoleManager);
+
+            var Companies = _context.companyRepository.GetCompaniesById(CompaniesIdentificators.Distinct().ToList());
 
             DisplayDegreeWithoutRequirementsViewModel degreeViewModel = _mapper.Map<DisplayDegreeWithoutRequirementsViewModel>(Degree);
             degreeViewModel.Branches = _context.branchRepository.GetBranchesById(Degree.Branches);
@@ -221,7 +225,11 @@ namespace Certification_System.Controllers
             var Degree = _context.degreeRepository.GetDegreeById(GivenDegree.Degree);
 
             var User = _context.userRepository.GetUserByGivenDegreeId(givenDegreeIdentificator);
-            var Companies = _context.companyRepository.GetCompaniesById(User.CompanyRoleManager.Concat(User.CompanyRoleWorker).Distinct().ToList());
+
+            var CompaniesIdentificators = User.CompanyRoleWorker;
+            CompaniesIdentificators.Add(User.CompanyRoleManager);
+
+            var Companies = _context.companyRepository.GetCompaniesById(CompaniesIdentificators.Distinct().ToList());
 
             DisplayDegreeWithoutRequirementsViewModel degreeViewModel = _mapper.Map<DisplayDegreeWithoutRequirementsViewModel>(Degree);
             degreeViewModel.Branches = _context.branchRepository.GetBranchesById(Degree.Branches);

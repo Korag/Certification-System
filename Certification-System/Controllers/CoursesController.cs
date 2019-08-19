@@ -192,7 +192,7 @@ namespace Certification_System.Controllers
 
             var Users = _context.userRepository.GetUsersById(Course.EnrolledUsers);
             List<DisplayCrucialDataWithCompaniesRoleUserViewModel> usersViewModel = _mapper.Map<List<DisplayCrucialDataWithCompaniesRoleUserViewModel>>(Users);
-            usersViewModel.ForEach(z => z.CompanyRoleManager = _context.companyRepository.GetCompaniesById(z.CompanyRoleManager).Select(s => s.CompanyName).ToList());
+            usersViewModel.ForEach(z => z.CompanyRoleManager = _context.companyRepository.GetCompanyById(z.CompanyRoleManager).CompanyName);
             usersViewModel.ForEach(z => z.CompanyRoleWorker = _context.companyRepository.GetCompaniesById(z.CompanyRoleWorker).Select(s => s.CompanyName).ToList());
 
             var InstructorsIdentificators = new List<string>();

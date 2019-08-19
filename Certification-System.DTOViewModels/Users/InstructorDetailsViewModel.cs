@@ -44,7 +44,7 @@ namespace Certification_System.DTOViewModels
         public ICollection<string> CompanyRoleWorker { get; set; }
 
         [Display(Name = "Zarządzający przedsiębiorstwem")]
-        public ICollection<string> CompanyRoleManager { get; set; }
+        public string CompanyRoleManager { get; set; }
 
         [Display(Name = "Kursy")]
         public ICollection<DisplayCourseViewModel> Courses { get; set; }

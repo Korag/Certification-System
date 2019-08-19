@@ -244,7 +244,7 @@ namespace Certification_System.Services
                      .ForMember(dest => dest.GivenCertificates, opts => opts.MapFrom(src => new List<string>()))
                      .ForMember(dest => dest.Courses, opts => opts.MapFrom(src => new List<string>()))
                      .ForMember(dest => dest.GivenDegrees, opts => opts.MapFrom(src => new List<string>()))
-                     .ForMember(dest => dest.CompanyRoleManager, opts => opts.MapFrom(src => new List<string>()))
+                     //.ForMember(dest => dest.CompanyRoleManager, opts => opts.MapFrom(src => new List<string>()))
                      .ForMember(dest => dest.CompanyRoleWorker, opts => opts.MapFrom(src => new List<string>()))
                      .ForMember(dest => dest.NormalizedUserName, opts => opts.MapFrom(src => src.Email.ToUpper()))
                      .ForMember(dest => dest.NormalizedEmail, opts => opts.MapFrom(src => src.Email.ToUpper()))
@@ -259,14 +259,14 @@ namespace Certification_System.Services
 
             CreateMap<CertificationPlatformUser, DisplayAllUserInformationViewModel>()
                      .ForMember(dest => dest.UserIdentificator, opts => opts.MapFrom(src => src.Id))
-                     .ForMember(dest => dest.CompanyRoleManager, opts => opts.MapFrom(src => new List<string>()))
+                     //.ForMember(dest => dest.CompanyRoleManager, opts => opts.MapFrom(src => new List<string>()))
                      .ForMember(dest => dest.CompanyRoleWorker, opts => opts.MapFrom(src => new List<string>()));
 
             CreateMap<AddUserViewModel, CertificationPlatformUser>()
                      .ForMember(dest => dest.GivenCertificates, opts => opts.MapFrom(src => new List<string>()))
                      .ForMember(dest => dest.Courses, opts => opts.MapFrom(src => new List<string>()))
                      .ForMember(dest => dest.GivenDegrees, opts => opts.MapFrom(src => new List<string>()))
-                     .ForMember(dest => dest.CompanyRoleManager, opts => opts.MapFrom(src => new List<string>()))
+                     //.ForMember(dest => dest.CompanyRoleManager, opts => opts.MapFrom(src => new List<string>()))
                      .ForMember(dest => dest.CompanyRoleWorker, opts => opts.MapFrom(src => new List<string>()))
                      .ForMember(dest => dest.NormalizedUserName, opts => opts.MapFrom(src => src.Email.ToUpper()))
                      .ForMember(dest => dest.NormalizedEmail, opts => opts.MapFrom(src => src.Email.ToUpper()))
