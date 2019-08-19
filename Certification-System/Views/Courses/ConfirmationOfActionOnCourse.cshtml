@@ -36,6 +36,12 @@ else
                     @Html.DisplayNameFor(model => model.EnrolledUsersLimit)
                 </th>
                 <th>
+                    @Html.DisplayNameFor(model => model.ExamIsRequired)
+                </th>
+                <th>
+                    @Html.DisplayNameFor(model => model.CourseEnded)
+                </th>
+                <th>
                     @Html.DisplayNameFor(model => model.DateOfStart)
                 </th>
                 <th>
@@ -59,6 +65,12 @@ else
                 </td>
                 <td>
                     @Html.DisplayFor(model => model.EnrolledUsersLimit)
+                </td>
+                <td>
+                    <input type="checkbox" asp-for="@Model.ExamIsRequired" class="form-control col-12" data-toggle="toggle" data-on="Tak" data-off="Nie" data-size="sm" disabled />
+                </td>
+                <td>
+                    <input type="checkbox" asp-for="@Model.CourseEnded" class="form-control col-12" data-toggle="toggle" data-on="Tak" data-off="Nie" data-size="sm" disabled />
                 </td>
                 <td>
                     @Html.DisplayFor(model => model.DateOfStart)

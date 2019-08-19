@@ -312,6 +312,9 @@ else
                     @Html.DisplayNameFor(model => model.Course.EnrolledUsersQuantity)
                 </th>
                 <th>
+                    @Html.DisplayNameFor(model => model.Course.ExamIsRequired)
+                </th>
+                <th>
                     @Html.DisplayNameFor(model => model.Course.CourseEnded)
                 </th>
                 <th>
@@ -347,6 +350,9 @@ else
                 </td>
                 <td>
                     @Html.DisplayFor(model => model.Course.EnrolledUsersQuantity)
+                </td>
+                <td>
+                    <input type="checkbox" asp-for="Course.ExamIsRequired" class="form-control col-12" data-toggle="toggle" data-on="Tak" data-off="Nie" data-size="sm" disabled />
                 </td>
                 <td>
                     <input type="checkbox" asp-for="Course.CourseEnded" data-toggle="toggle" data-on="Tak" data-off="Nie" data-size="sm" disabled />

@@ -29,6 +29,9 @@ namespace Certification_System.DTOViewModels
         [Display(Name = "Liczba uczestników")]
         public int EnrolledUsersQuantity { get; set; }
 
+        [Display(Name = "Kończy się egzaminem")]
+        public bool ExamIsRequired { get; set; }
+
         [Display(Name = "Kurs zakończony")]
         public bool CourseEnded { get; set; }
 
