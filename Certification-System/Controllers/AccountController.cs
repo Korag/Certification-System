@@ -12,6 +12,8 @@ using Certification_System.ServicesInterfaces;
 using Certification_System.Extensions;
 using AspNetCore.Identity.Mongo.Model;
 using AutoMapper;
+using Certification_System.Repository.DAL;
+using Certification_System.DTOViewModels.ManageViewModels;
 
 namespace Certification_System.Controllers
 {
@@ -19,6 +21,8 @@ namespace Certification_System.Controllers
     [Route("[controller]/[action]")]
     public class AccountController : Controller
     {
+        private readonly MongoOperations _context;
+
         private readonly UserManager<CertificationPlatformUser> _userManager;
         private readonly SignInManager<CertificationPlatformUser> _signInManager;
         private readonly RoleManager<MongoRole> _roleManager;
@@ -28,14 +32,16 @@ namespace Certification_System.Controllers
         private readonly IKeyGenerator _keyGenerator;
 
         public AccountController(
+            MongoOperations context,
             UserManager<CertificationPlatformUser> userManager,
             SignInManager<CertificationPlatformUser> signInManager,
-             RoleManager<MongoRole> roleManager,
+            RoleManager<MongoRole> roleManager,
             IEmailSender emailSender,
             ILogger<AccountController> logger,
             IMapper mapper,
             IKeyGenerator keyGenerator)
         {
+            _context = context;
             _userManager = userManager;
             _signInManager = signInManager;
             _roleManager = roleManager;
@@ -50,8 +56,10 @@ namespace Certification_System.Controllers
 
         [HttpGet]
         [AllowAnonymous]
-        public async Task<IActionResult> Login(string returnUrl = null)
+        public async Task<IActionResult> Login(string returnUrl = null, string message = null)
         {
+            ViewBag.message = message;
+
             // Clear the existing external cookie to ensure a clean login process
             await HttpContext.SignOutAsync(IdentityConstants.ExternalScheme);
 
@@ -64,6 +72,7 @@ namespace Certification_System.Controllers
         public async Task<IActionResult> Login(LoginViewModel model, string returnUrl = null)
         {
             ViewData["ReturnUrl"] = returnUrl;
+
             if (ModelState.IsValid)
             {
                 // This doesn't count login failures towards account lockout
@@ -93,6 +102,199 @@ namespace Certification_System.Controllers
             // If we got this far, something failed, redisplay form
             return View(model);
         }
+
+        [HttpGet]
+        [AllowAnonymous]
+        public IActionResult Register(string returnUrl = null)
+        {
+            ViewData["ReturnUrl"] = returnUrl;
+            return View();
+        }
+
+        [HttpPost]
+        [AllowAnonymous]
+        public async Task<IActionResult> Register(RegisterViewModel model, string returnUrl = null)
+        {
+            ViewData["ReturnUrl"] = returnUrl;
+            if (ModelState.IsValid)
+            {
+                var user = _mapper.Map<CertificationPlatformUser>(model);
+                user.Id = _keyGenerator.GenerateNewId();
+                user.SecurityStamp = _keyGenerator.GenerateNewGuid();
+
+                var result = await _userManager.CreateAsync(user, model.Password);
+
+                if (!await _roleManager.RoleExistsAsync("Worker"))
+                {
+                    await _roleManager.CreateAsync(new CertificationPlatformUserRole("Worker"));
+                }
+
+                var addToRole = await _userManager.AddToRoleAsync(user, "Worker");
+
+                if (result.Succeeded)
+                {
+                    _logger.LogInformation("User created a new account with password.");
+
+                    var code = await _userManager.GenerateEmailConfirmationTokenAsync(user);
+                    var callbackUrl = Url.EmailConfirmationLink(user.Id, code, Request.Scheme);
+                    await _emailSender.SendEmailAsync(model.Email, callbackUrl, "");
+
+                    await _signInManager.SignInAsync(user, isPersistent: false);
+                    _logger.LogInformation("User created a new account with password.");
+                    return RedirectToLocal(returnUrl);
+                }
+                AddErrors(result);
+            }
+
+            // If we got this far, something failed, redisplay form
+            return View(model);
+        }
+
+        //[HttpGet]
+        //[AllowAnonymous]
+        //public IActionResult ResetPassword(string code = null)
+        //{
+        //    if (code == null)
+        //    {
+        //        throw new ApplicationException("A code must be supplied for password reset.");
+        //    }
+        //    var model = new ResetPasswordViewModel { Code = code };
+        //    return View(model);
+        //}
+
+        //[HttpPost]
+        //[AllowAnonymous]
+        //public async Task<IActionResult> ResetPassword(ResetPasswordViewModel model)
+        //{
+        //    if (!ModelState.IsValid)
+        //    {
+        //        return View(model);
+        //    }
+        //    var user = await _userManager.FindByEmailAsync(model.Email);
+        //    if (user == null)
+        //    {
+        //        // Don't reveal that the user does not exist
+        //        return RedirectToAction(nameof(ResetPasswordConfirmation));
+        //    }
+        //    var result = await _userManager.ResetPasswordAsync(user, model.Code, model.Password);
+        //    if (result.Succeeded)
+        //    {
+        //        return RedirectToAction(nameof(ResetPasswordConfirmation));
+        //    }
+        //    AddErrors(result);
+        //    return View();
+        //}
+
+        //[HttpGet]
+        //[AllowAnonymous]
+        //public IActionResult ResetPasswordConfirmation()
+        //{
+        //    return View();
+        //}
+
+        [HttpGet]
+        [Authorize]
+        public ActionResult ChangeAccountPassword(string userIdentificator)
+        {
+            ChangePasswordViewModel passwordToChange = new ChangePasswordViewModel
+            {
+                UserIdentificator = userIdentificator
+            };
+  
+            return View(passwordToChange);
+        }
+
+        [HttpPost]
+        [Authorize]
+        public ActionResult ChangeAccountPassword(ChangePasswordViewModel passwordToChange)
+        {
+            if (ModelState.IsValid)
+            {
+                var User = _context.userRepository.GetUserById(passwordToChange.UserIdentificator);
+
+                var result = _userManager.ChangePasswordAsync(User, passwordToChange.OldPassword, passwordToChange.Password).Result;
+
+                if (result.Succeeded)
+                {
+                    _signInManager.SignOutAsync().Wait();
+                    return RedirectToAction("Login", "Account", new { message = "Twoje hasło zostało zmienione - zostałeś wylogowany" });
+                }
+                else
+                {
+                    ModelState.AddModelError(string.Empty, "Wprowadzono niepoprawne obecnie obowiązujące hasło");
+                    return View(new ChangePasswordViewModel {UserIdentificator = passwordToChange.UserIdentificator });
+                }
+            }
+
+            return View(new ChangePasswordViewModel { UserIdentificator = passwordToChange.UserIdentificator });
+        }
+
+        [HttpPost]
+        public async Task<IActionResult> Logout()
+        {
+            await _signInManager.SignOutAsync();
+            _logger.LogInformation("User logged out.");
+            return RedirectToAction(nameof(Login), "Account");
+        }
+
+        [HttpGet]
+        [AllowAnonymous]
+        public async Task<IActionResult> ConfirmEmail(string userId, string code)
+        {
+            if (userId == null || code == null)
+            {
+                return RedirectToAction("BlankMenu", "Certificates");
+            }
+            var user = await _userManager.FindByIdAsync(userId);
+            if (user == null)
+            {
+                throw new ApplicationException($"Unable to load user with ID '{userId}'.");
+            }
+            var result = await _userManager.ConfirmEmailAsync(user, code);
+            return View(result.Succeeded ? "ConfirmEmail" : "Error");
+        }
+
+        //[HttpGet]
+        //[AllowAnonymous]
+        //public IActionResult ForgotPassword()
+        //{
+        //    return View();
+        //}
+
+        //[HttpPost]
+        //[AllowAnonymous]
+        //public async Task<IActionResult> ForgotPassword(ForgotPasswordViewModel model)
+        //{
+        //    if (ModelState.IsValid)
+        //    {
+        //        var user = await _userManager.FindByEmailAsync(model.Email);
+        //        if (user == null || !(await _userManager.IsEmailConfirmedAsync(user)))
+        //        {
+        //            // Don't reveal that the user does not exist or is not confirmed
+        //            return RedirectToAction(nameof(ForgotPasswordConfirmation));
+        //        }
+
+        //        // For more information on how to enable account confirmation and password reset please
+        //        // visit https://go.microsoft.com/fwlink/?LinkID=532713
+        //        var code = await _userManager.GeneratePasswordResetTokenAsync(user);
+        //        var callbackUrl = Url.ResetPasswordCallbackLink(user.Id, code, Request.Scheme);
+        //        await _emailSender.SendEmailAsync(model.Email, "Reset Password",
+        //           $"Please reset your password by clicking here: <a href='{callbackUrl}'>link</a>");
+        //        return RedirectToAction(nameof(ForgotPasswordConfirmation));
+        //    }
+
+        //    // If we got this far, something failed, redisplay form
+        //    return View(model);
+        //}
+
+        //[HttpGet]
+        //[AllowAnonymous]
+        //public IActionResult ForgotPasswordConfirmation()
+        //{
+        //    return View();
+        //}
+
+        #region Currently not-used
 
         [HttpGet]
         [AllowAnonymous]
@@ -209,61 +411,6 @@ namespace Certification_System.Controllers
             return View();
         }
 
-        [HttpGet]
-        [AllowAnonymous]
-        public IActionResult Register(string returnUrl = null)
-        {
-            ViewData["ReturnUrl"] = returnUrl;
-            return View();
-        }
-
-        [HttpPost]
-        [AllowAnonymous]
-        public async Task<IActionResult> Register(RegisterViewModel model, string returnUrl = null)
-        {
-            ViewData["ReturnUrl"] = returnUrl;
-            if (ModelState.IsValid)
-            {
-                var user = _mapper.Map<CertificationPlatformUser>(model);
-                user.Id = _keyGenerator.GenerateNewId();
-                user.SecurityStamp = _keyGenerator.GenerateNewGuid();
-
-                var result = await _userManager.CreateAsync(user, model.Password);
-
-                if (!await _roleManager.RoleExistsAsync("Worker"))
-                {
-                    await _roleManager.CreateAsync(new CertificationPlatformUserRole("Worker"));
-                }
-
-                var addToRole = await _userManager.AddToRoleAsync(user, "Worker");
-
-                if (result.Succeeded)
-                {
-                    _logger.LogInformation("User created a new account with password.");
-
-                    var code = await _userManager.GenerateEmailConfirmationTokenAsync(user);
-                    var callbackUrl = Url.EmailConfirmationLink(user.Id, code, Request.Scheme);
-                    await _emailSender.SendEmailAsync(model.Email, callbackUrl,"");
-
-                    await _signInManager.SignInAsync(user, isPersistent: false);
-                    _logger.LogInformation("User created a new account with password.");
-                    return RedirectToLocal(returnUrl);
-                }
-                AddErrors(result);
-            }
-
-            // If we got this far, something failed, redisplay form
-            return View(model);
-        }
-
-        [HttpPost]
-        public async Task<IActionResult> Logout()
-        {
-            await _signInManager.SignOutAsync();
-            _logger.LogInformation("User logged out.");
-            return RedirectToAction(nameof(Login), "Account");
-        }
-
         [HttpPost]
         [AllowAnonymous]
         public IActionResult ExternalLogin(string provider, string returnUrl = null)
@@ -342,151 +489,11 @@ namespace Certification_System.Controllers
         }
 
         [HttpGet]
-        [AllowAnonymous]
-        public async Task<IActionResult> ConfirmEmail(string userId, string code)
-        {
-            if (userId == null || code == null)
-            {
-                return RedirectToAction("BlankMenu", "Certificates");
-            }
-            var user = await _userManager.FindByIdAsync(userId);
-            if (user == null)
-            {
-                throw new ApplicationException($"Unable to load user with ID '{userId}'.");
-            }
-            var result = await _userManager.ConfirmEmailAsync(user, code);
-            return View(result.Succeeded ? "ConfirmEmail" : "Error");
-        }
-
-        [HttpGet]
-        [AllowAnonymous]
-        public IActionResult ForgotPassword()
-        {
-            return View();
-        }
-
-        [HttpPost]
-        [AllowAnonymous]
-        public async Task<IActionResult> ForgotPassword(ForgotPasswordViewModel model)
-        {
-            if (ModelState.IsValid)
-            {
-                var user = await _userManager.FindByEmailAsync(model.Email);
-                if (user == null || !(await _userManager.IsEmailConfirmedAsync(user)))
-                {
-                    // Don't reveal that the user does not exist or is not confirmed
-                    return RedirectToAction(nameof(ForgotPasswordConfirmation));
-                }
-
-                // For more information on how to enable account confirmation and password reset please
-                // visit https://go.microsoft.com/fwlink/?LinkID=532713
-                var code = await _userManager.GeneratePasswordResetTokenAsync(user);
-                var callbackUrl = Url.ResetPasswordCallbackLink(user.Id, code, Request.Scheme);
-                await _emailSender.SendEmailAsync(model.Email, "Reset Password",
-                   $"Please reset your password by clicking here: <a href='{callbackUrl}'>link</a>");
-                return RedirectToAction(nameof(ForgotPasswordConfirmation));
-            }
-
-            // If we got this far, something failed, redisplay form
-            return View(model);
-        }
-
-        [HttpGet]
-        [AllowAnonymous]
-        public IActionResult ForgotPasswordConfirmation()
-        {
-            return View();
-        }
-
-        [HttpGet]
-        [AllowAnonymous]
-        public IActionResult ResetPassword(string code = null)
-        {
-            if (code == null)
-            {
-                throw new ApplicationException("A code must be supplied for password reset.");
-            }
-            var model = new ResetPasswordViewModel { Code = code };
-            return View(model);
-        }
-
-        [HttpPost]
-        [AllowAnonymous]
-        public async Task<IActionResult> ResetPassword(ResetPasswordViewModel model)
-        {
-            if (!ModelState.IsValid)
-            {
-                return View(model);
-            }
-            var user = await _userManager.FindByEmailAsync(model.Email);
-            if (user == null)
-            {
-                // Don't reveal that the user does not exist
-                return RedirectToAction(nameof(ResetPasswordConfirmation));
-            }
-            var result = await _userManager.ResetPasswordAsync(user, model.Code, model.Password);
-            if (result.Succeeded)
-            {
-                return RedirectToAction(nameof(ResetPasswordConfirmation));
-            }
-            AddErrors(result);
-            return View();
-        }
-
-        [HttpGet]
-        [AllowAnonymous]
-        public IActionResult ResetPasswordConfirmation()
-        {
-            return View();
-        }
-
-
-        [HttpGet]
         public IActionResult AccessDenied()
         {
             return View();
         }
-
-        // GET: /Account/GenerateMenu
-        [Authorize]
-        public ActionResult GenerateMenu()
-        {
-            // todo: change for switch with additional instructor and examinator role.
-
-            if (this.User.IsInRole("Admin"))
-            {
-                return PartialView("_AdminMenu");
-            }
-            else if (this.User.IsInRole("Company"))
-            {
-                return PartialView("_CompanyMenu");
-            }
-            else
-            {
-                return PartialView("_WorkerMenu");
-            }
-        }
-
-        // GET: /Account/_AdminMenu
-        [Authorize(Roles = "Admin")]
-        public IActionResult _AdminMenu()
-        {
-            return PartialView();
-        }
-
-        // GET: /Account/_CompanyMenu
-        [Authorize(Roles = "Company")]
-        public IActionResult _CompanyMenu()
-        {
-            return PartialView();
-        }
-
-        // GET: /Account/_WorkerMenu
-        [Authorize(Roles = "Worker")]
-        public IActionResult _WorkerMenu()
-        {
-            return PartialView();
-        }
+        #endregion
 
         #region Helpers
 

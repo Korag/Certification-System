@@ -15,6 +15,11 @@
                 <h4>Zaloguj się na swoje konto.</h4>
                 <hr />
 
+                @if (!string.IsNullOrWhiteSpace(ViewBag.message))
+                {
+                    <h2 class="alert alert-info" role="alert">@ViewBag.message</h2>
+                }
+
                 <a asp-action="VerifyCompetenceManual" asp-controller="CompetenceVerification" asp-route-returnurl="@ViewData["ReturnUrl"]" class="btn btn-primary mt-1 mb-1">Weryfikuj certyfikat</a>
 
                 <div class="col-md-6 col-xl-6 col-sm-8 col-xs-10 m-auto p-3 shadow p-3 mb-5 bg-light rounded border border-primary rounded-bottom" style="opacity:0.65">
