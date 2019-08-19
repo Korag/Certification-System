@@ -298,6 +298,16 @@ namespace Certification_System.Services
 
             CreateMap<CertificationPlatformUser, DisplayUserWithCourseResultsViewModel>()
                      .ForMember(dest => dest.UserIdentificator, opts => opts.MapFrom(src => src.Id));
+
+            CreateMap<CertificationPlatformUser, EditAccountViewModel>()
+                    .ForMember(dest => dest.UserIdentificator, opts => opts.MapFrom(src => src.Id));
+
+            CreateMap<EditAccountViewModel, CertificationPlatformUser>()
+                 .ForMember(dest => dest.Id, opts => opts.Ignore());
+
+            CreateMap<EditAccountViewModel, CertificationPlatformUser>()
+                   .ForMember(dest => dest.NormalizedUserName, opts => opts.MapFrom(src => src.Email.ToUpper()))
+                   .ForMember(dest => dest.NormalizedEmail, opts => opts.MapFrom(src => src.Email.ToUpper()));
             #endregion
 
             #region ViewModels to ViewModels 

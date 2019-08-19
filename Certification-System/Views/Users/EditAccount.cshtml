@@ -1,15 +1,19 @@
-﻿@model Certification_System.DTOViewModels.EditUserViewModel
-
+﻿@model Certification_System.DTOViewModels.EditAccountViewModel
 @{
-    ViewData["Title"] = "EditUser";
+    ViewData["Title"] = "EditAccount";
     Layout = "~/Views/Shared/_Layout.cshtml";
 }
 
 <h2>Edytuj dane użytkownika systemu</h2>
 <hr />
 
+@if (!string.IsNullOrWhiteSpace(ViewBag.message))
+{
+    <h2 class="alert alert-info" role="alert">@ViewBag.message</h2>
+}
+
 <div>
-    <form asp-action="AddNewGivenCertificate">
+    <form asp-action="EditAccount">
 
         <div class="col-md-8 col-xl-6 col-lg-6 col-sm-12 col-xs-10 m-auto p-3 shadow p-3 mb-5 bg-light rounded border border-primary rounded-bottom" style="opacity:0.90">
 
@@ -48,6 +52,18 @@
                 </div>
                 <div class="row justify-content-center">
                     <span asp-validation-for="LastName" class="text-danger"></span>
+                </div>
+            </div>
+
+            <div class="form-group">
+                <div>
+                    <label asp-for="PhoneNumber"></label>
+                </div>
+                <div>
+                    <input asp-for="PhoneNumber" class="col-12 form-control" />
+                </div>
+                <div class="row justify-content-center">
+                    <span asp-validation-for="PhoneNumber" class="text-danger"></span>
                 </div>
             </div>
 
@@ -113,18 +129,6 @@
 
             <div class="form-group">
                 <div>
-                    <label asp-for="PhoneNumber"></label>
-                </div>
-                <div>
-                    <input asp-for="PhoneNumber" class="col-12 form-control" />
-                </div>
-                <div class="row justify-content-center">
-                    <span asp-validation-for="PhoneNumber" class="text-danger"></span>
-                </div>
-            </div>
-
-            <div class="form-group">
-                <div>
                     <label asp-for="DateOfBirth"></label>
                 </div>
 
@@ -140,47 +144,11 @@
                 </div>
             </div>
 
-            <div class="form-group">
-                <div>
-                    <label asp-for="AvailableRoles" class="control-label"></label>
-                </div>
-                <div>
-                    <select asp-for="SelectedRole" asp-items="@Model.AvailableRoles" data-style="btn-white" data-container="body" data-width="auto" data-header="Wybierz użytkownika" multiple data-live-search="true" title="Nie wybrano żadnego elementu" class="form-control selectpicker show-tick w-100"> </select>
-                    <div class="row justify-content-center">
-                        <span asp-validation-for="SelectedRole" class="text-danger"></span>
-                    </div>
-                </div>
-            </div>
-
-            <div class="form-group">
-                <div>
-                    <label asp-for="CompanyRoleWorker" class="control-label"></label>
-                </div>
-                <div>
-                    <select asp-for="CompanyRoleWorker" asp-items="@Model.AvailableCompanies" data-style="btn-white" data-container="body" data-width="auto" data-header="Wybierz przedsiębiorstwo" multiple data-live-search="true" title="Nie wybrano żadnego elementu" class="form-control selectpicker show-tick w-100"> </select>
-                    <div class="row justify-content-center">
-                        <span asp-validation-for="CompanyRoleWorker" class="text-danger"></span>
-                    </div>
-                </div>
-            </div>
-
-            <div class="form-group">
-                <div>
-                    <label asp-for="CompanyRoleManager" class="control-label"></label>
-                </div>
-                <div>
-                    <select asp-for="CompanyRoleManager" asp-items="@Model.AvailableCompanies" data-style="btn-white" data-container="body" data-width="auto" data-header="Wybierz przedsiębiorstwo" multiple data-max-options="1" data-live-search="true" title="Nie wybrano żadnego elementu" class="form-control selectpicker show-tick w-100"> </select>
-                    <div class="row justify-content-center">
-                        <span asp-validation-for="CompanyRoleManager" class="text-danger"></span>
-                    </div>
-                </div>
-            </div>
-
             <div asp-validation-summary="ModelOnly" class="row justify-content-center alert alert-danger validation-model"></div>
 
             <div class="row m-0 mt-3">
                 <input type="submit" class="btn btn-primary mt-1 xs300px_JustifyContentCenter" value="Edytuj" />
-                <a asp-action="DisplayAllUsers" asp-controller="Users" class="btn btn-outline-info mt-1 xs300px_FloatRight">Powrót do listy</a>
+                <a asp-action="AccountDetails" asp-controller="Users" class="btn btn-outline-info mt-1 xs300px_FloatRight">Powrót do danych</a>
             </div>
 
         </div>

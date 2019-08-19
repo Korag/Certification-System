@@ -24,7 +24,7 @@
     else
     {
         <div class="row m-0 mt-3 mb-3">
-            <a asp-action="EditUser" asp-route-userIdentificator="@Model.UserIdentificator" asp-controller="Users" class="btn btn-warning mt-1 mr-1">Edytuj</a>
+            <a asp-action="EditAccount" asp-route-userIdentificator="@Model.UserIdentificator" asp-controller="Users" class="btn btn-warning mt-1 mr-1">Edytuj</a>
             <a asp-action="ChangeAccountPassword" asp-route-userIdentificator="@Model.UserIdentificator" asp-controller="Account" class="btn btn-secondary mt-1">Zmień hasło</a>
         </div>
     }

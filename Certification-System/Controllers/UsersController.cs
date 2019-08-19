@@ -415,5 +415,37 @@ namespace Certification_System.Controllers
 
             return View(companyWithAccountDetails);
         }
+
+        // GET: EditAccount
+        [Authorize]
+        public ActionResult EditAccount(string userIdentificator, string message)
+        {
+            ViewBag.message = message;
+
+            CertificationPlatformUser User = _context.userRepository.GetUserById(userIdentificator);
+
+            EditAccountViewModel AccountDetails = _mapper.Map<EditAccountViewModel>(User);
+
+            return View(AccountDetails);
+        }
+
+        // POST: EditAccount
+        [Authorize]
+        [HttpPost]
+        public ActionResult EditAccount(EditAccountViewModel editedAccount)
+        {
+            if (ModelState.IsValid)
+            {
+                var OriginUser = _userManager.FindByIdAsync(editedAccount.UserIdentificator).Result;
+
+                OriginUser = _mapper.Map<EditAccountViewModel, CertificationPlatformUser>(editedAccount, OriginUser);
+
+                _context.userRepository.UpdateUser(OriginUser);
+
+                return RedirectToAction("EditAccount", "Users", new { userIdentificator = OriginUser.Id, message = "Pomyślnie zaktualizowano dane" });
+            }
+
+            return View(editedAccount);
+        }
     }
 }
