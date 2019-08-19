@@ -114,7 +114,7 @@ namespace Certification_System.Controllers
             if (UsersConnectedToCompany.Count != 0)
             {
                 ListOfUsers = _mapper.Map<List<DisplayUserViewModel>>(UsersConnectedToCompany);
-                ListOfUsers.ForEach(z => z.CompanyRoleManager = _context.companyRepository.GetCompanyById(z.CompanyRoleManager).CompanyName);
+                ListOfUsers.ForEach(z => z.CompanyRoleManager = _context.companyRepository.GetCompaniesById(z.CompanyRoleManager).ToList().Select(s => s.CompanyName).ToList());
                 ListOfUsers.ForEach(z => z.CompanyRoleWorker = _context.companyRepository.GetCompaniesById(z.CompanyRoleWorker).ToList().Select(s => s.CompanyName).ToList());
             }
 

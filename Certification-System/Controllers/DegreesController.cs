@@ -198,7 +198,7 @@ namespace Certification_System.Controllers
             foreach (var user in UsersWithDegree)
             {
                 DisplayUserViewModel singleUser = _mapper.Map<DisplayUserViewModel>(user);
-                singleUser.CompanyRoleManager = _context.companyRepository.GetCompanyById(user.CompanyRoleManager).CompanyName;
+                singleUser.CompanyRoleManager = _context.companyRepository.GetCompaniesById(user.CompanyRoleManager).Select(s => s.CompanyName).ToList();
                 singleUser.CompanyRoleWorker = _context.companyRepository.GetCompaniesById(user.CompanyRoleWorker).Select(s => s.CompanyName).ToList();
 
                 ListOfUsers.Add(singleUser);

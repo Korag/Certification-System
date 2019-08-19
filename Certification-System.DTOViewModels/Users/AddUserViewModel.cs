@@ -86,7 +86,7 @@ namespace Certification_System.DTOViewModels
         public IList<SelectListItem> AvailableCompanies { get; set; }
 
         [Display(Name = "Przedsiębiorstwo zarządzane przez użytkownika")]
-        public string CompanyRoleManager { get; set; }
+        public ICollection<string> CompanyRoleManager { get; set; }
 
         [Display(Name = "Przedsiębiorstwo zrzeszające pracownika")]
         public ICollection<string> CompanyRoleWorker { get; set; }

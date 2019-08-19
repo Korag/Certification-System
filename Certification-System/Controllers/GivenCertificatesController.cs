@@ -165,11 +165,7 @@ namespace Certification_System.Controllers
             var Certificate = _context.certificateRepository.GetCertificateById(GivenCertificate.Certificate);
 
             var User = _context.userRepository.GetUserByGivenCertificateId(GivenCertificate.GivenCertificateIdentificator);
-
-            var CompaniesIdentificators = User.CompanyRoleWorker;
-            CompaniesIdentificators.Add(User.CompanyRoleManager);
-
-            var Companies = _context.companyRepository.GetCompaniesById(CompaniesIdentificators.Distinct().ToList());
+            var Companies = _context.companyRepository.GetCompaniesById(User.CompanyRoleManager.Concat(User.CompanyRoleWorker).Distinct().ToList());
 
             List<DisplayCompanyViewModel> companiesViewModel = _mapper.Map<List<DisplayCompanyViewModel>>(Companies);
 
@@ -193,11 +189,7 @@ namespace Certification_System.Controllers
             var Certificate = _context.certificateRepository.GetCertificateById(GivenCertificate.Certificate);
 
             var User = _context.userRepository.GetUserByGivenCertificateId(GivenCertificate.GivenCertificateIdentificator);
-
-            var CompaniesIdentificators = User.CompanyRoleWorker;
-            CompaniesIdentificators.Add(User.CompanyRoleManager);
-
-            var Companies = _context.companyRepository.GetCompaniesById(CompaniesIdentificators.Distinct().ToList());
+            var Companies = _context.companyRepository.GetCompaniesById(User.CompanyRoleManager.Concat(User.CompanyRoleWorker).Distinct().ToList());
 
             var Course = _context.courseRepository.GetCourseById(GivenCertificate.Course);
             var Meetings = _context.meetingRepository.GetMeetingsById(Course.Meetings);

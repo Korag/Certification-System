@@ -81,7 +81,12 @@
                         </ul>
                     </td>
                     <td>
-                        @Html.DisplayFor(modelItem => user.CompanyRoleManager)
+                        <ul>
+                            @foreach (var companyManager in user.CompanyRoleManager)
+                            {
+                                <li>@companyManager</li>
+                            }
+                        </ul>
                     </td>
                     <td>
                         <div class="dropdown p-0">
@@ -108,11 +113,11 @@
                                 else if (user.Roles.Contains("EXAMINER"))
                                 {<a asp-action="ExaminerDetails" asp-route-userIdentificator="@user.UserIdentificator" asp-controller="Users" class="btn btn-info w-100 mb-1">Szczegóły</a>}
 
-                                <a asp-action="EditUser" asp-route-userIdentificator="@user.UserIdentificator" asp-controller="Users" class="btn btn-warning w-100">Edytuj</a>
+                                <a asp-action="EditUser" asp-route-userIdentificator="@user.UserIdentificator" asp-controller="Users" class="btn btn-warning w-100 mb-1">Edytuj</a>
 
                                 @if (user.Roles.Contains("WORKER"))
                                 {
-                                    <a asp-action="AddNewGivenCertificate" asp-route-userIdentificator="@user.UserIdentificator" asp-controller="Certificates" class="btn btn-primary w-100 mt-1 mb-1">Nadaj certyfikat</a>
+                                    <a asp-action="AddNewGivenCertificate" asp-route-userIdentificator="@user.UserIdentificator" asp-controller="Certificates" class="btn btn-primary w-100 mb-1">Nadaj certyfikat</a>
                                     <a asp-action="AddNewGivenDegree" asp-route-userIdentificator="@user.UserIdentificator" asp-controller="Degrees" class="btn btn-secondary w-100 mb-1">Nadaj stopień zawodowy</a>
                                     <a asp-action="GenerateUserQR" asp-route-userIdentificator="@user.UserIdentificator" asp-controller="CompetenceVerification" class="btn btn-dark w-100">Generuj kod QR</a>
                                 }

@@ -105,7 +105,12 @@ else
                     </ul>
                 </td>
                 <td>
-                    @Html.DisplayFor(model => model.CompanyRoleManager)
+                    <ul>
+                        @foreach (var company in Model.CompanyRoleManager)
+                        {
+                            <li>@company</li>
+                        }
+                    </ul>
                 </td>
                 <td>
                     <ul>

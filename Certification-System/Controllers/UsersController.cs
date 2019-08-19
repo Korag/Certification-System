@@ -49,10 +49,7 @@ namespace Certification_System.Controllers
             {
                 DisplayUserViewModel singleUser = _mapper.Map<DisplayUserViewModel>(user);
 
-                if (!string.IsNullOrWhiteSpace(singleUser.CompanyRoleManager))
-                {
-                    singleUser.CompanyRoleManager = _context.companyRepository.GetCompanyById(user.CompanyRoleManager).CompanyName;
-                }
+                singleUser.CompanyRoleManager = _context.companyRepository.GetCompaniesById(user.CompanyRoleManager).Select(s => s.CompanyName).ToList();
                 singleUser.CompanyRoleWorker = _context.companyRepository.GetCompaniesById(user.CompanyRoleWorker).Select(s => s.CompanyName).ToList();
 
                 usersToDisplay.Add(singleUser);
@@ -74,7 +71,7 @@ namespace Certification_System.Controllers
                 DisplayAllUserInformationViewModel modifiedUser = _mapper.Map<DisplayAllUserInformationViewModel>(User);
 
                 modifiedUser.CompanyRoleWorker = _context.companyRepository.GetCompaniesById(User.CompanyRoleWorker).Select(z => z.CompanyName).ToList();
-                modifiedUser.CompanyRoleManager = _context.companyRepository.GetCompanyById(User.CompanyRoleManager).CompanyName;
+                modifiedUser.CompanyRoleManager = _context.companyRepository.GetCompaniesById(User.CompanyRoleManager).Select(z => z.CompanyName).ToList();
 
                 return View(modifiedUser);
             }
@@ -188,13 +185,16 @@ namespace Certification_System.Controllers
             var GivenDegrees = _context.givenDegreeRepository.GetGivenDegreesById(User.GivenDegrees);
 
             var CompaniesRoleWorker = _context.companyRepository.GetCompaniesById(User.CompanyRoleWorker);
-            var CompanyRoleManager = _context.companyRepository.GetCompanyById(User.CompanyRoleManager);
+            var CompaniesRoleManager = _context.companyRepository.GetCompaniesById(User.CompanyRoleManager);
 
             List<Company> Companies = CompaniesRoleWorker.ToList();
 
-            if (Companies.Where(z => z.CompanyIdentificator == CompanyRoleManager.CompanyIdentificator).Count() == 0)
+            foreach (var company in CompaniesRoleManager)
             {
-                Companies.Add(CompanyRoleManager);
+                if (Companies.Where(z => z.CompanyIdentificator == company.CompanyIdentificator).Count() == 0)
+                {
+                    Companies.Add(company);
+                }
             }
 
             List<DisplayCourseViewModel> ListOfCourses = new List<DisplayCourseViewModel>();
@@ -270,13 +270,16 @@ namespace Certification_System.Controllers
             var GivenDegrees = _context.givenDegreeRepository.GetGivenDegreesById(User.GivenDegrees);
 
             var CompaniesRoleWorker = _context.companyRepository.GetCompaniesById(User.CompanyRoleWorker);
-            var CompanyRoleManager = _context.companyRepository.GetCompanyById(User.CompanyRoleManager);
+            var CompaniesRoleManager = _context.companyRepository.GetCompaniesById(User.CompanyRoleManager);
 
             List<Company> Companies = CompaniesRoleWorker.ToList();
 
-            if (Companies.Where(z => z.CompanyIdentificator == CompanyRoleManager.CompanyIdentificator).Count() == 0)
+            foreach (var company in CompaniesRoleManager)
             {
-                Companies.Add(CompanyRoleManager);
+                if (Companies.Where(z => z.CompanyIdentificator == company.CompanyIdentificator).Count() == 0)
+                {
+                    Companies.Add(company);
+                }
             }
 
             List<DisplayGivenCertificateToUserWithoutCourseViewModel> ListOfGivenCertificates = new List<DisplayGivenCertificateToUserWithoutCourseViewModel>();
@@ -390,7 +393,7 @@ namespace Certification_System.Controllers
         public ActionResult CompanyWithAccountDetails(string userIdentificator)
         {
             var User = _context.userRepository.GetUserById(userIdentificator);
-
+            ////////////////////////////////////////////////////////////////////////////////
             var Company = _context.companyRepository.GetCompanyById(User.CompanyRoleManager);
             var UsersConnectedToCompany = _context.userRepository.GetUsersConnectedToCompany(Company.CompanyIdentificator);
 
@@ -399,8 +402,8 @@ namespace Certification_System.Controllers
             if (UsersConnectedToCompany.Count != 0)
             {
                 ListOfUsers = _mapper.Map<List<DisplayUserViewModel>>(UsersConnectedToCompany);
-
-                ListOfUsers.ForEach(z => z.CompanyRoleManager = _context.companyRepository.GetCompanyById(z.CompanyRoleManager).CompanyName);
+                ////////////////////////////////////////////////////////////////////////////////
+                ListOfUsers.ForEach(z => z.CompanyRoleManager = _context.companyRepository.GetCompaniesById(z.CompanyRoleManager).ToList().Select(s => s.CompanyName).ToList());
                 ListOfUsers.ForEach(z => z.CompanyRoleWorker = _context.companyRepository.GetCompaniesById(z.CompanyRoleWorker).ToList().Select(s => s.CompanyName).ToList());
             }
 

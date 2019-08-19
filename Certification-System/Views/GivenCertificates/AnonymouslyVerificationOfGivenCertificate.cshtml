@@ -114,7 +114,7 @@
                             {
                                 <p>@Html.DisplayNameFor(model => model.User.CompanyRoleWorker)</p>
                             }
-                            @if (Model.User.CompanyRoleManager == company.CompanyIdentificator)
+                            @if (Model.User.CompanyRoleManager.Contains(company.CompanyIdentificator))
                             {
                                 <p>@Html.DisplayNameFor(model => model.User.CompanyRoleManager)</p>
                             }
