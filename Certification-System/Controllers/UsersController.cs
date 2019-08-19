@@ -177,8 +177,10 @@ namespace Certification_System.Controllers
 
         // GET: UserDetails
         [Authorize(Roles = "Admin")]
-        public ActionResult UserDetails(string userIdentificator)
+        public ActionResult UserDetails(string userIdentificator, string message)
         {
+            ViewBag.Message = message;
+
             var User = _context.userRepository.GetUserById(userIdentificator);
             var GivenCertificates = _context.givenCertificateRepository.GetGivenCertificatesById(User.GivenCertificates);
             var Courses = _context.courseRepository.GetCoursesById(User.Courses);
@@ -393,8 +395,8 @@ namespace Certification_System.Controllers
         public ActionResult CompanyWithAccountDetails(string userIdentificator)
         {
             var User = _context.userRepository.GetUserById(userIdentificator);
-            ////////////////////////////////////////////////////////////////////////////////
-            var Company = _context.companyRepository.GetCompanyById(User.CompanyRoleManager);
+
+            var Company = _context.companyRepository.GetCompanyById(User.CompanyRoleManager.FirstOrDefault());
             var UsersConnectedToCompany = _context.userRepository.GetUsersConnectedToCompany(Company.CompanyIdentificator);
 
             List<DisplayUserViewModel> ListOfUsers = new List<DisplayUserViewModel>();
@@ -402,7 +404,7 @@ namespace Certification_System.Controllers
             if (UsersConnectedToCompany.Count != 0)
             {
                 ListOfUsers = _mapper.Map<List<DisplayUserViewModel>>(UsersConnectedToCompany);
-                ////////////////////////////////////////////////////////////////////////////////
+
                 ListOfUsers.ForEach(z => z.CompanyRoleManager = _context.companyRepository.GetCompaniesById(z.CompanyRoleManager).ToList().Select(s => s.CompanyName).ToList());
                 ListOfUsers.ForEach(z => z.CompanyRoleWorker = _context.companyRepository.GetCompaniesById(z.CompanyRoleWorker).ToList().Select(s => s.CompanyName).ToList());
             }

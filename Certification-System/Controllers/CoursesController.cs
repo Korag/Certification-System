@@ -472,14 +472,14 @@ namespace Certification_System.Controllers
         {
             if (ModelState.IsValid)
             {
-                var UsersToDeleteFromCourseIdentificators = deleteUsersFromCourseViewModel.UsersToDeleteFromCourse.ToList().Where(z => z.IsToDeleteFromCourse == true).Select(z => z.UserIdentificator);
+                var UsersToDeleteFromCourseIdentificators = deleteUsersFromCourseViewModel.UsersToDeleteFromCourse.ToList().Where(z => z.IsToDeleteFromCourse == true).Select(z => z.UserIdentificator).ToList();
 
-                _context.courseRepository.DeleteUsersFromCourse(deleteUsersFromCourseViewModel.CourseIdentificator, UsersToDeleteFromCourseIdentificators.ToList());
-                _context.userRepository.DeleteCourseFromUsersCollection(deleteUsersFromCourseViewModel.CourseIdentificator, UsersToDeleteFromCourseIdentificators.ToList());
+                _context.courseRepository.DeleteUsersFromCourse(deleteUsersFromCourseViewModel.CourseIdentificator, UsersToDeleteFromCourseIdentificators);
+                _context.userRepository.DeleteCourseFromUsersCollection(deleteUsersFromCourseViewModel.CourseIdentificator, UsersToDeleteFromCourseIdentificators);
 
                 if (deleteUsersFromCourseViewModel.UsersToDeleteFromCourse.Count() == 1)
                 {
-                    return RedirectToAction("UserDetails", new { userIdentificator = deleteUsersFromCourseViewModel.UsersToDeleteFromCourse.FirstOrDefault().UserIdentificator, message = "Usunięto użytkownika z kursu" });
+                    return RedirectToAction("UserDetails", "Users", new { userIdentificator = deleteUsersFromCourseViewModel.UsersToDeleteFromCourse.FirstOrDefault().UserIdentificator, message = "Usunięto użytkownika z kursu" });
                 }
                 else
                 {
@@ -487,7 +487,7 @@ namespace Certification_System.Controllers
                 }
             }
 
-            return View(deleteUsersFromCourseViewModel);
+            return RedirectToAction("DeleteUsersFromCourse", new { courseIdentificator = deleteUsersFromCourseViewModel.CourseIdentificator });
         }
 
         #region HelpersMethod

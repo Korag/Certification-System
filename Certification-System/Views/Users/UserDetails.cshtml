@@ -8,6 +8,11 @@
 <h1>Szczegóły użytkownika</h1>
 <hr />
 
+@if (!string.IsNullOrWhiteSpace(ViewBag.message))
+{
+    <h2 class="alert alert-info" role="alert">@ViewBag.message</h2>
+}
+
 <div>
 
     <h2>Informacje o użytkowniku</h2>

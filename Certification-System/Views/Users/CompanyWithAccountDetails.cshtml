@@ -168,7 +168,7 @@
                         @Html.DisplayNameFor(model => model.UsersConnectedToCompany.First().CompanyRoleWorker)
                     </th>
                     <th>
-                        @Html.DisplayNameFor(model => model.UsersConnectedToCompany.CompanyRoleManager)
+                        @Html.DisplayNameFor(model => model.UsersConnectedToCompany.First().CompanyRoleManager)
                     </th>
                     <th>
                         Operacje
@@ -197,7 +197,12 @@
                             </ul>
                         </td>
                         <td>
-                            @Html.DisplayFor(modelItem => user.CompanyRoleManager)
+                            <ul>
+                                @foreach (var companyManager in user.CompanyRoleManager)
+                                {
+                                    <li>@companyManager</li>
+                                }
+                             </ul>
                         </td>
                         <td>
                             <a asp-action="UserDetails" asp-route-userIdentificator="@user.UserIdentificator" asp-controller="Users" class="btn btn-info m-1">Szczegóły</a>

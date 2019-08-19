@@ -169,7 +169,7 @@
                     <label asp-for="CompanyRoleManager" class="control-label"></label>
                 </div>
                 <div>
-                    <select asp-for="CompanyRoleManager" asp-items="@Model.AvailableCompanies" data-style="btn-white" data-container="body" data-width="auto" data-header="Wybierz przedsiębiorstwo" multiple data-live-search="true" title="Nie wybrano żadnego elementu" class="form-control selectpicker show-tick w-100"> </select>
+                    <select asp-for="CompanyRoleManager" asp-items="@Model.AvailableCompanies" data-style="btn-white" data-container="body" data-width="auto" data-header="Wybierz przedsiębiorstwo" multiple data-max-options="1" data-live-search="true" title="Nie wybrano żadnego elementu" class="form-control selectpicker show-tick w-100"> </select>
                     <div class="row justify-content-center">
                         <span asp-validation-for="CompanyRoleManager" class="text-danger"></span>
                     </div>
