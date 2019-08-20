@@ -20,6 +20,8 @@ using Certification_System.RepositoryInterfaces;
 using Certification_System.Repository;
 using Certification_System.Repository.Context;
 using AutoMapper;
+using Certification_System.Services.Models;
+using Certification_System.ServicesInterfaces.Models;
 
 namespace Certification_System
 {
@@ -68,6 +70,8 @@ namespace Certification_System
 
             // Services Layer
             services.AddTransient<IEmailSender, EmailSender>();
+            services.AddSingleton<IEmailConfiguration>(Configuration.GetSection("EmailConfiguration").Get<EmailConfiguration>());
+
             services.AddTransient<IGeneratorQR, GeneratorQR>();
             services.AddTransient<IKeyGenerator, KeyGenerator>();
 
@@ -92,7 +96,8 @@ namespace Certification_System
                 options.Filters.Add(new AutoValidateAntiforgeryTokenAttribute());
             })
             .SetCompatibilityVersion(CompatibilityVersion.Version_2_2)
-            .AddDataAnnotationsLocalization(); 
+            .AddDataAnnotationsLocalization();
+
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
