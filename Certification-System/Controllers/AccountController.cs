@@ -15,6 +15,7 @@ using AutoMapper;
 using Certification_System.Repository.DAL;
 using Certification_System.DTOViewModels;
 using System.Collections.Generic;
+using Certification_System.ServicesInterfaces.Models;
 
 namespace Certification_System.Controllers
 {
@@ -57,7 +58,8 @@ namespace Certification_System.Controllers
 
         private readonly Dictionary<int, string> _messages = new Dictionary<int, string>
          {
-           {1,"Na podany przez Ciebie email została wysłana wiadomość"},
+           {0, ""},
+           {1,"Na podany przez Ciebie email została wysłana wiadomość, która pozwoli na zresetowanie hasła do konta."},
            {2, "Two"},
            {3,"Three"}
          };
@@ -114,7 +116,7 @@ namespace Certification_System.Controllers
 
         [HttpGet]
         [AllowAnonymous]
-        public ActionResult Register(string returnUrl = null)
+        public ActionResult Register(string returnUrl)
         {
             ViewData["ReturnUrl"] = returnUrl;
             return View();
@@ -140,13 +142,16 @@ namespace Certification_System.Controllers
 
                 var addToRole = await _userManager.AddToRoleAsync(user, "Worker");
 
+                // todo: verify email
+                // todo: check if user has a password
+
                 if (result.Succeeded)
                 {
                     _logger.LogInformation("User created a new account with password.");
 
                     var code = await _userManager.GenerateEmailConfirmationTokenAsync(user);
                     var callbackUrl = Url.EmailConfirmationLink(user.Id, code, Request.Scheme);
-                    await _emailSender.SendEmailAsync(model.Email, callbackUrl, "");
+                    //await _emailSender.SendEmailAsync(model.Email, callbackUrl, "");
 
                     await _signInManager.SignInAsync(user, isPersistent: false);
                     _logger.LogInformation("User created a new account with password.");
@@ -200,7 +205,7 @@ namespace Certification_System.Controllers
         public async Task<ActionResult> Logout()
         {
             await _signInManager.SignOutAsync();
-            _logger.LogInformation("User logged out.");
+            _logger.LogInformation("Użytkownik został wylogowany");
             return RedirectToAction(nameof(Login), "Account");
         }
 
@@ -286,22 +291,32 @@ namespace Certification_System.Controllers
 
                 var code = await _userManager.GeneratePasswordResetTokenAsync(user);
 
-                // generate URL and send email with Code
+                var callbackUrl = Url.ResetPasswordCallbackLink(user.Id, code, Request.Scheme);
 
-                //var callbackUrl = Url.ResetPasswordCallbackLink(user.Id, code, Request.Scheme);
+                EmailMessageDto emailToSend = new EmailMessageDto
+                {
+                    ReceiverName = user.FirstName + " " + user.LastName,
+                    ReceiverEmailAddress = user.Email,
+                    Subject = "Reset hasła do konta na Certification-Platform",
+                    BodyMessage = $"Please reset your password by clicking here: <a href='{callbackUrl}'>link</a>"
+                };
 
-                //await _emailSender.SendEmailAsync(emailModel.Email, "Reset Password",
-                //   $"Please reset your password by clicking here: <a href='{callbackUrl}'>link</a>");
+                await _emailSender.SendEmailAsync(emailToSend);
 
-                return RedirectToAction(nameof(ForgotPasswordConfirmation));
+                return RedirectToAction(nameof(ForgotPasswordConfirmation), new { messageNumber = 1 });
             }
 
             return View(emailModel);
         }
 
         [AllowAnonymous]
-        public ActionResult ForgotPasswordConfirmation(int messageNumber)
+        public ActionResult ForgotPasswordConfirmation(int messageNumber = 0)
         {
+            if (messageNumber == 0)
+            {
+                return RedirectToAction("Login", "Account");
+            }
+
             ViewBag.message = _messages[messageNumber];
 
             return View();
@@ -335,14 +350,14 @@ namespace Certification_System.Controllers
 
                 if (user == null)
                 {
-                    return RedirectToAction(nameof(Login), "Account", new { message = "Hasło zostało zresetowane" });
+                    return RedirectToAction(nameof(Login), "Account", new { message = "Hasło zostało zmienione" });
                 }
 
                 var result = await _userManager.ResetPasswordAsync(user, passwordToReset.Code, passwordToReset.Password);
 
                 if (result.Succeeded)
                 {
-                    return RedirectToAction(nameof(Login), "Account", new { message = "Hasło zostało zresetowane" });
+                    return RedirectToAction(nameof(Login), "Account", new { message = "Hasło zostało zmienione" });
                 }
             }
 
