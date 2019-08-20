@@ -22,5 +22,32 @@ namespace Certification_System.Extensions
                 values: new { userIdentificator, code },
                 protocol: scheme);
         }
+
+        public static string VerifyUserCompetencesByQRLink(this IUrlHelper urlHelper, string userIdentificator, string scheme)
+        {
+            return urlHelper.Action(
+                action: nameof(CompetenceVerificationController.VerifyUserCompetencesByQR),
+                controller: "CompetenceVerification",
+                values: new { userIdentificator },
+                protocol: scheme);
+        }
+
+        public static string VerifyGivenCertificateByQRLink(this IUrlHelper urlHelper, string givenCertificateIdentificator, string scheme)
+        {
+            return urlHelper.Action(
+                action: nameof(CompetenceVerificationController.VerifyGivenCertificateByQR),
+                controller: "CompetenceVerification",
+                values: new { givenCertificateIdentificator },
+                protocol: scheme);
+        }
+
+        public static string VerifyGivenDegreeByQRLink(this IUrlHelper urlHelper, string givenDegreeIdentificator, string scheme)
+        {
+            return urlHelper.Action(
+                action: nameof(CompetenceVerificationController.VerifyGivenDegreeByQR),
+                controller: "CompetenceVerification",
+                values: new { givenDegreeIdentificator },
+                protocol: scheme);
+        }
     }
 }

@@ -1,5 +1,6 @@
 ﻿using AutoMapper;
 using Certification_System.DTOViewModels;
+using Certification_System.Extensions;
 using Certification_System.Repository.DAL;
 using Certification_System.ServicesInterfaces;
 using Microsoft.AspNetCore.Authorization;
@@ -279,7 +280,7 @@ namespace Certification_System.Controllers
         [AllowAnonymous]
         public ActionResult GenerateUserQR(string userIdentificator)
         {
-            string URL = @"https://certification-system.azurewebsites.net/CompetenceVerification/VerifyUserCompetencesByQR?userIdentificator=" + $"{userIdentificator}";
+            string URL = Url.VerifyUserCompetencesByQRLink(userIdentificator, Request.Scheme);
 
             return RedirectToAction("GenerateQRCodeFromGivenURL", "CompetenceVerification", new { URL = URL });
         }
@@ -288,7 +289,7 @@ namespace Certification_System.Controllers
         [AllowAnonymous]
         public ActionResult GenerateGivenCertificateQR(string givenCertificateIdentificator)
         {
-            string URL = @"https://certification-system.azurewebsites.net/CompetenceVerification/VerifyGivenCertificateByQR?givenCertificateIdentificator=" + $"{givenCertificateIdentificator}";
+            string URL = Url.VerifyGivenCertificateByQRLink(givenCertificateIdentificator, Request.Scheme);
 
             return RedirectToAction("GenerateQRCodeFromGivenURL", "CompetenceVerification", new { URL = URL });
         }
@@ -297,7 +298,7 @@ namespace Certification_System.Controllers
         [AllowAnonymous]
         public ActionResult GenerateGivenDegreeQR(string givenDegreeIdentificator)
         {
-            string URL = @"https://certification-system.azurewebsites.net/CompetenceVerification/VerifyGivenDegreeByQR?givenDegreeIdentificator=" + $"{givenDegreeIdentificator}";
+            string URL = Url.VerifyGivenDegreeByQRLink(givenDegreeIdentificator, Request.Scheme);
 
             return RedirectToAction("GenerateQRCodeFromGivenURL", "CompetenceVerification", new { URL = URL });
         }
