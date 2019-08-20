@@ -3,6 +3,11 @@
     Layout = "~/Views/Shared/_Layout.cshtml";
 }
 
+@if (!string.IsNullOrWhiteSpace(ViewBag.message))
+{
+    <h2 class="alert alert-info" role="alert">@ViewBag.message</h2>
+}
+
 <div class="container pt-2">
     <img src="~/Image/logo_ziad_big.jpg" class="img-fluid rounded mx-auto d-block" alt="Logo ZIAD" style="height:30vw; opacity:0.60" />
 </div>

@@ -13,7 +13,7 @@ using Certification_System.Extensions;
 using AspNetCore.Identity.Mongo.Model;
 using AutoMapper;
 using Certification_System.Repository.DAL;
-using Certification_System.DTOViewModels.ManageViewModels;
+using Certification_System.DTOViewModels;
 
 namespace Certification_System.Controllers
 {
@@ -56,7 +56,7 @@ namespace Certification_System.Controllers
 
         [HttpGet]
         [AllowAnonymous]
-        public async Task<IActionResult> Login(string returnUrl = null, string message = null)
+        public async Task<ActionResult> Login(string returnUrl = null, string message = null)
         {
             ViewBag.message = message;
 
@@ -105,7 +105,7 @@ namespace Certification_System.Controllers
 
         [HttpGet]
         [AllowAnonymous]
-        public IActionResult Register(string returnUrl = null)
+        public ActionResult Register(string returnUrl = null)
         {
             ViewData["ReturnUrl"] = returnUrl;
             return View();
@@ -150,48 +150,6 @@ namespace Certification_System.Controllers
             return View(model);
         }
 
-        //[HttpGet]
-        //[AllowAnonymous]
-        //public IActionResult ResetPassword(string code = null)
-        //{
-        //    if (code == null)
-        //    {
-        //        throw new ApplicationException("A code must be supplied for password reset.");
-        //    }
-        //    var model = new ResetPasswordViewModel { Code = code };
-        //    return View(model);
-        //}
-
-        //[HttpPost]
-        //[AllowAnonymous]
-        //public async Task<IActionResult> ResetPassword(ResetPasswordViewModel model)
-        //{
-        //    if (!ModelState.IsValid)
-        //    {
-        //        return View(model);
-        //    }
-        //    var user = await _userManager.FindByEmailAsync(model.Email);
-        //    if (user == null)
-        //    {
-        //        // Don't reveal that the user does not exist
-        //        return RedirectToAction(nameof(ResetPasswordConfirmation));
-        //    }
-        //    var result = await _userManager.ResetPasswordAsync(user, model.Code, model.Password);
-        //    if (result.Succeeded)
-        //    {
-        //        return RedirectToAction(nameof(ResetPasswordConfirmation));
-        //    }
-        //    AddErrors(result);
-        //    return View();
-        //}
-
-        //[HttpGet]
-        //[AllowAnonymous]
-        //public IActionResult ResetPasswordConfirmation()
-        //{
-        //    return View();
-        //}
-
         [HttpGet]
         [Authorize]
         public ActionResult ChangeAccountPassword(string userIdentificator)
@@ -230,7 +188,7 @@ namespace Certification_System.Controllers
         }
 
         [HttpPost]
-        public async Task<IActionResult> Logout()
+        public async Task<ActionResult> Logout()
         {
             await _signInManager.SignOutAsync();
             _logger.LogInformation("User logged out.");
@@ -239,7 +197,7 @@ namespace Certification_System.Controllers
 
         [HttpGet]
         [AllowAnonymous]
-        public async Task<IActionResult> ConfirmEmail(string userId, string code)
+        public async Task<ActionResult> ConfirmEmail(string userId, string code)
         {
             if (userId == null || code == null)
             {
@@ -254,45 +212,46 @@ namespace Certification_System.Controllers
             return View(result.Succeeded ? "ConfirmEmail" : "Error");
         }
 
-        //[HttpGet]
-        //[AllowAnonymous]
-        //public IActionResult ForgotPassword()
-        //{
-        //    return View();
-        //}
+        [HttpGet]
+        [AllowAnonymous]
+        public ActionResult SetAccountPassword(string userId)
+        {
+            SetPasswordViewModel setPassword = new SetPasswordViewModel
+            {
+                UserIdentificator = userId
+            };
 
-        //[HttpPost]
-        //[AllowAnonymous]
-        //public async Task<IActionResult> ForgotPassword(ForgotPasswordViewModel model)
-        //{
-        //    if (ModelState.IsValid)
-        //    {
-        //        var user = await _userManager.FindByEmailAsync(model.Email);
-        //        if (user == null || !(await _userManager.IsEmailConfirmedAsync(user)))
-        //        {
-        //            // Don't reveal that the user does not exist or is not confirmed
-        //            return RedirectToAction(nameof(ForgotPasswordConfirmation));
-        //        }
+            return View(setPassword);
+        }
 
-        //        // For more information on how to enable account confirmation and password reset please
-        //        // visit https://go.microsoft.com/fwlink/?LinkID=532713
-        //        var code = await _userManager.GeneratePasswordResetTokenAsync(user);
-        //        var callbackUrl = Url.ResetPasswordCallbackLink(user.Id, code, Request.Scheme);
-        //        await _emailSender.SendEmailAsync(model.Email, "Reset Password",
-        //           $"Please reset your password by clicking here: <a href='{callbackUrl}'>link</a>");
-        //        return RedirectToAction(nameof(ForgotPasswordConfirmation));
-        //    }
+        [HttpPost]
+        [AllowAnonymous]
+        public ActionResult SetAccountPassword(SetPasswordViewModel passwordToSet)
+        {
+            if (ModelState.IsValid)
+            {
+                var user = _context.userRepository.GetUserById(passwordToSet.UserIdentificator);
 
-        //    // If we got this far, something failed, redisplay form
-        //    return View(model);
-        //}
+                if (user == null)
+                {
+                    return RedirectToAction("Login", "Account", new { message = "Wystąpił niespodziewany błąd podczas ustawiania hasła użytkownika" });
 
-        //[HttpGet]
-        //[AllowAnonymous]
-        //public IActionResult ForgotPasswordConfirmation()
-        //{
-        //    return View();
-        //}
+                }
+
+                var addPasswordResult = _userManager.AddPasswordAsync(user, passwordToSet.Password).Result;
+
+                if (addPasswordResult.Succeeded)
+                {
+                    _signInManager.SignInAsync(user, isPersistent: false);
+                    return RedirectToAction("BlankMenu", "Certificates", new { message = "Twoje hasło zostało ustawione - zostałeś zalogowany na swoje konto" });
+                }
+            }
+
+            return View(passwordToSet);
+        }
+
+        
+
 
         #region Currently not-used
 

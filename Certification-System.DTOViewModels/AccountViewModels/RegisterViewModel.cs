@@ -1,6 +1,6 @@
 ﻿using System.ComponentModel.DataAnnotations;
 
-namespace Certification_System.DTOViewModels.AccountViewModels
+namespace Certification_System.DTOViewModels
 {
     public class RegisterViewModel
     {

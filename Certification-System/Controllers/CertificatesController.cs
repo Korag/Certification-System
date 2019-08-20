@@ -28,8 +28,10 @@ namespace Certification_System.Controllers
 
         // GET: BlankMenu
         [Authorize]
-        public ActionResult BlankMenu()
+        public ActionResult BlankMenu(string message = null)
         {
+            ViewBag.message = message;
+
             return View();
         }
 
