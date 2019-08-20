@@ -307,6 +307,48 @@ namespace Certification_System.Controllers
             return View();
         }
 
+        [HttpGet]
+        [AllowAnonymous]
+        public ActionResult ResetForgottenPassword(string userIdentificator, string code = null)
+        {
+            if (code == null)
+            {
+                return RedirectToAction(nameof(ForgotPasswordConfirmation), "Account", new { messageNumber = 1 });
+            }
+
+            var passwordToReset = new ResetPasswordViewModel
+            {
+                UserIdentificator = userIdentificator,
+                Code = code
+            };
+
+            return View(passwordToReset);
+        }
+
+        [HttpPost]
+        [AllowAnonymous]
+        public async Task<ActionResult> ResetForgottenPassword(ResetPasswordViewModel passwordToReset)
+        {
+            if (ModelState.IsValid)
+            {
+                var user = _context.userRepository.GetUserById(passwordToReset.UserIdentificator);
+
+                if (user == null)
+                {
+                    return RedirectToAction(nameof(Login), "Account", new { message = "Hasło zostało zresetowane" });
+                }
+
+                var result = await _userManager.ResetPasswordAsync(user, passwordToReset.Code, passwordToReset.Password);
+
+                if (result.Succeeded)
+                {
+                    return RedirectToAction(nameof(Login), "Account", new { message = "Hasło zostało zresetowane" });
+                }
+            }
+
+            return View(passwordToReset);
+        }
+
 
         #region Currently not-used
 
