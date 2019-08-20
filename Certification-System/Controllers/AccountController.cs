@@ -14,6 +14,7 @@ using AspNetCore.Identity.Mongo.Model;
 using AutoMapper;
 using Certification_System.Repository.DAL;
 using Certification_System.DTOViewModels;
+using System.Collections.Generic;
 
 namespace Certification_System.Controllers
 {
@@ -53,6 +54,14 @@ namespace Certification_System.Controllers
 
         [TempData]
         public string ErrorMessage { get; set; }
+
+        private readonly Dictionary<int, string> _messages = new Dictionary<int, string>
+         {
+           {1,"Na podany przez Ciebie email została wysłana wiadomość"},
+           {2, "Two"},
+           {3,"Three"}
+         };
+
 
         [HttpGet]
         [AllowAnonymous]
@@ -158,7 +167,7 @@ namespace Certification_System.Controllers
             {
                 UserIdentificator = userIdentificator
             };
-  
+
             return View(passwordToChange);
         }
 
@@ -180,7 +189,7 @@ namespace Certification_System.Controllers
                 else
                 {
                     ModelState.AddModelError(string.Empty, "Wprowadzono niepoprawne obecnie obowiązujące hasło");
-                    return View(new ChangePasswordViewModel {UserIdentificator = passwordToChange.UserIdentificator });
+                    return View(new ChangePasswordViewModel { UserIdentificator = passwordToChange.UserIdentificator });
                 }
             }
 
@@ -211,6 +220,9 @@ namespace Certification_System.Controllers
             var result = await _userManager.ConfirmEmailAsync(user, code);
             return View(result.Succeeded ? "ConfirmEmail" : "Error");
         }
+
+        // todo: link setAccountPassword to login action in if clause
+        // todo: link emailVerification to login action in if clause and ModelState.AddError
 
         [HttpGet]
         [AllowAnonymous]
@@ -250,7 +262,50 @@ namespace Certification_System.Controllers
             return View(passwordToSet);
         }
 
-        
+        [HttpGet]
+        [AllowAnonymous]
+        public ActionResult ForgotPassword()
+        {
+            return View();
+        }
+
+        [HttpPost]
+        [AllowAnonymous]
+        public async Task<ActionResult> ForgotPassword(ForgotPasswordViewModel emailModel)
+        {
+            if (ModelState.IsValid)
+            {
+                var user = await _userManager.FindByEmailAsync(emailModel.Email);
+
+                //todo: after creating EmailVerificationMethod
+
+                if (user == null /*|| !(await _userManager.IsEmailConfirmedAsync(user))*/)
+                {
+                    return RedirectToAction(nameof(ForgotPasswordConfirmation));
+                }
+
+                var code = await _userManager.GeneratePasswordResetTokenAsync(user);
+
+                // generate URL and send email with Code
+
+                //var callbackUrl = Url.ResetPasswordCallbackLink(user.Id, code, Request.Scheme);
+
+                //await _emailSender.SendEmailAsync(emailModel.Email, "Reset Password",
+                //   $"Please reset your password by clicking here: <a href='{callbackUrl}'>link</a>");
+
+                return RedirectToAction(nameof(ForgotPasswordConfirmation));
+            }
+
+            return View(emailModel);
+        }
+
+        [AllowAnonymous]
+        public ActionResult ForgotPasswordConfirmation(int messageNumber)
+        {
+            ViewBag.message = _messages[messageNumber];
+
+            return View();
+        }
 
 
         #region Currently not-used
