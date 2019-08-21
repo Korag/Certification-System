@@ -76,7 +76,6 @@
   <ItemGroup>
     <Folder Include="Extensions\" />
     <Folder Include="Views\Account\Not-used\" />
-    <Folder Include="Views\Exams\" />
     <Folder Include="Views\Manage Not-used\" />
   </ItemGroup>
 

@@ -35,6 +35,11 @@ namespace Certification_System.Repository
             return GetUsers().AsQueryable().Where(z => z.Roles.Contains("WORKER")).ToList();
         }
 
+        public ICollection<CertificationPlatformUser> GetListOfExaminers()
+        {
+            return GetUsers().AsQueryable().Where(z => z.Roles.Contains("EXAMINER")).ToList();
+        }
+
         public ICollection<CertificationPlatformUser> GetListOfUsers()
         {
             return GetUsers().AsQueryable().ToList();
@@ -103,6 +108,26 @@ namespace Certification_System.Repository
                         {
                             Text = instructor.FirstName + " " + instructor.LastName,
                             Value = instructor.Id
+                        }
+                    );
+            };
+
+            return SelectList;
+        }
+
+        public ICollection<SelectListItem> GetExaminersAsSelectList()
+        {
+            var Examiners = GetListOfExaminers();
+            List<SelectListItem> SelectList = new List<SelectListItem>();
+
+            foreach (var examiner in Examiners)
+            {
+                SelectList.Add
+                    (
+                        new SelectListItem()
+                        {
+                            Text = examiner.FirstName + " " + examiner.LastName,
+                            Value = examiner.Id
                         }
                     );
             };

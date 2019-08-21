@@ -10,6 +10,8 @@ namespace Certification_System.Repository.DAL
         public readonly ICourseRepository courseRepository;
         public readonly IDegreeRepository degreeRepository;
         public readonly IExamRepository examRepository;
+        public readonly IExamTermRepository examTermRepository;
+        public readonly IExamResultRepository examResultRepository;
         public readonly IGivenCertificateRepository givenCertificateRepository;
         public readonly IGivenDegreeRepository givenDegreeRepository;
         public readonly IMeetingRepository meetingRepository;
@@ -22,6 +24,8 @@ namespace Certification_System.Repository.DAL
            ICourseRepository courseRepository,
            IDegreeRepository degreeRepository,
            IExamRepository examRepository,
+           IExamTermRepository examTermRepository,
+           IExamResultRepository examResultRepository,
            IGivenCertificateRepository givenCertificateRepository,
            IGivenDegreeRepository givenDegreeRepository,
            IMeetingRepository meetingRepository,
@@ -33,6 +37,8 @@ namespace Certification_System.Repository.DAL
             this.courseRepository = courseRepository;
             this.degreeRepository = degreeRepository;
             this.examRepository = examRepository;
+            this.examTermRepository = examTermRepository;
+            this.examResultRepository = examResultRepository;
             this.givenCertificateRepository = givenCertificateRepository;
             this.givenDegreeRepository = givenDegreeRepository;
             this.meetingRepository = meetingRepository;
