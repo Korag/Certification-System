@@ -14,7 +14,8 @@ namespace Certification_System.Entities
         public DateTime DateOfStart { get; set; }
         public DateTime DateOfEnd { get; set; }
 
-        public int DurationInMinutes { get; set; }
+        public int DurationMinutes { get; set; }
+        public int DurationDays { get; set; }
         public int UsersLimit { get; set; }
 
         public ICollection<string> EnrolledUsers { get; set; }

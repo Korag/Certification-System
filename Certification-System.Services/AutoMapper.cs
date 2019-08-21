@@ -132,6 +132,29 @@ namespace Certification_System.Services
             CreateMap<Degree, DisplayDegreeWithoutRequirementsViewModel>();
             #endregion
 
+            #region Exams
+            CreateMap<Exam, AddExamViewModel>();
+
+            CreateMap<AddExamViewModel, Exam>()
+                     .ForMember(dest => dest.Examiners, opts => opts.MapFrom(src => src.SelectedExaminers))
+                     .ForMember(dest => dest.AvailableExamTerms, opts => opts.MapFrom(src => new List<string>()))
+                     .ForMember(dest => dest.ExamResults, opts => opts.MapFrom(src => new List<string>()))
+                     .ForMember(dest => dest.EnrolledUsers, opts => opts.MapFrom(src => new List<string>()));
+            #endregion
+
+            #region ExamTerms
+            CreateMap<Exam, AddExamTermViewModel>();
+
+            CreateMap<AddExamTermViewModel, Exam>()
+                  .ForMember(dest => dest.Examiners, opts => opts.MapFrom(src => src.SelectedExaminers))
+                  .ForMember(dest => dest.EnrolledUsers, opts => opts.MapFrom(src => new List<string>()));
+            #endregion
+
+            #region ExamResults
+            CreateMap<Exam, AddExamResultViewModel>();
+
+            #endregion
+
             #region GivenCertificates
             CreateMap<AddGivenCertificateViewModel, GivenCertificate>();
 
@@ -288,7 +311,7 @@ namespace Certification_System.Services
                      .ForMember(dest => dest.GivenDegrees, opts => opts.Ignore());
 
             CreateMap<CertificationPlatformUser, AccountDetailsViewModel>()
-                    .ForMember(dest => dest.UserIdentificator, opts => opts.MapFrom(src => src.Id)); 
+                    .ForMember(dest => dest.UserIdentificator, opts => opts.MapFrom(src => src.Id));
 
             CreateMap<CertificationPlatformUser, UserDetailsForAnonymousViewModel>()
                      .ForMember(dest => dest.UserIdentificator, opts => opts.MapFrom(src => src.Id))

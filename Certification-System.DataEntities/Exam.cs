@@ -16,15 +16,16 @@ namespace Certification_System.Entities
         public string Description { get; set; }
         public DateTime DateOfStart { get; set; }
         public DateTime DateOfEnd { get; set; }
-        public int Duration { get; set; }
+        public int DurationMinutes { get; set; }
+        public int DurationDays { get; set; }
         public int OrdinalNumber { get; set; }
         public int MaxAmountOfPointsToEarn { get; set; }
         public int UsersLimit { get; set; }
 
         public bool ExamDividedToTerms { get; set; }
-        public ICollection<string> AvailableTerms { get; set; }
+        public ICollection<string> AvailableExamTerms { get; set; }
 
-        public ICollection<string> Examinators { get; set; }
+        public ICollection<string> Examiners { get; set; }
         public ICollection<string> ExamResults { get; set; }
         public ICollection<string> EnrolledUsers { get; set; }
     }
