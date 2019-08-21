@@ -1,0 +1,167 @@
+﻿@model Certification_System.DTOViewModels.AddExamViewModel
+
+@{
+    ViewData["Title"] = "AddNewExam";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+<h1>Dodaj nowy egzamin</h1>
+<hr />
+
+<div>
+    <form asp-action="AddNewExam">
+
+        <div class="col-md-8 col-xl-6 col-lg-6 col-sm-12 col-xs-10 m-auto p-3 shadow p-3 mb-5 bg-light rounded border border-primary rounded-bottom" style="opacity:0.90">
+
+            <div class="form-group">
+                <label asp-for="SelectedCourse" class="control-label"></label>
+                <div>
+                    <select asp-for="SelectedCourse" asp-items="@Model.AvailableCourses" data-style="btn-white" data-container="body" data-width="auto" data-header="Wybierz kurs" data-live-search="true" title="Nie wybrano żadnego elementu" class="form-control selectpicker show-tick w-100"> </select>
+                    <div class="row justify-content-center">
+                        <span asp-validation-for="SelectedCourse" class="text-danger"></span>
+                    </div>
+                </div>
+            </div>
+
+            <div class="form-group">
+                <label asp-for="ExamIndexer" class="control-label"></label>
+                <div>
+                    <input asp-for="ExamIndexer" class="form-control col-12" />
+                    <div class="row justify-content-center">
+                        <span asp-validation-for="ExamIndexer" class="text-danger"></span>
+                    </div>
+                </div>
+            </div>
+
+            <div class="form-group">
+                <label asp-for="DateOfStart" class="control-label"></label>
+                <div>
+                    <div class='input-group date' id='DateOfStart'>
+                        <input type='text' class="form-control col-12" name="DateOfStart" value="@DateTime.Now.ToShortDateString() @DateTime.Now.ToShortTimeString()" />
+                        <span class="input-group-addon">
+                            <span class="fa fa-calendar pl-1 pt-0.5" style="font-size:34px"></span>
+                        </span>
+                    </div>
+                    <div class="row justify-content-center">
+                        <span asp-validation-for="DateOfStart" class="text-danger"></span>
+                    </div>
+                </div>
+            </div>
+
+            <div class="form-group">
+                <label asp-for="DateOfEnd" class="control-label"></label>
+                <div>
+                    <div class='input-group date' id='DateOfEnd'>
+                        <input type='text' class="form-control col-12" name="DateOfEnd" value="@DateTime.Now.AddMonths(6).ToShortDateString() @DateTime.Now.ToShortTimeString()" />
+                        <span class="input-group-addon">
+                            <span class="fa fa-calendar pl-1 pt-0.5" style="font-size:34px"></span>
+                        </span>
+                    </div>
+                    <div class="row justify-content-center">
+                        <span asp-validation-for="DateOfEnd" class="text-danger"></span>
+                    </div>
+                </div>
+            </div>
+
+            <div class="form-group">
+                <label asp-for="UsersLimit" class="control-label"></label>
+                <div>
+                    <input asp-for="UsersLimit" class="form-control col-12" />
+                    <div class="row justify-content-center">
+                        <span asp-validation-for="UsersLimit" class="text-danger"></span>
+                    </div>
+                </div>
+            </div>
+
+            <div class="form-group">
+                <label asp-for="SelectedExaminers" class="control-label"></label>
+                <div>
+                    <select asp-for="SelectedExaminers" asp-items="@Model.AvailableExaminers" data-style="btn-white" data-container="body" data-width="auto" data-header="Wybierz kurs" data-live-search="true" title="Nie wybrano żadnego elementu" class="form-control selectpicker show-tick w-100"> </select>
+                    <div class="row justify-content-center">
+                        <span asp-validation-for="SelectedExaminers" class="text-danger"></span>
+                    </div>
+                </div>
+            </div>
+
+            <div class="form-group">
+                <label asp-for="ExamDividedToTerms" class="control-label"></label>
+                <div>
+                    <input type="checkbox" asp-for="ExamDividedToTerms" id="ExamDividedToTerms" class="form-control col-12" data-toggle="toggle" data-on="Tak" data-off="Nie" data-size="sm" />
+                    <div class="row justify-content-center">
+                        <span asp-validation-for="ExamDividedToTerms" class="text-danger"></span>
+                    </div>
+                </div>
+            </div>
+
+            <div class="row justify-content-center m-0 mt-3 mb-3" id="hiddenInput" hidden>
+                <button id="AddExamTerm" class="btn btn-secondary">Dodaj termin egzaminu</button>
+            </div>
+
+            <div asp-validation-summary="ModelOnly" class="row justify-content-center alert alert-danger validation-model"></div>
+
+            <div class="row m-0 mt-3">
+                <input type="submit" value="Nadaj certyfikat" class="btn btn-primary mt-1 xs300px_JustifyContentCenter" />
+                <a asp-action="DisplayAllGivenCertificates" asp-controller="GivenCertificates" class="btn btn-outline-info mt-1 xs300px_FloatRight">Powrót do listy</a>
+            </div>
+
+        </div>
+
+        <div id="ExamTermViewComponentsContainer" class="col-md-12 col-xl-12 col-lg-12 col-sm-12 col-xs-10 m-auto p-3 shadow p-3 mb-5 pt-4 bg-light rounded border border-primary rounded-bottom" style="opacity:0.90; top:10px" hidden>
+
+        </div>
+
+    </form>
+</div>
+
+@section Scripts {
+    @{await Html.RenderPartialAsync("_ValidationScriptsPartial");}
+
+    <script>
+        var numerator = @Model.AvailableExamTerms.Count();
+
+        $(function () {
+            $('#DateOfStart').datetimepicker({
+                format: 'DD.MM.YYYY HH:mm',
+                locale: moment.locale('pl', {
+                    week: { dow: 1 }
+                })
+            });
+            $('#DateOfEnd').datetimepicker({
+                format: 'DD.MM.YYYY HH:mm',
+                locale: moment.locale('pl', {
+                    week: { dow: 1 }
+                }),
+                useCurrent: false
+            });
+            $("#DateOfStart").on("dp.change", function (e) {
+                $('#DateOfEnd').data("DateTimePicker").minDate(e.date);
+            });
+            $("#DateOfEnd").on("dp.change", function (e) {
+                $('#DateOfStart').data("DateTimePicker").maxDate(e.date);
+            });
+        });
+
+        $('#ExamDividedToTerms').change(function () {
+            if ($(this).is(":checked")) {
+                $('#hiddenInput').removeAttr("hidden");
+            }
+            else {
+                document.getElementById("hiddenInput").hidden = true;
+                document.getElementById("ExamTermViewComponentsContainer").hidden = true;
+            }
+        });
+
+        $('#AddExamTerm').click(function (e){
+            e.preventDefault();
+
+            $('#ExamTermViewComponentsContainer').removeAttr("hidden");
+
+            $('#ExamTermViewComponentsContainer').append('<div id="ExamTermViewComponentsContainer'+ numerator + '"></div>');
+
+            $('#ExamTermViewComponentsContainer'+numerator).load('GetAddExamTermViewComponent?orderNumber=' + numerator)
+   
+            numerator++;
+        });
+
+    </script>
+}

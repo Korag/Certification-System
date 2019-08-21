@@ -43,6 +43,14 @@
                     <div class="dropdown-divider"></div>
                     <a asp-controller="Meetings" asp-action="AddNewMeeting" class="dropdown-item">Dodaj spotkanie do szkolenia *</a>
                     <a asp-controller="Meetings" asp-action="DisplayAllMeetings" class="dropdown-item">Wyświetl wszystkie spotkania *</a>
+                    <div class="dropdown-divider"></div>
+                    <p class="dropdown-header mt-1">Egzaminy</p>
+                    <div class="dropdown-divider"></div>
+                    <a asp-controller="Exams" asp-action="AddNewExam" class="dropdown-item">Dodaj nowy egzamin *</a>
+                    <a asp-controller="Exams" asp-action="DisplayAllExams" class="dropdown-item">Wyświetl wszystkie egzaminy</a>
+                    <a asp-controller="Exams" asp-action="AddNewExamTerms" class="dropdown-item">Dodaj nowe terminy egzaminu</a>
+                    <a asp-controller="Exams" asp-action="AddUsersToExam" class="dropdown-item">Przypisz użytkowników do egzaminu</a>
+                    <a asp-controller="Exams" asp-action="MarkExams" class="dropdown-item">Oceń egzamin</a>
                 </div>
             </li>
             <li class="nav-item dropdown">
