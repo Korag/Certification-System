@@ -51,7 +51,7 @@ namespace Certification_System.Controllers
             if (ModelState.IsValid)
             {
                 var course = _context.courseRepository.GetCourseById(newExam.SelectedCourse);
-    
+
                 Exam exam = _mapper.Map<Exam>(newExam);
                 exam.ExamIdentificator = _keyGenerator.GenerateNewId();
 
@@ -95,6 +95,33 @@ namespace Certification_System.Controllers
         public ActionResult GetAddExamTermViewComponent(string orderNumber)
         {
             return ViewComponent("AddExamTerm", new { orderNumber = orderNumber });
+        }
+
+
+        // GET: DisplayAllExams
+        [Authorize(Roles = "Admin")]
+        public ActionResult DisplayAllExams()
+        {
+            var Exams = _context.examRepository.GetListOfExams();
+            var Courses = _context.courseRepository.GetListOfCourses();
+
+            List<DisplayExamViewModel> ListOfExams = new List<DisplayExamViewModel>();
+
+            foreach (var course in Courses)
+            {
+                foreach (var exam in course.Exams)
+                {
+                    Exam examModel = Exams.Where(z => z.ExamIdentificator == exam).FirstOrDefault();
+
+                    DisplayExamViewModel singleExam = _mapper.Map<DisplayExamViewModel>(examModel);
+                    singleExam.Examiners = _mapper.Map<List<DisplayCrucialDataUserViewModel>>(_context.userRepository.GetUsersById(examModel.Examiners));
+                    singleExam.Course = _mapper.Map<DisplayCrucialDataCourseViewModel>(course);
+
+                    ListOfExams.Add(singleExam);
+                }
+            }
+
+            return View(ListOfExams);
         }
     }
 }

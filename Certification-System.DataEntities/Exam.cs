@@ -16,8 +16,8 @@ namespace Certification_System.Entities
         public string Description { get; set; }
         public DateTime DateOfStart { get; set; }
         public DateTime DateOfEnd { get; set; }
-        public int DurationMinutes { get; set; }
         public int DurationDays { get; set; }
+        public int DurationMinutes { get; set; }
         public int OrdinalNumber { get; set; }
         public int MaxAmountOfPointsToEarn { get; set; }
         public int UsersLimit { get; set; }

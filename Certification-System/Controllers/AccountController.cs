@@ -222,7 +222,19 @@ namespace Certification_System.Controllers
 
                 if (result.Succeeded)
                 {
+                    EmailMessageDto emailToSend = new EmailMessageDto
+                    {
+                        ReceiverName = User.FirstName + " " + User.LastName,
+                        ReceiverEmailAddress = User.Email,
+                        Subject = "Hasło Twojego konta w Certification-System zostało zmienione",
+                        BodyMessage = $"Dzień dobry, informujemy, że dokonano właśnie zmiany hasła konta powiązanego z " +
+                        $"tym adresem email. </br> W przypadku nieautoryzowanego dostępu do konta prosimy o pilny kontakt z administratorem systemu."
+                    };
+
+                    _emailSender.SendEmailAsync(emailToSend);
+
                     _signInManager.SignOutAsync().Wait();
+
                     return RedirectToAction("Login", "Account", new { message = "Twoje hasło zostało zmienione - zostałeś wylogowany" });
                 }
                 else

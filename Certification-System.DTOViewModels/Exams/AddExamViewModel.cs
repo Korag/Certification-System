@@ -14,7 +14,7 @@ namespace Certification_System.DTOViewModels
         public string SelectedCourse { get; set; }
 
         [Required(ErrorMessage = "Pole \"{0}\" jest wymagane.")]
-        [Display(Name = "Identyfikator")]
+        [Display(Name = "Identyfikator egzaminu")]
         public string ExamIndexer { get; set; }
 
         [Required(ErrorMessage = "Pole \"{0}\" jest wymagane.")]
@@ -22,7 +22,7 @@ namespace Certification_System.DTOViewModels
         [Display(Name = "Nazwa egzaminu")]
         public string Name { get; set; }
 
-        [Display(Name = "Opis")]
+        [Display(Name = "Opis egzaminu")]
         [MaxLength(255)]
         public string Description { get; set; }
 
@@ -42,7 +42,7 @@ namespace Certification_System.DTOViewModels
         public int UsersLimit { get; set; }
 
         [Required(ErrorMessage = "Pole \"{0}\" jest wymagane.")]
-        [Display(Name = "Egzamin podzielony na terminy ?")]
+        [Display(Name = "Egzamin podzielony na tury ?")]
         public bool ExamDividedToTerms { get; set; }
 
         public IList<SelectListItem> AvailableExaminers { get; set; }
