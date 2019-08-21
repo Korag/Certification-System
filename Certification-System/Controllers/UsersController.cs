@@ -24,13 +24,15 @@ namespace Certification_System.Controllers
 
         private readonly IMapper _mapper;
         private readonly IKeyGenerator _keyGenerator;
+        private readonly IEmailSender _emailSender;
 
         public UsersController(
             UserManager<CertificationPlatformUser> userManager,
             RoleManager<MongoRole> roleManager,
             MongoOperations context,
             IMapper mapper,
-            IKeyGenerator keyGenerator)
+            IKeyGenerator keyGenerator,
+            IEmailSender emailSender)
         {
             _userManager = userManager;
             _roleManager = roleManager;
@@ -38,6 +40,7 @@ namespace Certification_System.Controllers
 
             _mapper = mapper;
             _keyGenerator = keyGenerator;
+            _emailSender = emailSender;
         }
 
         // GET: DisplayAllUsers
@@ -91,6 +94,8 @@ namespace Certification_System.Controllers
                 AvailableCompanies = _context.companyRepository.GetCompaniesAsSelectList().ToList()
             };
 
+            newUser.SelectedRole = newUser.AvailableRoles.Where(z => z.Value == "Worker").Select(z => z.Value).FirstOrDefault();
+
             return View(newUser);
         }
 
@@ -136,9 +141,12 @@ namespace Certification_System.Controllers
                         BodyMessage = $"W celu utworzenia hasła do konta należy kliknąć w poniższy link: <a href='{callbackUrl}'>link</a>"
                     };
 
+                    _emailSender.SendEmailAsync(emailToSend);
+
                     return RedirectToAction("ConfirmationOfActionOnUser", "Users", new { userIdentificator = user.Id, TypeOfAction = "Add" });
                 }
 
+                ModelState.AddModelError(string.Empty, "Użytkownik o podanym adresie email już widnieje w systemie.");
                 newUser.AvailableRoles = _context.userRepository.GetRolesAsSelectList().ToList();
                 newUser.AvailableCompanies = _context.companyRepository.GetCompaniesAsSelectList().ToList();
 

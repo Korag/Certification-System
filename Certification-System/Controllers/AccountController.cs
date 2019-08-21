@@ -94,7 +94,7 @@ namespace Certification_System.Controllers
 
                     if (!emailConfirmed)
                     {
-                        ModelState.AddModelError(string.Empty, "Adres email przypisany do konta nie został potwierdzony. Sprawdź swoją skrzynkę pocztową - wysłaliśmy wiadomość w celu potwierdzenia Twojego adresu email");
+                        ModelState.AddModelError(string.Empty, "Adres email przypisany do konta nie został potwierdzony. Sprawdź swoją skrzynkę pocztową - wysłaliśmy wiadomość w celu potwierdzenia Twojego adresu email.");
 
                         var code = await _userManager.GenerateEmailConfirmationTokenAsync(user);
                         var callbackUrl = Url.EmailConfirmationLink(user.Id, code, Request.Scheme);
@@ -170,9 +170,6 @@ namespace Certification_System.Controllers
 
                 var addToRole = await _userManager.AddToRoleAsync(user, "Worker");
 
-                // todo: verify email
-                // todo: check if user has a password
-
                 if (result.Succeeded)
                 {
                     var code = await _userManager.GenerateEmailConfirmationTokenAsync(user);
@@ -192,7 +189,7 @@ namespace Certification_System.Controllers
                     _logger.LogInformation("Użytkownik utworzył nowe konto.");
                     //return RedirectToLocal(returnUrl);
 
-                    return RedirectToAction("Login", "Account");
+                    return RedirectToAction("Login", "Account", new { message = "Na Twój adres email została wysłana wiadomość z informacją dotyczącą potwierdzenia adresu email." });
                 }
                 AddErrors(result);
             }
@@ -261,14 +258,18 @@ namespace Certification_System.Controllers
 
                 var result = await _userManager.ConfirmEmailAsync(user, emailToConfirm.Code);
 
-                return View(result.Succeeded ? "ConfirmEmail" : "Error");
+                if (result.Succeeded)
+                {
+                    return RedirectToAction("Login", "Account", new { message = "Adres email został potwierdzony." });
+                }
+                else
+                {
+                    return View("Error");
+                }
             }
 
             return RedirectToAction("Login", "Account");
         }
-
-        // todo: link setAccountPassword to login action in if clause
-        // todo: link emailVerification to login action in if clause and ModelState.AddError
 
         [HttpGet]
         [AllowAnonymous]
@@ -293,14 +294,13 @@ namespace Certification_System.Controllers
                 if (user == null)
                 {
                     return RedirectToAction("Login", "Account", new { message = "Wystąpił niespodziewany błąd podczas ustawiania hasła użytkownika" });
-
                 }
 
                 var addPasswordResult = _userManager.AddPasswordAsync(user, passwordToSet.Password).Result;
 
                 if (addPasswordResult.Succeeded)
                 {
-                    _signInManager.SignInAsync(user, isPersistent: false);
+                    _signInManager.SignInAsync(user, isPersistent: false).Wait();
                     return RedirectToAction("BlankMenu", "Certificates", new { message = "Twoje hasło zostało ustawione - zostałeś zalogowany na swoje konto" });
                 }
             }
