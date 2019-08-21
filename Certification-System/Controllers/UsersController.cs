@@ -10,6 +10,8 @@ using AspNetCore.Identity.Mongo.Model;
 using Certification_System.Repository.DAL;
 using AutoMapper;
 using Certification_System.ServicesInterfaces;
+using Certification_System.ServicesInterfaces.Models;
+using Certification_System.Extensions;
 
 namespace Certification_System.Controllers
 {
@@ -120,9 +122,20 @@ namespace Certification_System.Controllers
                     var addToWorkerRoleWhenSelectedCompanyRole = await _userManager.AddToRoleAsync(user, "Worker");
                 }
 
-                var result = await _userManager.CreateAsync(user, newUser.Password);
+                var result = await _userManager.CreateAsync(user);
+
                 if (result.Succeeded)
                 {
+                    var callbackUrl = Url.SetUserPasswordLink(user.Id, Request.Scheme);
+
+                    EmailMessageDto emailToSend = new EmailMessageDto
+                    {
+                        ReceiverName = user.FirstName + " " + user.LastName,
+                        ReceiverEmailAddress = user.Email,
+                        Subject = "Utworzenie konta w Certification-System",
+                        BodyMessage = $"W celu utworzenia hasła do konta należy kliknąć w poniższy link: <a href='{callbackUrl}'>link</a>"
+                    };
+
                     return RedirectToAction("ConfirmationOfActionOnUser", "Users", new { userIdentificator = user.Id, TypeOfAction = "Add" });
                 }
 

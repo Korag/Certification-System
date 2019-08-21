@@ -5,12 +5,12 @@ namespace Certification_System.Extensions
 {
     public static class UrlHelperExtensions
     {
-        public static string EmailConfirmationLink(this IUrlHelper urlHelper, string userId, string code, string scheme)
+        public static string EmailConfirmationLink(this IUrlHelper urlHelper, string userIdentificator, string code, string scheme)
         {
             return urlHelper.Action(
                 action: nameof(AccountController.ConfirmEmail),
                 controller: "Account",
-                values: new { userId, code },
+                values: new { userIdentificator, code },
                 protocol: scheme);
         }
 
@@ -20,6 +20,15 @@ namespace Certification_System.Extensions
                 action: nameof(AccountController.ResetForgottenPassword),
                 controller: "Account",
                 values: new { userIdentificator, code },
+                protocol: scheme);
+        }
+
+        public static string SetUserPasswordLink(this IUrlHelper urlHelper, string userIdentificator, string scheme)
+        {
+            return urlHelper.Action(
+                action: nameof(AccountController.SetAccountPassword),
+                controller: "Account",
+                values: new { userIdentificator },
                 protocol: scheme);
         }
 
