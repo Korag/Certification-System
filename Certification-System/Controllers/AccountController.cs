@@ -86,23 +86,51 @@ namespace Certification_System.Controllers
 
             if (ModelState.IsValid)
             {
+                var user = _userManager.FindByEmailAsync(model.Email).Result;
+
+                if (user != null)
+                {
+                    var emailConfirmed = _userManager.IsEmailConfirmedAsync(user).Result;
+
+                    if (!emailConfirmed)
+                    {
+                        ModelState.AddModelError(string.Empty, "Adres email przypisany do konta nie został potwierdzony. Sprawdź swoją skrzynkę pocztową - wysłaliśmy wiadomość w celu potwierdzenia Twojego adresu email");
+
+                        var code = await _userManager.GenerateEmailConfirmationTokenAsync(user);
+                        var callbackUrl = Url.EmailConfirmationLink(user.Id, code, Request.Scheme);
+
+                        EmailMessageDto emailToSend = new EmailMessageDto
+                        {
+                            ReceiverName = user.FirstName + " " + user.LastName,
+                            ReceiverEmailAddress = model.Email,
+                            Subject = "Rejestracja w Certification-System",
+                            BodyMessage = $"W celu potwierdzenia adresu email należy kliknąć w poniższy link: <a href='{callbackUrl}'>link</a>"
+                        };
+
+                        await _emailSender.SendEmailAsync(emailToSend);
+
+                        return View(model);
+                    }
+                }
+
                 // This doesn't count login failures towards account lockout
                 // To enable password failures to trigger account lockout, set lockoutOnFailure: true
                 var result = await _signInManager.PasswordSignInAsync(model.Email, model.Password, model.RememberMe, lockoutOnFailure: false);
+
                 if (result.Succeeded)
                 {
                     _logger.LogInformation("User został zalogowany");
                     return RedirectToLocal(returnUrl);
                 }
-                if (result.RequiresTwoFactor)
-                {
-                    return RedirectToAction(nameof(LoginWith2fa), new { returnUrl, model.RememberMe });
-                }
-                if (result.IsLockedOut)
-                {
-                    _logger.LogWarning("Konto użytkownika zostało zablokowane");
-                    return RedirectToAction(nameof(Lockout));
-                }
+                //if (result.RequiresTwoFactor)
+                //{
+                //    return RedirectToAction(nameof(LoginWith2fa), new { returnUrl, model.RememberMe });
+                //}
+                //if (result.IsLockedOut)
+                //{
+                //    _logger.LogWarning("Konto użytkownika zostało zablokowane");
+                //    return RedirectToAction(nameof(Lockout));
+                //}
                 else
                 {
                     ModelState.AddModelError(string.Empty, "Adres email lub hasło są błędne.");
@@ -147,15 +175,24 @@ namespace Certification_System.Controllers
 
                 if (result.Succeeded)
                 {
-                    _logger.LogInformation("User created a new account with password.");
-
                     var code = await _userManager.GenerateEmailConfirmationTokenAsync(user);
                     var callbackUrl = Url.EmailConfirmationLink(user.Id, code, Request.Scheme);
-                    //await _emailSender.SendEmailAsync(model.Email, callbackUrl, "");
 
-                    await _signInManager.SignInAsync(user, isPersistent: false);
-                    _logger.LogInformation("User created a new account with password.");
-                    return RedirectToLocal(returnUrl);
+                    EmailMessageDto emailToSend = new EmailMessageDto
+                    {
+                        ReceiverName = model.FirstName + " " + model.LastName,
+                        ReceiverEmailAddress = model.Email,
+                        Subject = "Rejestracja w Certification-System",
+                        BodyMessage = $"W celu potwierdzenia adresu email należy kliknąć w poniższy link: <a href='{callbackUrl}'>link</a>"
+                    };
+
+                    await _emailSender.SendEmailAsync(emailToSend);
+
+                    //await _signInManager.SignInAsync(user, isPersistent: false);
+                    _logger.LogInformation("Użytkownik utworzył nowe konto.");
+                    //return RedirectToLocal(returnUrl);
+
+                    return RedirectToAction("Login", "Account");
                 }
                 AddErrors(result);
             }
@@ -211,19 +248,23 @@ namespace Certification_System.Controllers
 
         [HttpGet]
         [AllowAnonymous]
-        public async Task<ActionResult> ConfirmEmail(string userId, string code)
+        public async Task<ActionResult> ConfirmEmail(ConfirmEmailViewModel emailToConfirm)
         {
-            if (userId == null || code == null)
+            if (ModelState.IsValid)
             {
-                return RedirectToAction("BlankMenu", "Certificates");
+                var user = _context.userRepository.GetUserById(emailToConfirm.UserIdentificator);
+
+                if (user == null)
+                {
+                    return RedirectToAction("Login", "Account");
+                }
+
+                var result = await _userManager.ConfirmEmailAsync(user, emailToConfirm.Code);
+
+                return View(result.Succeeded ? "ConfirmEmail" : "Error");
             }
-            var user = await _userManager.FindByIdAsync(userId);
-            if (user == null)
-            {
-                throw new ApplicationException($"Unable to load user with ID '{userId}'.");
-            }
-            var result = await _userManager.ConfirmEmailAsync(user, code);
-            return View(result.Succeeded ? "ConfirmEmail" : "Error");
+
+            return RedirectToAction("Login", "Account");
         }
 
         // todo: link setAccountPassword to login action in if clause
@@ -231,11 +272,11 @@ namespace Certification_System.Controllers
 
         [HttpGet]
         [AllowAnonymous]
-        public ActionResult SetAccountPassword(string userId)
+        public ActionResult SetAccountPassword(string userIdentificator)
         {
             SetPasswordViewModel setPassword = new SetPasswordViewModel
             {
-                UserIdentificator = userId
+                UserIdentificator = userIdentificator
             };
 
             return View(setPassword);
@@ -298,7 +339,7 @@ namespace Certification_System.Controllers
                     ReceiverName = user.FirstName + " " + user.LastName,
                     ReceiverEmailAddress = user.Email,
                     Subject = "Reset hasła do konta na Certification-Platform",
-                    BodyMessage = $"Please reset your password by clicking here: <a href='{callbackUrl}'>link</a>"
+                    BodyMessage = $"Zresetuj swoje hasło poprzez ten link: <a href='{callbackUrl}'>link</a>"
                 };
 
                 await _emailSender.SendEmailAsync(emailToSend);
