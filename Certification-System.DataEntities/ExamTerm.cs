@@ -19,6 +19,6 @@ namespace Certification_System.Entities
         public int UsersLimit { get; set; }
 
         public ICollection<string> EnrolledUsers { get; set; }
-        public ICollection<string> Examinators { get; set; }
+        public ICollection<string> Examiners { get; set; }
     }
 }

@@ -15,6 +15,9 @@ Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "MongoDB Scheme", "MongoDB S
 		MongoDB Scheme\certification-system_mongoCollectionScheme_v2.1.pdf = MongoDB Scheme\certification-system_mongoCollectionScheme_v2.1.pdf
 		MongoDB Scheme\certification-system_mongoCollectionScheme_v2.1.png = MongoDB Scheme\certification-system_mongoCollectionScheme_v2.1.png
 		MongoDB Scheme\certification-system_mongoCollectionScheme_v2.1.vsdx = MongoDB Scheme\certification-system_mongoCollectionScheme_v2.1.vsdx
+		MongoDB Scheme\certification-system_mongoCollectionScheme_v3.0.pdf = MongoDB Scheme\certification-system_mongoCollectionScheme_v3.0.pdf
+		MongoDB Scheme\certification-system_mongoCollectionScheme_v3.0.png = MongoDB Scheme\certification-system_mongoCollectionScheme_v3.0.png
+		MongoDB Scheme\certification-system_mongoCollectionScheme_v3.0.vsdx = MongoDB Scheme\certification-system_mongoCollectionScheme_v3.0.vsdx
 	EndProjectSection
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Certification-System", "Certification-System\Certification-System.csproj", "{60C0AB49-802A-479A-BC44-9A88FA32105A}"
@@ -27,9 +30,9 @@ Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "AspNetIdentityProvider", "A
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Tests", "Tests", "{E0559461-6B52-4250-8A08-C45D8B7C57A1}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Certification-System.UnitTests", "Certification-System.UnitTests\Certification-System.UnitTests.csproj", "{3D5022CD-EE0B-4744-AF1E-67844D488D00}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Certification-System.UnitTests", "Certification-System.UnitTests\Certification-System.UnitTests.csproj", "{3D5022CD-EE0B-4744-AF1E-67844D488D00}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Certification-System.IntegrationTests", "Certification-System.IntegrationTests\Certification-System.IntegrationTests.csproj", "{B5592562-F731-45A6-874D-AD1988E9F206}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Certification-System.IntegrationTests", "Certification-System.IntegrationTests\Certification-System.IntegrationTests.csproj", "{B5592562-F731-45A6-874D-AD1988E9F206}"
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Schemas", "Schemas", "{979622FD-B1F5-42C7-B8F8-324FC3070770}"
 EndProject
@@ -42,17 +45,17 @@ Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Architecture Scheme", "Arch
 		MongoDB Scheme\certification-system_architectureScheme.vsdx = MongoDB Scheme\certification-system_architectureScheme.vsdx
 	EndProjectSection
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Certification-System.RepositoryInterfaces", "Certification-System.RepositoryInterfaces\Certification-System.RepositoryInterfaces.csproj", "{96923ED7-0C77-4D19-9B43-961D7AD8F624}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Certification-System.RepositoryInterfaces", "Certification-System.RepositoryInterfaces\Certification-System.RepositoryInterfaces.csproj", "{96923ED7-0C77-4D19-9B43-961D7AD8F624}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Certification-System.Repository", "Certification-System.Repository\Certification-System.Repository.csproj", "{4E3A4129-5C9E-4B27-9DE0-AE736D136AB5}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Certification-System.Repository", "Certification-System.Repository\Certification-System.Repository.csproj", "{4E3A4129-5C9E-4B27-9DE0-AE736D136AB5}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Certification-System.ServicesInterfaces", "Certification-System.ServicesInterfaces\Certification-System.ServicesInterfaces.csproj", "{81EFDACC-65F8-40A7-AB73-4AE5C44EE402}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Certification-System.ServicesInterfaces", "Certification-System.ServicesInterfaces\Certification-System.ServicesInterfaces.csproj", "{81EFDACC-65F8-40A7-AB73-4AE5C44EE402}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Certification-System.Services", "Certification-System.Services\Certification-System.Services.csproj", "{847537FA-B8B0-451D-8460-2A04D8A641E7}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Certification-System.Services", "Certification-System.Services\Certification-System.Services.csproj", "{847537FA-B8B0-451D-8460-2A04D8A641E7}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Certification-System.DataEntities", "Certification-System.DataEntities\Certification-System.DataEntities.csproj", "{907FA13A-FEA2-4556-97EC-CEBDE3EA053E}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Certification-System.DataEntities", "Certification-System.DataEntities\Certification-System.DataEntities.csproj", "{907FA13A-FEA2-4556-97EC-CEBDE3EA053E}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Certification-System.DTOViewModels", "Certification-System.DTOViewModels\Certification-System.DTOViewModels.csproj", "{5836DE2A-0609-4690-B916-E18EEFF8953C}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Certification-System.DTOViewModels", "Certification-System.DTOViewModels\Certification-System.DTOViewModels.csproj", "{5836DE2A-0609-4690-B916-E18EEFF8953C}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
