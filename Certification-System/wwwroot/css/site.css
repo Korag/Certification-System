@@ -34,6 +34,11 @@
     }
 }*/
 
+.body-image {
+    background-image: url('../Image/page-bg_10.jpg');
+    background-repeat: repeat;
+}
+
 .background-image {
     background-image: url('../Image/logo_ziad_big_transparent.png');
     background-size: 40vw 30vw;
