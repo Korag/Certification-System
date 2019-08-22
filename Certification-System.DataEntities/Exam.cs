@@ -23,7 +23,7 @@ namespace Certification_System.Entities
         public int UsersLimit { get; set; }
 
         public bool ExamDividedToTerms { get; set; }
-        public ICollection<string> AvailableExamTerms { get; set; }
+        public ICollection<string> ExamTerms { get; set; }
 
         public ICollection<string> Examiners { get; set; }
         public ICollection<string> ExamResults { get; set; }

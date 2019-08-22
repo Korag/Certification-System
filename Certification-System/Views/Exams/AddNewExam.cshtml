@@ -117,7 +117,7 @@
     @{await Html.RenderPartialAsync("_ValidationScriptsPartial");}
 
     <script>
-        var numerator = @Model.AvailableExamTerms.Count();
+        var numerator = @Model.ExamTerms.Count();
 
         $(function () {
             $('#DateOfStart').datetimepicker({

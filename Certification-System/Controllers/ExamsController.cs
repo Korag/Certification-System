@@ -32,7 +32,7 @@ namespace Certification_System.Controllers
             {
                 AvailableCourses = _context.courseRepository.GetActiveCoursesAsSelectList().ToList(),
                 AvailableExaminers = _context.userRepository.GetExaminersAsSelectList().ToList(),
-                AvailableExamTerms = new List<AddExamTermViewModel>()
+                ExamTerms = new List<AddExamTermViewModel>()
             };
 
             if (!string.IsNullOrWhiteSpace(courseIdentificator))
@@ -63,9 +63,9 @@ namespace Certification_System.Controllers
 
                 List<ExamTerm> examsTerms = new List<ExamTerm>();
 
-                if (exam.AvailableExamTerms.Count() != 0)
+                if (exam.ExamTerms.Count() != 0)
                 {
-                    foreach (var newExamTerm in newExam.AvailableExamTerms)
+                    foreach (var newExamTerm in newExam.ExamTerms)
                     {
                         ExamTerm examTerm = _mapper.Map<ExamTerm>(newExamTerm);
                         examTerm.ExamTermIdentificator = _keyGenerator.GenerateNewId();
@@ -73,7 +73,7 @@ namespace Certification_System.Controllers
                         examTerm.DurationDays = (int)newExamTerm.DateOfEnd.Subtract(newExamTerm.DateOfStart).TotalDays;
                         examTerm.DurationMinutes = (int)newExamTerm.DateOfEnd.Subtract(newExamTerm.DateOfStart).TotalMinutes;
 
-                        exam.AvailableExamTerms.Add(examTerm.ExamTermIdentificator);
+                        exam.ExamTerms.Add(examTerm.ExamTermIdentificator);
                         examsTerms.Add(examTerm);
                     }
                 }

@@ -53,6 +53,6 @@ namespace Certification_System.DTOViewModels
 
 
         [Display(Name = "Terminy")]
-        public ICollection<AddExamTermViewModel> AvailableExamTerms { get; set; }
+        public ICollection<AddExamTermViewModel> ExamTerms { get; set; }
     }
 }
