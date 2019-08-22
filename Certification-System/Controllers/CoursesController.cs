@@ -191,6 +191,7 @@ namespace Certification_System.Controllers
             }
 
             var Users = _context.userRepository.GetUsersById(Course.EnrolledUsers);
+
             List<DisplayCrucialDataWithCompaniesRoleUserViewModel> usersViewModel = _mapper.Map<List<DisplayCrucialDataWithCompaniesRoleUserViewModel>>(Users);
             usersViewModel.ForEach(z => z.CompanyRoleManager = _context.companyRepository.GetCompaniesById(z.CompanyRoleManager).Select(s => s.CompanyName).ToList());
             usersViewModel.ForEach(z => z.CompanyRoleWorker = _context.companyRepository.GetCompaniesById(z.CompanyRoleWorker).Select(s => s.CompanyName).ToList());
@@ -199,15 +200,35 @@ namespace Certification_System.Controllers
             Meetings.ToList().ForEach(z => z.Instructors.ToList().ForEach(s => InstructorsIdentificators.Add(s)));
 
             var Instructors = _context.userRepository.GetUsersById(InstructorsIdentificators.Distinct().ToList());
-
             List<DisplayCrucialDataWithContactUserViewModel> instructorsViewModel = _mapper.Map<List<DisplayCrucialDataWithContactUserViewModel>>(Instructors);
 
+            var Exams = _context.examRepository.GetExamsById(Course.Exams);
+            List<DisplayExamWithoutCourseViewModel> examsViewModel = _mapper.Map<List<DisplayExamWithoutCourseViewModel>>(Exams);
+
+            List<string> ListOfExaminatorsIdentificators = new List<string>();
+
+            foreach (var exam in Exams)
+            {
+                var ExamTermsOfExam = _context.examTermRepository.GetExamTermsById(exam.ExamTerms);
+                ExamTermsOfExam.ToList().ForEach(z => ListOfExaminatorsIdentificators.AddRange(z.Examiners));
+
+                ListOfExaminatorsIdentificators.AddRange(exam.Examiners);
+            }
+            ListOfExaminatorsIdentificators.Distinct();
+
+            var Examiners = _context.userRepository.GetUsersById(ListOfExaminatorsIdentificators);
+            List<DisplayCrucialDataWithContactUserViewModel> examinersViewModel = _mapper.Map<List<DisplayCrucialDataWithContactUserViewModel>>(Examiners);
+
             CourseDetailsViewModel courseDetails = _mapper.Map<CourseDetailsViewModel>(Course);
-            courseDetails.EnrolledUsersQuantity = Course.EnrolledUsers.Count;
             courseDetails.Branches = _context.branchRepository.GetBranchesById(Course.Branches);
+
             courseDetails.Meetings = meetingsViewModel;
+            courseDetails.Exams = examsViewModel;
+
+            courseDetails.EnrolledUsersQuantity = Course.EnrolledUsers.Count;
             courseDetails.EnrolledUsers = usersViewModel;
             courseDetails.Instructors = instructorsViewModel;
+            courseDetails.Examiners = examinersViewModel;
 
             courseDetails.DispensedGivenCertificates = _mapper.Map<DispenseGivenCertificateCheckBoxViewModel[]>(usersViewModel);
 
