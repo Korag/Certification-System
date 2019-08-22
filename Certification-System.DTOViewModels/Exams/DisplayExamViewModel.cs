@@ -29,7 +29,7 @@ namespace Certification_System.DTOViewModels
         [Display(Name = "Czas [dni]")]
         public DateTime DurationDays { get; set; }
 
-        [Display(Name = "Czas [h]")]
+        [Display(Name = "Czas [min]")]
         public DateTime DurationMinutes{ get; set; }
 
         [Display(Name = "Egzamin podzielony na tury ?")]

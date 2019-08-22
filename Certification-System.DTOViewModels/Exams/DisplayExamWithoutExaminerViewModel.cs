@@ -4,7 +4,7 @@ using System.ComponentModel.DataAnnotations;
 
 namespace Certification_System.DTOViewModels
 {
-    public class DisplayExamWithoutCourseViewModel
+    public class DisplayExamWithoutExaminerViewModel
     {
         public string ExamIdentificator { get; set; }
 
@@ -29,7 +29,7 @@ namespace Certification_System.DTOViewModels
         [Display(Name = "Czas [dni]")]
         public DateTime DurationDays { get; set; }
 
-        [Display(Name = "Czas [min]")]
+        [Display(Name = "Czas [h]")]
         public DateTime DurationMinutes{ get; set; }
 
         [Display(Name = "Egzamin podzielony na tury ?")]
@@ -41,7 +41,7 @@ namespace Certification_System.DTOViewModels
         [Display(Name = "Limit uczestników")]
         public int UsersLimit { get; set; }
 
-        [Display(Name = "Egzaminatorzy")]
-        public ICollection<DisplayCrucialDataUserViewModel> Examiners { get; set; }
+        [Display(Name = "Kurs")]
+        public DisplayCrucialDataCourseViewModel Course { get; set; }
     }
 }

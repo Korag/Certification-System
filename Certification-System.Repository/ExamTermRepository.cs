@@ -53,5 +53,13 @@ namespace Certification_System.Repository
 
             return resultListOfExamTerms;
         }
+
+        public ICollection<ExamTerm> GetExamTermsByExaminerId(string userIdentificator)
+        {
+            var filter = Builders<ExamTerm>.Filter.Where(z => z.Examiners.Contains(userIdentificator));
+            var resultListOfExamTerms = GetExamsTerms().Find<ExamTerm>(filter).ToList();
+
+            return resultListOfExamTerms;
+        }
     }
 }

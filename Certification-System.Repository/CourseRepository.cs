@@ -167,5 +167,19 @@ namespace Certification_System.Repository
 
             var result = GetCourses().UpdateOne(filter, update);
         }
+
+        public ICollection<Course> GetExaminerCourses(string userIdentificator, ICollection<Exam> exams)
+        {
+            GetCourses();
+
+            List<Course> resultListOfCourses = new List<Course>();
+
+            foreach (var exam in exams)
+            {
+                resultListOfCourses.Add(_courses.AsQueryable().ToList().Where(z => z.Exams.Contains(exam.ExamIdentificator)).FirstOrDefault());
+            }
+
+            return resultListOfCourses;
+        }
     }
 }

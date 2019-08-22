@@ -468,5 +468,65 @@ namespace Certification_System.Controllers
 
             return View(editedAccount);
         }
+
+        // GET: ExaminerDetails
+        [Authorize(Roles = "Admin")]
+        public ActionResult ExaminerDetails(string userIdentificator)
+        {
+            var User = _context.userRepository.GetUserById(userIdentificator);
+
+            var Exams = _context.examRepository.GetExamsByExaminatorId(userIdentificator);
+            var ExamsTerms = _context.examTermRepository.GetExamTermsByExaminerId(userIdentificator);
+
+            var Courses = _context.courseRepository.GetExaminerCourses(userIdentificator, Exams);
+
+            List<DisplayCourseViewModel> ListOfCourses = new List<DisplayCourseViewModel>();
+
+            if (Courses.Count != 0)
+            {
+                foreach (var course in Courses)
+                {
+                    DisplayCourseViewModel singleCourse = _mapper.Map<DisplayCourseViewModel>(course);
+                    singleCourse.Branches = _context.branchRepository.GetBranchesById(course.Branches);
+
+                    ListOfCourses.Add(singleCourse);
+                }
+            }
+
+            List<DisplayExamWithoutExaminerViewModel> ListOfExams = new List<DisplayExamWithoutExaminerViewModel>();
+
+            if (Exams.Count != 0)
+            {
+                foreach (var exam in Exams)
+                {
+                    DisplayExamWithoutExaminerViewModel singleExam = _mapper.Map<DisplayExamWithoutExaminerViewModel>(exam);
+                    singleExam.UsersQuantitiy = exam.EnrolledUsers.Count();
+                    singleExam.Course = _mapper.Map<DisplayCrucialDataCourseViewModel>(Courses.ToList().Where(z => z.Exams.Contains(exam.ExamIdentificator)));
+
+
+                    ListOfExams.Add(singleExam);
+                }
+            }
+
+            List<DisplayExamTermWithoutExaminerViewModel> ListOfExamsTerms = new List<DisplayExamTermWithoutExaminerViewModel>();
+
+            if (ExamsTerms.Count != 0)
+            {
+                foreach (var examTerm in ExamsTerms)
+                {
+                    DisplayExamTermWithoutExaminerViewModel singleExamTerm = _mapper.Map<DisplayExamTermWithoutExaminerViewModel>(examTerm);
+                    singleExamTerm.UsersQuantitiy = examTerm.EnrolledUsers.Count();
+
+                    ListOfExamsTerms.Add(singleExamTerm);
+                }
+            }
+
+            ExaminerDetailsViewModel ExaminerDetails = _mapper.Map<ExaminerDetailsViewModel>(User);
+            ExaminerDetails.Courses = ListOfCourses;
+            ExaminerDetails.Exams = ListOfExams;
+            ExaminerDetails.ExamsTerms = ListOfExamsTerms;
+
+            return View(ExaminerDetails);
+        }
     }
 }

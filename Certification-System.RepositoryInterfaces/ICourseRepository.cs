@@ -20,5 +20,6 @@ namespace Certification_System.RepositoryInterfaces
         ICollection<SelectListItem> GetActiveCoursesWithVacantSeatsAsSelectList();
         ICollection<Course> GetCoursesByMeetingsId(ICollection<string> meetingsIdentificators);
         void DeleteUsersFromCourse(string courseIdentificator, ICollection<string> usersIdentificators);
+        ICollection<Course> GetExaminerCourses(string userIdentificator, ICollection<Exam> exams);
     }
 }

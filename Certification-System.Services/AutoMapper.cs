@@ -146,6 +146,8 @@ namespace Certification_System.Services
 
             CreateMap<Exam, DisplayExamWithoutCourseViewModel>()
              .ForMember(dest => dest.Examiners, opts => opts.Ignore());
+
+            CreateMap<Exam, DisplayExamWithoutExaminerViewModel>();
             #endregion
 
             #region ExamTerms
@@ -154,6 +156,8 @@ namespace Certification_System.Services
             CreateMap<AddExamTermViewModel, Exam>()
                   .ForMember(dest => dest.Examiners, opts => opts.MapFrom(src => src.SelectedExaminers))
                   .ForMember(dest => dest.EnrolledUsers, opts => opts.MapFrom(src => new List<string>()));
+
+            CreateMap<Exam, DisplayExamTermWithoutExaminerViewModel>();
             #endregion
 
             #region ExamResults
@@ -332,11 +336,25 @@ namespace Certification_System.Services
                     .ForMember(dest => dest.UserIdentificator, opts => opts.MapFrom(src => src.Id));
 
             CreateMap<EditAccountViewModel, CertificationPlatformUser>()
-                 .ForMember(dest => dest.Id, opts => opts.Ignore());
+                    .ForMember(dest => dest.Id, opts => opts.Ignore());
 
             CreateMap<EditAccountViewModel, CertificationPlatformUser>()
-                   .ForMember(dest => dest.NormalizedUserName, opts => opts.MapFrom(src => src.Email.ToUpper()))
-                   .ForMember(dest => dest.NormalizedEmail, opts => opts.MapFrom(src => src.Email.ToUpper()));
+                    .ForMember(dest => dest.NormalizedUserName, opts => opts.MapFrom(src => src.Email.ToUpper()))
+                    .ForMember(dest => dest.NormalizedEmail, opts => opts.MapFrom(src => src.Email.ToUpper()));
+
+            CreateMap<CertificationPlatformUser, ExaminerDetailsViewModel>()
+                     .ForMember(dest => dest.UserIdentificator, opts => opts.MapFrom(src => src.Id))
+                     .ForMember(dest => dest.Courses, opts => opts.Ignore())
+                     .ForMember(dest => dest.Exams, opts => opts.Ignore())
+                     .ForMember(dest => dest.ExamsTerms, opts => opts.Ignore());
+
+
+            CreateMap<CertificationPlatformUser, InstructorExaminerDetailsViewModel>()
+                     .ForMember(dest => dest.UserIdentificator, opts => opts.MapFrom(src => src.Id))
+                     .ForMember(dest => dest.CoursesInstructor, opts => opts.Ignore())
+                     .ForMember(dest => dest.CoursesExaminer, opts => opts.Ignore())
+                     .ForMember(dest => dest.Exams, opts => opts.Ignore())
+                     .ForMember(dest => dest.ExamsTerms, opts => opts.Ignore());
             #endregion
 
             #region ViewModels to ViewModels 
