@@ -57,6 +57,18 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Certification-System.DataEn
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Certification-System.DTOViewModels", "Certification-System.DTOViewModels\Certification-System.DTOViewModels.csproj", "{5836DE2A-0609-4690-B916-E18EEFF8953C}"
 EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Materials", "Materials", "{5981EC74-AF6A-4651-8D6C-6FA3D1379930}"
+EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "EmailTemplate", "EmailTemplate", "{E8382AFE-B998-4EF1-AD6E-A96D49DA2AD9}"
+	ProjectSection(SolutionItems) = preProject
+		Materials\EmailTemplate\index.htm = Materials\EmailTemplate\index.htm
+	EndProjectSection
+EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "images", "images", "{5CC1BAFF-4E3A-4D7D-873E-FBBFC25C5F79}"
+	ProjectSection(SolutionItems) = preProject
+		Materials\EmailTemplate\images\logo_ziad_medium.jpg = Materials\EmailTemplate\images\logo_ziad_medium.jpg
+	EndProjectSection
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -123,6 +135,8 @@ Global
 		{3D5022CD-EE0B-4744-AF1E-67844D488D00} = {E0559461-6B52-4250-8A08-C45D8B7C57A1}
 		{B5592562-F731-45A6-874D-AD1988E9F206} = {E0559461-6B52-4250-8A08-C45D8B7C57A1}
 		{B28244F8-A795-4408-905D-BF6A2D4AB6E2} = {979622FD-B1F5-42C7-B8F8-324FC3070770}
+		{E8382AFE-B998-4EF1-AD6E-A96D49DA2AD9} = {5981EC74-AF6A-4651-8D6C-6FA3D1379930}
+		{5CC1BAFF-4E3A-4D7D-873E-FBBFC25C5F79} = {E8382AFE-B998-4EF1-AD6E-A96D49DA2AD9}
 	EndGlobalSection
 	GlobalSection(ExtensibilityGlobals) = postSolution
 		SolutionGuid = {3E97B8C1-13DA-4A73-82AA-0CC413C62002}
