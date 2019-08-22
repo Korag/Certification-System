@@ -3,7 +3,7 @@ using System.ComponentModel.DataAnnotations;
 
 namespace Certification_System.DTOViewModels
 {
-    public class InstructorDetailsViewModel
+    public class InstructorExaminerDetailsViewModel
     {
         public string UserIdentificator { get; set; }
 
@@ -40,10 +40,19 @@ namespace Certification_System.DTOViewModels
         [Display(Name = "Data urodzenia")]
         public string DateOfBirth { get; set; }
 
-        [Display(Name = "Kursy")]
-        public ICollection<DisplayCourseViewModel> Courses { get; set; }
+        [Display(Name = "Kursy instruktora")]
+        public ICollection<DisplayCourseViewModel> CoursesInstructor { get; set; }
+
+        [Display(Name = "Kursy egzaminatora")]
+        public ICollection<DisplayCourseViewModel> CoursesExaminer { get; set; }
 
         [Display(Name = "Kursy")]
         public ICollection<DisplayMeetingWithoutInstructorViewModel> Meetings { get; set; }
+
+        [Display(Name = "Egzaminy")]
+        public ICollection<DisplayExamWithoutExaminerViewModel> Exams { get; set; }
+
+        [Display(Name = "Tury egzaminów")]
+        public ICollection<DisplayExamTermWithoutExaminerViewModel> ExamsTerms { get; set; }
     }
 }

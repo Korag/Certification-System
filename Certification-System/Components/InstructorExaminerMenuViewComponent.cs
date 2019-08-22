@@ -2,7 +2,7 @@
 
 namespace Certification_System.Components
 {
-    public class InstructorExaminatorMenuViewComponent : ViewComponent
+    public class InstructorExaminerMenuViewComponent : ViewComponent
     {
         public IViewComponentResult Invoke()
         {
