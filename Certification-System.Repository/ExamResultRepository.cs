@@ -37,5 +37,21 @@ namespace Certification_System.Repository
         {
             GetExamsResults().InsertMany(examsResults);
         }
+
+        public ExamResult GetExamResultById(string examResultIdentificator)
+        {
+            var filter = Builders<ExamResult>.Filter.Where(z => z.ExamResultIdentificator == examResultIdentificator);
+            var resultExamResult = GetExamsResults().Find<ExamResult>(filter).FirstOrDefault();
+
+            return resultExamResult;
+        }
+
+        public ICollection<ExamResult> GetExamsResultsById(ICollection<string> examResultsIdentificators)
+        {
+            var filter = Builders<ExamResult>.Filter.Where(z => examResultsIdentificators.Contains(z.ExamResultIdentificator));
+            var resultListOfExamResults = GetExamsResults().Find<ExamResult>(filter).ToList();
+
+            return resultListOfExamResults;
+        }
     }
 }

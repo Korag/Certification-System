@@ -46,7 +46,7 @@ namespace Certification_System.Repository
             return resultExamTerm;
         }
 
-        public ICollection<ExamTerm> GetExamTermsById(ICollection<string> examsTermsIdentificators)
+        public ICollection<ExamTerm> GetExamsTermsById(ICollection<string> examsTermsIdentificators)
         {
             var filter = Builders<ExamTerm>.Filter.Where(z => examsTermsIdentificators.Contains(z.ExamTermIdentificator));
             var resultListOfExamTerms = GetExamsTerms().Find<ExamTerm>(filter).ToList();

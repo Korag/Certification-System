@@ -9,7 +9,7 @@ namespace Certification_System.RepositoryInterfaces
         void AddExamTerm(ExamTerm examTerm);
         void AddExamsTerms(ICollection<ExamTerm> examsTerms);
         ExamTerm GetExamTermById(string examTermIdentificator);
-        ICollection<ExamTerm> GetExamTermsById(ICollection<string> examsTermsIdentificators);
+        ICollection<ExamTerm> GetExamsTermsById(ICollection<string> examsTermsIdentificators);
         ICollection<ExamTerm> GetExamTermsByExaminerId(string userIdentificator);
     }
 }

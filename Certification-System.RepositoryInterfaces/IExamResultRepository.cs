@@ -8,5 +8,6 @@ namespace Certification_System.RepositoryInterfaces
         ICollection<ExamResult> GetListOfExamsResults();
         void AddExamResult(ExamResult examResult);
         void AddExamsResults(ICollection<ExamResult> examsResults);
+        ICollection<ExamResult> GetExamsResultsById(ICollection<string> examResultsIdentificators);
     }
 }

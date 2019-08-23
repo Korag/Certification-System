@@ -181,5 +181,13 @@ namespace Certification_System.Repository
 
             return resultListOfCourses;
         }
+
+        public Course GetCourseByExamId(string examIdentificator)
+        {
+            var filter = Builders<Course>.Filter.Where(x => x.Exams.Contains(examIdentificator));
+            var resultCourse = GetCourses().Find<Course>(filter).FirstOrDefault();
+
+            return resultCourse;
+        }
     }
 }
