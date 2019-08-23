@@ -156,6 +156,12 @@ namespace Certification_System.Services
                      .ForMember(dest => dest.Examiners, opts => opts.Ignore())
                      .ForMember(dest => dest.EnrolledUsers, opts => opts.Ignore())
                      .ForMember(dest => dest.UsersQuantitiy, opts => opts.MapFrom(src=> src.EnrolledUsers.Count()));
+
+            CreateMap<Exam, DisplayExamWithTermsViewModel>()
+                     .ForMember(dest => dest.Course, opts => opts.Ignore())
+                     .ForMember(dest => dest.ExamTerms, opts => opts.Ignore())
+                     .ForMember(dest => dest.Examiners, opts => opts.Ignore())
+                     .ForMember(dest => dest.UsersQuantitiy, opts => opts.MapFrom(src => src.EnrolledUsers.Count()));
             #endregion
 
             #region ExamTerms

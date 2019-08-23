@@ -77,11 +77,12 @@ namespace Certification_System.Controllers
                         examsTerms.Add(examTerm);
                     }
                 }
+                var ExamsTermsIdentificators = examsTerms.Select(z => z.ExamTermIdentificator);
 
                 _context.examRepository.AddExam(exam);
                 _context.examTermRepository.AddExamsTerms(examsTerms);
 
-                return RedirectToAction("ConfirmationOfActionOnExam", new { examIdentificator = exam.ExamIdentificator, TypeOfAction = "Add" });
+                return RedirectToAction("ConfirmationOfActionOnExam", new { examIdentificator = exam.ExamIdentificator, examsTermsIdentificators = ExamsTermsIdentificators, TypeOfAction = "Add" });
             }
 
             newExam.AvailableCourses = _context.courseRepository.GetActiveCoursesAsSelectList().ToList();
@@ -171,6 +172,44 @@ namespace Certification_System.Controllers
             ExamDetails.EnrolledUsers = ListOfUsers;
 
             return View();
+        }
+
+        // GET: ConfirmationOfActionOnExam
+        [Authorize(Roles = "Admin")]
+        public ActionResult ConfirmationOfActionOnExam(string examIdentificator, ICollection<string> examsTermsIdentificators, string TypeOfAction)
+        {
+            if (examIdentificator != null)
+            {
+                ViewBag.TypeOfAction = TypeOfAction;
+
+                var Exam = _context.examRepository.GetExamById(examIdentificator);
+                var Examiners = _context.userRepository.GetUsersById(Exam.Examiners);
+
+                var Course = _context.courseRepository.GetCourseByExamId(examIdentificator);
+
+                DisplayExamWithTermsViewModel modifiedExam = _mapper.Map<DisplayExamWithTermsViewModel>(Exam);
+
+                if (examsTermsIdentificators.Count() != 0)
+                {
+                    var ExamTerms = _context.examTermRepository.GetExamsTermsById(examsTermsIdentificators);
+                    modifiedExam.ExamTerms = _mapper.Map<List<DisplayExamTermViewModel>>(ExamTerms);
+
+                    foreach (var examTerms in ExamTerms)
+                    {
+                        List<string> ExamTermsExaminersIdentificators = new List<string>();
+                        var SingleExamTermExaminers = _context.userRepository.GetUsersById(examTerms.Examiners);
+
+                        modifiedExam.Examiners = _mapper.Map<List<DisplayCrucialDataUserViewModel>>(SingleExamTermExaminers);
+                    }
+                }
+
+                modifiedExam.Course = _mapper.Map<DisplayCrucialDataCourseViewModel>(Course);
+                modifiedExam.Examiners = _mapper.Map<List<DisplayCrucialDataUserViewModel>>(Examiners);
+
+                return View(modifiedExam);
+            }
+
+            return RedirectToAction(nameof(AddNewExam));
         }
     }
 }
