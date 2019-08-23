@@ -123,6 +123,55 @@ namespace Certification_System.Controllers
 
             return View(ListOfExams);
         }
+
+        // GET: ExamDetails
+        [Authorize(Roles = "Admin")]
+        public ActionResult ExamDetails(string examIdentificator)
+        {
+            var Exam = _context.examRepository.GetExamById(examIdentificator);
+            var ExamTerms = _context.examTermRepository.GetExamsTermsById(Exam.ExamTerms);
+            var ExamResults = _context.examResultRepository.GetExamsResultsById(Exam.ExamResults);
+
+            List<DisplayExamTermViewModel> ListOfExamTerms = _mapper.Map<List<DisplayExamTermViewModel>>(ExamTerms);
+
+            List<string> ExaminersIdentificators = Exam.Examiners.ToList();
+            List<string> UsersIdentificators = Exam.EnrolledUsers.ToList();
+
+            foreach (var examTerm in ExamTerms)
+            {
+                ExaminersIdentificators.AddRange(examTerm.Examiners);
+                UsersIdentificators.AddRange(examTerm.EnrolledUsers);
+            }
+            ExaminersIdentificators.Distinct();
+            UsersIdentificators.Distinct();
+
+            var Examiners = _context.userRepository.GetUsersById(ExaminersIdentificators);
+            List<DisplayCrucialDataWithContactUserViewModel> ListOfExaminers = Mapper.Map<List<DisplayCrucialDataWithContactUserViewModel>>(Examiners);
+
+            var Users = _context.userRepository.GetUsersById(UsersIdentificators);
+            List<DisplayUserWithExamResults> ListOfUsers = new List<DisplayUserWithExamResults>();
+
+            foreach (var user in Users)
+            {
+                var userExamResult = ExamResults.Where(z => z.User == user.Id).FirstOrDefault();
+
+                var UserWithExamResult = Mapper.Map<DisplayUserWithExamResults>(user);
+                UserWithExamResult = _mapper.Map<DisplayUserWithExamResults>(userExamResult);
+            }
+
+            var Course = _context.courseRepository.GetCourseByExamId(examIdentificator);
+            DisplayCourseViewModel courseViewModel = _mapper.Map<DisplayCourseViewModel>(Course);
+            courseViewModel.Branches = _context.branchRepository.GetBranchesById(Course.Branches);
+
+            ExamDetailsViewModel ExamDetails = _mapper.Map<ExamDetailsViewModel>(Exam);
+            ExamDetails.ExamTerms = ListOfExamTerms;
+            ExamDetails.Course = courseViewModel;
+
+            ExamDetails.Examiners = ListOfExaminers;
+            ExamDetails.EnrolledUsers = ListOfUsers;
+
+            return View();
+        }
     }
 }
 

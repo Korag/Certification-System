@@ -209,7 +209,7 @@ namespace Certification_System.Controllers
 
             foreach (var exam in Exams)
             {
-                var ExamTermsOfExam = _context.examTermRepository.GetExamTermsById(exam.ExamTerms);
+                var ExamTermsOfExam = _context.examTermRepository.GetExamsTermsById(exam.ExamTerms);
                 ExamTermsOfExam.ToList().ForEach(z => ListOfExaminatorsIdentificators.AddRange(z.Examiners));
 
                 ListOfExaminatorsIdentificators.AddRange(exam.Examiners);

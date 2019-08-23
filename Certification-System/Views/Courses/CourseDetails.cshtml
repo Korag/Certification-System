@@ -282,7 +282,7 @@ else
     @if (Model.Examiners.Count != 0)
     {
         <div class="col-12 table-responsive">
-            <table id="listInstructors" class="table table-striped table-bordered display" style="width: 100%;" role="grid">
+            <table id="listExaminers" class="table table-striped table-bordered display" style="width: 100%;" role="grid">
                 <thead>
                     <tr>
                         <th>
@@ -566,6 +566,13 @@ else
             );
 
             $('#listInstructors').DataTable({
+                "language": {
+                    "url": "//cdn.datatables.net/plug-ins/1.10.19/i18n/Polish.json"
+                },
+            }
+            );
+
+            $('#listExaminers').DataTable({
                 "language": {
                     "url": "//cdn.datatables.net/plug-ins/1.10.19/i18n/Polish.json"
                 },
