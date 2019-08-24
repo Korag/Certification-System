@@ -509,6 +509,7 @@ namespace Certification_System.Controllers
                 {
                     DisplayExamTermWithoutExaminerViewModel singleExamTerm = _mapper.Map<DisplayExamTermWithoutExaminerViewModel>(examTerm);
                     singleExamTerm.UsersQuantitiy = examTerm.EnrolledUsers.Count();
+                    singleExamTerm.Exam = _mapper.Map<DisplayCrucialDataExamViewModel>(Exams.Where(z => z.ExamDividedToTerms == true && z.ExamTerms.Contains(examTerm.ExamTermIdentificator)).FirstOrDefault());
 
                     ListOfExamsTerms.Add(singleExamTerm);
                 }

@@ -342,6 +342,18 @@ else
             <thead>
                 <tr>
                     <th>
+                        @Html.DisplayNameFor(model => model.ExamsTerms.First().Exam.ExamIndexer)
+                    </th>
+                    <th>
+                        @Html.DisplayNameFor(model => model.ExamsTerms.First().Exam.Name)
+                    </th>
+                    <th>
+                        @Html.DisplayNameFor(model => model.ExamsTerms.First().Exam.Description)
+                    </th>
+                    <th>
+                        @Html.DisplayNameFor(model => model.ExamsTerms.First().Exam.OrdinalNumber)
+                    </th>
+                    <th>
                         @Html.DisplayNameFor(model => model.ExamsTerms.First().ExamTermIndexer)
                     </th>
                     <th>
@@ -370,39 +382,51 @@ else
             <tbody>
                 @foreach (var examTerm in Model.ExamsTerms)
                 {
-                    <tr>
-                        <td>
-                            @Html.DisplayFor(modelItem => examTerm.ExamTermIndexer)
-                        </td>
-                        <td>
-                            @Html.DisplayFor(modelItem => examTerm.DateOfStart)
-                        </td>
-                        <td>
-                            @Html.DisplayFor(modelItem => examTerm.DateOfEnd)
-                        </td>
-                        <td>
-                            @Html.DisplayFor(modelItem => examTerm.DurationDays)
-                        </td>
-                        <td>
-                            @Html.DisplayFor(modelItem => examTerm.DurationMinutes)
-                        </td>
-                        <td>
-                            @Html.DisplayFor(modelItem => examTerm.UsersQuantitiy)
-                        </td>
-                        <td>
-                            @Html.DisplayFor(modelItem => examTerm.UsersLimit)
-                        </td>
-                        <td>
-                            <div class="dropdown p-0">
-                                <button class="btn btn-success dropdown-toggle" type="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">Operacje</button>
-                                <div class="dropdown-menu">
-                                    @*todo*@
-                                    @*todo*@
-                                    @*todo*@
-                                </div>
+                <tr>
+                    <td>
+                        @Html.DisplayFor(modelItem => examTerm.Exam.ExamIndexer)
+                    </td>
+                    <td>
+                        @Html.DisplayFor(modelItem => examTerm.Exam.Name)
+                    </td>
+                    <td>
+                        @Html.DisplayFor(modelItem => examTerm.Exam.Description)
+                    </td>
+                    <td>
+                        @Html.DisplayFor(modelItem => examTerm.Exam.OrdinalNumber)
+                    </td>
+                    <td>
+                        @Html.DisplayFor(modelItem => examTerm.ExamTermIndexer)
+                    </td>
+                    <td>
+                        @Html.DisplayFor(modelItem => examTerm.DateOfStart)
+                    </td>
+                    <td>
+                        @Html.DisplayFor(modelItem => examTerm.DateOfEnd)
+                    </td>
+                    <td>
+                        @Html.DisplayFor(modelItem => examTerm.DurationDays)
+                    </td>
+                    <td>
+                        @Html.DisplayFor(modelItem => examTerm.DurationMinutes)
+                    </td>
+                    <td>
+                        @Html.DisplayFor(modelItem => examTerm.UsersQuantitiy)
+                    </td>
+                    <td>
+                        @Html.DisplayFor(modelItem => examTerm.UsersLimit)
+                    </td>
+                    <td>
+                        <div class="dropdown p-0">
+                            <button class="btn btn-success dropdown-toggle" type="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">Operacje</button>
+                            <div class="dropdown-menu">
+                                @*todo*@
+                                @*todo*@
+                                @*todo*@
                             </div>
-                        </td>
-                    </tr>
+                        </div>
+                    </td>
+                </tr>
                 }
             </tbody>
         </table>

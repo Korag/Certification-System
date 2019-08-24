@@ -418,3 +418,5 @@ namespace Certification_System.Services
         }
     }
 }
+
+DisplayCrucialDataExamViewModel

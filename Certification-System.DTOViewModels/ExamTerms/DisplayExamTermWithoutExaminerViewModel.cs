@@ -1,6 +1,4 @@
-﻿using Microsoft.AspNetCore.Mvc.Rendering;
-using System;
-using System.Collections.Generic;
+﻿using System;
 using System.ComponentModel.DataAnnotations;
 
 namespace Certification_System.DTOViewModels
@@ -29,5 +27,8 @@ namespace Certification_System.DTOViewModels
 
         [Display(Name = "Limit uczestników")]
         public int UsersLimit { get; set; }
+
+        [Display(Name = "Egzamin")]
+        public DisplayCrucialDataExamViewModel Exam { get; set; }
     }
 }

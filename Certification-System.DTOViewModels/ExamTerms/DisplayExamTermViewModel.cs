@@ -8,9 +8,6 @@ namespace Certification_System.DTOViewModels
     {
         public string ExamTermIdentificator { get; set; }
 
-        [Display(Name = "Identyfikator egzaminu")]
-        public string ExamTermIndexer { get; set; }
-
         [Display(Name = "Data rozpoczęcia")]
         public DateTime DateOfStart { get; set; }
 
@@ -28,6 +25,9 @@ namespace Certification_System.DTOViewModels
 
         [Display(Name = "Limit uczestników")]
         public int UsersLimit { get; set; }
+
+        [Display(Name = "Egzamin")]
+        public DisplayCrucialDataExamViewModel Exam { get; set; }
 
         [Display(Name = "Egzaminatorzy")]
         public ICollection<DisplayCrucialDataUserViewModel> Examiners { get; set; }
