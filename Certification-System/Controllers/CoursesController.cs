@@ -369,6 +369,12 @@ namespace Certification_System.Controllers
             var Course = _context.courseRepository.GetCourseById(courseIdentificator);
             var Meetings = _context.meetingRepository.GetMeetingsById(Course.Meetings);
 
+            var Exams = _context.examRepository.GetExamsById(Course.Exams);
+
+            List<string> AllExamsResultsIdentificators = new List<string>();
+            Exams.ToList().ForEach(z => AllExamsResultsIdentificators.AddRange(z.ExamResults));
+            var AllExamsResults = _context.examResultRepository.GetExamsResultsById(AllExamsResultsIdentificators);
+
             if (Course.CourseEnded != true)
             {
                 var EnrolledUsersList = _context.userRepository.GetUsersById(Course.EnrolledUsers);
@@ -377,10 +383,8 @@ namespace Certification_System.Controllers
 
                 if (EnrolledUsersList.Count != 0)
                 {
-                    ListOfUsers = GetCourseListOfUsersWithStatistics(EnrolledUsersList, Meetings).ToList();
+                    ListOfUsers = GetCourseListOfUsersWithStatistics(EnrolledUsersList, Meetings, Exams, AllExamsResults).ToList();
                 }
-
-                // if course ended by exam - get exam result and show
 
                 DispenseGivenCertificatesViewModel courseToEndViewModel = _mapper.Map<DispenseGivenCertificatesViewModel>(Course);
                 courseToEndViewModel.AllCourseParticipants = ListOfUsers;
@@ -443,9 +447,15 @@ namespace Certification_System.Controllers
             var EnrolledUsersList = _context.userRepository.GetUsersById(Course.EnrolledUsers);
             List<DisplayUserWithCourseResultsViewModel> ListOfUsers = new List<DisplayUserWithCourseResultsViewModel>();
 
+            var Exams = _context.examRepository.GetExamsById(Course.Exams);
+
+            List<string> AllExamsResultsIdentificators = new List<string>();
+            Exams.ToList().ForEach(z => AllExamsResultsIdentificators.AddRange(z.ExamResults));
+            var AllExamsResults = _context.examResultRepository.GetExamsResultsById(AllExamsResultsIdentificators);
+
             if (EnrolledUsersList.Count != 0)
             {
-                ListOfUsers = GetCourseListOfUsersWithStatistics(EnrolledUsersList, Meetings).ToList();
+                ListOfUsers = GetCourseListOfUsersWithStatistics(EnrolledUsersList, Meetings, Exams, AllExamsResults).ToList();
             }
 
             courseToEndViewModel.AllCourseParticipants = ListOfUsers;
@@ -513,7 +523,7 @@ namespace Certification_System.Controllers
 
         #region HelpersMethod
         // GetCourseListOfUsersWithStatistics
-        private ICollection<DisplayUserWithCourseResultsViewModel> GetCourseListOfUsersWithStatistics(ICollection<CertificationPlatformUser> enrolledUsers, ICollection<Meeting> meetings)
+        private ICollection<DisplayUserWithCourseResultsViewModel> GetCourseListOfUsersWithStatistics(ICollection<CertificationPlatformUser> enrolledUsers, ICollection<Meeting> meetings, ICollection<Exam> exams, ICollection<ExamResult> examResults)
         {
             List<DisplayUserWithCourseResultsViewModel> ListOfUsers = new List<DisplayUserWithCourseResultsViewModel>();
 
@@ -521,10 +531,15 @@ namespace Certification_System.Controllers
             {
                 DisplayUserWithCourseResultsViewModel singleUser = _mapper.Map<DisplayUserWithCourseResultsViewModel>(user);
 
-                // until Exam collection will be ready
+                var UserLastExam = exams.Where(z => z.EnrolledUsers.Contains(user.Id)).OrderByDescending(z => z.OrdinalNumber).FirstOrDefault();
+                var UserResultFromLastExam = examResults.Where(z => UserLastExam.ExamResults.Contains(z.ExamResultIdentificator) && user.Id == z.User).FirstOrDefault();
 
-                //singleUser.ExamPercentResult = 
-                //singleUser.ExamAttempsQuantity = 
+                singleUser = _mapper.Map<DisplayUserWithCourseResultsViewModel>(UserResultFromLastExam);
+                singleUser.MaxAmountOfPointsToEarn = UserLastExam.MaxAmountOfPointsToEarn;
+                singleUser.ExamOrdinalNumber = UserLastExam.OrdinalNumber;
+
+                singleUser.QuantityOfMeetings = meetings.Count();
+                singleUser.QuantityOfPresenceOnMeetings = meetings.Where(z => z.AttendanceList.Contains(user.Id)).Count();
 
                 try
                 {

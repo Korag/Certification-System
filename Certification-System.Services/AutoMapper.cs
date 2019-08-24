@@ -194,7 +194,9 @@ namespace Certification_System.Services
 
             CreateMap<ExamResult, DisplayUserWithExamResults>();
 
-            CreateMap<Exam, EditExamTermViewModel>();
+            CreateMap<Exam, EditExamTermViewModel>(); //>>> ???
+
+            CreateMap<ExamResult, DisplayUserWithCourseResultsViewModel>();
             #endregion
 
             #region GivenCertificates

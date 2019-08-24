@@ -50,7 +50,7 @@
     <div class="form-group">
         <label asp-for="ExamIsRequired" class="control-label"></label>
         <div class="row pl-3">
-            <input type="checkbox" asp-for="ExamIsRequired" class="form-control col-12" data-toggle="toggle" data-on="Tak" data-off="Nie" data-size="sm" disabled/>
+            <input type="checkbox" asp-for="ExamIsRequired" class="form-control col-12" data-toggle="toggle" data-on="Tak" data-off="Nie" data-size="sm" disabled />
         </div>
     </div>
 
@@ -112,16 +112,31 @@
                             @Html.DisplayNameFor(model => model.AllCourseParticipants.First().LastName)
                         </th>
                         <th>
-                            @Html.DisplayNameFor(model => model.AllCourseParticipants.First().ExamPercentResult)
+                            @Html.DisplayNameFor(model => model.AllCourseParticipants.First().PointsEarned)
                         </th>
                         <th>
-                            @Html.DisplayNameFor(model => model.AllCourseParticipants.First().ExamAttempsQuantity)
+                            @Html.DisplayNameFor(model => model.AllCourseParticipants.First().MaxAmountOfPointsToEarn)
                         </th>
                         <th>
-                            @Html.DisplayNameFor(model => model.AllCourseParticipants.First().PercentageOfUserPresenceOnMeetings)
+                            @Html.DisplayNameFor(model => model.AllCourseParticipants.First().PercentageOfResult)
                         </th>
                         <th>
-                            Przyznać certyfikat za odbyty kurs
+                            @Html.DisplayNameFor(model => model.AllCourseParticipants.First().ExamPassed)
+                        </th>
+                        <th>
+                            @Html.DisplayNameFor(model => model.AllCourseParticipants.First().ExamOrdinalNumber)
+                        </th>
+                        <th>
+                            @Html.DisplayNameFor(model => model.AllCourseParticipants.First().QuantityOfPresenceOnMeetings)
+                        </th>
+                        <th>
+                            @Html.DisplayNameFor(model => model.AllCourseParticipants.First().QuantityOfMeetings)
+                        </th>
+                        <th>
+                            @Html.DisplayNameFor(model => model.AllCourseParticipants.First().QuantityOfMeetings)
+                        </th>
+                        <th>
+                            Przyznać certyfikat za odbyty kurs ?
                         </th>
                     </tr>
                 </thead>
@@ -140,10 +155,25 @@
                                 @Html.DisplayFor(model => model.AllCourseParticipants.ElementAt(i).LastName)
                             </td>
                             <td>
-                                @Html.DisplayFor(model => model.AllCourseParticipants.ElementAt(i).ExamPercentResult) %
+                                @Html.DisplayFor(model => model.AllCourseParticipants.ElementAt(i).PointsEarned)
                             </td>
                             <td>
-                                @Html.DisplayFor(model => model.AllCourseParticipants.ElementAt(i).ExamAttempsQuantity)
+                                @Html.DisplayFor(model => model.AllCourseParticipants.ElementAt(i).MaxAmountOfPointsToEarn)
+                            </td>
+                            <td>
+                                @Html.DisplayFor(model => model.AllCourseParticipants.ElementAt(i).PercentageOfResult) %
+                            </td>
+                            <td>
+                                @Html.DisplayFor(model => model.AllCourseParticipants.ElementAt(i).ExamPassed)
+                            </td>
+                            <td>
+                                @Html.DisplayFor(model => model.AllCourseParticipants.ElementAt(i).ExamOrdinalNumber)
+                            </td>
+                            <td>
+                                @Html.DisplayFor(model => model.AllCourseParticipants.ElementAt(i).QuantityOfPresenceOnMeetings)
+                            </td>
+                            <td>
+                                @Html.DisplayFor(model => model.AllCourseParticipants.ElementAt(i).QuantityOfMeetings)
                             </td>
                             <td>
                                 @Html.DisplayFor(model => model.AllCourseParticipants.ElementAt(i).PercentageOfUserPresenceOnMeetings) %
