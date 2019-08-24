@@ -6,6 +6,8 @@
         public string ReceiverName { get; set; }
 
         public string Subject { get; set; }
+
+        public string Header { get; set; }
         public string BodyMessage { get; set; }
     }
 }

@@ -1,7 +1,10 @@
 ﻿using Certification_System.ServicesInterfaces;
 using Certification_System.ServicesInterfaces.Models;
 using MailKit.Net.Smtp;
+using Microsoft.AspNetCore.Hosting;
 using MimeKit;
+using MimeKit.Utils;
+using System.IO;
 using System.Threading.Tasks;
 
 namespace Certification_System.Services
@@ -9,10 +12,12 @@ namespace Certification_System.Services
     public class EmailSender : IEmailSender
     {
         private IEmailConfiguration _emailConfiguration;
+        private IHostingEnvironment _environment;
 
-        public EmailSender(IEmailConfiguration emailConfiguration)
+        public EmailSender(IEmailConfiguration emailConfiguration, IHostingEnvironment environment)
         {
             _emailConfiguration = emailConfiguration;
+            _environment = environment;
         }
 
         public Task SendEmailAsync(EmailMessageDto emailMessage)
@@ -22,42 +27,38 @@ namespace Certification_System.Services
             message.To.Add(new MailboxAddress(emailMessage.ReceiverName, emailMessage.ReceiverEmailAddress));
             message.Subject = emailMessage.Subject;
 
-            message.Body = new TextPart("html")
-            {
-                Text = emailMessage.BodyMessage
-            };
+            var builder = new BodyBuilder();
 
-//            var builder = new BodyBuilder();
+            builder.TextBody = $@"
+++++++++++++++++++++
+Certification-System
+++++++++++++++++++++
 
-//            // Set the plain-text version of the message text
-//            builder.TextBody = @"Hey Alice,
+{emailMessage.Header}
+*******************************************
 
-//What are you up to this weekend? Monica is throwing one of her parties on
-//Saturday and I was hoping you could make it.
+{emailMessage.BodyMessage}
 
-//Will you be my +1?
+*******************************************
 
-//-- Joey
-//";
+______________________
+ZIAD Bielsko-Biała SA
+al. Armii Krajowej 220
+43-316 Bielsko-Biała
+";
+            var logo = builder.LinkedResources.Add(Path.Combine(_environment.WebRootPath, @"Image\logo_ziad_medium.jpg"));
+            logo.ContentId = MimeUtils.GenerateMessageId();
+     
+            string html = File.ReadAllText(Path.Combine(_environment.WebRootPath, @"resources\emailTemplate\index.htm"));
 
-//            // In order to reference selfie.jpg from the html text, we'll need to add it
-//            // to builder.LinkedResources and then use its Content-Id value in the img src.
-//            var image = builder.LinkedResources.Add(@"C:\Users\Joey\Documents\Selfies\selfie.jpg");
-//            image.ContentId = MimeUtils.GenerateMessageId();
+            builder.HtmlBody = html
+                                  .Replace("{ContentId}", logo.ContentId)
+                                  .Replace("{Header}", emailMessage.Header)
+                                  .Replace("{BodyMessage}", emailMessage.BodyMessage);
 
-//            // Set the html version of the message text
-//            builder.HtmlBody = string.Format(@"<p>Hey Alice,<br>
-//<p>What are you up to this weekend? Monica is throwing one of her parties on
-//Saturday and I was hoping you could make it.<br>
-//<p>Will you be my +1?<br>
-//<p>-- Joey<br>
-//<center><img src=""cid:{0}""></center>", image.ContentId);
+            //builder.Attachments.Add(@"C:\Users\Joey\Documents\party.ics");
 
-//            // We may also want to attach a calendar event for Monica's party...
-//            builder.Attachments.Add(@"C:\Users\Joey\Documents\party.ics");
-
-//            // Now we just need to set the message body and we're done
-//            message.Body = builder.ToMessageBody();
+            message.Body = builder.ToMessageBody();
 
             using (var client = new SmtpClient())
             {
@@ -74,7 +75,22 @@ namespace Certification_System.Services
 
             return Task.CompletedTask;
         }
+
+        public EmailMessageDto GenerateEmailMessage(string receiverEmailAddress, string receiverName, string messageType)
+        {
+            EmailMessageDto emailMessage = new EmailMessageDto
+            {
+                ReceiverName = receiverName,
+                ReceiverEmailAddress = receiverEmailAddress,
+
+                Subject = EmailMessageTypes.EmailMessageSubject[messageType],
+                Header = EmailMessageTypes.EmailMessageHeader[messageType],
+                BodyMessage = EmailMessageTypes.EmailMessageBody[messageType]
+            };
+
+            return emailMessage;
+        }
     }
 }
 
-// todo: generator of Body for different purpouses
+
