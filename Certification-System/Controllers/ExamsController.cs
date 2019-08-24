@@ -32,7 +32,7 @@ namespace Certification_System.Controllers
             {
                 AvailableCourses = _context.courseRepository.GetActiveCoursesAsSelectList().ToList(),
                 AvailableExaminers = _context.userRepository.GetExaminersAsSelectList().ToList(),
-                ExamTerms = new List<AddExamTermViewModel>()
+                ExamTerms = new List<AddExamTermWithoutExamViewModel>()
             };
 
             if (!string.IsNullOrWhiteSpace(courseIdentificator))
@@ -90,14 +90,6 @@ namespace Certification_System.Controllers
 
             return View(newExam);
         }
-
-        // GET: GetAddExamTermViewComponent
-        [Authorize(Roles = "Admin")]
-        public ActionResult GetAddExamTermViewComponent(string orderNumber)
-        {
-            return ViewComponent("AddExamTerm", new { orderNumber = orderNumber });
-        }
-
 
         // GET: DisplayAllExams
         [Authorize(Roles = "Admin")]
