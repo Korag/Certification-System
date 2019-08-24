@@ -70,5 +70,11 @@ namespace Certification_System.Repository
             var result = GetExamsTerms().ReplaceOne(filter, examTerm);
             }
         }
+
+        public void UpdateExamTerm(ExamTerm examTerm)
+        {
+            var filter = Builders<ExamTerm>.Filter.Eq(x => x.ExamTermIdentificator, examTerm.ExamTermIdentificator);
+            var result = GetExamsTerms().ReplaceOne(filter, examTerm);
+        }
     }
 }

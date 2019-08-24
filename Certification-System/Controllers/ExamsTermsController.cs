@@ -90,5 +90,55 @@ namespace Certification_System.Controllers
 
             return View(ListOfExams);
         }
+
+        // GET: EditExamTerm
+        [Authorize(Roles = "Admin")]
+        public ActionResult EditExamTerm(string examTermIdentificator)
+        {
+            var Exam = _context.examRepository.GetListOfExams().Where(z => z.ExamTerms.Contains(examTermIdentificator)).FirstOrDefault();
+            var ExamTerm = _context.examTermRepository.GetExamTermById(examTermIdentificator);
+
+            EditExamTermViewModel examTermToUpdate = _mapper.Map<EditExamTermViewModel>(ExamTerm);
+            examTermToUpdate.AvailableExaminers = _context.userRepository.GetExaminersAsSelectList().ToList();
+            examTermToUpdate.AvailableExams = _context.examRepository.GetExamsAsSelectList().ToList();
+            examTermToUpdate.SelectedExam = Exam.ExamIdentificator;
+
+            return View(examTermToUpdate);
+        }
+
+        // POST: EditExamTerm
+        [Authorize(Roles = "Admin")]
+        [HttpPost]
+        public ActionResult EditExamTerm(EditExamTermViewModel editedExamTerm)
+        {   
+            var OriginExamTerm = _context.examTermRepository.GetExamTermById(editedExamTerm.ExamTermIdentificator);
+            var OriginExam = _context.examRepository.GetListOfExams().Where(z => z.ExamTerms.Contains(editedExamTerm.ExamTermIdentificator)).FirstOrDefault();
+
+            if (ModelState.IsValid)
+            {
+                if (editedExamTerm.SelectedExam != OriginExam.ExamIdentificator)
+                {
+                    OriginExam.ExamTerms.Remove(editedExamTerm.ExamTermIdentificator);
+                    _context.examRepository.UpdateExam(OriginExam);
+
+                    var Exam = _context.examRepository.GetExamById(editedExamTerm.SelectedExam);
+                    Exam.ExamTerms.Add(editedExamTerm.ExamTermIdentificator);
+                    _context.examRepository.UpdateExam(Exam);
+                }
+
+                OriginExamTerm = _mapper.Map<EditExamTermViewModel, ExamTerm>(editedExamTerm, OriginExamTerm);
+                OriginExamTerm.DurationDays = (int)OriginExamTerm.DateOfEnd.Subtract(OriginExamTerm.DateOfStart).TotalDays;
+                OriginExamTerm.DurationMinutes = (int)OriginExamTerm.DateOfEnd.Subtract(OriginExamTerm.DateOfStart).TotalMinutes;
+
+                _context.examTermRepository.UpdateExamTerm(OriginExamTerm);
+
+                return RedirectToAction("ConfirmationOfActionOnExamTerm", "ExamsTerms", new { examTermIdentificator = editedExamTerm.ExamTermIdentificator, TypeOfAction = "Update" });
+            }
+
+            editedExamTerm.AvailableExaminers = _context.userRepository.GetExaminersAsSelectList().ToList();
+            editedExamTerm.AvailableExams = _context.examRepository.GetExamsAsSelectList().ToList();
+
+            return View(editedExamTerm);
+        }
     }
 }

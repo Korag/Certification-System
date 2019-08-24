@@ -12,5 +12,6 @@ namespace Certification_System.RepositoryInterfaces
         ICollection<ExamTerm> GetExamsTermsById(ICollection<string> examsTermsIdentificators);
         ICollection<ExamTerm> GetExamTermsByExaminerId(string userIdentificator);
         void UpdateExamsTerms(ICollection<ExamTerm> examTerms);
+        void UpdateExamTerm(ExamTerm examTerm);
     }
 }

@@ -150,6 +150,8 @@ namespace Certification_System.Services
 
             CreateMap<Exam, DisplayExamWithoutExaminerViewModel>();
 
+            CreateMap<Exam, DisplayCrucialDataExamViewModel>();
+
             CreateMap<Exam, ExamDetailsViewModel>()
                      .ForMember(dest => dest.Course, opts => opts.Ignore())
                      .ForMember(dest => dest.ExamTerms, opts => opts.Ignore())
@@ -172,33 +174,37 @@ namespace Certification_System.Services
             #endregion
 
             #region ExamTerms
-            CreateMap<Exam, AddExamTermWithoutExamViewModel>();
+            CreateMap<ExamTerm, AddExamTermWithoutExamViewModel>();
 
-            CreateMap<AddExamTermWithoutExamViewModel, Exam>()
+            CreateMap<AddExamTermWithoutExamViewModel, ExamTerm>()
                      .ForMember(dest => dest.Examiners, opts => opts.MapFrom(src => src.SelectedExaminers))
                      .ForMember(dest => dest.EnrolledUsers, opts => opts.MapFrom(src => new List<string>()));
 
-            CreateMap<AddExamTermViewModel, Exam>()
+            CreateMap<AddExamTermViewModel, ExamTerm>()
                     .ForMember(dest => dest.Examiners, opts => opts.MapFrom(src => src.SelectedExaminers))
                     .ForMember(dest => dest.EnrolledUsers, opts => opts.MapFrom(src => new List<string>()));
 
-            CreateMap<Exam, DisplayExamTermWithoutExaminerViewModel>()
+            CreateMap<ExamTerm, DisplayExamTermWithoutExaminerViewModel>()
                      .ForMember(dest => dest.UsersQuantitiy, opts => opts.MapFrom(src => src.EnrolledUsers.Count()));
 
-            CreateMap<Exam, DisplayExamTermViewModel>()
+            CreateMap<ExamTerm, DisplayExamTermViewModel>()
                     .ForMember(dest => dest.Examiners, opts => opts.Ignore())
                     .ForMember(dest => dest.UsersQuantitiy, opts => opts.MapFrom(src => src.EnrolledUsers.Count()));
 
-            CreateMap<EditExamTermViewModel, Exam>()
+            CreateMap<EditExamTermViewModel, ExamTerm>()
                     .ForMember(dest => dest.Examiners, opts => opts.MapFrom(src => src.SelectedExaminers));
+
+            CreateMap<ExamTerm, EditExamTermViewModel>()
+                    .ForMember(dest => dest.SelectedExaminers, opts => opts.MapFrom(src => src.Examiners));
+
+            CreateMap<EditExamTermViewModel, ExamTerm>()
+                   .ForMember(dest => dest.Examiners, opts => opts.MapFrom(src => src.SelectedExaminers));
             #endregion
 
             #region ExamResults
             CreateMap<ExamResult, AddExamResultViewModel>();
 
             CreateMap<ExamResult, DisplayUserWithExamResults>();
-
-            CreateMap<Exam, EditExamTermViewModel>(); //>>> ???
 
             CreateMap<ExamResult, DisplayUserWithCourseResultsViewModel>();
             #endregion
@@ -419,4 +425,3 @@ namespace Certification_System.Services
     }
 }
 
-DisplayCrucialDataExamViewModel
