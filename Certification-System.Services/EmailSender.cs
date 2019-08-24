@@ -56,6 +56,14 @@ al. Armii Krajowej 220
                                   .Replace("{Header}", emailMessage.Header)
                                   .Replace("{BodyMessage}", emailMessage.BodyMessage);
 
+            if (!string.IsNullOrWhiteSpace(emailMessage.Link))
+            {
+                builder.HtmlBody = builder.HtmlBody
+                                                 .Replace("display: none", "display: inline-block")
+                                                 .Replace("{LinkButtonValue}", emailMessage.Link)
+                                                 .Replace("{LinkButtonText}", emailMessage.LinkText);
+            };
+
             //builder.Attachments.Add(@"C:\Users\Joey\Documents\party.ics");
 
             message.Body = builder.ToMessageBody();
@@ -76,7 +84,7 @@ al. Armii Krajowej 220
             return Task.CompletedTask;
         }
 
-        public EmailMessageDto GenerateEmailMessage(string receiverEmailAddress, string receiverName, string messageType)
+        public EmailMessageDto GenerateEmailMessage(string receiverEmailAddress, string receiverName, string messageType, string link)
         {
             EmailMessageDto emailMessage = new EmailMessageDto
             {
@@ -85,7 +93,10 @@ al. Armii Krajowej 220
 
                 Subject = EmailMessageTypes.EmailMessageSubject[messageType],
                 Header = EmailMessageTypes.EmailMessageHeader[messageType],
-                BodyMessage = EmailMessageTypes.EmailMessageBody[messageType]
+                BodyMessage = EmailMessageTypes.EmailMessageBody[messageType],
+
+                Link = link,
+                LinkText = EmailMessageTypes.EmailMessageLinkText[messageType],
             };
 
             return emailMessage;

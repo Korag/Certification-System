@@ -9,5 +9,8 @@
 
         public string Header { get; set; }
         public string BodyMessage { get; set; }
+
+        public string Link { get; set; }
+        public string LinkText { get; set; }
     }
 }
