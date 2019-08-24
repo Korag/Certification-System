@@ -172,11 +172,15 @@ namespace Certification_System.Services
             #endregion
 
             #region ExamTerms
-            CreateMap<Exam, AddExamTermViewModel>();
+            CreateMap<Exam, AddExamTermWithoutExamViewModel>();
 
-            CreateMap<AddExamTermViewModel, Exam>()
+            CreateMap<AddExamTermWithoutExamViewModel, Exam>()
                      .ForMember(dest => dest.Examiners, opts => opts.MapFrom(src => src.SelectedExaminers))
                      .ForMember(dest => dest.EnrolledUsers, opts => opts.MapFrom(src => new List<string>()));
+
+            CreateMap<AddExamTermViewModel, Exam>()
+                    .ForMember(dest => dest.Examiners, opts => opts.MapFrom(src => src.SelectedExaminers))
+                    .ForMember(dest => dest.EnrolledUsers, opts => opts.MapFrom(src => new List<string>()));
 
             CreateMap<Exam, DisplayExamTermWithoutExaminerViewModel>()
                      .ForMember(dest => dest.UsersQuantitiy, opts => opts.MapFrom(src => src.EnrolledUsers.Count()));

@@ -5,14 +5,8 @@ using System.ComponentModel.DataAnnotations;
 
 namespace Certification_System.DTOViewModels
 {
-    public class AddExamTermViewModel
+    public class AddExamTermWithoutExamViewModel
     {
-        public IList<SelectListItem> AvailableExams { get; set; }
-
-        [Display(Name = "Egzaminy")]
-        [Required(ErrorMessage = "Pole \"{0}\" jest wymagane.")]
-        public string SelectedExam { get; set; }
-
         [Required(ErrorMessage = "Pole \"{0}\" jest wymagane.")]
         [DataType(DataType.Date)]
         [DisplayFormat(DataFormatString = "{0:DD/MM/YYYY}")]

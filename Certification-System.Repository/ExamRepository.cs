@@ -1,8 +1,10 @@
 ﻿using Certification_System.Entities;
 using Certification_System.Repository.Context;
 using Certification_System.RepositoryInterfaces;
+using Microsoft.AspNetCore.Mvc.Rendering;
 using MongoDB.Driver;
 using System.Collections.Generic;
+using System.Linq;
 
 namespace Certification_System.Repository
 {
@@ -61,6 +63,46 @@ namespace Certification_System.Repository
         {
             var filter = Builders<Exam>.Filter.Eq(x => x.ExamIdentificator, exam.ExamIdentificator);
             var result = GetExams().ReplaceOne(filter, exam);
+        }
+
+        public ICollection<SelectListItem> GetExamsAsSelectList()
+        {
+            var Exams = GetListOfExams();
+            List<SelectListItem> SelectList = new List<SelectListItem>();
+
+            foreach (var exam in Exams)
+            {
+                SelectList.Add
+                    (
+                        new SelectListItem()
+                        {
+                            Text = exam.ExamIndexer  + " " + exam.Name,
+                            Value = exam.ExamIdentificator
+                        }
+                    );
+            };
+
+            return SelectList;
+        }
+
+        public ICollection<SelectListItem> GetExamsWhichAreDividedToTermsAsSelectList()
+        {
+            var Exams = GetListOfExams().ToList().Where(z=> z.ExamDividedToTerms == true);
+            List<SelectListItem> SelectList = new List<SelectListItem>();
+
+            foreach (var exam in Exams)
+            {
+                SelectList.Add
+                    (
+                        new SelectListItem()
+                        {
+                            Text = exam.ExamIndexer + " " + exam.Name,
+                            Value = exam.ExamIdentificator
+                        }
+                    );
+            };
+
+            return SelectList;
         }
     }
 }
