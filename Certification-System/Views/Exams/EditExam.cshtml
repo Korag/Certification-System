@@ -1,17 +1,19 @@
-﻿@model Certification_System.DTOViewModels.AddExamViewModel
+﻿@model Certification_System.DTOViewModels.EditExamViewModel
 
 @{
-    ViewData["Title"] = "AddNewExam";
+    ViewData["Title"] = "EditExam";
     Layout = "~/Views/Shared/_Layout.cshtml";
 }
 
-<h1>Dodaj nowy egzamin</h1>
+<h1>Edytuj egzamin</h1>
 <hr />
 
 <div>
-    <form asp-action="AddNewExam">
+    <form asp-action="EditExam">
 
         <div class="col-md-8 col-xl-6 col-lg-6 col-sm-12 col-xs-10 m-auto p-3 shadow p-3 mb-5 bg-light rounded border border-primary rounded-bottom" style="opacity:0.90">
+
+            <input asp-for="ExamIdentificator" class="form-control col-12" hidden/>
 
             <div class="form-group">
                 <label asp-for="SelectedCourse" class="control-label"></label>
@@ -100,7 +102,7 @@
             <div asp-validation-summary="ModelOnly" class="row justify-content-center alert alert-danger validation-model"></div>
 
             <div class="row m-0 mt-3">
-                <input type="submit" value="Dodaj" class="btn btn-primary mt-1 xs300px_JustifyContentCenter" />
+                <input type="submit" value="Edytuj" class="btn btn-primary mt-1 xs300px_JustifyContentCenter" />
                 <a asp-action="DisplayAllGivenCertificates" asp-controller="GivenCertificates" class="btn btn-outline-info mt-1 xs300px_FloatRight">Powrót do listy</a>
             </div>
 
@@ -158,8 +160,8 @@
 
             $('#ExamTermViewComponentsContainer').append('<div id="ExamTermViewComponentsContainer'+ numerator + '"></div>');
 
-            $('#ExamTermViewComponentsContainer'+numerator).load('GetAddExamTermViewComponent?orderNumber=' + numerator)
-   
+            $('#ExamTermViewComponentsContainer'+numerator).load('GetEditExamTermViewComponent?orderNumber=' + numerator)
+
             numerator++;
         });
 
