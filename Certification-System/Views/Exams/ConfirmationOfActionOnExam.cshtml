@@ -148,9 +148,6 @@ else
             <thead>
                 <tr>
                     <th>
-                        @Html.DisplayNameFor(model => model.ExamTerms.First().ExamTermIndexer)
-                    </th>
-                    <th>
                         @Html.DisplayNameFor(model => model.ExamTerms.First().DateOfStart)
                     </th>
                     <th>
@@ -179,10 +176,7 @@ else
             <tbody>
                 @foreach (var examTerm in Model.ExamTerms)
                 {
-                    <tr>
-                        <td>
-                            @Html.DisplayFor(modelItem => examTerm.ExamTermIndexer)
-                        </td>
+                    <tr>  
                         <td>
                             @Html.DisplayFor(modelItem => examTerm.DateOfStart)
                         </td>

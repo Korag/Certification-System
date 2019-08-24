@@ -69,5 +69,26 @@ namespace Certification_System.Controllers
 
             return View(newExamTerm);
         }
+
+        // GET: DisplayAllExamsTerms
+        [Authorize(Roles = "Admin")]
+        public ActionResult DisplayAllExamsTerms()
+        {
+            var Exams = _context.examRepository.GetListOfExams();
+            var ExamsTerms = _context.examTermRepository.GetListOfExamsTerms();
+
+            List<DisplayExamTermViewModel> ListOfExams = new List<DisplayExamTermViewModel>();
+
+            foreach (var examTerm in ExamsTerms)
+            {
+                DisplayExamTermViewModel singleExamTerm = _mapper.Map<DisplayExamTermViewModel>(examTerm);
+                singleExamTerm.Examiners = _mapper.Map<List<DisplayCrucialDataUserViewModel>>(_context.userRepository.GetUsersById(examTerm.Examiners));
+                singleExamTerm.Exam = _mapper.Map<DisplayCrucialDataExamViewModel>(Exams.Where(z => z.ExamTerms.Contains(examTerm.ExamTermIdentificator)).Select(z => z.ExamIdentificator).FirstOrDefault());
+
+                ListOfExams.Add(singleExamTerm);
+            }
+
+            return View(ListOfExams);
+        }
     }
 }
