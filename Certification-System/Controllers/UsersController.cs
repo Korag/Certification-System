@@ -133,14 +133,7 @@ namespace Certification_System.Controllers
                 {
                     var callbackUrl = Url.SetUserPasswordLink(user.Id, Request.Scheme);
 
-                    EmailMessageDto emailToSend = new EmailMessageDto
-                    {
-                        ReceiverName = user.FirstName + " " + user.LastName,
-                        ReceiverEmailAddress = user.Email,
-                        Subject = "Utworzenie konta w Certification-System",
-                        BodyMessage = $"W celu utworzenia hasła do konta należy kliknąć w poniższy link: <a href='{callbackUrl}'>link</a>"
-                    };
-
+                    var emailToSend = _emailSender.GenerateEmailMessage(user.Email, user.FirstName + " " + user.LastName, "setPassword", callbackUrl);
                     _emailSender.SendEmailAsync(emailToSend);
 
                     return RedirectToAction("ConfirmationOfActionOnUser", "Users", new { userIdentificator = user.Id, TypeOfAction = "Add" });

@@ -40,7 +40,7 @@ Certification-System
 {emailMessage.BodyMessage}
 
 *******************************************
-
+{emailMessage.LinkText}: {emailMessage.Link}
 ______________________
 ZIAD Bielsko-Biała SA
 al. Armii Krajowej 220
@@ -84,7 +84,7 @@ al. Armii Krajowej 220
             return Task.CompletedTask;
         }
 
-        public EmailMessageDto GenerateEmailMessage(string receiverEmailAddress, string receiverName, string messageType, string link)
+        public EmailMessageDto GenerateEmailMessage(string receiverEmailAddress, string receiverName, string messageType, string link = null)
         {
             EmailMessageDto emailMessage = new EmailMessageDto
             {

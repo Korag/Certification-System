@@ -99,15 +99,8 @@ namespace Certification_System.Controllers
                         var code = await _userManager.GenerateEmailConfirmationTokenAsync(user);
                         var callbackUrl = Url.EmailConfirmationLink(user.Id, code, Request.Scheme);
 
-                        EmailMessageDto emailToSend = new EmailMessageDto
-                        {
-                            ReceiverName = user.FirstName + " " + user.LastName,
-                            ReceiverEmailAddress = model.Email,
-                            Subject = "Rejestracja w Certification-System",
-                            BodyMessage = $"W celu potwierdzenia adresu email należy kliknąć w poniższy link: <a href='{callbackUrl}'>link</a>"
-                        };
-
-                        await _emailSender.SendEmailAsync(emailToSend);
+                        var emailToSend = _emailSender.GenerateEmailMessage(model.Email, user.FirstName + " " + user.LastName, "emailConfirmation", callbackUrl);
+                        _emailSender.SendEmailAsync(emailToSend);
 
                         return View(model);
                     }
@@ -175,15 +168,8 @@ namespace Certification_System.Controllers
                     var code = await _userManager.GenerateEmailConfirmationTokenAsync(user);
                     var callbackUrl = Url.EmailConfirmationLink(user.Id, code, Request.Scheme);
 
-                    EmailMessageDto emailToSend = new EmailMessageDto
-                    {
-                        ReceiverName = model.FirstName + " " + model.LastName,
-                        ReceiverEmailAddress = model.Email,
-                        Subject = "Rejestracja w Certification-System",
-                        BodyMessage = $"W celu potwierdzenia adresu email należy kliknąć w poniższy link: <a href='{callbackUrl}'>link</a>"
-                    };
-
-                    await _emailSender.SendEmailAsync(emailToSend);
+                    var emailToSend = _emailSender.GenerateEmailMessage(model.Email, user.FirstName + " " + user.LastName, "register", callbackUrl);
+                    _emailSender.SendEmailAsync(emailToSend);
 
                     //await _signInManager.SignInAsync(user, isPersistent: false);
                     _logger.LogInformation("Użytkownik utworzył nowe konto.");
@@ -222,15 +208,7 @@ namespace Certification_System.Controllers
 
                 if (result.Succeeded)
                 {
-                    EmailMessageDto emailToSend = new EmailMessageDto
-                    {
-                        ReceiverName = User.FirstName + " " + User.LastName,
-                        ReceiverEmailAddress = User.Email,
-                        Subject = "Hasło Twojego konta w Certification-System zostało zmienione",
-                        BodyMessage = $"Dzień dobry, informujemy, że dokonano właśnie zmiany hasła konta powiązanego z " +
-                        $"tym adresem email. </br> W przypadku nieautoryzowanego dostępu do konta prosimy o pilny kontakt z administratorem systemu."
-                    };
-
+                    var emailToSend = _emailSender.GenerateEmailMessage(User.Email, User.FirstName + " " + User.LastName, "changePassword");
                     _emailSender.SendEmailAsync(emailToSend);
 
                     _signInManager.SignOutAsync().Wait();
@@ -335,10 +313,14 @@ namespace Certification_System.Controllers
             {
                 var user = await _userManager.FindByEmailAsync(emailModel.Email);
 
-                //todo: after creating EmailVerificationMethod
-
-                if (user == null /*|| !(await _userManager.IsEmailConfirmedAsync(user))*/)
+                if (user == null  || !(await _userManager.IsEmailConfirmedAsync(user)))
                 {
+                    // email ktoś właśnie próbował zresetować hasło do konta lecz adres email nie został jeszcze potwierdzony.
+                    // jeżeli było to działanie zaplanowane - mozesz potwierdzić swój adres email klikając w ten link, a następnie powrócić do panelu resetu hasła
+                    // W innym przypadku prosimy o zignorowanie tej wiadomości.
+                    var emailMessage = _emailSender.GenerateEmailMessage(emailModel.Email, "" , "resetPasswordWithoutEmailConfirmation");
+                    _emailSender.SendEmailAsync(emailMessage);
+
                     return RedirectToAction(nameof(ForgotPasswordConfirmation));
                 }
 
@@ -346,15 +328,8 @@ namespace Certification_System.Controllers
 
                 var callbackUrl = Url.ResetPasswordCallbackLink(user.Id, code, Request.Scheme);
 
-                EmailMessageDto emailToSend = new EmailMessageDto
-                {
-                    ReceiverName = user.FirstName + " " + user.LastName,
-                    ReceiverEmailAddress = user.Email,
-                    Subject = "Reset hasła do konta na Certification-Platform",
-                    BodyMessage = $"Zresetuj swoje hasło poprzez ten link: <a href='{callbackUrl}'>link</a>"
-                };
-
-                await _emailSender.SendEmailAsync(emailToSend);
+                var emailToSend = _emailSender.GenerateEmailMessage(user.Email, user.FirstName + " " + user.LastName, "resetPassword");
+                _emailSender.SendEmailAsync(emailToSend);
 
                 return RedirectToAction(nameof(ForgotPasswordConfirmation), new { messageNumber = 1 });
             }
