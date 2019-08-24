@@ -61,5 +61,14 @@ namespace Certification_System.Repository
 
             return resultListOfExamTerms;
         }
+
+        public void UpdateExamsTerms(ICollection<ExamTerm> examTerms)
+        {
+            foreach (var examTerm in examTerms)
+            {
+            var filter = Builders<ExamTerm>.Filter.Eq(x => x.ExamTermIdentificator, examTerm.ExamTermIdentificator);
+            var result = GetExamsTerms().ReplaceOne(filter, examTerm);
+            }
+        }
     }
 }

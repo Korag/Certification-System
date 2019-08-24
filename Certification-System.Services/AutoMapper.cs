@@ -162,6 +162,13 @@ namespace Certification_System.Services
                      .ForMember(dest => dest.ExamTerms, opts => opts.Ignore())
                      .ForMember(dest => dest.Examiners, opts => opts.Ignore())
                      .ForMember(dest => dest.UsersQuantitiy, opts => opts.MapFrom(src => src.EnrolledUsers.Count()));
+
+            CreateMap<Exam, EditExamViewModel>();
+
+            CreateMap<EditExamViewModel, Exam>()
+                    .ForMember(dest => dest.Examiners, opts => opts.MapFrom(src => src.SelectedExaminers))
+                    .ForMember(dest => dest.DurationDays, opts => opts.MapFrom(src => src.DateOfEnd.Subtract(src.DateOfStart).Days))
+                    .ForMember(dest => dest.DurationMinutes, opts => opts.MapFrom(src => src.DateOfEnd.Subtract(src.DateOfStart).Minutes));
             #endregion
 
             #region ExamTerms
@@ -177,12 +184,17 @@ namespace Certification_System.Services
             CreateMap<Exam, DisplayExamTermViewModel>()
                     .ForMember(dest => dest.Examiners, opts => opts.Ignore())
                     .ForMember(dest => dest.UsersQuantitiy, opts => opts.MapFrom(src => src.EnrolledUsers.Count()));
+
+            CreateMap<EditExamTermViewModel, Exam>()
+                    .ForMember(dest => dest.Examiners, opts => opts.MapFrom(src => src.SelectedExaminers));
             #endregion
 
             #region ExamResults
             CreateMap<ExamResult, AddExamResultViewModel>();
 
             CreateMap<ExamResult, DisplayUserWithExamResults>();
+
+            CreateMap<Exam, EditExamTermViewModel>();
             #endregion
 
             #region GivenCertificates

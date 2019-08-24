@@ -56,5 +56,11 @@ namespace Certification_System.Repository
 
             return resultListOfExams;
         }
+
+        public void UpdateExam(Exam exam)
+        {
+            var filter = Builders<Exam>.Filter.Eq(x => x.ExamIdentificator, exam.ExamIdentificator);
+            var result = GetExams().ReplaceOne(filter, exam);
+        }
     }
 }
