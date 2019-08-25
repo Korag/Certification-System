@@ -58,9 +58,9 @@ namespace Certification_System.Controllers
 
         private readonly Dictionary<int, string> _messages = new Dictionary<int, string>
          {
-           {1,"Na podany przez Ciebie email została wysłana wiadomość, która pozwoli na zresetowanie hasła do konta."},
-           {2, "Na adres email wybranego użytkownika została wysłana wiadomość pozwalająca na potwierdzenie jego adresu email"},
-           {3,"Three"}
+           {1, "Na podany przez Ciebie email została wysłana wiadomość, która pozwoli na zresetowanie hasła do konta."},
+           {2, "Na adres email wybranego użytkownika została wysłana wiadomość pozwalająca na potwierdzenie jego adresu email."},
+           {3, "Na adres email wybranego użytkownika została wysłana wiadomość pozwalająca na reset hasła do konta użytkownika."}
          };
 
 
@@ -401,6 +401,22 @@ namespace Certification_System.Controllers
             _emailSender.SendEmailAsync(emailToSend);
 
             return RedirectToAction(nameof(UniversalConfirmationPanel), "Account", new { returnUrl = returnUrl, messageNumber = 2 });
+        }
+
+        [HttpGet]
+        [Authorize(Roles = "Admin")]
+        public ActionResult ForceResetUserPassword(string userIdentificator, string returnUrl)
+        {
+            var user = _context.userRepository.GetUserById(userIdentificator);
+
+            var code =  _userManager.GeneratePasswordResetTokenAsync(user).Result;
+
+            var callbackUrl = Url.ResetPasswordCallbackLink(user.Id, code, Request.Scheme);
+
+            var emailToSend = _emailSender.GenerateEmailMessage(user.Email, user.FirstName + " " + user.LastName, "manuallySendResetPasswordMessage");
+            _emailSender.SendEmailAsync(emailToSend);
+
+            return RedirectToAction(nameof(UniversalConfirmationPanel), "Account", new { returnUrl = returnUrl, messageNumber = 3 });
         }
 
         [AllowAnonymous]
