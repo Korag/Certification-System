@@ -13,7 +13,15 @@
     <h2>Informacje o użytkowniku</h2>
 
     <div class="row m-0 mt-3 mb-3">
-        <a asp-action="EditUser" asp-route-userIdentificator="UserIdentificator" asp-controller="Users" class="btn btn-warning mt-1 xs450px_FloatLeft">Edytuj</a>
+        <a asp-action="EditUser" asp-route-userIdentificator="UserIdentificator" asp-controller="Users" class="btn btn-warning mt-1 mr-1 xs450px_FloatLeft">Edytuj</a>
+        <div class="dropdown p-0 mt-1">
+            <button class="btn btn-success dropdown-toggle" type="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">Wyślij email</button>
+            <div class="dropdown-menu">
+                <a asp-action="SendEmailConfirmationLink" asp-route-returnUrl="@($"{Context.Request.Scheme}://{Context.Request.Host}{Context.Request.Path}{Context.Request.QueryString}")" asp-route-userIdentificator="@Model.UserIdentificator" asp-controller="Account" class="btn btn-primary w-100 mb-1">Potwierdzenie adresu email</a>
+                <a asp-action="ForceResetUserPassword" asp-route-returnUrl="@($"{Context.Request.Scheme}://{Context.Request.Host}{Context.Request.Path}{Context.Request.QueryString}")" asp-route-userIdentificator="@Model.UserIdentificator" asp-controller="Account" class="btn btn-secondary w-100">Reset hasła</a>
+            </div>
+        </div>
+
         <a asp-action="DisplayAllUsers" asp-controller="Users" class="btn btn-outline-info mt-1 xs450px_FloatRight">Powrót do listy użytkowników</a>
     </div>
 

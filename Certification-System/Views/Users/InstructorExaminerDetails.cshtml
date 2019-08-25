@@ -13,7 +13,15 @@
     <h2>Informacje o użytkowniku</h2>
 
     <div class="row m-0 mt-3 mb-3">
-        <a asp-action="EditUser" asp-route-userIdentificator="UserIdentificator" asp-controller="Users" class="btn btn-primary mt-1 xs450px_FloatLeft">Edytuj</a>
+        <a asp-action="EditUser" asp-route-userIdentificator="@Model.UserIdentificator" asp-controller="Users" class="btn btn-primary mt-1 mr-1 xs450px_FloatLeft">Edytuj</a>
+        <div class="dropdown p-0 mt-1">
+            <button class="btn btn-success dropdown-toggle" type="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">Wyślij email</button>
+            <div class="dropdown-menu">
+                <a asp-action="SendEmailConfirmationLink" asp-route-returnUrl="@($"{Context.Request.Scheme}://{Context.Request.Host}{Context.Request.Path}{Context.Request.QueryString}")" asp-route-userIdentificator="@Model.UserIdentificator" asp-controller="Account" class="btn btn-primary w-100 mb-1">Potwierdzenie adresu email</a>
+                <a asp-action="ForceResetUserPassword" asp-route-returnUrl="@($"{Context.Request.Scheme}://{Context.Request.Host}{Context.Request.Path}{Context.Request.QueryString}")" asp-route-userIdentificator="@Model.UserIdentificator" asp-controller="Account" class="btn btn-secondary w-100">Reset hasła</a>
+            </div>
+        </div>
+
         <a asp-action="DisplayAllUsers" asp-controller="Users" class="btn btn-outline-info mt-1 xs450px_FloatRight">Powrót do listy użytkowników</a>
     </div>
 
@@ -514,11 +522,12 @@ else
                             <div class="dropdown p-0">
                                 <button class="btn btn-success dropdown-toggle" type="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">Operacje</button>
                                 <div class="dropdown-menu">
-                                    <a asp-action="MarkExam" asp-route-examIdentificator="@exam.ExamIdentificator" asp-controller="Exams" class="btn btn-primary w-100 mb-1">Oceń egzamin</a>
-                                    <a asp-action="AddNewExamTerm" asp-route-examIdentificator="@exam.ExamIdentificator" asp-controller="Exams" class="btn btn-secondary w-100">Dodaj termin egzaminu</a>
+                                    <a asp-action="MarkExam" asp-route-examIdentificator="@exam.ExamIdentificator" asp-controller="Exams" class="btn btn-success w-100 mb-1">Oceń egzamin</a>
+                                    <a asp-action="AddNewExamTerm" asp-route-examIdentificator="@exam.ExamIdentificator" asp-controller="Exams" class="btn btn-primary w-100">Dodaj termin egzaminu</a>
                                     <a asp-action="ExamDetails" asp-route-examIdentificator="@exam.ExamIdentificator" asp-controller="Exams" class="btn btn-info w-100 mb-1">Szczegóły nadanego certyfikatu</a>
-                                    <a asp-action="EditExam" asp-route-examIdentificator="@exam.ExamIdentificator" asp-controller="Exams" class="btn btn-warning w-100 mb-1">Szczegóły użytkownika</a>
-                                    <a asp-action="AddUsersToExam" asp-route-examIdentificator="@exam.ExamIdentificator" asp-controller="Exams" class="btn btn-light w-100">Przypisz użytkowników</a>
+                                    <a asp-action="EditExam" asp-route-examIdentificator="@exam.ExamIdentificator" asp-controller="Exams" class="btn btn-warning w-100 mb-1">Edytuj egzamin</a>
+                                    <a asp-action="AddUsersToExam" asp-route-examIdentificator="@exam.ExamIdentificator" asp-controller="Exams" class="btn btn-secondary w-100">Przypisz użytkowników</a>
+                                    <a asp-action="DeleteUsersFromExam" asp-route-examIdentificator="@exam.ExamIdentificator" asp-controller="Exams" class="btn btn-light w-100">Usuń użytkowników z tury</a>
                                 </div>
                             </div>
                         </td>
@@ -600,9 +609,11 @@ else
                             <div class="dropdown p-0">
                                 <button class="btn btn-success dropdown-toggle" type="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">Operacje</button>
                                 <div class="dropdown-menu">
-                                    @*todo*@
-                                    @*todo*@
-                                    @*todo*@
+                                    <a asp-action="EditExamTerm" asp-route-examTermIdentificator="@examTerm.ExamTermIdentificator" asp-controller="ExamsTerms" class="btn btn-warning w-100 mb-1">Edytuj</a>
+                                    <a asp-action="ExamTermDetails" asp-route-examTermIdentificator="@examTerm.ExamTermIdentificator" asp-controller="ExamsTerms" class="btn btn-info w-100 mb-1">Szczegóły</a>
+                                    <a asp-action="AddUsersToExamTerm" asp-route-examTermIdentificator="@examTerm.ExamTermIdentificator" asp-controller="ExamsTerms" class="btn btn-primary w-100 mb-1">Dodaj użytkowników do tury</a>
+                                    <a asp-action="MarkExamTerm" asp-route-examTermIdentificator="@examTerm.ExamTermIdentificator" asp-controller="ExamsTerms" class="btn btn-success w-100 mb-1">Oceń egzamin dla tury</a>
+                                    <a asp-action="DeleteUsersFromExamTerm" asp-route-examTermIdentificator="@examTerm.ExamTermIdentificator" asp-controller="ExamsTerms" class="btn btn-light w-100">Usuń użytkowników z tury</a>
                                 </div>
                             </div>
                         </td>
