@@ -58,9 +58,8 @@ namespace Certification_System.Controllers
 
         private readonly Dictionary<int, string> _messages = new Dictionary<int, string>
          {
-           {0, ""},
            {1,"Na podany przez Ciebie email została wysłana wiadomość, która pozwoli na zresetowanie hasła do konta."},
-           {2, "Two"},
+           {2, "Na adres email wybranego użytkownika została wysłana wiadomość pozwalająca na potwierdzenie jego adresu email"},
            {3,"Three"}
          };
 
@@ -315,9 +314,6 @@ namespace Certification_System.Controllers
 
                 if (user == null  || !(await _userManager.IsEmailConfirmedAsync(user)))
                 {
-                    // email ktoś właśnie próbował zresetować hasło do konta lecz adres email nie został jeszcze potwierdzony.
-                    // jeżeli było to działanie zaplanowane - mozesz potwierdzić swój adres email klikając w ten link, a następnie powrócić do panelu resetu hasła
-                    // W innym przypadku prosimy o zignorowanie tej wiadomości.
                     var emailMessage = _emailSender.GenerateEmailMessage(emailModel.Email, "" , "resetPasswordWithoutEmailConfirmation");
                     _emailSender.SendEmailAsync(emailMessage);
 
@@ -392,6 +388,29 @@ namespace Certification_System.Controllers
             return View(passwordToReset);
         }
 
+        [HttpGet]
+        [Authorize(Roles = "Admin")]
+        public ActionResult SendEmailConfirmationLink(string userIdentificator, string returnUrl)
+        {
+            var user = _context.userRepository.GetUserById(userIdentificator);
+
+            var code =  _userManager.GenerateEmailConfirmationTokenAsync(user).Result;
+            var callbackUrl = Url.EmailConfirmationLink(user.Id, code, Request.Scheme);
+
+            var emailToSend = _emailSender.GenerateEmailMessage(user.Email, user.FirstName + " " + user.LastName, "manuallySendEmailConfirmationMessage", callbackUrl);
+            _emailSender.SendEmailAsync(emailToSend);
+
+            return RedirectToAction(nameof(UniversalConfirmationPanel), "Account", new { returnUrl = returnUrl, messageNumber = 2 });
+        }
+
+        [AllowAnonymous]
+        [Authorize(Roles = "Admin")]
+        public ActionResult UniversalConfirmationPanel(string returnUrl, int messageNumber)
+        {
+            ViewBag.message = _messages[messageNumber];
+
+            return Redirect(returnUrl);
+        }
 
         #region Currently not-used
 
