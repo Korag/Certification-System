@@ -288,5 +288,13 @@ namespace Certification_System.Repository
 
             var result = GetUsers().UpdateMany(filter, update);
         }
+
+        public CertificationPlatformUser GetUserByEmail(string emailAddress)
+        {
+            var filter = Builders<CertificationPlatformUser>.Filter.Eq(x => x.Email, emailAddress);
+            var result = GetUsers().Find<CertificationPlatformUser>(filter).FirstOrDefault();
+
+            return result;
+        }
     }
 }

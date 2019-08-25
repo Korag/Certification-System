@@ -557,6 +557,25 @@ namespace Certification_System.Controllers
 
             return ListOfUsers;
         }
+
+        // GET: MyCourses
+        [Authorize(Roles = "Worker")]
+        public ActionResult MyCourses()
+        {
+            var User = _context.userRepository.GetUserByEmail(this.User.Identity.Name);
+
+            var Courses = _context.courseRepository.GetCoursesById(User.Courses);
+            List<DisplayCourseViewModel> ListOfCourses = new List<DisplayCourseViewModel>();
+
+            if (Courses.Count != 0)
+            {
+                ListOfCourses = _mapper.Map<List<DisplayCourseViewModel>>(Courses);
+                ListOfCourses.ForEach(z => z.Branches = _context.branchRepository.GetBranchesById(z.Branches));
+                ListOfCourses.ForEach(z => z.EnrolledUsersQuantity = Courses.Where(s => s.CourseIdentificator == z.CourseIdentificator).FirstOrDefault().EnrolledUsers.Count);
+            }
+
+            return View(ListOfCourses);
+        }
         #endregion
     }
 }
