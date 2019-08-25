@@ -140,5 +140,26 @@ namespace Certification_System.Controllers
 
             return View(editedExamTerm);
         }
+
+        // GET: ConfirmationOfActionOnExamTerm
+        [Authorize(Roles = "Admin")]
+        public ActionResult ConfirmationOfActionOnExamTerm(string examTermIdentificator, string TypeOfAction)
+        {
+            if (examTermIdentificator != null)
+            {
+                ViewBag.TypeOfAction = TypeOfAction;
+
+                var Exam = _context.examRepository.GetListOfExams().Where(z => z.ExamTerms.Contains(examTermIdentificator)).FirstOrDefault();
+                var ExamTerm = _context.examTermRepository.GetExamTermById(examTermIdentificator);
+
+                DisplayExamTermViewModel modifiedExamTerm = _mapper.Map<DisplayExamTermViewModel>(ExamTerm);
+                modifiedExamTerm.Exam = _mapper.Map<DisplayCrucialDataExamViewModel>(Exam);
+                modifiedExamTerm.Examiners = _mapper.Map<List<DisplayCrucialDataUserViewModel>>(_context.userRepository.GetUsersById(ExamTerm.Examiners).Select(z=> z.Id).ToList());
+
+                return View(modifiedExamTerm);
+            }
+
+            return RedirectToAction(nameof(AddNewExamTerm));
+        }
     }
 }
