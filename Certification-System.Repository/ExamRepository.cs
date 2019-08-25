@@ -104,5 +104,13 @@ namespace Certification_System.Repository
 
             return SelectList;
         }
+
+        public Exam GetExamByExamTermId(string examTermIdentificator)
+        {
+            var filter = Builders<Exam>.Filter.Where(z => z.ExamTerms.Contains(examTermIdentificator));
+            var resultExam = GetExams().Find<Exam>(filter).FirstOrDefault();
+
+            return resultExam;
+        }
     }
 }

@@ -199,6 +199,13 @@ namespace Certification_System.Services
 
             CreateMap<EditExamTermViewModel, ExamTerm>()
                    .ForMember(dest => dest.Examiners, opts => opts.MapFrom(src => src.SelectedExaminers));
+
+            CreateMap<ExamTerm, ExamTermDetailsViewModel>()
+                  .ForMember(dest => dest.UsersQuantity, opts => opts.MapFrom(src => src.EnrolledUsers.Count()))
+                  .ForMember(dest => dest.Exam, opts => opts.Ignore())
+                  .ForMember(dest => dest.Course, opts => opts.Ignore())
+                  .ForMember(dest => dest.Examiners, opts => opts.Ignore())
+                  .ForMember(dest => dest.UsersWithResults, opts => opts.Ignore());
             #endregion
 
             #region ExamResults
@@ -207,6 +214,8 @@ namespace Certification_System.Services
             CreateMap<ExamResult, DisplayUserWithExamResults>();
 
             CreateMap<ExamResult, DisplayUserWithCourseResultsViewModel>();
+
+            CreateMap<ExamResult, DisplayUserWithExamResults>();
             #endregion
 
             #region GivenCertificates

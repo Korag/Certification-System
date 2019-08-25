@@ -9,5 +9,6 @@ namespace Certification_System.RepositoryInterfaces
         void AddExamResult(ExamResult examResult);
         void AddExamsResults(ICollection<ExamResult> examsResults);
         ICollection<ExamResult> GetExamsResultsById(ICollection<string> examResultsIdentificators);
+        ICollection<ExamResult> GetExamsResultsByExamTermId(string examTermIdentificator);
     }
 }

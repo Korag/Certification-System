@@ -14,5 +14,6 @@ namespace Certification_System.RepositoryInterfaces
         void UpdateExam(Exam exam);
         ICollection<SelectListItem> GetExamsAsSelectList();
         ICollection<SelectListItem> GetExamsWhichAreDividedToTermsAsSelectList();
+        Exam GetExamByExamTermId(string examTermIdentificator);
     }
 }

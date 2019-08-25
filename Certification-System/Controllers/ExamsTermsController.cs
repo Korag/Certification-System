@@ -95,7 +95,7 @@ namespace Certification_System.Controllers
         [Authorize(Roles = "Admin")]
         public ActionResult EditExamTerm(string examTermIdentificator)
         {
-            var Exam = _context.examRepository.GetListOfExams().Where(z => z.ExamTerms.Contains(examTermIdentificator)).FirstOrDefault();
+            var Exam = _context.examRepository.GetExamByExamTermId(examTermIdentificator);
             var ExamTerm = _context.examTermRepository.GetExamTermById(examTermIdentificator);
 
             EditExamTermViewModel examTermToUpdate = _mapper.Map<EditExamTermViewModel>(ExamTerm);
@@ -110,7 +110,7 @@ namespace Certification_System.Controllers
         [Authorize(Roles = "Admin")]
         [HttpPost]
         public ActionResult EditExamTerm(EditExamTermViewModel editedExamTerm)
-        {   
+        {
             var OriginExamTerm = _context.examTermRepository.GetExamTermById(editedExamTerm.ExamTermIdentificator);
             var OriginExam = _context.examRepository.GetListOfExams().Where(z => z.ExamTerms.Contains(editedExamTerm.ExamTermIdentificator)).FirstOrDefault();
 
@@ -149,17 +149,74 @@ namespace Certification_System.Controllers
             {
                 ViewBag.TypeOfAction = TypeOfAction;
 
-                var Exam = _context.examRepository.GetListOfExams().Where(z => z.ExamTerms.Contains(examTermIdentificator)).FirstOrDefault();
+                var Exam = _context.examRepository.GetExamByExamTermId(examTermIdentificator);
                 var ExamTerm = _context.examTermRepository.GetExamTermById(examTermIdentificator);
 
                 DisplayExamTermViewModel modifiedExamTerm = _mapper.Map<DisplayExamTermViewModel>(ExamTerm);
                 modifiedExamTerm.Exam = _mapper.Map<DisplayCrucialDataExamViewModel>(Exam);
-                modifiedExamTerm.Examiners = _mapper.Map<List<DisplayCrucialDataUserViewModel>>(_context.userRepository.GetUsersById(ExamTerm.Examiners).Select(z=> z.Id).ToList());
+                modifiedExamTerm.Examiners = _mapper.Map<List<DisplayCrucialDataUserViewModel>>(_context.userRepository.GetUsersById(ExamTerm.Examiners).Select(z => z.Id).ToList());
 
                 return View(modifiedExamTerm);
             }
 
             return RedirectToAction(nameof(AddNewExamTerm));
+        }
+
+        // GET: ExamTermDetails
+        [Authorize(Roles = "Admin")]
+        public ActionResult ExamTermDetails(string examTermIdentificator)
+        {
+            var ExamTerm = _context.examTermRepository.GetExamTermById(examTermIdentificator);
+            var Exam = _context.examRepository.GetExamByExamTermId(examTermIdentificator);
+            var Examiners = _context.userRepository.GetUsersById(ExamTerm.Examiners);
+
+            var EnrolledUsers = _context.userRepository.GetUsersById(ExamTerm.EnrolledUsers);
+            var ExamTermResults = _context.examResultRepository.GetExamsResultsByExamTermId(examTermIdentificator);
+
+            var Course = _context.courseRepository.GetCourseByExamId(Exam.ExamIdentificator);
+
+            DisplayExamWithoutCourseViewModel examViewModel = _mapper.Map<DisplayExamWithoutCourseViewModel>(Exam);
+            examViewModel.Examiners = _mapper.Map<List<DisplayCrucialDataUserViewModel>>(_context.userRepository.GetUsersById(Exam.Examiners).Select(z => z.Id).ToList());
+
+            List<DisplayCrucialDataWithContactUserViewModel> examinersViewModel = _mapper.Map<List<DisplayCrucialDataWithContactUserViewModel>>(Examiners);
+
+            DisplayCourseViewModel courseViewModel = _mapper.Map<DisplayCourseViewModel>(Course);
+            courseViewModel.Branches = _context.branchRepository.GetBranchesById(Course.Branches);
+
+            List<DisplayUserWithExamResults> usersViewModel = new List<DisplayUserWithExamResults>();
+
+            bool ExamTermNotMarked = false;
+
+            if (ExamTermResults.Count() != 0)
+            {
+                ExamTermNotMarked = true;
+            }
+
+            foreach (var user in EnrolledUsers)
+            {
+                DisplayUserWithExamResults singleUser = _mapper.Map<DisplayUserWithExamResults>(EnrolledUsers);
+
+                if (!ExamTermNotMarked)
+                {
+                    ExamResult userResult = ExamTermResults.ToList().Where(z => z.User == user.Id).FirstOrDefault();
+
+                    singleUser = _mapper.Map<DisplayUserWithExamResults>(userResult);
+                }
+
+                usersViewModel.Add(singleUser);
+            }
+
+            ExamTermDetailsViewModel ExamTermDetails = _mapper.Map<ExamTermDetailsViewModel>(ExamTerm);
+            ExamTermDetails.Exam = examViewModel;
+            ExamTermDetails.Examiners = examinersViewModel;
+
+            ExamTermDetails.Course = courseViewModel;
+            ExamTermDetails.UsersWithResults = usersViewModel;
+
+            ExamTermDetails.MaxAmountOfPointsToEarn = Exam.MaxAmountOfPointsToEarn;
+            ExamTermDetails.ExamTermNotMarked = ExamTermNotMarked;
+
+            return View(ExamTermDetails);
         }
     }
 }
