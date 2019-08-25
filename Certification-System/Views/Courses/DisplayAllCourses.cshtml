@@ -22,7 +22,7 @@
 </div>
 
 <div class="col-12 table-responsive">
-    <table id="coursesList" class="table table-striped table-bordered display" style="width: 100%;" role="grid">
+    <table id="listCourses" class="table table-striped table-bordered display" style="width: 100%;" role="grid">
         <thead>
             <tr>
                 <th>
@@ -134,7 +134,7 @@
 @section Scripts{
     <script>
         $(document).ready(function () {
-            $('#coursesList').DataTable({
+            $('#listCourses').DataTable({
                 "language": {
                     "url": "//cdn.datatables.net/plug-ins/1.10.19/i18n/Polish.json"
                 },
