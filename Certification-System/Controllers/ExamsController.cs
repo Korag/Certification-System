@@ -230,20 +230,25 @@ namespace Certification_System.Controllers
 
             if (ModelState.IsValid)
             {
-                if (!editedExam.ExamDividedToTerms)
+                if (!editedExam.ExamDividedToTerms && OriginExam.ExamTerms.Count() != 0)
                 {
-                    //todo delete related ExamTerms
+                    OriginExam.ExamTerms.Clear();
+
+                    OriginExam = _mapper.Map<EditExamViewModel, Exam>(editedExam, OriginExam);
+
+                    _context.examTermRepository.DeleteExamsTerms(OriginExamTerms.Select(z=> z.ExamTermIdentificator).ToList());
+                }
+                else
+                {
+                    OriginExam = _mapper.Map<EditExamViewModel, Exam>(editedExam, OriginExam);
+                    OriginExamTerms = _mapper.Map<List<EditExamTermViewModel>, List<ExamTerm>>(editedExam.ExamTerms.ToList(), OriginExamTerms.ToList());
+
+                    OriginExam.ExamTerms = editedExam.ExamTerms.Select(z => z.ExamTermIdentificator).ToList();
+
+                    _context.examTermRepository.UpdateExamsTerms(OriginExamTerms);
                 }
 
-                OriginExam = _mapper.Map<EditExamViewModel, Exam>(editedExam, OriginExam);
-                OriginExamTerms = _mapper.Map<List<EditExamTermViewModel>, List<ExamTerm>>(editedExam.ExamTerms.ToList(), OriginExamTerms.ToList());
-
-                //todo archive ExamTerms when it is in deletion process
-
-                OriginExam.ExamTerms = editedExam.ExamTerms.Select(z => z.ExamTermIdentificator).ToList();
-
                 _context.examRepository.UpdateExam(OriginExam);
-                _context.examTermRepository.UpdateExamsTerms(OriginExamTerms);
 
                 return RedirectToAction("ConfirmationOfActionOnExam", "Exams", new { examIdentificator = editedExam.ExamIdentificator, examsTermsIdentificators = editedExam.ExamTerms.Select(z=> z.ExamTermIdentificator).ToList(), TypeOfAction = "Update" });
             }
