@@ -30,7 +30,7 @@ namespace Certification_System.Controllers
         {
             AddExamViewModel newExam = new AddExamViewModel
             {
-                AvailableCourses = _context.courseRepository.GetActiveCoursesAsSelectList().ToList(),
+                AvailableCourses = _context.courseRepository.GetActiveCoursesWhereExamIsRequiredAsSelectList().ToList(),
                 AvailableExaminers = _context.userRepository.GetExaminersAsSelectList().ToList(),
                 ExamTerms = new List<AddExamTermWithoutExamViewModel>()
             };
@@ -44,7 +44,7 @@ namespace Certification_System.Controllers
         }
 
         // POST: AddNewExam
-        [Authorize(Roles = "Admin")]
+
         [HttpPost]
         public ActionResult AddNewExam(AddExamViewModel newExam)
         {
@@ -59,7 +59,8 @@ namespace Certification_System.Controllers
 
                 exam.DurationDays = (int)exam.DateOfEnd.Subtract(exam.DateOfStart).TotalDays;
                 exam.DurationMinutes = (int)exam.DateOfEnd.Subtract(exam.DateOfStart).TotalMinutes;
-                exam.OrdinalNumber = course.Exams.Count();
+                //exam.OrdinalNumber = course.Exams.Count();
+                exam.OrdinalNumber = 1;
 
                 List<ExamTerm> examsTerms = new List<ExamTerm>();
 
@@ -76,11 +77,14 @@ namespace Certification_System.Controllers
                         exam.ExamTerms.Add(examTerm.ExamTermIdentificator);
                         examsTerms.Add(examTerm);
                     }
+
+                    _context.examTermRepository.AddExamsTerms(examsTerms);
                 }
+
                 var ExamsTermsIdentificators = examsTerms.Select(z => z.ExamTermIdentificator);
 
+                _context.courseRepository.UpdateCourse(course);
                 _context.examRepository.AddExam(exam);
-                _context.examTermRepository.AddExamsTerms(examsTerms);
 
                 return RedirectToAction("ConfirmationOfActionOnExam", new { examIdentificator = exam.ExamIdentificator, examsTermsIdentificators = ExamsTermsIdentificators, TypeOfAction = "Add" });
             }
@@ -139,7 +143,7 @@ namespace Certification_System.Controllers
             UsersIdentificators.Distinct();
 
             var Examiners = _context.userRepository.GetUsersById(ExaminersIdentificators);
-            List<DisplayCrucialDataWithContactUserViewModel> ListOfExaminers = Mapper.Map<List<DisplayCrucialDataWithContactUserViewModel>>(Examiners);
+            List<DisplayCrucialDataWithContactUserViewModel> ListOfExaminers = _mapper.Map<List<DisplayCrucialDataWithContactUserViewModel>>(Examiners);
 
             var Users = _context.userRepository.GetUsersById(UsersIdentificators);
             List<DisplayUserWithExamResults> ListOfUsers = new List<DisplayUserWithExamResults>();
@@ -150,6 +154,13 @@ namespace Certification_System.Controllers
 
                 var UserWithExamResult = Mapper.Map<DisplayUserWithExamResults>(user);
                 UserWithExamResult = _mapper.Map<DisplayUserWithExamResults>(userExamResult);
+            }
+
+            bool ExamNotMarked = false;
+
+            if (ExamResults.Count() != 0)
+            {
+                ExamNotMarked = true;
             }
 
             var Course = _context.courseRepository.GetCourseByExamId(examIdentificator);
@@ -163,7 +174,9 @@ namespace Certification_System.Controllers
             ExamDetails.Examiners = ListOfExaminers;
             ExamDetails.EnrolledUsers = ListOfUsers;
 
-            return View();
+            ExamDetails.ExamNotMarked = ExamNotMarked;
+
+            return View(ExamDetails);
         }
 
         // GET: ConfirmationOfActionOnExam
@@ -210,12 +223,16 @@ namespace Certification_System.Controllers
         {
             var Exam = _context.examRepository.GetExamById(examIdentificator);
             var ExamTerms = _context.examTermRepository.GetExamsTermsById(Exam.ExamTerms);
+            var Course = _context.courseRepository.GetCourseByExamId(Exam.ExamIdentificator);
 
             EditExamViewModel examToUpdate = _mapper.Map<EditExamViewModel>(Exam);
             examToUpdate.ExamTerms = _mapper.Map<List<EditExamTermViewModel>>(ExamTerms);
 
             examToUpdate.AvailableExaminers = _context.userRepository.GetExaminersAsSelectList().ToList();
             examToUpdate.AvailableCourses = _context.courseRepository.GetActiveCoursesAsSelectList().ToList();
+
+            examToUpdate.SelectedExaminers = _context.userRepository.GetUsersById(Exam.Examiners).Select(z => z.Id).ToList();
+            examToUpdate.SelectedCourse = Course.CourseIdentificator;
 
             return View(examToUpdate);
         }
@@ -230,17 +247,22 @@ namespace Certification_System.Controllers
 
             if (ModelState.IsValid)
             {
-                if (!editedExam.ExamDividedToTerms && OriginExam.ExamTerms.Count() != 0)
+                if (!editedExam.ExamDividedToTerms && OriginExamTerms.Count() != 0)
                 {
-                    OriginExam.ExamTerms.Clear();
-
-                    OriginExam = _mapper.Map<EditExamViewModel, Exam>(editedExam, OriginExam);
+                    OriginExam.ExamTerms.Clear();      
 
                     _context.examTermRepository.DeleteExamsTerms(OriginExamTerms.Select(z=> z.ExamTermIdentificator).ToList());
                 }
-                else
+                else if (editedExam.ExamDividedToTerms && OriginExamTerms.Count() == 0)
                 {
-                    OriginExam = _mapper.Map<EditExamViewModel, Exam>(editedExam, OriginExam);
+                    OriginExamTerms = _mapper.Map<List<EditExamTermViewModel>, List<ExamTerm>>(editedExam.ExamTerms.ToList(), OriginExamTerms.ToList());
+
+                    OriginExam.ExamTerms = editedExam.ExamTerms.Select(z => z.ExamTermIdentificator).ToList();
+
+                    _context.examTermRepository.UpdateExamsTerms(OriginExamTerms);
+                }
+                else if(editedExam.ExamDividedToTerms && OriginExamTerms.Count() != 0)
+                {
                     OriginExamTerms = _mapper.Map<List<EditExamTermViewModel>, List<ExamTerm>>(editedExam.ExamTerms.ToList(), OriginExamTerms.ToList());
 
                     OriginExam.ExamTerms = editedExam.ExamTerms.Select(z => z.ExamTermIdentificator).ToList();
@@ -248,6 +270,7 @@ namespace Certification_System.Controllers
                     _context.examTermRepository.UpdateExamsTerms(OriginExamTerms);
                 }
 
+                OriginExam = _mapper.Map<EditExamViewModel, Exam>(editedExam, OriginExam);
                 _context.examRepository.UpdateExam(OriginExam);
 
                 return RedirectToAction("ConfirmationOfActionOnExam", "Exams", new { examIdentificator = editedExam.ExamIdentificator, examsTermsIdentificators = editedExam.ExamTerms.Select(z=> z.ExamTermIdentificator).ToList(), TypeOfAction = "Update" });

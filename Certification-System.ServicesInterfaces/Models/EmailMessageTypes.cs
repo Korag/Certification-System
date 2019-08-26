@@ -14,7 +14,6 @@ namespace Certification_System.ServicesInterfaces.Models
            {"resetPasswordWithoutEmailConfirmation", "Wykryto próbę zmiany hasła do konta powiązanego z tym adresem email. Próba ta została zablokowana ze względu na brak potwierdzenia z tego adresu email. Jeżeli ta próba była autoryzowana przez Ciebie najpierw potwierdź swój email. Jeżeli nie posiadasz stosownej wiadomości na swojej skrzynce skontaktuj się z administratorem systemu."},
            {"manuallySendEmailConfirmationMessage", "Administrator systemu prosi o dokonanie potwierdzenia tego adresu email, który jest powiązany z kontem w Certification-System. Prosimy o kliknięcie w link poniżej."},
            {"manuallySendResetPasswordMessage", "Administrator systemu uruchomił procedurę resetu hasła dla Twojego konta użytkownika. W celu dokończenia procesu należy kliknąć w poniższy link."},
-
         };
 
         public static readonly Dictionary<string, string> EmailMessageHeader = new Dictionary<string, string>
@@ -27,7 +26,6 @@ namespace Certification_System.ServicesInterfaces.Models
            {"resetPasswordWithoutEmailConfirmation", "Ktoś próbował zresetować Twoje hasło"},
            {"manuallySendEmailConfirmationMessage", "Wykonano ręczną akcję wywołania procedury potwierdzenia adresu email"},
            {"manuallySendResetPasswordMessage", "Wykonano ręczną akcję wywołania procedury resetu hasła użytkownika"},
-
         };
 
         public static readonly Dictionary<string, string> EmailMessageSubject = new Dictionary<string, string>
@@ -40,7 +38,6 @@ namespace Certification_System.ServicesInterfaces.Models
            {"resetPasswordWithoutEmailConfirmation", "Próba zresetowania hasła do Twojego konta w Certification-System"},
            {"manuallySendEmailConfirmationMessage", "Potwierdzenie adresu email w Certification-System"},
            {"manuallySendResetPasswordMessage", "Reset hasła do konta w Certification-System"},
-
         };
 
         public static readonly Dictionary<string, string> EmailMessageLinkText = new Dictionary<string, string>

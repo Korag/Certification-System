@@ -112,6 +112,10 @@ textarea {
     padding: 0px 0px 0px 0px;
 }
 
+ul {
+    padding-left: 20px;
+}
+
 @media (max-width: 300px) {
     .xs300px_FloatRight {
         margin: auto;

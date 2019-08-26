@@ -60,8 +60,9 @@ namespace Certification_System.Controllers
          {
            {1, "Na podany przez Ciebie email została wysłana wiadomość, która pozwoli na zresetowanie hasła do konta."},
            {2, "Na adres email wybranego użytkownika została wysłana wiadomość pozwalająca na potwierdzenie jego adresu email."},
-           {3, "Na adres email wybranego użytkownika została wysłana wiadomość pozwalająca na reset hasła do konta użytkownika."}
-         };
+           {3, "Na adres email wybranego użytkownika została wysłana wiadomość pozwalająca na reset hasła do konta użytkownika."},
+           {4, "Użytkownik nie może zresetować swojego hasła w przypadku, gdy adres email nie został potwierdzony. Najpierw należy wysłać wiadomość weryfikacyjną adres email, a następnie tą lub po potwierdzeniu adresu użytkownik sam może skorzystać z opcji \"Zapomniałem hasła\" w panelu logowania"}
+        };
 
 
         [HttpGet]
@@ -409,11 +410,16 @@ namespace Certification_System.Controllers
         {
             var user = _context.userRepository.GetUserById(userIdentificator);
 
+            if (user == null || !(_userManager.IsEmailConfirmedAsync(user).Result))
+            {
+                return RedirectToAction(nameof(UniversalConfirmationPanel), "Account", new { returnUrl = returnUrl, messageNumber = 4 });
+            }
+
             var code =  _userManager.GeneratePasswordResetTokenAsync(user).Result;
 
             var callbackUrl = Url.ResetPasswordCallbackLink(user.Id, code, Request.Scheme);
 
-            var emailToSend = _emailSender.GenerateEmailMessage(user.Email, user.FirstName + " " + user.LastName, "manuallySendResetPasswordMessage");
+            var emailToSend = _emailSender.GenerateEmailMessage(user.Email, user.FirstName + " " + user.LastName, "manuallySendResetPasswordMessage", callbackUrl);
             _emailSender.SendEmailAsync(emailToSend);
 
             return RedirectToAction(nameof(UniversalConfirmationPanel), "Account", new { returnUrl = returnUrl, messageNumber = 3 });
@@ -425,7 +431,7 @@ namespace Certification_System.Controllers
         {
             ViewBag.message = _messages[messageNumber];
 
-            return Redirect(returnUrl);
+            return View((object)returnUrl);
         }
 
         #region Currently not-used

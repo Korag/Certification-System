@@ -27,13 +27,16 @@ namespace Certification_System.DTOViewModels
         public DateTime DateOfEnd { get; set; }
 
         [Display(Name = "Czas [dni]")]
-        public DateTime DurationDays { get; set; }
+        public int DurationDays { get; set; }
 
         [Display(Name = "Czas [min]")]
-        public DateTime DurationMinutes{ get; set; }
+        public int DurationMinutes { get; set; }
 
         [Display(Name = "Egzamin podzielony na tury ?")]
         public bool ExamDividedToTerms { get; set; }
+
+        [Display(Name = "Egzamin nie oceniony")]
+        public bool ExamNotMarked { get; set; }
 
         [Display(Name = "Maksymalna liczba punktów")]
         public int MaxAmountOfPointsToEarn { get; set; }

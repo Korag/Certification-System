@@ -14,11 +14,11 @@
 <div class="row m-0 mt-3 mb-3">
     <a asp-action="EditExam" asp-route-examIdentificator="@Model.ExamIdentificator" asp-controller="Exams" class="btn btn-warning mt-1 mr-1 xs450px_FloatLeft">Edytuj</a>
 
-       @if (Model.ExamDividedToTerms == false)
-        {
-            <a asp-action="AddUsersToExam" asp-route-examIdentificator="@Model.ExamIdentificator" asp-controller="Exams" class="btn btn-secondary mt-1 mr-1 xs450px_FloatLeft">Dodaj użytkowników do kursu</a>
-        }
-  
+    @if (Model.ExamDividedToTerms == false)
+    {
+        <a asp-action="AddUsersToExam" asp-route-examIdentificator="@Model.ExamIdentificator" asp-controller="Exams" class="btn btn-secondary mt-1 mr-1 xs450px_FloatLeft">Dodaj użytkowników do kursu</a>
+    }
+
     <a asp-action="DisplayAllExams" asp-controller="Exams" class="btn btn-outline-info mt-1 xs450px_FloatRight">Powrót do listy egzaminów</a>
 </div>
 
@@ -270,7 +270,7 @@
                     </tr>
                 }
             </tbody>
-        </table> 
+        </table>
     </div>
 }
 
@@ -370,32 +370,47 @@ else
             <tbody>
                 @foreach (var user in Model.EnrolledUsers)
                 {
-                <tr>
-                    <td>
-                        @Html.DisplayFor(modelItem => user.Email)
-                    </td>
-                    <td>
-                        @Html.DisplayFor(modelItem => user.FirstName)
-                    </td>
-                    <td>
-                        @Html.DisplayFor(modelItem => user.LastName)
-                    </td>
-                    <td>
-                        @Html.DisplayFor(modelItem => user.PointsEarned)
-                    </td>
-                    <td>
-                        @Html.DisplayFor(modelItem => Model.MaxAmountOfPointsToEarn)
-                    </td>
-                    <td>
-                        @Html.DisplayFor(modelItem => user.PercentageOfResult)
-                    </td>
-                    <td>
-                        <input type="checkbox" asp-for="@user.ExamPassed" data-toggle="toggle" data-on="Tak" data-off="Nie" data-size="sm" disabled />
-                    </td>
-                    <td>
-                        <a asp-action="UserDetails" asp-route-userIdentificator="@user.UserIdentificator" asp-controller="Users" class="btn btn-info">Szczegóły użytkownika</a>
-                    </td>
-                </tr>
+                    <tr>
+                        <td>
+                            @Html.DisplayFor(modelItem => user.Email)
+                        </td>
+                        <td>
+                            @Html.DisplayFor(modelItem => user.FirstName)
+                        </td>
+                        <td>
+                            @Html.DisplayFor(modelItem => user.LastName)
+                        </td>
+                        @if (!Model.ExamNotMarked)
+                        {
+                            <td>
+                                @Html.DisplayFor(modelItem => user.PointsEarned)
+                            </td>
+                            <td>
+                                @Html.DisplayFor(modelItem => Model.MaxAmountOfPointsToEarn)
+                            </td>
+                            <td>
+                                @Html.DisplayFor(modelItem => user.PercentageOfResult)
+                            </td>
+                        }
+                        else
+                        {
+                            <td>
+                                Jeszcze nie został oceniony
+                            </td>
+                            <td>
+                                Jeszcze nie został oceniony
+                            </td>
+                            <td>
+                                Jeszcze nie został oceniony
+                            </td>
+                        }
+                        <td>
+                            <input type="checkbox" asp-for="@user.ExamPassed" data-toggle="toggle" data-on="Tak" data-off="Nie" data-size="sm" disabled />
+                        </td>
+                        <td>
+                            <a asp-action="UserDetails" asp-route-userIdentificator="@user.UserIdentificator" asp-controller="Users" class="btn btn-info">Szczegóły użytkownika</a>
+                        </td>
+                    </tr>
                 }
             </tbody>
         </table>
@@ -403,7 +418,7 @@ else
 }
 else
 {
-    <div class="mt-4 mb-4 alert alert-warning">Brak ocenionych użytkowników</div>
+    <div class="mt-4 mb-4 alert alert-warning">Brak zapisanych użytkowników</div>
 }
 
 @section Scripts {

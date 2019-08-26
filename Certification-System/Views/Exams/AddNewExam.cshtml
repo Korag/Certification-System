@@ -34,6 +34,26 @@
             </div>
 
             <div class="form-group">
+                <label asp-for="Name" class="control-label"></label>
+                <div>
+                    <input asp-for="Name" class="form-control col-12" />
+                    <div class="row justify-content-center">
+                        <span asp-validation-for="Name" class="text-danger"></span>
+                    </div>
+                </div>
+            </div>
+
+            <div class="form-group">
+                <label asp-for="Description" class="control-label"></label>
+                <div>
+                    <textarea asp-for="Description" class="form-control col-12" style="width:100%; min-width:100%;"></textarea>
+                    <div class="row justify-content-center">
+                        <span asp-validation-for="Description" class="text-danger"></span>
+                    </div>
+                </div>
+            </div>
+
+            <div class="form-group">
                 <label asp-for="DateOfStart" class="control-label"></label>
                 <div>
                     <div class='input-group date' id='DateOfStart'>
@@ -66,7 +86,7 @@
             <div class="form-group">
                 <label asp-for="UsersLimit" class="control-label"></label>
                 <div>
-                    <input asp-for="UsersLimit" class="form-control col-12" />
+                    <input asp-for="UsersLimit" class="form-control col-12" min="1" value="1" />
                     <div class="row justify-content-center">
                         <span asp-validation-for="UsersLimit" class="text-danger"></span>
                     </div>
@@ -117,7 +137,8 @@
     @{await Html.RenderPartialAsync("_ValidationScriptsPartial");}
 
     <script>
-        var numerator = @Model.ExamTerms.Count();
+        var numerator = 0;
+
 
         $(function () {
             $('#DateOfStart').datetimepicker({
@@ -158,7 +179,7 @@
 
             $('#ExamTermViewComponentsContainer').append('<div id="ExamTermViewComponentsContainer'+ numerator + '"></div>');
 
-            $('#ExamTermViewComponentsContainer'+numerator).load('GetAddExamTermViewComponent?orderNumber=' + numerator)
+            $('#ExamTermViewComponentsContainer'+numerator).load('\GetAddExamTermViewComponent?orderNumber=' + numerator)
    
             numerator++;
         });

@@ -22,5 +22,6 @@ namespace Certification_System.RepositoryInterfaces
         void DeleteUsersFromCourse(string courseIdentificator, ICollection<string> usersIdentificators);
         ICollection<Course> GetExaminerCourses(string userIdentificator, ICollection<Exam> exams);
         Course GetCourseByExamId(string examIdentificator);
+        ICollection<SelectListItem> GetActiveCoursesWhereExamIsRequiredAsSelectList();
     }
 }

@@ -77,6 +77,26 @@ namespace Certification_System.Repository
             return SelectList;
         }
 
+        public ICollection<SelectListItem> GetActiveCoursesWhereExamIsRequiredAsSelectList()
+        {
+            List<Course> Courses = GetActiveCourses().ToList().Where(z=> z.ExamIsRequired == true).ToList();
+            List<SelectListItem> SelectList = new List<SelectListItem>();
+
+            foreach (var course in Courses)
+            {
+                SelectList.Add
+                    (
+                        new SelectListItem()
+                        {
+                            Text = course.CourseIndexer + " " + course.Name,
+                            Value = course.CourseIdentificator
+                        }
+                    );
+            };
+
+            return SelectList;
+        }
+
         public ICollection<SelectListItem> GetActiveCoursesWithVacantSeatsAsSelectList()
         {
             List<Course> Courses = GetActiveCourses().ToList();
