@@ -583,7 +583,7 @@ namespace Certification_System.Controllers
                 {
                     DisplayExamWithoutExaminerViewModel singleExam = _mapper.Map<DisplayExamWithoutExaminerViewModel>(exam);
                     singleExam.UsersQuantitiy = exam.EnrolledUsers.Count();
-                    singleExam.Course = _mapper.Map<DisplayCrucialDataCourseViewModel>(CoursesExaminer.ToList().Where(z => z.Exams.Contains(exam.ExamIdentificator)));
+                    singleExam.Course = _mapper.Map<DisplayCrucialDataCourseViewModel>(CoursesExaminer.ToList().Where(z => z.Exams.Contains(exam.ExamIdentificator)).FirstOrDefault());
 
 
                     ListOfExams.Add(singleExam);

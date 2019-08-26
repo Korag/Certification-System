@@ -79,7 +79,7 @@ namespace Certification_System.Repository
 
         public ICollection<SelectListItem> GetActiveCoursesWhereExamIsRequiredAsSelectList()
         {
-            List<Course> Courses = GetActiveCourses().ToList().Where(z=> z.ExamIsRequired == true).ToList();
+            List<Course> Courses = GetActiveCourses().ToList().Where(z => z.ExamIsRequired == true).ToList();
             List<SelectListItem> SelectList = new List<SelectListItem>();
 
             foreach (var course in Courses)
@@ -196,7 +196,12 @@ namespace Certification_System.Repository
 
             foreach (var exam in exams)
             {
-                resultListOfCourses.Add(_courses.AsQueryable().ToList().Where(z => z.Exams.Contains(exam.ExamIdentificator)).FirstOrDefault());
+                var Course = _courses.AsQueryable().ToList().Where(z => z.Exams.Contains(exam.ExamIdentificator)).FirstOrDefault();
+
+                if (resultListOfCourses.Contains(Course))
+                {
+                    resultListOfCourses.Add(Course);
+                }
             }
 
             return resultListOfCourses;
