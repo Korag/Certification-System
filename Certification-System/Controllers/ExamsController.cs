@@ -247,27 +247,35 @@ namespace Certification_System.Controllers
 
             if (ModelState.IsValid)
             {
-                if (!editedExam.ExamDividedToTerms && OriginExamTerms.Count() != 0)
+                if (!editedExam.ExamDividedToTerms)
                 {
                     OriginExam.ExamTerms.Clear();      
 
                     _context.examTermRepository.DeleteExamsTerms(OriginExamTerms.Select(z=> z.ExamTermIdentificator).ToList());
                 }
-                else if (editedExam.ExamDividedToTerms && OriginExamTerms.Count() == 0)
+                else if (editedExam.ExamDividedToTerms)
                 {
                     OriginExamTerms = _mapper.Map<List<EditExamTermViewModel>, List<ExamTerm>>(editedExam.ExamTerms.ToList(), OriginExamTerms.ToList());
 
                     OriginExam.ExamTerms = editedExam.ExamTerms.Select(z => z.ExamTermIdentificator).ToList();
 
                     _context.examTermRepository.UpdateExamsTerms(OriginExamTerms);
-                }
-                else if(editedExam.ExamDividedToTerms && OriginExamTerms.Count() != 0)
-                {
-                    OriginExamTerms = _mapper.Map<List<EditExamTermViewModel>, List<ExamTerm>>(editedExam.ExamTerms.ToList(), OriginExamTerms.ToList());
 
-                    OriginExam.ExamTerms = editedExam.ExamTerms.Select(z => z.ExamTermIdentificator).ToList();
+                    List<string> NewExamTermsIdentificators = new List<string>();
 
-                    _context.examTermRepository.UpdateExamsTerms(OriginExamTerms);
+                    if (editedExam.ExamTerms.Count() != OriginExamTerms.Count())
+                    {
+                        for (int i = OriginExamTerms.Count(); i < editedExam.ExamTerms.Count(); i++)
+                        {
+                            ExamTerm singleExamTerm = _mapper.Map<ExamTerm>(editedExam.ExamTerms.ElementAt(i));
+                            singleExamTerm.ExamTermIdentificator = _keyGenerator.GenerateNewId();
+
+                            NewExamTermsIdentificators.Add(singleExamTerm.ExamTermIdentificator);
+
+                            _context.examTermRepository.AddExamTerm(singleExamTerm);
+                        }
+                    }
+                    OriginExam.ExamTerms.ToList().AddRange(NewExamTermsIdentificators);
                 }
 
                 OriginExam = _mapper.Map<EditExamViewModel, Exam>(editedExam, OriginExam);

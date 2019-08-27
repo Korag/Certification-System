@@ -36,7 +36,7 @@ namespace Certification_System.Controllers
                 AvailableExams = _context.examRepository.GetExamsWhichAreDividedToTermsAsSelectList().ToList()
             };
 
-            if (string.IsNullOrWhiteSpace(examIdentificator))
+            if (!string.IsNullOrWhiteSpace(examIdentificator))
             {
                 newExamTerm.SelectedExam = examIdentificator;
             }
