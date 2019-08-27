@@ -67,11 +67,12 @@ namespace Certification_System.Services
             CreateMap<Course, DisplayCrucialDataCourseViewModel>();
 
             CreateMap<Course, CourseDetailsViewModel>()
-                     .ForMember(dest => dest.Meetings, opts => opts.MapFrom(src => new List<string>()))
-                     .ForMember(dest => dest.EnrolledUsers, opts => opts.Ignore());
+                     .ForMember(dest => dest.Meetings, opts => opts.Ignore())
+                     .ForMember(dest => dest.EnrolledUsers, opts => opts.Ignore())
+                     .ForMember(dest => dest.Exams, opts => opts.Ignore());
 
             CreateMap<Course, DisplayCourseWithMeetingsViewModel>()
-                     .ForMember(dest => dest.Meetings, opts => opts.MapFrom(src => new List<string>()));
+                     .ForMember(dest => dest.Meetings, opts => opts.Ignore());
 
             CreateMap<AddCourseViewModel, Course>()
                      .ForMember(dest => dest.CourseIdentificator, opts => opts.Ignore())

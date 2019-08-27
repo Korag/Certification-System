@@ -203,7 +203,15 @@ namespace Certification_System.Controllers
             List<DisplayCrucialDataWithContactUserViewModel> instructorsViewModel = _mapper.Map<List<DisplayCrucialDataWithContactUserViewModel>>(Instructors);
 
             var Exams = _context.examRepository.GetExamsById(Course.Exams);
-            List<DisplayExamWithoutCourseViewModel> examsViewModel = _mapper.Map<List<DisplayExamWithoutCourseViewModel>>(Exams);
+            List<DisplayExamWithoutCourseViewModel> examsViewModel = new List<DisplayExamWithoutCourseViewModel>();
+
+            foreach (var exam in Exams)
+            {
+                DisplayExamWithoutCourseViewModel singleExam = _mapper.Map<DisplayExamWithoutCourseViewModel>(exam);
+                singleExam.Examiners = _mapper.Map<List<DisplayCrucialDataUserViewModel>>(_context.userRepository.GetUsersById(exam.Examiners));
+
+                examsViewModel.Add(singleExam);
+            }
 
             List<string> ListOfExaminatorsIdentificators = new List<string>();
 
@@ -238,13 +246,13 @@ namespace Certification_System.Controllers
                 {
                     var UsersGivenCertificates = _context.givenCertificateRepository.GetGivenCertificatesById(user.GivenCertificates);
 
-                    if (UsersGivenCertificates.Where(z => z.Course == Course.CourseIdentificator).Count()!= 0)
+                    if (UsersGivenCertificates.Where(z => z.Course == Course.CourseIdentificator).Count() != 0)
                     {
                         courseDetails.DispensedGivenCertificates.Where(z => z.UserIdentificator == user.Id).Select(z => z.GivenCertificateIsEarned = true);
                     }
-                 }
+                }
             }
-      
+
             return View(courseDetails);
         }
 
@@ -345,7 +353,7 @@ namespace Certification_System.Controllers
                         _context.courseRepository.AddEnrolledUsersToCourse(usersAssignedToCourse.SelectedCourse, usersAssignedToCourse.SelectedUsers);
 
                         return RedirectToAction("CourseDetails", new { courseIdentificator = usersAssignedToCourse.SelectedCourse, message = "Zapisano nowych użytkowników na kurs" });
-                        }
+                    }
                 }
                 else
                 {
@@ -422,7 +430,7 @@ namespace Certification_System.Controllers
                     {
                         GivenCertificate singleGivenCertificate = new GivenCertificate
                         {
-                            GivenCertificateIdentificator = _keyGenerator.GenerateNewGuid(),
+                            GivenCertificateIdentificator = _keyGenerator.GenerateNewId(),
                             //GivenCertificateIndexer = from generator
                             GivenCertificateIndexer = "AAAAAAAAAA",
 
@@ -442,6 +450,8 @@ namespace Certification_System.Controllers
                         _context.userRepository.UpdateUser(User);
                     }
                 }
+
+                return RedirectToAction("CourseDetails", new { courseIdentificator = courseToEndViewModel.CourseIdentificator, message = "Zaknięto kurs i rozdano certyfikaty." });
             }
 
             var EnrolledUsersList = _context.userRepository.GetUsersById(Course.EnrolledUsers);
@@ -469,7 +479,7 @@ namespace Certification_System.Controllers
         public ActionResult DeleteUsersFromCourse(string courseIdentificator)
         {
             var Course = _context.courseRepository.GetCourseById(courseIdentificator);
-         
+
             if (Course.CourseEnded != true)
             {
                 var EnrolledUsersList = _context.userRepository.GetUsersById(Course.EnrolledUsers);
@@ -521,43 +531,6 @@ namespace Certification_System.Controllers
             return RedirectToAction("DeleteUsersFromCourse", new { courseIdentificator = deleteUsersFromCourseViewModel.CourseIdentificator });
         }
 
-        #region HelpersMethod
-        // GetCourseListOfUsersWithStatistics
-        private ICollection<DisplayUserWithCourseResultsViewModel> GetCourseListOfUsersWithStatistics(ICollection<CertificationPlatformUser> enrolledUsers, ICollection<Meeting> meetings, ICollection<Exam> exams, ICollection<ExamResult> examResults)
-        {
-            List<DisplayUserWithCourseResultsViewModel> ListOfUsers = new List<DisplayUserWithCourseResultsViewModel>();
-
-            foreach (var user in enrolledUsers)
-            {
-                DisplayUserWithCourseResultsViewModel singleUser = _mapper.Map<DisplayUserWithCourseResultsViewModel>(user);
-
-                var UserLastExam = exams.Where(z => z.EnrolledUsers.Contains(user.Id)).OrderByDescending(z => z.OrdinalNumber).FirstOrDefault();
-                var UserResultFromLastExam = examResults.Where(z => UserLastExam.ExamResults.Contains(z.ExamResultIdentificator) && user.Id == z.User).FirstOrDefault();
-
-                singleUser = _mapper.Map<DisplayUserWithCourseResultsViewModel>(UserResultFromLastExam);
-                singleUser.MaxAmountOfPointsToEarn = UserLastExam.MaxAmountOfPointsToEarn;
-                singleUser.ExamOrdinalNumber = UserLastExam.OrdinalNumber;
-
-                singleUser.QuantityOfMeetings = meetings.Count();
-                singleUser.QuantityOfPresenceOnMeetings = meetings.Where(z => z.AttendanceList.Contains(user.Id)).Count();
-
-                try
-                {
-                    double UserPresencePercentage = ((meetings.Where(z => z.AttendanceList.Contains(singleUser.UserIdentificator)).Count() / meetings.Count()) * 100);
-                    UserPresencePercentage = Math.Round(UserPresencePercentage, 2);
-                    singleUser.PercentageOfUserPresenceOnMeetings = UserPresencePercentage;
-                }
-                catch (Exception e)
-                {
-                    singleUser.PercentageOfUserPresenceOnMeetings = 0.00;
-                }
-
-                ListOfUsers.Add(singleUser);
-            }
-
-            return ListOfUsers;
-        }
-
         // GET: MyCourses
         [Authorize(Roles = "Worker")]
         public ActionResult MyCourses()
@@ -575,6 +548,45 @@ namespace Certification_System.Controllers
             }
 
             return View(ListOfCourses);
+        }
+
+        #region HelpersMethod
+        // GetCourseListOfUsersWithStatistics
+        private ICollection<DisplayUserWithCourseResultsViewModel> GetCourseListOfUsersWithStatistics(ICollection<CertificationPlatformUser> enrolledUsers, ICollection<Meeting> meetings, ICollection<Exam> exams, ICollection<ExamResult> examResults)
+        {
+            List<DisplayUserWithCourseResultsViewModel> ListOfUsers = new List<DisplayUserWithCourseResultsViewModel>();
+
+            foreach (var user in enrolledUsers)
+            {
+                DisplayUserWithCourseResultsViewModel singleUser = _mapper.Map<DisplayUserWithCourseResultsViewModel>(user);
+
+                var UserLastExam = exams.Where(z => z.EnrolledUsers.Contains(user.Id)).OrderByDescending(z => z.OrdinalNumber).FirstOrDefault();
+                var UserResultFromLastExam = examResults.Where(z => UserLastExam.ExamResults.Contains(z.ExamResultIdentificator) && user.Id == z.User).FirstOrDefault();
+
+                if (UserResultFromLastExam != null)
+                {
+                    singleUser = _mapper.Map<DisplayUserWithCourseResultsViewModel>(UserResultFromLastExam);
+                    singleUser.MaxAmountOfPointsToEarn = UserLastExam.MaxAmountOfPointsToEarn;
+                    singleUser.ExamOrdinalNumber = UserLastExam.OrdinalNumber;
+
+                    singleUser.QuantityOfMeetings = meetings.Count();
+                    singleUser.QuantityOfPresenceOnMeetings = meetings.Where(z => z.AttendanceList.Contains(user.Id)).Count();
+                }
+                try
+                {
+                    double UserPresencePercentage = ((meetings.Where(z => z.AttendanceList.Contains(singleUser.UserIdentificator)).Count() / meetings.Count()) * 100);
+                    UserPresencePercentage = Math.Round(UserPresencePercentage, 2);
+                    singleUser.PercentageOfUserPresenceOnMeetings = UserPresencePercentage;
+                }
+                catch (Exception e)
+                {
+                    singleUser.PercentageOfUserPresenceOnMeetings = 0.00;
+                }
+
+                ListOfUsers.Add(singleUser);
+            }
+
+            return ListOfUsers;
         }
         #endregion
     }
