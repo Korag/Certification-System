@@ -76,7 +76,7 @@ namespace Certification_System.Repository
                     (
                         new SelectListItem()
                         {
-                            Text = exam.ExamIndexer  + " " + exam.Name,
+                            Text = exam.ExamIndexer + " " + exam.Name,
                             Value = exam.ExamIdentificator
                         }
                     );
@@ -87,7 +87,7 @@ namespace Certification_System.Repository
 
         public ICollection<SelectListItem> GetExamsWhichAreDividedToTermsAsSelectList()
         {
-            var Exams = GetListOfExams().ToList().Where(z=> z.ExamDividedToTerms == true);
+            var Exams = GetListOfExams().ToList().Where(z => z.ExamDividedToTerms == true);
             List<SelectListItem> SelectList = new List<SelectListItem>();
 
             foreach (var exam in Exams)
@@ -111,6 +111,24 @@ namespace Certification_System.Repository
             var resultExam = GetExams().Find<Exam>(filter).FirstOrDefault();
 
             return resultExam;
+        }
+
+        public ICollection<SelectListItem> GetAddExamMenuOptions()
+        {
+            var Exams = GetListOfExams();
+            List<SelectListItem> SelectList = new List<SelectListItem>
+                {
+                new SelectListItem(){
+                            Text = "Dodaj egzamin",
+                            Value = "addExam"
+                },
+                new SelectListItem(){
+                            Text = "Dodaj termin do istniejącego egzaminu",
+                            Value = "addExamPeriod"
+                },
+            };
+
+            return SelectList;
         }
     }
 }

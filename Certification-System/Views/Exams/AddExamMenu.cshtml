@@ -5,11 +5,14 @@
     Layout = "~/Views/Shared/_Layout.cshtml";
 }
 
-<div style="padding-top:10vw">
+<div style="padding-top:8vw; padding-bottom:10vw">
     <form asp-action="AddExamMenu">
         <div class="col-md-8 col-xl-6 col-lg-6 col-sm-12 col-xs-10 m-auto p-3 shadow p-3 mb-5 bg-light rounded border border-primary rounded-bottom" style="opacity:0.90">
 
-            <div class="btn-group btn-group-toggle row" data-toggle="buttons">
+            <input asp-for="CourseIdentificator" class="form-control col-12" hidden />
+            <input asp-for="ExamIdentificator" class="form-control col-12" hidden />
+
+            <div class="btn-group btn-group-toggle d-flex row justify-content-center" data-toggle="buttons">
                 @foreach (var option in Model.AvailableOptions)
                 {
                     <label class="btn btn-outline-secondary ml-2 mr-2 mt-1">

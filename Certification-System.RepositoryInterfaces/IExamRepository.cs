@@ -15,5 +15,6 @@ namespace Certification_System.RepositoryInterfaces
         ICollection<SelectListItem> GetExamsAsSelectList();
         ICollection<SelectListItem> GetExamsWhichAreDividedToTermsAsSelectList();
         Exam GetExamByExamTermId(string examTermIdentificator);
+        ICollection<SelectListItem> GetAddExamMenuOptions();
     }
 }

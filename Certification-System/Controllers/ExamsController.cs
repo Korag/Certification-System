@@ -423,23 +423,14 @@ namespace Certification_System.Controllers
 
         // GET: AddExamMenu
         [Authorize(Roles = "Admin")]
-        public ActionResult AddExamMenu()
+        public ActionResult AddExamMenu(string courseIdentificator, string examIdentificator)
         {
             AddExamTypeOfActionViewModel addExamType = new AddExamTypeOfActionViewModel
             {
-                AvailableOptions = new List<SelectListItem>
-                {
-                     new SelectListItem()
-                        {
-                            Text = "Dodaj egzamin",
-                            Value = "addExam"
-                        },
-                     new SelectListItem()
-                        {
-                            Text = "Dodaj termin do istniejącego egzaminu",
-                            Value = "addExamPeriod"
-                        },
-                }
+                AvailableOptions = _context.examRepository.GetAddExamMenuOptions().ToList(),
+                
+                CourseIdentificator = courseIdentificator,
+                ExamIdentificator = examIdentificator
             };
 
             return View(addExamType);
@@ -451,16 +442,16 @@ namespace Certification_System.Controllers
         public ActionResult AddExamMenu(AddExamTypeOfActionViewModel addExamTypeOfAction)
         {
             if (addExamTypeOfAction.SelectedOption == "addExam" && addExamTypeOfAction.ExamTermsQuantity == 0)
-                return RedirectToAction("AddNewExam", "Exams");
+                return RedirectToAction("AddNewExam", "Exams", new { courseIdentificator = addExamTypeOfAction.CourseIdentificator, examIdentificator = addExamTypeOfAction.ExamIdentificator });
 
             else if (addExamTypeOfAction.SelectedOption == "addExam" && addExamTypeOfAction.ExamTermsQuantity != 0)
-                return RedirectToAction("AddNewExamWithExamTerms", "Exams", new { quantityOfExamTerms = addExamTypeOfAction.ExamTermsQuantity });
+                return RedirectToAction("AddNewExamWithExamTerms", "Exams", new { courseIdentificator = addExamTypeOfAction.CourseIdentificator, examIdentificator = addExamTypeOfAction.ExamIdentificator, quantityOfExamTerms = addExamTypeOfAction.ExamTermsQuantity });
 
             else if(addExamTypeOfAction.SelectedOption == "addExamPeriod" && addExamTypeOfAction.ExamTermsQuantity == 0)
-                return RedirectToAction("AddNewExamPeriod", "Exams");
+                return RedirectToAction("AddNewExamPeriod", "Exams", new { courseIdentificator = addExamTypeOfAction.CourseIdentificator, examIdentificator = addExamTypeOfAction.ExamIdentificator, quantityOfExamTerms = addExamTypeOfAction.ExamTermsQuantity });
 
             else if(addExamTypeOfAction.SelectedOption == "addExamPeriod" && addExamTypeOfAction.ExamTermsQuantity != 0)
-                return RedirectToAction("AddNewExamPeriodWithExamTerms", "Exams", new { quantityOfExamTerms = addExamTypeOfAction.ExamTermsQuantity });
+                return RedirectToAction("AddNewExamPeriodWithExamTerms", "Exams", new { courseIdentificator = addExamTypeOfAction.CourseIdentificator, examIdentificator = addExamTypeOfAction.ExamIdentificator, quantityOfExamTerms = addExamTypeOfAction.ExamTermsQuantity });
 
             return RedirectToAction("BlankMenu", "Certificates");
         }
