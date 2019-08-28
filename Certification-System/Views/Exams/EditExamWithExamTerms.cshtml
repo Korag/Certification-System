@@ -1,7 +1,7 @@
-﻿@model Certification_System.DTOViewModels.EditExamViewModel
+﻿@model Certification_System.DTOViewModels.EditExamWithExamTermsViewModel
 
 @{
-    ViewData["Title"] = "EditExam";
+    ViewData["Title"] = "EditExamWithExamTerms";
     Layout = "~/Views/Shared/_Layout.cshtml";
 }
 
@@ -9,7 +9,7 @@
 <hr />
 
 <div>
-    <form asp-action="EditExam">
+    <form asp-action="EditExamWithExamTerms">
 
         <div class="col-md-8 col-xl-6 col-lg-6 col-sm-12 col-xs-10 m-auto p-3 shadow p-3 mb-5 bg-light rounded border border-primary rounded-bottom" style="opacity:0.90">
 
@@ -119,6 +119,64 @@
                 <button id="AddExamTerm" class="btn btn-secondary">Dodaj termin egzaminu</button>
             </div>
 
+            @for (int i = 0; i < Model.ExamTerms.Count(); i++)
+            {
+            <div class="m-2 col-12 bg-light rounded border border-secondary rounded-bottom">
+
+                <input asp-for="ExamTerms[i].ExamTermIdentificator" class="form-control col-6" hidden/>
+
+                <div class="form-group">
+                    <label asp-for="ExamTerms[i].UsersLimit" class="control-label"></label>
+                    <div>
+                        <input asp-for="ExamTerms[i].UsersLimit" class="form-control col-6" min="1" />
+                        <div class="row justify-content-center">
+                            <span asp-validation-for="ExamTerms[i].UsersLimit" class="text-danger"></span>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="form-group">
+                    <label asp-for="ExamTerms[i].SelectedExaminers" class="control-label"></label>
+                    <div>
+                        <select asp-for="ExamTerms[i].SelectedExaminers" asp-items="@Model.AvailableExaminers" data-style="btn-white" data-container="body" data-width="auto" data-header="Wybierz kurs" data-live-search="true" title="Nie wybrano żadnego elementu" class="form-control selectpicker show-tick w-100"> </select>
+                        <div class="row justify-content-center">
+                            <span asp-validation-for="ExamTerms[i].SelectedExaminers" class="text-danger"></span>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="form-group">
+                    <label asp-for="ExamTerms[i].DateOfStart" class="control-label"></label>
+                    <div>
+                        <div class='input-group date' id='DateOfStart'>
+                            <input type='text' class="form-control col-6" name="DateOfStart" value="@DateTime.Now.ToShortDateString() @DateTime.Now.ToShortTimeString()" />
+                            <span class="input-group-addon">
+                                <span class="fa fa-calendar pl-1 pt-0.5" style="font-size:34px"></span>
+                            </span>
+                        </div>
+                        <div class="row justify-content-center">
+                            <span asp-validation-for="ExamTerms[i].DateOfStart" class="text-danger"></span>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="form-group">
+                    <label asp-for="ExamTerms[i].DateOfEnd" class="control-label"></label>
+                    <div>
+                        <div class='input-group date' id='DateOfEnd'>
+                            <input type='text' class="form-control col-6" name="DateOfEnd" value="@DateTime.Now.AddMonths(6).ToShortDateString() @DateTime.Now.ToShortTimeString()" />
+                            <span class="input-group-addon">
+                                <span class="fa fa-calendar pl-1 pt-0.5" style="font-size:34px"></span>
+                            </span>
+                        </div>
+                        <div class="row justify-content-center">
+                            <span asp-validation-for="ExamTerms[i].DateOfEnd" class="text-danger"></span>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            }
+
             <div asp-validation-summary="ModelOnly" class="row justify-content-center alert alert-danger validation-model"></div>
 
             <div class="row m-0 mt-3">
@@ -137,53 +195,4 @@
 
 @section Scripts {
     @{await Html.RenderPartialAsync("_ValidationScriptsPartial");}
-
-    <script>
-        var numerator = @Model.ExamTerms.Count();
-
-        $(function () {
-            $('#DateOfStart').datetimepicker({
-                format: 'DD.MM.YYYY HH:mm',
-                locale: moment.locale('pl', {
-                    week: { dow: 1 }
-                })
-            });
-            $('#DateOfEnd').datetimepicker({
-                format: 'DD.MM.YYYY HH:mm',
-                locale: moment.locale('pl', {
-                    week: { dow: 1 }
-                }),
-                useCurrent: false
-            });
-            $("#DateOfStart").on("dp.change", function (e) {
-                $('#DateOfEnd').data("DateTimePicker").minDate(e.date);
-            });
-            $("#DateOfEnd").on("dp.change", function (e) {
-                $('#DateOfStart').data("DateTimePicker").maxDate(e.date);
-            });
-        });
-
-        $('#ExamDividedToTerms').change(function () {
-            if ($(this).is(":checked")) {
-                $('#hiddenInput').removeAttr("hidden");
-            }
-            else {
-                document.getElementById("hiddenInput").hidden = true;
-                document.getElementById("ExamTermViewComponentsContainer").hidden = true;
-            }
-        });
-
-        $('#AddExamTerm').click(function (e){
-            e.preventDefault();
-
-            $('#ExamTermViewComponentsContainer').removeAttr("hidden");
-
-            $('#ExamTermViewComponentsContainer').append('<div id="ExamTermViewComponentsContainer'+ numerator + '"></div>');
-
-            $('#ExamTermViewComponentsContainer'+numerator).load('GetEditExamTermViewComponent?orderNumber=' + numerator)
-
-            numerator++;
-        });
-
-    </script>
 }

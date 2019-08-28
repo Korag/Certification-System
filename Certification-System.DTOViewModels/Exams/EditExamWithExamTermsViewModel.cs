@@ -5,7 +5,7 @@ using System.ComponentModel.DataAnnotations;
 
 namespace Certification_System.DTOViewModels
 {
-    public class EditExamViewModel
+    public class EditExamWithExamTermsViewModel
     {
         public string ExamIdentificator { get; set; }
 
@@ -54,6 +54,6 @@ namespace Certification_System.DTOViewModels
         public ICollection<string> SelectedExaminers { get; set; }
 
         [Display(Name = "Tury")]
-        public ICollection<EditExamTermViewModel> ExamTerms { get; set; }
+        public IList<EditExamTermViewModel> ExamTerms { get; set; }
     }
 }

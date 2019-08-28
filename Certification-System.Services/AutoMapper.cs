@@ -174,9 +174,9 @@ namespace Certification_System.Services
                      .ForMember(dest => dest.Examiners, opts => opts.Ignore())
                      .ForMember(dest => dest.UsersQuantitiy, opts => opts.MapFrom(src => src.EnrolledUsers.Count()));
 
-            CreateMap<Exam, EditExamViewModel>();
+            CreateMap<Exam, EditExamWithExamTermsViewModel>();
 
-            CreateMap<EditExamViewModel, Exam>()
+            CreateMap<EditExamWithExamTermsViewModel, Exam>()
                     .ForMember(dest => dest.Examiners, opts => opts.MapFrom(src => src.SelectedExaminers))
                     .ForMember(dest => dest.DurationDays, opts => opts.MapFrom(src => src.DateOfEnd.Subtract(src.DateOfStart).Days))
                     .ForMember(dest => dest.DurationMinutes, opts => opts.MapFrom(src => src.DateOfEnd.Subtract(src.DateOfStart).Minutes))

@@ -404,15 +404,15 @@ namespace Certification_System.Controllers
             return RedirectToAction(nameof(AddNewExam));
         }
 
-        // GET: EditExam
+        // GET: EditExamWithExamTerms
         [Authorize(Roles = "Admin")]
-        public ActionResult EditExam(string examIdentificator)
+        public ActionResult EditExamWithExamTerms(string examIdentificator)
         {
             var Exam = _context.examRepository.GetExamById(examIdentificator);
             var ExamTerms = _context.examTermRepository.GetExamsTermsById(Exam.ExamTerms);
             var Course = _context.courseRepository.GetCourseByExamId(Exam.ExamIdentificator);
 
-            EditExamViewModel examToUpdate = _mapper.Map<EditExamViewModel>(Exam);
+            EditExamWithExamTermsViewModel examToUpdate = _mapper.Map<EditExamWithExamTermsViewModel>(Exam);
             examToUpdate.ExamTerms = _mapper.Map<List<EditExamTermViewModel>>(ExamTerms);
 
             examToUpdate.AvailableExaminers = _context.userRepository.GetExaminersAsSelectList().ToList();
@@ -427,7 +427,7 @@ namespace Certification_System.Controllers
         // POST: EditExam
         [Authorize(Roles = "Admin")]
         [HttpPost]
-        public ActionResult EditExam(EditExamViewModel editedExam)
+        public ActionResult EditExamWithExamTerms(EditExamWithExamTermsViewModel editedExam)
         {
             var OriginExam = _context.examRepository.GetExamById(editedExam.ExamIdentificator);
             var OriginExamTerms = _context.examTermRepository.GetExamsTermsById(OriginExam.ExamTerms);
@@ -465,7 +465,7 @@ namespace Certification_System.Controllers
                     OriginExam.ExamTerms.ToList().AddRange(NewExamTermsIdentificators);
                 }
 
-                OriginExam = _mapper.Map<EditExamViewModel, Exam>(editedExam, OriginExam);
+                OriginExam = _mapper.Map<EditExamWithExamTermsViewModel, Exam>(editedExam, OriginExam);
                 _context.examRepository.UpdateExam(OriginExam);
 
                 return RedirectToAction("ConfirmationOfActionOnExam", "Exams", new { examIdentificator = editedExam.ExamIdentificator, examsTermsIdentificators = editedExam.ExamTerms.Select(z=> z.ExamTermIdentificator).ToList(), TypeOfAction = "Update" });
