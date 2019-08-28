@@ -15,7 +15,7 @@ else
 }
 
 <div class="row m-0 mt-3 mb-3">
-    <a asp-action="AddNewCourse" asp-controller="Courses" class="btn btn-primary mt-1 xs350px_FloatLeft">Dodaj nowy kurs</a>
+    <a asp-action="AddCourseMenu" asp-controller="Courses" class="btn btn-primary mt-1 xs350px_FloatLeft">Dodaj nowy kurs</a>
     <a asp-action="DisplayAllCourses" asp-controller="Courses" class="btn btn-outline-info mt-1 xs350px_FloatRight">Powrót do listy kursów</a>
 </div>
 
@@ -165,7 +165,7 @@ else
 </div>
 
 @*<div class="mt-3">
-        <a asp-action="AddNewCourse" asp-controller="Courses" class="btn btn-primary m-1">Dodaj kurs"</a>
+        <a asp-action="AddCourseMenu" asp-controller="Courses" class="btn btn-primary m-1">Dodaj kurs"</a>
         <a asp-action="CourseDetails" asp-route-courseIdentificator="@Model.CourseIdentificator" asp-controller="Courses" class="btn btn-info m-1">Szczegóły</a>
         <a asp-action="EditCourse" asp-route-courseIdentificator="@Model.CourseIdentificator" asp-controller="Courses" class="btn btn-warning m-1">Aktualizuj</a>
         <a asp-action="DisplayAllCourses" asp-controller="Courses" class="btn btn-success m-1">Lista wszystkich kursów</a>

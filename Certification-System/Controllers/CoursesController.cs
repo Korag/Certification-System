@@ -82,6 +82,28 @@ namespace Certification_System.Controllers
             return RedirectToAction(nameof(AddNewCourse));
         }
 
+        // GET: AddCourseMenu
+        [Authorize(Roles = "Admin")]
+        public ActionResult AddCourseMenu()
+        {
+            return View();
+        }
+
+        // POST: AddCourseMenu
+        [Authorize(Roles = "Admin")]
+        [HttpPost]
+        public ActionResult AddCourseMenu(AddCourseTypeOfActionViewModel addCourseTypeOfAction)
+        {
+            if (addCourseTypeOfAction.MeetingsQuantity != 0)
+            {
+                return RedirectToAction("AddNewCourseWithMeetings", "Courses", new { quantityOfMeetings = addCourseTypeOfAction.MeetingsQuantity });
+            }
+            else
+            {
+                return RedirectToAction("AddNewCourse", "Courses");
+            }
+        }
+
         // GET: AddNewCourse
         [Authorize(Roles = "Admin")]
         public ActionResult AddNewCourse()

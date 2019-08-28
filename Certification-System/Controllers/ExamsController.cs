@@ -445,6 +445,8 @@ namespace Certification_System.Controllers
         [HttpPost]
         public ActionResult AddExamMenu(AddExamTypeOfActionViewModel addExamTypeOfAction)
         {
+            if (ModelState.IsValid)
+            {
             if (addExamTypeOfAction.SelectedOption == "addExam" && addExamTypeOfAction.ExamTermsQuantity == 0)
                 return RedirectToAction("AddNewExam", "Exams", new { courseIdentificator = addExamTypeOfAction.CourseIdentificator, examIdentificator = addExamTypeOfAction.ExamIdentificator });
 
@@ -458,6 +460,11 @@ namespace Certification_System.Controllers
                 return RedirectToAction("AddNewExamPeriodWithExamTerms", "Exams", new { courseIdentificator = addExamTypeOfAction.CourseIdentificator, examIdentificator = addExamTypeOfAction.ExamIdentificator, quantityOfExamTerms = addExamTypeOfAction.ExamTermsQuantity });
 
             return RedirectToAction("BlankMenu", "Certificates");
+            }
+
+            addExamTypeOfAction.AvailableOptions = _context.examRepository.GetAddExamMenuOptions().ToList();
+
+            return View(addExamTypeOfAction);
         }
 
 
