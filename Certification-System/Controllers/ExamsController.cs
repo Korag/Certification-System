@@ -44,6 +44,7 @@ namespace Certification_System.Controllers
         }
 
         // POST: AddNewExam
+        [Authorize(Roles = "Admin")]
         [HttpPost]
         public ActionResult AddNewExam(AddExamViewModel newExam)
         {
@@ -97,6 +98,7 @@ namespace Certification_System.Controllers
         }
 
         // POST: AddNewExamWithExamTerms
+        [Authorize(Roles = "Admin")]
         [HttpPost]
         public ActionResult AddNewExamWithExamTerms(AddExamWithExamTermsViewModel newExam)
         {
@@ -171,6 +173,7 @@ namespace Certification_System.Controllers
         }
 
         // POST: AddExamPeriod
+        [Authorize(Roles = "Admin")]
         [HttpPost]
         public ActionResult AddExamPeriod(AddExamPeriodViewModel newExamPeriod)
         {
@@ -232,6 +235,7 @@ namespace Certification_System.Controllers
         }
 
         // POST: AddExamPeriodWithExamTerms
+        [Authorize(Roles = "Admin")]
         [HttpPost]
         public ActionResult AddExamPeriodWithExamTerms(AddExamPeriodWithExamTermsViewModel newExamPeriod)
         {
@@ -436,7 +440,7 @@ namespace Certification_System.Controllers
             return View(addExamType);
         }
 
-        // GET: AddExamMenu
+        // POST: AddExamMenu
         [Authorize(Roles = "Admin")]
         [HttpPost]
         public ActionResult AddExamMenu(AddExamTypeOfActionViewModel addExamTypeOfAction)

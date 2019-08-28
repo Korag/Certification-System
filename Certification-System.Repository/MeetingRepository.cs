@@ -72,5 +72,10 @@ namespace Certification_System.Repository
 
             return resultListOfMeetings;
         }
+
+        public void AddMeetings(ICollection<Meeting> meetings)
+        {
+            GetMeetings().InsertMany(meetings);
+        }
     }
 }

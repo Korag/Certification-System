@@ -5,7 +5,7 @@ using System.ComponentModel.DataAnnotations;
 
 namespace Certification_System.DTOViewModels
 {
-    public class AddCourseViewModel
+    public class AddCourseWithMeetingsViewModel
     {
         [Required]
         [Display(Name = "Identyfikator")]
@@ -49,5 +49,11 @@ namespace Certification_System.DTOViewModels
 
         [Display(Name = "Obszar")]
         public IList<SelectListItem> AvailableBranches { get; set; }
+
+        [Display(Name = "Instruktorzy")]
+        public IList<SelectListItem> AvailableInstructors { get; set; }
+
+        [Display(Name = "Spotkania w ramach kursu")]
+        public IList<AddMeetingWithoutCourseViewModel> Meetings { get; set; }
     }
 }

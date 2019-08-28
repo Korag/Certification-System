@@ -12,5 +12,6 @@ namespace Certification_System.RepositoryInterfaces
         void UpdateMeeting(Meeting meeting);
         void ChangeUsersPresenceOnMeetings(string meetingIdentificator, ICollection<string> usersIdentificators);
         ICollection<Meeting> GetMeetingsByInstructorId(string userIdentificator);
+        void AddMeetings(ICollection<Meeting> meetings);
     }
 }

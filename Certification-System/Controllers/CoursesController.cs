@@ -88,11 +88,8 @@ namespace Certification_System.Controllers
         {
             AddCourseViewModel newCourse = new AddCourseViewModel
             {
-                AvailableBranches = new List<SelectListItem>(),
-                SelectedBranches = new List<string>(),
+                AvailableBranches = _context.branchRepository.GetBranchesAsSelectList().ToList()
             };
-
-            newCourse.AvailableBranches = _context.branchRepository.GetBranchesAsSelectList().ToList();
 
             return View(newCourse);
         }
@@ -118,6 +115,70 @@ namespace Certification_System.Controllers
             }
 
             newCourse.AvailableBranches = _context.branchRepository.GetBranchesAsSelectList().ToList();
+
+            return View(newCourse);
+        }
+
+        // GET: AddNewCourseWithMeetings
+        [Authorize(Roles = "Admin")]
+        public ActionResult AddNewCourseWithMeetings(int quantityOfMeetings)
+        {
+            AddCourseWithMeetingsViewModel newCourse = new AddCourseWithMeetingsViewModel
+            {
+                AvailableBranches = _context.branchRepository.GetBranchesAsSelectList().ToList(),
+                AvailableInstructors = _context.userRepository.GetInstructorsAsSelectList().ToList(),
+                Meetings = new List<AddMeetingWithoutCourseViewModel>()
+            };
+
+            for (int i = 0; i < quantityOfMeetings; i++)
+            {
+                newCourse.Meetings.Add(new AddMeetingWithoutCourseViewModel());
+            };
+
+            return View(newCourse);
+        }
+
+        // POST: AddNewCourseWithMeetings
+        [Authorize(Roles = "Admin")]
+        [HttpPost]
+        public ActionResult AddNewCourseWithMeetings(AddCourseWithMeetingsViewModel newCourse)
+        {
+            if (ModelState.IsValid)
+            {
+                Course course = _mapper.Map<Course>(newCourse);
+                course.CourseIdentificator = _keyGenerator.GenerateNewId();
+
+                if (course.DateOfEnd != null)
+                {
+                    course.CourseLength = course.DateOfEnd.Subtract(course.DateOfStart).Days;
+                }
+
+                List<Meeting> meetings = new List<Meeting>();
+
+                if (course.Meetings.Count() != 0)
+                {
+                    foreach (var newMeeting in course.Meetings)
+                    {
+                        Meeting meeting = _mapper.Map<Meeting>(newMeeting);
+                        meeting.MeetingIdentificator = _keyGenerator.GenerateNewId();
+
+                        meetings.Add(meeting);
+                    }
+
+                    _context.meetingRepository.AddMeetings(meetings);
+                }
+
+                var MeetingsIdentificators = meetings.Select(z => z.MeetingIdentificator);
+
+                course.Meetings.ToList().AddRange(MeetingsIdentificators);
+
+                _context.courseRepository.AddCourse(course);
+
+                return RedirectToAction("ConfirmationOfActionOnCourse", new { courseIdentificator = course.CourseIdentificator, meetingsIdentificators = MeetingsIdentificators, TypeOfAction = "Add" });
+            }
+
+            newCourse.AvailableBranches = _context.branchRepository.GetBranchesAsSelectList().ToList();
+            newCourse.AvailableInstructors = _context.userRepository.GetInstructorsAsSelectList().ToList();
 
             return View(newCourse);
         }

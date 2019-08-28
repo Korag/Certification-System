@@ -81,6 +81,13 @@ namespace Certification_System.Services
                      .ForMember(dest => dest.Exams, opts => opts.MapFrom(src => new List<string>()))
                      .ForMember(dest => dest.EnrolledUsers, opts => opts.MapFrom(src => new List<string>()));
 
+            CreateMap<AddCourseWithMeetingsViewModel, Course>()
+                     .ForMember(dest => dest.CourseIdentificator, opts => opts.Ignore())
+                     .ForMember(dest => dest.Branches, opts => opts.MapFrom(src => src.SelectedBranches))
+                     .ForMember(dest => dest.Meetings, opts => opts.MapFrom(src => new List<string>()))
+                     .ForMember(dest => dest.Exams, opts => opts.MapFrom(src => new List<string>()))
+                     .ForMember(dest => dest.EnrolledUsers, opts => opts.MapFrom(src => new List<string>()));
+
             CreateMap<Course, EditCourseViewModel>()
                       .ForMember(dest => dest.SelectedBranches, opts => opts.MapFrom(src => src.Branches));
 
@@ -327,6 +334,10 @@ namespace Certification_System.Services
             CreateMap<AddMeetingViewModel, Meeting>()
                      .ForMember(dest => dest.MeetingIdentificator, opts => opts.Ignore())
                      .ForMember(dest => dest.Instructors, opts => opts.MapFrom(src => src.SelectedInstructors));
+
+            CreateMap<AddMeetingWithoutCourseViewModel, Meeting>()
+                   .ForMember(dest => dest.MeetingIdentificator, opts => opts.Ignore())
+                   .ForMember(dest => dest.Instructors, opts => opts.MapFrom(src => src.SelectedInstructors));
 
             CreateMap<Meeting, EditMeetingViewModel>()
                      .ForMember(dest => dest.SelectedInstructors, opts => opts.MapFrom(src => src.Instructors));

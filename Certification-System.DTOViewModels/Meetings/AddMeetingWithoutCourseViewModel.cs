@@ -5,14 +5,8 @@ using System.ComponentModel.DataAnnotations;
 
 namespace Certification_System.DTOViewModels
 {
-    public class AddMeetingViewModel
+    public class AddMeetingWithoutCourseViewModel
     {
-        [Required(ErrorMessage = "Należy wybrać do którego kursu przypisać spotkanie.")]
-        public string SelectedCourse { get; set; }
-
-        [Display(Name = "Kurs")]
-        public IList<SelectListItem> AvailableCourses { get; set; }
-
         [Required(ErrorMessage = "Pole \"{0}\" jest wymagane.")]
         [Display(Name = "Identyfikator")]
         public string MeetingIndexer { get; set; }
