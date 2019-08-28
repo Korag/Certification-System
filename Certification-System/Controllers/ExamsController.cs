@@ -5,6 +5,7 @@ using Certification_System.Repository.DAL;
 using Certification_System.ServicesInterfaces;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.AspNetCore.Mvc.Rendering;
 using System.Collections.Generic;
 using System.Linq;
 
@@ -213,7 +214,7 @@ namespace Certification_System.Controllers
                 ExamTerms = new List<AddExamTermWithoutExamViewModel>()
             };
 
-            for (int i = 0; i<quantityOfExamTerms; i++)
+            for (int i = 0; i < quantityOfExamTerms; i++)
             {
                 newExamPeriod.ExamTerms.Add(new AddExamTermWithoutExamViewModel());
             }
@@ -410,7 +411,7 @@ namespace Certification_System.Controllers
         {
             var Exam = _context.examRepository.GetExamById(examIdentificator);
 
-            if (Exam.ExamDividedToTerms)
+            if (Exam.ExamDividedToTerms && Exam.ExamTerms.Count() != 0)
             {
                 return RedirectToAction("EditExamWithExamTerms", "Exams", new { examIdentificator = examIdentificator });
             }
@@ -420,23 +421,48 @@ namespace Certification_System.Controllers
             }
         }
 
-
-        // GET: EditExam
+        // GET: AddExamMenu
         [Authorize(Roles = "Admin")]
-        public ActionResult EditExam(string examIdentificator)
+        public ActionResult AddExamMenu()
         {
-            var Exam = _context.examRepository.GetExamById(examIdentificator);
-            var Course = _context.courseRepository.GetCourseByExamId(Exam.ExamIdentificator);
+            AddExamTypeOfActionViewModel addExamType = new AddExamTypeOfActionViewModel
+            {
+                AvailableOptions = new List<SelectListItem>
+                {
+                     new SelectListItem()
+                        {
+                            Text = "Dodaj egzamin",
+                            Value = "addExam"
+                        },
+                     new SelectListItem()
+                        {
+                            Text = "Dodaj termin do istniejącego egzaminu",
+                            Value = "addExamPeriod"
+                        },
+                }
+            };
 
-            EditExamViewModel examToUpdate = _mapper.Map<EditExamViewModel>(Exam);
+            return View(addExamType);
+        }
 
-            examToUpdate.AvailableExaminers = _context.userRepository.GetExaminersAsSelectList().ToList();
-            examToUpdate.AvailableCourses = _context.courseRepository.GetActiveCoursesAsSelectList().ToList();
+        // GET: AddExamMenu
+        [Authorize(Roles = "Admin")]
+        [HttpPost]
+        public ActionResult AddExamMenu(AddExamTypeOfActionViewModel addExamTypeOfAction)
+        {
+            if (addExamTypeOfAction.SelectedOption == "addExam" && addExamTypeOfAction.ExamTermsQuantity == 0)
+                return RedirectToAction("AddNewExam", "Exams");
 
-            examToUpdate.SelectedExaminers = _context.userRepository.GetUsersById(Exam.Examiners).Select(z => z.Id).ToList();
-            examToUpdate.SelectedCourse = Course.CourseIdentificator;
+            else if (addExamTypeOfAction.SelectedOption == "addExam" && addExamTypeOfAction.ExamTermsQuantity != 0)
+                return RedirectToAction("AddNewExamWithExamTerms", "Exams", new { quantityOfExamTerms = addExamTypeOfAction.ExamTermsQuantity });
 
-            return View(examToUpdate);
+            else if(addExamTypeOfAction.SelectedOption == "addExamPeriod" && addExamTypeOfAction.ExamTermsQuantity == 0)
+                return RedirectToAction("AddNewExamPeriod", "Exams");
+
+            else if(addExamTypeOfAction.SelectedOption == "addExamPeriod" && addExamTypeOfAction.ExamTermsQuantity != 0)
+                return RedirectToAction("AddNewExamPeriodWithExamTerms", "Exams", new { quantityOfExamTerms = addExamTypeOfAction.ExamTermsQuantity });
+
+            return RedirectToAction("BlankMenu", "Certificates");
         }
 
 
@@ -501,9 +527,9 @@ namespace Certification_System.Controllers
             {
                 if (!editedExam.ExamDividedToTerms)
                 {
-                    OriginExam.ExamTerms.Clear();      
+                    OriginExam.ExamTerms.Clear();
 
-                    _context.examTermRepository.DeleteExamsTerms(OriginExamTerms.Select(z=> z.ExamTermIdentificator).ToList());
+                    _context.examTermRepository.DeleteExamsTerms(OriginExamTerms.Select(z => z.ExamTermIdentificator).ToList());
                 }
                 else if (editedExam.ExamDividedToTerms)
                 {
@@ -533,7 +559,7 @@ namespace Certification_System.Controllers
                 OriginExam = _mapper.Map<EditExamWithExamTermsViewModel, Exam>(editedExam, OriginExam);
                 _context.examRepository.UpdateExam(OriginExam);
 
-                return RedirectToAction("ConfirmationOfActionOnExam", "Exams", new { examIdentificator = editedExam.ExamIdentificator, examsTermsIdentificators = editedExam.ExamTerms.Select(z=> z.ExamTermIdentificator).ToList(), TypeOfAction = "Update" });
+                return RedirectToAction("ConfirmationOfActionOnExam", "Exams", new { examIdentificator = editedExam.ExamIdentificator, examsTermsIdentificators = editedExam.ExamTerms.Select(z => z.ExamTermIdentificator).ToList(), TypeOfAction = "Update" });
             }
 
             editedExam.AvailableExaminers = _context.userRepository.GetExaminersAsSelectList().ToList();
