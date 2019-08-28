@@ -32,7 +32,6 @@ namespace Certification_System.Controllers
             {
                 AvailableCourses = _context.courseRepository.GetActiveCoursesAsSelectList().ToList(),
                 AvailableExaminers = _context.userRepository.GetExaminersAsSelectList().ToList(),
-                ExamTerms = new List<AddExamTermWithoutExamViewModel>()
             };
 
             if (!string.IsNullOrWhiteSpace(courseIdentificator))
@@ -71,55 +70,81 @@ namespace Certification_System.Controllers
             return View(newExam);
         }
 
-        //[HttpPost]
-        //public ActionResult AddNewExam(AddExamViewModel newExam)
-        //{
-        //    if (ModelState.IsValid)
-        //    {
-        //        var course = _context.courseRepository.GetCourseById(newExam.SelectedCourse);
+        // GET: AddNewExamWithExamTerms
+        [Authorize(Roles = "Admin")]
+        public ActionResult AddNewExamWithExamTerms(string courseIdentificator, int quantityOfExamTerms)
+        {
+            AddExamWithExamTermsViewModel newExam = new AddExamWithExamTermsViewModel
+            {
+                AvailableCourses = _context.courseRepository.GetActiveCoursesAsSelectList().ToList(),
+                AvailableExaminers = _context.userRepository.GetExaminersAsSelectList().ToList(),
+                ExamDividedToTerms = true,
+                ExamTerms = new List<AddExamTermWithoutExamViewModel>()
+            };
 
-        //        Exam exam = _mapper.Map<Exam>(newExam);
-        //        exam.ExamIdentificator = _keyGenerator.GenerateNewId();
+            for (int i = 0; i < quantityOfExamTerms; i++)
+            {
+                newExam.ExamTerms.Add(new AddExamTermWithoutExamViewModel());
+            }
 
-        //        course.Exams.Add(exam.ExamIdentificator);
+            if (!string.IsNullOrWhiteSpace(courseIdentificator))
+            {
+                newExam.SelectedCourse = courseIdentificator;
+            }
 
-        //        exam.DurationDays = (int)exam.DateOfEnd.Subtract(exam.DateOfStart).TotalDays;
-        //        exam.DurationMinutes = (int)exam.DateOfEnd.Subtract(exam.DateOfStart).TotalMinutes;
-        //        //exam.OrdinalNumber = course.Exams.Count();
-        //        exam.OrdinalNumber = 1;
+            return View(newExam);
+        }
 
-        //        List<ExamTerm> examsTerms = new List<ExamTerm>();
 
-        //        if (exam.ExamTerms.Count() != 0)
-        //        {
-        //            foreach (var newExamTerm in newExam.ExamTerms)
-        //            {
-        //                ExamTerm examTerm = _mapper.Map<ExamTerm>(newExamTerm);
-        //                examTerm.ExamTermIdentificator = _keyGenerator.GenerateNewId();
+        // POST: AddNewExamWithExamTerms
+        [HttpPost]
+        public ActionResult AddNewExamWithExamTerms(AddExamWithExamTermsViewModel newExam)
+        {
+            if (ModelState.IsValid)
+            {
+                var course = _context.courseRepository.GetCourseById(newExam.SelectedCourse);
 
-        //                examTerm.DurationDays = (int)newExamTerm.DateOfEnd.Subtract(newExamTerm.DateOfStart).TotalDays;
-        //                examTerm.DurationMinutes = (int)newExamTerm.DateOfEnd.Subtract(newExamTerm.DateOfStart).TotalMinutes;
+                Exam exam = _mapper.Map<Exam>(newExam);
+                exam.ExamIdentificator = _keyGenerator.GenerateNewId();
 
-        //                exam.ExamTerms.Add(examTerm.ExamTermIdentificator);
-        //                examsTerms.Add(examTerm);
-        //            }
+                course.Exams.Add(exam.ExamIdentificator);
 
-        //            _context.examTermRepository.AddExamsTerms(examsTerms);
-        //        }
+                exam.DurationDays = (int)exam.DateOfEnd.Subtract(exam.DateOfStart).TotalDays;
+                exam.DurationMinutes = (int)exam.DateOfEnd.Subtract(exam.DateOfStart).TotalMinutes;
+                exam.OrdinalNumber = 1;
 
-        //        var ExamsTermsIdentificators = examsTerms.Select(z => z.ExamTermIdentificator);
+                List<ExamTerm> examsTerms = new List<ExamTerm>();
 
-        //        _context.courseRepository.UpdateCourse(course);
-        //        _context.examRepository.AddExam(exam);
+                if (exam.ExamTerms.Count() != 0)
+                {
+                    foreach (var newExamTerm in newExam.ExamTerms)
+                    {
+                        ExamTerm examTerm = _mapper.Map<ExamTerm>(newExamTerm);
+                        examTerm.ExamTermIdentificator = _keyGenerator.GenerateNewId();
 
-        //        return RedirectToAction("ConfirmationOfActionOnExam", new { examIdentificator = exam.ExamIdentificator, examsTermsIdentificators = ExamsTermsIdentificators, TypeOfAction = "Add" });
-        //    }
+                        examTerm.DurationDays = (int)newExamTerm.DateOfEnd.Subtract(newExamTerm.DateOfStart).TotalDays;
+                        examTerm.DurationMinutes = (int)newExamTerm.DateOfEnd.Subtract(newExamTerm.DateOfStart).TotalMinutes;
 
-        //    newExam.AvailableCourses = _context.courseRepository.GetActiveCoursesAsSelectList().ToList();
-        //    newExam.AvailableExaminers = _context.userRepository.GetExaminersAsSelectList().ToList();
+                        exam.ExamTerms.Add(examTerm.ExamTermIdentificator);
+                        examsTerms.Add(examTerm);
+                    }
 
-        //    return View(newExam);
-        //}
+                    _context.examTermRepository.AddExamsTerms(examsTerms);
+                }
+
+                var ExamsTermsIdentificators = examsTerms.Select(z => z.ExamTermIdentificator);
+
+                _context.courseRepository.UpdateCourse(course);
+                _context.examRepository.AddExam(exam);
+
+                return RedirectToAction("ConfirmationOfActionOnExam", new { examIdentificator = exam.ExamIdentificator, examsTermsIdentificators = ExamsTermsIdentificators, TypeOfAction = "Add" });
+            }
+
+            newExam.AvailableCourses = _context.courseRepository.GetActiveCoursesAsSelectList().ToList();
+            newExam.AvailableExaminers = _context.userRepository.GetExaminersAsSelectList().ToList();
+
+            return View(newExam);
+        }
 
         // GET: DisplayAllExams
         [Authorize(Roles = "Admin")]

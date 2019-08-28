@@ -137,11 +137,19 @@ namespace Certification_System.Services
             #region Exams
             CreateMap<Exam, AddExamViewModel>();
 
-            CreateMap<AddExamViewModel, Exam>()
+            CreateMap<Exam, AddExamWithExamTermsViewModel>();
+
+            CreateMap<AddExamWithExamTermsViewModel, Exam>()
                      .ForMember(dest => dest.Examiners, opts => opts.MapFrom(src => src.SelectedExaminers))
                      .ForMember(dest => dest.ExamTerms, opts => opts.MapFrom(src => new List<string>()))
                      .ForMember(dest => dest.ExamResults, opts => opts.MapFrom(src => new List<string>()))
                      .ForMember(dest => dest.EnrolledUsers, opts => opts.MapFrom(src => new List<string>()));
+
+            CreateMap<AddExamViewModel, Exam>()
+                    .ForMember(dest => dest.Examiners, opts => opts.MapFrom(src => src.SelectedExaminers))
+                    .ForMember(dest => dest.ExamTerms, opts => opts.MapFrom(src => new List<string>()))
+                    .ForMember(dest => dest.ExamResults, opts => opts.MapFrom(src => new List<string>()))
+                    .ForMember(dest => dest.EnrolledUsers, opts => opts.MapFrom(src => new List<string>()));
 
             CreateMap<Exam, DisplayExamViewModel>()
                      .ForMember(dest => dest.Examiners, opts => opts.Ignore());

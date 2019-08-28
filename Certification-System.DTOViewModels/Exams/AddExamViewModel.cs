@@ -51,9 +51,5 @@ namespace Certification_System.DTOViewModels
         [Display(Name = "Egzaminatorzy")]
         [Required(ErrorMessage = "Pole \"{0}\" jest wymagane.")]
         public ICollection<string> SelectedExaminers { get; set; }
-
-
-        [Display(Name = "Terminy")]
-        public IList<AddExamTermWithoutExamViewModel> ExamTerms { get; set; }
     }
 }
