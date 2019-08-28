@@ -187,6 +187,12 @@ namespace Certification_System.Services
                   .ForMember(dest => dest.ExamTerms, opts => opts.MapFrom(src => new List<string>()))
                   .ForMember(dest => dest.ExamResults, opts => opts.MapFrom(src => new List<string>()))
                   .ForMember(dest => dest.EnrolledUsers, opts => opts.MapFrom(src => new List<string>()));
+
+            CreateMap<AddExamPeriodWithExamTermsViewModel, Exam>()
+                  .ForMember(dest => dest.Examiners, opts => opts.MapFrom(src => src.SelectedExaminers))
+                  .ForMember(dest => dest.ExamTerms, opts => opts.MapFrom(src => new List<string>()))
+                  .ForMember(dest => dest.ExamResults, opts => opts.MapFrom(src => new List<string>()))
+                  .ForMember(dest => dest.EnrolledUsers, opts => opts.MapFrom(src => new List<string>()));
             #endregion
 
             #region ExamTerms
