@@ -404,6 +404,23 @@ namespace Certification_System.Controllers
             return RedirectToAction(nameof(AddNewExam));
         }
 
+        // GET: EditExamHub
+        [Authorize(Roles = "Admin")]
+        public ActionResult EditExamHub(string examIdentificator)
+        {
+            var Exam = _context.examRepository.GetExamById(examIdentificator);
+
+            if (Exam.ExamDividedToTerms)
+            {
+                return RedirectToAction("EditExamWithExamTerms", "Exams", new { examIdentificator = examIdentificator });
+            }
+            else
+            {
+                return RedirectToAction("EditExam", "Exams", new { examIdentificator = examIdentificator });
+            }
+        }
+
+
         // GET: EditExam
         [Authorize(Roles = "Admin")]
         public ActionResult EditExam(string examIdentificator)
