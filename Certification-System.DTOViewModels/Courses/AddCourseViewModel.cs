@@ -51,7 +51,5 @@ namespace Certification_System.DTOViewModels
         public IList<SelectListItem> AvailableBranches { get; set; }
 
         public ICollection<string> EnrolledUsers { get; set; }
-
-        public ICollection<AddMeetingViewModel> Meetings { get; set; }
     }
 }

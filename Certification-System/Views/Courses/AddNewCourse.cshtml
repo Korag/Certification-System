@@ -133,28 +133,6 @@
     @{await Html.RenderPartialAsync("_ValidationScriptsPartial");}
 
     <script>
-        //$('#datetimepickercontrol').datetimepicker({
-        //    format: 'DD.MM.YYYY HH:mm',
-        //    locale: moment.locale('pl', {
-        //        week: { dow: 1 }
-        //    })
-        //});
-
-        var meetingNumber = 0;
-
-        @*'@Url.Action("AddNewMeetingPartial", "Meetings", new { MeetingIdentificator = meetingNumber })'*@
-
-        $("#loadPartialView").click(function () {
-
-            var url = '@Html.Raw(@Url.Action("AddNewMeetingPartial", "Meetings"))' + '?MeetingIdentificator=' + meetingNumber;
-            $.get(url, {}, function (response) {
-
-            $("#meetingContainer").append(`<div name="meetingNumber${meetingNumber}></div>`).html(response);
-            meetingNumber++;
-        });
-        });
-
-
         $(function () {
             $('#DateOfStart').datetimepicker({
                 format: 'DD.MM.YYYY HH:mm',

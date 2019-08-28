@@ -26,24 +26,6 @@ namespace Certification_System.Controllers
             _keyGenerator = keyGenerator;
         }
 
-        // GET: AddNewCourse
-        [Authorize(Roles = "Admin")]
-        public ActionResult AddNewCourse()
-        {
-            AddCourseViewModel newCourse = new AddCourseViewModel
-            {
-                AvailableBranches = new List<SelectListItem>(),
-                SelectedBranches = new List<string>(),
-                Meetings = new List<AddMeetingViewModel>()
-            };
-
-            newCourse.AvailableBranches = _context.branchRepository.GetBranchesAsSelectList().ToList();
-
-            //todo GetInstructorsData and store it in some collection in AddCourseViewModel
-
-            return View(newCourse);
-        }
-
         // GET: ConfirmationOfActionOnCourse
         [Authorize(Roles = "Admin")]
         public ActionResult ConfirmationOfActionOnCourse(string courseIdentificator, ICollection<string> meetingsIdentificators, string TypeOfAction)
@@ -100,6 +82,21 @@ namespace Certification_System.Controllers
             return RedirectToAction(nameof(AddNewCourse));
         }
 
+        // GET: AddNewCourse
+        [Authorize(Roles = "Admin")]
+        public ActionResult AddNewCourse()
+        {
+            AddCourseViewModel newCourse = new AddCourseViewModel
+            {
+                AvailableBranches = new List<SelectListItem>(),
+                SelectedBranches = new List<string>(),
+            };
+
+            newCourse.AvailableBranches = _context.branchRepository.GetBranchesAsSelectList().ToList();
+
+            return View(newCourse);
+        }
+
         // POST: AddNewCourse
         [Authorize(Roles = "Admin")]
         [HttpPost]
@@ -110,29 +107,6 @@ namespace Certification_System.Controllers
                 Course course = _mapper.Map<Course>(newCourse);
                 course.CourseIdentificator = _keyGenerator.GenerateNewId();
 
-                if (newCourse.Meetings != null)
-                {
-                    foreach (var meeting in newCourse.Meetings)
-                    {
-                        Meeting singleMeeting = _mapper.Map<Meeting>(meeting);
-                        singleMeeting.MeetingIdentificator = _keyGenerator.GenerateNewId();
-                        singleMeeting.Instructors = new List<string>();
-
-                        //foreach (var instructor in Instructor)
-                        //{
-
-                        //}
-
-                        //todo InstructorFindBySomething for example Name
-                        // --> maybe 2 collections in ViewModel - firstName, LastName of all Instructors available
-                        //todo Instructor in singleMeeting.Add(instructor.Id)
-                        //todo Meeting add to collection in Mongo
-                        //todo Add reference to meeting to Course.Meetings Array
-
-                        //_context.AddMeeting(singleMeeting);
-                    }
-                }
-
                 if (course.DateOfEnd != null)
                 {
                     course.CourseLength = course.DateOfEnd.Subtract(course.DateOfStart).Days;
@@ -140,14 +114,10 @@ namespace Certification_System.Controllers
 
                 _context.courseRepository.AddCourse(course);
 
-                return RedirectToAction("ConfirmationOfActionOnCourse", new { courseIdentificator = course.CourseIdentificator, meetingsIdentificators = new List<string>(), TypeOfAction = "Update" });
+                return RedirectToAction("ConfirmationOfActionOnCourse", new { courseIdentificator = course.CourseIdentificator, TypeOfAction = "Update" });
             }
 
             newCourse.AvailableBranches = _context.branchRepository.GetBranchesAsSelectList().ToList();
-            if (newCourse.SelectedBranches == null)
-            {
-                newCourse.SelectedBranches = new List<string>();
-            }
 
             return View(newCourse);
         }
