@@ -1,7 +1,7 @@
-﻿@model Certification_System.DTOViewModels.EditExamWithExamTermsViewModel
+﻿@model Certification_System.DTOViewModels.EditExamViewModel
 
 @{
-    ViewData["Title"] = "EditExamWithExamTerms";
+    ViewData["Title"] = "EditExam";
     Layout = "~/Views/Shared/_Layout.cshtml";
 }
 
@@ -9,7 +9,7 @@
 <hr />
 
 <div>
-    <form asp-action="EditExamWithExamTerms">
+    <form asp-action="EditExam">
 
         <div class="col-md-8 col-xl-6 col-lg-6 col-sm-12 col-xs-10 m-auto p-3 shadow p-3 mb-5 bg-light rounded border border-primary rounded-bottom" style="opacity:0.90">
 
@@ -114,64 +114,6 @@
                     </div>
                 </div>
             </div>
-
-            @for (int i = 0; i < Model.ExamTerms.Count(); i++)
-            {
-            <div class="m-2 col-12 bg-light rounded border border-secondary rounded-bottom">
-
-                <input asp-for="ExamTerms[i].ExamTermIdentificator" class="form-control col-6" hidden/>
-
-                <div class="form-group">
-                    <label asp-for="ExamTerms[i].UsersLimit" class="control-label"></label>
-                    <div>
-                        <input asp-for="ExamTerms[i].UsersLimit" class="form-control col-6" min="1" />
-                        <div class="row justify-content-center">
-                            <span asp-validation-for="ExamTerms[i].UsersLimit" class="text-danger"></span>
-                        </div>
-                    </div>
-                </div>
-
-                <div class="form-group">
-                    <label asp-for="ExamTerms[i].SelectedExaminers" class="control-label"></label>
-                    <div>
-                        <select asp-for="ExamTerms[i].SelectedExaminers" asp-items="@Model.AvailableExaminers" data-style="btn-white" data-container="body" data-width="auto" data-header="Wybierz kurs" data-live-search="true" title="Nie wybrano żadnego elementu" class="form-control selectpicker show-tick w-100"> </select>
-                        <div class="row justify-content-center">
-                            <span asp-validation-for="ExamTerms[i].SelectedExaminers" class="text-danger"></span>
-                        </div>
-                    </div>
-                </div>
-
-                <div class="form-group">
-                    <label asp-for="ExamTerms[i].DateOfStart" class="control-label"></label>
-                    <div>
-                        <div class='input-group date' id='DateOfStart'>
-                            <input type='text' class="form-control col-6" name="DateOfStart" value="@DateTime.Now.ToShortDateString() @DateTime.Now.ToShortTimeString()" />
-                            <span class="input-group-addon">
-                                <span class="fa fa-calendar pl-1 pt-0.5" style="font-size:34px"></span>
-                            </span>
-                        </div>
-                        <div class="row justify-content-center">
-                            <span asp-validation-for="ExamTerms[i].DateOfStart" class="text-danger"></span>
-                        </div>
-                    </div>
-                </div>
-
-                <div class="form-group">
-                    <label asp-for="ExamTerms[i].DateOfEnd" class="control-label"></label>
-                    <div>
-                        <div class='input-group date' id='DateOfEnd'>
-                            <input type='text' class="form-control col-6" name="DateOfEnd" value="@DateTime.Now.AddMonths(6).ToShortDateString() @DateTime.Now.ToShortTimeString()" />
-                            <span class="input-group-addon">
-                                <span class="fa fa-calendar pl-1 pt-0.5" style="font-size:34px"></span>
-                            </span>
-                        </div>
-                        <div class="row justify-content-center">
-                            <span asp-validation-for="ExamTerms[i].DateOfEnd" class="text-danger"></span>
-                        </div>
-                    </div>
-                </div>
-            </div>
-            }
 
             <div asp-validation-summary="ModelOnly" class="row justify-content-center alert alert-danger validation-model"></div>
 

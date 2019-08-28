@@ -404,6 +404,54 @@ namespace Certification_System.Controllers
             return RedirectToAction(nameof(AddNewExam));
         }
 
+        // GET: EditExam
+        [Authorize(Roles = "Admin")]
+        public ActionResult EditExam(string examIdentificator)
+        {
+            var Exam = _context.examRepository.GetExamById(examIdentificator);
+            var Course = _context.courseRepository.GetCourseByExamId(Exam.ExamIdentificator);
+
+            EditExamViewModel examToUpdate = _mapper.Map<EditExamViewModel>(Exam);
+
+            examToUpdate.AvailableExaminers = _context.userRepository.GetExaminersAsSelectList().ToList();
+            examToUpdate.AvailableCourses = _context.courseRepository.GetActiveCoursesAsSelectList().ToList();
+
+            examToUpdate.SelectedExaminers = _context.userRepository.GetUsersById(Exam.Examiners).Select(z => z.Id).ToList();
+            examToUpdate.SelectedCourse = Course.CourseIdentificator;
+
+            return View(examToUpdate);
+        }
+
+
+        // POST: EditExam
+        [Authorize(Roles = "Admin")]
+        [HttpPost]
+        public ActionResult EditExam(EditExamViewModel editedExam)
+        {
+            var OriginExam = _context.examRepository.GetExamById(editedExam.ExamIdentificator);
+            var OriginExamTerms = _context.examTermRepository.GetExamsTermsById(OriginExam.ExamTerms);
+
+            if (ModelState.IsValid)
+            {
+                if (!editedExam.ExamDividedToTerms)
+                {
+                    OriginExam.ExamTerms.Clear();
+
+                    _context.examTermRepository.DeleteExamsTerms(OriginExamTerms.Select(z => z.ExamTermIdentificator).ToList());
+                }
+
+                OriginExam = _mapper.Map<EditExamViewModel, Exam>(editedExam, OriginExam);
+                _context.examRepository.UpdateExam(OriginExam);
+
+                return RedirectToAction("ConfirmationOfActionOnExam", "Exams", new { examIdentificator = editedExam.ExamIdentificator, TypeOfAction = "Update" });
+            }
+
+            editedExam.AvailableExaminers = _context.userRepository.GetExaminersAsSelectList().ToList();
+            editedExam.AvailableCourses = _context.courseRepository.GetActiveCoursesAsSelectList().ToList();
+
+            return View(editedExam);
+        }
+
         // GET: EditExamWithExamTerms
         [Authorize(Roles = "Admin")]
         public ActionResult EditExamWithExamTerms(string examIdentificator)
@@ -424,7 +472,7 @@ namespace Certification_System.Controllers
             return View(examToUpdate);
         }
 
-        // POST: EditExam
+        // POST: EditExamWithExamTerms
         [Authorize(Roles = "Admin")]
         [HttpPost]
         public ActionResult EditExamWithExamTerms(EditExamWithExamTermsViewModel editedExam)
