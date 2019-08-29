@@ -1,0 +1,21 @@
+﻿@model Certification_System.DTOViewModels.ModalViewModel
+
+<div class="modal fade" id="modal" tabindex="-1" role="dialog" aria-labelledby="exampleModalCenterTitle" aria-hidden="true">
+    <div class="modal-dialog modal-dialog-centered" role="document">
+        <div class="modal-content bg-light rounded border border-primary rounded-bottom">
+            <div class="modal-header">
+                <h5 class="modal-title" id="exampleModalLongTitle">@Model.Title</h5>
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                </button>
+            </div>
+            <div class="modal-body">
+                @Model.Body
+            </div>
+            <div class="row m-0 p-4">
+                <a asp-action="@Model.Action" asp-controller="@Model.Controller" class="btn @Model.ButtonClass mt-1 xs300px_JustifyContentCenter">@Model.ButtonText</a>
+                <button type="button" class="btn btn-secondary mt-1 xs300px_FloatRight" data-dismiss="modal">Anuluj</button>
+            </div>
+        </div>
+    </div>
+</div>
