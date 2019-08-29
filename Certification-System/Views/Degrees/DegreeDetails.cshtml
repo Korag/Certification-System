@@ -225,67 +225,7 @@ else
 
 @if (Model.UsersWithDegree.Count != 0)
 {
-    <div class="col-12 table-responsive">
-        <table id="listUsers" class="table table-striped table-bordered display" style="width: 100%;" role="grid">
-            <thead>
-                <tr>
-                    <th>
-                        @Html.DisplayNameFor(model => model.UsersWithDegree.First().Email)
-                    </th>
-                    <th>
-                        @Html.DisplayNameFor(model => model.UsersWithDegree.First().FirstName)
-                    </th>
-                    <th>
-                        @Html.DisplayNameFor(model => model.UsersWithDegree.First().LastName)
-                    </th>
-                    <th>
-                        @Html.DisplayNameFor(model => model.UsersWithDegree.First().CompanyRoleWorker)
-                    </th>
-                    <th>
-                        @Html.DisplayNameFor(model => model.UsersWithDegree.First().CompanyRoleManager)
-                    </th>
-                    <th>
-                        Operacje
-                    </th>
-                </tr>
-            </thead>
-            <tbody>
-                @foreach (var user in Model.UsersWithDegree)
-                {
-                    <tr>
-                        <td>
-                            @Html.DisplayFor(modelItem => user.Email)
-                        </td>
-                        <td>
-                            @Html.DisplayFor(modelItem => user.FirstName)
-                        </td>
-                        <td>
-                            @Html.DisplayFor(modelItem => user.LastName)
-                        </td>
-                        <td>
-                            <ul>
-                                @foreach (var companyWorker in user.CompanyRoleWorker)
-                                {
-                                    <li>@companyWorker</li>
-                                }
-                            </ul>
-                        </td>
-                        <td>
-                            <ul>
-                                @foreach (var companyManager in user.CompanyRoleManager)
-                                {
-                                    <li>@companyManager</li>
-                                }
-                            </ul>
-                        </td>
-                        <td>
-                            <a asp-action="UserDetails" asp-route-userIdentificator="@user.UserIdentificator" asp-controller="Users" class="btn btn-info m-1">Szczegóły</a>
-                        </td>
-                    </tr>
-                }
-            </tbody>
-        </table>
-    </div>
+    @await Component.InvokeAsync("DisplayUserViewModelDataTable", new { usersViewModel = Model.UsersWithDegree, tableIdentificator = "listUsers" })
 }
 else
 {
@@ -295,13 +235,6 @@ else
 @section Scripts{
     <script>
         $(document).ready(function () {
-
-            $('#listUsers').DataTable({
-                "language": {
-                    "url": "//cdn.datatables.net/plug-ins/1.10.19/i18n/Polish.json"
-                },
-            }
-            );
 
             $('#listCertificates').DataTable({
                 "language": {

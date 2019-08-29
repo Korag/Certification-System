@@ -46,8 +46,7 @@
                     <div class="dropdown-divider"></div>
                     <p class="dropdown-header mt-1">Egzaminy</p>
                     <div class="dropdown-divider"></div>
-                    <a asp-controller="Exams" asp-action="AddExamMenu" class="dropdown-item">Dodaj nowy egzamin *</a>
-                    <a asp-controller="Exams" asp-action="AddExamPeriod" class="dropdown-item">Dodaj nowy termin egzaminu </a>
+                    <a asp-controller="Exams" asp-action="AddExamMenu" class="dropdown-item">Dodaj nowy egzamin/termin egzaminu *</a>
                     <a asp-controller="Exams" asp-action="DisplayAllExams" class="dropdown-item">Wyświetl wszystkie egzaminy *</a>
                     <div class="dropdown-divider"></div>
                     <p class="dropdown-header mt-1">Tury egzaminów</p>
@@ -57,7 +56,7 @@
                     <div class="dropdown-divider"></div>
                     <p class="dropdown-header mt-1">Egzaminowanie</p>
                     <div class="dropdown-divider"></div>
-                    <a asp-controller="Exams" asp-action="AddUsersToExam" class="dropdown-item">Wyświetl wszystkie wyniki egzaminowania</a>
+                    <a asp-controller="Exams" asp-action="DisplayAllExamsResults" class="dropdown-item">Wyświetl wszystkie wyniki egzaminowania *</a>
                     <a asp-controller="Exams" asp-action="AddUsersToExam" class="dropdown-item">Przypisz użytkowników do egzaminu</a>
                     <a asp-controller="ExamsResult" asp-action="MarkExams" class="dropdown-item">Oceń egzamin</a>
                 </div>

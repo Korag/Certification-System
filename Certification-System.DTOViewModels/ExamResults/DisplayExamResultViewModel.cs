@@ -7,6 +7,7 @@ namespace Certification_System.DTOViewModels
 {
     public class DisplayExamResultViewModel
     {
+        [Display(Name = "Identyfikator wyniku")]
         public string ExamResultIndexer { get; set; }
 
         [Display(Name = "Ilość punktów")]

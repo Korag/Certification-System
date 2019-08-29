@@ -569,9 +569,9 @@ namespace Certification_System.Controllers
             return View(editedExam);
         }
 
-        // GET: DisplayAllExamsResuts
+        // GET: DisplayAllExamsResults
         [Authorize(Roles = "Admin")]
-        public ActionResult DisplayAllExamsResuts()
+        public ActionResult DisplayAllExamsResults()
         {
             var ExamsResults = _context.examResultRepository.GetListOfExamsResults();
             var Exams = _context.examRepository.GetListOfExams();
