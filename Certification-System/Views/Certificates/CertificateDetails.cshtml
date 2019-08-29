@@ -69,67 +69,7 @@
 @if (Model.UsersWithCertificate.Count != 0)
 {
     <h2 class="mt-4 mb-4">Użytkownicy posiadający certyfikat</h2>
-    <div class="col-12 table-responsive">
-        <table id="listUsers" class="table table-striped table-bordered display" style="width: 100%;" role="grid">
-            <thead>
-                <tr>
-                    <th>
-                        @Html.DisplayNameFor(model => model.UsersWithCertificate.First().Email)
-                    </th>
-                    <th>
-                        @Html.DisplayNameFor(model => model.UsersWithCertificate.First().FirstName)
-                    </th>
-                    <th>
-                        @Html.DisplayNameFor(model => model.UsersWithCertificate.First().LastName)
-                    </th>
-                    <th>
-                        @Html.DisplayNameFor(model => model.UsersWithCertificate.First().CompanyRoleWorker)
-                    </th>
-                    <th>
-                        @Html.DisplayNameFor(model => model.UsersWithCertificate.First().CompanyRoleManager)
-                    </th>
-                    <th>
-                        Operacje
-                    </th>
-                </tr>
-            </thead>
-            <tbody>
-                @foreach (var user in Model.UsersWithCertificate)
-                {
-                    <tr>
-                        <td>
-                            @Html.DisplayFor(modelItem => user.Email)
-                        </td>
-                        <td>
-                            @Html.DisplayFor(modelItem => user.FirstName)
-                        </td>
-                        <td>
-                            @Html.DisplayFor(modelItem => user.LastName)
-                        </td>
-                        <td>
-                            <ul>
-                                @foreach (var companyWorker in user.CompanyRoleWorker)
-                                {
-                                    <li>@companyWorker</li>
-                                }
-                            </ul>
-                        </td>
-                        <td>
-                            <ul>
-                                @foreach (var companyManager in user.CompanyRoleManager)
-                                {
-                                    <li>@companyManager</li>
-                                }
-                            </ul>
-                        </td>
-                        <td>
-                            <a asp-action="UserDetails" asp-route-userIdentificator="@user.UserIdentificator" asp-controller="Users" class="btn btn-info m-1">Szczegóły</a>
-                        </td>
-                    </tr>
-                }
-            </tbody>
-        </table>
-    </div>
+    @await Component.InvokeAsync("DisplayCrucialDataWithCompaniesRoleUserDataTable", new { usersViewModel = Model.UsersWithCertificate, tableIdentificator = "listUsers" })
 }
 else
 {
@@ -139,108 +79,16 @@ else
 @if (Model.CoursesWhichEndedWithCertificate.Count != 0)
 {
     <h2 class="mt-4 mb-4">Kursy, które zakończyły się przyznaniem tego typu certyfikatu</h2>
-    <div class="col-12 table-responsive">
-        <table id="listCourses" class="table table-striped table-bordered display" style="width: 100%;" role="grid">
-            <thead>
-                <tr>
-                    <th>
-                        @Html.DisplayNameFor(model => model.CoursesWhichEndedWithCertificate.First().CourseIndexer)
-                    </th>
-                    <th>
-                        @Html.DisplayNameFor(model => model.CoursesWhichEndedWithCertificate.First().Name)
-                    </th>
-                    <th>
-                        @Html.DisplayNameFor(model => model.CoursesWhichEndedWithCertificate.First().Description)
-                    </th>
-                    <th>
-                        @Html.DisplayNameFor(model => model.CoursesWhichEndedWithCertificate.First().DateOfStart)
-                    </th>
-                    <th>
-                        @Html.DisplayNameFor(model => model.CoursesWhichEndedWithCertificate.First().DateOfEnd)
-                    </th>
-                    <th>
-                        @Html.DisplayNameFor(model => model.CoursesWhichEndedWithCertificate.First().EnrolledUsersLimit)
-                    </th>
-                    <th>
-                        @Html.DisplayNameFor(model => model.CoursesWhichEndedWithCertificate.First().EnrolledUsersQuantity)
-                    </th>
-                    <th>
-                        @Html.DisplayNameFor(model => model.CoursesWhichEndedWithCertificate.First().ExamIsRequired)
-                    </th>
-                    <th>
-                        @Html.DisplayNameFor(model => model.CoursesWhichEndedWithCertificate.First().CourseEnded)
-                    </th>
-                    <th>
-                        @Html.DisplayNameFor(model => model.CoursesWhichEndedWithCertificate.First().CourseLength)
-                    </th>
-                    <th>
-                        @Html.DisplayNameFor(model => model.CoursesWhichEndedWithCertificate.First().Branches)
-                    </th>
-                    <th>
-                        Operacje
-                    </th>
-                </tr>
-            </thead>
-            <tbody>
-                @foreach (var course in Model.CoursesWhichEndedWithCertificate)
-                {
-                <tr>
-                    <td>
-                        @Html.DisplayFor(modelItem => course.CourseIndexer)
-                    </td>
-                    <td>
-                        @Html.DisplayFor(modelItem => course.Name)
-                    </td>
-                    <td>
-                        @Html.DisplayFor(modelItem => course.Description)
-                    </td>
-                    <td>
-                        @Html.DisplayFor(modelItem => course.DateOfStart)
-                    </td>
-                    <td>
-                        @Html.DisplayFor(modelItem => course.DateOfEnd)
-                    </td>
-                    <td>
-                        @Html.DisplayFor(modelItem => course.EnrolledUsersLimit)
-                    </td>
-                    <td>
-                        @Html.DisplayFor(modelItem => course.EnrolledUsersQuantity)
-                    </td>
-                    <td>
-                        <input type="checkbox" asp-for="@course.ExamIsRequired" class="form-control col-12" data-toggle="toggle" data-on="Tak" data-off="Nie" data-size="sm" disabled />
-                    </td>
-                    <td>
-                        <input type="checkbox" asp-for="@course.CourseEnded" class="form-control col-12" data-toggle="toggle" data-on="Tak" data-off="Nie" data-size="sm" disabled />
-                    </td>
-                    <td>
-                        @Html.DisplayFor(modelItem => course.CourseLength)
-                    </td>
-                    <td>
-                        <ul>
-                            @foreach (var branch in course.Branches)
-                            {
-                                <li>@branch</li>
-                            }
-                        </ul>
-                    </td>
-                    <td>
-                        <a asp-action="CourseDetails" asp-route-courseIdentificator="@course.CourseIdentificator" asp-controller="Courses" class="btn btn-info m-1">Szczegóły</a>
-                    </td>
-                </tr>
-                }
-            </tbody>
-        </table>
-    </div>
+    @await Component.InvokeAsync("DisplayCourseDataTable", new { courseViewModel = Model.CoursesWhichEndedWithCertificate, tableIdentificator = "listCourses" })
 }
 else
 {
     <div class="mt-4 mb-4 alert alert-warning">Brak kursów, które zakończyły się nadaniem takiego certyfikatu</div>
 }
 
-@section Scripts{
+@section Scripts {
     <script>
         $(document).ready(function () {
-
             $('#listUsers').DataTable({
                 "language": {
                     "url": "//cdn.datatables.net/plug-ins/1.10.19/i18n/Polish.json"
@@ -254,10 +102,5 @@ else
                 },
             }
             );
-
-        });
     </script>
 }
-
-
-

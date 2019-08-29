@@ -225,7 +225,7 @@ else
 
 @if (Model.UsersWithDegree.Count != 0)
 {
-    @await Component.InvokeAsync("DisplayUserViewModelDataTable", new { usersViewModel = Model.UsersWithDegree, tableIdentificator = "listUsers" })
+    @await Component.InvokeAsync("DisplayUserDataTable", new { usersViewModel = Model.UsersWithDegree, tableIdentificator = "listUsers" })
 }
 else
 {
@@ -235,6 +235,13 @@ else
 @section Scripts{
     <script>
         $(document).ready(function () {
+
+            $('#listUsers').DataTable({
+                "language": {
+                    "url": "//cdn.datatables.net/plug-ins/1.10.19/i18n/Polish.json"
+                },
+            }
+            );
 
             $('#listCertificates').DataTable({
                 "language": {
