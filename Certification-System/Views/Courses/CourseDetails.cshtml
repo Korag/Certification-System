@@ -205,7 +205,7 @@ else
                         @Html.DisplayNameFor(model => model.Meetings.First().NumberOfApartment)
                     </th>
                     <th>
-                        @Html.DisplayNameFor(model => model.Meetings.First().InstructorsCredentials)
+                        @Html.DisplayNameFor(model => model.Meetings.First().Instructors)
                     </th>
                     <th>
                         Operacje
@@ -242,9 +242,9 @@ else
                         </td>
                         <td>
                             <ul>
-                                @foreach (var instructor in meeting.InstructorsCredentials)
+                                @foreach (var instructor in meeting.Instructors)
                                 {
-                                    <li>@instructor</li>
+                                    <li>@instructor.FirstName  @instructor.LastName</li>
                                 }
                             </ul>
                         </td>

@@ -139,7 +139,7 @@ namespace Certification_System.Controllers
                 _context.courseRepository.UpdateCourse(course);
                 _context.examRepository.AddExam(exam);
 
-                return RedirectToAction("ConfirmationOfActionOnExam", new { examIdentificator = exam.ExamIdentificator, examsTermsIdentificators = ExamsTermsIdentificators, TypeOfAction = "Add" });
+                return RedirectToAction("ConfirmationOfActionOnExam", new { examIdentificator = exam.ExamIdentificator, TypeOfAction = "Add" });
             }
 
             newExam.AvailableCourses = _context.courseRepository.GetActiveCoursesWhereExamIsRequiredAsSelectList().ToList();
@@ -277,7 +277,7 @@ namespace Certification_System.Controllers
                 _context.courseRepository.UpdateCourse(course);
                 _context.examRepository.AddExam(exam);
 
-                return RedirectToAction("ConfirmationOfActionOnExam", new { examIdentificator = exam.ExamIdentificator, examsTermsIdentificators = ExamsTermsIdentificators, TypeOfAction = "Add" });
+                return RedirectToAction("ConfirmationOfActionOnExam", new { examIdentificator = exam.ExamIdentificator, TypeOfAction = "Add" });
             }
 
             newExamPeriod.AvailableCourses = _context.courseRepository.GetActiveCoursesWhereExamIsRequiredAsSelectList().ToList();
@@ -373,7 +373,7 @@ namespace Certification_System.Controllers
 
         // GET: ConfirmationOfActionOnExam
         [Authorize(Roles = "Admin")]
-        public ActionResult ConfirmationOfActionOnExam(string examIdentificator, ICollection<string> examsTermsIdentificators, string TypeOfAction)
+        public ActionResult ConfirmationOfActionOnExam(string examIdentificator, string TypeOfAction)
         {
             if (examIdentificator != null)
             {
@@ -386,17 +386,16 @@ namespace Certification_System.Controllers
 
                 DisplayExamWithTermsViewModel modifiedExam = _mapper.Map<DisplayExamWithTermsViewModel>(Exam);
 
-                if (examsTermsIdentificators.Count() != 0)
+                if (Exam.ExamTerms.Count() != 0)
                 {
-                    var ExamTerms = _context.examTermRepository.GetExamsTermsById(examsTermsIdentificators);
+                    var ExamTerms = _context.examTermRepository.GetExamsTermsById(Exam.ExamTerms);
                     modifiedExam.ExamTerms = _mapper.Map<List<DisplayExamTermViewModel>>(ExamTerms);
 
-                    foreach (var examTerms in ExamTerms)
+                    foreach (var examTerm in modifiedExam.ExamTerms)
                     {
-                        List<string> ExamTermsExaminersIdentificators = new List<string>();
-                        var SingleExamTermExaminers = _context.userRepository.GetUsersById(examTerms.Examiners);
+                        var SingleExamTermExaminers = _context.userRepository.GetUsersById(ExamTerms.Where(z => z.ExamTermIdentificator == examTerm.ExamTermIdentificator).Select(z=> z.Examiners).FirstOrDefault());
 
-                        modifiedExam.Examiners = _mapper.Map<List<DisplayCrucialDataUserViewModel>>(SingleExamTermExaminers);
+                        examTerm.Examiners = _mapper.Map<List<DisplayCrucialDataUserViewModel>>(SingleExamTermExaminers);
                     }
                 }
 
@@ -561,7 +560,7 @@ namespace Certification_System.Controllers
                 OriginExam = _mapper.Map<EditExamWithExamTermsViewModel, Exam>(editedExam, OriginExam);
                 _context.examRepository.UpdateExam(OriginExam);
 
-                return RedirectToAction("ConfirmationOfActionOnExam", "Exams", new { examIdentificator = editedExam.ExamIdentificator, examsTermsIdentificators = editedExam.ExamTerms.Select(z => z.ExamTermIdentificator).ToList(), TypeOfAction = "Update" });
+                return RedirectToAction("ConfirmationOfActionOnExam", "Exams", new { examIdentificator = editedExam.ExamIdentificator, TypeOfAction = "Update" });
             }
 
             editedExam.AvailableExaminers = _context.userRepository.GetExaminersAsSelectList().ToList();

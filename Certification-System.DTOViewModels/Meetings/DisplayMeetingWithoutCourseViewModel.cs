@@ -4,7 +4,7 @@ using System.ComponentModel.DataAnnotations;
 
 namespace Certification_System.DTOViewModels
 {
-    public class DisplayMeetingViewModel
+    public class DisplayMeetingWithoutCourseViewModel
     {
         public string MeetingIdentificator { get; set; }
 
@@ -32,9 +32,6 @@ namespace Certification_System.DTOViewModels
 
         [Display(Name = "Numer domu/mieszkania")]
         public string NumberOfApartment { get; set; }
-
-        [Display(Name = "Kurs")]
-        public DisplayCrucialDataCourseViewModel Course { get; set; }
 
         [Display(Name = "Instruktorzy")]
         public ICollection<DisplayCrucialDataUserViewModel> Instructors { get; set; }

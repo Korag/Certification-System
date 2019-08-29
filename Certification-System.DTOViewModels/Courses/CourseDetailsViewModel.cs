@@ -42,7 +42,7 @@ namespace Certification_System.DTOViewModels
         public ICollection<string> Branches { get; set; }
 
         [Display(Name = "Spotkania w ramach szkolenia")]
-        public ICollection<DisplayMeetingViewModel> Meetings { get; set; }
+        public ICollection<DisplayMeetingWithoutCourseViewModel> Meetings { get; set; }
 
         [Display(Name = "Zarejestrowani uczestnicy")]
         public ICollection<DisplayCrucialDataWithCompaniesRoleUserViewModel> EnrolledUsers { get; set; }

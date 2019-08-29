@@ -28,7 +28,7 @@ namespace Certification_System.Controllers
 
         // GET: ConfirmationOfActionOnCourse
         [Authorize(Roles = "Admin")]
-        public ActionResult ConfirmationOfActionOnCourse(string courseIdentificator, ICollection<string> meetingsIdentificators, string TypeOfAction)
+        public ActionResult ConfirmationOfActionOnCourse(string courseIdentificator, string TypeOfAction)
         {
             if (courseIdentificator != null)
             {
@@ -38,39 +38,17 @@ namespace Certification_System.Controllers
 
                 DisplayCourseWithMeetingsViewModel modifiedCourse = _mapper.Map<DisplayCourseWithMeetingsViewModel>(Course);
 
-                if (Course.Meetings != null)
+                if (Course.Meetings.Count() != 0)
                 {
-                    //    var MeetingsId = _context.GetMeetingsById(Course.Meetings);
-                    //    List<AddMeetingViewModel> Meetings = new List<AddMeetingViewModel>();
+                    var Meetings = _context.meetingRepository.GetMeetingsById(Course.Meetings);
+                    modifiedCourse.Meetings = _mapper.Map<List<DisplayMeetingWithoutCourseViewModel>>(Meetings);
 
-                    //    foreach (var meeting in MeetingsId)
-                    //    {
-                    //        var Instructors = _context.GetInstructorsById(meeting.Instructor);
+                    foreach (var meeting in modifiedCourse.Meetings)
+                    {
+                        var Instructors = _context.userRepository.GetUsersById(Meetings.Where(z => z.MeetingIdentificator == meeting.MeetingIdentificator).Select(z => z.Instructors).FirstOrDefault());
 
-                    //        AddMeetingViewModel meetingsInCourse = new AddMeetingViewModel
-                    //        {
-                    //            MeetingIndexer = meeting.MeetingIndexer,
-                    //            Description = meeting.Description,
-                    //            DateOfMeeting = meeting.DateOfMeeting,
-                    //            Country = meeting.Country,
-                    //            City = meeting.City,
-                    //            PostCode = meeting.PostCode,
-                    //            Address = meeting.Address,
-                    //            NumberOfApartment = meeting.NumberOfApartment,
-
-                    //            Instructors = new List<string>()
-                    //        };
-
-                    //        foreach (var instructor in Instructors)
-                    //        {
-                    //            string instructorIdentity = instructor.FirstName + instructor.LastName;
-                    //            meetingsInCourse.Instructors.Add(instructorIdentity);
-                    //        }
-
-                    //        Meetings.Add(meetingsInCourse);
-                    //    }
-
-                    //    addedCourse.MeetingsViewModels = Meetings;
+                        meeting.Instructors = _mapper.Map<List<DisplayCrucialDataUserViewModel>>(Instructors);
+                    }
                 }
 
                 var BranchNames = _context.branchRepository.GetBranchesById(Course.Branches);
@@ -79,7 +57,7 @@ namespace Certification_System.Controllers
                 return View(modifiedCourse);
             }
 
-            return RedirectToAction(nameof(AddNewCourse));
+            return RedirectToAction(nameof(AddCourseMenu));
         }
 
         // GET: AddCourseMenu
@@ -100,7 +78,7 @@ namespace Certification_System.Controllers
             }
             else
             {
-                return RedirectToAction("AddNewCourse", "Courses");
+                return View();
             }
         }
 
@@ -196,7 +174,7 @@ namespace Certification_System.Controllers
 
                 _context.courseRepository.AddCourse(course);
 
-                return RedirectToAction("ConfirmationOfActionOnCourse", new { courseIdentificator = course.CourseIdentificator, meetingsIdentificators = MeetingsIdentificators, TypeOfAction = "Add" });
+                return RedirectToAction("ConfirmationOfActionOnCourse", new { courseIdentificator = course.CourseIdentificator, TypeOfAction = "Add" });
             }
 
             newCourse.AvailableBranches = _context.branchRepository.GetBranchesAsSelectList().ToList();
@@ -231,14 +209,15 @@ namespace Certification_System.Controllers
             var Course = _context.courseRepository.GetCourseById(courseIdentificator);
             var Meetings = _context.meetingRepository.GetMeetingsById(Course.Meetings);
 
-            List<DisplayMeetingViewModel> meetingsViewModel = new List<DisplayMeetingViewModel>();
+            List<DisplayMeetingWithoutCourseViewModel> meetingsViewModel = new List<DisplayMeetingWithoutCourseViewModel>();
 
             // przemyśleć nad zmniejszeniem ViewModelu -> niepotrzebne pola
             foreach (var meeting in Meetings)
             {
-                DisplayMeetingViewModel singleMeeting = _mapper.Map<DisplayMeetingViewModel>(meeting);
-                singleMeeting.CourseIdentificator = Course.CourseIdentificator;
-                singleMeeting.InstructorsCredentials = _context.userRepository.GetInstructorsById(meeting.Instructors).Select(z => z.FirstName + " " + z.LastName).ToList();
+                var meetingInstructors = _context.userRepository.GetInstructorsById(meeting.Instructors).ToList();
+
+                DisplayMeetingWithoutCourseViewModel singleMeeting = _mapper.Map<DisplayMeetingWithoutCourseViewModel>(meeting);
+                singleMeeting.Instructors = _mapper.Map<List<DisplayCrucialDataUserViewModel>>(meetingInstructors);
 
                 meetingsViewModel.Add(singleMeeting);
             }
@@ -396,7 +375,7 @@ namespace Certification_System.Controllers
 
                 _context.meetingRepository.UpdateMeetings(OriginMeetings);
 
-                return RedirectToAction("ConfirmationOfActionOnCourse", "Courses", new { courseIdentificator = editedCourse.CourseIdentificator, meetingsIdentificators = editedCourse.Meetings.Select(z => z.MeetingIdentificator).ToList(), TypeOfAction = "Update" });
+                return RedirectToAction("ConfirmationOfActionOnCourse", "Courses", new { courseIdentificator = editedCourse.CourseIdentificator, TypeOfAction = "Update" });
             }
 
             editedCourse.AvailableBranches = _context.branchRepository.GetBranchesAsSelectList().ToList();

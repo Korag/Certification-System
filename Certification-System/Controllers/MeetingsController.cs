@@ -31,15 +31,15 @@ namespace Certification_System.Controllers
             if (meetingIdentificator != null)
             {
                 var Meeting = _context.meetingRepository.GetMeetingById(meetingIdentificator);
+                var Course = _context.courseRepository.GetCourseByMeetingId(meetingIdentificator);
 
                 DisplayMeetingViewModel modifiedMeeting = _mapper.Map<DisplayMeetingViewModel>(Meeting);
-                modifiedMeeting.CourseIndexer = _context.courseRepository.GetCourseByMeetingId(meetingIdentificator).CourseIndexer;
-                modifiedMeeting.InstructorsCredentials = new List<string>();
-          
-                if (Meeting.Instructors != null)
+                modifiedMeeting.Course = _mapper.Map<DisplayCrucialDataCourseViewModel>(Course);
+
+                if (Meeting.Instructors.Count() != 0)
                 {
                     var Instructors = _context.userRepository.GetInstructorsById(Meeting.Instructors);
-                    modifiedMeeting.InstructorsCredentials = Instructors.Select(z => z.FirstName + " " + z.LastName).ToList();
+                    modifiedMeeting.Instructors = _mapper.Map<List<DisplayCrucialDataUserViewModel>>(Instructors);
                 }
 
                 return View(modifiedMeeting);
@@ -130,16 +130,12 @@ namespace Certification_System.Controllers
 
             foreach (var meeting in Meetings)
             {
-                Course RelatedCourse = _context.courseRepository.GetCourseByMeetingId(meeting.MeetingIdentificator);
-                List<CertificationPlatformUser> RelatedInstructors = _context.userRepository.GetInstructorsById(meeting.Instructors).ToList();
+                var Course = _context.courseRepository.GetCourseByMeetingId(meeting.MeetingIdentificator);
+                var Instructors = _context.userRepository.GetInstructorsById(meeting.Instructors).ToList();
 
                 DisplayMeetingViewModel singleMeeting = _mapper.Map<DisplayMeetingViewModel>(meeting);
-                singleMeeting.CourseIdentificator = RelatedCourse.CourseIdentificator;
-                singleMeeting.CourseIndexer = RelatedCourse.CourseIndexer;
-                singleMeeting.CourseName = RelatedCourse.Name;
-
-                singleMeeting.InstructorsIdentificators = RelatedInstructors.Select(z => z.Id).ToList();
-                singleMeeting.InstructorsCredentials = RelatedInstructors.Select(z => z.FirstName + " " + z.LastName).ToList();
+                singleMeeting.Course = _mapper.Map<DisplayCrucialDataCourseViewModel>(Course);
+                singleMeeting.Instructors = _mapper.Map<List<DisplayCrucialDataUserViewModel>>(Instructors);
 
                 ListOfMeetings.Add(singleMeeting);
             }
