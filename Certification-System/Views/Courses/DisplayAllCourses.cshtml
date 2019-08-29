@@ -118,12 +118,12 @@
                         <button class="btn btn-success dropdown-toggle" type="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">Operacje</button>
                         <div class="dropdown-menu">
                             <a asp-action="CourseDetails" asp-route-courseIdentificator="@course.CourseIdentificator" asp-controller="Courses" class="btn btn-info w-100 mb-1">Szczegóły</a>
-                            <a asp-action="EditCourse" asp-route-courseIdentificator="@course.CourseIdentificator" asp-controller="Courses" class="btn btn-warning w-100">Edytuj</a>
+                            <a asp-action="EditCourseHub" asp-route-courseIdentificator="@course.CourseIdentificator" asp-controller="Courses" class="btn btn-warning w-100">Edytuj</a>
                         </div>
                     </div>
 
                     @*<a asp-action="CourseDetails" asp-route-courseIdentificator="@course.CourseIdentificator" asp-controller="Courses" class="btn btn-info m-1">Szczegóły</a>
-            <a asp-action="EditCourse" asp-route-courseIdentificator="@course.CourseIdentificator" asp-controller="Courses" class="btn btn-warning m-1">Edytuj</a>*@
+        <a asp-action="EditCourseHub" asp-route-courseIdentificator="@course.CourseIdentificator" asp-controller="Courses" class="btn btn-warning m-1">Edytuj</a>*@
                 </td>
             </tr>
             }

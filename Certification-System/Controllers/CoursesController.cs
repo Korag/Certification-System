@@ -309,6 +309,22 @@ namespace Certification_System.Controllers
             return View(courseDetails);
         }
 
+        // GET: EditCourseHub
+        [Authorize(Roles = "Admin")]
+        public ActionResult EditCourseHub(string courseIdentificator)
+        {
+            var Course = _context.courseRepository.GetCourseById(courseIdentificator);
+
+            if (Course.Meetings.Count() != 0)
+            {
+                return RedirectToAction("EditCourseWithMeetings", "Courses", new { courseIdentificator = courseIdentificator });
+            }
+            else
+            {
+                return RedirectToAction("EditCourse", "Courses", new { courseIdentificator = courseIdentificator });
+            }
+        }
+
         // GET: EditCourse
         [Authorize(Roles = "Admin")]
         public ActionResult EditCourse(string courseIdentificator)
