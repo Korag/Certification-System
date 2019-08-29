@@ -338,17 +338,16 @@ namespace Certification_System.Services
             #endregion
 
             #region Meetings
-            CreateMap<Meeting, DisplayMeetingViewModel>();
-
-            CreateMap<Meeting, DisplayMeetingWithInstructorsViewModel>();
+            CreateMap<Meeting, DisplayMeetingViewModel>()
+                     .ForMember(dest => dest.Instructors, opts => opts.Ignore());
 
             CreateMap<AddMeetingViewModel, Meeting>()
                      .ForMember(dest => dest.MeetingIdentificator, opts => opts.Ignore())
                      .ForMember(dest => dest.Instructors, opts => opts.MapFrom(src => src.SelectedInstructors));
 
             CreateMap<AddMeetingWithoutCourseViewModel, Meeting>()
-                   .ForMember(dest => dest.MeetingIdentificator, opts => opts.Ignore())
-                   .ForMember(dest => dest.Instructors, opts => opts.MapFrom(src => src.SelectedInstructors));
+                     .ForMember(dest => dest.MeetingIdentificator, opts => opts.Ignore())
+                     .ForMember(dest => dest.Instructors, opts => opts.MapFrom(src => src.SelectedInstructors));
 
             CreateMap<Meeting, EditMeetingViewModel>()
                      .ForMember(dest => dest.SelectedInstructors, opts => opts.MapFrom(src => src.Instructors));

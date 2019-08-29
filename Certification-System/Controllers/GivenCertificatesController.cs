@@ -203,8 +203,15 @@ namespace Certification_System.Controllers
             DisplayCourseViewModel courseViewModel = _mapper.Map<DisplayCourseViewModel>(Course);
             courseViewModel.Branches = _context.branchRepository.GetBranchesById(courseViewModel.Branches);
 
-            List<DisplayMeetingWithInstructorsViewModel> meetingsViewModel = _mapper.Map<List<DisplayMeetingWithInstructorsViewModel>>(Meetings);
-            meetingsViewModel.ForEach(z=> z.Instructors = _context.userRepository.GetInstructorsById(z.Instructors).Select(s=> s.FirstName + " " + s.LastName).ToList());
+            List<DisplayMeetingWithoutCourseViewModel> meetingsViewModel = new List<DisplayMeetingWithoutCourseViewModel>();
+
+            foreach (var meeting in Meetings)
+            {
+                DisplayMeetingWithoutCourseViewModel singleMeeting =  _mapper.Map<DisplayMeetingWithoutCourseViewModel>(meeting);
+                singleMeeting.Instructors = _mapper.Map<List<DisplayCrucialDataUserViewModel>>(Instructors.Where(z => meeting.Instructors.Contains(z.Id)).ToList());
+
+                meetingsViewModel.Add(singleMeeting);
+            }
 
             List<DisplayCompanyViewModel> companiesViewModel = _mapper.Map<List<DisplayCompanyViewModel>>(Companies);
 

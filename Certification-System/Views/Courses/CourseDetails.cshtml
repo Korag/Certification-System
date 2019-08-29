@@ -481,12 +481,12 @@ else
                     <th>
                         @Html.DisplayNameFor(model => model.EnrolledUsers.First().CompanyRoleManager)
                     </th>
-                    @if (Model.CourseEnded)
+                    @*@if (Model.CourseEnded)
                     {
                         <th>
                             @Html.DisplayNameFor(model => model.DispensedGivenCertificates)
                         </th>
-                    }
+                    }*@
                     <th>
                         Operacje
                     </th>
@@ -521,12 +521,12 @@ else
                                 }
                             </ul>
                         </td>
-                        @if (Model.CourseEnded)
+                        @*@if (Model.CourseEnded)
                         {
                             <td>
-                                <input type="checkbox" asp-for="@Model.DispensedGivenCertificates.Where(z=> z.UserIdentificator == user.UserIdentificator).Select(z=> z.GivenCertificateIsEarned)FirstOrDefault()" data-toggle="toggle" data-on="Przyznano" data-off="Nie przyznano" data-size="sm" />
+                                <input type="checkbox" asp-for="@Model.DispensedGivenCertificates.Where(z=> z.UserIdentificator == user.UserIdentificator).Select(z=> z.GivenCertificateIsEarned).FirstOrDefault()" data-toggle="toggle" data-on="Przyznano" data-off="Nie przyznano" data-size="sm" />
                             </td>
-                        }
+                        }*@
                         <td>
                             <div class="dropdown p-0">
                                 <button class="btn btn-success dropdown-toggle" type="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">Operacje</button>

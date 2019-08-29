@@ -34,6 +34,6 @@ namespace Certification_System.DTOViewModels
 
 
         [Display(Name = "Spotkania w ramach kursu")]
-        public ICollection<DisplayMeetingWithInstructorsViewModel> Meetings { get; set; }
+        public ICollection<DisplayMeetingWithoutCourseViewModel> Meetings { get; set; }
     }
 }

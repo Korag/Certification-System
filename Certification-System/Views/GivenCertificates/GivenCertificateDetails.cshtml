@@ -454,7 +454,7 @@ else
                             <ul>
                                 @foreach (var instructor in meeting.Instructors)
                                 {
-                                    <li>@instructor</li>
+                                    <li>@instructor.FirstName @instructor.LastName</li>
                                 }
                             </ul>
                         </td>
