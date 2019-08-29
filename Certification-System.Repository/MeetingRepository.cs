@@ -77,5 +77,14 @@ namespace Certification_System.Repository
         {
             GetMeetings().InsertMany(meetings);
         }
+
+        public void UpdateMeetings(ICollection<Meeting> meetings)
+        {
+            foreach (var meeting in meetings)
+            {
+                var filter = Builders<Meeting>.Filter.Eq(x => x.MeetingIdentificator, meeting.MeetingIdentificator);
+                var result = GetMeetings().ReplaceOne(filter, meeting);
+            }
+        }
     }
 }

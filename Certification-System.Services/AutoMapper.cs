@@ -89,14 +89,22 @@ namespace Certification_System.Services
                      .ForMember(dest => dest.EnrolledUsers, opts => opts.MapFrom(src => new List<string>()));
 
             CreateMap<Course, EditCourseViewModel>()
-                      .ForMember(dest => dest.SelectedBranches, opts => opts.MapFrom(src => src.Branches));
+                     .ForMember(dest => dest.SelectedBranches, opts => opts.MapFrom(src => src.Branches));
+
+            CreateMap<Course, EditCourseWithMeetingsViewModel>()
+                     .ForMember(dest => dest.SelectedBranches, opts => opts.MapFrom(src => src.Branches));
+
+            CreateMap<EditCourseWithMeetingsViewModel, Course>()
+                   .ForMember(dest => dest.CourseIdentificator, opts => opts.Ignore())
+                   .ForMember(dest => dest.Meetings, opts => opts.Ignore())
+                   .ForMember(dest => dest.EnrolledUsers, opts => opts.Ignore())
+                   .ForMember(dest => dest.Branches, opts => opts.MapFrom(src => src.SelectedBranches));
 
             CreateMap<EditCourseViewModel, Course>()
                      .ForMember(dest => dest.CourseIdentificator, opts => opts.Ignore())
                      .ForMember(dest => dest.Meetings, opts => opts.Ignore())
                      .ForMember(dest => dest.EnrolledUsers, opts => opts.Ignore())
                      .ForMember(dest => dest.Branches, opts => opts.MapFrom(src => src.SelectedBranches));
-
 
             CreateMap<Course, DispenseGivenCertificatesViewModel>()
                     .ForMember(dest => dest.DispensedGivenCertificates, opts => opts.Ignore())

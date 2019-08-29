@@ -66,8 +66,8 @@ namespace Certification_System.Repository
         {
             foreach (var examTerm in examTerms)
             {
-            var filter = Builders<ExamTerm>.Filter.Eq(x => x.ExamTermIdentificator, examTerm.ExamTermIdentificator);
-            var result = GetExamsTerms().ReplaceOne(filter, examTerm);
+                var filter = Builders<ExamTerm>.Filter.Eq(x => x.ExamTermIdentificator, examTerm.ExamTermIdentificator);
+                var result = GetExamsTerms().ReplaceOne(filter, examTerm);
             }
         }
 

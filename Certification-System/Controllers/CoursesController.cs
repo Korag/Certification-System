@@ -351,6 +351,44 @@ namespace Certification_System.Controllers
             return View(editedCourse);
         }
 
+        // GET: EditCourseWithMeetings
+        [Authorize(Roles = "Admin")]
+        public ActionResult EditCourseWithMeetings(string courseIdentificator)
+        {
+            var Course = _context.courseRepository.GetCourseById(courseIdentificator);
+            var Meetings = _context.meetingRepository.GetMeetingsById(Course.Meetings);
+
+            EditCourseWithMeetingsViewModel courseToUpdate = _mapper.Map<EditCourseWithMeetingsViewModel>(Course);
+            courseToUpdate.AvailableBranches = _context.branchRepository.GetBranchesAsSelectList().ToList();
+            courseToUpdate.AvailableInstructors = _context.userRepository.GetInstructorsAsSelectList().ToList();
+            courseToUpdate.Meetings = _mapper.Map<List<EditMeetingViewModel>>(Meetings);
+
+            return View(courseToUpdate);
+        }
+
+        // POST: EditCourseWithMeetings
+        [Authorize(Roles = "Admin")]
+        [HttpPost]
+        public ActionResult EditCourseWithMeetings(EditCourseWithMeetingsViewModel editedCourse)
+        {
+            var OriginCourse = _context.courseRepository.GetCourseById(editedCourse.CourseIdentificator);
+            var OriginMeetings = _context.meetingRepository.GetMeetingsById(editedCourse.Meetings.Select(z => z.MeetingIdentificator).ToList());
+
+            if (ModelState.IsValid)
+            {
+                OriginMeetings = _mapper.Map<List<EditMeetingViewModel>, List<Meeting>>(editedCourse.Meetings.ToList(), OriginMeetings.ToList());
+
+                _context.meetingRepository.UpdateMeetings(OriginMeetings);
+
+                return RedirectToAction("ConfirmationOfActionOnCourse", "Courses", new { courseIdentificator = editedCourse.CourseIdentificator, meetingsIdentificators = editedCourse.Meetings.Select(z => z.MeetingIdentificator).ToList(), TypeOfAction = "Update" });
+            }
+
+            editedCourse.AvailableBranches = _context.branchRepository.GetBranchesAsSelectList().ToList();
+            editedCourse.AvailableInstructors = _context.userRepository.GetInstructorsAsSelectList().ToList();
+
+            return View(editedCourse);
+        }
+
         // GET: AssignUserToCourse
         [Authorize(Roles = "Admin")]
         public ActionResult AssignUserToCourse(ICollection<string> userIdentificators, string courseIdentificator)
