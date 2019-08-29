@@ -130,5 +130,13 @@ namespace Certification_System.Repository
 
             return SelectList;
         }
+
+        public Exam GetExamByExamResultId(string examResultId)
+        {
+            var filter = Builders<Exam>.Filter.Where(z => z.ExamResults.Contains(examResultId));
+            var resultExam = GetExams().Find<Exam>(filter).FirstOrDefault();
+
+            return resultExam;
+        }
     }
 }

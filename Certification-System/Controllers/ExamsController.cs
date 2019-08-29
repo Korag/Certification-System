@@ -568,5 +568,36 @@ namespace Certification_System.Controllers
 
             return View(editedExam);
         }
+
+        // GET: DisplayAllExamsResuts
+        [Authorize(Roles = "Admin")]
+        public ActionResult DisplayAllExamsResuts()
+        {
+            var ExamsResults = _context.examResultRepository.GetListOfExamsResults();
+            var Exams = _context.examRepository.GetListOfExams();
+            var Courses = _context.courseRepository.GetListOfCourses();
+            var Users = _context.userRepository.GetListOfUsers();
+
+            List<DisplayExamResultViewModel> ListOfExamsResults = new List<DisplayExamResultViewModel>();
+
+            foreach (var examResult in ExamsResults)
+            {
+                DisplayExamResultViewModel singleExamResult = _mapper.Map<DisplayExamResultViewModel>(examResult);
+
+                var RelatedExam = _context.examRepository.GetExamByExamResultId(examResult.ExamResultIdentificator);
+                var RelatedCourse = _context.courseRepository.GetCourseByExamId(RelatedExam.ExamIdentificator);
+                var RelatedUser = _context.userRepository.GetUserById(examResult.User);
+
+                singleExamResult.MaxAmountOfPoints = RelatedExam.MaxAmountOfPointsToEarn;
+
+                singleExamResult.Exam = _mapper.Map<DisplayCrucialDataExamViewModel>(RelatedExam);
+                singleExamResult.Course = _mapper.Map<DisplayCrucialDataCourseViewModel>(RelatedCourse);
+                singleExamResult.User = _mapper.Map<DisplayCrucialDataUserViewModel>(RelatedUser);
+
+                ListOfExamsResults.Add(singleExamResult);
+            }
+
+            return View(ListOfExamsResults);
+        }
     }
 }
