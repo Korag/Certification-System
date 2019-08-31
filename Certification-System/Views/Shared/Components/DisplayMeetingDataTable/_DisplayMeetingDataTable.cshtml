@@ -1,0 +1,113 @@
+﻿@model Certification_System.DTOViewModels.DisplayMeetingDataTableViewModel
+
+<div class="col-12 table-responsive">
+    <table id="@Model.Options.TableIdentificator" class="table table-striped table-bordered display" style="width: 100%;" role="grid">
+        <thead>
+            <tr>
+                <th>
+                    @Html.DisplayNameFor(model => model.Meetings.FirstOrDefault().Course.CourseIndexer)
+                </th>
+                <th>
+                    @Html.DisplayNameFor(model => model.Meetings.FirstOrDefault().Course.Name)
+                </th>
+                <th>
+                    @Html.DisplayNameFor(model => model.Meetings.FirstOrDefault().Course.Description)
+                </th>
+                <th>
+                    @Html.DisplayNameFor(model => model.Meetings.FirstOrDefault().MeetingIndexer)
+                </th>
+                <th>
+                    @Html.DisplayNameFor(model => model.Meetings.FirstOrDefault().Description)
+                </th>
+                <th>
+                    @Html.DisplayNameFor(model => model.Meetings.FirstOrDefault().DateOfMeeting)
+                </th>
+                <th>
+                    @Html.DisplayNameFor(model => model.Meetings.FirstOrDefault().Country)
+                </th>
+                <th>
+                    @Html.DisplayNameFor(model => model.Meetings.FirstOrDefault().City)
+                </th>
+                <th>
+                    @Html.DisplayNameFor(model => model.Meetings.FirstOrDefault().PostCode)
+                </th>
+                <th>
+                    @Html.DisplayNameFor(model => model.Meetings.FirstOrDefault().Address)
+                </th>
+                <th>
+                    @Html.DisplayNameFor(model => model.Meetings.FirstOrDefault().NumberOfApartment)
+                </th>
+                <th>
+                    @Html.DisplayNameFor(model => model.Meetings.FirstOrDefault().Instructors)
+                </th>
+                @if (Model.Options.OperationSet != 0)
+                {
+                    <th>
+                        Operacje
+                    </th>
+                }
+            </tr>
+        </thead>
+        <tbody>
+            @foreach (var meeting in Model.Meetings)
+            {
+                <tr>
+                    <td>
+                        @Html.DisplayFor(modelItem => meeting.Course.CourseIndexer)
+                    </td>
+                    <td>
+                        @Html.DisplayFor(modelItem => meeting.Course.Name)
+                    </td>
+                    <td>
+                        @Html.DisplayFor(modelItem => meeting.Course.Description)
+                    </td>
+                    <td>
+                        @Html.DisplayFor(modelItem => meeting.MeetingIndexer)
+                    </td>
+                    <td>
+                        @Html.DisplayFor(modelItem => meeting.Description)
+                    </td>
+                    <td>
+                        @Html.DisplayFor(modelItem => meeting.DateOfMeeting)
+                    </td>
+                    <td>
+                        @Html.DisplayFor(modelItem => meeting.Country)
+                    </td>
+                    <td>
+                        @Html.DisplayFor(modelItem => meeting.City)
+                    </td>
+                    <td>
+                        @Html.DisplayFor(modelItem => meeting.PostCode)
+                    </td>
+                    <td>
+                        @Html.DisplayFor(modelItem => meeting.Address)
+                    </td>
+                    <td>
+                        @Html.DisplayFor(modelItem => meeting.NumberOfApartment)
+                    </td>
+                    <td>
+                        <ul>
+                            @foreach (var instructor in meeting.Instructors)
+                            {
+                                <li>@instructor.FirstName @instructor.LastName</li>
+                            }
+                        </ul>
+                    </td>
+                    @if (Model.Options.OperationSet != 0)
+                    {
+                        <td>
+                            <div class="dropdown p-0">
+                                <button class="btn btn-success dropdown-toggle" type="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">Operacje</button>
+                                <div class="dropdown-menu">
+                                    <a asp-action="MeetingDetails" asp-route-meetingIdentificator="@meeting.MeetingIdentificator" asp-controller="Meetings" class="btn btn-info w-100 mb-1">Szczegóły</a>
+                                    <a asp-action="EditMeeting" asp-route-meetingIdentificator="@meeting.MeetingIdentificator" asp-controller="Meetings" class="btn btn-warning w-100 mb-1">Edytuj</a>
+                                    <a asp-action="CheckUsersPresence" asp-route-meetingIdentificator="@meeting.MeetingIdentificator" asp-controller="Meetings" class="btn btn-primary w-100">Sprawdź obecność</a>
+                                </div>
+                            </div>
+                        </td>
+                    }
+                </tr>
+            }
+        </tbody>
+    </table>
+</div>
