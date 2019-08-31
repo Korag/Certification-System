@@ -8,7 +8,7 @@ namespace Certification_System.Components
     {
         public IViewComponentResult Invoke(ICollection<DisplayDegreeViewModel> degreeViewModel, string tableIdentificator, int operationSet = 0)
         {
-            DisplayDegreeDataTableViewModel certificateDataTableViewModel = new DisplayDegreeDataTableViewModel
+            DisplayDegreeDataTableViewModel degreeDataTableViewModel = new DisplayDegreeDataTableViewModel
             {
                 Degrees = degreeViewModel,
                 Options = new DataTableOptionsViewModel
@@ -18,7 +18,7 @@ namespace Certification_System.Components
                 }
             };
 
-            return View("_DisplayDegreeDataTable", certificateDataTableViewModel);
+            return View("_DisplayDegreeDataTable", degreeDataTableViewModel);
         }
     }
 }

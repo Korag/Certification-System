@@ -79,7 +79,7 @@ else
 @if (Model.CoursesWhichEndedWithCertificate.Count != 0)
 {
     <h2 class="mt-4 mb-4">Kursy, które zakończyły się przyznaniem tego typu certyfikatu</h2>
-    @await Component.InvokeAsync("DisplayCourseDataTable", new { courseViewModel = Model.CoursesWhichEndedWithCertificate, tableIdentificator = "listCourses" })
+    @await Component.InvokeAsync("DisplayCourseDataTable", new { courseViewModel = Model.CoursesWhichEndedWithCertificate, tableIdentificator = "listCourses", operationSet = 1 })
 }
 else
 {

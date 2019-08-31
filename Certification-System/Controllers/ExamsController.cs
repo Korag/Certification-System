@@ -384,7 +384,9 @@ namespace Certification_System.Controllers
 
                 var Course = _context.courseRepository.GetCourseByExamId(examIdentificator);
 
-                DisplayExamWithTermsViewModel modifiedExam = _mapper.Map<DisplayExamWithTermsViewModel>(Exam);
+                DisplayExamWithTermsViewModel modifiedExam = new DisplayExamWithTermsViewModel();
+
+                modifiedExam.Exam = _mapper.Map<DisplayExamViewModel>(Exam);
 
                 if (Exam.ExamTerms.Count() != 0)
                 {
@@ -399,8 +401,8 @@ namespace Certification_System.Controllers
                     }
                 }
 
-                modifiedExam.Course = _mapper.Map<DisplayCrucialDataCourseViewModel>(Course);
-                modifiedExam.Examiners = _mapper.Map<List<DisplayCrucialDataUserViewModel>>(Examiners);
+                modifiedExam.Exam.Course = _mapper.Map<DisplayCrucialDataCourseViewModel>(Course);
+                modifiedExam.Exam.Examiners = _mapper.Map<List<DisplayCrucialDataUserViewModel>>(Examiners);
 
                 return View(modifiedExam);
             }
