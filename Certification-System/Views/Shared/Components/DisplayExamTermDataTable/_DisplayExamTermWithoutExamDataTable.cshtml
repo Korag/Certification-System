@@ -1,0 +1,83 @@
+﻿@model Certification_System.DTOViewModels.DisplayExamTermWithoutExamDataTableViewModel
+
+<div class="col-12 table-responsive">
+    <table id="@Model.Options.TableIdentificator" class="table table-striped table-bordered display" style="width: 100%;" role="grid">
+        <thead>
+
+            <tr>
+                <th>
+                    @Html.DisplayNameFor(model => model.ExamsTerms.FirstOrDefault().DateOfStart)
+                </th>
+                <th>
+                    @Html.DisplayNameFor(model => model.ExamsTerms.FirstOrDefault().DateOfEnd)
+                </th>
+                <th>
+                    @Html.DisplayNameFor(model => model.ExamsTerms.FirstOrDefault().DurationDays)
+                </th>
+                <th>
+                    @Html.DisplayNameFor(model => model.ExamsTerms.FirstOrDefault().DurationMinutes)
+                </th>
+                <th>
+                    @Html.DisplayNameFor(model => model.ExamsTerms.FirstOrDefault().UsersQuantitiy)
+                </th>
+                <th>
+                    @Html.DisplayNameFor(model => model.ExamsTerms.FirstOrDefault().UsersLimit)
+                </th>
+                <th>
+                    @Html.DisplayNameFor(model => model.ExamsTerms.FirstOrDefault().Examiners)
+                </th>
+                @if (Model.Options.OperationSet != 0)
+                {
+                    <th>
+                        Operacje
+                    </th>
+                }
+            </tr>
+        </thead>
+        <tbody>
+            @foreach (var examTerm in Model.ExamsTerms)
+            {
+                <tr>
+                    <td>
+                        @Html.DisplayFor(modelItem => examTerm.DateOfStart)
+                    </td>
+                    <td>
+                        @Html.DisplayFor(modelItem => examTerm.DurationDays)
+                    </td>
+                    <td>
+                        @Html.DisplayFor(modelItem => examTerm.DurationMinutes)
+                    </td>
+                    <td>
+                        @Html.DisplayFor(modelItem => examTerm.UsersQuantitiy)
+                    </td>
+                    <td>
+                        @Html.DisplayFor(modelItem => examTerm.UsersLimit)
+                    </td>
+                    <td>
+                        <ul>
+                            @foreach (var examiner in examTerm.Examiners)
+                            {
+                                <li>@examiner.FirstName @examiner.LastName</li>
+                            }
+                        </ul>
+                    </td>
+                    @if (Model.Options.OperationSet != 0)
+                    {
+                        <td>
+                            <div class="dropdown p-0">
+                                <button class="btn btn-success dropdown-toggle" type="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">Operacje</button>
+                                <div class="dropdown-menu">
+                                    <a asp-action="EditExamTerm" asp-route-examTermIdentificator="@examTerm.ExamTermIdentificator" asp-controller="ExamsTerms" class="btn btn-warning w-100 mb-1">Edytuj</a>
+                                    <a asp-action="ExamTermDetails" asp-route-examTermIdentificator="@examTerm.ExamTermIdentificator" asp-controller="ExamsTerms" class="btn btn-info w-100 mb-1">Szczegóły</a>
+                                    <a asp-action="AddUsersToExamTerm" asp-route-examTermIdentificator="@examTerm.ExamTermIdentificator" asp-controller="ExamsTerms" class="btn btn-primary w-100 mb-1">Dodaj użytkowników do tury</a>
+                                    <a asp-action="MarkExamTerm" asp-route-examTermIdentificator="@examTerm.ExamTermIdentificator" asp-controller="ExamsTerms" class="btn btn-success w-100 mb-1">Oceń egzamin dla tury</a>
+                                    <a asp-action="DeleteUsersFromExamTerm" asp-route-examTermIdentificator="@examTerm.ExamTermIdentificator" asp-controller="ExamsTerms" class="btn btn-light w-100">Usuń użytkowników z tury</a>
+                                </div>
+                            </div>
+                        </td>
+                    }
+                </tr>
+            }
+        </tbody>
+    </table>
+</div>
