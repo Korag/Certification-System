@@ -14,7 +14,7 @@ namespace Certification_System.Components
                 Options = new DataTableOptionsViewModel
                 {
                     TableIdentificator = tableIdentificator,
-                    SelectedSetOfOperations = operationSet
+                    OperationSet = operationSet
                 }
             };
 

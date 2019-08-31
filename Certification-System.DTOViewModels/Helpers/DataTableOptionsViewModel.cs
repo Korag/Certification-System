@@ -3,6 +3,6 @@
     public class DataTableOptionsViewModel
     {
         public string TableIdentificator { get; set; }
-        public int SelectedSetOfOperations { get; set; }
+        public int OperationSet { get; set; }
     }
 }

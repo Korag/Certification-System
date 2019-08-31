@@ -12,71 +12,7 @@
     <a asp-action="AddNewCertificate" asp-controller="Certificates" class="btn btn-primary">Dodaj nowy certyfikat</a>
 </div>
 
-<div class="col-12 table-responsive">
-    <table id="listCertificates" class="table table-striped table-bordered display" style="width: 100%;" role="grid">
-        <thead>
-            <tr>
-                <th>
-                    @Html.DisplayNameFor(model => model.CertificateIndexer)
-                </th>
-                <th>
-                    @Html.DisplayNameFor(model => model.Name)
-                </th>
-                <th>
-                    @Html.DisplayNameFor(model => model.Description)
-                </th>
-                <th>
-                    @Html.DisplayNameFor(model => model.Depreciated)
-                </th>
-                <th>
-                    @Html.DisplayNameFor(model => model.Branches)
-                </th>
-                <th>
-                    Operacje
-                </th>
-            </tr>
-        </thead>
-        <tbody>
-            @foreach (var certificate in Model)
-            {
-                <tr>
-                    <td>
-                        @Html.DisplayFor(modelItem => certificate.CertificateIndexer)
-                    </td>
-                    <td>
-                        @Html.DisplayFor(modelItem => certificate.Name)
-                    </td>
-                    <td>
-                        @Html.DisplayFor(modelItem => certificate.Description)
-                    </td>
-                    <td>
-                        <input type="checkbox" asp-for="@certificate.Depreciated" class="form-control col-12" data-toggle="toggle" data-on="Tak" data-off="Nie" data-size="sm" disabled />
-                    </td>
-                    <td>
-                        <ul>
-                            @foreach (var branch in certificate.Branches)
-                            {
-                                <li>@branch</li>
-                            }
-                        </ul>
-                    </td>
-                    <td>
-                        <div class="dropdown p-0">
-                            <button class="btn btn-success dropdown-toggle" type="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">Operacje</button>
-                            <div class="dropdown-menu">
-                                <a asp-action="CertificateDetails" asp-route-certificateIdentificator="@certificate.CertificateIdentificator" asp-controller="Certificates" class="btn btn-info w-100 mb-1">Szczegóły</a>
-                                <a asp-action="EditCertificate" asp-route-certificateIdentificator="@certificate.CertificateIdentificator" asp-controller="Certificates" class="btn btn-warning w-100">Edytuj</a>
-                            </div>
-                        </div>
-
-                        @*<a asp-action="CertificateDetails" asp-route-certificateIdentificator="@certificate.CertificateIdentificator" asp-controller="Certificates" class="btn btn-info m-1">Szczegóły</a>
-                          <a asp-action="EditCertificate" asp-route-certificateIdentificator="@certificate.CertificateIdentificator" asp-controller="Certificates" class="btn btn-warning m-1">Aktualizuj</a>*@
-                    </td>
-                </tr>
-            }
-        </tbody>
-    </table>
-</div>
+@await Component.InvokeAsync("DisplayCertificateDataTable", new { certificateViewModel = Model, tableIdentificator = "listCertificates", operationSet = 1 })
 
 @section Scripts{
     <script>
