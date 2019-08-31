@@ -23,7 +23,7 @@ else
 @{List<DisplayGivenCertificateViewModel> givenCertificateList = new List<DisplayGivenCertificateViewModel>();
     givenCertificateList.Add(Model);}
 
-@await Component.InvokeAsync("DisplayGivenCertificateDataTable", new { givenCertificateViewModel = Model, tableIdentificator = "givenCertificateConfirmation" })
+@await Component.InvokeAsync("DisplayGivenCertificateDataTable", new { givenCertificateViewModel = givenCertificateList, tableIdentificator = "givenCertificateConfirmation" })
 
 
 @section Scripts{
