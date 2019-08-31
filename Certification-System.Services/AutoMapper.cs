@@ -230,6 +230,10 @@ namespace Certification_System.Services
                     .ForMember(dest => dest.Examiners, opts => opts.Ignore())
                     .ForMember(dest => dest.UsersQuantitiy, opts => opts.MapFrom(src => src.EnrolledUsers.Count()));
 
+            CreateMap<ExamTerm, DisplayExamTermWithoutExamViewModel>()
+                    .ForMember(dest => dest.Examiners, opts => opts.Ignore())
+                    .ForMember(dest => dest.UsersQuantitiy, opts => opts.MapFrom(src => src.EnrolledUsers.Count()));
+
             CreateMap<EditExamTermViewModel, ExamTerm>()
                     .ForMember(dest => dest.Examiners, opts => opts.MapFrom(src => src.SelectedExaminers));
 
@@ -237,14 +241,14 @@ namespace Certification_System.Services
                     .ForMember(dest => dest.SelectedExaminers, opts => opts.MapFrom(src => src.Examiners));
 
             CreateMap<EditExamTermViewModel, ExamTerm>()
-                   .ForMember(dest => dest.Examiners, opts => opts.MapFrom(src => src.SelectedExaminers));
+                    .ForMember(dest => dest.Examiners, opts => opts.MapFrom(src => src.SelectedExaminers));
 
             CreateMap<ExamTerm, ExamTermDetailsViewModel>()
-                  .ForMember(dest => dest.UsersQuantity, opts => opts.MapFrom(src => src.EnrolledUsers.Count()))
-                  .ForMember(dest => dest.Exam, opts => opts.Ignore())
-                  .ForMember(dest => dest.Course, opts => opts.Ignore())
-                  .ForMember(dest => dest.Examiners, opts => opts.Ignore())
-                  .ForMember(dest => dest.UsersWithResults, opts => opts.Ignore());
+                    .ForMember(dest => dest.UsersQuantity, opts => opts.MapFrom(src => src.EnrolledUsers.Count()))
+                    .ForMember(dest => dest.Exam, opts => opts.Ignore())
+                    .ForMember(dest => dest.Course, opts => opts.Ignore())
+                    .ForMember(dest => dest.Examiners, opts => opts.Ignore())
+                    .ForMember(dest => dest.UsersWithResults, opts => opts.Ignore());
             #endregion
 
             #region ExamResults

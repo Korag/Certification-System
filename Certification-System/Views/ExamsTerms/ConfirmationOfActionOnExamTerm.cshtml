@@ -1,8 +1,9 @@
 ﻿@model Certification_System.DTOViewModels.DisplayExamTermViewModel
+@using Certification_System.DTOViewModels
 
 @{
     ViewData["Title"] = "ConfirmationOfActionOnExamTerm";
-    Layout = "~/Views/Shared/_Layout.cshtml";
+ Layout = "~/Views/Shared/_Layout.cshtml";
 }
 
 @if (ViewBag.TypeOfAction == "Update")
@@ -19,89 +20,10 @@ else
     <a asp-action="DisplayAllExamsTerms" asp-controller="ExamsTerms" class="btn btn-outline-info mt-1 xs450px_FloatRight">Powrót do listy tur</a>
 </div>
 
-<div class="col-12 table-responsive">
-    <table id="examTermConfirmation" class="table table-striped table-bordered display" style="width: 100%;" role="grid">
-        <thead>
-            <tr>
-                <th>
-                    @Html.DisplayNameFor(model => model.Exam.ExamIndexer)
-                </th>
-                <th>
-                    @Html.DisplayNameFor(model => model.Exam.Name)
-                </th>
-                <th>
-                    @Html.DisplayNameFor(model => model.Exam.Description)
-                </th>
-                <th>
-                    @Html.DisplayNameFor(model => model.Exam.OrdinalNumber)
-                </th>
-                <th>
-                    @Html.DisplayNameFor(model => model.DateOfStart)
-                </th>
-                <th>
-                    @Html.DisplayNameFor(model => model.DateOfEnd)
-                </th>
-                <th>
-                    @Html.DisplayNameFor(model => model.DurationDays)
-                </th>
-                <th>
-                    @Html.DisplayNameFor(model => model.DurationMinutes)
-                </th>
-                <th>
-                    @Html.DisplayNameFor(model => model.UsersQuantitiy)
-                </th>
-                <th>
-                    @Html.DisplayNameFor(model => model.UsersLimit)
-                </th>
-                <th>
-                    @Html.DisplayNameFor(model => model.Examiners)
-                </th>
-            </tr>
-        </thead>
-        <tbody>
-            <tr>
-                <td>
-                    @Html.DisplayFor(model => model.Exam.ExamIndexer)
-                </td>
-                <td>
-                    @Html.DisplayFor(model => model.Exam.Name)
-                </td>
-                <td>
-                    @Html.DisplayFor(model => model.Exam.Description)
-                </td>
-                <td>
-                    @Html.DisplayFor(model => model.Exam.OrdinalNumber)
-                </td>
-                <td>
-                    @Html.DisplayFor(model => model.DateOfStart)
-                </td>
-                <td>
-                    @Html.DisplayFor(model => model.DateOfEnd)
-                </td>
-                <td>
-                    @Html.DisplayFor(model => model.DurationDays)
-                </td>
-                <td>
-                    @Html.DisplayFor(model => model.DurationMinutes)
-                </td>
-                <td>
-                    @Html.DisplayFor(model => model.UsersQuantitiy)
-                </td>
-                <td>
-                    @Html.DisplayFor(model => model.UsersLimit)
-                </td>
-                <td>
-                    <ul>
-                        @foreach (var examiner in Model.Examiners)
-                        {
-                            <li>@examiner.FirstName @examiner.LastName</li>
-                        }
-                    </ul>
-                </td>
-            </tr>
-        </tbody>
-    </table>
-</div>
+@{List<DisplayExamTermViewModel> examTermList = new List<DisplayExamTermViewModel>();
+    examTermList.Add(Model);}
+
+@await Component.InvokeAsync("_DisplayExamTermDataTable", new { examTermViewModel = examTermList, tableIdentificator = "examTermConfirmation" })
 
 @section Scripts{
     <script>
