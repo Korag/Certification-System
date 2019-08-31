@@ -74,6 +74,7 @@
 
 
   <ItemGroup>
+    <Folder Include="Components\NewFolder\" />
     <Folder Include="Extensions\" />
     <Folder Include="Views\Account\Not-used\" />
     <Folder Include="Views\Manage Not-used\" />
