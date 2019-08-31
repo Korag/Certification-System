@@ -139,7 +139,7 @@ else
                     @Html.DisplayNameFor(model => model.Certificate.Branches)
                 </th>
                 <th>
-                    Stopień zawodowy jest ważny ?
+                    Certyfikat jest ważny ?
                 </th>
             </tr>
         </thead>
@@ -299,95 +299,7 @@ else
 
 @if (Model.Meetings.Count != 0)
 {
-    <div class="col-12 table-responsive">
-        <table id="listMeetings" class="table table-striped table-bordered display" style="width: 100%;" role="grid">
-            <thead>
-                <tr>
-                    <th>
-                        @Html.DisplayNameFor(model => model.Meetings.First().MeetingIndexer)
-                    </th>
-                    <th>
-                        @Html.DisplayNameFor(model => model.Meetings.First().Description)
-                    </th>
-                    <th>
-                        @Html.DisplayNameFor(model => model.Meetings.First().DateOfMeeting)
-                    </th>
-                    <th>
-                        @Html.DisplayNameFor(model => model.Meetings.First().Country)
-                    </th>
-                    <th>
-                        @Html.DisplayNameFor(model => model.Meetings.First().City)
-                    </th>
-                    <th>
-                        @Html.DisplayNameFor(model => model.Meetings.First().PostCode)
-                    </th>
-                    <th>
-                        @Html.DisplayNameFor(model => model.Meetings.First().Address)
-                    </th>
-                    <th>
-                        @Html.DisplayNameFor(model => model.Meetings.First().NumberOfApartment)
-                    </th>
-                    <th>
-                        @Html.DisplayNameFor(model => model.Meetings.First().Instructors)
-                    </th>
-                    <th>
-                        Operacje
-                    </th>
-                </tr>
-            </thead>
-            <tbody>
-                @foreach (var meeting in Model.Meetings)
-                {
-                    <tr>
-                        <td>
-                            @Html.DisplayFor(modelItem => meeting.MeetingIndexer)
-                        </td>
-                        <td>
-                            @Html.DisplayFor(modelItem => meeting.Description)
-                        </td>
-                        <td>
-                            @Html.DisplayFor(modelItem => meeting.DateOfMeeting)
-                        </td>
-                        <td>
-                            @Html.DisplayFor(modelItem => meeting.Country)
-                        </td>
-                        <td>
-                            @Html.DisplayFor(modelItem => meeting.City)
-                        </td>
-                        <td>
-                            @Html.DisplayFor(modelItem => meeting.PostCode)
-                        </td>
-                        <td>
-                            @Html.DisplayFor(modelItem => meeting.Address)
-                        </td>
-                        <td>
-                            @Html.DisplayFor(modelItem => meeting.NumberOfApartment)
-                        </td>
-                        <td>
-                            <ul>
-                                @foreach (var instructor in meeting.Instructors)
-                                {
-                                    <li>@instructor.FirstName @instructor.LastName</li>
-                                }
-                            </ul>
-                        </td>
-                        <td>
-                            <div class="dropdown p-0">
-                                <button class="btn btn-success dropdown-toggle" type="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">Operacje</button>
-                                <div class="dropdown-menu">
-                                    <a asp-action="MeetingDetails" asp-route-meetingIdentificator="@meeting.MeetingIdentificator" asp-controller="Users" class="btn btn-info w-100 mb-1">Szczegóły spotkania</a>
-                                    <a asp-action="EditMeeting" asp-route-meetingIdentificator="@meeting.MeetingIdentificator" asp-controller="Users" class="btn btn-warning w-100 mb-1">Edytuj spotkanie</a>
-                                    <a asp-action="CheckUsersPresence" asp-route-meetingIdentificator="@meeting.MeetingIdentificator" asp-controller="Users" class="btn btn-primary w-100">Sprawdź obecność</a>
-                                    @*@Html.ActionLink("Szczegóły instruktora", "InstructorDetail", new { instructorIdentificator = item.Instructors }, new { @class = "btn btn-secondary" })*@
-                                    @*@Html.ActionLink("Usuń spotkanie ze szkolenia", "DeleteMeeting", new { meetingIdentificator = item.MeetingIdentificator }) |*@
-                                </div>
-                            </div>
-                        </td>
-                    </tr>
-                }
-            </tbody>
-        </table>
-    </div>
+    @await Component.InvokeAsync("DisplayMeetingWithoutCourseDataTable", new { meetingViewModel = Model.Meetings, tableIdentificator = "listMeetings", operationSet = 1 })
 }
 else
 {
