@@ -64,69 +64,7 @@
 
 @if (Model.RequiredCertificates.Count != 0)
 {
-    <div class="col-12 table-responsive">
-        <table id="listCertificates" class="table table-striped table-bordered display" style="width: 100%;" role="grid">
-            <thead>
-                <tr>
-                    <th>
-                        @Html.DisplayNameFor(model => model.RequiredCertificates.First().CertificateIndexer)
-                    </th>
-                    <th>
-                        @Html.DisplayNameFor(model => model.RequiredCertificates.First().Name)
-                    </th>
-                    <th>
-                        @Html.DisplayNameFor(model => model.RequiredCertificates.First().Description)
-                    </th>
-                    <th>
-                        @Html.DisplayNameFor(model => model.RequiredCertificates.First().Depreciated)
-                    </th>
-                    <th>
-                        @Html.DisplayNameFor(model => model.RequiredCertificates.First().Branches)
-                    </th>
-                    <th>
-                        Operacje
-                    </th>
-                </tr>
-            </thead>
-            <tbody>
-                @foreach (var certificate in Model.RequiredCertificates)
-                {
-                    <tr>
-                        <td>
-                            @Html.DisplayFor(modelItem => certificate.CertificateIndexer)
-                        </td>
-                        <td>
-                            @Html.DisplayFor(modelItem => certificate.Name)
-                        </td>
-                        <td>
-                            @Html.DisplayFor(modelItem => certificate.Description)
-                        </td>
-                        <td>
-                            @Html.DisplayFor(modelItem => certificate.Depreciated)
-                        </td>
-                        <td>
-                            <ul>
-                                @foreach (var branch in certificate.Branches)
-                                {
-                                    <li>@branch</li>
-                                }
-                            </ul>
-                        </td>
-                        <td>
-                            <div class="dropdown p-0">
-                                <button class="btn btn-success dropdown-toggle" type="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">Operacje</button>
-                                <div class="dropdown-menu">
-                                    <a asp-action="CertificateDetails" asp-route-certificateIdentificator="@certificate.CertificateIdentificator" asp-controller="Certificates" class="btn btn-info w-100 mb-1">Szczegóły</a>
-                                    <a asp-action="EditCertificate" asp-route-certificateIdentificator="@certificate.CertificateIdentificator" asp-controller="Certificates" class="btn btn-warning w-100">Edytuj</a>
-                                    @*@Html.ActionLink("Usuń", "MarkCertificateAsDepreciated", "Certificates", new { CertificateIdentificator = item.CertificateIndexer }, new { @class = "btn btn-danger" })*@
-                                </div>
-                            </div>
-                        </td>
-                    </tr>
-                }
-            </tbody>
-        </table>
-    </div>
+    @await Component.InvokeAsync("DisplayCertificateDataTable", new { certificateViewModel = Model.RequiredCertificates, tableIdentificator = "listRequiredCertificates", operationSet = 1 })
 }
 else
 {
@@ -137,84 +75,7 @@ else
 
 @if (Model.RequiredDegrees.Count != 0)
 {
-    <div class="col-12 table-responsive">
-        <table id="listDegrees" class="table table-striped table-bordered display" style="width: 100%;" role="grid">
-            <thead>
-                <tr>
-                    <th>
-                        @Html.DisplayNameFor(model => model.DegreeIndexer)
-                    </th>
-                    <th>
-                        @Html.DisplayNameFor(model => model.Name)
-                    </th>
-                    <th>
-                        @Html.DisplayNameFor(model => model.Description)
-                    </th>
-                    <th>
-                        @Html.DisplayNameFor(model => model.RequiredCertificates)
-                    </th>
-                    <th>
-                        @Html.DisplayNameFor(model => model.RequiredDegrees)
-                    </th>
-                    <th>
-                        @Html.DisplayNameFor(model => model.Branches)
-                    </th>
-                    <th>
-                        Operacje
-                    </th>
-                </tr>
-            </thead>
-            <tbody>
-                @foreach (var degree in Model.RequiredDegrees)
-                {
-                    <tr>
-                        <td>
-                            @Html.DisplayFor(modelItem => degree.DegreeIndexer)
-                        </td>
-                        <td>
-                            @Html.DisplayFor(modelItem => degree.Name)
-                        </td>
-                        <td>
-                            @Html.DisplayFor(modelItem => degree.Description)
-                        </td>
-                        <td>
-                            <ul>
-                                @foreach (var requiredCertificate in degree.RequiredCertificates)
-                                {
-                                    <li>@requiredCertificate</li>
-                                }
-                            </ul>
-                        </td>
-                        <td>
-                            <ul>
-                                @foreach (var requiredDegree in degree.RequiredDegrees)
-                                {
-                                    <li>@requiredDegree</li>
-                                }
-                            </ul>
-                        </td>
-                        <td>
-                            <ul>
-                                @foreach (var branch in degree.Branches)
-                                {
-                                    <li>@branch</li>
-                                }
-                            </ul>
-                        </td>
-                        <td>
-                            <div class="dropdown p-0">
-                                <button class="btn btn-success dropdown-toggle" type="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">Operacje</button>
-                                <div class="dropdown-menu">
-                                    <a asp-action="DegreeDetails" asp-route-degreeIdentificator="@degree.DegreeIdentificator" asp-controller="Degrees" class="btn btn-info w-100 mb-1">Szczegóły</a>
-                                    <a asp-action="EditDegree" asp-route-degreeIdentificator="@degree.DegreeIdentificator" asp-controller="Degrees" class="btn btn-warning w-100">Edytuj</a>
-                                </div>
-                            </div>
-                        </td>
-                    </tr>
-                }
-            </tbody>
-        </table>
-    </div>
+    @await Component.InvokeAsync("DisplayDegreeDataTable", new { degreeViewModel = Model.RequiredDegrees, tableIdentificator = "listRequiredDegrees", operationSet = 1 })
 }
 else
 {
@@ -243,14 +104,14 @@ else
             }
             );
 
-            $('#listCertificates').DataTable({
+            $('#listRequiredCertificates').DataTable({
                 "language": {
                     "url": "//cdn.datatables.net/plug-ins/1.10.19/i18n/Polish.json"
                 },
             }
             );
 
-            $('#listDegrees').DataTable({
+            $('#listRequiredDegrees').DataTable({
                 "language": {
                     "url": "//cdn.datatables.net/plug-ins/1.10.19/i18n/Polish.json"
                 },

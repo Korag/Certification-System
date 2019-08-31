@@ -468,6 +468,23 @@ namespace Certification_System.Controllers
             return View(addExamTypeOfAction);
         }
 
+        // GET: EditExam
+        [Authorize(Roles = "Admin")]
+        public ActionResult EditExam(string examIdentificator)
+        {
+            var Exam = _context.examRepository.GetExamById(examIdentificator);
+            var Course = _context.courseRepository.GetCourseByExamId(Exam.ExamIdentificator);
+
+            EditExamViewModel examToUpdate = _mapper.Map<EditExamViewModel>(Exam);
+
+            examToUpdate.AvailableExaminers = _context.userRepository.GetExaminersAsSelectList().ToList();
+            examToUpdate.AvailableCourses = _context.courseRepository.GetActiveCoursesAsSelectList().ToList();
+
+            examToUpdate.SelectedExaminers = _context.userRepository.GetUsersById(Exam.Examiners).Select(z => z.Id).ToList();
+            examToUpdate.SelectedCourse = Course.CourseIdentificator;
+
+            return View(examToUpdate);
+        }
 
         // POST: EditExam
         [Authorize(Roles = "Admin")]
