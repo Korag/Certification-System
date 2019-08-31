@@ -1,4 +1,5 @@
 ﻿@model Certification_System.DTOViewModels.DisplayCompanyViewModel
+@using  Certification_System.DTOViewModels
 
 @{
     ViewBag.Title = "ConfirmationOfActionOnCompany";
@@ -17,69 +18,13 @@ else
 
 <div class="row m-0 mt-3 mb-3">
     <a asp-action="AddNewCompany" asp-controller="Companies" class="btn btn-primary mt-1 xs350px_FloatLeft">Dodaj nowe przedsiębiorstwo</a>
-    <a asp-action="DisplayAllCompanies" asp-controller="Companies" class="btn btn-outline-info mt-1 xs350px_FloatRight">>Powrót do listy przedsiębiorstw</a>
+    <a asp-action="DisplayAllCompanies" asp-controller="Companies" class="btn btn-outline-info mt-1 xs350px_FloatRight">Powrót do listy przedsiębiorstw</a>
 </div>
 
-<div class="col-12 table-responsive">
-    <table id="companyConfirmation" class="table table-striped table-bordered display" style="width: 100%;" role="grid">
-        <thead>
-            <tr>
-                <th>
-                    @Html.DisplayNameFor(model => model.CompanyName)
-                </th>
-                <th>
-                    @Html.DisplayNameFor(model => model.Email)
-                </th>
-                <th>
-                    @Html.DisplayNameFor(model => model.Phone)
-                </th>
-                <th>
-                    @Html.DisplayNameFor(model => model.Country)
-                </th>
-                <th>
-                    @Html.DisplayNameFor(model => model.City)
-                </th>
-                <th>
-                    @Html.DisplayNameFor(model => model.PostCode)
-                </th>
-                <th>
-                    @Html.DisplayNameFor(model => model.Address)
-                </th>
-                <th>
-                    @Html.DisplayNameFor(model => model.NumberOfApartment)
-                </th>
-            </tr>
-        </thead>
-        <tbody>
-            <tr>
-                <td>
-                    @Html.DisplayFor(model => model.CompanyName)
-                </td>
-                <td>
-                    @Html.DisplayFor(model => model.Email)
-                </td>
-                <td>
-                    @Html.DisplayFor(model => model.Phone)
-                </td>
-                <td>
-                    @Html.DisplayFor(model => model.Country)
-                </td>
-                <td>
-                    @Html.DisplayFor(model => model.City)
-                </td>
-                <td>
-                    @Html.DisplayFor(model => model.PostCode)
-                </td>
-                <td>
-                    @Html.DisplayFor(model => model.Address)
-                </td>
-                <td>
-                    @Html.DisplayFor(model => model.NumberOfApartment)
-                </td>
-            </tr>
-        </tbody>
-    </table>
-</div>
+@{List<DisplayCompanyViewModel> companyList = new List<DisplayCompanyViewModel>();
+    companyList.Add(Model);}
+
+@await Component.InvokeAsync("DisplayCompanyDataTable", new { companyViewModel = companyList, tableIdentificator = "companyConfirmation" })
 
 @section Scripts{
     <script>

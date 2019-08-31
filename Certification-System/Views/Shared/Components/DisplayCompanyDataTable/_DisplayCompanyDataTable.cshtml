@@ -1,0 +1,83 @@
+﻿@model Certification_System.DTOViewModels.DisplayCompanyDataTableViewModel
+
+<div class="col-12 table-responsive">
+    <table id="@Model.Options.TableIdentificator" class="table table-striped table-bordered display" style="width: 100%;" role="grid">
+        <thead>
+            <tr>
+                <th>
+                    @Html.DisplayNameFor(model => model.Companies.FirstOrDefault().CompanyName)
+                </th>
+                <th>
+                    @Html.DisplayNameFor(model => model.Companies.FirstOrDefault().Email)
+                </th>
+                <th>
+                    @Html.DisplayNameFor(model => model.Companies.FirstOrDefault().Phone)
+                </th>
+                <th>
+                    @Html.DisplayNameFor(model => model.Companies.FirstOrDefault().Country)
+                </th>
+                <th>
+                    @Html.DisplayNameFor(model => model.Companies.FirstOrDefault().City)
+                </th>
+                <th>
+                    @Html.DisplayNameFor(model => model.Companies.FirstOrDefault().PostCode)
+                </th>
+                <th>
+                    @Html.DisplayNameFor(model => model.Companies.FirstOrDefault().Address)
+                </th>
+                <th>
+                    @Html.DisplayNameFor(model => model.Companies.FirstOrDefault().NumberOfApartment)
+                </th>
+                @if (Model.Options.OperationSet != 0)
+                {
+                    <th>
+                        Operacje
+                    </th>
+                }
+            </tr>
+        </thead>
+        <tbody>
+            @foreach (var company in Model.Companies)
+            {
+                <tr>
+                    <td>
+                        @Html.DisplayFor(model => company.CompanyName)
+                    </td>
+                    <td>
+                        @Html.DisplayFor(model => company.Email)
+                    </td>
+                    <td>
+                        @Html.DisplayFor(model => company.Phone)
+                    </td>
+                    <td>
+                        @Html.DisplayFor(model => company.Country)
+                    </td>
+                    <td>
+                        @Html.DisplayFor(model => company.City)
+                    </td>
+                    <td>
+                        @Html.DisplayFor(model => company.PostCode)
+                    </td>
+                    <td>
+                        @Html.DisplayFor(model => company.Address)
+                    </td>
+                    <td>
+                        @Html.DisplayFor(model => company.NumberOfApartment)
+                    </td>
+                    @if (Model.Options.OperationSet != 0)
+                    {
+                        <td>
+                            <div class="dropdown p-0">
+                                <button class="btn btn-success dropdown-toggle" type="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">Operacje</button>
+                                <div class="dropdown-menu">
+                                    <a asp-action="CompanyDetails" asp-route-companyIdentificator="@company.CompanyIdentificator" asp-controller="Companies" class="btn btn-info w-100 mb-1">Szczegóły</a>
+                                    <a asp-action="EditCompany" asp-route-companyIdentificator="@company.CompanyIdentificator" asp-controller="Companies" class="btn btn-warning w-100">Edytuj</a>
+                                </div>
+                            </div>
+                        </td>
+                    }
+                </tr>
+            }
+        </tbody>
+    </table>
+</div>
