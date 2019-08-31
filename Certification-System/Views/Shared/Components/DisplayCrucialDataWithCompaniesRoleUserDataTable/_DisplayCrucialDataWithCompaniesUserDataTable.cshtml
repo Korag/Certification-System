@@ -19,9 +19,12 @@
                 <th>
                     @Html.DisplayNameFor(model => model.Users.FirstOrDefault().CompanyRoleManager)
                 </th>
-                <th>
-                    Operacje
-                </th>
+                @if (Model.Options.OperationSet != 0)
+                {
+                    <th>
+                        Operacje
+                    </th>
+                }
             </tr>
         </thead>
         <tbody>
@@ -53,9 +56,12 @@
                             }
                         </ul>
                     </td>
-                    <td>
-                        <a asp-action="UserDetails" asp-route-userIdentificator="@user.UserIdentificator" asp-controller="Users" class="btn btn-info">Szczegóły</a>
-                    </td>
+                    @if (Model.Options.OperationSet != 0)
+                    {
+                        <td>
+                            <a asp-action="UserDetails" asp-route-userIdentificator="@user.UserIdentificator" asp-controller="Users" class="btn btn-info">Szczegóły</a>
+                        </td>
+                    }
                 </tr>
             }
         </tbody>

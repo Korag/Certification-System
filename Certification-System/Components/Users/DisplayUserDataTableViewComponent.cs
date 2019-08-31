@@ -6,11 +6,19 @@ namespace Certification_System.Components
 {
     public class DisplayUserDataTableViewComponent : ViewComponent
     {
-        public IViewComponentResult Invoke(List<DisplayUserViewModel> usersViewModel, string tableIdentificator)
+        public IViewComponentResult Invoke(List<DisplayUserViewModel> userViewModel, string tableIdentificator, int operationSet = 0)
         {
-            ViewBag.tableIdentificator = tableIdentificator;
+            DisplayUserDataTableViewModel userDataTableViewModel = new DisplayUserDataTableViewModel
+            {
+                Users = userViewModel,
+                Options = new DataTableOptionsViewModel
+                {
+                    TableIdentificator = tableIdentificator,
+                    OperationSet = operationSet
+                }
+            };
 
-            return View("_DisplayUserDataTable", usersViewModel);
+            return View("_DisplayUserDataTable", userDataTableViewModel);
         }
     }
 }

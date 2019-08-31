@@ -225,7 +225,7 @@ else
 
 @if (Model.UsersWithDegree.Count != 0)
 {
-    @await Component.InvokeAsync("DisplayUserDataTable", new { usersViewModel = Model.UsersWithDegree, tableIdentificator = "listUsers" })
+    @await Component.InvokeAsync("DisplayUserDataTable", new { userViewModel = Model.UsersWithDegree, tableIdentificator = "listUsers", operationSet = 1 })
 }
 else
 {

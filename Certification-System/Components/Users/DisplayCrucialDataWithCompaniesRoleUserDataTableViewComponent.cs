@@ -6,19 +6,17 @@ namespace Certification_System.Components
 {
     public class DisplayCrucialDataWithCompaniesRoleUserDataTableViewComponent : ViewComponent
     {
-        public IViewComponentResult Invoke(ICollection<DisplayCrucialDataWithCompaniesRoleUserViewModel> usersViewModel, string tableIdentificator, int operationSet)
+        public IViewComponentResult Invoke(ICollection<DisplayCrucialDataWithCompaniesRoleUserViewModel> userViewModel, string tableIdentificator, int operationSet)
         {
             DisplayCrucialDataWithCompaniesRoleUserDataTableViewModel userDataTableViewModel = new DisplayCrucialDataWithCompaniesRoleUserDataTableViewModel
             {
-                Users = usersViewModel,
+                Users = userViewModel,
                 Options = new DataTableOptionsViewModel
                 {
                     TableIdentificator = tableIdentificator,
                     OperationSet = operationSet
                 }
             };
-
-            ViewBag.tableIdentificator = tableIdentificator;
 
             return View("_DisplayCrucialDataWithCompaniesUserDataTable", userDataTableViewModel);
         }
