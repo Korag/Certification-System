@@ -8,7 +8,7 @@ namespace Certification_System.Components
     {
         public IViewComponentResult Invoke(ICollection<DisplayCompanyViewModel> companyViewModel, string tableIdentificator, int operationSet = 0)
         {
-            DisplayCompanyDataTableViewModel certificateDataTableViewModel = new DisplayCompanyDataTableViewModel
+            DisplayCompanyDataTableViewModel companyDataTableViewModel = new DisplayCompanyDataTableViewModel
             {
                 Companies = companyViewModel,
                 Options = new DataTableOptionsViewModel
@@ -18,7 +18,7 @@ namespace Certification_System.Components
                 }
             };
 
-            return View("_DisplayCompanyDataTable", certificateDataTableViewModel);
+            return View("_DisplayCompanyDataTable", companyDataTableViewModel);
         }
     }
 }
