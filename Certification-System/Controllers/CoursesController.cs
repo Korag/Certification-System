@@ -36,7 +36,8 @@ namespace Certification_System.Controllers
 
                 var Course = _context.courseRepository.GetCourseById(courseIdentificator);
 
-                DisplayCourseWithMeetingsViewModel modifiedCourse = _mapper.Map<DisplayCourseWithMeetingsViewModel>(Course);
+                DisplayCourseWithMeetingsViewModel modifiedCourse = new DisplayCourseWithMeetingsViewModel();
+                modifiedCourse.Course = _mapper.Map<DisplayCourseViewModel>(Course);
 
                 if (Course.Meetings.Count() != 0)
                 {
@@ -52,7 +53,7 @@ namespace Certification_System.Controllers
                 }
 
                 var BranchNames = _context.branchRepository.GetBranchesById(Course.Branches);
-                modifiedCourse.Branches = BranchNames;
+                modifiedCourse.Course.Branches = BranchNames;
 
                 return View(modifiedCourse);
             }

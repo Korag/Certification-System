@@ -62,7 +62,8 @@ namespace Certification_System.Services
             #endregion
 
             #region Courses
-            CreateMap<Course, DisplayCourseViewModel>();
+            CreateMap<Course, DisplayCourseViewModel>()
+                     .ForMember(dest => dest.EnrolledUsersQuantity, opts => opts.MapFrom(src => src.EnrolledUsers.Count()));
 
             CreateMap<Course, DisplayCrucialDataCourseViewModel>();
 
@@ -70,9 +71,6 @@ namespace Certification_System.Services
                      .ForMember(dest => dest.Meetings, opts => opts.Ignore())
                      .ForMember(dest => dest.EnrolledUsers, opts => opts.Ignore())
                      .ForMember(dest => dest.Exams, opts => opts.Ignore());
-
-            CreateMap<Course, DisplayCourseWithMeetingsViewModel>()
-                     .ForMember(dest => dest.Meetings, opts => opts.Ignore());
 
             CreateMap<AddCourseViewModel, Course>()
                      .ForMember(dest => dest.CourseIdentificator, opts => opts.Ignore())
