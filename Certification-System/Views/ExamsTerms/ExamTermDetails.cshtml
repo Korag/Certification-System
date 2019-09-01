@@ -1,4 +1,5 @@
 ﻿@model Certification_System.DTOViewModels.ExamTermDetailsViewModel
+@using Certification_System.DTOViewModels
 
 @{
     ViewData["Title"] = "ExamTermDetails";
@@ -72,372 +73,154 @@
     </div>
 </div>
 
+@{List<DisplayExamWithoutCourseViewModel> examList = new List<DisplayExamWithoutCourseViewModel>();
+    examList.Add(Model.Exam);}
+
+@await Component.InvokeAsync("DisplayExamWithoutCourseDataTable", new { examViewModel = examList, tableIdentificator = "listExams", operationSet = 1 })
+
+<h2 class="mt-4 mb-4">Informacje dotyczące kursu</h2>
+
+<div class="mt-3 mb-3">
+    <a asp-action="EditCourseHub" asp-route-courseIdentificator="@Model.Course.CourseIdentificator" asp-controller="Courses" class="btn btn-warning mt-1 mr-1">Edytuj</a>
+    <a asp-action="CourseDetails" asp-route-courseIdentificator="@Model.Course.CourseIdentificator" asp-controller="Courses" class="btn btn-info mt-1">Szczegóły</a>
+</div>
+
+@await Component.InvokeAsync("DisplayCourseDataTable", new { courseViewModel = Model.Course, tableIdentificator = "listCourses", operationSet = 1 })
+
+<h2 class="mt-4 mb-4">Egzaminatorzy</h2>
+
+@if (Model.Examiners.Count != 0)
+{
+    @await Component.InvokeAsync("DisplayCrucialDataWithContactUserDataTable", new { userViewModel = Model.Examiners, tableIdentificator = "listExaminers", operationSet = 2 })
+}
+
+else
+{
+    <div class="mt-4 mb-4 alert alert-warning">Brak egzaminatorów przypisanych do egzaminu</div>
+}
+
+<h2 class="mt-4 mb-4">Użytkownicy zapisani na turę egzaminu</h2>
+
+<div class="mt-3 mb-3">
+    <a asp-action="AssignUserToExamTerm" asp-route-examTermIdentificator="@Model.ExamTermIdentificator" asp-controller="ExamsTerms" class="btn btn-primary">Dodaj użytkownika do tury egzaminu</a>
+</div>
+
+@if (Model.UsersWithResults.Count != 0)
+{
     <div class="col-12 table-responsive">
-        <table id="listExams" class="table table-striped table-bordered display" style="width: 100%;" role="grid">
+        <table id="listUsers" class="table table-striped table-bordered display" style="width: 100%;" role="grid">
             <thead>
                 <tr>
                     <th>
-                        @Html.DisplayNameFor(model => Model.Exam.ExamIndexer)
+                        @Html.DisplayNameFor(model => model.UsersWithResults.First().Email)
                     </th>
                     <th>
-                        @Html.DisplayNameFor(model => Model.Exam.OrdinalNumber)
+                        @Html.DisplayNameFor(model => model.UsersWithResults.First().FirstName)
                     </th>
                     <th>
-                        @Html.DisplayNameFor(model => Model.Exam.Name)
+                        @Html.DisplayNameFor(model => model.UsersWithResults.First().LastName)
                     </th>
                     <th>
-                        @Html.DisplayNameFor(model => Model.Exam.Description)
+                        @Html.DisplayNameFor(model => model.UsersWithResults.First().PointsEarned)
                     </th>
                     <th>
-                        @Html.DisplayNameFor(model => Model.Exam.DateOfStart)
+                        @Html.DisplayNameFor(model => model.MaxAmountOfPointsToEarn)
                     </th>
                     <th>
-                        @Html.DisplayNameFor(model => Model.Exam.DateOfEnd)
+                        @Html.DisplayNameFor(model => model.UsersWithResults.First().PercentageOfResult)
                     </th>
                     <th>
-                        @Html.DisplayNameFor(model => Model.Exam.DurationDays)
+                        @Html.DisplayNameFor(model => model.UsersWithResults.First().ExamPassed)
                     </th>
                     <th>
-                        @Html.DisplayNameFor(model => Model.Exam.DurationMinutes)
-                    </th>
-                    <th>
-                        @Html.DisplayNameFor(model => Model.Exam.ExamDividedToTerms)
-                    </th>
-                    <th>
-                        @Html.DisplayNameFor(model => Model.Exam.UsersQuantitiy)
-                    </th>
-                    <th>
-                        @Html.DisplayNameFor(model => Model.Exam.UsersLimit)
-                    </th>
-                    <th>
-                        @Html.DisplayNameFor(model => Model.Exam.Examiners)
+                        Operacje
                     </th>
                 </tr>
             </thead>
             <tbody>
-                <tr>
-                    <td>
-                        @Html.DisplayFor(modelItem => Model.Exam.ExamIndexer)
-                    </td>
-                    <td>
-                        @Html.DisplayFor(modelItem => Model.Exam.OrdinalNumber)
-                    </td>
-                    <td>
-                        @Html.DisplayFor(modelItem => Model.Exam.Name)
-                    </td>
-                    <td>
-                        @Html.DisplayFor(modelItem => Model.Exam.Description)
-                    </td>
-                    <td>
-                        @Html.DisplayFor(modelItem => Model.Exam.DateOfStart)
-                    </td>
-                    <td>
-                        @Html.DisplayFor(modelItem => Model.Exam.DateOfEnd)
-                    </td>
-                    <td>
-                        @Html.DisplayFor(modelItem => Model.Exam.DurationDays)
-                    </td>
-                    <td>
-                        @Html.DisplayFor(modelItem => Model.Exam.DurationMinutes)
-                    </td>
-                    <td>
-                        <input type="checkbox" asp-for="@Model.Exam.ExamDividedToTerms" data-toggle="toggle" data-on="Tak" data-off="Nie" data-size="sm" disabled />
-                    </td>
-                    <td>
-                        @Html.DisplayFor(modelItem => Model.Exam.UsersQuantitiy)
-                    </td>
-                    <td>
-                        @Html.DisplayFor(modelItem => Model.Exam.UsersLimit)
-                    </td>
-                    <td>
-                        <ul>
-                            @foreach (var examiner in Model.Exam.Examiners)
-                            {
-                                <li>@examiner.FirstName @examiner.LastName</li>
-                            }
-                        </ul>
-                    </td>
-                </tr>
-            </tbody>
-        </table>
-    </div>
-
-    <h2 class="mt-4 mb-4">Informacje dotyczące kursu</h2>
-
-    <div class="mt-3 mb-3">
-        <a asp-action="EditCourseHub" asp-route-courseIdentificator="@Model.Course.CourseIdentificator" asp-controller="Courses" class="btn btn-warning mt-1 mr-1">Edytuj</a>
-        <a asp-action="CourseDetails" asp-route-courseIdentificator="@Model.Course.CourseIdentificator" asp-controller="Courses" class="btn btn-info mt-1">Szczegóły</a>
-    </div>
-
-    <div class="col-12 table-responsive">
-        <table id="listCourses" class="table table-striped table-bordered display" style="width: 100%;" role="grid">
-            <thead>
-                <tr>
-                    <th>
-                        @Html.DisplayNameFor(model => model.Course.CourseIndexer)
-                    </th>
-                    <th>
-                        @Html.DisplayNameFor(model => model.Course.Name)
-                    </th>
-                    <th>
-                        @Html.DisplayNameFor(model => model.Course.Description)
-                    </th>
-                    <th>
-                        @Html.DisplayNameFor(model => model.Course.DateOfStart)
-                    </th>
-                    <th>
-                        @Html.DisplayNameFor(model => model.Course.DateOfEnd)
-                    </th>
-                    <th>
-                        @Html.DisplayNameFor(model => model.Course.EnrolledUsersLimit)
-                    </th>
-                    <th>
-                        @Html.DisplayNameFor(model => model.Course.EnrolledUsersQuantity)
-                    </th>
-                    <th>
-                        @Html.DisplayNameFor(model => model.Course.ExamIsRequired)
-                    </th>
-                    <th>
-                        @Html.DisplayNameFor(model => model.Course.CourseEnded)
-                    </th>
-                    <th>
-                        @Html.DisplayNameFor(model => model.Course.CourseLength)
-                    </th>
-                    <th>
-                        @Html.DisplayNameFor(model => model.Course.Branches)
-                    </th>
-                </tr>
-            </thead>
-            <tbody>
-                <tr>
-                    <td>
-                        @Html.DisplayFor(modelItem => Model.Course.CourseIndexer)
-                    </td>
-                    <td>
-                        @Html.DisplayFor(modelItem => Model.Course.Name)
-                    </td>
-                    <td>
-                        @Html.DisplayFor(modelItem => Model.Course.Description)
-                    </td>
-                    <td>
-                        @Html.DisplayFor(modelItem => Model.Course.DateOfStart)
-                    </td>
-                    <td>
-                        @Html.DisplayFor(modelItem => Model.Course.DateOfEnd)
-                    </td>
-                    <td>
-                        @Html.DisplayFor(modelItem => Model.Course.EnrolledUsersLimit)
-                    </td>
-                    <td>
-                        @Html.DisplayFor(modelItem => Model.Course.EnrolledUsersQuantity)
-                    </td>
-                    <td>
-                        <input type="checkbox" asp-for="@Model.Course.ExamIsRequired" class="form-control col-12" data-toggle="toggle" data-on="Tak" data-off="Nie" data-size="sm" disabled />
-                    </td>
-                    <td>
-                        @if (Model.Course.CourseEnded == true)
+                @foreach (var user in Model.UsersWithResults)
+                {
+                    <tr>
+                        <td>
+                            @Html.DisplayFor(modelItem => user.Email)
+                        </td>
+                        <td>
+                            @Html.DisplayFor(modelItem => user.FirstName)
+                        </td>
+                        <td>
+                            @Html.DisplayFor(modelItem => user.LastName)
+                        </td>
+                        @if (!Model.ExamTermNotMarked)
                         {
-                            <p hidden>1</p>
+                            <td>
+                                @Html.DisplayFor(modelItem => user.PointsEarned)
+                            </td>
+                            <td>
+                                @Html.DisplayFor(modelItem => Model.MaxAmountOfPointsToEarn)
+                            </td>
+                            <td>
+                                @Html.DisplayFor(modelItem => user.PercentageOfResult)
+                            </td>
                         }
                         else
                         {
-                            <p hidden>0</p>
+                            <td>
+                                Jeszcze nie został oceniony
+                            </td>
+                            <td>
+                                Jeszcze nie został oceniony
+                            </td>
+                            <td>
+                                Jeszcze nie został oceniony
+                            </td>
                         }
-                        <input type="checkbox" asp-for="@Model.Course.CourseEnded" data-toggle="toggle" data-on="Tak" data-off="Nie" data-size="sm" disabled />
-                    </td>
-                    <td>
-                        @Html.DisplayFor(modelItem => Model.Course.CourseLength)
-                    </td>
-                    <td>
-                        <ul>
-                            @foreach (var branch in Model.Course.Branches)
-                            {
-                                <li>@branch</li>
-                            }
-                        </ul>
-                    </td>
-                </tr>
+                        <td>
+                            <input type="checkbox" asp-for="@user.ExamPassed" data-toggle="toggle" data-on="Tak" data-off="Nie" data-size="sm" disabled />
+                        </td>
+                        <td>
+                            <a asp-action="UserDetails" asp-route-userIdentificator="@user.UserIdentificator" asp-controller="Users" class="btn btn-info">Szczegóły użytkownika</a>
+                        </td>
+                    </tr>
+                }
             </tbody>
         </table>
     </div>
+}
+else
+{
+    <div class="mt-4 mb-4 alert alert-warning">Żaden użytkownik nie został przypisany do tej tury egzaminu</div>
+}
 
-    <h2 class="mt-4 mb-4">Egzaminatorzy</h2>
+@section Scripts {
+    <script>
+        $(document).ready(function () {
+            $('#listExams').DataTable({
+                "language": {
+                    "url": "//cdn.datatables.net/plug-ins/1.10.19/i18n/Polish.json"
+                },
+            }
+            );
 
-    @if (Model.Examiners.Count != 0)
-    {
-        <div class="col-12 table-responsive">
-            <table id="listExaminers" class="table table-striped table-bordered display" style="width: 100%;" role="grid">
-                <thead>
-                    <tr>
-                        <th>
-                            @Html.DisplayNameFor(model => model.Examiners.First().FirstName)
-                        </th>
-                        <th>
-                            @Html.DisplayNameFor(model => model.Examiners.First().LastName)
-                        </th>
-                        <th>
-                            @Html.DisplayNameFor(model => model.Examiners.First().Email)
-                        </th>
-                        <th>
-                            @Html.DisplayNameFor(model => model.Examiners.First().PhoneNumber)
-                        </th>
-                        <th>
-                            Operacje
-                        </th>
-                    </tr>
-                </thead>
-                <tbody>
-                    @foreach (var examiner in Model.Examiners)
-                    {
-                        <tr>
-                            <td>
-                                @Html.DisplayFor(modelItem => examiner.FirstName)
-                            </td>
-                            <td>
-                                @Html.DisplayFor(modelItem => examiner.LastName)
-                            </td>
-                            <td>
-                                @Html.DisplayFor(modelItem => examiner.Email)
-                            </td>
-                            <td>
-                                @Html.DisplayFor(modelItem => examiner.PhoneNumber)
-                            </td>
-                            <td>
-                                <a asp-action="ExaminersDetails" asp-route-examinerIdentificator="@examiner.UserIdentificator" asp-controller="Users" class="btn btn-info m-1">Szczegóły egzaminatora</a>
-                            </td>
-                        </tr>
-                    }
-                </tbody>
-            </table>
-        </div>
-    }
-    else
-    {
-        <div class="mt-4 mb-4 alert alert-warning">Brak egzaminatorów przypisanych do egzaminu</div>
-    }
+            $('#listCourses').DataTable({
+                "language": {
+                    "url": "//cdn.datatables.net/plug-ins/1.10.19/i18n/Polish.json"
+                },
+            }
+            );
 
-    <h2 class="mt-4 mb-4">Użytkownicy zapisani na turę egzaminu</h2>
+            $('#listExaminers').DataTable({
+                "language": {
+                    "url": "//cdn.datatables.net/plug-ins/1.10.19/i18n/Polish.json"
+                },
+            }
+            );
 
-    <div class="mt-3 mb-3">
-            <a asp-action="AssignUserToExamTerm" asp-route-examTermIdentificator="@Model.ExamTermIdentificator" asp-controller="ExamsTerms" class="btn btn-primary">Dodaj użytkownika do tury egzaminu</a>
-    </div>
-
-    @if (Model.UsersWithResults.Count != 0)
-    {
-        <div class="col-12 table-responsive">
-            <table id="listUsers" class="table table-striped table-bordered display" style="width: 100%;" role="grid">
-                <thead>
-                    <tr>
-                        <th>
-                            @Html.DisplayNameFor(model => model.UsersWithResults.First().Email)
-                        </th>
-                        <th>
-                            @Html.DisplayNameFor(model => model.UsersWithResults.First().FirstName)
-                        </th>
-                        <th>
-                            @Html.DisplayNameFor(model => model.UsersWithResults.First().LastName)
-                        </th>
-                        <th>
-                            @Html.DisplayNameFor(model => model.UsersWithResults.First().PointsEarned)
-                        </th>
-                        <th>
-                            @Html.DisplayNameFor(model => model.MaxAmountOfPointsToEarn)
-                        </th>
-                        <th>
-                            @Html.DisplayNameFor(model => model.UsersWithResults.First().PercentageOfResult)
-                        </th>
-                        <th>
-                            @Html.DisplayNameFor(model => model.UsersWithResults.First().ExamPassed)
-                        </th>
-                        <th>
-                            Operacje
-                        </th>
-                    </tr>
-                </thead>
-                <tbody>
-                    @foreach (var user in Model.UsersWithResults)
-                    {
-                        <tr>
-                            <td>
-                                @Html.DisplayFor(modelItem => user.Email)
-                            </td>
-                            <td>
-                                @Html.DisplayFor(modelItem => user.FirstName)
-                            </td>
-                            <td>
-                                @Html.DisplayFor(modelItem => user.LastName)
-                            </td>
-                            @if (!Model.ExamTermNotMarked)
-                            {
-                                <td>
-                                    @Html.DisplayFor(modelItem => user.PointsEarned)
-                                </td>
-                                <td>
-                                    @Html.DisplayFor(modelItem => Model.MaxAmountOfPointsToEarn)
-                                </td>
-                                <td>
-                                    @Html.DisplayFor(modelItem => user.PercentageOfResult)
-                                </td>
-                            }
-                            else
-                            {
-                                <td>
-                                    Jeszcze nie został oceniony
-                                </td>
-                                <td>
-                                    Jeszcze nie został oceniony
-                                </td>
-                                <td>
-                                    Jeszcze nie został oceniony
-                                </td>
-                            }
-                            <td>
-                                <input type="checkbox" asp-for="@user.ExamPassed" data-toggle="toggle" data-on="Tak" data-off="Nie" data-size="sm" disabled />
-                            </td>
-                            <td>
-                                <a asp-action="UserDetails" asp-route-userIdentificator="@user.UserIdentificator" asp-controller="Users" class="btn btn-info">Szczegóły użytkownika</a>
-                            </td>
-                        </tr>
-                    }
-                </tbody>
-            </table>
-        </div>
-    }
-    else
-    {
-        <div class="mt-4 mb-4 alert alert-warning">Żaden użytkownik nie został przypisany do tej tury egzaminu</div>
-    }
-
-    @section Scripts {
-        <script>
-            $(document).ready(function () {
-                $('#listExams').DataTable({
-                    "language": {
-                        "url": "//cdn.datatables.net/plug-ins/1.10.19/i18n/Polish.json"
-                    },
-                }
-                );
-
-                $('#listCourses').DataTable({
-                    "language": {
-                        "url": "//cdn.datatables.net/plug-ins/1.10.19/i18n/Polish.json"
-                    },
-                }
-                );
-
-                $('#listExaminers').DataTable({
-                    "language": {
-                        "url": "//cdn.datatables.net/plug-ins/1.10.19/i18n/Polish.json"
-                    },
-                }
-                );
-
-                $('#listUsers').DataTable({
-                    "language": {
-                        "url": "//cdn.datatables.net/plug-ins/1.10.19/i18n/Polish.json"
-                    },
-                }
-                );
-            });
-        </script>
-    }
+            $('#listUsers').DataTable({
+                "language": {
+                    "url": "//cdn.datatables.net/plug-ins/1.10.19/i18n/Polish.json"
+                },
+            }
+            );
+        });
+    </script>
+}

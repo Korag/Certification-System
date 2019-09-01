@@ -22,6 +22,7 @@
     {
         <a asp-action="EndCourseAndDispenseGivenCertificates" asp-route-courseIdentificator="@Model.CourseIdentificator" asp-controller="Courses" class="btn btn-secondary mt-1 mr-1 xs450px_FloatLeft">Zakończ kurs</a>
     }
+
     else
     {
         <a asp-action="EndCourseAndDispenseGivenCertificates" asp-route-courseIdentificator="@Model.CourseIdentificator" asp-controller="Courses" class="btn btn-secondary mt-1 mr-1 xs450px_FloatLeft" disabled>Zakończ kurs</a>
@@ -117,52 +118,9 @@
 
 @if (Model.Instructors.Count != 0)
 {
-    <div class="col-12 table-responsive">
-        <table id="listInstructors" class="table table-striped table-bordered display" style="width: 100%;" role="grid">
-            <thead>
-                <tr>
-                    <th>
-                        @Html.DisplayNameFor(model => model.Instructors.First().FirstName)
-                    </th>
-                    <th>
-                        @Html.DisplayNameFor(model => model.Instructors.First().LastName)
-                    </th>
-                    <th>
-                        @Html.DisplayNameFor(model => model.Instructors.First().Email)
-                    </th>
-                    <th>
-                        @Html.DisplayNameFor(model => model.Instructors.First().PhoneNumber)
-                    </th>
-                    <th>
-                        Operacje
-                    </th>
-                </tr>
-            </thead>
-            <tbody>
-                @foreach (var instructor in Model.Instructors)
-                {
-                    <tr>
-                        <td>
-                            @Html.DisplayFor(modelItem => instructor.FirstName)
-                        </td>
-                        <td>
-                            @Html.DisplayFor(modelItem => instructor.LastName)
-                        </td>
-                        <td>
-                            @Html.DisplayFor(modelItem => instructor.Email)
-                        </td>
-                        <td>
-                            @Html.DisplayFor(modelItem => instructor.PhoneNumber)
-                        </td>
-                        <td>
-                            <a asp-action="InstructorDetails" asp-route-instructorIdentificator="@instructor.UserIdentificator" asp-controller="Users" class="btn btn-info m-1">Szczegóły instruktora</a>
-                        </td>
-                    </tr>
-                }
-            </tbody>
-        </table>
-    </div>
+    @await Component.InvokeAsync("DisplayCrucialDataWithContactUserDataTable", new { userViewModel = Model.Instructors, tableIdentificator = "listInstructors", operationSet = 1 })
 }
+
 else
 {
     <div class="mt-4 mb-4 alert alert-warning">Brak instruktorów przypisanych do kursu</div>
@@ -178,6 +136,7 @@ else
 {
     @await Component.InvokeAsync("DisplayMeetingWithoutCourseDataTable", new { meetingViewModel = Model.Meetings, tableIdentificator = "listMeetings", operationSet = 1 })
 }
+
 else
 {
     <div class="mt-4 mb-4 alert alert-warning">Kurs nie posiada zdefiniowanych spotkań</div>
@@ -189,52 +148,9 @@ else
 
     @if (Model.Examiners.Count != 0)
     {
-        <div class="col-12 table-responsive">
-            <table id="listExaminers" class="table table-striped table-bordered display" style="width: 100%;" role="grid">
-                <thead>
-                    <tr>
-                        <th>
-                            @Html.DisplayNameFor(model => model.Examiners.First().FirstName)
-                        </th>
-                        <th>
-                            @Html.DisplayNameFor(model => model.Examiners.First().LastName)
-                        </th>
-                        <th>
-                            @Html.DisplayNameFor(model => model.Examiners.First().Email)
-                        </th>
-                        <th>
-                            @Html.DisplayNameFor(model => model.Examiners.First().PhoneNumber)
-                        </th>
-                        <th>
-                            Operacje
-                        </th>
-                    </tr>
-                </thead>
-                <tbody>
-                    @foreach (var examiner in Model.Examiners)
-                    {
-                        <tr>
-                            <td>
-                                @Html.DisplayFor(modelItem => examiner.FirstName)
-                            </td>
-                            <td>
-                                @Html.DisplayFor(modelItem => examiner.LastName)
-                            </td>
-                            <td>
-                                @Html.DisplayFor(modelItem => examiner.Email)
-                            </td>
-                            <td>
-                                @Html.DisplayFor(modelItem => examiner.PhoneNumber)
-                            </td>
-                            <td>
-                                <a asp-action="ExaminersDetails" asp-route-examinerIdentificator="@examiner.UserIdentificator" asp-controller="Users" class="btn btn-info m-1">Szczegóły egzaminatora</a>
-                            </td>
-                        </tr>
-                    }
-                </tbody>
-            </table>
-        </div>
+        @await Component.InvokeAsync("DisplayCrucialDataWithContactUserDataTable", new { userViewModel = Model.Examiners, tableIdentificator = "listExaminers", operationSet = 2 })
     }
+
     else
     {
         <div class="mt-4 mb-4 alert alert-warning">Brak egzaminatorów przypisanych do kursu</div>
@@ -250,6 +166,7 @@ else
     {
         @await Component.InvokeAsync("DisplayExamDataTable", new { examViewModel = Model.Exams, tableIdentificator = "listExams", operationSet = 1 })
     }
+
     else
     {
         <div class="mt-4 mb-4 alert alert-warning">Kurs nie posiada zdefiniowanych egzaminów</div>
@@ -344,6 +261,7 @@ else
         </table>
     </div>
 }
+
 else
 {
     <div class="mt-4 mb-4 alert alert-warning">Brak użytkowników zapisanych na kurs</div>

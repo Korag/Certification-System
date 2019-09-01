@@ -1,4 +1,6 @@
 ﻿@model Certification_System.DTOViewModels.GivenCertificateDetailsViewModel
+@using Certification_System.DTOViewModels
+
 @{
     ViewData["Title"] = "GivenCertificateDetails";
     Layout = "~/Views/Shared/_Layout.cshtml";
@@ -199,7 +201,10 @@ else
 
 <h2 class="mt-4 mb-4">Dane kursu</h2>
 
-@await Component.InvokeAsync("DisplayCourseDataTable", new { courseViewModel = Model.Course, tableIdentificator = "listCourses", operationSet = 2 })
+@{List<DisplayCourseViewModel> courseList = new List<DisplayCourseViewModel>();
+    courseList.Add(Model.Course);}
+
+@await Component.InvokeAsync("DisplayCourseDataTable", new { courseViewModel = courseList, tableIdentificator = "listCourses", operationSet = 2 })
 
 <h2 class="mt-4 mb-4">Spotkania w ramach kursu</h2>
 

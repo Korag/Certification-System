@@ -5,11 +5,8 @@
 
 /* Set padding to keep content from hitting the edges */
 .body-content {
-    padding-left: 2vw;
-    padding-right: 2vw;
+    padding: 2vh 2vw 2vh 2vw;
     min-height: 32vw;
-    padding-top: 2vh;
-    padding-bottom: 2vh;
 }
 
 /*@media (min-width: 1200px) {

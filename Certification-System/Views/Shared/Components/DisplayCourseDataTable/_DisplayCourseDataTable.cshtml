@@ -74,7 +74,15 @@
                         <input type="checkbox" asp-for="@course.ExamIsRequired" class="form-control col-12" data-toggle="toggle" data-on="Tak" data-off="Nie" data-size="sm" disabled />
                     </td>
                     <td>
-                        <input type="checkbox" asp-for="@course.CourseEnded" class="form-control col-12" data-toggle="toggle" data-on="Tak" data-off="Nie" data-size="sm" disabled />
+                        @if (course.CourseEnded == true)
+                        {
+                            <p hidden>1</p>
+                        }
+                        else
+                        {
+                            <p hidden>0</p>
+                        }
+                        <input type="checkbox" asp-for="@course.CourseEnded" data-toggle="toggle" data-on="Tak" data-off="Nie" data-size="sm" disabled />
                     </td>
                     <td>
                         @Html.DisplayFor(modelItem => course.CourseLength)

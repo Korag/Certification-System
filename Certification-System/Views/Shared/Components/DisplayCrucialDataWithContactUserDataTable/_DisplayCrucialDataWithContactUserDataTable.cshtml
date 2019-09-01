@@ -40,7 +40,7 @@
                     <td>
                         @Html.DisplayFor(modelItem => user.PhoneNumber)
                     </td>
-                    @if (Model.Options.OperationSet != 0)
+                    @if (Model.Options.OperationSet == 1)
                     {
                         <td>
                             <div class="dropdown p-0">
@@ -50,6 +50,12 @@
                                     <a asp-action="EditUser" asp-route-userIdentificator="@user.UserIdentificator" asp-controller="Users" class="btn btn-warning w-100">Aktualizuj</a>
                                 </div>
                             </div>
+                        </td>
+                    }
+                    @if (Model.Options.OperationSet == 2)
+                    {
+                        <td>
+                            <a asp-action="ExaminersDetails" asp-route-examinerIdentificator="@user.UserIdentificator" asp-controller="Users" class="btn btn-info m-1">Szczegóły egzaminatora</a>
                         </td>
                     }
                 </tr>
