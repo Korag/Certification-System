@@ -187,35 +187,5 @@
 @section Scripts {
     @{await Html.RenderPartialAsync("_ValidationScriptsPartial");}
     @{await Html.RenderPartialAsync("_RelatedCalendarsInputScript", new RelatedCalendarsInputScriptViewModel { StartDate = "DateOfStart", EndDate = "DateOfEnd" });}
-
-    <script>
-        $(document).ready(function () {
-
-            for (var i = 0; i < @Model.ExamTerms.Count(); i++) {
-                $("#DateOfStart" + i).datetimepicker({
-                    format: 'DD.MM.YYYY HH:mm',
-                    locale: moment.locale('pl', {
-                        week: { dow: 1 }
-                    })
-                });
-                $("#DateOfEnd" + i).datetimepicker({
-                    format: 'DD.MM.YYYY HH:mm',
-                    locale: moment.locale('pl', {
-                        week: { dow: 1 }
-                    }),
-                    useCurrent: false
-                });
-                $("#DateOfStart" + i).on("dp.change", function (e) {
-                    $("#DateOfEnd" + i).data("DateTimePicker").minDate(e.date);
-                });
-                $("#DateOfEnd" + i).on("dp.change", function (e) {
-                    $("#DateOfStart" + i).data("DateTimePicker").maxDate(e.date);
-                });
-            }
-        });
-
-    </script>
+    @{await Html.RenderPartialAsync("_RelatedManyCalendarsInputScript", new RelatedManyCalendarsInputScriptViewModel { StartDate = "DateOfStart", EndDate = "DateOfEnd", QuantityOfInputs = Model.ExamTerms.Count() });}
 }
-
-
-
