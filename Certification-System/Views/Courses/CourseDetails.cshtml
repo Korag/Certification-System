@@ -164,7 +164,7 @@ else
 
     @if (Model.Exams.Count != 0)
     {
-        @await Component.InvokeAsync("DisplayExamDataTable", new { examViewModel = Model.Exams, tableIdentificator = "listExams", operationSet = 1 })
+        @await Component.InvokeAsync("DisplayExamWithoutCourseDataTable", new { examViewModel = Model.Exams, tableIdentificator = "listExams", operationSet = 1 })
     }
 
     else
@@ -268,45 +268,9 @@ else
 }
 
 @section Scripts {
-    <script>
-        $(document).ready(function () {
-
-            $('#listMeetings').DataTable({
-                "language": {
-                    "url": "//cdn.datatables.net/plug-ins/1.10.19/i18n/Polish.json"
-                },
-            }
-            );
-
-            $('#listUsers').DataTable({
-                "language": {
-                    "url": "//cdn.datatables.net/plug-ins/1.10.19/i18n/Polish.json"
-                },
-            }
-            );
-
-            $('#listInstructors').DataTable({
-                "language": {
-                    "url": "//cdn.datatables.net/plug-ins/1.10.19/i18n/Polish.json"
-                },
-            }
-            );
-
-            $('#listExaminers').DataTable({
-                "language": {
-                    "url": "//cdn.datatables.net/plug-ins/1.10.19/i18n/Polish.json"
-                },
-            }
-            );
-
-            $('#listExams').DataTable({
-                "language": {
-                    "url": "//cdn.datatables.net/plug-ins/1.10.19/i18n/Polish.json"
-                },
-            }
-            );
-        });
-    </script>
-
-
+    @{await Html.RenderPartialAsync("_DataTableBasicScript", "listMeetings");}
+    @{await Html.RenderPartialAsync("_DataTableBasicScript", "listUsers");}
+    @{await Html.RenderPartialAsync("_DataTableBasicScript", "listInstructors");}
+    @{await Html.RenderPartialAsync("_DataTableBasicScript", "listExams");}
+    @{await Html.RenderPartialAsync("_DataTableBasicScript", "listExaminers");}
 }

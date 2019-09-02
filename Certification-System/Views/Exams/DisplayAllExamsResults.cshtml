@@ -11,15 +11,5 @@
 @await Component.InvokeAsync("DisplayExamResultDataTable", new { examResultViewModel = Model, tableIdentificator = "listExamsResults" })
 
 @section Scripts{
-    <script>
-        $(document).ready(function () {
-
-            $('#listExamsResults').DataTable({
-                "language": {
-                    "url": "//cdn.datatables.net/plug-ins/1.10.19/i18n/Polish.json"
-                },
-            }
-            );
-        });
-    </script>
+    @{await Html.RenderPartialAsync("_DataTableBasicScript", "listExamsResults");}
 }

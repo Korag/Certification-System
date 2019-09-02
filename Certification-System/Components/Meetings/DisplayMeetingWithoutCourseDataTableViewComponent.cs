@@ -4,7 +4,7 @@ using System.Collections.Generic;
 
 namespace Certification_System.Components
 {
-    public class DisplayMeetingWithoutCourseDataTableViewComponen : ViewComponent
+    public class DisplayMeetingWithoutCourseDataTableViewComponent : ViewComponent
     {
         public IViewComponentResult Invoke(ICollection<DisplayMeetingWithoutCourseViewModel> meetingViewModel, string tableIdentificator, int operationSet = 0)
         {

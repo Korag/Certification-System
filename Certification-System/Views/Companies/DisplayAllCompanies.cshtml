@@ -15,14 +15,5 @@
 @await Component.InvokeAsync("DisplayCompanyDataTable", new { companyViewModel = Model, tableIdentificator = "listCompanies", operationSet = 1 })
 
 @section Scripts{
-    <script>
-        $(document).ready(function () {
-            $('#listCompanies').DataTable({
-                "language": {
-                    "url": "//cdn.datatables.net/plug-ins/1.10.19/i18n/Polish.json"
-                },
-            }
-            );
-        });
-    </script>
+    @{await Html.RenderPartialAsync("_DataTableBasicScript", "listCompanies");}
 }

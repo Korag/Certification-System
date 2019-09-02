@@ -26,15 +26,5 @@ else
 @await Component.InvokeAsync("DisplayGivenDegreeDataTable", new { givenDegreeViewModel = givenDegreeList, tableIdentificator = "givenDegreeConfirmation" })
 
 @section Scripts{
-    <script>
-        $(document).ready(function () {
-
-            $('#givenDegreeConfirmation').DataTable({
-                "language": {
-                    "url": "//cdn.datatables.net/plug-ins/1.10.19/i18n/Polish.json"
-                },
-            }
-            );
-        });
-    </script>
+    @{await Html.RenderPartialAsync("_DataTableBasicScript", "givenDegreeConfirmation");}
 }

@@ -390,51 +390,51 @@ else
             <tbody>
                 @foreach (var examTerm in Model.ExamsTerms)
                 {
-                <tr>
-                    <td>
-                        @Html.DisplayFor(modelItem => examTerm.Exam.ExamIndexer)
-                    </td>
-                    <td>
-                        @Html.DisplayFor(modelItem => examTerm.Exam.Name)
-                    </td>
-                    <td>
-                        @Html.DisplayFor(modelItem => examTerm.Exam.Description)
-                    </td>
-                    <td>
-                        @Html.DisplayFor(modelItem => examTerm.Exam.OrdinalNumber)
-                    </td>
-                    <td>
-                        @Html.DisplayFor(modelItem => examTerm.ExamTermIndexer)
-                    </td>
-                    <td>
-                        @Html.DisplayFor(modelItem => examTerm.DateOfStart)
-                    </td>
-                    <td>
-                        @Html.DisplayFor(modelItem => examTerm.DateOfEnd)
-                    </td>
-                    <td>
-                        @Html.DisplayFor(modelItem => examTerm.DurationDays)
-                    </td>
-                    <td>
-                        @Html.DisplayFor(modelItem => examTerm.DurationMinutes)
-                    </td>
-                    <td>
-                        @Html.DisplayFor(modelItem => examTerm.UsersQuantitiy)
-                    </td>
-                    <td>
-                        @Html.DisplayFor(modelItem => examTerm.UsersLimit)
-                    </td>
-                    <td>
-                        <div class="dropdown p-0">
-                            <button class="btn btn-success dropdown-toggle" type="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">Operacje</button>
-                            <div class="dropdown-menu">
-                                @*todo*@
-                                @*todo*@
-                                @*todo*@
+                    <tr>
+                        <td>
+                            @Html.DisplayFor(modelItem => examTerm.Exam.ExamIndexer)
+                        </td>
+                        <td>
+                            @Html.DisplayFor(modelItem => examTerm.Exam.Name)
+                        </td>
+                        <td>
+                            @Html.DisplayFor(modelItem => examTerm.Exam.Description)
+                        </td>
+                        <td>
+                            @Html.DisplayFor(modelItem => examTerm.Exam.OrdinalNumber)
+                        </td>
+                        <td>
+                            @Html.DisplayFor(modelItem => examTerm.ExamTermIndexer)
+                        </td>
+                        <td>
+                            @Html.DisplayFor(modelItem => examTerm.DateOfStart)
+                        </td>
+                        <td>
+                            @Html.DisplayFor(modelItem => examTerm.DateOfEnd)
+                        </td>
+                        <td>
+                            @Html.DisplayFor(modelItem => examTerm.DurationDays)
+                        </td>
+                        <td>
+                            @Html.DisplayFor(modelItem => examTerm.DurationMinutes)
+                        </td>
+                        <td>
+                            @Html.DisplayFor(modelItem => examTerm.UsersQuantitiy)
+                        </td>
+                        <td>
+                            @Html.DisplayFor(modelItem => examTerm.UsersLimit)
+                        </td>
+                        <td>
+                            <div class="dropdown p-0">
+                                <button class="btn btn-success dropdown-toggle" type="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">Operacje</button>
+                                <div class="dropdown-menu">
+                                    @*todo*@
+                                    @*todo*@
+                                    @*todo*@
+                                </div>
                             </div>
-                        </div>
-                    </td>
-                </tr>
+                        </td>
+                    </tr>
                 }
             </tbody>
         </table>
@@ -446,29 +446,7 @@ else
 }
 
 @section Scripts{
-    <script>
-        $(document).ready(function () {
-
-            $('#listCourses').DataTable({
-                "language": {
-                    "url": "//cdn.datatables.net/plug-ins/1.10.19/i18n/Polish.json"
-                },
-            }
-            );
-
-            $('#listExams').DataTable({
-                "language": {
-                    "url": "//cdn.datatables.net/plug-ins/1.10.19/i18n/Polish.json"
-                },
-            }
-            );
-
-            $('#listExamsTerms').DataTable({
-                "language": {
-                    "url": "//cdn.datatables.net/plug-ins/1.10.19/i18n/Polish.json"
-                },
-            }
-            );
-        });
-    </script>
+    @{await Html.RenderPartialAsync("_DataTableBasicScript", "listCourses");}
+    @{await Html.RenderPartialAsync("_DataTableBasicScript", "listExams");}
+    @{await Html.RenderPartialAsync("_DataTableBasicScript", "listExamsTerms");}
 }

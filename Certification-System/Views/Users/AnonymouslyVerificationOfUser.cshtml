@@ -258,29 +258,7 @@ else
 }
 
 @section Scripts{
-    <script>
-        $(document).ready(function () {
-
-            $('#listGivenCertificates').DataTable({
-                "language": {
-                    "url": "//cdn.datatables.net/plug-ins/1.10.19/i18n/Polish.json"
-                },
-            }
-            );
-
-            $('#listGivenDegrees').DataTable({
-                "language": {
-                    "url": "//cdn.datatables.net/plug-ins/1.10.19/i18n/Polish.json"
-                },
-            }
-            );
-
-            $('#listCompanies').DataTable({
-                "language": {
-                    "url": "//cdn.datatables.net/plug-ins/1.10.19/i18n/Polish.json"
-                },
-            }
-            );
-        });
-    </script>
+    @{await Html.RenderPartialAsync("_DataTableBasicScript", "listGivenCertificates");}
+    @{await Html.RenderPartialAsync("_DataTableBasicScript", "listGivenDegrees");}
+    @{await Html.RenderPartialAsync("_DataTableBasicScript", "listCompanies");}
 }

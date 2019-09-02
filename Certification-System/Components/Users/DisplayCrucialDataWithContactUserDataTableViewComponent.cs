@@ -18,7 +18,7 @@ namespace Certification_System.Components
                 }
             };
 
-            return View("_DisplayCrucialDataWithContactDataTable", userDataTableViewModel);
+            return View("_DisplayCrucialDataWithContactUserDataTable", userDataTableViewModel);
         }
     }
 }

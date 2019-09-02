@@ -45,22 +45,6 @@ else
 }
 
 @section Scripts{
-    <script>
-        $(document).ready(function () {
-
-            $('#examConfirmation').DataTable({
-                "language": {
-                    "url": "//cdn.datatables.net/plug-ins/1.10.19/i18n/Polish.json"
-                },
-            }
-            );
-
-            $('#examTermsConfirmation').DataTable({
-                "language": {
-                    "url": "//cdn.datatables.net/plug-ins/1.10.19/i18n/Polish.json"
-                },
-            }
-            );
-        });
-    </script>
+    @{await Html.RenderPartialAsync("_DataTableBasicScript", "examConfirmation");}
+    @{await Html.RenderPartialAsync("_DataTableBasicScript", "examTermsConfirmation");}
 }

@@ -211,35 +211,8 @@ else
 }
 
 @section Scripts {
-    <script>
-        $(document).ready(function () {
-            $('#listCourses').DataTable({
-                "language": {
-                    "url": "//cdn.datatables.net/plug-ins/1.10.19/i18n/Polish.json"
-                },
-            }
-            );
-
-            $('#listExamTerms').DataTable({
-                "language": {
-                    "url": "//cdn.datatables.net/plug-ins/1.10.19/i18n/Polish.json"
-                },
-            }
-            );
-
-            $('#listExaminers').DataTable({
-                "language": {
-                    "url": "//cdn.datatables.net/plug-ins/1.10.19/i18n/Polish.json"
-                },
-            }
-            );
-
-            $('#listUsers').DataTable({
-                "language": {
-                    "url": "//cdn.datatables.net/plug-ins/1.10.19/i18n/Polish.json"
-                },
-            }
-            );
-        });
-    </script>
+    @{await Html.RenderPartialAsync("_DataTableBasicScript", "listCourses");}
+    @{await Html.RenderPartialAsync("_DataTableBasicScript", "listExamTerms");}
+    @{await Html.RenderPartialAsync("_DataTableBasicScript", "listExaminers");}
+    @{await Html.RenderPartialAsync("_DataTableBasicScript", "listUsers");}
 }

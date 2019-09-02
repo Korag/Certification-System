@@ -251,17 +251,9 @@
 
 @section Scripts {
     @{await Html.RenderPartialAsync("_ValidationScriptsPartial");}
+    @{await Html.RenderPartialAsync("_DataTableBasicScript", "listUsers");}
 
     <script>
-        $(document).ready(function () {
-
-            $('#listUsers').DataTable({
-                "language": {
-                    "url": "//cdn.datatables.net/plug-ins/1.10.19/i18n/Polish.json"
-                },
-            });
-        });
-
         $(function () {
             $('#ReceiptDate').datetimepicker({
                 format: 'DD.MM.YYYY HH:mm',

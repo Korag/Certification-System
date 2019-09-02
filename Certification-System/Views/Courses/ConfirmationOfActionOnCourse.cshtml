@@ -19,7 +19,7 @@ else
     <a asp-action="DisplayAllCourses" asp-controller="Courses" class="btn btn-outline-info mt-1 xs350px_FloatRight">Powrót do listy kursów</a>
 </div>
 
-@await Component.InvokeAsync("DisplayCourseDataTable", new { courseViewModel = Model.Course, tableIdentificator = "courseConfirmation"})
+@await Component.InvokeAsync("DisplayCourseDataTable", new { courseViewModel = Model.Course, tableIdentificator = "courseConfirmation" })
 
 <div class="row m-0 mt-3">
     <a asp-action="CourseDetails" asp-route-courseIdentificator="@Model.Course.CourseIdentificator" asp-controller="Courses" class="btn btn-secondary mt-1 mr-1">Szczegóły</a>
@@ -38,22 +38,6 @@ else
 }
 
 @section Scripts{
-    <script>
-        $(document).ready(function () {
-
-            $('#courseConfirmation').DataTable({
-                "language": {
-                    "url": "//cdn.datatables.net/plug-ins/1.10.19/i18n/Polish.json"
-                },
-            }
-            );
-
-            $('#listMeetings').DataTable({
-                "language": {
-                    "url": "//cdn.datatables.net/plug-ins/1.10.19/i18n/Polish.json"
-                },
-            }
-            );
-        });
-    </script>
+    @{await Html.RenderPartialAsync("_DataTableBasicScript", "courseConfirmation");}
+    @{await Html.RenderPartialAsync("_DataTableBasicScript", "listMeetings");}
 }

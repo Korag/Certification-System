@@ -87,21 +87,6 @@ else
 }
 
 @section Scripts {
-    <script>
-        $(document).ready(function () {
-            $('#listUsers').DataTable({
-                "language": {
-                    "url": "//cdn.datatables.net/plug-ins/1.10.19/i18n/Polish.json"
-                },
-            }
-            );
-
-            $('#listCourses').DataTable({
-                "language": {
-                    "url": "//cdn.datatables.net/plug-ins/1.10.19/i18n/Polish.json"
-                },
-            }
-            );
-        });
-    </script>
+    @{await Html.RenderPartialAsync("_DataTableBasicScript", "listUsers");}
+    @{await Html.RenderPartialAsync("_DataTableBasicScript", "listCourses");}
 }

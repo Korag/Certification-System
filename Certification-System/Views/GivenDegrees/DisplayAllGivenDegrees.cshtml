@@ -15,15 +15,5 @@
 @await Component.InvokeAsync("DisplayGivenDegreeDataTable", new { givenDegreeViewModel = Model, tableIdentificator = "listGivenDegrees", operationSet = 1 })
 
 @section Scripts{
-    <script>
-        $(document).ready(function () {
-
-            $('#listGivenDegrees').DataTable({
-                "language": {
-                    "url": "//cdn.datatables.net/plug-ins/1.10.19/i18n/Polish.json"
-                },
-            }
-            );
-        });
-    </script>
+    @{await Html.RenderPartialAsync("_DataTableBasicScript", "listGivenDegrees");}
 }

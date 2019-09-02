@@ -15,16 +15,5 @@
 @await Component.InvokeAsync("DisplayCertificateDataTable", new { certificateViewModel = Model, tableIdentificator = "listCertificates", operationSet = 1 })
 
 @section Scripts{
-    <script>
-        $(document).ready(function () {
-
-            $('#listCertificates').DataTable({
-                "language": {
-                    "url": "//cdn.datatables.net/plug-ins/1.10.19/i18n/Polish.json"
-                },
-                //responsive: true
-            }
-            );
-        });
-    </script>
+    @{await Html.RenderPartialAsync("_DataTableBasicScript", "listCertificates");}
 }

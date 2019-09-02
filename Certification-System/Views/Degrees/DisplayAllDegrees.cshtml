@@ -11,19 +11,8 @@
     <a asp-action="AddNewDegree" asp-controller="Degrees" class="btn btn-primary">Dodaj kolejny stopień zawodowy</a>
 </div>
 
-@await Component.InvokeAsync("DisplayDegreeDataTable", new { degreeViewModel = Model, tableIdentificator = "listDegrees", operationSet = 1})
+@await Component.InvokeAsync("DisplayDegreeDataTable", new { degreeViewModel = Model, tableIdentificator = "listDegrees", operationSet = 1 })
 
 @section Scripts{
-    <script>
-        $(document).ready(function () {
-
-            $('#listDegrees').DataTable({
-                "language": {
-                    "url": "//cdn.datatables.net/plug-ins/1.10.19/i18n/Polish.json"
-                },
-                //responsive: true
-            }
-            );
-        });
-    </script>
+    @{await Html.RenderPartialAsync("_DataTableBasicScript", "listDegrees");}
 }

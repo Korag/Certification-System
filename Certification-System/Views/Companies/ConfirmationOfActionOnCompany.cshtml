@@ -27,15 +27,5 @@ else
 @await Component.InvokeAsync("DisplayCompanyDataTable", new { companyViewModel = companyList, tableIdentificator = "companyConfirmation" })
 
 @section Scripts{
-    <script>
-        $(document).ready(function () {
-
-            $('#companyConfirmation').DataTable({
-                "language": {
-                    "url": "//cdn.datatables.net/plug-ins/1.10.19/i18n/Polish.json"
-                },
-            }
-            );
-        });
-    </script>
+    @{await Html.RenderPartialAsync("_DataTableBasicScript", "companyConfirmation");}
 }

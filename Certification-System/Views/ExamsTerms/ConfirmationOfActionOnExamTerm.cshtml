@@ -3,7 +3,7 @@
 
 @{
     ViewData["Title"] = "ConfirmationOfActionOnExamTerm";
- Layout = "~/Views/Shared/_Layout.cshtml";
+    Layout = "~/Views/Shared/_Layout.cshtml";
 }
 
 @if (ViewBag.TypeOfAction == "Update")
@@ -26,15 +26,5 @@ else
 @await Component.InvokeAsync("_DisplayExamTermDataTable", new { examTermViewModel = examTermList, tableIdentificator = "examTermConfirmation" })
 
 @section Scripts{
-    <script>
-        $(document).ready(function () {
-
-            $('#examTermConfirmation').DataTable({
-                "language": {
-                    "url": "//cdn.datatables.net/plug-ins/1.10.19/i18n/Polish.json"
-                },
-            }
-            );
-        });
-    </script>
+    @{await Html.RenderPartialAsync("_DataTableBasicScript", "examTermConfirmation");}
 }

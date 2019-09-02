@@ -1,4 +1,5 @@
 ﻿@model IEnumerable<Certification_System.DTOViewModels.DisplayCourseViewModel>
+@using Certification_System.DTOViewModels
 
 @{
     ViewData["Title"] = "DisplayAllCourses";
@@ -24,27 +25,5 @@
 @await Component.InvokeAsync("DisplayCourseDataTable", new { courseViewModel = Model, tableIdentificator = "listCourses", operationSet = 2 })
 
 @section Scripts{
-    <script>
-        $(document).ready(function () {
-            $('#listCourses').DataTable({
-                "language": {
-                    "url": "//cdn.datatables.net/plug-ins/1.10.19/i18n/Polish.json"
-                },
-                initComplete: function () {
-                    this.api().columns(8).every(function () {
-                        var column = this;
-
-                        $('#select').on('change', function () {
-                            var val = $.fn.dataTable.util.escapeRegex(
-                                $(this).val()
-                            );
-                            column
-                                .search(val ? val : '', true, false)
-                                .draw();
-                        });
-                    });
-                }
-            });
-        });
-    </script>
+    @{await Html.RenderPartialAsync("_DataTableWithFilterOnColumnScript", new DataTableExtendedScriptViewModel{ TableIdentificator = "listCourses", NumberOfColumn = 8 });}
 }

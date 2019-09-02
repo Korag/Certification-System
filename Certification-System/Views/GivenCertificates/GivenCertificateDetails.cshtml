@@ -231,43 +231,9 @@ else
 }
 
 @section Scripts{
-    <script>
-        $(document).ready(function () {
-
-            $('#listGivenCertificate').DataTable({
-                "language": {
-                    "url": "//cdn.datatables.net/plug-ins/1.10.19/i18n/Polish.json"
-                },
-            }
-            );
-
-            $('#listCompanies').DataTable({
-                "language": {
-                    "url": "//cdn.datatables.net/plug-ins/1.10.19/i18n/Polish.json"
-                },
-            }
-            );
-
-            $('#listCourses').DataTable({
-                "language": {
-                    "url": "//cdn.datatables.net/plug-ins/1.10.19/i18n/Polish.json"
-                },
-            }
-            );
-
-            $('#listMeetings').DataTable({
-                "language": {
-                    "url": "//cdn.datatables.net/plug-ins/1.10.19/i18n/Polish.json"
-                },
-            }
-            );
-
-            $('#listInstructors').DataTable({
-                "language": {
-                    "url": "//cdn.datatables.net/plug-ins/1.10.19/i18n/Polish.json"
-                },
-            }
-            );
-        });
-    </script>
+    @{await Html.RenderPartialAsync("_DataTableBasicScript", "listGivenCertificate");}
+    @{await Html.RenderPartialAsync("_DataTableBasicScript", "listCompanies");}
+    @{await Html.RenderPartialAsync("_DataTableBasicScript", "listCourses");}
+    @{await Html.RenderPartialAsync("_DataTableBasicScript", "listMeetings");}
+    @{await Html.RenderPartialAsync("_DataTableBasicScript", "listInstructors");}
 }

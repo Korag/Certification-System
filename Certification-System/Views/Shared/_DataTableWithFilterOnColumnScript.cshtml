@@ -1,0 +1,25 @@
+@model Certification_System.DTOViewModels.DataTableExtendedScriptViewModel
+
+<script>
+        $(document).ready(function () {
+            $('#@Model.TableIdentificator').DataTable({
+                "language": {
+                    "url": "//cdn.datatables.net/plug-ins/1.10.19/i18n/Polish.json"
+                },
+                initComplete: function () {
+                    this.api().columns(@Model.NumberOfColumn).every(function () {
+                        var column = this;
+
+                        $('#select').on('change', function () {
+                            var val = $.fn.dataTable.util.escapeRegex(
+                                $(this).val()
+                            );
+                            column
+                                .search(val ? val : '', true, false)
+                                .draw();
+                        });
+                    });
+                }
+            });
+        });
+</script>
