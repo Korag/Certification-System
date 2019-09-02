@@ -27,39 +27,40 @@
         <tbody>
             @foreach (var user in Model.Users)
             {
-                <tr>
+            <tr>
+                <td>
+                    @Html.DisplayFor(modelItem => user.FirstName)
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => user.LastName)
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => user.Email)
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => user.PhoneNumber)
+                </td>
+                @if (Model.Options.OperationSet == 1)
+                {
                     <td>
-                        @Html.DisplayFor(modelItem => user.FirstName)
+                        <a asp-action="ExaminersDetails" asp-route-examinerIdentificator="@user.UserIdentificator" asp-controller="Users" class="btn btn-info m-1">Szczegóły egzaminatora</a>
                     </td>
+                }
+                @if (Model.Options.OperationSet == 2)
+                {
                     <td>
-                        @Html.DisplayFor(modelItem => user.LastName)
-                    </td>
-                    <td>
-                        @Html.DisplayFor(modelItem => user.Email)
-                    </td>
-                    <td>
-                        @Html.DisplayFor(modelItem => user.PhoneNumber)
-                    </td>
-                    @if (Model.Options.OperationSet == 1)
-                    {
-                        <td>
-                            <div class="dropdown p-0">
-                                <button class="btn btn-success dropdown-toggle" type="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">Operacje</button>
-                                <div class="dropdown-menu">
-                                    <a asp-action="InstructorDetails" asp-route-instructorIdentificator="@user.UserIdentificator" asp-controller="Users" class="btn btn-info w-100 mb-1">Szczegóły</a>
-                                    <a asp-action="EditUser" asp-route-userIdentificator="@user.UserIdentificator" asp-controller="Users" class="btn btn-warning w-100">Aktualizuj</a>
-                                </div>
+                        <div class="dropdown p-0">
+                            <button class="btn btn-success dropdown-toggle" type="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">Operacje</button>
+                            <div class="dropdown-menu">
+                                <a asp-action="InstructorDetails" asp-route-instructorIdentificator="@user.UserIdentificator" asp-controller="Users" class="btn btn-info w-100 mb-1">Szczegóły</a>
+                                <a asp-action="EditUser" asp-route-userIdentificator="@user.UserIdentificator" asp-controller="Users" class="btn btn-warning w-100">Aktualizuj</a>
                             </div>
-                        </td>
-                    }
-                    @if (Model.Options.OperationSet == 2)
-                    {
-                        <td>
-                            <a asp-action="ExaminersDetails" asp-route-examinerIdentificator="@user.UserIdentificator" asp-controller="Users" class="btn btn-info m-1">Szczegóły egzaminatora</a>
-                        </td>
-                    }
-                </tr>
+                        </div>
+                    </td>
+                }
+            </tr>
             }
         </tbody>
     </table>
 </div>
+
