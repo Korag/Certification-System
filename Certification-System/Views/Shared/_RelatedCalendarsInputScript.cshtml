@@ -1,0 +1,25 @@
+@model Certification_System.DTOViewModels.RelatedCalendarsInputScriptViewModel
+
+<script>
+    $(function () {
+        $('#@Model.StartDate').datetimepicker({
+            format: 'DD.MM.YYYY HH:mm',
+            locale: moment.locale('pl', {
+                week: { dow: 1 }
+            })
+        });
+        $('#@Model.EndDate').datetimepicker({
+            format: 'DD.MM.YYYY HH:mm',
+            locale: moment.locale('pl', {
+                week: { dow: 1 }
+            }),
+            useCurrent: false
+        });
+        $("#@Model.StartDate").on("dp.change", function (e) {
+            $('#@Model.EndDate').data("DateTimePicker").minDate(e.date);
+        });
+        $("#@Model.EndDate").on("dp.change", function (e) {
+            $('#@Model.StartDate').data("DateTimePicker").maxDate(e.date);
+        });
+    });
+</script>

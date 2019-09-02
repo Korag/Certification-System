@@ -11,21 +11,12 @@
 
         <div class="col-md-8 col-xl-6 col-lg-6 col-sm-12 col-xs-10 m-auto p-3 shadow p-3 mb-5 bg-light rounded border border-primary rounded-bottom" style="opacity:0.90">
 
-            <div class="btn-group btn-group-toggle d-flex row justify-content-center" data-toggle="buttons">
-                <label class="btn btn-outline-secondary ml-2 mr-2 mt-1">
-                    <input type="radio"
-                           name="SelectedOption"
-                           value="DodajKurs"
-                           autocomplete="off" />
-                    <span>Dodaj nowy kurs</span>
-                </label>
-            </div>
-
-            <div class="form-group mt-4">
+            <div class="form-group">
                 <label asp-for="MeetingsQuantity" class="control-label"></label>
                 <div>
                     <select asp-for="MeetingsQuantity" data-style="btn-white" data-container="body" multiple data-max-options="1" data-width="auto" data-header="Wybierz liczbę tur" data-live-search="true" title="Nie wybrano żadnego elementu" class="form-control selectpicker show-tick w-100 rounded border border-secondary">
-                        @for (int i = 0; i < 10; i++)
+                        <option selected>0</option>
+                        @for (int i = 1; i < 10; i++)
                         {
                             <option>@i</option>
                         }

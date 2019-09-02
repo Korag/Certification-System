@@ -14,7 +14,7 @@
 
         <div class="col-md-8 col-xl-6 col-lg-6 col-sm-12 col-xs-10 m-auto p-3 shadow p-3 mb-5 bg-light rounded border border-primary rounded-bottom" style="opacity:0.90">
 
-            <input asp-for="CourseIdentificator" class="form-control col-12" hidden/>
+            <input asp-for="CourseIdentificator" class="form-control col-12" hidden />
 
             <div class="form-group">
                 <label asp-for="CourseIndexer" class="control-label"></label>
@@ -105,107 +105,107 @@
 
             @for (int i = 0; i < Model.Meetings.Count(); i++)
             {
-            <div class="col-12 bg-light rounded border border-primary rounded-bottom mb-2 p-3">
+                <div class="col-12 bg-light rounded border border-primary rounded-bottom mb-2 p-3">
 
-                <input asp-for="Meetings[i].MeetingIdentificator" class="form-control col-12" hidden />
+                    <input asp-for="Meetings[i].MeetingIdentificator" class="form-control col-12" hidden />
 
-                <div class="form-group">
-                    <label asp-for="Meetings[i].MeetingIndexer" class="control-label"></label>
-                    <div>
-                        <input asp-for="Meetings[i].MeetingIndexer" class="form-control col-12" />
-                        <div class="row justify-content-center">
-                            <span asp-validation-for="Meetings[i].MeetingIndexer" class="text-danger"></span>
+                    <div class="form-group">
+                        <label asp-for="Meetings[i].MeetingIndexer" class="control-label"></label>
+                        <div>
+                            <input asp-for="Meetings[i].MeetingIndexer" class="form-control col-12" />
+                            <div class="row justify-content-center">
+                                <span asp-validation-for="Meetings[i].MeetingIndexer" class="text-danger"></span>
+                            </div>
                         </div>
                     </div>
-                </div>
 
-                <div class="form-group">
-                    <label asp-for="Meetings[i].Description" class="control-label"></label>
-                    <div>
-                        <textarea asp-for="Meetings[i].Description" class="form-control col-12" style="width:100%; min-width:100%;"></textarea>
-                        <div class="row justify-content-center">
-                            <span asp-validation-for="Meetings[i].Description" class="text-danger"></span>
+                    <div class="form-group">
+                        <label asp-for="Meetings[i].Description" class="control-label"></label>
+                        <div>
+                            <textarea asp-for="Meetings[i].Description" class="form-control col-12" style="width:100%; min-width:100%;"></textarea>
+                            <div class="row justify-content-center">
+                                <span asp-validation-for="Meetings[i].Description" class="text-danger"></span>
+                            </div>
                         </div>
                     </div>
-                </div>
 
-                <div class="form-group">
-                    <label asp-for="Meetings[i].DateOfMeeting" class="control-label"></label>
-                    <div>
-                        @{string id_DoM = "DateOfMeeting" + i; }
-                        <div class='input-group date' id='@id_DoM'>
-                            <input type='text' class="form-control col-12" value="@DateTime.Now.ToShortDateString() @DateTime.Now.ToShortTimeString()" />
-                            <span class="input-group-addon">
-                                <span class="fa fa-calendar pl-1 pt-0.5" style="font-size:34px"></span>
-                            </span>
-                        </div>
-                        <div class="row justify-content-center">
-                            <span asp-validation-for="Meetings[i].DateOfMeeting" class="text-danger"></span>
-                        </div>
-                    </div>
-                </div>
-
-                <div class="form-group">
-                    <label asp-for="Meetings[i].Country" class="control-label"></label>
-                    <div>
-                        <input asp-for="Meetings[i].Country" class="form-control col-12" />
-                        <div class="row justify-content-center">
-                            <span asp-validation-for="Meetings[i].Country" class="text-danger"></span>
+                    <div class="form-group">
+                        <label asp-for="Meetings[i].DateOfMeeting" class="control-label"></label>
+                        <div>
+                            @{string id_DoM = "DateOfMeeting" + i; }
+                            <div class='input-group date' id='@id_DoM'>
+                                <input type='text' class="form-control col-12" value="@DateTime.Now.ToShortDateString() @DateTime.Now.ToShortTimeString()" />
+                                <span class="input-group-addon">
+                                    <span class="fa fa-calendar pl-1 pt-0.5" style="font-size:34px"></span>
+                                </span>
+                            </div>
+                            <div class="row justify-content-center">
+                                <span asp-validation-for="Meetings[i].DateOfMeeting" class="text-danger"></span>
+                            </div>
                         </div>
                     </div>
-                </div>
 
-                <div class="form-group">
-                    <label asp-for="Meetings[i].City" class="control-label"></label>
-                    <div>
-                        <input asp-for="Meetings[i].City" class="form-control col-12" />
-                        <div class="row justify-content-center">
-                            <span asp-validation-for="Meetings[i].City" class="text-danger"></span>
+                    <div class="form-group">
+                        <label asp-for="Meetings[i].Country" class="control-label"></label>
+                        <div>
+                            <input asp-for="Meetings[i].Country" class="form-control col-12" />
+                            <div class="row justify-content-center">
+                                <span asp-validation-for="Meetings[i].Country" class="text-danger"></span>
+                            </div>
                         </div>
                     </div>
-                </div>
 
-                <div class="form-group">
-                    <label asp-for="Meetings[i].PostCode" class="control-label"></label>
-                    <div>
-                        <input asp-for="Meetings[i].PostCode" class="form-control col-12" />
-                        <div class="row justify-content-center">
-                            <span asp-validation-for="Meetings[i].PostCode" class="text-danger"></span>
+                    <div class="form-group">
+                        <label asp-for="Meetings[i].City" class="control-label"></label>
+                        <div>
+                            <input asp-for="Meetings[i].City" class="form-control col-12" />
+                            <div class="row justify-content-center">
+                                <span asp-validation-for="Meetings[i].City" class="text-danger"></span>
+                            </div>
                         </div>
                     </div>
-                </div>
 
-                <div class="form-group">
-                    <label asp-for="Meetings[i].Address" class="control-label"></label>
-                    <div>
-                        <input asp-for="Meetings[i].Address" class="form-control col-12" />
-                        <div class="row justify-content-center">
-                            <span asp-validation-for="Meetings[i].Address" class="text-danger"></span>
+                    <div class="form-group">
+                        <label asp-for="Meetings[i].PostCode" class="control-label"></label>
+                        <div>
+                            <input asp-for="Meetings[i].PostCode" class="form-control col-12" />
+                            <div class="row justify-content-center">
+                                <span asp-validation-for="Meetings[i].PostCode" class="text-danger"></span>
+                            </div>
                         </div>
                     </div>
-                </div>
 
-                <div class="form-group">
-                    <label asp-for="Meetings[i].NumberOfApartment" class="control-label"></label>
-                    <div>
-                        <input asp-for="Meetings[i].NumberOfApartment" class="form-control col-12" />
-                        <div class="row justify-content-center">
-                            <span asp-validation-for="Meetings[i].NumberOfApartment" class="text-danger"></span>
+                    <div class="form-group">
+                        <label asp-for="Meetings[i].Address" class="control-label"></label>
+                        <div>
+                            <input asp-for="Meetings[i].Address" class="form-control col-12" />
+                            <div class="row justify-content-center">
+                                <span asp-validation-for="Meetings[i].Address" class="text-danger"></span>
+                            </div>
                         </div>
                     </div>
-                </div>
 
-                <div class="form-group">
-                    <label asp-for="AvailableInstructors" class="control-label"></label>
-                    <div>
-                        <select asp-for="Meetings[i].SelectedInstructors" asp-items="@Model.AvailableInstructors" data-style="btn-white" data-container="body" data-width="auto" data-header="Wybierz instruktora" data-live-search="true" title="Nie wybrano instruktora" multiple class="form-control selectpicker show-tick w-100"> </select>
-                        <div class="row justify-content-center">
-                            <span asp-validation-for="Meetings[i].SelectedInstructors" class="text-danger"></span>
+                    <div class="form-group">
+                        <label asp-for="Meetings[i].NumberOfApartment" class="control-label"></label>
+                        <div>
+                            <input asp-for="Meetings[i].NumberOfApartment" class="form-control col-12" />
+                            <div class="row justify-content-center">
+                                <span asp-validation-for="Meetings[i].NumberOfApartment" class="text-danger"></span>
+                            </div>
                         </div>
                     </div>
-                </div>
 
-            </div>
+                    <div class="form-group">
+                        <label asp-for="AvailableInstructors" class="control-label"></label>
+                        <div>
+                            <select asp-for="Meetings[i].SelectedInstructors" asp-items="@Model.AvailableInstructors" data-style="btn-white" data-container="body" data-width="auto" data-header="Wybierz instruktora" data-live-search="true" title="Nie wybrano instruktora" multiple class="form-control selectpicker show-tick w-100"> </select>
+                            <div class="row justify-content-center">
+                                <span asp-validation-for="Meetings[i].SelectedInstructors" class="text-danger"></span>
+                            </div>
+                        </div>
+                    </div>
+
+                </div>
             }
 
             <div asp-validation-summary="ModelOnly" class="row justify-content-center alert alert-danger validation-model"></div>
@@ -222,29 +222,10 @@
 
 @section Scripts {
     @{await Html.RenderPartialAsync("_ValidationScriptsPartial");}
+    @{await Html.RenderPartialAsync("_RelatedCalendarsInputScript", new RelatedCalendarsInputScriptViewModel { StartDate = "DateOfStart", EndDate = "DateOfEnd" });}
 
     <script>
         $(function () {
-            $('#DateOfStart').datetimepicker({
-                format: 'DD.MM.YYYY HH:mm',
-                locale: moment.locale('pl', {
-                    week: { dow: 1 }
-                })
-            });
-            $('#DateOfEnd').datetimepicker({
-                format: 'DD.MM.YYYY HH:mm',
-                locale: moment.locale('pl', {
-                    week: { dow: 1 }
-                }),
-                useCurrent: false
-            });
-            $("#DateOfStart").on("dp.change", function (e) {
-                $('#DateOfEnd').data("DateTimePicker").minDate(e.date);
-            });
-            $("#DateOfEnd").on("dp.change", function (e) {
-                $('#DateOfStart').data("DateTimePicker").maxDate(e.date);
-            });
-
              for (var i = 0; i < @Model.Meetings.Count(); i++) {
                 $("#DateOfMeeting" + i).datetimepicker({
                     format: 'DD.MM.YYYY HH:mm',

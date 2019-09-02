@@ -1,4 +1,5 @@
 ﻿@model Certification_System.DTOViewModels.EditGivenCertificateViewModel
+@using Certification_System.DTOViewModels
 
 @{
     ViewData["Title"] = "EditGivenCertificate";
@@ -102,28 +103,5 @@
 
 @section Scripts {
     @{await Html.RenderPartialAsync("_ValidationScriptsPartial");}
-
-    <script>
-        $(function () {
-            $('#ReceiptDate').datetimepicker({
-                format: 'DD.MM.YYYY HH:mm',
-                locale: moment.locale('pl', {
-                    week: { dow: 1 }
-                })
-            });
-            $('#ExpirationDate').datetimepicker({
-                format: 'DD.MM.YYYY HH:mm',
-                locale: moment.locale('pl', {
-                    week: { dow: 1 }
-                }),
-                useCurrent: false
-            });
-            $("#ReceiptDate").on("dp.change", function (e) {
-                $('#ExpirationDate').data("DateTimePicker").minDate(e.date);
-            });
-            $("#ExpirationDate").on("dp.change", function (e) {
-                $('#ReceiptDate').data("DateTimePicker").maxDate(e.date);
-            });
-        });
-    </script>
+    @{await Html.RenderPartialAsync("_RelatedCalendarsInputScript", new RelatedCalendarsInputScriptViewModel { StartDate = "ReceiptDate", EndDate = "ExpirationDate" });}
 }

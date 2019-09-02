@@ -79,7 +79,7 @@ namespace Certification_System.Controllers
             }
             else
             {
-                return View();
+                return RedirectToAction("AddNewCourse", "Courses");
             }
         }
 

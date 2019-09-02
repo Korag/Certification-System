@@ -1,4 +1,5 @@
 ﻿@model Certification_System.DTOViewModels.EditExamTermViewModel
+@using Certification_System.DTOViewModels
 
 @{
     ViewData["Title"] = "EditExamTerm";
@@ -86,28 +87,5 @@
 
 @section Scripts {
     @{await Html.RenderPartialAsync("_ValidationScriptsPartial");}
-
-    <script>
-        $(function () {
-            $('#DateOfStart').datetimepicker({
-                format: 'DD.MM.YYYY HH:mm',
-                locale: moment.locale('pl', {
-                    week: { dow: 1 }
-                })
-            });
-            $('#DateOfEnd').datetimepicker({
-                format: 'DD.MM.YYYY HH:mm',
-                locale: moment.locale('pl', {
-                    week: { dow: 1 }
-                }),
-                useCurrent: false
-            });
-            $("#DateOfStart").on("dp.change", function (e) {
-                $('#DateOfEnd').data("DateTimePicker").minDate(e.date);
-            });
-            $("#DateOfEnd").on("dp.change", function (e) {
-                $('#DateOfStart').data("DateTimePicker").maxDate(e.date);
-            });
-        });
-    </script>
+    @{await Html.RenderPartialAsync("_RelatedCalendarsInputScript", new RelatedCalendarsInputScriptViewModel { StartDate = "DateOfStart", EndDate = "DateOfEnd" });}
 }
