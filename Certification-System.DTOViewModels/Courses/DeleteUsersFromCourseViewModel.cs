@@ -51,7 +51,7 @@ namespace Certification_System.DTOViewModels
         public ICollection<string> Branches { get; set; }
 
         [Display(Name = "Lista użytkowników do usunięcia z kursu")]
-        public DeleteUsersFromCourseCheckBoxViewModel[] UsersToDeleteFromCourse { get; set; }
+        public DeleteUsersFromCheckBoxViewModel[] UsersToDeleteFromCourse { get; set; }
 
         [Display(Name = "Uczestnicy kursu")]
         public ICollection<DisplayCrucialDataUserViewModel> AllCourseParticipants { get; set; }

@@ -481,8 +481,8 @@ namespace Certification_System.Services
                      .ForMember(dest => dest.Courses, opts => opts.Ignore())
                      .ForMember(dest => dest.Meetings, opts => opts.Ignore());
 
-            CreateMap<DisplayCrucialDataUserViewModel, DeleteUsersFromCourseCheckBoxViewModel>()
-                     .ForMember(dest => dest.IsToDeleteFromCourse, opts => opts.Ignore());
+            CreateMap<DisplayCrucialDataUserViewModel, DeleteUsersFromCheckBoxViewModel>()
+                     .ForMember(dest => dest.IsToDelete, opts => opts.Ignore());
             #endregion
         }
     }

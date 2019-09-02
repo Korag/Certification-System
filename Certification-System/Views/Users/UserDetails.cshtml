@@ -459,7 +459,7 @@ else
                                     {
                                         <form asp-action="DeleteUsersFromCourse" asp-controller="Courses">
                                             <input value="@Model.UserIdentificator" name="UsersToDeleteFromCourse[0].UserIdentificator" class="form-control col-12" hidden />
-                                            <input value="true" name="UsersToDeleteFromCourse[0].IsToDeleteFromCourse" class="form-control col-12" hidden />
+                                            <input value="true" name="UsersToDeleteFromCourse[0].IsToDelete" class="form-control col-12" hidden />
 
                                             <input value="@course.CourseIdentificator" name="CourseIdentificator" class="form-control col-12" hidden />
                                             <input type="submit" value="Usuń użytkownika z kursu" class="btn btn-danger w-100" />

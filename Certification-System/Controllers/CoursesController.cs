@@ -586,7 +586,7 @@ namespace Certification_System.Controllers
                 deleteUsersFromCourseViewModel.Branches = _context.branchRepository.GetBranchesById(Course.Branches);
                 deleteUsersFromCourseViewModel.EnrolledUsersQuantity = Course.EnrolledUsers.Count;
 
-                deleteUsersFromCourseViewModel.UsersToDeleteFromCourse = _mapper.Map<DeleteUsersFromCourseCheckBoxViewModel[]>(ListOfUsers);
+                deleteUsersFromCourseViewModel.UsersToDeleteFromCourse = _mapper.Map<DeleteUsersFromCheckBoxViewModel[]>(ListOfUsers);
 
                 return View(deleteUsersFromCourseViewModel);
             }
@@ -601,7 +601,7 @@ namespace Certification_System.Controllers
         {
             if (ModelState.IsValid)
             {
-                var UsersToDeleteFromCourseIdentificators = deleteUsersFromCourseViewModel.UsersToDeleteFromCourse.ToList().Where(z => z.IsToDeleteFromCourse == true).Select(z => z.UserIdentificator).ToList();
+                var UsersToDeleteFromCourseIdentificators = deleteUsersFromCourseViewModel.UsersToDeleteFromCourse.ToList().Where(z => z.IsToDelete == true).Select(z => z.UserIdentificator).ToList();
 
                 _context.courseRepository.DeleteUsersFromCourse(deleteUsersFromCourseViewModel.CourseIdentificator, UsersToDeleteFromCourseIdentificators);
                 _context.userRepository.DeleteCourseFromUsersCollection(deleteUsersFromCourseViewModel.CourseIdentificator, UsersToDeleteFromCourseIdentificators);

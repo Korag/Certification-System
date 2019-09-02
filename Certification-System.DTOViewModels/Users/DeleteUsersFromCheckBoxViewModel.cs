@@ -1,8 +1,8 @@
 ﻿namespace Certification_System.DTOViewModels
 {
-    public class DeleteUsersFromCourseCheckBoxViewModel
+    public class DeleteUsersFromCheckBoxViewModel
     {
         public string UserIdentificator { get; set; }
-        public bool IsToDeleteFromCourse { get; set; }
+        public bool IsToDelete { get; set; }
     }
 }

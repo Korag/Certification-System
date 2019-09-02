@@ -1,0 +1,49 @@
+﻿@model Certification_System.DTOViewModels.DeleteUserFromCourseDataTableViewModel
+
+<div class="col-12 table-responsive">
+    <table id="@Model.Options.TableIdentificator" class="table table-striped table-bordered display" style="width: 100%;" role="grid">
+        <thead>
+            <tr>
+                <th>
+                    @Html.DisplayNameFor(model => model.Users.FirstOrDefault().Email)
+                </th>
+                <th>
+                    @Html.DisplayNameFor(model => model.Users.FirstOrDefault().FirstName)
+                </th>
+                <th>
+                    @Html.DisplayNameFor(model => model.Users.FirstOrDefault().LastName)
+                </th>
+                <th>
+                    Użytkownik do usunięcia z kursu ?
+                </th>
+            </tr>
+        </thead>
+        <tbody>
+            @{var UsersQuantitity = Model.Users.Count();}
+            @for (int i = 0; i < UsersQuantitity; i++)
+            {
+                <tr>
+                    <td>
+                        @Html.DisplayFor(model => model.Users.ElementAt(i).Email)
+                    </td>
+                    <td>
+                        @Html.DisplayFor(model => model.Users.ElementAt(i).FirstName)
+                    </td>
+                    <td>
+                        @Html.DisplayFor(model => model.Users.ElementAt(i).LastName)
+                    </td>
+                    <td>
+                        <input type="checkbox" asp-for="@Model.UsersToDeleteFromCourse[i].IsToDelete" data-toggle="toggle" data-on="Tak" data-off="Nie" data-size="sm" />
+                        <input type="hidden" asp-for="@Model.UsersToDeleteFromCourse[i].UserIdentificator" />
+                    </td>
+                </tr>
+            }
+        </tbody>
+    </table>
+</div>
+
+<div>
+    <div class="row justify-content-center">
+        <input type="submit" value="Usuń użytkowników z kursu" class="btn btn-danger" />
+    </div>
+</div>

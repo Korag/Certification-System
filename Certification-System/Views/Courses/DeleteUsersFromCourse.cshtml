@@ -89,53 +89,7 @@
 
     @if (Model.AllCourseParticipants.Count != 0)
     {
-        <div class="col-12 table-responsive">
-            <table id="listUsers" class="table table-striped table-bordered display" style="width: 100%;" role="grid">
-                <thead>
-                    <tr>
-                        <th>
-                            @Html.DisplayNameFor(model => model.AllCourseParticipants.First().Email)
-                        </th>
-                        <th>
-                            @Html.DisplayNameFor(model => model.AllCourseParticipants.First().FirstName)
-                        </th>
-                        <th>
-                            @Html.DisplayNameFor(model => model.AllCourseParticipants.First().LastName)
-                        </th>
-                        <th>
-                            Użytkownik do usunięcia z kursu ?
-                        </th>
-                    </tr>
-                </thead>
-                <tbody>
-                    @{var UsersQuantitity = Model.AllCourseParticipants.Count();}
-                    @for (int i = 0; i < UsersQuantitity; i++)
-                    {
-                        <tr>
-                            <td>
-                                @Html.DisplayFor(model => model.AllCourseParticipants.ElementAt(i).Email)
-                            </td>
-                            <td>
-                                @Html.DisplayFor(model => model.AllCourseParticipants.ElementAt(i).FirstName)
-                            </td>
-                            <td>
-                                @Html.DisplayFor(model => model.AllCourseParticipants.ElementAt(i).LastName)
-                            </td>
-                            <td>
-                                <input type="checkbox" asp-for="@Model.UsersToDeleteFromCourse[i].IsToDeleteFromCourse" data-toggle="toggle" data-on="Tak" data-off="Nie" data-size="sm" />
-                                <input type="hidden" asp-for="@Model.UsersToDeleteFromCourse[i].UserIdentificator" />
-                            </td>
-                        </tr>
-                    }
-                </tbody>
-            </table>
-        </div>
-
-        <div>
-            <div class="row justify-content-center">
-                <input type="submit" value="Usuń użytkowników z kursu" class="btn btn-danger" />
-            </div>
-        </div>
+        @await Component.InvokeAsync("DeleteUserFromCourseDataTable", new { userViewModel = Model.AllCourseParticipants, userToDeleteViewModel = Model.UsersToDeleteFromCourse, tableIdentificator = "listUsers"})
     }
     else
     {
