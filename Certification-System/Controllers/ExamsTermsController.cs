@@ -185,24 +185,22 @@ namespace Certification_System.Controllers
 
             List<DisplayUserWithExamResults> usersViewModel = new List<DisplayUserWithExamResults>();
 
-            bool ExamTermNotMarked = false;
-
-            if (ExamTermResults.Count() != 0)
-            {
-                ExamTermNotMarked = true;
-            }
-
             foreach (var user in EnrolledUsers)
             {
                 DisplayUserWithExamResults singleUser = _mapper.Map<DisplayUserWithExamResults>(EnrolledUsers);
 
-                if (!ExamTermNotMarked)
+                var userExamResult = ExamTermResults.ToList().Where(z => z.User == user.Id).FirstOrDefault();
+
+                if (userExamResult != null)
                 {
-                    ExamResult userResult = ExamTermResults.ToList().Where(z => z.User == user.Id).FirstOrDefault();
-
-                    singleUser = _mapper.Map<DisplayUserWithExamResults>(userResult);
+                    singleUser = _mapper.Map<DisplayUserWithExamResults>(userExamResult);
+                    singleUser.MaxAmountOfPointsToEarn = Exam.MaxAmountOfPointsToEarn;
                 }
-
+                else
+                {
+                    singleUser.HasExamResult = false;
+                }
+             
                 usersViewModel.Add(singleUser);
             }
 
@@ -212,9 +210,6 @@ namespace Certification_System.Controllers
 
             ExamTermDetails.Course = courseViewModel;
             ExamTermDetails.UsersWithResults = usersViewModel;
-
-            ExamTermDetails.MaxAmountOfPointsToEarn = Exam.MaxAmountOfPointsToEarn;
-            ExamTermDetails.ExamTermNotMarked = ExamTermNotMarked;
 
             return View(ExamTermDetails);
         }

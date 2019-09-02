@@ -20,9 +20,6 @@ namespace Certification_System.DTOViewModels
         [Display(Name = "Czas [min]")]
         public DateTime DurationMinutes { get; set; }
 
-        [Display(Name = "Maksymalna liczba punktów")]
-        public int MaxAmountOfPointsToEarn { get; set; }
-
         [Display(Name = "Liczba uczestników")]
         public int UsersQuantity { get; set; }
 

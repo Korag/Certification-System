@@ -343,17 +343,18 @@ namespace Certification_System.Controllers
             foreach (var user in Users)
             {
                 var userExamResult = ExamResults.Where(z => z.User == user.Id).FirstOrDefault();
+                DisplayUserWithExamResults UserWithExamResult = new DisplayUserWithExamResults();
 
-                var UserWithExamResult = Mapper.Map<DisplayUserWithExamResults>(user);
-                UserWithExamResult = _mapper.Map<DisplayUserWithExamResults>(userExamResult);
-                UserWithExamResult.MaxAmountOfPointsToEarn = Exam.MaxAmountOfPointsToEarn;
-            }
-
-            bool ExamNotMarked = false;
-
-            if (ExamResults.Count() != 0)
-            {
-                ExamNotMarked = true;
+                if (userExamResult != null)
+                {
+                    UserWithExamResult = Mapper.Map<DisplayUserWithExamResults>(user);
+                    UserWithExamResult = _mapper.Map<DisplayUserWithExamResults>(userExamResult);
+                    UserWithExamResult.MaxAmountOfPointsToEarn = Exam.MaxAmountOfPointsToEarn;
+                }
+                else
+                {
+                    UserWithExamResult.HasExamResult = false;
+                }
             }
 
             var Course = _context.courseRepository.GetCourseByExamId(examIdentificator);
@@ -366,8 +367,6 @@ namespace Certification_System.Controllers
 
             ExamDetails.Examiners = ListOfExaminers;
             ExamDetails.EnrolledUsers = ListOfUsers;
-
-            ExamDetails.ExamNotMarked = ExamNotMarked;
 
             return View(ExamDetails);
         }

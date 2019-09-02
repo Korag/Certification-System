@@ -15,6 +15,9 @@ namespace Certification_System.DTOViewModels
         [Display(Name = "Nazwisko")]
         public string LastName { get; set; }
 
+        [Display(Name = "Został oceniony")]
+        public bool HasExamResult { get; set; }
+
         [Display(Name = "Liczba uzyskanych punktów")]
         public double PointsEarned { get; set; }
 
