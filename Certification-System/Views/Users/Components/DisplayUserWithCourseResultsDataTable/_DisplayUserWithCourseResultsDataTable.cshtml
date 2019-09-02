@@ -1,0 +1,91 @@
+﻿@model Certification_System.DTOViewModels.DisplayUserWithCourseResultsDataTableViewModel
+
+<div class="col-12 table-responsive">
+    <table id="@Model.Options.TableIdentificator" class="table table-striped table-bordered display" style="width: 100%;" role="grid">
+        <thead>
+            <tr>
+                <th>
+                    @Html.DisplayNameFor(model => model.Users.FirstOrDefault().Email)
+                </th>
+                <th>
+                    @Html.DisplayNameFor(model => model.Users.FirstOrDefault().FirstName)
+                </th>
+                <th>
+                    @Html.DisplayNameFor(model => model.Users.FirstOrDefault().LastName)
+                </th>
+                <th>
+                    @Html.DisplayNameFor(model => model.Users.FirstOrDefault().PointsEarned)
+                </th>
+                <th>
+                    @Html.DisplayNameFor(model => model.Users.FirstOrDefault().MaxAmountOfPointsToEarn)
+                </th>
+                <th>
+                    @Html.DisplayNameFor(model => model.Users.FirstOrDefault().PercentageOfResult)
+                </th>
+                <th>
+                    @Html.DisplayNameFor(model => model.Users.FirstOrDefault().ExamPassed)
+                </th>
+                <th>
+                    @Html.DisplayNameFor(model => model.Users.FirstOrDefault().ExamOrdinalNumber)
+                </th>
+                <th>
+                    @Html.DisplayNameFor(model => model.Users.FirstOrDefault().QuantityOfPresenceOnMeetings)
+                </th>
+                <th>
+                    @Html.DisplayNameFor(model => model.Users.FirstOrDefault().QuantityOfMeetings)
+                </th>
+                <th>
+                    @Html.DisplayNameFor(model => model.Users.FirstOrDefault().PercentageOfUserPresenceOnMeetings)
+                </th>
+                <th>
+                    Przyznać certyfikat za odbyty kurs ?
+                </th>
+            </tr>
+        </thead>
+        <tbody>
+            @{var UsersQuantitity = Model.Users.Count();}
+            @for (int i = 0; i < UsersQuantitity; i++)
+            {
+                <tr>
+                    <td>
+                        @Html.DisplayFor(model => model.Users.ElementAt(i).Email)
+                    </td>
+                    <td>
+                        @Html.DisplayFor(model => model.Users.ElementAt(i).FirstName)
+                    </td>
+                    <td>
+                        @Html.DisplayFor(model => model.Users.ElementAt(i).LastName)
+                    </td>
+                    <td>
+                        @Html.DisplayFor(model => model.Users.ElementAt(i).PointsEarned)
+                    </td>
+                    <td>
+                        @Html.DisplayFor(model => model.Users.ElementAt(i).MaxAmountOfPointsToEarn)
+                    </td>
+                    <td>
+                        @Html.DisplayFor(model => model.Users.ElementAt(i).PercentageOfResult) %
+                    </td>
+                    <td>
+                        @Html.DisplayFor(model => model.Users.ElementAt(i).ExamPassed)
+                    </td>
+                    <td>
+                        @Html.DisplayFor(model => model.Users.ElementAt(i).ExamOrdinalNumber)
+                    </td>
+                    <td>
+                        @Html.DisplayFor(model => model.Users.ElementAt(i).QuantityOfPresenceOnMeetings)
+                    </td>
+                    <td>
+                        @Html.DisplayFor(model => model.Users.ElementAt(i).QuantityOfMeetings)
+                    </td>
+                    <td>
+                        @Html.DisplayFor(model => model.Users.ElementAt(i).PercentageOfUserPresenceOnMeetings) %
+                    </td>
+                    <td>
+                        <input type="checkbox" asp-for="@Model.DispensedGivenCertificates[i].GivenCertificateIsEarned" data-toggle="toggle" data-on="Przyznano" data-off="Nie przyznano" data-size="sm" />
+                        <input type="hidden" asp-for="@Model.DispensedGivenCertificates[i].UserIdentificator" />
+                    </td>
+                </tr>
+            }
+        </tbody>
+    </table>
+</div>
