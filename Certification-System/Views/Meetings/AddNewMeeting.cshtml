@@ -141,15 +141,5 @@
 
 @section Scripts {
     @{await Html.RenderPartialAsync("_ValidationScriptsPartial");}
-
-    <script>
-        $(function () {
-            $('#DateOfMeeting').datetimepicker({
-                format: 'DD.MM.YYYY HH:mm',
-                locale: moment.locale('pl', {
-                    week: { dow: 1 }
-                })
-            });
-        });
-    </script>
+    @{await Html.RenderPartialAsync("_SingleCalendarInputScript", "DateOfMeeting");}
 }

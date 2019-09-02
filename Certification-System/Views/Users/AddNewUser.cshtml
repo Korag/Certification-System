@@ -188,15 +188,5 @@
 
 @section Scripts {
     @await Html.PartialAsync("_ValidationScriptsPartial")
-
-    <script>
-        $(function () {
-            $('#DateOfBirth').datetimepicker({
-                format: 'DD.MM.YYYY HH:mm',
-                locale: moment.locale('pl', {
-                    week: { dow: 1 }
-                })
-            });
-        });
-    </script>
+    @{await Html.RenderPartialAsync("_SingleCalendarInputScript", "DateOfBirth");}
 }
