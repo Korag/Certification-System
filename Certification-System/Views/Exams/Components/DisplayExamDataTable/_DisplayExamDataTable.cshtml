@@ -124,7 +124,8 @@
                                     }
                                     <a asp-action="ExamDetails" asp-route-examIdentificator="@exam.ExamIdentificator" asp-controller="Exams" class="btn btn-info w-100 mb-1">Szczegóły egzaminu</a>
                                     <a asp-action="EditExamHub" asp-route-examIdentificator="@exam.ExamIdentificator" asp-controller="Exams" class="btn btn-warning w-100 mb-1">Edytuj</a>
-                                    <a asp-action="AddUsersToExam" asp-route-examIdentificator="@exam.ExamIdentificator" asp-controller="Exams" class="btn btn-light w-100">Przypisz użytkowników</a>
+                                    <a asp-action="AddUsersToExam" asp-route-examIdentificator="@exam.ExamIdentificator" asp-controller="Exams" class="btn btn-light w-100  mb-1">Przypisz użytkowników</a>
+                                    <a asp-action="DeleteUsersFromExam" asp-route-examIdentificator="@exam.ExamIdentificator" asp-controller="Exams" class="btn btn-danger w-100">Usuń użytkowników</a>
                                 </div>
                             </div>
                         </td>
