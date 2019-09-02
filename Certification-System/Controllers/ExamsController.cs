@@ -346,6 +346,7 @@ namespace Certification_System.Controllers
 
                 var UserWithExamResult = Mapper.Map<DisplayUserWithExamResults>(user);
                 UserWithExamResult = _mapper.Map<DisplayUserWithExamResults>(userExamResult);
+                UserWithExamResult.MaxAmountOfPointsToEarn = Exam.MaxAmountOfPointsToEarn;
             }
 
             bool ExamNotMarked = false;

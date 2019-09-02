@@ -38,9 +38,6 @@ namespace Certification_System.DTOViewModels
         [Display(Name = "Egzamin nie oceniony")]
         public bool ExamNotMarked { get; set; }
 
-        [Display(Name = "Maksymalna liczba punktów")]
-        public int MaxAmountOfPointsToEarn { get; set; }
-
         [Display(Name = "Liczba uczestników")]
         public int UsersQuantitiy { get; set; }
 
