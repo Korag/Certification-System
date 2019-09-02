@@ -12,7 +12,7 @@
     <a asp-action="AddNewGivenCertificate" asp-controller="GivenCertificates" class="btn btn-primary">Przyznaj nowy certyfikat</a>
 </div>
 
-@await Component.InvokeAsync("_DisplayGivenCertificateDataTable", new { examViewModel = Model, tableIdentificator = "listGivenCertificates", operationSet = 1 })
+@await Component.InvokeAsync("DisplayGivenCertificateDataTable", new { examViewModel = Model, tableIdentificator = "listGivenCertificates", operationSet = 1 })
 
 @section Scripts{
     @{await Html.RenderPartialAsync("_DataTableBasicScript", "listGivenCertificates");}

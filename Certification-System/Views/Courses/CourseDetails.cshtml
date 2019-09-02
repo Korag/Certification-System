@@ -16,16 +16,16 @@
 <h2>Informacje o kursie</h2>
 
 <div class="row m-0 mt-3 mb-3">
-    <a asp-action="EditCourseHub" asp-route-courseIdentificator="@Model.CourseIdentificator" asp-controller="Courses" class="btn btn-warning mt-1 mr-1 xs450px_FloatLeft">Edytuj</a>
+    <a asp-action="EditCourseHub" asp-route-courseIdentificator="@Model.Course.CourseIdentificator" asp-controller="Courses" class="btn btn-warning mt-1 mr-1 xs450px_FloatLeft">Edytuj</a>
 
-    @if (Model.CourseEnded == false)
+    @if (Model.Course.CourseEnded == false)
     {
-        <a asp-action="EndCourseAndDispenseGivenCertificates" asp-route-courseIdentificator="@Model.CourseIdentificator" asp-controller="Courses" class="btn btn-secondary mt-1 mr-1 xs450px_FloatLeft">Zakończ kurs</a>
+        <a asp-action="EndCourseAndDispenseGivenCertificates" asp-route-courseIdentificator="@Model.Course.CourseIdentificator" asp-controller="Courses" class="btn btn-secondary mt-1 mr-1 xs450px_FloatLeft">Zakończ kurs</a>
     }
 
     else
     {
-        <a asp-action="EndCourseAndDispenseGivenCertificates" asp-route-courseIdentificator="@Model.CourseIdentificator" asp-controller="Courses" class="btn btn-secondary mt-1 mr-1 xs450px_FloatLeft" disabled>Zakończ kurs</a>
+        <a asp-action="EndCourseAndDispenseGivenCertificates" asp-route-courseIdentificator="@Model.Course.CourseIdentificator" asp-controller="Courses" class="btn btn-secondary mt-1 mr-1 xs450px_FloatLeft" disabled>Zakończ kurs</a>
     }
 
     <a asp-action="DisplayAllCourses" asp-controller="Courses" class="btn btn-outline-info mt-1 xs450px_FloatRight">Powrót do listy kursów</a>
@@ -37,64 +37,64 @@
         <div class="col-md-8 col-xl-6 col-lg-6 col-sm-12 col-xs-10 m-auto p-3 shadow p-3 mb-5 bg-light rounded border border-primary rounded-bottom" style="opacity:0.90">
 
             <div class="form-group">
-                <label asp-for="CourseIndexer" class="control-label"></label>
-                <input asp-for="CourseIndexer" class="form-control col-12" disabled />
+                <label asp-for="Course.CourseIndexer" class="control-label"></label>
+                <input asp-for="Course.CourseIndexer" class="form-control col-12" disabled />
             </div>
 
             <div class="form-group">
-                <label asp-for="Name" class="control-label"></label>
-                <input asp-for="Name" class="form-control col-12" disabled />
+                <label asp-for="Course.Name" class="control-label"></label>
+                <input asp-for="Course.Name" class="form-control col-12" disabled />
             </div>
 
             <div class="form-group">
-                <label asp-for="Description" class="control-label"></label>
-                <textarea asp-for="Description" class="form-control col-12" style="width:100%; min-width:100%;" disabled></textarea>
+                <label asp-for="Course.Description" class="control-label"></label>
+                <textarea asp-for="Course.Description" class="form-control col-12" style="width:100%; min-width:100%;" disabled></textarea>
             </div>
 
             <div class="form-group">
-                <label asp-for="DateOfStart" class="control-label"></label>
-                <input asp-for="DateOfStart" class="form-control col-12" disabled />
+                <label asp-for="Course.DateOfStart" class="control-label"></label>
+                <input asp-for="Course.DateOfStart" class="form-control col-12" disabled />
             </div>
 
             <div class="form-group">
-                <label asp-for="DateOfEnd" class="control-label"></label>
-                <input asp-for="DateOfEnd" class="form-control col-12" disabled />
+                <label asp-for="Course.DateOfEnd" class="control-label"></label>
+                <input asp-for="Course.DateOfEnd" class="form-control col-12" disabled />
             </div>
 
             <div class="form-group">
-                <label asp-for="EnrolledUsersQuantity" class="control-label"></label>
-                <input asp-for="EnrolledUsersQuantity" class="form-control col-12" disabled />
+                <label asp-for="Course.EnrolledUsersQuantity" class="control-label"></label>
+                <input asp-for="Course.EnrolledUsersQuantity" class="form-control col-12" disabled />
             </div>
 
             <div class="form-group">
-                <label asp-for="EnrolledUsersLimit" class="control-label"></label>
-                <input asp-for="EnrolledUsersLimit" class="form-control col-12" disabled />
+                <label asp-for="Course.EnrolledUsersLimit" class="control-label"></label>
+                <input asp-for="Course.EnrolledUsersLimit" class="form-control col-12" disabled />
             </div>
 
             <div class="form-group">
-                <label asp-for="ExamIsRequired" class="control-label"></label>
+                <label asp-for="Course.ExamIsRequired" class="control-label"></label>
                 <div class="row pl-3">
-                    <input type="checkbox" asp-for="ExamIsRequired" class="form-control col-12" data-toggle="toggle" data-on="Tak" data-off="Nie" data-size="sm" disabled />
+                    <input type="checkbox" asp-for="Course.ExamIsRequired" class="form-control col-12" data-toggle="toggle" data-on="Tak" data-off="Nie" data-size="sm" disabled />
                 </div>
             </div>
 
             <div class="form-group">
-                <label asp-for="CourseEnded" class="control-label"></label>
+                <label asp-for="Course.CourseEnded" class="control-label"></label>
                 <div class="row pl-3">
-                    <input type="checkbox" asp-for="CourseEnded" class="form-control col-12" data-toggle="toggle" data-on="Tak" data-off="Nie" data-size="sm" disabled />
+                    <input type="checkbox" asp-for="Course.CourseEnded" class="form-control col-12" data-toggle="toggle" data-on="Tak" data-off="Nie" data-size="sm" disabled />
                 </div>
             </div>
 
             <div class="form-group">
-                <label asp-for="CourseLength" class="control-label"></label>
-                <input asp-for="CourseLength" class="form-control col-12" disabled />
+                <label asp-for="Course.CourseLength" class="control-label"></label>
+                <input asp-for="Course.CourseLength" class="form-control col-12" disabled />
             </div>
 
             <div class="form-group">
-                <label asp-for="Branches" class="control-label col-12 p-0"></label>
+                <label asp-for="Course.Branches" class="control-label col-12 p-0"></label>
                 <div>
                     <div class="btn-group btn-group-toggle row" data-toggle="buttons">
-                        @foreach (var branch in Model.Branches)
+                        @foreach (var branch in Model.Course.Branches)
                         {
                             <label class="btn btn-outline-secondary m-2 active">
                                 <input type="checkbox"
@@ -129,7 +129,7 @@ else
 <h2 class="mt-4 mb-4">Spotkania w ramach kursu</h2>
 
 <div class="mt-3 mb-3">
-    <a asp-action="AddNewMeeting" asp-route-courseIdentificator="@Model.CourseIdentificator" asp-controller="Meetings" class="btn btn-primary">Dodaj spotkanie do kursu</a>
+    <a asp-action="AddNewMeeting" asp-route-courseIdentificator="@Model.Course.CourseIdentificator" asp-controller="Meetings" class="btn btn-primary">Dodaj spotkanie do kursu</a>
 </div>
 
 @if (Model.Meetings.Count != 0)
@@ -142,7 +142,7 @@ else
     <div class="mt-4 mb-4 alert alert-warning">Kurs nie posiada zdefiniowanych spotkań</div>
 }
 
-@if (Model.ExamIsRequired)
+@if (Model.Course.ExamIsRequired)
 {
     <h2 class="mt-4 mb-4">Egzaminatorzy</h2>
 
@@ -159,7 +159,7 @@ else
     <h2 class="mt-4 mb-4">Egzaminy w ramach kursu</h2>
 
     <div class="mt-3 mb-3">
-        <a asp-action="AddExamMenu" asp-route-courseIdentificator="@Model.CourseIdentificator" asp-controller="Exams" class="btn btn-primary">Dodaj egzamin do kursu</a>
+        <a asp-action="AddExamMenu" asp-route-courseIdentificator="@Model.Course.CourseIdentificator" asp-controller="Exams" class="btn btn-primary">Dodaj egzamin do kursu</a>
     </div>
 
     @if (Model.Exams.Count != 0)
@@ -176,90 +176,12 @@ else
 <h2 class="mt-4 mb-4">Użytkownicy zapisani na kurs</h2>
 
 <div class="mt-3 mb-3">
-    <a asp-action="AssignUserToCourse" asp-route-courseIdentificator="@Model.CourseIdentificator" asp-controller="Courses" class="btn btn-primary">Dodaj użytkownika do kursu</a>
+    <a asp-action="AssignUserToCourse" asp-route-courseIdentificator="@Model.Course.CourseIdentificator" asp-controller="Courses" class="btn btn-primary">Dodaj użytkownika do kursu</a>
 </div>
 
 @if (Model.EnrolledUsers.Count != 0)
 {
-    <div class="col-12 table-responsive">
-        <table id="listUsers" class="table table-striped table-bordered display" style="width: 100%;" role="grid">
-            <thead>
-                <tr>
-                    <th>
-                        @Html.DisplayNameFor(model => model.EnrolledUsers.First().Email)
-                    </th>
-                    <th>
-                        @Html.DisplayNameFor(model => model.EnrolledUsers.First().FirstName)
-                    </th>
-                    <th>
-                        @Html.DisplayNameFor(model => model.EnrolledUsers.First().LastName)
-                    </th>
-                    <th>
-                        @Html.DisplayNameFor(model => model.EnrolledUsers.First().CompanyRoleWorker)
-                    </th>
-                    <th>
-                        @Html.DisplayNameFor(model => model.EnrolledUsers.First().CompanyRoleManager)
-                    </th>
-                    @*@if (Model.CourseEnded)
-                        {
-                            <th>
-                                @Html.DisplayNameFor(model => model.DispensedGivenCertificates)
-                            </th>
-                        }*@
-                    <th>
-                        Operacje
-                    </th>
-                </tr>
-            </thead>
-            <tbody>
-                @foreach (var user in Model.EnrolledUsers)
-                {
-                    <tr>
-                        <td>
-                            @Html.DisplayFor(modelItem => user.Email)
-                        </td>
-                        <td>
-                            @Html.DisplayFor(modelItem => user.FirstName)
-                        </td>
-                        <td>
-                            @Html.DisplayFor(modelItem => user.LastName)
-                        </td>
-                        <td>
-                            <ul>
-                                @foreach (var companyWorker in user.CompanyRoleWorker)
-                                {
-                                    <li>@companyWorker</li>
-                                }
-                            </ul>
-                        </td>
-                        <td>
-                            <ul>
-                                @foreach (var companyManager in user.CompanyRoleManager)
-                                {
-                                    <li>@companyManager</li>
-                                }
-                            </ul>
-                        </td>
-                        @*@if (Model.CourseEnded)
-                            {
-                                <td>
-                                    <input type="checkbox" asp-for="@Model.DispensedGivenCertificates.Where(z=> z.UserIdentificator == user.UserIdentificator).Select(z=> z.GivenCertificateIsEarned).FirstOrDefault()" data-toggle="toggle" data-on="Przyznano" data-off="Nie przyznano" data-size="sm" />
-                                </td>
-                            }*@
-                        <td>
-                            <div class="dropdown p-0">
-                                <button class="btn btn-success dropdown-toggle" type="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">Operacje</button>
-                                <div class="dropdown-menu">
-                                    <a asp-action="UserDetails" asp-route-userIdentificator="@user.UserIdentificator" asp-controller="Users" class="btn btn-info w-100 mb-1">Szczegóły</a>
-                                    <a asp-action="DeleteUsersFromCourse" asp-route-courseIdentificator="@Model.CourseIdentificator" asp-controller="Courses" class="btn btn-danger w-100">Usuń z kursu</a>
-                                </div>
-                            </div>
-                        </td>
-                    </tr>
-                }
-            </tbody>
-        </table>
-    </div>
+    @await Component.InvokeAsync("DisplayCrucialDataWithCourseSummaryUserDataTable", new { userViewModel = Model.EnrolledUsers, courseViewModel = Model.Course, dispensedGivenCertificateViewModel = Model.DispensedGivenCertificates, tableIdentificator = "listUsers", operationSet = 1 })
 }
 
 else

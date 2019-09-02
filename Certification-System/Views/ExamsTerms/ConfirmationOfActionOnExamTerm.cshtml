@@ -23,7 +23,7 @@ else
 @{List<DisplayExamTermViewModel> examTermList = new List<DisplayExamTermViewModel>();
     examTermList.Add(Model);}
 
-@await Component.InvokeAsync("_DisplayExamTermDataTable", new { examTermViewModel = examTermList, tableIdentificator = "examTermConfirmation" })
+@await Component.InvokeAsync("DisplayExamTermDataTable", new { examTermViewModel = examTermList, tableIdentificator = "examTermConfirmation" })
 
 @section Scripts{
     @{await Html.RenderPartialAsync("_DataTableBasicScript", "examTermConfirmation");}

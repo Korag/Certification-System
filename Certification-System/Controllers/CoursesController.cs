@@ -225,9 +225,9 @@ namespace Certification_System.Controllers
 
             var Users = _context.userRepository.GetUsersById(Course.EnrolledUsers);
 
-            List<DisplayCrucialDataWithCompaniesRoleUserViewModel> usersViewModel = _mapper.Map<List<DisplayCrucialDataWithCompaniesRoleUserViewModel>>(Users);
-            usersViewModel.ForEach(z => z.CompanyRoleManager = _context.companyRepository.GetCompaniesById(z.CompanyRoleManager).Select(s => s.CompanyName).ToList());
-            usersViewModel.ForEach(z => z.CompanyRoleWorker = _context.companyRepository.GetCompaniesById(z.CompanyRoleWorker).Select(s => s.CompanyName).ToList());
+            List<DisplayCrucialDataUserViewModel> usersViewModel = _mapper.Map<List<DisplayCrucialDataUserViewModel>>(Users);
+            //usersViewModel.ForEach(z => z.CompanyRoleManager = _context.companyRepository.GetCompaniesById(z.CompanyRoleManager).Select(s => s.CompanyName).ToList());
+            //usersViewModel.ForEach(z => z.CompanyRoleWorker = _context.companyRepository.GetCompaniesById(z.CompanyRoleWorker).Select(s => s.CompanyName).ToList());
 
             var InstructorsIdentificators = new List<string>();
             Meetings.ToList().ForEach(z => z.Instructors.ToList().ForEach(s => InstructorsIdentificators.Add(s)));
@@ -260,13 +260,14 @@ namespace Certification_System.Controllers
             var Examiners = _context.userRepository.GetUsersById(ListOfExaminatorsIdentificators);
             List<DisplayCrucialDataWithContactUserViewModel> examinersViewModel = _mapper.Map<List<DisplayCrucialDataWithContactUserViewModel>>(Examiners);
 
-            CourseDetailsViewModel courseDetails = _mapper.Map<CourseDetailsViewModel>(Course);
-            courseDetails.Branches = _context.branchRepository.GetBranchesById(Course.Branches);
+            CourseDetailsViewModel courseDetails = new CourseDetailsViewModel();
+            courseDetails.Course = _mapper.Map<DisplayCourseViewModel>(Course);
+            courseDetails.Course.Branches = _context.branchRepository.GetBranchesById(Course.Branches);
 
             courseDetails.Meetings = meetingsViewModel;
             courseDetails.Exams = examsViewModel;
 
-            courseDetails.EnrolledUsersQuantity = Course.EnrolledUsers.Count;
+            courseDetails.Course.EnrolledUsersQuantity = Course.EnrolledUsers.Count;
             courseDetails.EnrolledUsers = usersViewModel;
             courseDetails.Instructors = instructorsViewModel;
             courseDetails.Examiners = examinersViewModel;

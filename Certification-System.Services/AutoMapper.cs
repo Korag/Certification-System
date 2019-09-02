@@ -68,6 +68,7 @@ namespace Certification_System.Services
             CreateMap<Course, DisplayCrucialDataCourseViewModel>();
 
             CreateMap<Course, CourseDetailsViewModel>()
+                     .ForMember(dest => dest.Course, opts => opts.Ignore())
                      .ForMember(dest => dest.Meetings, opts => opts.Ignore())
                      .ForMember(dest => dest.EnrolledUsers, opts => opts.Ignore())
                      .ForMember(dest => dest.Exams, opts => opts.Ignore());
@@ -469,7 +470,10 @@ namespace Certification_System.Services
             CreateMap<DisplayUserWithCourseResultsViewModel, DispenseGivenCertificateCheckBoxViewModel>()
                      .ForMember(dest => dest.GivenCertificateIsEarned, opts => opts.Ignore());
 
-            CreateMap<DisplayCrucialDataWithCompaniesRoleUserViewModel, DispenseGivenCertificateCheckBoxViewModel>()
+            //CreateMap<DisplayCrucialDataWithCompaniesRoleUserViewModel, DispenseGivenCertificateCheckBoxViewModel>()
+            //         .ForMember(dest => dest.GivenCertificateIsEarned, opts => opts.Ignore());
+
+            CreateMap<DisplayCrucialDataUserViewModel, DispenseGivenCertificateCheckBoxViewModel>()
                      .ForMember(dest => dest.GivenCertificateIsEarned, opts => opts.Ignore());
 
             CreateMap<CertificationPlatformUser, InstructorDetailsViewModel>()
