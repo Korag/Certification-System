@@ -219,17 +219,5 @@
 @section Scripts {
     @{await Html.RenderPartialAsync("_ValidationScriptsPartial");}
     @{await Html.RenderPartialAsync("_RelatedCalendarsInputScript", new RelatedCalendarsInputScriptViewModel { StartDate = "DateOfStart", EndDate = "DateOfEnd" });}
-
-    <script>
-        $(function () {
-             for (var i = 0; i < @Model.Meetings.Count(); i++) {
-                $("#DateOfMeeting" + i).datetimepicker({
-                    format: 'DD.MM.YYYY HH:mm',
-                    locale: moment.locale('pl', {
-                        week: { dow: 1 }
-                    })
-                });
-            }
-        });
-    </script>
+    @{await Html.RenderPartialAsync("_ManyCalendarsInputScript", new ManyCalendarsInputScriptViewModel { Date = "DateOfMeeting", QuantityOfInputs = Model.Meetings.Count() });}
 }
