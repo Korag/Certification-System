@@ -1,4 +1,4 @@
-﻿@model Certification_System.DTOViewModels.DeleteUserFromCourseDataTableViewModel
+﻿@model Certification_System.DTOViewModels.CheckMeetingPresenceDataTableViewModel
 
 <div class="col-12 table-responsive">
     <table id="@Model.Options.TableIdentificator" class="table table-striped table-bordered display" style="width: 100%;" role="grid">
@@ -14,7 +14,7 @@
                     @Html.DisplayNameFor(model => model.Users.FirstOrDefault().LastName)
                 </th>
                 <th>
-                    Użytkownik do usunięcia z kursu ?
+                    Obecny/a na spotkaniu ?
                 </th>
             </tr>
         </thead>
@@ -33,11 +33,18 @@
                         @Html.DisplayFor(model => model.Users.ElementAt(i).LastName)
                     </td>
                     <td>
-                        <input type="checkbox" asp-for="@Model.UsersToDeleteFromCourse[i].IsToDelete" data-toggle="toggle" data-on="Tak" data-off="Nie" data-size="sm" />
-                        <input type="hidden" asp-for="@Model.UsersToDeleteFromCourse[i].UserIdentificator" />
+                        @*<div class="checkbox btn btn-outline-primary">
+                            <input asp-for="@Model.AttendanceList[i].IsPresent" />
+                            <label asp-for="@Model.AttendanceList[i].IsPresent" hidden></label>
+                            <input type="hidden" asp-for="@Model.AttendanceList[i].UserIdentificator" />
+                        </div>*@
+
+                        <input type="checkbox" asp-for="@Model.AttendanceList[i].IsPresent" data-toggle="toggle" data-on="Obecny" data-off="Nieobecny" data-size="sm" />
+                        <input type="hidden" asp-for="@Model.AttendanceList[i].UserIdentificator" />
                     </td>
                 </tr>
             }
         </tbody>
     </table>
 </div>
+

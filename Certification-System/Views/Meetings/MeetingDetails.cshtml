@@ -74,57 +74,7 @@
 
 @if (Model.Instructors.Count != 0)
 {
-    <div class="col-12 table-responsive">
-        <table id="listInstructors" class="table table-striped table-bordered display" style="width: 100%;" role="grid">
-            <thead>
-                <tr>
-                    <th>
-                        @Html.DisplayNameFor(model => model.Instructors.First().FirstName)
-                    </th>
-                    <th>
-                        @Html.DisplayNameFor(model => model.Instructors.First().LastName)
-                    </th>
-                    <th>
-                        @Html.DisplayNameFor(model => model.Instructors.First().Email)
-                    </th>
-                    <th>
-                        @Html.DisplayNameFor(model => model.Instructors.First().PhoneNumber)
-                    </th>
-                    <th>
-                        Operacje
-                    </th>
-                </tr>
-            </thead>
-            <tbody>
-                @foreach (var instructor in Model.Instructors)
-                {
-                    <tr>
-                        <td>
-                            @Html.DisplayFor(modelItem => instructor.FirstName)
-                        </td>
-                        <td>
-                            @Html.DisplayFor(modelItem => instructor.LastName)
-                        </td>
-                        <td>
-                            @Html.DisplayFor(modelItem => instructor.Email)
-                        </td>
-                        <td>
-                            @Html.DisplayFor(modelItem => instructor.PhoneNumber)
-                        </td>
-                        <td>
-                            <div class="dropdown p-0">
-                                <button class="btn btn-success dropdown-toggle" type="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">Operacje</button>
-                                <div class="dropdown-menu">
-                                    <a asp-action="InstructorDetails" asp-route-instructorIdentificator="@instructor.UserIdentificator" asp-controller="Users" class="btn btn-info w-100 mb-1">Szczegóły</a>
-                                    <a asp-action="EditUser" asp-route-userIdentificator="@instructor.UserIdentificator" asp-controller="Users" class="btn btn-warning w-100">Edytuj</a>
-                                </div>
-                            </div>
-                        </td>
-                    </tr>
-                }
-            </tbody>
-        </table>
-    </div>
+    @await Component.InvokeAsync("DisplayCrucialDataWithContactUserDataTable", new { courseViewModel = Model.Instructors, tableIdentificator = "listInstructors", operationSet = 2 })
 }
 
 else

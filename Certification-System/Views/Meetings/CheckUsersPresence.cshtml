@@ -70,53 +70,7 @@
 
     @if (Model.AllCourseParticipants.Count != 0)
     {
-        <div class="col-12 table-responsive">
-            <table id="listUsers" class="table table-striped table-bordered display" style="width: 100%;" role="grid">
-                <thead>
-                    <tr>
-                        <th>
-                            @Html.DisplayNameFor(model => model.AllCourseParticipants.First().Email)
-                        </th>
-                        <th>
-                            @Html.DisplayNameFor(model => model.AllCourseParticipants.First().FirstName)
-                        </th>
-                        <th>
-                            @Html.DisplayNameFor(model => model.AllCourseParticipants.First().LastName)
-                        </th>
-                        <th>
-                            Obecny/a na spotkaniu ?
-                        </th>
-                    </tr>
-                </thead>
-                <tbody>
-                    @{var UsersQuantitity = Model.AllCourseParticipants.Count();}
-                    @for (int i = 0; i < UsersQuantitity; i++)
-                    {
-                        <tr>
-                            <td>
-                                @Html.DisplayFor(model => model.AllCourseParticipants.ElementAt(i).Email)
-                            </td>
-                            <td>
-                                @Html.DisplayFor(model => model.AllCourseParticipants.ElementAt(i).FirstName)
-                            </td>
-                            <td>
-                                @Html.DisplayFor(model => model.AllCourseParticipants.ElementAt(i).LastName)
-                            </td>
-                            <td>
-                                @*<div class="checkbox btn btn-outline-primary">
-                                        <input asp-for="@Model.AttendanceList[i].IsPresent" />
-                                        <label asp-for="@Model.AttendanceList[i].IsPresent" hidden></label>
-                                        <input type="hidden" asp-for="@Model.AttendanceList[i].UserIdentificator" />
-                                    </div>*@
-
-                                <input type="checkbox" asp-for="@Model.AttendanceList[i].IsPresent" data-toggle="toggle" data-on="Obecny" data-off="Nieobecny" data-size="sm" />
-                                <input type="hidden" asp-for="@Model.AttendanceList[i].UserIdentificator" />
-                            </td>
-                        </tr>
-                    }
-                </tbody>
-            </table>
-        </div>
+        @await Component.InvokeAsync("CheckMeetingPresenceDataTable", new { userViewModel = Model.AllCourseParticipants, presenceViewModel = Model.AttendanceList, tableIdentificator = "listUsers" })
 
         <div>
             <div class="row justify-content-center">

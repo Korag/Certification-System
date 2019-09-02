@@ -89,7 +89,13 @@
 
     @if (Model.AllCourseParticipants.Count != 0)
     {
-        @await Component.InvokeAsync("DeleteUserFromCourseDataTable", new { userViewModel = Model.AllCourseParticipants, userToDeleteViewModel = Model.UsersToDeleteFromCourse, tableIdentificator = "listUsers"})
+        @await Component.InvokeAsync("DeleteUserFromCourseDataTable", new { userViewModel = Model.AllCourseParticipants, userToDeleteViewModel = Model.UsersToDeleteFromCourse, tableIdentificator = "listUsers" })
+
+        <div>
+            <div class="row justify-content-center">
+                <input type="submit" value="Usuń użytkowników z kursu" class="btn btn-danger" />
+            </div>
+        </div>
     }
     else
     {
