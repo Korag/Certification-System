@@ -5,7 +5,7 @@ namespace Certification_System.Components
 {
     public class ModalViewComponent : ViewComponent
     {
-        public IViewComponentResult Invoke(string title, string body, string action, string controller, string buttonText, string buttonClass)
+        public IViewComponentResult Invoke(string title, string body, string action, string controller, bool formSubmit, string buttonText, string buttonClass, string dataTarget = "modal")
         {
             ModalViewModel modal = new ModalViewModel
             {
@@ -14,6 +14,9 @@ namespace Certification_System.Components
 
                 Action = action,
                 Controller = controller,
+
+                FormSubmit = formSubmit,
+                DataTarget = dataTarget,
 
                 ButtonText = buttonText,
                 ButtonClass = buttonClass

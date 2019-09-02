@@ -1,4 +1,4 @@
-@using Certification_System.Entities
+﻿@using Certification_System.Entities
 @using Microsoft.AspNetCore.Identity
 @inject SignInManager<CertificationPlatformUser> SignInManager
 @inject UserManager<CertificationPlatformUser> UserManager
@@ -7,11 +7,12 @@
     @if (SignInManager.IsSignedIn(User))
     {
         <li class="nav-item mr-2 font-weight-bold">
-            <a asp-controller="Users" asp-action="AccountDetails" title="Manage" class="nav-link" style="color:#4162ce">@User.Identity.Name</a>
+            <a asp-controller="Users" asp-action="AccountDetails" title="Manage" class="btn btn-outline-primary font-weight-bold">@User.Identity.Name</a>
         </li>
         <li class="nav-item font-weight-bold">
             <form method="post" class="form-inline" asp-controller="Account" asp-action="Logout">
-                <button type="submit" class="nav-link btn btn-link text-danger">Wyloguj</button>
+                <button type="button" data-toggle="modal" data-target="#modalLogout" class="btn btn-outline-danger">Wyloguj</button>
+                @await Component.InvokeAsync("Modal", new { title = "Wylogowanie z systemu", body = "Czy na pewno chcesz się wylogować ?", formSubmit = true, dataTarget = "modalLogout", buttonText = "Wyloguj", buttonClass = "btn-danger" })
             </form>
         </li>
     }

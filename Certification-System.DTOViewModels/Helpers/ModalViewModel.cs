@@ -11,6 +11,9 @@ namespace Certification_System.DTOViewModels
         public string Action { get; set; }
         public string Controller { get; set; }
 
+        public bool FormSubmit { get; set; }
+        public string DataTarget { get; set; }
+
         public string ButtonText { get; set; }
         public string ButtonClass { get; set; }
     }

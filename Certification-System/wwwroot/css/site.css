@@ -97,8 +97,8 @@ textarea {
     color: #4162ce;
 }
 
-.validation-model ul{
-    margin-bottom:0px;
+.validation-model ul {
+    margin-bottom: 0px;
 }
 
 .scrollable-menu {
@@ -107,7 +107,7 @@ textarea {
     overflow-x: hidden;
 }
 
-.show{
+.show {
     padding: 0px 0px 0px 0px;
 }
 
@@ -119,8 +119,9 @@ ul {
     .xs300px_FloatRight {
         margin: auto;
     }
-    .xs300px_JustifyContentCenter{
-        margin:auto;
+
+    .xs300px_JustifyContentCenter {
+        margin: auto;
     }
 }
 
@@ -169,7 +170,7 @@ ul {
 
     .xs350px_FloatLeft {
         margin: 0px;
-        margin-right:4px;
+        margin-right: 4px;
     }
 }
 
@@ -204,12 +205,17 @@ ul {
     .navbar-toggler {
         margin-left: auto;
     }
+
     .navbar-brand {
-        margin:auto;
+        margin: auto;
     }
 }
 
 .dropdown-menu {
     max-height: 80vh;
     overflow-y: auto;
+}
+
+.modal-backdrop {
+    z-index: 1010;
 }
