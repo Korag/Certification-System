@@ -1,0 +1,110 @@
+﻿@model Certification_System.DTOViewModels.DisplayAllUserInformationDataTableViewModel
+
+<div class="col-12 table-responsive">
+    <table id="@Model.Options.TableIdentificator" class="table table-striped table-bordered display" style="width: 100%;" role="grid">
+        <thead>
+            <tr>
+                <th>
+                    @Html.DisplayNameFor(model => model.Users.FirstOrDefault().Email)
+                </th>
+                <th>
+                    @Html.DisplayNameFor(model => model.Users.FirstOrDefault().FirstName)
+                </th>
+                <th>
+                    @Html.DisplayNameFor(model => model.Users.FirstOrDefault().LastName)
+                </th>
+                <th>
+                    @Html.DisplayNameFor(model => model.Users.FirstOrDefault().Country)
+                </th>
+                <th>
+                    @Html.DisplayNameFor(model => model.Users.FirstOrDefault().City)
+                </th>
+                <th>
+                    @Html.DisplayNameFor(model => model.Users.FirstOrDefault().PostCode)
+                </th>
+                <th>
+                    @Html.DisplayNameFor(model => model.Users.FirstOrDefault().Address)
+                </th>
+                <th>
+                    @Html.DisplayNameFor(model => model.Users.FirstOrDefault().NumberOfApartment)
+                </th>
+                <th>
+                    @Html.DisplayNameFor(model => model.Users.FirstOrDefault().PhoneNumber)
+                </th>
+                <th>
+                    @Html.DisplayNameFor(model => model.Users.FirstOrDefault().DateOfBirth)
+                </th>
+                <th>
+                    @Html.DisplayNameFor(model => model.Users.FirstOrDefault().Roles)
+                </th>
+                <th>
+                    @Html.DisplayNameFor(model => model.Users.FirstOrDefault().CompanyRoleManager)
+                </th>
+                <th>
+                    @Html.DisplayNameFor(model => model.Users.FirstOrDefault().CompanyRoleWorker)
+                </th>
+            </tr>
+        </thead>
+        <tbody>
+            @foreach (var user in Model.Users)
+            {
+                <tr>
+                    <td>
+                        @Html.DisplayFor(model => user.Email)
+                    </td>
+                    <td>
+                        @Html.DisplayFor(model => user.FirstName)
+                    </td>
+                    <td>
+                        @Html.DisplayFor(model => user.LastName)
+                    </td>
+                    <td>
+                        @Html.DisplayFor(model => user.Country)
+                    </td>
+                    <td>
+                        @Html.DisplayFor(model => user.City)
+                    </td>
+                    <td>
+                        @Html.DisplayFor(model => user.PostCode)
+                    </td>
+                    <td>
+                        @Html.DisplayFor(model => user.Address)
+                    </td>
+                    <td>
+                        @Html.DisplayFor(model => user.NumberOfApartment)
+                    </td>
+                    <td>
+                        @Html.DisplayFor(model => user.PhoneNumber)
+                    </td>
+                    <td>
+                        @Html.DisplayFor(model => user.DateOfBirth)
+                    </td>
+                    <td>
+                        <ul>
+                            @foreach (var role in user.Roles)
+                            {
+                                <li>@role</li>
+                            }
+                        </ul>
+                    </td>
+                    <td>
+                        <ul>
+                            @foreach (var company in user.CompanyRoleManager)
+                            {
+                                <li>@company</li>
+                            }
+                        </ul>
+                    </td>
+                    <td>
+                        <ul>
+                            @foreach (var company in user.CompanyRoleWorker)
+                            {
+                                <li>@company</li>
+                            }
+                        </ul>
+                    </td>
+                </tr>
+            }
+        </tbody>
+    </table>
+</div>
