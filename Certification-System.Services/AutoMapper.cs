@@ -271,25 +271,15 @@ namespace Certification_System.Services
                      .ForMember(dest => dest.Course, opts => opts.Ignore())
                      .ForMember(dest => dest.User, opts => opts.Ignore());
 
-            CreateMap<GivenCertificate, GivenCertificateDetailsForAnonymousViewModel>()
-                    .ForMember(dest => dest.Certificate, opts => opts.Ignore())
-                    .ForMember(dest => dest.Companies, opts => opts.Ignore())
-                    .ForMember(dest => dest.User, opts => opts.Ignore());
-
-            CreateMap<GivenCertificate, GivenCertificateDetailsViewModel>()
-                 .ForMember(dest => dest.Certificate, opts => opts.Ignore())
-                 .ForMember(dest => dest.Companies, opts => opts.Ignore())
-                 .ForMember(dest => dest.User, opts => opts.Ignore())
-                 .ForMember(dest => dest.Instructors, opts => opts.Ignore())
-                 .ForMember(dest => dest.Course, opts => opts.Ignore())
-                 .ForMember(dest => dest.Meetings, opts => opts.Ignore());
-
             CreateMap<GivenCertificate, DisplayGivenCertificateToUserViewModel>()
                      .ForMember(dest => dest.Certificate, opts => opts.Ignore())
                      .ForMember(dest => dest.Course, opts => opts.Ignore());
 
             CreateMap<GivenCertificate, DisplayGivenCertificateToUserWithoutCourseViewModel>()
                  .ForMember(dest => dest.Certificate, opts => opts.Ignore());
+
+            CreateMap<GivenCertificate, DisplayGivenCertificateToUserWithoutCourseExtendedViewModel>()
+             .ForMember(dest => dest.Certificate, opts => opts.Ignore());
 
             CreateMap<EditGivenCertificateViewModel, GivenCertificate>()
                  .ForMember(dest => dest.GivenCertificateIdentificator, opts => opts.Ignore())

@@ -1,0 +1,88 @@
+﻿@model Certification_System.DTOViewModels.DisplayGivenCertificateWithoutUserExtendedDataTableViewModel
+
+<div class="col-12 table-responsive">
+    <table id="@Model.Options.TableIdentificator" class="table table-striped table-bordered display" style="width: 100%;" role="grid">
+        <thead>
+            <tr>
+                <th>
+                    @Html.DisplayNameFor(model => model.GivenCertificate.GivenCertificateIndexer)
+                </th>
+                <th>
+                    @Html.DisplayNameFor(model => model.GivenCertificate.ReceiptDate)
+                </th>
+                <th>
+                    @Html.DisplayNameFor(model => model.GivenCertificate.ExpirationDate)
+                </th>
+                <th>
+                    @Html.DisplayNameFor(model => model.GivenCertificate.Certificate.CertificateIndexer)
+                </th>
+                <th>
+                    @Html.DisplayNameFor(model => model.GivenCertificate.Certificate.Name)
+                </th>
+                <th>
+                    @Html.DisplayNameFor(model => model.GivenCertificate.Certificate.Description)
+                </th>
+                <th>
+                    @Html.DisplayNameFor(model => model.GivenCertificate.Certificate.Depreciated)
+                </th>
+                <th>
+                    @Html.DisplayNameFor(model => model.GivenCertificate.Certificate.Branches)
+                </th>
+                <th>
+                    Certyfikat jest ważny ?
+                </th>
+            </tr>
+        </thead>
+        <tbody>
+            <tr class="alert @if (Model.GivenCertificate.ExpirationDate < DateTime.Now) { <text> table-danger </text>} else { <text> table-success </text> }">
+                <td>
+                    @Html.DisplayFor(model => model.GivenCertificate.GivenCertificateIndexer)
+                </td>
+                <td>
+                    @Html.DisplayFor(model => model.GivenCertificate.ReceiptDate)
+                </td>
+                <td>
+                    @Html.DisplayFor(model => model.GivenCertificate.ExpirationDate)
+                </td>
+                <td>
+                    @Html.DisplayFor(model => model.GivenCertificate.Certificate.CertificateIndexer)
+                </td>
+                <td>
+                    @Html.DisplayFor(model => model.GivenCertificate.Certificate.Name)
+                </td>
+                <td>
+                    @Html.DisplayFor(model => model.GivenCertificate.Certificate.Description)
+                </td>
+                <td>
+                    <input type="checkbox" asp-for="GivenCertificate.Certificate.Depreciated" data-toggle="toggle" data-on="Tak" data-off="Nie" data-size="sm" disabled />
+                </td>
+                <td>
+                    <div class="btn-group btn-group-toggle row" data-toggle="buttons">
+                        @foreach (var branch in Model.GivenCertificate.Certificate.Branches)
+                        {
+                            <label class="btn btn-outline-secondary m-2 active">
+                                <input type="checkbox"
+                                       name="SelectedBranches"
+                                       value="@branch"
+                                       autocomplete="off"
+                                       disabled
+                                       checked />
+                                <span>@branch</span>
+                            </label>
+                        }
+                    </div>
+                </td>
+                <td style="text-align:center">
+                    @if (Model.GivenCertificate.ExpirationDate < DateTime.Now)
+                    {
+                        <span class="fas fa-times" style="font-size:34px"></span>
+                    }
+                    else
+                    {
+                        <span class="fas fa-check-circle" style="font-size:34px"></span>
+                    }
+                </td>
+            </tr>
+        </tbody>
+    </table>
+</div>

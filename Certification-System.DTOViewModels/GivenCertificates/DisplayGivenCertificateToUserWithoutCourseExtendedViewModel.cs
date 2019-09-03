@@ -3,7 +3,7 @@ using System.ComponentModel.DataAnnotations;
 
 namespace Certification_System.DTOViewModels
 {
-    public class DisplayGivenCertificateViewModel
+    public class DisplayGivenCertificateToUserWithoutCourseExtendedViewModel
     {
         public string GivenCertificateIdentificator { get; set; }
 
@@ -17,12 +17,6 @@ namespace Certification_System.DTOViewModels
         public DateTime ExpirationDate { get; set; }
 
         [Display(Name = "Nadany certyfikat")]
-        public DisplayCrucialDataCertificateViewModel Certificate { get; set; }
-
-        [Display(Name = "Użytkownik")]
-        public DisplayCrucialDataUserViewModel User { get; set; }
-
-        [Display(Name = "Szkolenie")]
-        public DisplayCrucialDataCourseViewModel Course { get; set; }
+        public DisplayCertificateViewModel Certificate { get; set; }
     }
 }

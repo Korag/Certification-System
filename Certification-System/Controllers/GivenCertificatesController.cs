@@ -173,8 +173,10 @@ namespace Certification_System.Controllers
 
             DisplayCrucialDataCertificateViewModel certificateViewModel = _mapper.Map<DisplayCrucialDataCertificateViewModel>(Certificate);
 
-            GivenCertificateDetailsForAnonymousViewModel VerifiedGivenCertificate = _mapper.Map<GivenCertificateDetailsForAnonymousViewModel>(GivenCertificate);
-            VerifiedGivenCertificate.Certificate = certificateViewModel;
+            GivenCertificateDetailsForAnonymousViewModel VerifiedGivenCertificate = new GivenCertificateDetailsForAnonymousViewModel();
+
+            VerifiedGivenCertificate.GivenCertificate = _mapper.Map<DisplayGivenCertificateToUserWithoutCourseViewModel>(GivenCertificate);
+            VerifiedGivenCertificate.GivenCertificate.Certificate = certificateViewModel;
             VerifiedGivenCertificate.User = userViewModel;
             VerifiedGivenCertificate.Companies = companiesViewModel;
 
@@ -221,8 +223,9 @@ namespace Certification_System.Controllers
             DisplayCertificateViewModel certificateViewModel = _mapper.Map<DisplayCertificateViewModel>(Certificate);
             certificateViewModel.Branches = _context.branchRepository.GetBranchesById(certificateViewModel.Branches);
 
-            GivenCertificateDetailsViewModel VerifiedGivenCertificate = _mapper.Map<GivenCertificateDetailsViewModel>(GivenCertificate);
-            VerifiedGivenCertificate.Certificate = certificateViewModel;
+            GivenCertificateDetailsViewModel VerifiedGivenCertificate = new GivenCertificateDetailsViewModel();
+            VerifiedGivenCertificate.GivenCertificate = _mapper.Map<DisplayGivenCertificateToUserWithoutCourseExtendedViewModel>(GivenCertificate);
+            VerifiedGivenCertificate.GivenCertificate.Certificate = certificateViewModel;
 
             VerifiedGivenCertificate.Course = courseViewModel;
             VerifiedGivenCertificate.Meetings = meetingsViewModel;

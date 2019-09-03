@@ -278,7 +278,7 @@ else
 
 @if (Model.Courses.Count != 0)
 {
-    @await Component.InvokeAsync("DisplayCourseDataTable", new { courseViewModel = Model.Courses, tableIdentificator = "listCourses", operationSet = 3 })
+    @await Component.InvokeAsync("DisplayCourseDataTable", new { courseViewModel = Model.Courses, userIdentificator = Model.UserIdentificator, tableIdentificator = "listCourses", operationSet = 3 })
 }
 else
 {
