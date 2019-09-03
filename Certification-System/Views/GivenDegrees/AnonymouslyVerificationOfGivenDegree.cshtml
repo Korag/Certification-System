@@ -60,7 +60,7 @@ else
 
 <h2 class="mt-4 mb-4">Szczegóły nadanego stopnia zawodowego</h2>
 
-@{List<DisplayGivenDegreeToUserExtViewModel> givenDegreeList = new List<DisplayGivenDegreeToUserExtViewModel>();
+@{List<DisplayGivenDegreeToUserExtendedViewModel> givenDegreeList = new List<DisplayGivenDegreeToUserExtendedViewModel>();
     givenDegreeList.Add(Model.GivenDegree);}
 
 @await Component.InvokeAsync("DisplayGivenDegreeToUserExtendedDataTable", new { givenDegreeViewModel = givenDegreeList, tableIdentificator = "listGivenDegree" })

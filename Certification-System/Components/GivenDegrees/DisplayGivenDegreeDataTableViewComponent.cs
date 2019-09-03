@@ -18,7 +18,7 @@ namespace Certification_System.Components
                 }
             };
 
-            return View("_DisplayMeetingDataTable", givenDegreeDataTableViewModel);
+            return View("_DisplayGivenDegreeDataTable", givenDegreeDataTableViewModel);
         }
     }
 }

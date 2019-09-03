@@ -68,7 +68,7 @@
 
 @if (Model.UsersConnectedToCompany.Count != 0)
 {
-    @await Component.InvokeAsync("DisplayUserViewModelDataTable", new { userViewModel = Model.UsersConnectedToCompany, tableIdentificator = "listUsers" })
+    @await Component.InvokeAsync("DisplayUserDataTable", new { userViewModel = Model.UsersConnectedToCompany, tableIdentificator = "listUsers", operationSet = 1 })
 }
 else
 {

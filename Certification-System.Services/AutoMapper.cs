@@ -370,9 +370,11 @@ namespace Certification_System.Services
             CreateMap<CertificationPlatformUser, DisplayCrucialDataWithCompaniesRoleUserViewModel>()
                      .ForMember(dest => dest.UserIdentificator, opts => opts.MapFrom(src => src.Id));
 
-            CreateMap<CertificationPlatformUser, DisplayCrucialDataWithContactUserViewModel>();
+            CreateMap<CertificationPlatformUser, DisplayCrucialDataWithContactUserViewModel>()
+                     .ForMember(dest => dest.UserIdentificator, opts => opts.MapFrom(src => src.Id));
 
-            CreateMap<CertificationPlatformUser, DisplayCrucialDataWithBirthDateUserViewModel>();
+            CreateMap<CertificationPlatformUser, DisplayCrucialDataWithBirthDateUserViewModel>()
+                     .ForMember(dest => dest.UserIdentificator, opts => opts.MapFrom(src => src.Id));
 
             CreateMap<CertificationPlatformUser, DisplayAllUserInformationViewModel>()
                      .ForMember(dest => dest.UserIdentificator, opts => opts.MapFrom(src => src.Id))

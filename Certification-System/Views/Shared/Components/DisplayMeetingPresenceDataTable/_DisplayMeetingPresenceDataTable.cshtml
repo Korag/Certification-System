@@ -1,0 +1,84 @@
+﻿@model Certification_System.DTOViewModels.DisplayMeetingPresenceDataTableViewModel
+
+<div class="col-12 table-responsive">
+    <table id="@Model.Options.TableIdentificator" class="table table-striped table-bordered display" style="width: 100%;" role="grid">
+        <thead>
+            <tr>
+                <th>
+                    @Html.DisplayNameFor(model => model.Users.FirstOrDefault().Email)
+                </th>
+                <th>
+                    @Html.DisplayNameFor(model => model.Users.FirstOrDefault().FirstName)
+                </th>
+                <th>
+                    @Html.DisplayNameFor(model => model.Users.FirstOrDefault().LastName)
+                </th>
+                <th>
+                    @Html.DisplayNameFor(model => model.AttendanceList)
+                </th>
+                @if (Model.Options.OperationSet != 0)
+                {
+                    <th>
+                        Operacje
+                    </th>
+                }
+            </tr>
+        </thead>
+        <tbody>
+            @foreach (var user in Model.Users)
+            {
+                <tr>
+                    <td>
+                        @Html.DisplayFor(modelItem => user.Email)
+                    </td>
+                    <td>
+                        @Html.DisplayFor(modelItem => user.FirstName)
+                    </td>
+                    <td>
+                        @Html.DisplayFor(modelItem => user.LastName)
+                    </td>
+                    <td>
+                        @if (Model.AttendanceList.Contains(user.UserIdentificator))
+                        {
+                            <input type="checkbox" checked data-toggle="toggle" data-on="<i class='fas fa-clipboard-check'></i> Obecny" data-off="<i class='fas fa-times'></i> Nieobecny" data-size="sm" disabled />
+                        }
+                        else
+                        {
+                            <input type="checkbox" data-toggle="toggle" data-on="<i class='fas fa-clipboard-check'></i> Obecny" data-off="<i class='fas fa-times'></i> Nieobecny" data-size="sm" disabled />
+                        }
+
+                        @*@if (Model.AttendanceList.Count != 0)
+                            {
+                                @if (Model.AttendanceList.Contains(user.UserIdentificator))
+                                {
+                                    <span class="fas fa-clipboard-check" style="font-size:34px"></span>
+                                }
+                                else
+                                {
+                                    <span class="fas fa-times" style="font-size:34px"></span>
+                                }
+                            }
+                            else
+                            {
+                                <span class="fas fa-file-signature" style="font-size:34px"></span>
+                            }*@
+                    </td>
+                    @if (Model.Options.OperationSet != 0)
+                    {
+                        <td>
+                            <div class="dropdown p-0">
+                                <button class="btn btn-success dropdown-toggle" type="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">Operacje</button>
+                                <div class="dropdown-menu">
+                                    <a asp-action="UserDetails" asp-route-userIdentificator="@user.UserIdentificator" asp-controller="Users" class="btn btn-info w-100 mb-1">Szczegóły</a>
+                                    <a asp-action="EditUser" asp-route-userIdentificator="@user.UserIdentificator" asp-controller="Users" class="btn btn-warning w-100 mb-1">Edytuj</a>
+                                    <a asp-action="AddNewGivenCertificate" asp-route-userIdentificator="@user.UserIdentificator" asp-controller="GivenCertificates" class="btn btn-primary w-100 mb-1">Nadaj certyfikat</a>
+                                    <a asp-action="AddNewGivenDegree" asp-route-userIdentificator="@user.UserIdentificator" asp-controller="GivenDegrees" class="btn btn-secondary w-100">Nadaj stopień zawodowy</a>
+                                </div>
+                            </div>
+                        </td>
+                    }
+                </tr>
+            }
+        </tbody>
+    </table>
+</div>
