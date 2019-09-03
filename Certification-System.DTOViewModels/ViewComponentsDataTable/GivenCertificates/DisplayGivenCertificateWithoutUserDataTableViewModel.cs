@@ -2,9 +2,8 @@
 
 namespace Certification_System.DTOViewModels
 {
-    public class DisplayGivenCertificateWithUserDataTableViewModel
+    public class DisplayGivenCertificateWithoutUserDataTableViewModel
     {
-        public DisplayCrucialDataWithBirthDateUserViewModel User { get; set; }
         public ICollection<DisplayGivenCertificateToUserWithoutCourseViewModel> GivenCertificates { get; set; }
         public DataTableOptionsViewModel Options { get; set; }
     }

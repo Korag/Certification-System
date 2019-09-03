@@ -48,7 +48,7 @@
 
 @if (Model.Companies.Count != 0)
 {
-    @await Component.InvokeAsync("DisplayCompanyWithUserRoleDataTable", new { companyViewModel = Model.Companies, tableIdentificator = "listCompanies"})
+    @await Component.InvokeAsync("DisplayCompanyWithUserRoleDataTable", new { companyViewModel = Model.Companies, tableIdentificator = "listCompanies" })
 }
 
 else
@@ -60,58 +60,7 @@ else
 
 @if (Model.GivenCertificates.Count != 0)
 {
-    <div class="col-12 table-responsive">
-        <table id="listGivenCertificates" class="table table-bordered display" style="width: 100%;" role="grid">
-            <thead>
-                <tr>
-                    <th>
-                        @Html.DisplayNameFor(model => model.GivenCertificates.First().GivenCertificateIndexer)
-                    </th>
-                    <th>
-                        @Html.DisplayNameFor(model => model.GivenCertificates.First().ReceiptDate)
-                    </th>
-                    <th>
-                        @Html.DisplayNameFor(model => model.GivenCertificates.First().ExpirationDate)
-                    </th>
-                    <th>
-                        @Html.DisplayNameFor(model => model.GivenCertificates.First().Certificate.CertificateIndexer) i @Html.DisplayNameFor(model => model.GivenCertificates.First().Certificate.Name)
-                    </th>
-                    <th>
-                        Certyfikat jest ważny ?
-                    </th>
-                </tr>
-            </thead>
-            <tbody class="text-secondary">
-                @foreach (var givenCertificate in Model.GivenCertificates)
-                {
-                    <tr class="alert @if (givenCertificate.ExpirationDate < DateTime.Now) { <text> table-danger </text>} else { <text> table-success </text> }">
-                        <td>
-                            @Html.DisplayFor(modelItem => givenCertificate.GivenCertificateIndexer)
-                        </td>
-                        <td>
-                            @Html.DisplayFor(modelItem => givenCertificate.ReceiptDate)
-                        </td>
-                        <td>
-                            @Html.DisplayFor(modelItem => givenCertificate.ExpirationDate)
-                        </td>
-                        <td>
-                            @Html.DisplayFor(model => givenCertificate.Certificate.CertificateIndexer) @Html.DisplayFor(model => givenCertificate.Certificate.Name)
-                        </td>
-                        <td style="text-align:center">
-                            @if (givenCertificate.ExpirationDate < DateTime.Now)
-                            {
-                                <span class="fas fa-times" style="font-size:34px"></span>
-                            }
-                            else
-                            {
-                                <span class="fas fa-check-circle" style="font-size:34px"></span>
-                            }
-                        </td>
-                    </tr>
-                }
-            </tbody>
-        </table>
-    </div>
+    @await Component.InvokeAsync("DisplayGivenCertificateWithoutUserDataTable", new { givenCertificateViewModel = Model.GivenCertificates, tableIdentificator = "listGivenCertificates" })
 }
 
 else

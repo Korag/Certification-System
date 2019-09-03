@@ -111,7 +111,10 @@ else
     <a asp-action="GivenCertificateDetails" asp-route-givenCertificateIdentificator="@Model.GivenCertificate.GivenCertificateIdentificator" asp-controller="GivenCertificates" class="btn btn-secondary mt-1 mr-1">Szczegóły przyznanego certyfikatu</a>
 </div>
 
-@await Component.InvokeAsync("DisplayGivenCertificateWithoutUserDataTable", new { givenCertificateViewModel = Model.GivenCertificate, tableIdentificator = "listGivenCertificate" })
+@{List<DisplayGivenCertificateToUserWithoutCourseExtendedViewModel> givenCertificateList = new List<DisplayGivenCertificateToUserWithoutCourseExtendedViewModel>();
+    givenCertificateList.Add(Model.GivenCertificate);}
+
+@await Component.InvokeAsync("DisplayGivenCertificateWithoutUserExtDataTable", new { givenCertificateViewModel = givenCertificateList, tableIdentificator = "listGivenCertificate" })
 
 <h2 class="mt-4 mb-4">Dane kursu</h2>
 
