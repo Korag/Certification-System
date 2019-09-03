@@ -112,7 +112,6 @@
 {
     @await Component.InvokeAsync("DisplayCompanyWithUserRoleDataTable", new { companyViewModel = Model.Companies, tableIdentificator = "listCompanies", operationSet = 1 })
 }
-
 else
 {
     <div class="mt-4 mb-4 alert alert-warning">Użytkownik nie jest zrzeszony z żadnym przedsiębiorstwem</div>
@@ -126,72 +125,8 @@ else
 
 @if (Model.GivenCertificates.Count != 0)
 {
-    <div class="col-12 table-responsive">
-        <table id="listGivenCertificates" class="table table-bordered display" style="width: 100%;" role="grid">
-            <thead>
-                <tr>
-                    <th>
-                        @Html.DisplayNameFor(model => model.GivenCertificates.First().GivenCertificateIndexer)
-                    </th>
-                    <th>
-                        @Html.DisplayNameFor(model => model.GivenCertificates.First().ReceiptDate)
-                    </th>
-                    <th>
-                        @Html.DisplayNameFor(model => model.GivenCertificates.First().ExpirationDate)
-                    </th>
-                    <th>
-                        @Html.DisplayNameFor(model => model.GivenCertificates.First().Certificate.CertificateIndexer) i @Html.DisplayNameFor(model => model.GivenCertificates.First().Certificate.Name)
-                    </th>
-                    <th>
-                        @Html.DisplayNameFor(model => model.GivenCertificates.First().Course.CourseIndexer) i @Html.DisplayNameFor(model => model.GivenCertificates.First().Course.Name)
-                    </th>
-                    <th>
-                        Certyfikat jest ważny ?
-                    </th>
-                    <th>
-                        Operacje
-                    </th>
-                </tr>
-            </thead>
-            <tbody>
-                @foreach (var givenCertificate in Model.GivenCertificates)
-                {
-                    <tr class="alert @if (givenCertificate.ExpirationDate < DateTime.Now) { <text> table-danger </text>} else { <text> table-success </text> }">
-                        <td>
-                            @Html.DisplayFor(modelItem => givenCertificate.GivenCertificateIndexer)
-                        </td>
-                        <td>
-                            @Html.DisplayFor(modelItem => givenCertificate.ReceiptDate)
-                        </td>
-                        <td>
-                            @Html.DisplayFor(modelItem => givenCertificate.ExpirationDate)
-                        </td>
-                        <td>
-                            @Html.DisplayFor(model => givenCertificate.Certificate.CertificateIndexer) @Html.DisplayFor(model => givenCertificate.Certificate.Name)
-                        </td>
-                        <td>
-                            @Html.DisplayFor(model => givenCertificate.Course.CourseIndexer) @Html.DisplayFor(model => givenCertificate.Course.Name)
-                        </td>
-                        <td style="text-align:center">
-                            @if (givenCertificate.ExpirationDate < DateTime.Now)
-                            {
-                                <span class="fas fa-times" style="font-size:34px"></span>
-                            }
-                            else
-                            {
-                                <span class="fas fa-check-circle" style="font-size:34px"></span>
-                            }
-                        </td>
-                        <td>
-                            <a asp-action="EditGivenCertificate" asp-route-givenCertificateIdentificator="@givenCertificate.GivenCertificateIdentificator" asp-controller="GivenCertificate" class="btn btn-warning">Edytuj nadany certyfikat</a>
-                        </td>
-                    </tr>
-                }
-            </tbody>
-        </table>
-    </div>
+    @await Component.InvokeAsync("DisplayGivenCertificateToUserDataTable", new { givenCertificateViewModel = Model.GivenCertificates, tableIdentificator = "listGivenCertificates", operationSet = 1 })
 }
-
 else
 {
     <div class="mt-4 mb-4 alert alert-warning">Użytkownikowi nie przyznano żadnych certyfikatów</div>
