@@ -1,0 +1,85 @@
+﻿@model Certification_System.DTOViewModels.DisplayGivenDegreeToUserExtendedDataTableViewModel
+
+<div class="col-12 table-responsive">
+    <table id="@Model.Options.TableIdentificator" class="table table-striped table-bordered display" style="width: 100%;" role="grid">
+        <thead>
+            <tr>
+                <th>
+                    @Html.DisplayNameFor(model => model.GivenDegrees.FirstOrDefault().GivenDegreeIndexer)
+                </th>
+                <th>
+                    @Html.DisplayNameFor(model => model.GivenDegrees.FirstOrDefault().ReceiptDate)
+                </th>
+                <th>
+                    @Html.DisplayNameFor(model => model.GivenDegrees.FirstOrDefault().ExpirationDate)
+                </th>
+                <th>
+                    @Html.DisplayNameFor(model => model.GivenDegrees.FirstOrDefault().Degree.DegreeIndexer)
+                </th>
+                <th>
+                    @Html.DisplayNameFor(model => model.GivenDegrees.FirstOrDefault().Degree.Name)
+                </th>
+                <th>
+                    @Html.DisplayNameFor(model => model.GivenDegrees.FirstOrDefault().Degree.Description)
+                </th>
+                <th>
+                    @Html.DisplayNameFor(model => model.GivenDegrees.FirstOrDefault().Degree.Branches)
+                </th>
+                <th>
+                    Stopień zawodowy jest ważny ?
+                </th>
+            </tr>
+        </thead>
+        <tbody>
+            @foreach (var givenDegree in Model.GivenDegrees)
+            {
+                <tr class="alert @if (givenDegree.ExpirationDate < DateTime.Now) { <text> table-danger </text>} else { <text> table-success </text> }">
+                    <td>
+                        @Html.DisplayFor(model => givenDegree.GivenDegreeIndexer)
+                    </td>
+                    <td>
+                        @Html.DisplayFor(model => givenDegree.ReceiptDate)
+                    </td>
+                    <td>
+                        @Html.DisplayFor(model => givenDegree.ExpirationDate)
+                    </td>
+                    <td>
+                        @Html.DisplayFor(model => givenDegree.Degree.DegreeIndexer)
+                    </td>
+                    <td>
+                        @Html.DisplayFor(model => givenDegree.Degree.Name)
+                    </td>
+                    <td>
+                        @Html.DisplayFor(model => givenDegree.Degree.Description)
+                    </td>
+                    <td>
+                        <div class="btn-group btn-group-toggle row" data-toggle="buttons">
+                            @foreach (var branch in givenDegree.Degree.Branches)
+                            {
+                                <label class="btn btn-outline-secondary m-2 active">
+                                    <input type="checkbox"
+                                           name="SelectedBranches"
+                                           value="@branch"
+                                           autocomplete="off"
+                                           disabled
+                                           checked />
+                                    <span>@branch</span>
+                                </label>
+                            }
+                        </div>
+                    </td>
+                    <td style="text-align:center">
+                        @if (givenDegree.ExpirationDate < DateTime.Now)
+                        {
+                            <span class="fas fa-times" style="font-size:34px"></span>
+                        }
+                        else
+                        {
+                            <span class="fas fa-check-circle" style="font-size:34px"></span>
+                        }
+                    </td>
+                </tr>
+            }
+        </tbody>
+    </table>
+</div>

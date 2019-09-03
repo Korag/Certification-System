@@ -1,4 +1,5 @@
 ﻿@model Certification_System.DTOViewModels.GivenDegreeDetailsForAnonymousViewModel
+@using Certification_System.DTOViewModels
 
 @{
     ViewData["Title"] = "AnonymouslyVerificationOfGivenDegree";
@@ -59,88 +60,12 @@ else
 
 <h2 class="mt-4 mb-4">Szczegóły nadanego stopnia zawodowego</h2>
 
-<div class="col-12 table-responsive">
-    <table id="listGivenCertificate" class="table table-striped table-bordered display" style="width: 100%;" role="grid">
-        <thead>
-            <tr>
-                <th>
-                    @Html.DisplayNameFor(model => model.GivenDegreeIndexer)
-                </th>
-                <th>
-                    @Html.DisplayNameFor(model => model.ReceiptDate)
-                </th>
-                <th>
-                    @Html.DisplayNameFor(model => model.ExpirationDate)
-                </th>
-                <th>
-                    @Html.DisplayNameFor(model => model.Degree.DegreeIndexer)
-                </th>
-                <th>
-                    @Html.DisplayNameFor(model => model.Degree.Name)
-                </th>
-                <th>
-                    @Html.DisplayNameFor(model => model.Degree.Description)
-                </th>
-                <th>
-                    @Html.DisplayNameFor(model => model.Degree.Branches)
-                </th>
-                <th>
-                    Stopień zawodowy jest ważny ?
-                </th>
-            </tr>
-        </thead>
-        <tbody>
-            <tr class="alert @if (Model.ExpirationDate < DateTime.Now) { <text> table-danger </text>} else { <text> table-success </text> }">
-                <td>
-                    @Html.DisplayFor(model => model.GivenDegreeIndexer)
-                </td>
-                <td>
-                    @Html.DisplayFor(model => model.ReceiptDate)
-                </td>
-                <td>
-                    @Html.DisplayFor(model => model.ExpirationDate)
-                </td>
-                <td>
-                    @Html.DisplayFor(model => model.Degree.DegreeIndexer)
-                </td>
-                <td>
-                    @Html.DisplayFor(model => model.Degree.Name)
-                </td>
-                <td>
-                    @Html.DisplayFor(model => model.Degree.Description)
-                </td>
-                <td>
-                    <div class="btn-group btn-group-toggle row" data-toggle="buttons">
-                        @foreach (var branch in Model.Degree.Branches)
-                        {
-                            <label class="btn btn-outline-secondary m-2 active">
-                                <input type="checkbox"
-                                       name="SelectedBranches"
-                                       value="@branch"
-                                       autocomplete="off"
-                                       disabled
-                                       checked />
-                                <span>@branch</span>
-                            </label>
-                        }
-                    </div>
-                </td>
-                <td style="text-align:center">
-                    @if (Model.ExpirationDate < DateTime.Now)
-                    {
-                        <span class="fas fa-times" style="font-size:34px"></span>
-                    }
-                    else
-                    {
-                        <span class="fas fa-check-circle" style="font-size:34px"></span>
-                    }
-                </td>
-            </tr>
-        </tbody>
-    </table>
-</div>
+@{List<DisplayGivenDegreeToUserExtViewModel> givenDegreeList = new List<DisplayGivenDegreeToUserExtViewModel>();
+    givenDegreeList.Add(Model.GivenDegree);}
+
+@await Component.InvokeAsync("DisplayGivenDegreeToUserExtendedDataTable", new { givenDegreeViewModel = givenDegreeList, tableIdentificator = "listGivenDegree" })
 
 @section Scripts{
-    @{await Html.RenderPartialAsync("_DataTableBasicScript", "listGivenCertificate");}
+    @{await Html.RenderPartialAsync("_DataTableBasicScript", "listGivenDegree");}
     @{await Html.RenderPartialAsync("_DataTableBasicScript", "listCompanies");}
 }

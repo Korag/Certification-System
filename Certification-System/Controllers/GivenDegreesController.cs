@@ -201,8 +201,9 @@ namespace Certification_System.Controllers
                 }
             }
 
-            GivenDegreeDetailsViewModel GivenDegreeDetails = _mapper.Map<GivenDegreeDetailsViewModel>(GivenDegree);
-            GivenDegreeDetails.Degree = degreeViewModel;
+            GivenDegreeDetailsViewModel GivenDegreeDetails = new GivenDegreeDetailsViewModel();
+            GivenDegreeDetails.GivenDegree = _mapper.Map<DisplayGivenDegreeToUserExtendedViewModel>(GivenDegree);
+            GivenDegreeDetails.GivenDegree.Degree = degreeViewModel;
             GivenDegreeDetails.User = userViewModel;
             GivenDegreeDetails.Companies = companiesViewModel;
 
@@ -230,8 +231,9 @@ namespace Certification_System.Controllers
 
             List<DisplayCompanyViewModel> companiesViewModel = _mapper.Map<List<DisplayCompanyViewModel>>(Companies);
 
-            GivenDegreeDetailsForAnonymousViewModel GivenDegreeDetails = _mapper.Map<GivenDegreeDetailsForAnonymousViewModel>(GivenDegree);
-            GivenDegreeDetails.Degree = degreeViewModel;
+            GivenDegreeDetailsForAnonymousViewModel GivenDegreeDetails = new GivenDegreeDetailsForAnonymousViewModel();
+            GivenDegreeDetails.GivenDegree = _mapper.Map<DisplayGivenDegreeToUserExtendedViewModel>(GivenDegree);
+            GivenDegreeDetails.GivenDegree.Degree = degreeViewModel;
             GivenDegreeDetails.User = userViewModel;
             GivenDegreeDetails.Companies = companiesViewModel;
 

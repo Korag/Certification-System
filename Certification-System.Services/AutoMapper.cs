@@ -310,18 +310,8 @@ namespace Certification_System.Services
             CreateMap<GivenDegree, DisplayGivenDegreeToUserViewModel>()
                      .ForMember(dest => dest.Degree, opts => opts.Ignore());
 
-
-            CreateMap<GivenDegree, GivenDegreeDetailsViewModel>()
-                     .ForMember(dest => dest.Degree, opts => opts.Ignore())
-                     .ForMember(dest => dest.RequiredDegreesWithGivenInstances, opts => opts.Ignore())
-                     .ForMember(dest => dest.RequiredCertificatesWithGivenInstances, opts => opts.Ignore())
-                     .ForMember(dest => dest.User, opts => opts.Ignore())
-                     .ForMember(dest => dest.Companies, opts => opts.Ignore());
-
-            CreateMap<GivenDegree, GivenDegreeDetailsForAnonymousViewModel>()
-                  .ForMember(dest => dest.Degree, opts => opts.Ignore())
-                  .ForMember(dest => dest.User, opts => opts.Ignore())
-                  .ForMember(dest => dest.Companies, opts => opts.Ignore());
+            CreateMap<GivenDegree, DisplayGivenDegreeToUserExtendedViewModel>()
+                     .ForMember(dest => dest.Degree, opts => opts.Ignore());
             #endregion
 
             #region Meetings

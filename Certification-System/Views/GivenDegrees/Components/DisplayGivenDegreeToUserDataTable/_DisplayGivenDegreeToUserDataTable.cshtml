@@ -59,6 +59,19 @@
                         <a asp-action="EditGivenDegree" asp-route-givenDegreeIdentificator="@givenDegree.GivenDegreeIdentificator" asp-controller="GivenDegrees" class="btn btn-warning m-1">Edytuj naadany stopień zawodowy</a>
                     </td>
                 }
+                @if (Model.Options.OperationSet != 0)
+                {
+                    <td>
+                        <div class="dropdown p-0">
+                            <button class="btn btn-success dropdown-toggle" type="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">Operacje</button>
+                            <div class="dropdown-menu">
+                                <a asp-action="EditGivenDegree" asp-route-givenDegreeIdentificator="@givenDegree.GivenDegreeIdentificator" asp-controller="GivenDegrees" class="btn btn-warning w-100 mb-1">Edytuj nadany stopień</a>
+                                <a asp-action="DegreeDetails" asp-route-degreeIdentificator="@givenDegree.Degree.DegreeIdentificator" asp-controller="Degrees" class="btn btn-info w-100 mb-1">Szczegóły stopnia zawodowego</a>
+                                <a asp-action="GivenDegreeDetails" asp-route-givenDegreeIdentificator="@givenDegree.GivenDegreeIdentificator" asp-controller="GivenDegrees" class="btn btn-secondary w-100">Szczegóły przyznanego stopnia zawodowego</a>
+                            </div>
+                        </div>
+                    </td>
+                }
                 </tr>
             }
         </tbody>

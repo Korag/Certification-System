@@ -1,15 +1,16 @@
 ﻿using Certification_System.DTOViewModels;
 using Microsoft.AspNetCore.Mvc;
+using System.Collections.Generic;
 
 namespace Certification_System.Components
 {
     public class DisplayGivenCertificateWithoutUserExtDataTableViewComponent : ViewComponent
     {
-        public IViewComponentResult Invoke(DisplayGivenCertificateToUserWithoutCourseExtendedViewModel givenCertificateViewModel, string tableIdentificator, int operationSet = 0)
+        public IViewComponentResult Invoke(ICollection<DisplayGivenCertificateToUserWithoutCourseExtendedViewModel> givenCertificateViewModel, string tableIdentificator, int operationSet = 0)
         {
             DisplayGivenCertificateWithoutUserExtendedDataTableViewModel givenCertificateDataTableViewModel = new DisplayGivenCertificateWithoutUserExtendedDataTableViewModel
             {
-                GivenCertificate = givenCertificateViewModel,
+                GivenCertificates = givenCertificateViewModel,
                 Options = new DataTableOptionsViewModel
                 {
                     TableIdentificator = tableIdentificator,

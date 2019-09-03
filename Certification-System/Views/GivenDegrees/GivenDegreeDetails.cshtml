@@ -1,4 +1,5 @@
 ﻿@model Certification_System.DTOViewModels.GivenDegreeDetailsViewModel
+@using Certification_System.DTOViewModels
 
 @{
     ViewData["Title"] = "GivenDegreeDetails";
@@ -106,167 +107,22 @@ else
 <h2 class="mt-4 mb-4">Szczegóły nadanego stopnia zawodowego</h2>
 
 <div class="row 0 m-0 mt-3 mb-3">
-    <a asp-action="EditGivenDegree" asp-route-givenDegreeIdentificator="@Model.GivenDegreeIdentificator" asp-controller="GivenDegrees" class="btn btn-warning mt-1 mr-1">Edytuj nadany stopień</a>
-    <a asp-action="DegreeDetails" asp-route-degreeIdentificator="@Model.Degree.DegreeIdentificator" asp-controller="Degrees" class="btn btn-info mt-1 mr-1">Szczegóły stopnia zawodowego</a>
-    <a asp-action="GivenDegreeDetails" asp-route-givenDegreeIdentificator="@Model.GivenDegreeIdentificator" asp-controller="GivenDegrees" class="btn btn-secondary mt-1 mr-1">Szczegóły przyznanego stopnia zawodowego</a>
+    <a asp-action="EditGivenDegree" asp-route-givenDegreeIdentificator="@Model.GivenDegree.GivenDegreeIdentificator" asp-controller="GivenDegrees" class="btn btn-warning mt-1 mr-1">Edytuj nadany stopień</a>
+    <a asp-action="DegreeDetails" asp-route-degreeIdentificator="@Model.GivenDegree.Degree.DegreeIdentificator" asp-controller="Degrees" class="btn btn-info mt-1 mr-1">Szczegóły stopnia zawodowego</a>
+    <a asp-action="GivenDegreeDetails" asp-route-givenDegreeIdentificator="@Model.GivenDegree.GivenDegreeIdentificator" asp-controller="GivenDegrees" class="btn btn-secondary mt-1 mr-1">Szczegóły przyznanego stopnia zawodowego</a>
 </div>
 
-<div class="col-12 table-responsive">
-    <table id="listGivenDegree" class="table table-striped table-bordered display" style="width: 100%;" role="grid">
-        <thead>
-            <tr>
-                <th>
-                    @Html.DisplayNameFor(model => model.GivenDegreeIndexer)
-                </th>
-                <th>
-                    @Html.DisplayNameFor(model => model.ReceiptDate)
-                </th>
-                <th>
-                    @Html.DisplayNameFor(model => model.ExpirationDate)
-                </th>
-                <th>
-                    @Html.DisplayNameFor(model => model.Degree.DegreeIndexer)
-                </th>
-                <th>
-                    @Html.DisplayNameFor(model => model.Degree.Name)
-                </th>
-                <th>
-                    @Html.DisplayNameFor(model => model.Degree.Description)
-                </th>
-                <th>
-                    @Html.DisplayNameFor(model => model.Degree.Branches)
-                </th>
-                <th>
-                    Stopień zawodowy jest ważny ?
-                </th>
-            </tr>
-        </thead>
-        <tbody>
-            <tr class="alert @if (Model.ExpirationDate < DateTime.Now) { <text> table-danger </text>} else { <text> table-success </text> }">
-                <td>
-                    @Html.DisplayFor(model => model.GivenDegreeIndexer)
-                </td>
-                <td>
-                    @Html.DisplayFor(model => model.ReceiptDate)
-                </td>
-                <td>
-                    @Html.DisplayFor(model => model.ExpirationDate)
-                </td>
-                <td>
-                    @Html.DisplayFor(model => model.Degree.DegreeIndexer)
-                </td>
-                <td>
-                    @Html.DisplayFor(model => model.Degree.Name)
-                </td>
-                <td>
-                    @Html.DisplayFor(model => model.Degree.Description)
-                </td>
-                <td>
-                    <div class="btn-group btn-group-toggle row" data-toggle="buttons">
-                        @foreach (var branch in Model.Degree.Branches)
-                        {
-                            <label class="btn btn-outline-secondary m-2 active">
-                                <input type="checkbox"
-                                       name="SelectedBranches"
-                                       value="@branch"
-                                       autocomplete="off"
-                                       disabled
-                                       checked />
-                                <span>@branch</span>
-                            </label>
-                        }
-                    </div>
-                </td>
-                <td style="text-align:center">
-                    @if (Model.ExpirationDate < DateTime.Now)
-                    {
-                        <span class="fas fa-times" style="font-size:34px"></span>
-                    }
-                    else
-                    {
-                        <span class="fas fa-check-circle" style="font-size:34px"></span>
-                    }
-                </td>
-            </tr>
-        </tbody>
-    </table>
-</div>
+@{List<DisplayGivenDegreeToUserExtendedViewModel> givenDegreeList = new List<DisplayGivenDegreeToUserExtendedViewModel>();
+    givenDegreeList.Add(Model.GivenDegree);}
+
+@await Component.InvokeAsync("DisplayGivenDegreeToUserExtendedDataTable", new { givenDegreeViewModel = givenDegreeList, tableIdentificator = "listGivenDegree" })
+
 
 <h2 class="mt-4 mb-4">Certyfikaty wymagane do uzyskania stopnia zawodowego</h2>
 
 @if (Model.RequiredCertificatesWithGivenInstances.Count != 0)
 {
-    <div class="col-12 table-responsive">
-        <table id="listRequiredCertificates" class="table table-striped table-bordered display" style="width: 100%;" role="grid">
-            <thead>
-                <tr>
-                    <th>
-                        @Html.DisplayNameFor(model => model.RequiredCertificatesWithGivenInstances.First().GivenCertificateIndexer)
-                    </th>
-                    <th>
-                        @Html.DisplayNameFor(model => model.RequiredCertificatesWithGivenInstances.First().ReceiptDate)
-                    </th>
-                    <th>
-                        @Html.DisplayNameFor(model => model.RequiredCertificatesWithGivenInstances.First().ExpirationDate)
-                    </th>
-                    <th>
-                        @Html.DisplayNameFor(model => model.RequiredCertificatesWithGivenInstances.First().Certificate.CertificateIndexer)
-                    </th>
-                    <th>
-                        @Html.DisplayNameFor(model => model.RequiredCertificatesWithGivenInstances.First().Certificate.Name)
-                    </th>
-                    <th>
-                        Certyfikat jest ważny ?
-                    </th>
-                    <th>
-                        Operacje
-                    </th>
-                </tr>
-            </thead>
-            <tbody>
-                @foreach (var certificate in Model.RequiredCertificatesWithGivenInstances)
-                {
-                    <tr class="alert @if (certificate.ExpirationDate < DateTime.Now) { <text> table-danger </text>} else { <text> table-success </text> }">
-                        <td>
-                            @Html.DisplayFor(modelItem => certificate.GivenCertificateIndexer)
-                        </td>
-                        <td>
-                            @Html.DisplayFor(modelItem => certificate.ReceiptDate)
-                        </td>
-                        <td>
-                            @Html.DisplayFor(modelItem => certificate.ExpirationDate)
-                        </td>
-                        <td>
-                            @Html.DisplayFor(modelItem => certificate.Certificate.CertificateIndexer)
-                        </td>
-                        <td>
-                            @Html.DisplayFor(modelItem => certificate.Certificate.Name)
-                        </td>
-                        <td style="text-align:center">
-                            @if (certificate.ExpirationDate < DateTime.Now)
-                            {
-                                <span class="fas fa-times" style="font-size:34px"></span>
-                            }
-                            else
-                            {
-                                <span class="fas fa-check-circle" style="font-size:34px"></span>
-                            }
-                        </td>
-                        <td>
-                            <div class="dropdown p-0">
-                                <button class="btn btn-success dropdown-toggle" type="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">Operacje</button>
-                                <div class="dropdown-menu">
-                                    <a asp-action="EditGivenCertificate" asp-route-givenCertificateIdentificator="@certificate.GivenCertificateIdentificator" asp-controller="GivenCertificate" class="btn btn-warning w-100 mb-1">Edytuj nadany certyfikat</a>
-                                    <a asp-action="CertificateDetails" asp-route-certificateIdentificator="@certificate.Certificate.CertificateIdentificator" asp-controller="Certificate" class="btn btn-info w-100 mb-1">Szczegóły certyfikatu</a>
-                                    <a asp-action="GivenCertificateDetails" asp-route-certificateIdentificator="@certificate.GivenCertificateIdentificator" asp-controller="GivenCertificate" class="btn btn-secondary w-100">Szczegóły przyznanego certyfikatu</a>
-                                </div>
-                            </div>
-                        </td>
-                    </tr>
-                }
-            </tbody>
-        </table>
-    </div>
+    @await Component.InvokeAsync("DisplayGivenCertificateWithoutUserDataTable", new { givenCertificateViewModel = Model.RequiredCertificatesWithGivenInstances, tableIdentificator = "listRequiredCertificates", operationSet = 1 })
 }
 else
 {
@@ -277,77 +133,7 @@ else
 
 @if (Model.RequiredDegreesWithGivenInstances.Count != 0)
 {
-    <div class="col-12 table-responsive">
-        <table id="listRequiredDegrees" class="table table-striped table-bordered display" style="width: 100%;" role="grid">
-            <thead>
-                <tr>
-                    <th>
-                        @Html.DisplayNameFor(model => model.RequiredDegreesWithGivenInstances.First().GivenDegreeIndexer)
-                    </th>
-                    <th>
-                        @Html.DisplayNameFor(model => model.RequiredDegreesWithGivenInstances.First().ReceiptDate)
-                    </th>
-                    <th>
-                        @Html.DisplayNameFor(model => model.RequiredDegreesWithGivenInstances.First().ExpirationDate)
-                    </th>
-                    <th>
-                        @Html.DisplayNameFor(model => model.RequiredDegreesWithGivenInstances.First().Degree.DegreeIndexer)
-                    </th>
-                    <th>
-                        @Html.DisplayNameFor(model => model.RequiredDegreesWithGivenInstances.First().Degree.Name)
-                    </th>
-                    <th>
-                        Stopień zawodowy jest ważny ?
-                    </th>
-                    <th>
-                        Operacje
-                    </th>
-                </tr>
-            </thead>
-            <tbody>
-                @foreach (var degree in Model.RequiredDegreesWithGivenInstances)
-                {
-                    <tr class="alert @if (degree.ExpirationDate < DateTime.Now) { <text> table-danger </text>} else { <text> table-success </text> }">
-                        <td>
-                            @Html.DisplayFor(modelItem => degree.GivenDegreeIndexer)
-                        </td>
-                        <td>
-                            @Html.DisplayFor(modelItem => degree.ReceiptDate)
-                        </td>
-                        <td>
-                            @Html.DisplayFor(modelItem => degree.ExpirationDate)
-                        </td>
-                        <td>
-                            @Html.DisplayFor(modelItem => degree.Degree.DegreeIndexer)
-                        </td>
-                        <td>
-                            @Html.DisplayFor(modelItem => degree.Degree.Name)
-                        </td>
-                        <td style="text-align:center">
-                            @if (degree.ExpirationDate < DateTime.Now)
-                            {
-                                <span class="fas fa-times" style="font-size:34px"></span>
-                            }
-                            else
-                            {
-                                <span class="fas fa-check-circle" style="font-size:34px"></span>
-                            }
-                        </td>
-                        <td>
-                            <div class="dropdown p-0">
-                                <button class="btn btn-success dropdown-toggle" type="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">Operacje</button>
-                                <div class="dropdown-menu">
-                                    <a asp-action="EditGivenDegree" asp-route-givenDegreeIdentificator="@degree.GivenDegreeIdentificator" asp-controller="GivenDegrees" class="btn btn-warning w-100 mb-1">Edytuj nadany stopień</a>
-                                    <a asp-action="DegreeDetails" asp-route-degreeIdentificator="@degree.Degree.DegreeIdentificator" asp-controller="Degrees" class="btn btn-info w-100 mb-1">Szczegóły stopnia zawodowego</a>
-                                    <a asp-action="GivenDegreeDetails" asp-route-givenDegreeIdentificator="@degree.GivenDegreeIdentificator" asp-controller="GivenDegrees" class="btn btn-secondary w-100">Szczegóły przyznanego stopnia zawodowego</a>
-                                </div>
-                            </div>
-                        </td>
-                    </tr>
-                }
-            </tbody>
-        </table>
-    </div>
+    @await Component.InvokeAsync("DisplayGivenDegreeToUserDataTable", new { givenCertificateViewModel = Model.RequiredDegreesWithGivenInstances, tableIdentificator = "listRequiredDegrees", operationSet = 2 })
 }
 else
 {

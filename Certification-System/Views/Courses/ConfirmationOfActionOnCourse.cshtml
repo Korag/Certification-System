@@ -1,4 +1,5 @@
 ﻿@model Certification_System.DTOViewModels.DisplayCourseWithMeetingsViewModel
+@using Certification_System.DTOViewModels
 
 @{
     ViewBag.Title = "ConfirmationOfActionOnCourse";
@@ -19,7 +20,10 @@ else
     <a asp-action="DisplayAllCourses" asp-controller="Courses" class="btn btn-outline-info mt-1 xs350px_FloatRight">Powrót do listy kursów</a>
 </div>
 
-@await Component.InvokeAsync("DisplayCourseDataTable", new { courseViewModel = Model.Course, tableIdentificator = "courseConfirmation" })
+@{List<DisplayCourseViewModel> courseList = new List<DisplayCourseViewModel>();
+    courseList.Add(Model.Course);}
+
+@await Component.InvokeAsync("DisplayCourseDataTable", new { courseViewModel = courseList, tableIdentificator = "courseConfirmation" })
 
 <div class="row m-0 mt-3">
     <a asp-action="CourseDetails" asp-route-courseIdentificator="@Model.Course.CourseIdentificator" asp-controller="Courses" class="btn btn-secondary mt-1 mr-1">Szczegóły</a>
