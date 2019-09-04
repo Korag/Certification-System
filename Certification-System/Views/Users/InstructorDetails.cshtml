@@ -116,7 +116,7 @@ else
 
 @if (Model.Meetings.Count != 0)
 {
-    @await Component.InvokeAsync("DisplayMeetingDataTable", new { meetingViewModel = Model.Meetings, tableIdentificator = "listMeetings", operationSet = 1 })
+    @await Component.InvokeAsync("DisplayMeetingWithoutInstructorDataTable", new { meetingViewModel = Model.Meetings, tableIdentificator = "listMeetings", operationSet = 1 })
 }
 else
 {
