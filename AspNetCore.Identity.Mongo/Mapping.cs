@@ -11,7 +11,7 @@ namespace AspNetCore.Identity.Mongo
 			BsonClassMap.RegisterClassMap<MongoUser>(cm =>
 			{
 				cm.AutoMap();
-				cm.MapIdMember(c => c.Id).SetIdGenerator(GuidGenerator.Instance);
+				cm.MapIdMember(c => c.Id).SetIdGenerator(ObjectIdGenerator.Instance);
 				cm.MapField(c => c.PasswordHash).SetIgnoreIfNull(true);
 				cm.MapField(c => c.Roles).SetIgnoreIfNull(true);
 				cm.MapField(c => c.Claims).SetIgnoreIfNull(true);
@@ -23,7 +23,7 @@ namespace AspNetCore.Identity.Mongo
 			BsonClassMap.RegisterClassMap<MongoRole>(cm =>
 			{
 				cm.AutoMap();
-				cm.MapIdMember(c => c.Id).SetIdGenerator(GuidGenerator.Instance);
+				cm.MapIdMember(c => c.Id).SetIdGenerator(ObjectIdGenerator.Instance);
 			});
 		}
 	}

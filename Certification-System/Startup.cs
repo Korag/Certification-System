@@ -27,7 +27,7 @@ namespace Certification_System
 {
     public class Startup
     {
-        private string ConnectionString => Configuration.GetConnectionString("DefaultConnection");
+        private string ConnectionString => Configuration.GetConnectionString("AtlasConnection");
 
         public Startup(IConfiguration configuration)
         {

@@ -32,7 +32,7 @@ namespace Certification_System.Repository.Context
                 {
                     dynamic deserializedObject = JsonConvert.DeserializeObject(json);
                     _database = deserializedObject.DatabaseName;
-                    _connectionstring = deserializedObject.ConnectionString;
+                    _connectionstring = deserializedObject.AtlasConnectionString;
                 }
                 catch (Exception e)
                 {

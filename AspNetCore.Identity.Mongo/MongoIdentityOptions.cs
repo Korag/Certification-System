@@ -2,7 +2,7 @@
 {
 	public class MongoIdentityOptions
 	{
-		public string ConnectionString { get; set; } = "mongodb://Admin:Qwer!234@ds042527.mlab.com:42527/certification_system_tests";
+		public string ConnectionString { get; set; } = "mongodb+srv://Admin:certification_admin1@mongodbcluster-wqayz.azure.mongodb.net/certification_system?retryWrites=true&w=majority";
         
 	    public string UsersCollection { get; set; } = "Users";
 		
