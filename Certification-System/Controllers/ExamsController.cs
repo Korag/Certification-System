@@ -755,34 +755,73 @@ namespace Certification_System.Controllers
             return RedirectToAction("DeleteUsersFromExam", new { examIdentificator = deleteUsersFromExamViewModel.ExamIdentificator });
         }
 
-        //// GET: AssignUsersToExam
-        //[Authorize(Roles = "Admin")]
-        //public ActionResult AssignUsersFromCourseToExam(ICollection<string> userIdentificators, string examIdentificator)
-        //{
-        //    ICollection<string> ChosenUsers;
-        //    string ChosenExam = "";
+        // GET: AssignUsersFromCourseToExam
+        [Authorize(Roles = "Admin")]
+        public ActionResult AssignUsersFromCourseToExam(string examIdentificator)
+        {
+            if (string.IsNullOrWhiteSpace(examIdentificator))
+            {
+                return RedirectToAction("BlankMenu", "Certificates");
+            }
 
-        //    if (userIdentificators.Count() != 0)
-        //        ChosenUsers = _context.userRepository.GetUsersById(userIdentificators).Select(z => z.Id).ToList();
-        //    else
-        //        ChosenUsers = new List<string>();
+            var Exam = _context.examRepository.GetExamById(examIdentificator);
 
-        //    if (examIdentificator != null)
-        //        ChosenExam = _context.examRepository.GetExamById(examIdentificator).ExamIdentificator;
+            if (Exam.DateOfStart > DateTime.Now)
+            {
+                var Course = _context.courseRepository.GetCourseByExamId(Exam.ExamIdentificator);
 
-        //    var AvailableUsers = _context.userRepository.GetWorkersAsSelectList().ToList();
-        //    var AvailableExams = _context.examRepository.GetActiveCoursesWithVacantSeatsAsSelectList().ToList();
+                var UsersNotEnrolledInExamIdentificators = Course.EnrolledUsers.Where(z => !Exam.EnrolledUsers.Contains(z)).ToList();
+                var UsersNotEnrolledInExam = _context.userRepository.GetUsersById(UsersNotEnrolledInExamIdentificators);
 
-        //    AssignUserToCourseViewModel usersToAssignToCourse = new AssignUserToCourseViewModel
-        //    {
-        //        AvailableCourses = AvailableCourses,
-        //        SelectedCourse = ChosenCourse,
+                List<DisplayCrucialDataUserViewModel> ListOfUsers = new List<DisplayCrucialDataUserViewModel>();
 
-        //        AvailableUsers = AvailableUsers,
-        //        SelectedUsers = ChosenUsers
-        //    };
+                if (UsersNotEnrolledInExam.Count != 0)
+                {
+                    ListOfUsers = _mapper.Map<List<DisplayCrucialDataUserViewModel>>(UsersNotEnrolledInExam);
+                }
 
-        //    return View(usersToAssignToCourse);
-        //}
+                var VacantSeats = Exam.UsersLimit - Exam.EnrolledUsers.Count();
+
+                AssignUsersFromCourseToExamViewModel addUsersToExamViewModel = _mapper.Map<AssignUsersFromCourseToExamViewModel>(Exam);
+                addUsersToExamViewModel.CourseParticipants = ListOfUsers;
+                addUsersToExamViewModel.VacantSeats = VacantSeats;
+
+                addUsersToExamViewModel.UsersToAssignToExam = _mapper.Map<AddUsersFromCheckBoxViewModel[]>(ListOfUsers);
+
+                return View(addUsersToExamViewModel);
+            }
+
+            return RedirectToAction("ExamDetails", new { examIdentificator = examIdentificator });
+        }
+
+        // POST: AssignUsersFromCourseToExam
+        [HttpPost]
+        [Authorize(Roles = "Admin")]
+        public ActionResult AssignUsersFromCourseToExam(AssignUsersFromCourseToExamViewModel addUsersToExamViewModel)
+        {
+            if (ModelState.IsValid)
+            {
+                if (addUsersToExamViewModel.DateOfStart > DateTime.Now)
+                {
+                    var Exam = _context.examRepository.GetExamById(addUsersToExamViewModel.ExamIdentificator);
+
+                    if (addUsersToExamViewModel.UsersToAssignToExam.Count() <= addUsersToExamViewModel.VacantSeats)
+                    {
+                        var UsersToAddToExamIdentificators = addUsersToExamViewModel.UsersToAssignToExam.ToList().Where(z => z.IsToAssign == true).Select(z => z.UserIdentificator).ToList();
+
+                        _context.examRepository.AddUsersToExam(addUsersToExamViewModel.ExamIdentificator, UsersToAddToExamIdentificators);
+
+                        return RedirectToAction("ExamDetails", new { examIdentificator = addUsersToExamViewModel.ExamIdentificator, message = "Dodano grupę użytkowników do egzaminu" });
+                    }
+
+                    ModelState.AddModelError("", "Brak wystarczającej ilości wolnych miejsc");
+                    ModelState.AddModelError("", $"Do egzaminu można dodać maksymalnie {addUsersToExamViewModel.VacantSeats} użytkowników");
+                }
+
+                return RedirectToAction("ExamDetails", new { examIdentificator = addUsersToExamViewModel.ExamIdentificator });
+            }
+
+            return View(addUsersToExamViewModel);
+        }
     }
 }

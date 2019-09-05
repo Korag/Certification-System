@@ -21,5 +21,6 @@ namespace Certification_System.RepositoryInterfaces
         IList<SelectListItem> GetActiveExamsWithVacantSeatsAsSelectList();
         void AddUserToExam(string examIdentificator, string userIdentificator);
         void DeleteUsersFromExam(string examIdentificator, ICollection<string> usersIdentificators);
+        void AddUsersToExam(string examIdentificator, ICollection<string> usersIdentificators);
     }
 }

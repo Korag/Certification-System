@@ -185,5 +185,13 @@ namespace Certification_System.Repository
 
             var result = GetExams().UpdateOne(filter, update);
         }
+
+        public void AddUsersToExam(string examIdentificator, ICollection<string> usersIdentificators)
+        {
+            var filter = Builders<Exam>.Filter.Where(z => z.ExamIdentificator == examIdentificator);
+            var update = Builders<Exam>.Update.AddToSetEach(x => x.EnrolledUsers, usersIdentificators);
+
+            var result = GetExams().UpdateOne(filter, update);
+        }
     }
 }
