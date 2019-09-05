@@ -1,8 +1,11 @@
 ﻿using Certification_System.Entities;
 using Certification_System.Repository.Context;
 using Certification_System.RepositoryInterfaces;
+using Microsoft.AspNetCore.Mvc.Rendering;
 using MongoDB.Driver;
+using System;
 using System.Collections.Generic;
+using System.Linq;
 
 namespace Certification_System.Repository
 {
@@ -54,6 +57,14 @@ namespace Certification_System.Repository
             return resultListOfExamTerms;
         }
 
+        public ICollection<ExamTerm> GetActiveExamsTermsById(ICollection<string> examsTermsIdentificators)
+        {
+            var filter = Builders<ExamTerm>.Filter.Where(z => examsTermsIdentificators.Contains(z.ExamTermIdentificator) && z.DateOfStart > DateTime.Now);
+            var resultListOfExamTerms = GetExamsTerms().Find<ExamTerm>(filter).ToList();
+
+            return resultListOfExamTerms;
+        }
+
         public ICollection<ExamTerm> GetExamTermsByExaminerId(string userIdentificator)
         {
             var filter = Builders<ExamTerm>.Filter.Where(z => z.Examiners.Contains(userIdentificator));
@@ -81,6 +92,36 @@ namespace Certification_System.Repository
         {
             var filter = Builders<ExamTerm>.Filter.Where(x => examsTermsIdentificators.Contains(x.ExamTermIdentificator));
             var result = GetExamsTerms().DeleteMany(filter);
+        }
+
+        public IList<SelectListItem> GetActiveExamTermsWithVacantSeatsAsSelectList(Exam exam)
+        {
+            var ExamTerms = GetActiveExamsTermsById(exam.ExamTerms);
+            List<SelectListItem> SelectList = new List<SelectListItem>();
+
+            foreach (var examTerm in ExamTerms)
+            {
+                var VacantSeats = examTerm.UsersLimit - examTerm.EnrolledUsers.Count();
+
+                SelectList.Add
+                    (
+                        new SelectListItem()
+                        {
+                            Text =  exam.DateOfStart + " - " + exam.DateOfEnd + " |wm.: " + VacantSeats,
+                            Value = exam.ExamIdentificator
+                        }
+                    );
+            };
+
+            return SelectList;
+        }
+
+        public void AddUserToExamTerm(string examTermIdentificator, string userIdentificator)
+        {
+            var filter = Builders<ExamTerm>.Filter.Where(z => z.ExamTermIdentificator == examTermIdentificator);
+            var update = Builders<ExamTerm>.Update.AddToSet(x => x.EnrolledUsers, userIdentificator);
+
+            var result = GetExamsTerms().UpdateOne(filter, update);
         }
     }
 }

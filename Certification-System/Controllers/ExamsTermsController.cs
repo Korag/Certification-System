@@ -200,7 +200,7 @@ namespace Certification_System.Controllers
                 {
                     singleUser.HasExamResult = false;
                 }
-             
+
                 usersViewModel.Add(singleUser);
             }
 
@@ -212,6 +212,67 @@ namespace Certification_System.Controllers
             ExamTermDetails.UsersWithResults = usersViewModel;
 
             return View(ExamTermDetails);
+        }
+
+        // GET: AssignUserToExamTerm
+        [Authorize(Roles = "Admin")]
+        public ActionResult AssignUserToExamTerm(string examIdentificator, string userIdentificator)
+        {
+            var Exam = _context.examRepository.GetExamById(examIdentificator);
+
+            AssignUserToExamTermViewModel userToAssignToExamTerm = new AssignUserToExamTermViewModel
+            {
+                AvailableExamTerms = _context.examTermRepository.GetActiveExamTermsWithVacantSeatsAsSelectList(Exam).ToList(),
+
+                UserIdentificator = userIdentificator,
+                ExamIdentificator = examIdentificator
+            };
+            return View(userToAssignToExamTerm);
+        }
+
+        // POST: AssignUserToExamTerm
+        [Authorize(Roles = "Admin")]
+        [HttpPost]
+        public ActionResult AssignUserToExamTerm(AssignUserToExamTermViewModel userAssignedToExamTerm)
+        {
+            if (ModelState.IsValid)
+            {
+                var ExamTerm = _context.examTermRepository.GetExamTermById(userAssignedToExamTerm.SelectedExamTerm);
+                var user = _context.userRepository.GetUserById(userAssignedToExamTerm.UserIdentificator);
+
+                if (!ExamTerm.EnrolledUsers.Contains(userAssignedToExamTerm.UserIdentificator))
+                {
+                    var VacantSeats = ExamTerm.UsersLimit - ExamTerm.EnrolledUsers.Count();
+
+                    if (VacantSeats < 1)
+                    {
+                        ModelState.AddModelError("", "Brak wystarczającej liczby miejsc dla wybranego użytkownika");
+                    }
+                    else
+                    {
+                        _context.examRepository.AddUserToExam(userAssignedToExamTerm.ExamIdentificator, userAssignedToExamTerm.UserIdentificator);
+                        _context.examTermRepository.AddUserToExamTerm(userAssignedToExamTerm.SelectedExamTerm, userAssignedToExamTerm.UserIdentificator);
+
+                        return RedirectToAction("ExamTermDetails", new { examTermIdentificator = userAssignedToExamTerm.SelectedExamTerm, message = "Zapisano nowego użytkownika na turę egzaminu" });
+                    }
+                }
+                else
+                {
+                    ModelState.AddModelError("", user.FirstName + " " + user.LastName + " już jest zapisany/a na wybraną turę egzaminu");
+                }
+            }
+
+            if (string.IsNullOrWhiteSpace(userAssignedToExamTerm.ExamIdentificator))
+            {
+               var Exam = _context.examRepository.GetExamById(userAssignedToExamTerm.ExamIdentificator);
+                userAssignedToExamTerm.AvailableExamTerms = _context.examTermRepository.GetActiveExamTermsWithVacantSeatsAsSelectList(Exam).ToList();
+
+                return View(userAssignedToExamTerm);
+            }
+            else
+            {
+                return RedirectToAction("AssingUserToExam", "Exams");
+            }
         }
     }
 }

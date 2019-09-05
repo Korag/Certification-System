@@ -4,18 +4,18 @@ using System.ComponentModel.DataAnnotations;
 
 namespace Certification_System.DTOViewModels
 {
-    public class AssignUserToCourseViewModel
+    public class AssignUserToExamViewModel
     {
-        public IList<SelectListItem> AvailableCourses { get; set; }
+        public IList<SelectListItem> AvailableExams { get; set; }
 
         [Required(ErrorMessage = "Pole \"{0}\" jest wymagane.")]
-        [Display(Name = "Kursy")]
-        public string SelectedCourse { get; set; }
+        [Display(Name = "Egzaminy")]
+        public string SelectedExam { get; set; }
 
         public IList<SelectListItem> AvailableUsers { get; set; }
 
         [Required(ErrorMessage = "Pole \"{0}\" jest wymagane.")]
-        [Display(Name = "Użytkownicy")]
-        public ICollection<string> SelectedUsers { get; set; }
+        [Display(Name = "Użytkownik")]
+        public string SelectedUser { get; set; }
     }
 }

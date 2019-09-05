@@ -1,4 +1,5 @@
 ﻿using Certification_System.Entities;
+using Microsoft.AspNetCore.Mvc.Rendering;
 using System.Collections.Generic;
 
 namespace Certification_System.RepositoryInterfaces
@@ -14,5 +15,7 @@ namespace Certification_System.RepositoryInterfaces
         void UpdateExamsTerms(ICollection<ExamTerm> examTerms);
         void UpdateExamTerm(ExamTerm examTerm);
         void DeleteExamsTerms(ICollection<string> examsTermsIdentificators);
+        IList<SelectListItem> GetActiveExamTermsWithVacantSeatsAsSelectList(Exam exam);
+        void AddUserToExamTerm(string examTermIdentificator, string userIdentificator);
     }
 }

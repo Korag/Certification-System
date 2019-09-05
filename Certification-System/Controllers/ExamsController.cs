@@ -315,8 +315,10 @@ namespace Certification_System.Controllers
 
         // GET: ExamDetails
         [Authorize(Roles = "Admin")]
-        public ActionResult ExamDetails(string examIdentificator)
+        public ActionResult ExamDetails(string examIdentificator, string message)
         {
+            ViewBag.Message = message;
+
             var Exam = _context.examRepository.GetExamById(examIdentificator);
             var ExamTerms = _context.examTermRepository.GetExamsTermsById(Exam.ExamTerms);
             var ExamResults = _context.examResultRepository.GetExamsResultsById(Exam.ExamResults);
@@ -664,7 +666,6 @@ namespace Certification_System.Controllers
                     if (VacantSeats < 1)
                     {
                         ModelState.AddModelError("", "Brak wystarczającej liczby miejsc dla wybranego użytkownika");
-                        ModelState.AddModelError("", $"Do wybranego kursu maksymalnie możesz zapisać jeszcze: {VacantSeats} użytkowników");
                     }
                     else
                     {
