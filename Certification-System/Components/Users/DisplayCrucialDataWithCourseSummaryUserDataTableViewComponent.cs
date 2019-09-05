@@ -20,7 +20,7 @@ namespace Certification_System.Components
                 }
             };
 
-            return View("_DisplayCrucialDataWithCourseSummaryUserDataTable", userDataTableViewModel);
+            return View("_DisplayCrucialDataCourseSummaryUserDataTable", userDataTableViewModel);
         }
     }
 }
