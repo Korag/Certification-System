@@ -209,6 +209,10 @@ namespace Certification_System.Services
                      .ForMember(dest => dest.ExamTerms, opts => opts.MapFrom(src => new List<string>()))
                      .ForMember(dest => dest.ExamResults, opts => opts.MapFrom(src => new List<string>()))
                      .ForMember(dest => dest.EnrolledUsers, opts => opts.MapFrom(src => new List<string>()));
+
+            CreateMap<Course, DeleteUsersFromExamViewModel>()
+                     .ForMember(dest => dest.UsersToDeleteFromExam, opts => opts.Ignore())
+                     .ForMember(dest => dest.AllExamParticipants, opts => opts.Ignore());
             #endregion
 
             #region ExamTerms

@@ -123,5 +123,13 @@ namespace Certification_System.Repository
 
             var result = GetExamsTerms().UpdateOne(filter, update);
         }
+
+        public void DeleteUsersFromExamTerms(ICollection<string> examTermsIdentificators, ICollection<string> usersIdentificators)
+        {
+            var filter = Builders<ExamTerm>.Filter.Where(z => examTermsIdentificators.Contains(z.ExamTermIdentificator));
+            var update = Builders<ExamTerm>.Update.PullAll(x => x.EnrolledUsers, usersIdentificators);
+
+            var result = GetExamsTerms().UpdateOne(filter, update);
+        }
     }
 }

@@ -164,8 +164,10 @@ namespace Certification_System.Controllers
 
         // GET: ExamTermDetails
         [Authorize(Roles = "Admin")]
-        public ActionResult ExamTermDetails(string examTermIdentificator)
+        public ActionResult ExamTermDetails(string examTermIdentificator, string message)
         {
+            ViewBag.message = message;
+
             var ExamTerm = _context.examTermRepository.GetExamTermById(examTermIdentificator);
             var Exam = _context.examRepository.GetExamByExamTermId(examTermIdentificator);
             var Examiners = _context.userRepository.GetUsersById(ExamTerm.Examiners);

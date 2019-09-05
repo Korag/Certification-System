@@ -176,8 +176,12 @@ else
 <h2 class="mt-4 mb-4">Użytkownicy zapisani na kurs</h2>
 
 <div class="mt-3 mb-3">
-    <a asp-action="AssignUserToCourse" asp-route-courseIdentificator="@Model.Course.CourseIdentificator" asp-controller="Courses" class="btn btn-primary">Dodaj użytkownika do kursu</a>
-</div>
+    <a asp-action="AssignUserToCourse" asp-route-courseIdentificator="@Model.Course.CourseIdentificator" asp-controller="Courses" class="btn btn-primary mr-1 mt-1">Dodaj użytkownika do kursu</a>
+    @if (!Model.Course.CourseEnded && Model.EnrolledUsers.Count != 0)
+    {
+        <a asp-action="DeleteUsersFromCourse" asp-route-courseIdentificator="@Model.Course.CourseIdentificator" asp-controller="Courses" class="btn btn-danger mt-1">Usuń użytkowników z kursu</a>
+    }
+ </div>
 
 @if (Model.EnrolledUsers.Count != 0)
 {

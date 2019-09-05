@@ -35,13 +35,11 @@ namespace Certification_System.DTOViewModels
         [Display(Name = "Długość kursu [dni]")]
         public int CourseLength { get; set; }
 
-        [Required(ErrorMessage = "Pole \"{0}\" jest wymagane.")]
         [DataType(DataType.Date)]
         [DisplayFormat(DataFormatString = "{0:DD/MM/YYYY}")]
         [Display(Name = "Data otrzymania certyfikatu")]
         public DateTime ReceiptDate { get; set; }
 
-        [Required(ErrorMessage = "Pole \"{0}\" jest wymagane.")]
         [DataType(DataType.Date)]
         [DisplayFormat(DataFormatString = "{0:DD/MM/YYYY}")]
         [Display(Name = "Data wygaśnięcia certyfikatu")]
