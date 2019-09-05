@@ -276,5 +276,71 @@ namespace Certification_System.Controllers
                 return RedirectToAction("AssingUserToExam", "Exams");
             }
         }
+
+        // GET: DeleteUsersFromExamTerm
+        [Authorize(Roles = "Admin")]
+        public ActionResult DeleteUsersFromExamTerm(string examTermIdentificator)
+        {
+            if (string.IsNullOrWhiteSpace(examTermIdentificator))
+            {
+                return RedirectToAction("BlankMenu", "Certificates");
+            }
+
+            var ExamTerm = _context.examTermRepository.GetExamTermById(examTermIdentificator);
+
+            if (ExamTerm.DateOfStart > DateTime.Now)
+            {
+                var EnrolledUsersList = _context.userRepository.GetUsersById(ExamTerm.EnrolledUsers);
+
+                List<DisplayCrucialDataUserViewModel> ListOfUsers = new List<DisplayCrucialDataUserViewModel>();
+
+                if (EnrolledUsersList.Count != 0)
+                {
+                    ListOfUsers = _mapper.Map<List<DisplayCrucialDataUserViewModel>>(EnrolledUsersList);
+                }
+
+                DeleteUsersFromExamTermViewModel deleteUsersFromExamViewModel = _mapper.Map<DeleteUsersFromExamTermViewModel>(ExamTerm);
+                deleteUsersFromExamViewModel.AllExamTermParticipants = ListOfUsers;
+
+                var Exam = _context.examRepository.GetExamByExamTermId(examTermIdentificator);
+                deleteUsersFromExamViewModel.Exam = _mapper.Map<DisplayCrucialDataExamViewModel>(ExamTerm);
+
+                deleteUsersFromExamViewModel.UsersToDeleteFromExamTerm = _mapper.Map<DeleteUsersFromCheckBoxViewModel[]>(ListOfUsers);
+
+                return View(deleteUsersFromExamViewModel);
+            }
+            
+            return RedirectToAction("ExamTermDetails", new { examTermIdentificator = examTermIdentificator });
+        }
+
+        // POST: DeleteUsersFromExamTerm
+        [HttpPost]
+        [Authorize(Roles = "Admin")]
+        public ActionResult DeleteUsersFromExamTerm(DeleteUsersFromExamTermViewModel deleteUsersFromExamTermViewModel)
+        {
+            if (ModelState.IsValid)
+            {
+                if (deleteUsersFromExamTermViewModel.DateOfStart > DateTime.Now)
+                {
+                    var UsersToDeleteFromExamTermIdentificators = deleteUsersFromExamTermViewModel.UsersToDeleteFromExamTerm.ToList().Where(z => z.IsToDelete == true).Select(z => z.UserIdentificator).ToList();
+
+                    _context.examTermRepository.DeleteUsersFromExamTerm(deleteUsersFromExamTermViewModel.ExamTermIdentificator, UsersToDeleteFromExamTermIdentificators);
+                    _context.examRepository.DeleteUsersFromExam(deleteUsersFromExamTermViewModel.Exam.ExamIdentificator, UsersToDeleteFromExamTermIdentificators);
+
+                    if (deleteUsersFromExamTermViewModel.UsersToDeleteFromExamTerm.Count() == 1)
+                    {
+                        return RedirectToAction("UserDetails", "Users", new { userIdentificator = deleteUsersFromExamTermViewModel.UsersToDeleteFromExamTerm.FirstOrDefault().UserIdentificator, message = "Usunięto użytkownika z tury egzaminu" });
+                    }
+                    else
+                    {
+                        return RedirectToAction("ExamTermDetails", new { examTermIdentificator = deleteUsersFromExamTermViewModel.ExamTermIdentificator, message = "Usunięto grupę użytkowników z tury egzaminu" });
+                    }
+                }
+
+                return RedirectToAction("ExamTermDetails", new { examTermIdentificator = deleteUsersFromExamTermViewModel.ExamTermIdentificator });
+            }
+
+            return RedirectToAction("DeleteUsersFromExamTerm", new { examTermIdentificator = deleteUsersFromExamTermViewModel.ExamTermIdentificator });
+        }
     }
 }

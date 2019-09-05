@@ -1,11 +1,11 @@
-﻿@model Certification_System.DTOViewModels.DeleteUsersFromExamViewModel
+﻿@model Certification_System.DTOViewModels.DeleteUsersFromExamTermViewModel
 
 @{
-    ViewData["Title"] = "DeleteUsersFromExam";
+    ViewData["Title"] = "DeleteUsersFromExamTerm";
     Layout = "~/Views/Shared/_Layout.cshtml";
 }
 
-<h2>Usuwanie użytkowników z egzaminu</h2>
+<h2>Usuwanie użytkowników z tury egzaminu</h2>
 <hr />
 
 <div>
@@ -14,23 +14,28 @@
     <div class="col-md-8 col-xl-6 col-lg-6 col-sm-12 col-xs-10 m-auto p-3 shadow p-3 mb-5 bg-light rounded border border-primary rounded-bottom" style="opacity:0.90">
 
         <div class="form-group">
-            <label asp-for="ExamIndexer" class="control-label"></label>
-            <input asp-for="ExamIndexer" class="form-control col-12" disabled />
+            <label asp-for="Exam.ExamIndexer" class="control-label"></label>
+            <input asp-for="Exam.ExamIndexer" class="form-control col-12" disabled />
         </div>
 
         <div class="form-group">
-            <label asp-for="OrdinalNumber" class="control-label"></label>
-            <input asp-for="OrdinalNumber" class="form-control col-12" disabled />
+            <label asp-for="Exam.Name" class="control-label"></label>
+            <input asp-for="Exam.Name" class="form-control col-12" disabled />
         </div>
 
         <div class="form-group">
-            <label asp-for="Name" class="control-label"></label>
-            <textarea asp-for="Name" class="form-control col-12" style="width:100%; min-width:100%;" disabled></textarea>
+            <label asp-for="Exam.OrdinalNumber" class="control-label"></label>
+            <input asp-for="Exam.OrdinalNumber" class="form-control col-12" disabled />
         </div>
 
         <div class="form-group">
-            <label asp-for="Description" class="control-label"></label>
-            <textarea asp-for="Description" class="form-control col-12" style="width:100%; min-width:100%;" disabled></textarea>
+            <label asp-for="DateOfStart" class="control-label"></label>
+            <input asp-for="DateOfStart" class="form-control col-12" disabled />
+        </div>
+
+        <div class="form-group">
+            <label asp-for="DateOfStart" class="control-label"></label>
+            <input asp-for="DateOfStart" class="form-control col-12" disabled />
         </div>
 
         <div class="form-group">
@@ -54,13 +59,6 @@
         </div>
 
         <div class="form-group">
-            <label asp-for="ExamDividedToTerms" class="control-label"></label>
-            <div class="row pl-3">
-                <input type="checkbox" asp-for="ExamDividedToTerms" class="form-control col-12" data-toggle="toggle" data-on="Tak" data-off="Nie" data-size="sm" disabled />
-            </div>
-        </div>
-
-        <div class="form-group">
             <label asp-for="UsersQuantitiy" class="control-label"></label>
             <input asp-for="UsersQuantitiy" class="form-control col-12" disabled />
         </div>
@@ -73,20 +71,21 @@
     </div>
 </div>
 
-<h2 class="mt-4 mb-4">Uczestnicy egzaminu</h2>
+<h2 class="mt-4 mb-4">Uczestnicy tury egzaminu</h2>
 
-<form asp-action="DeleteUsersFromExam">
+<form asp-action="DeleteUsersFromExamTerm">
 
-    <input asp-for="ExamIdentificator" class="form-control col-12" hidden />
-    <input asp-for="ExamDividedToTerms" class="form-control col-12" hidden />
+    <input asp-for="ExamTermIdentificator" class="form-control col-12" hidden />
+    <input asp-for="Exam.ExamIdentificator" class="form-control col-12" hidden />
 
-    @if (Model.AllExamParticipants.Count != 0)
+
+    @if (Model.AllExamTermParticipants.Count != 0)
     {
-        @await Component.InvokeAsync("DeleteUserFromExamDataTable", new { userViewModel = Model.AllExamParticipants, userToDeleteViewModel = Model.UsersToDeleteFromExam, tableIdentificator = "listUsers" })
+        @await Component.InvokeAsync("DeleteUserFromExamTermDataTable", new { userViewModel = Model.AllExamTermParticipants, userToDeleteViewModel = Model.UsersToDeleteFromExamTerm, tableIdentificator = "listUsers" })
 
         <div>
             <div class="row justify-content-center">
-                <input type="submit" value="Usuń użytkowników z egzaminu" class="btn btn-danger" />
+                <input type="submit" value="Usuń użytkowników z tury egzaminu" class="btn btn-danger" />
             </div>
         </div>
     }
