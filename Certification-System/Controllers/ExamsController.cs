@@ -618,5 +618,101 @@ namespace Certification_System.Controllers
 
             return View(ListOfExamsResults);
         }
+
+        // GET: AssignUserToExam
+        [Authorize(Roles = "Admin")]
+        public ActionResult AssignUserToExam(string userIdentificator)
+        {
+            string ChosenUser = null;
+
+            if (!string.IsNullOrWhiteSpace(userIdentificator))
+                ChosenUser = _context.userRepository.GetUserById(userIdentificator).Id;
+
+            var AvailableUsers = _context.userRepository.GetWorkersAsSelectList().ToList();
+            var AvailableExams = _context.examRepository.GetActiveExamsWithVacantSeatsAsSelectList().ToList();
+
+            AssignUserToExamViewModel userToAssignToExam = new AssignUserToExamViewModel
+            {
+                AvailableExams = AvailableExams,
+
+                AvailableUsers = AvailableUsers,
+                SelectedUser = ChosenUser
+            };
+
+            return View(userToAssignToExam);
+        }
+
+        // POST: AssignUserToExam
+        [Authorize(Roles = "Admin")]
+        [HttpPost]
+        public ActionResult AssignUserToExam(AssignUserToExamViewModel userAssignedToExam)
+        {
+            if (ModelState.IsValid)
+            {
+                var Exam = _context.examRepository.GetExamById(userAssignedToExam.SelectedExam);
+                var user = _context.userRepository.GetUserById(userAssignedToExam.SelectedUser);
+
+                if (!Exam.EnrolledUsers.Contains(userAssignedToExam.SelectedUser))
+                {
+                    if (Exam.ExamDividedToTerms)
+                    {
+                        return RedirectToAction("AssignUserToExamTerm", "ExamsTerms", new { examIdentificator = userAssignedToExam.SelectedExam, userIdentificator = userAssignedToExam.SelectedUser });
+                    }
+
+                    var VacantSeats = Exam.UsersLimit - Exam.EnrolledUsers.Count();
+
+                    if (VacantSeats < 1)
+                    {
+                        ModelState.AddModelError("", "Brak wystarczającej liczby miejsc dla wybranego użytkownika");
+                        ModelState.AddModelError("", $"Do wybranego kursu maksymalnie możesz zapisać jeszcze: {VacantSeats} użytkowników");
+                    }
+                    else
+                    {
+                        _context.examRepository.AddUserToExam(userAssignedToExam.SelectedExam, userAssignedToExam.SelectedUser);
+
+                        return RedirectToAction("ExamDetails", new { examIdentificator = userAssignedToExam.SelectedExam, message = "Zapisano nowego użytkownika na egzamin" });
+                    }
+                }
+                else
+                {
+                        ModelState.AddModelError("", user.FirstName + " " + user.LastName + " już jest zapisany/a na wybrany egzamin");
+                }
+            }
+
+            userAssignedToExam.AvailableUsers = _context.userRepository.GetWorkersAsSelectList().ToList();
+            userAssignedToExam.AvailableExams = _context.examRepository.GetActiveExamsWithVacantSeatsAsSelectList().ToList();
+
+            return View(userAssignedToExam);
+        }
+
+        //// GET: AssignUsersToExam
+        //[Authorize(Roles = "Admin")]
+        //public ActionResult AssignUsersFromCourseToExam(ICollection<string> userIdentificators, string examIdentificator)
+        //{
+        //    ICollection<string> ChosenUsers;
+        //    string ChosenExam = "";
+
+        //    if (userIdentificators.Count() != 0)
+        //        ChosenUsers = _context.userRepository.GetUsersById(userIdentificators).Select(z => z.Id).ToList();
+        //    else
+        //        ChosenUsers = new List<string>();
+
+        //    if (examIdentificator != null)
+        //        ChosenExam = _context.examRepository.GetExamById(examIdentificator).ExamIdentificator;
+
+        //    var AvailableUsers = _context.userRepository.GetWorkersAsSelectList().ToList();
+        //    var AvailableExams = _context.examRepository.GetActiveCoursesWithVacantSeatsAsSelectList().ToList();
+
+        //    AssignUserToCourseViewModel usersToAssignToCourse = new AssignUserToCourseViewModel
+        //    {
+        //        AvailableCourses = AvailableCourses,
+        //        SelectedCourse = ChosenCourse,
+
+        //        AvailableUsers = AvailableUsers,
+        //        SelectedUsers = ChosenUsers
+        //    };
+
+        //    return View(usersToAssignToCourse);
+        //}
     }
 }

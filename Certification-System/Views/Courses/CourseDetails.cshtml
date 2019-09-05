@@ -118,7 +118,7 @@
 
 @if (Model.Instructors.Count != 0)
 {
-    @await Component.InvokeAsync("DisplayCrucialDataWithContactUserDataTable", new { userViewModel = Model.Instructors, tableIdentificator = "listInstructors", operationSet = 1 })
+    @await Component.InvokeAsync("DisplayCrucialDataWithContactUserDataTable", new { userViewModel = Model.Instructors, tableIdentificator = "listInstructors", operationSet = 2 })
 }
 
 else

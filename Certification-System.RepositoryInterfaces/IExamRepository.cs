@@ -7,6 +7,7 @@ namespace Certification_System.RepositoryInterfaces
     public interface IExamRepository
     {
         ICollection<Exam> GetListOfExams();
+        ICollection<Exam> GetActiveExams();
         void AddExam(Exam exam);
         ICollection<Exam> GetExamsById(ICollection<string> examsIdentificators);
         Exam GetExamById(string examIdentificator);
@@ -17,5 +18,7 @@ namespace Certification_System.RepositoryInterfaces
         Exam GetExamByExamTermId(string examTermIdentificator);
         ICollection<SelectListItem> GetAddExamMenuOptions();
         Exam GetExamByExamResultId(string examResultId);
+        IList<SelectListItem> GetActiveExamsWithVacantSeatsAsSelectList();
+        void AddUserToExam(string examIdentificator, string userIdentificator);
     }
 }

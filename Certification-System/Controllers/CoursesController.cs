@@ -619,9 +619,9 @@ namespace Certification_System.Controllers
             return RedirectToAction("DeleteUsersFromCourse", new { courseIdentificator = deleteUsersFromCourseViewModel.CourseIdentificator });
         }
 
-        // GET: MyCourses
+        // GET: WorkerCourses
         [Authorize(Roles = "Worker")]
-        public ActionResult MyCourses()
+        public ActionResult WorkerCourses()
         {
             var User = _context.userRepository.GetUserByEmail(this.User.Identity.Name);
 

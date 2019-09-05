@@ -3,6 +3,7 @@ using Certification_System.Repository.Context;
 using Certification_System.RepositoryInterfaces;
 using Microsoft.AspNetCore.Mvc.Rendering;
 using MongoDB.Driver;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 
@@ -131,12 +132,50 @@ namespace Certification_System.Repository
             return SelectList;
         }
 
+        public ICollection<Exam> GetActiveExams()
+        {
+            var filter = Builders<Exam>.Filter.Gte(z => z.DateOfStart, DateTime.Now);
+            var resultListOfExams = GetExams().Find<Exam>(filter).ToList();
+
+            return resultListOfExams;
+        }
+
+        public IList<SelectListItem> GetActiveExamsWithVacantSeatsAsSelectList()
+        {
+            List<Exam> Exams = GetActiveExams().ToList();
+            List<SelectListItem> SelectList = new List<SelectListItem>();
+
+            foreach (var exam in Exams)
+            {
+                var VacantSeats = exam.UsersLimit - exam.EnrolledUsers.Count();
+
+                SelectList.Add
+                    (
+                        new SelectListItem()
+                        {
+                            Text = exam.ExamIndexer + " " + exam.Name + " |wm.: " + VacantSeats,
+                            Value = exam.ExamIdentificator
+                        }
+                    );
+            };
+
+            return SelectList;
+        }
+
         public Exam GetExamByExamResultId(string examResultId)
         {
             var filter = Builders<Exam>.Filter.Where(z => z.ExamResults.Contains(examResultId));
             var resultExam = GetExams().Find<Exam>(filter).FirstOrDefault();
 
             return resultExam;
+        }
+
+        public void AddUserToExam(string examIdentificator, string userIdentificator)
+        {
+            var filter = Builders<Exam>.Filter.Where(z => z.ExamIdentificator == examIdentificator);
+            var update = Builders<Exam>.Update.AddToSet(x => x.EnrolledUsers, userIdentificator);
+
+            var result = GetExams().UpdateOne(filter, update);
         }
     }
 }
