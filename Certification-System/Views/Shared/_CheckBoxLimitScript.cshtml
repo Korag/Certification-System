@@ -1,0 +1,11 @@
+@model int
+
+<script>
+    var limit = @Model;
+    $('[type="checkbox"]').on('change', function (event, state) {
+
+        if ($('[type="checkbox"]:checked').length > limit) {
+            $(this).bootstrapToggle('off');
+        }
+    });
+</script>
