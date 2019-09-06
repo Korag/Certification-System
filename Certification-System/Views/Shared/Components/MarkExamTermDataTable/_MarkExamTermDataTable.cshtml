@@ -1,0 +1,53 @@
+﻿@model Certification_System.DTOViewModels.MarkExamTermDataTableViewModel
+
+<div class="col-12 table-responsive">
+    <table id="@Model.Options.TableIdentificator" class="table table-striped table-bordered display" style="width: 100%;" role="grid">
+        <thead>
+            <tr>
+                <th>
+                    @Html.DisplayNameFor(model => model.Users.FirstOrDefault().Email)
+                </th>
+                <th>
+                    @Html.DisplayNameFor(model => model.Users.FirstOrDefault().FirstName)
+                </th>
+                <th>
+                    @Html.DisplayNameFor(model => model.Users.FirstOrDefault().LastName)
+                </th>
+                <th>
+                    @Html.DisplayNameFor(model => model.Users.FirstOrDefault().PointsEarned)
+                </th>
+                <th>
+                    @Html.DisplayNameFor(model => model.Users.FirstOrDefault().PercentageOfResult)
+                </th>
+                <th>
+                    @Html.DisplayNameFor(model => model.Users.FirstOrDefault().ExamPassed)
+                </th>
+            </tr>
+        </thead>
+        <tbody>
+            @for (int i = 0; i < Model.Users.Count(); i++)
+            {
+                <tr>
+                    <td>
+                        @Html.DisplayFor(model => model.Users.ElementAt(i).Email)
+                    </td>
+                    <td>
+                        @Html.DisplayFor(model => model.Users.ElementAt(i).FirstName)
+                    </td>
+                    <td>
+                        @Html.DisplayFor(model => model.Users.ElementAt(i).LastName)
+                    </td>
+                    <td>
+                        @Html.DisplayFor(model => model.Users.ElementAt(i).PointsEarned)
+                    </td>
+                    <td>
+                        @Html.DisplayFor(model => model.Users.ElementAt(i).PercentageOfResult)
+                    </td>
+                    <td>
+                        <input type="checkbox" asp-for="Users.ElementAt(i).ExamPassed" class="form-control col-12" data-toggle="toggle" data-on="Tak" data-off="Nie" data-size="sm" />
+                    </td>
+                </tr>
+            }
+        </tbody>
+    </table>
+</div>
