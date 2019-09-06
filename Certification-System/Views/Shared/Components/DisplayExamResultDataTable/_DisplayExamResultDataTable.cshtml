@@ -35,7 +35,7 @@
                     @Html.DisplayNameFor(model => model.ExamsResults.FirstOrDefault().PointsEarned)
                 </th>
                 <th>
-                    @Html.DisplayNameFor(model => model.ExamsResults.FirstOrDefault().MaxAmountOfPoints)
+                    @Html.DisplayNameFor(model => model.ExamsResults.FirstOrDefault().MaxAmountOfPointsToEarn)
                 </th>
                 <th>
                     @Html.DisplayNameFor(model => model.ExamsResults.FirstOrDefault().PercentageOfResult)
@@ -86,7 +86,7 @@
                         @Html.DisplayFor(modelItem => examResult.PointsEarned)
                     </td>
                     <td>
-                        @Html.DisplayFor(modelItem => examResult.MaxAmountOfPoints)
+                        @Html.DisplayFor(modelItem => examResult.MaxAmountOfPointsToEarn)
                     </td>
                     <td>
                         @Html.DisplayFor(modelItem => examResult.PercentageOfResult)

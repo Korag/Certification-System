@@ -11,7 +11,7 @@ namespace Certification_System.Entities
 
         public string User { get; set; }
 
-        public string PointsEarned { get; set; }
+        public double PointsEarned { get; set; }
         public double PercentageOfResult { get; set; }
         public bool ExamPassed { get; set; }
 

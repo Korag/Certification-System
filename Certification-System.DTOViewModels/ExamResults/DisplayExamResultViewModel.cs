@@ -14,7 +14,7 @@ namespace Certification_System.DTOViewModels
         public string PointsEarned { get; set; }
 
         [Display(Name = "Maks. liczba punktów")]
-        public int MaxAmountOfPoints { get; set; }
+        public double MaxAmountOfPointsToEarn { get; set; }
 
         [Display(Name = "Wynik procentowy")]
         public double PercentageOfResult { get; set; }

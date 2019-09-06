@@ -19,7 +19,7 @@ namespace Certification_System.Entities
         public int DurationDays { get; set; }
         public int DurationMinutes { get; set; }
         public int OrdinalNumber { get; set; }
-        public int MaxAmountOfPointsToEarn { get; set; }
+        public double MaxAmountOfPointsToEarn { get; set; }
         public int UsersLimit { get; set; }
 
         public bool ExamDividedToTerms { get; set; }

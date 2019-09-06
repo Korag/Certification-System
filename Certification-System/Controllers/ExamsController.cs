@@ -398,7 +398,7 @@ namespace Certification_System.Controllers
 
                     foreach (var examTerm in modifiedExam.ExamTerms)
                     {
-                        var SingleExamTermExaminers = _context.userRepository.GetUsersById(ExamTerms.Where(z => z.ExamTermIdentificator == examTerm.ExamTermIdentificator).Select(z=> z.Examiners).FirstOrDefault());
+                        var SingleExamTermExaminers = _context.userRepository.GetUsersById(ExamTerms.Where(z => z.ExamTermIdentificator == examTerm.ExamTermIdentificator).Select(z => z.Examiners).FirstOrDefault());
 
                         examTerm.Examiners = _mapper.Map<List<DisplayCrucialDataUserViewModel>>(SingleExamTermExaminers);
                     }
@@ -436,7 +436,7 @@ namespace Certification_System.Controllers
             AddExamTypeOfActionViewModel addExamType = new AddExamTypeOfActionViewModel
             {
                 AvailableOptions = _context.examRepository.GetAddExamMenuOptions().ToList(),
-                
+
                 CourseIdentificator = courseIdentificator,
                 ExamIdentificator = examIdentificator
             };
@@ -451,19 +451,19 @@ namespace Certification_System.Controllers
         {
             if (ModelState.IsValid)
             {
-            if (addExamTypeOfAction.SelectedOption == "addExam" && addExamTypeOfAction.ExamTermsQuantity == 0)
-                return RedirectToAction("AddNewExam", "Exams", new { courseIdentificator = addExamTypeOfAction.CourseIdentificator, examIdentificator = addExamTypeOfAction.ExamIdentificator });
+                if (addExamTypeOfAction.SelectedOption == "addExam" && addExamTypeOfAction.ExamTermsQuantity == 0)
+                    return RedirectToAction("AddNewExam", "Exams", new { courseIdentificator = addExamTypeOfAction.CourseIdentificator, examIdentificator = addExamTypeOfAction.ExamIdentificator });
 
-            else if (addExamTypeOfAction.SelectedOption == "addExam" && addExamTypeOfAction.ExamTermsQuantity != 0)
-                return RedirectToAction("AddNewExamWithExamTerms", "Exams", new { courseIdentificator = addExamTypeOfAction.CourseIdentificator, examIdentificator = addExamTypeOfAction.ExamIdentificator, quantityOfExamTerms = addExamTypeOfAction.ExamTermsQuantity });
+                else if (addExamTypeOfAction.SelectedOption == "addExam" && addExamTypeOfAction.ExamTermsQuantity != 0)
+                    return RedirectToAction("AddNewExamWithExamTerms", "Exams", new { courseIdentificator = addExamTypeOfAction.CourseIdentificator, examIdentificator = addExamTypeOfAction.ExamIdentificator, quantityOfExamTerms = addExamTypeOfAction.ExamTermsQuantity });
 
-            else if(addExamTypeOfAction.SelectedOption == "addExamPeriod" && addExamTypeOfAction.ExamTermsQuantity == 0)
-                return RedirectToAction("AddNewExamPeriod", "Exams", new { courseIdentificator = addExamTypeOfAction.CourseIdentificator, examIdentificator = addExamTypeOfAction.ExamIdentificator, quantityOfExamTerms = addExamTypeOfAction.ExamTermsQuantity });
+                else if (addExamTypeOfAction.SelectedOption == "addExamPeriod" && addExamTypeOfAction.ExamTermsQuantity == 0)
+                    return RedirectToAction("AddNewExamPeriod", "Exams", new { courseIdentificator = addExamTypeOfAction.CourseIdentificator, examIdentificator = addExamTypeOfAction.ExamIdentificator, quantityOfExamTerms = addExamTypeOfAction.ExamTermsQuantity });
 
-            else if(addExamTypeOfAction.SelectedOption == "addExamPeriod" && addExamTypeOfAction.ExamTermsQuantity != 0)
-                return RedirectToAction("AddNewExamPeriodWithExamTerms", "Exams", new { courseIdentificator = addExamTypeOfAction.CourseIdentificator, examIdentificator = addExamTypeOfAction.ExamIdentificator, quantityOfExamTerms = addExamTypeOfAction.ExamTermsQuantity });
+                else if (addExamTypeOfAction.SelectedOption == "addExamPeriod" && addExamTypeOfAction.ExamTermsQuantity != 0)
+                    return RedirectToAction("AddNewExamPeriodWithExamTerms", "Exams", new { courseIdentificator = addExamTypeOfAction.CourseIdentificator, examIdentificator = addExamTypeOfAction.ExamIdentificator, quantityOfExamTerms = addExamTypeOfAction.ExamTermsQuantity });
 
-            return RedirectToAction("BlankMenu", "Certificates");
+                return RedirectToAction("BlankMenu", "Certificates");
             }
 
             addExamTypeOfAction.AvailableOptions = _context.examRepository.GetAddExamMenuOptions().ToList();
@@ -610,7 +610,7 @@ namespace Certification_System.Controllers
                 var RelatedCourse = _context.courseRepository.GetCourseByExamId(RelatedExam.ExamIdentificator);
                 var RelatedUser = _context.userRepository.GetUserById(examResult.User);
 
-                singleExamResult.MaxAmountOfPoints = RelatedExam.MaxAmountOfPointsToEarn;
+                singleExamResult.MaxAmountOfPointsToEarn = RelatedExam.MaxAmountOfPointsToEarn;
 
                 singleExamResult.Exam = _mapper.Map<DisplayCrucialDataExamViewModel>(RelatedExam);
                 singleExamResult.Course = _mapper.Map<DisplayCrucialDataCourseViewModel>(RelatedCourse);
@@ -677,7 +677,7 @@ namespace Certification_System.Controllers
                 }
                 else
                 {
-                        ModelState.AddModelError("", user.FirstName + " " + user.LastName + " już jest zapisany/a na wybrany egzamin");
+                    ModelState.AddModelError("", user.FirstName + " " + user.LastName + " już jest zapisany/a na wybrany egzamin");
                 }
             }
 
@@ -822,6 +822,62 @@ namespace Certification_System.Controllers
             }
 
             return View(addUsersToExamViewModel);
+        }
+
+        // GET: MarkExam
+        [Authorize(Roles = "Admin")]
+        public ActionResult MarkExam(string examIdentificator)
+        {
+            if (string.IsNullOrWhiteSpace(examIdentificator))
+            {
+                return RedirectToAction("BlankMenu", "Certificates");
+            }
+
+            var Exam = _context.examRepository.GetExamById(examIdentificator);
+
+            if (Exam.DateOfStart < DateTime.Now)
+            {
+                var UsersEnrolledInExam = _context.userRepository.GetUsersById(Exam.EnrolledUsers);
+
+                List<MarkUserViewModel> ListOfUsers = new List<MarkUserViewModel>();
+
+                if (UsersEnrolledInExam.Count != 0)
+                {
+                    ListOfUsers = _mapper.Map<List<MarkUserViewModel>>(UsersEnrolledInExam);
+                }
+
+                MarkExamViewModel markExamViewModel = _mapper.Map<MarkExamViewModel>(Exam);
+
+                markExamViewModel.Users = ListOfUsers;
+
+                return View(markExamViewModel);
+            }
+
+            return RedirectToAction("ExamDetails", new { examIdentificator = examIdentificator });
+        }
+
+        // POST: MarkExam
+        [HttpPost]
+        [Authorize(Roles = "Admin")]
+        public ActionResult MarkExam(MarkExamViewModel markedExamViewModel)
+        {
+            if (ModelState.IsValid)
+            {
+                if (markedExamViewModel.DateOfStart < DateTime.Now)
+                {
+                    foreach (var user in markedExamViewModel.Users)
+                    {
+                        ExamResult userExamResult = _mapper.Map<ExamResult>(user);
+                        userExamResult.ExamResultIdentificator = _keyGenerator.GenerateNewId();
+
+                        _context.examResultRepository.AddExamResult(userExamResult);
+                    }
+                }
+
+                return RedirectToAction("ExamDetails", new { examIdentificator = markedExamViewModel.ExamIdentificator, message = "Dokonano oceny egzaminu" });
+            }
+
+            return View(markedExamViewModel);
         }
     }
 }

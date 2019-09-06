@@ -2,7 +2,7 @@
 
 namespace Certification_System.DTOViewModels
 {
-    public class DisplayUserWithExamResults
+    public class MarkUserViewModel
     {
         public string UserIdentificator { get; set; }
 
@@ -15,15 +15,11 @@ namespace Certification_System.DTOViewModels
         [Display(Name = "Nazwisko")]
         public string LastName { get; set; }
 
-        [Display(Name = "Został oceniony")]
-        public bool HasExamResult { get; set; }
-
+        [Required(ErrorMessage = "Pole \"{0}\" jest wymagane.")]
         [Display(Name = "Liczba uzyskanych punktów")]
         public double PointsEarned { get; set; }
 
-        [Display(Name = "Maksymalna liczba punktów")]
-        public double MaxAmountOfPointsToEarn { get; set; }
-
+        [Required(ErrorMessage = "Pole \"{0}\" jest wymagane.")]
         [Display(Name = "Procentowy wynik z egzaminu")]
         public double PercentageOfResult { get; set; }
 
