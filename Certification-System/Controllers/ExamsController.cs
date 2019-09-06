@@ -872,6 +872,8 @@ namespace Certification_System.Controllers
 
                         _context.examResultRepository.AddExamResult(userExamResult);
                     }
+
+                    _context.examRepository.SetMaxAmountOfPointsToEarn(markedExamViewModel.ExamIdentificator, markedExamViewModel.MaxAmountOfPointsToEarn);
                 }
 
                 return RedirectToAction("ExamDetails", new { examIdentificator = markedExamViewModel.ExamIdentificator, message = "Dokonano oceny egzaminu" });

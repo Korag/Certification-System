@@ -193,5 +193,13 @@ namespace Certification_System.Repository
 
             var result = GetExams().UpdateOne(filter, update);
         }
+
+        public void SetMaxAmountOfPointsToEarn(string examIdentificator, double maxAmountOfPointsToEarn)
+        {
+            var filter = Builders<Exam>.Filter.Where(z => z.ExamIdentificator == examIdentificator);
+            var update = Builders<Exam>.Update.Set(x => x.MaxAmountOfPointsToEarn, maxAmountOfPointsToEarn);
+
+            var result = GetExams().UpdateOne(filter, update);
+        }
     }
 }

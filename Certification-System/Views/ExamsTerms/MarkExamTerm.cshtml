@@ -1,0 +1,117 @@
+﻿@model Certification_System.DTOViewModels.MarkExamTermViewModel
+
+@{
+    ViewData["Title"] = "MarkExamTerm";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+<h2>Ocenianie tury egzaminu</h2>
+<hr />
+
+<form asp-action="MarkExamTerm">
+    <div>
+        <h2>Informacje o turze egzaminu</h2>
+
+        <div class="col-md-8 col-xl-6 col-lg-6 col-sm-12 col-xs-10 m-auto p-3 shadow p-3 mb-5 bg-light rounded border border-primary rounded-bottom" style="opacity:0.90">
+
+            <input asp-for="ExamTerm.ExamTermIdentificator" class="form-control col-12" hidden />
+            <input asp-for="ExamTerm.Exam.ExamIdentificator" class="form-control col-12" hidden />
+
+            <div class="form-group">
+                <label asp-for="ExamTerm.Exam.ExamIndexer" class="control-label"></label>
+                <input asp-for="ExamTerm.Exam.ExamIndexer" class="form-control col-12" disabled />
+            </div>
+
+            <div class="form-group">
+                <label asp-for="ExamTerm.Exam.Name" class="control-label"></label>
+                <input asp-for="ExamTerm.Exam.Name" class="form-control col-12" disabled />
+            </div>
+
+            <div class="form-group">
+                <label asp-for="ExamTerm.Exam.OrdinalNumber" class="control-label"></label>
+                <input asp-for="ExamTerm.Exam.OrdinalNumber" class="form-control col-12" disabled />
+            </div>
+
+            <div class="form-group">
+                <label asp-for="ExamTerm.DateOfStart" class="control-label"></label>
+                <input asp-for="ExamTerm.DateOfStart" class="form-control col-12" disabled />
+            </div>
+
+            <div class="form-group">
+                <label asp-for="ExamTerm.DateOfStart" class="control-label"></label>
+                <input asp-for="ExamTerm.DateOfStart" class="form-control col-12" disabled />
+            </div>
+
+            <div class="form-group">
+                <label asp-for="ExamTerm.DateOfStart" class="control-label"></label>
+                <input asp-for="ExamTerm.DateOfStart" class="form-control col-12" disabled />
+            </div>
+
+            <div class="form-group">
+                <label asp-for="ExamTerm.DateOfEnd" class="control-label"></label>
+                <input asp-for="ExamTerm.DateOfEnd" class="form-control col-12" disabled />
+            </div>
+
+            <div class="form-group">
+                <label asp-for="ExamTerm.DurationDays" class="control-label"></label>
+                <input asp-for="ExamTerm.DurationDays" class="form-control col-12" disabled />
+            </div>
+
+            <div class="form-group">
+                <label asp-for="ExamTerm.DurationMinutes" class="control-label"></label>
+                <input asp-for="ExamTerm.DurationMinutes" class="form-control col-12" disabled />
+            </div>
+
+            <div class="form-group">
+                <label asp-for="ExamTerm.UsersQuantity" class="control-label"></label>
+                <input asp-for="ExamTerm.UsersQuantity" class="form-control col-12" disabled />
+            </div>
+
+            <div class="form-group">
+                <label asp-for="ExamTerm.UsersLimit" class="control-label"></label>
+                <input asp-for="ExamTerm.UsersLimit" class="form-control col-12" disabled />
+            </div>
+
+            <div class="form-group">
+                <label asp-for="ExamTerm.Examiners" class="control-label col-12 p-0"></label>
+                <div>
+                    <ul>
+                        @foreach (var examiner in Model.ExamTerm.Examiners)
+                        {
+                            <li>examiner.FirstName examiner.LastName</li>
+                        }
+                    </ul>
+                </div>
+            </div>
+        </div>
+
+    </div>
+
+    <h2 class="mt-4 mb-4">Formularz oceny</h2>
+
+    <div class="form-group">
+        <label asp-for="MaxAmountOfPointsToEarn" class="control-label"></label>
+        <input asp-for="MaxAmountOfPointsToEarn" class="form-control col-12" />
+    </div>
+
+    @if (Model.Users.Count != 0)
+    {
+        @await Component.InvokeAsync("MarkExamTermDataTable", new { userViewModel = Model.Users, tableIdentificator = "listUsers" })
+
+        <div>
+            <div class="row justify-content-center">
+                <input type="submit" value="Oceń turę egzaminu" class="btn btn-danger" />
+            </div>
+        </div>
+    }
+    else
+    {
+        <div class="mt-4 mb-4 alert alert-warning">Brak zapisanych użytkowników</div>
+    }
+
+</form>
+
+@section Scripts {
+    @{await Html.RenderPartialAsync("_ValidationScriptsPartial");}
+    @{await Html.RenderPartialAsync("_DataTableBasicScript", "listUsers");}
+}

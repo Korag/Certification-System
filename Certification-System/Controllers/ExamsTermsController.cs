@@ -413,5 +413,69 @@ namespace Certification_System.Controllers
 
             return View(addUsersToExamTermViewModel);
         }
+
+        // GET: MarkExamTerm
+        [Authorize(Roles = "Admin")]
+        public ActionResult MarkExamTerm(string examTermIdentificator)
+        {
+            if (string.IsNullOrWhiteSpace(examTermIdentificator))
+            {
+                return RedirectToAction("BlankMenu", "Certificates");
+            }
+
+            var Exam = _context.examRepository.GetExamByExamTermId(examTermIdentificator);
+            var ExamTerm = _context.examTermRepository.GetExamTermById(examTermIdentificator);
+
+            if (Exam.DateOfStart < DateTime.Now)
+            {
+                var UsersEnrolledInExam = _context.userRepository.GetUsersById(Exam.EnrolledUsers);
+
+                List<MarkUserViewModel> ListOfUsers = new List<MarkUserViewModel>();
+
+                if (UsersEnrolledInExam.Count != 0)
+                {
+                    ListOfUsers = _mapper.Map<List<MarkUserViewModel>>(UsersEnrolledInExam);
+                }
+
+                MarkExamTermViewModel markExamTermViewModel = new MarkExamTermViewModel();
+
+                markExamTermViewModel.ExamTerm = _mapper.Map<DisplayExamTermViewModel>(ExamTerm);
+                markExamTermViewModel.ExamTerm.Exam = _mapper.Map<DisplayCrucialDataExamViewModel>(Exam);
+
+                markExamTermViewModel.Users = ListOfUsers;
+
+                return View(markExamTermViewModel);
+            }
+
+            return RedirectToAction("ExamTermDetails", new { examTermIdentificator = examTermIdentificator });
+        }
+
+        // POST: MarkExamTerm
+        [HttpPost]
+        [Authorize(Roles = "Admin")]
+        public ActionResult MarkExamTerm(MarkExamTermViewModel markedExamTermViewModel)
+        {
+            if (ModelState.IsValid)
+            {
+                if (markedExamTermViewModel.ExamTerm.DateOfStart < DateTime.Now)
+                {
+                    foreach (var user in markedExamTermViewModel.Users)
+                    {
+                        ExamResult userExamResult = _mapper.Map<ExamResult>(user);
+                        userExamResult.ExamResultIdentificator = _keyGenerator.GenerateNewId();
+
+                        userExamResult.ExamTerm = markedExamTermViewModel.ExamTerm.ExamTermIdentificator;
+
+                        _context.examResultRepository.AddExamResult(userExamResult);
+                    }
+
+                    _context.examRepository.SetMaxAmountOfPointsToEarn(markedExamTermViewModel.ExamTerm.Exam.ExamIdentificator, markedExamTermViewModel.MaxAmountOfPointsToEarn);
+                }
+
+                return RedirectToAction("ExamTermDetails", new { examTermIdentificator = markedExamTermViewModel.ExamTerm.ExamTermIdentificator, message = "Dokonano oceny tury egzaminu" });
+            }
+
+            return View(markedExamTermViewModel);
+        }
     }
 }

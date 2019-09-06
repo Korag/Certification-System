@@ -21,7 +21,7 @@ namespace Certification_System.DTOViewModels
         public DateTime DurationMinutes { get; set; }
 
         [Display(Name = "Liczba uczestników")]
-        public int UsersQuantitiy { get; set; }
+        public int UsersQuantity { get; set; }
 
         [Display(Name = "Limit uczestników")]
         public int UsersLimit { get; set; }
