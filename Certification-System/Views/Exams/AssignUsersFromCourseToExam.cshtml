@@ -76,9 +76,12 @@
         </div>
     </div>
 
-    <h2 class="mt-4 mb-4">Zapisy do egzaminu</h2>
+    <h2 class="mt-4 mb-4">Zapisy na egzamin</h2>
 
-    @*VacantSeats count with JQuery*@
+    <div class="form-group">
+        <label asp-for="VacantSeats" class="control-label"></label>
+        <input asp-for="VacantSeats" class="form-control col-12" disabled />
+    </div>
 
     @if (Model.CourseParticipants.Count != 0)
     {

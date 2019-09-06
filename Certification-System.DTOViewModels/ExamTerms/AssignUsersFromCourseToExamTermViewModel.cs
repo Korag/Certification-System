@@ -4,7 +4,7 @@ using System.ComponentModel.DataAnnotations;
 
 namespace Certification_System.DTOViewModels
 {
-    public class DisplayExamTermViewModel
+    public class AssignUsersFromCourseToExamTermViewModel
     {
         public string ExamTermIdentificator { get; set; }
 
@@ -26,10 +26,16 @@ namespace Certification_System.DTOViewModels
         [Display(Name = "Limit uczestników")]
         public int UsersLimit { get; set; }
 
+        [Display(Name = "Liczba wolnych miejsc")]
+        public int VacantSeats { get; set; }
+
         [Display(Name = "Egzamin")]
         public DisplayCrucialDataExamViewModel Exam { get; set; }
 
-        [Display(Name = "Egzaminatorzy")]
-        public ICollection<DisplayCrucialDataUserViewModel> Examiners { get; set; }
+        [Display(Name = "Lista użytkowników możliwych do dodania do egzaminu")]
+        public AddUsersFromCheckBoxViewModel[] UsersToAssignToExamTerm { get; set; }
+
+        [Display(Name = "Niezapisani na egzamin uczestnicy kursu")]
+        public ICollection<DisplayCrucialDataUserViewModel> CourseParticipants { get; set; }
     }
 }

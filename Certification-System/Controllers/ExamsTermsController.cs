@@ -342,5 +342,76 @@ namespace Certification_System.Controllers
 
             return RedirectToAction("DeleteUsersFromExamTerm", new { examTermIdentificator = deleteUsersFromExamTermViewModel.ExamTermIdentificator });
         }
+
+        // GET: AssignUsersFromCourseToExamTerm
+        [Authorize(Roles = "Admin")]
+        public ActionResult AssignUsersFromCourseToExamTerm(string examTermIdentificator)
+        {
+            if (string.IsNullOrWhiteSpace(examTermIdentificator))
+            {
+                return RedirectToAction("BlankMenu", "Certificates");
+            }
+
+            var ExamTerm = _context.examTermRepository.GetExamTermById(examTermIdentificator);
+
+            if (ExamTerm.DateOfStart > DateTime.Now)
+            {
+                var Exam = _context.examRepository.GetExamByExamTermId(examTermIdentificator);
+                var Course = _context.courseRepository.GetCourseByExamId(Exam.ExamIdentificator);
+
+                var UsersNotEnrolledInExamIdentificators = Course.EnrolledUsers.Where(z => !Exam.EnrolledUsers.Contains(z)).ToList();
+                var UsersNotEnrolledInExam = _context.userRepository.GetUsersById(UsersNotEnrolledInExamIdentificators);
+
+                List<DisplayCrucialDataUserViewModel> ListOfUsers = new List<DisplayCrucialDataUserViewModel>();
+
+                if (UsersNotEnrolledInExam.Count != 0)
+                {
+                    ListOfUsers = _mapper.Map<List<DisplayCrucialDataUserViewModel>>(UsersNotEnrolledInExam);
+                }
+
+                var VacantSeats = ExamTerm.UsersLimit - ExamTerm.EnrolledUsers.Count();
+
+                AssignUsersFromCourseToExamTermViewModel addUsersToExamTermViewModel = _mapper.Map<AssignUsersFromCourseToExamTermViewModel>(Exam);
+                addUsersToExamTermViewModel.CourseParticipants = ListOfUsers;
+                addUsersToExamTermViewModel.VacantSeats = VacantSeats;
+
+                addUsersToExamTermViewModel.UsersToAssignToExamTerm = _mapper.Map<AddUsersFromCheckBoxViewModel[]>(ListOfUsers);
+
+                return View(addUsersToExamTermViewModel);
+            }
+
+            return RedirectToAction("ExamTermDetails", new { examTermIdentificator = examTermIdentificator });
+        }
+
+        // POST: AssignUsersFromCourseToExamTerm
+        [HttpPost]
+        [Authorize(Roles = "Admin")]
+        public ActionResult AssignUsersFromCourseToExamTerm(AssignUsersFromCourseToExamTermViewModel addUsersToExamTermViewModel)
+        {
+            if (ModelState.IsValid)
+            {
+                if (addUsersToExamTermViewModel.DateOfStart > DateTime.Now)
+                {
+                    var Exam = _context.examRepository.GetExamByExamTermId(addUsersToExamTermViewModel.ExamTermIdentificator);
+
+                    if (addUsersToExamTermViewModel.UsersToAssignToExamTerm.Count() <= addUsersToExamTermViewModel.VacantSeats)
+                    {
+                        var UsersToAddToExamIdentificators = addUsersToExamTermViewModel.UsersToAssignToExamTerm.ToList().Where(z => z.IsToAssign == true).Select(z => z.UserIdentificator).ToList();
+
+                        _context.examRepository.AddUsersToExam(addUsersToExamTermViewModel.Exam.ExamIdentificator, UsersToAddToExamIdentificators);
+                        _context.examTermRepository.AddUsersToExamTerm(addUsersToExamTermViewModel.ExamTermIdentificator, UsersToAddToExamIdentificators);
+
+                        return RedirectToAction("ExamTermDetails", new { examTermIdentificator = addUsersToExamTermViewModel.ExamTermIdentificator, message = "Dodano grupę użytkowników do tury egzaminu" });
+                    }
+
+                    ModelState.AddModelError("", "Brak wystarczającej ilości wolnych miejsc");
+                    ModelState.AddModelError("", $"Do egzaminu można dodać maksymalnie {addUsersToExamTermViewModel.VacantSeats} użytkowników");
+                }
+
+                return RedirectToAction("ExamTermDetails", new { examTermIdentificator = addUsersToExamTermViewModel.ExamTermIdentificator });
+            }
+
+            return View(addUsersToExamTermViewModel);
+        }
     }
 }
