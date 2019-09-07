@@ -447,17 +447,31 @@ namespace Certification_System.Controllers
                 return RedirectToAction("BlankMenu", "Certificates");
             }
 
-            var Exam = _context.examRepository.GetExamByExamTermId(examTermIdentificator);
             var ExamTerm = _context.examTermRepository.GetExamTermById(examTermIdentificator);
 
-            if (Exam.DateOfStart < DateTime.Now)
+            if (ExamTerm.DateOfStart < DateTime.Now)
             {
+                var Exam = _context.examRepository.GetExamByExamTermId(examTermIdentificator);
                 var UsersEnrolledInExam = _context.userRepository.GetUsersById(Exam.EnrolledUsers);
+                var ExamResults = _context.examResultRepository.GetExamsResultsByExamTermId(examTermIdentificator);
 
                 List<MarkUserViewModel> ListOfUsers = new List<MarkUserViewModel>();
 
                 if (UsersEnrolledInExam.Count != 0)
                 {
+                    foreach (var user in UsersEnrolledInExam)
+                    {
+                        var singleUser = _mapper.Map<MarkUserViewModel>(user);
+
+                        var userExamResult = ExamResults.Where(z => z.User == user.Id);
+
+                        if (userExamResult != null)
+                        {
+                            singleUser = _mapper.Map<MarkUserViewModel>(userExamResult);
+                        }
+
+                        ListOfUsers.Add(singleUser);
+                    }
                     ListOfUsers = _mapper.Map<List<MarkUserViewModel>>(UsersEnrolledInExam);
                 }
 

@@ -278,6 +278,8 @@ namespace Certification_System.Services
 
             CreateMap<ExamResult, DisplayExamResultViewModel>()
                      .ForMember(dest => dest.User, opts => opts.Ignore());
+
+            CreateMap<ExamResult, MarkUserViewModel>();
             #endregion
 
             #region GivenCertificates

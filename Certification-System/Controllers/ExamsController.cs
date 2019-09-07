@@ -860,11 +860,25 @@ namespace Certification_System.Controllers
             if (Exam.DateOfStart < DateTime.Now)
             {
                 var UsersEnrolledInExam = _context.userRepository.GetUsersById(Exam.EnrolledUsers);
+                var ExamResults = _context.examResultRepository.GetExamsResultsById(Exam.ExamResults);
 
                 List<MarkUserViewModel> ListOfUsers = new List<MarkUserViewModel>();
 
                 if (UsersEnrolledInExam.Count != 0)
                 {
+                    foreach (var user in UsersEnrolledInExam)
+                    {
+                        var singleUser = _mapper.Map<MarkUserViewModel>(user);
+
+                        var userExamResult = ExamResults.Where(z => z.User == user.Id);
+
+                        if (userExamResult != null)
+                        {
+                            singleUser = _mapper.Map<MarkUserViewModel>(userExamResult);
+                        }
+
+                        ListOfUsers.Add(singleUser);
+                    }
                     ListOfUsers = _mapper.Map<List<MarkUserViewModel>>(UsersEnrolledInExam);
                 }
 
