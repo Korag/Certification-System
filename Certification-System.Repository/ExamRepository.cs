@@ -201,5 +201,13 @@ namespace Certification_System.Repository
 
             var result = GetExams().UpdateOne(filter, update);
         }
+
+        public ICollection<Exam> GetExamPeriods(string examIndexer)
+        {
+            var filter = Builders<Exam>.Filter.Where(z => z.ExamIndexer == examIndexer);
+            var resultListOfExams = GetExams().Find<Exam>(filter).ToList();
+
+            return resultListOfExams;
+        }
     }
 }

@@ -23,5 +23,6 @@ namespace Certification_System.RepositoryInterfaces
         void DeleteUsersFromExam(string examIdentificator, ICollection<string> usersIdentificators);
         void AddUsersToExam(string examIdentificator, ICollection<string> usersIdentificators);
         void SetMaxAmountOfPointsToEarn(string examIdentificator, double maxAmountOfPointsToEarn);
+        ICollection<Exam> GetExamPeriods(string examIndexer);
     }
 }

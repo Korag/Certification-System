@@ -769,26 +769,48 @@ namespace Certification_System.Controllers
             if (Exam.DateOfStart > DateTime.Now)
             {
                 var Course = _context.courseRepository.GetCourseByExamId(Exam.ExamIdentificator);
-
+             
                 var UsersNotEnrolledInExamIdentificators = Course.EnrolledUsers.Where(z => !Exam.EnrolledUsers.Contains(z)).ToList();
-                var UsersNotEnrolledInExam = _context.userRepository.GetUsersById(UsersNotEnrolledInExamIdentificators);
+
+                List<string> UsersWithPassedExamIdentificators = new List<string>();
+
+                if (Exam.OrdinalNumber != 1)
+                {
+                    var PreviousExamPeriods = _context.examRepository.GetExamPeriods(Exam.ExamIndexer);
+
+                    foreach (var examPeriod in PreviousExamPeriods)
+                    {
+                        var ExamResults = _context.examResultRepository.GetExamsResultsById(examPeriod.ExamResults);
+
+                        var UsersWithPassedExamInThatPeriod = ExamResults.Where(z => z.ExamPassed).Select(z => z.User).ToList();
+
+                        if (UsersWithPassedExamInThatPeriod.Count() != 0)
+                        {
+                            UsersWithPassedExamIdentificators.AddRange(UsersWithPassedExamInThatPeriod);
+                        }
+                    }
+                }
+        
+                var UsersNotEnrolledInWithoutPassedExamIdentificators = UsersNotEnrolledInExamIdentificators.Where(z => !UsersWithPassedExamIdentificators.Contains(z)).ToList();
+                var UsersNotEnrolledInWithoutPassedExam = _context.userRepository.GetUsersById(UsersNotEnrolledInWithoutPassedExamIdentificators);
 
                 List<DisplayCrucialDataUserViewModel> ListOfUsers = new List<DisplayCrucialDataUserViewModel>();
 
-                if (UsersNotEnrolledInExam.Count != 0)
+                if (UsersNotEnrolledInWithoutPassedExam.Count != 0)
                 {
-                    ListOfUsers = _mapper.Map<List<DisplayCrucialDataUserViewModel>>(UsersNotEnrolledInExam);
+                    ListOfUsers = _mapper.Map<List<DisplayCrucialDataUserViewModel>>(UsersNotEnrolledInWithoutPassedExam);
+
+                    var VacantSeats = Exam.UsersLimit - Exam.EnrolledUsers.Count();
+
+                    AssignUsersFromCourseToExamViewModel addUsersToExamViewModel = _mapper.Map<AssignUsersFromCourseToExamViewModel>(Exam);
+                    addUsersToExamViewModel.CourseParticipants = ListOfUsers;
+                    addUsersToExamViewModel.VacantSeats = VacantSeats;
+
+                    addUsersToExamViewModel.UsersToAssignToExam = _mapper.Map<AddUsersFromCheckBoxViewModel[]>(ListOfUsers);
+
+                    return View(addUsersToExamViewModel);
                 }
-
-                var VacantSeats = Exam.UsersLimit - Exam.EnrolledUsers.Count();
-
-                AssignUsersFromCourseToExamViewModel addUsersToExamViewModel = _mapper.Map<AssignUsersFromCourseToExamViewModel>(Exam);
-                addUsersToExamViewModel.CourseParticipants = ListOfUsers;
-                addUsersToExamViewModel.VacantSeats = VacantSeats;
-
-                addUsersToExamViewModel.UsersToAssignToExam = _mapper.Map<AddUsersFromCheckBoxViewModel[]>(ListOfUsers);
-
-                return View(addUsersToExamViewModel);
+                return RedirectToAction("ExamDetails", new { examIdentificator = examIdentificator, message = "Wszyscy nieposiadający zaliczonego egzaminu zostali już na niego zapisani" });
             }
 
             return RedirectToAction("ExamDetails", new { examIdentificator = examIdentificator });
