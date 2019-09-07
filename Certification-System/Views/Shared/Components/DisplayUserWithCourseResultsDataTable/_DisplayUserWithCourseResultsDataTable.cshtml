@@ -14,21 +14,6 @@
                     @Html.DisplayNameFor(model => model.Users.FirstOrDefault().LastName)
                 </th>
                 <th>
-                    @Html.DisplayNameFor(model => model.Users.FirstOrDefault().PointsEarned)
-                </th>
-                <th>
-                    @Html.DisplayNameFor(model => model.Users.FirstOrDefault().MaxAmountOfPointsToEarn)
-                </th>
-                <th>
-                    @Html.DisplayNameFor(model => model.Users.FirstOrDefault().PercentageOfResult)
-                </th>
-                <th>
-                    @Html.DisplayNameFor(model => model.Users.FirstOrDefault().ExamPassed)
-                </th>
-                <th>
-                    @Html.DisplayNameFor(model => model.Users.FirstOrDefault().ExamOrdinalNumber)
-                </th>
-                <th>
                     @Html.DisplayNameFor(model => model.Users.FirstOrDefault().QuantityOfPresenceOnMeetings)
                 </th>
                 <th>
@@ -37,6 +22,24 @@
                 <th>
                     @Html.DisplayNameFor(model => model.Users.FirstOrDefault().PercentageOfUserPresenceOnMeetings)
                 </th>
+                @for (int i = 0; i < Model.Users.FirstOrDefault().ExamsResults.Count(); i++)
+                {
+                    <th>
+                        EGZ. @i - @Html.DisplayNameFor(model => model.Users.FirstOrDefault().ExamsResults.FirstOrDefault().ExamOrdinalNumber)
+                    </th>
+                    <th>
+                        EGZ. @i - @Html.DisplayNameFor(model => model.Users.FirstOrDefault().ExamsResults.FirstOrDefault().PointsEarned)
+                    </th>
+                    <th>
+                        EGZ. @i - @Html.DisplayNameFor(model => model.Users.FirstOrDefault().ExamsResults.FirstOrDefault().MaxAmountOfPointsToEarn)
+                    </th>
+                    <th>
+                        EGZ. @i - @Html.DisplayNameFor(model => model.Users.FirstOrDefault().ExamsResults.FirstOrDefault().PercentageOfResult)
+                    </th>
+                    <th>
+                        EGZ. @i - @Html.DisplayNameFor(model => model.Users.FirstOrDefault().ExamsResults.FirstOrDefault().ExamPassed)
+                    </th>
+                }
                 <th>
                     Przyznać certyfikat za odbyty kurs ?
                 </th>
@@ -57,21 +60,6 @@
                         @Html.DisplayFor(model => model.Users.ElementAt(i).LastName)
                     </td>
                     <td>
-                        @Html.DisplayFor(model => model.Users.ElementAt(i).PointsEarned)
-                    </td>
-                    <td>
-                        @Html.DisplayFor(model => model.Users.ElementAt(i).MaxAmountOfPointsToEarn)
-                    </td>
-                    <td>
-                        @Html.DisplayFor(model => model.Users.ElementAt(i).PercentageOfResult) %
-                    </td>
-                    <td>
-                        @Html.DisplayFor(model => model.Users.ElementAt(i).ExamPassed)
-                    </td>
-                    <td>
-                        @Html.DisplayFor(model => model.Users.ElementAt(i).ExamOrdinalNumber)
-                    </td>
-                    <td>
                         @Html.DisplayFor(model => model.Users.ElementAt(i).QuantityOfPresenceOnMeetings)
                     </td>
                     <td>
@@ -80,6 +68,25 @@
                     <td>
                         @Html.DisplayFor(model => model.Users.ElementAt(i).PercentageOfUserPresenceOnMeetings) %
                     </td>
+
+                    @for (int j = 0; j < Model.Users.FirstOrDefault().ExamsResults.Count(); j++)
+                    {
+                        <td>
+                            @Html.DisplayFor(model => model.Users.ElementAt(i).ExamsResults.ElementAt(j).PointsEarned)
+                        </td>
+                        <td>
+                            @Html.DisplayFor(model => model.Users.ElementAt(i).ExamsResults.ElementAt(j).MaxAmountOfPointsToEarn)
+                        </td>
+                        <td>
+                            @Html.DisplayFor(model => model.Users.ElementAt(i).ExamsResults.ElementAt(j).PercentageOfResult) %
+                        </td>
+                        <td>
+                            @Html.DisplayFor(model => model.Users.ElementAt(i).ExamsResults.ElementAt(j).ExamPassed)
+                        </td>
+                        <td>
+                            @Html.DisplayFor(model => model.Users.ElementAt(i).ExamsResults.ElementAt(j).ExamOrdinalNumber)
+                        </td>
+                    }
                     <td>
                         <input type="checkbox" asp-for="@Model.DispensedGivenCertificates[i].GivenCertificateIsEarned" data-toggle="toggle" data-on="Przyznano" data-off="Nie przyznano" data-size="sm" />
                         <input type="hidden" asp-for="@Model.DispensedGivenCertificates[i].UserIdentificator" />

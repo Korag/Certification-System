@@ -1,4 +1,5 @@
-﻿using System.ComponentModel.DataAnnotations;
+﻿using System.Collections.Generic;
+using System.ComponentModel.DataAnnotations;
 
 namespace Certification_System.DTOViewModels
 {
@@ -15,20 +16,8 @@ namespace Certification_System.DTOViewModels
         [Display(Name = "Nazwisko")]
         public string LastName { get; set; }
 
-        [Display(Name = "Liczba uzyskanych punktów")]
-        public int PointsEarned { get; set; }
-
-        [Display(Name = "Maksymalna liczba punktów")]
-        public double MaxAmountOfPointsToEarn { get; set; }
-
-        [Display(Name = "Procentowy wynik z egzaminu")]
-        public double PercentageOfResult { get; set; }
-
-        [Display(Name = "Egzamin zaliczony")]
-        public bool ExamPassed { get; set; }
-
-        [Display(Name = "Termin egzaminu")]
-        public int ExamOrdinalNumber { get; set; }
+        [Display(Name = "Wyniki egzaminów")]
+        public ICollection<DisplayExamResultWithExamNumber> ExamsResults { get; set; }
 
         [Display(Name = "Ilość obecności")]
         public int QuantityOfPresenceOnMeetings { get; set; }

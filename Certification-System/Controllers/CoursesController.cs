@@ -647,19 +647,9 @@ namespace Certification_System.Controllers
             foreach (var user in enrolledUsers)
             {
                 DisplayUserWithCourseResultsViewModel singleUser = _mapper.Map<DisplayUserWithCourseResultsViewModel>(user);
+                singleUser.QuantityOfMeetings = meetings.Count();
+                singleUser.QuantityOfPresenceOnMeetings = meetings.Where(z => z.AttendanceList.Contains(user.Id)).Count();
 
-                var UserLastExam = exams.Where(z => z.EnrolledUsers.Contains(user.Id)).OrderByDescending(z => z.OrdinalNumber).FirstOrDefault();
-                var UserResultFromLastExam = examResults.Where(z => UserLastExam.ExamResults.Contains(z.ExamResultIdentificator) && user.Id == z.User).FirstOrDefault();
-
-                if (UserResultFromLastExam != null)
-                {
-                    singleUser = _mapper.Map<DisplayUserWithCourseResultsViewModel>(UserResultFromLastExam);
-                    singleUser.MaxAmountOfPointsToEarn = UserLastExam.MaxAmountOfPointsToEarn;
-                    singleUser.ExamOrdinalNumber = UserLastExam.OrdinalNumber;
-
-                    singleUser.QuantityOfMeetings = meetings.Count();
-                    singleUser.QuantityOfPresenceOnMeetings = meetings.Where(z => z.AttendanceList.Contains(user.Id)).Count();
-                }
                 try
                 {
                     double UserPresencePercentage = ((meetings.Where(z => z.AttendanceList.Contains(singleUser.UserIdentificator)).Count() / meetings.Count()) * 100);
@@ -671,6 +661,23 @@ namespace Certification_System.Controllers
                     singleUser.PercentageOfUserPresenceOnMeetings = 0.00;
                 }
 
+                var UserExams = exams.Where(z => z.EnrolledUsers.Contains(user.Id)).GroupBy(z => z.ExamIndexer).ToList();
+
+                for (int i = 0; i < UserExams.Count; i++)
+                { 
+                    var LastExamPeriod = UserExams[i].ToList().OrderByDescending(z => z.OrdinalNumber).FirstOrDefault();
+                    var LastUserResult = _context.examResultRepository.GetExamsResultsById(LastExamPeriod.ExamResults).ToList().Where(z=> z.User == user.Id).ToList();
+
+                    if (LastUserResult != null)
+                    {
+                        var singleExamResult = _mapper.Map<DisplayExamResultWithExamNumber>(LastUserResult);
+                        singleExamResult.MaxAmountOfPointsToEarn = LastExamPeriod.MaxAmountOfPointsToEarn;
+                        singleExamResult.ExamOrdinalNumber = LastExamPeriod.OrdinalNumber;
+
+                        singleUser.ExamsResults.Add(singleExamResult);
+                    }
+                }
+
                 ListOfUsers.Add(singleUser);
             }
 
@@ -679,3 +686,6 @@ namespace Certification_System.Controllers
         #endregion
     }
 }
+    
+
+    

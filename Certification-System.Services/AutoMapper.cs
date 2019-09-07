@@ -272,12 +272,12 @@ namespace Certification_System.Services
 
             CreateMap<ExamResult, DisplayUserWithExamResults>();
 
-            CreateMap<ExamResult, DisplayUserWithCourseResultsViewModel>();
-
             CreateMap<ExamResult, DisplayUserWithExamResults>();
 
             CreateMap<ExamResult, DisplayExamResultViewModel>()
                      .ForMember(dest => dest.User, opts => opts.Ignore());
+
+            CreateMap<ExamResult, DisplayExamResultWithExamNumber>();
 
             CreateMap<ExamResult, MarkUserViewModel>();
             #endregion
