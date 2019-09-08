@@ -110,6 +110,8 @@ namespace Certification_System.Services
                     .ForMember(dest => dest.AvailableCertificates, opts => opts.Ignore())
                     .ForMember(dest => dest.AllCourseParticipants, opts => opts.Ignore());
 
+            CreateMap<Course, DisplayCourseSummaryViewModel>();
+
             CreateMap<Course, DeleteUsersFromCourseViewModel>()
                      .ForMember(dest => dest.UsersToDeleteFromCourse, opts => opts.Ignore())
                      .ForMember(dest => dest.AllCourseParticipants, opts => opts.Ignore());

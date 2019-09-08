@@ -181,7 +181,7 @@ else
     {
         <a asp-action="DeleteUsersFromCourse" asp-route-courseIdentificator="@Model.Course.CourseIdentificator" asp-controller="Courses" class="btn btn-danger mt-1">Usuń użytkowników z kursu</a>
     }
- </div>
+</div>
 
 @if (Model.EnrolledUsers.Count != 0)
 {
@@ -200,3 +200,4 @@ else
     @{await Html.RenderPartialAsync("_DataTableBasicScript", "listExams");}
     @{await Html.RenderPartialAsync("_DataTableBasicScript", "listExaminers");}
 }
+DisplayUserWithCourseResultsDataTableViewComponent
