@@ -114,7 +114,9 @@ namespace Certification_System.Controllers
 
                 exam.DurationDays = (int)exam.DateOfEnd.Subtract(exam.DateOfStart).TotalDays;
                 exam.DurationMinutes = (int)exam.DateOfEnd.Subtract(exam.DateOfStart).TotalMinutes;
+
                 exam.OrdinalNumber = 1;
+                exam.UsersLimit = newExam.ExamTerms.Select(z => z.UsersLimit).Sum();
 
                 List<ExamTerm> examsTerms = new List<ExamTerm>();
 

@@ -29,7 +29,7 @@ namespace Certification_System.DTOViewModels
         [Required(ErrorMessage = "Pole \"{0}\" jest wymagane.")]
         public string SelectedUser { get; set; }
 
-        [Display(Name = "Szkolenia")]
+        [Display(Name = "Stopnie zawodowe")]
         public IList<SelectListItem> AvailableDegrees{ get; set; }
 
         [Required(ErrorMessage = "Pole \"{0}\" jest wymagane.")]
