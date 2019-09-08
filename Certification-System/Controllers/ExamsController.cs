@@ -118,6 +118,8 @@ namespace Certification_System.Controllers
                 exam.OrdinalNumber = 1;
                 exam.UsersLimit = newExam.ExamTerms.Select(z => z.UsersLimit).Sum();
 
+                exam.Examiners = newExam.ExamTerms.SelectMany(z => z.SelectedExaminers).Distinct().ToList();
+
                 List<ExamTerm> examsTerms = new List<ExamTerm>();
 
                 if (exam.ExamTerms.Count() != 0)
