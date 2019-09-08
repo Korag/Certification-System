@@ -51,7 +51,7 @@
                         <td>
                             <div class="dropdown p-0">
                                 <button class="btn btn-success dropdown-toggle" type="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">Operacje</button>
-                                <div class="dropdown-menu">
+                                <div class="dropdown-menu nohover">
                                     <a asp-action="GivenDegreeDetails" asp-route-givenDegreeIdentificator="@givenDegree.GivenDegreeIdentificator" asp-controller="GivenDegrees" class="btn btn-info w-100 mb-1">Szczegóły nadanego stopnia zawodowego</a>
                                     <a asp-action="UserDetails" asp-route-userIdentificator="@givenDegree.User.UserIdentificator" asp-controller="Users" class="btn btn-secondary w-100 mb-1">Szczegóły użytkownika</a>
                                     <a asp-action="EditGivenDegree" asp-route-givenDegreeIdentificator="@givenDegree.GivenDegreeIdentificator" asp-controller="GivenDegrees" class="btn btn-warning w-100">Edytuj stopień zawodowy</a>

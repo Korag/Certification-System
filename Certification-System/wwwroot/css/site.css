@@ -80,7 +80,7 @@ textarea {
     background-color: #000000;
 }
 
-.dropdown-menu a:hover {
+.dropdown-menu:not(.nohover) a:hover {
     background-color: #99ccff;
     color: #ffffff;
 }
@@ -219,3 +219,8 @@ ul {
 .modal-backdrop {
     z-index: 1010;
 }
+
+.bootstrap-datetimepicker-widget dropdown-menu {
+    overflow-y: no-display;
+}
+

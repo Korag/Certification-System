@@ -80,7 +80,7 @@
                         <td>
                             <div class="dropdown p-0">
                                 <button class="btn btn-success dropdown-toggle" type="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">Operacje</button>
-                                <div class="dropdown-menu">
+                                <div class="dropdown-menu nohover">
                                     <a asp-action="MeetingDetails" asp-route-meetingIdentificator="@meeting.MeetingIdentificator" asp-controller="Users" class="btn btn-info w-100 mb-1">Szczegóły spotkania</a>
                                     <a asp-action="EditMeeting" asp-route-meetingIdentificator="@meeting.MeetingIdentificator" asp-controller="Users" class="btn btn-warning w-100 mb-1">Edytuj spotkanie</a>
                                     <a asp-action="CheckUsersPresence" asp-route-meetingIdentificator="@meeting.MeetingIdentificator" asp-controller="Users" class="btn btn-primary w-100">Sprawdź obecność</a>

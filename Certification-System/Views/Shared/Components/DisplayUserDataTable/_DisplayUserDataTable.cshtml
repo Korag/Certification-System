@@ -78,7 +78,7 @@
                         <td>
                             <div class="dropdown p-0">
                                 <button class="btn btn-success dropdown-toggle" type="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">Operacje</button>
-                                <div class="dropdown-menu">
+                                <div class="dropdown-menu nohover">
                                     @if (user.Roles.Contains("ADMIN"))
                                     {<a asp-action="AccountDetails" asp-route-userIdentificator="@user.UserIdentificator" asp-controller="Users" class="btn btn-info w-100 mb-1">Szczegóły</a>}
 

@@ -99,7 +99,7 @@
                         <td>
                             <div class="dropdown p-0">
                                 <button class="btn btn-success dropdown-toggle" type="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">Operacje</button>
-                                <div class="dropdown-menu">
+                                <div class="dropdown-menu nohover">
                                     <a asp-action="UserDetails" asp-route-userIdentificator="@examResult.User.UserIdentificator" asp-controller="Users" class="btn btn-primary w-100 mb-1">Szczegóły użytkownika</a>
                                     <a asp-action="CourseDetails" asp-route-courseIdentificator="@examResult.Course.CourseIdentificator" asp-controller="Courses" class="btn btn-info w-100 mb-1">Szczegóły kursu</a>
                                     <a asp-action="ExamDetails" asp-route-examIdentificator="@examResult.Exam.ExamIdentificator" asp-controller="Exams" class="btn btn-secondary  w-100">Szczegóły egzaminu</a>

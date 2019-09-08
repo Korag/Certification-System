@@ -57,7 +57,7 @@
                         <td>
                             <div class="dropdown p-0">
                                 <button class="btn btn-success dropdown-toggle" type="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">Operacje</button>
-                                <div class="dropdown-menu">
+                                <div class="dropdown-menu nohover">
                                     <a asp-action="GivenCertificateDetails" asp-route-givenCertificateIdentificator="@givenCertificate.GivenCertificateIdentificator" asp-controller="GivenCertificates" class="btn btn-primary w-100 mb-1">Szczegóły nadanego certyfikatu</a>
                                     <a asp-action="UserDetails" asp-route-userIdentificator="@givenCertificate.User.UserIdentificator" asp-controller="Users" class="btn btn-info w-100 mb-1">Szczegóły użytkownika</a>
                                     <a asp-action="CourseDetails" asp-route-courseIdentificator="@givenCertificate.Course.CourseIdentificator" asp-controller="Courses" class="btn btn-secondary w-100 mb-1">Szczegóły kursu</a>
