@@ -453,7 +453,7 @@ namespace Certification_System.Controllers
             }
 
             usersAssignedToCourse.AvailableUsers = _context.userRepository.GetWorkersAsSelectList().ToList();
-            usersAssignedToCourse.AvailableCourses = _context.courseRepository.GetActiveCoursesAsSelectList().ToList();
+            usersAssignedToCourse.AvailableCourses = _context.courseRepository.GetActiveCoursesWithVacantSeatsAsSelectList().ToList();
 
             return View(usersAssignedToCourse);
         }

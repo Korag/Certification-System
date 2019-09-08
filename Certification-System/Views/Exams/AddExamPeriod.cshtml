@@ -16,7 +16,7 @@
             <div class="form-group">
                 <label asp-for="SelectedCourse" class="control-label"></label>
                 <div>
-                    <select asp-for="SelectedCourse" asp-items="@Model.AvailableCourses" data-style="btn-white" data-container="body" data-width="auto" data-header="Wybierz kurs" data-live-search="true" title="Nie wybrano żadnego elementu" class="form-control selectpicker show-tick w-100"> </select>
+                    <select asp-for="SelectedCourse" asp-items="@Model.AvailableCourses" data-style="btn-white" data-container="body" data-width="100%" data-size="auto" data-header="Wybierz kurs" data-live-search="true" title="Nie wybrano żadnego elementu" class="form-control selectpicker show-tick"> </select>
                     <div class="row justify-content-center">
                         <span asp-validation-for="SelectedCourse" class="text-danger"></span>
                     </div>
@@ -26,7 +26,7 @@
             <div class="form-group">
                 <label asp-for="SelectedExam" class="control-label"></label>
                 <div>
-                    <select asp-for="SelectedExam" asp-items="@Model.AvailableExams" data-style="btn-white" data-container="body" data-width="auto" data-header="Wybierz egzamin" data-live-search="true" title="Nie wybrano żadnego elementu" class="form-control selectpicker show-tick w-100"> </select>
+                    <select asp-for="SelectedExam" asp-items="@Model.AvailableExams" data-style="btn-white" data-container="body" data-width="100%" data-size="auto" data-header="Wybierz egzamin" data-live-search="true" title="Nie wybrano żadnego elementu" class="form-control selectpicker show-tick"> </select>
                     <div class="row justify-content-center">
                         <span asp-validation-for="SelectedExam" class="text-danger"></span>
                     </div>
@@ -76,7 +76,7 @@
             <div class="form-group">
                 <label asp-for="SelectedExaminers" class="control-label"></label>
                 <div>
-                    <select asp-for="SelectedExaminers" asp-items="@Model.AvailableExaminers" data-style="btn-white" data-container="body" data-width="auto" data-header="Wybierz kurs" data-live-search="true" title="Nie wybrano żadnego elementu" class="form-control selectpicker show-tick w-100"> </select>
+                    <select asp-for="SelectedExaminers" asp-items="@Model.AvailableExaminers" data-style="btn-white" data-container="body" data-width="100%" data-size="auto" data-header="Wybierz kurs" data-live-search="true" title="Nie wybrano żadnego elementu" class="form-control selectpicker show-tick"> </select>
                     <div class="row justify-content-center">
                         <span asp-validation-for="SelectedExaminers" class="text-danger"></span>
                     </div>

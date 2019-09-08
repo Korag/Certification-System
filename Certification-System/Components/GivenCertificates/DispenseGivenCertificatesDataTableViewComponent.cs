@@ -4,7 +4,7 @@ using System.Collections.Generic;
 
 namespace Certification_System.Components
 {
-    public class DispenseGivenCertificatesDataTableViewComponentViewComponent : ViewComponent
+    public class DispenseGivenCertificatesDataTableViewComponent : ViewComponent
     {
         public IViewComponentResult Invoke(List<DisplayUserWithCourseResultsViewModel> userViewModel, DispenseGivenCertificateCheckBoxViewModel[] givenCertificateViewModel, string tableIdentificator, int operationSet = 0)
         {

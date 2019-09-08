@@ -33,7 +33,7 @@
             <div class="form-group mt-4">
                 <label asp-for="ExamTermsQuantity" class="control-label"></label>
                 <div>
-                    <select asp-for="ExamTermsQuantity" data-style="btn-white" data-container="body" multiple data-max-options="1" data-width="auto" data-header="Wybierz liczbę tur" data-live-search="true" title="Nie wybrano żadnego elementu" class="form-control selectpicker show-tick w-100 rounded border border-secondary">
+                    <select asp-for="ExamTermsQuantity" data-style="btn-white" data-container="body" multiple data-max-options="1" data-width="100%" data-size="auto" data-header="Wybierz liczbę tur" data-live-search="true" title="Nie wybrano żadnego elementu" class="form-control selectpicker show-tick rounded border border-secondary">
                         @for (int i = 0; i < 10; i++)
                         {
                             <option>@i</option>
