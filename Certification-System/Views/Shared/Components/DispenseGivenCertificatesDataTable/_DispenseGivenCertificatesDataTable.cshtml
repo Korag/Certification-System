@@ -1,4 +1,4 @@
-﻿@model Certification_System.DTOViewModels.DisplayUserWithCourseResultsDataTableViewModel
+﻿@model Certification_System.DTOViewModels.DispenseGivenCertificatesDataTableViewModel
 
 <div class="col-12 table-responsive">
     <table id="@Model.Options.TableIdentificator" class="table table-striped table-bordered display" style="width: 100%;" role="grid">
@@ -22,7 +22,7 @@
                 <th>
                     @Html.DisplayNameFor(model => model.Users.FirstOrDefault().PercentageOfUserPresenceOnMeetings)
                 </th>
-                @for (int i = 0; i < Model.ExamsQuantity; i++)
+                @for (int i = 0; i < Model.Users.FirstOrDefault().ExamsResults.Count(); i++)
                 {
                     <th>
                         EGZ. @i - @Html.DisplayNameFor(model => model.Users.FirstOrDefault().ExamsResults.FirstOrDefault().ExamOrdinalNumber)
@@ -40,6 +40,9 @@
                         EGZ. @i - @Html.DisplayNameFor(model => model.Users.FirstOrDefault().ExamsResults.FirstOrDefault().ExamPassed)
                     </th>
                 }
+                <th>
+                    Przyznać certyfikat za odbyty kurs ?
+                </th>
             </tr>
         </thead>
         <tbody>
@@ -66,7 +69,7 @@
                         @Html.DisplayFor(model => model.Users.ElementAt(i).PercentageOfUserPresenceOnMeetings) %
                     </td>
 
-                    @for (int j = 0; j < Model.Users.ElementAt(i).ExamsResults.Count(); j++)
+                    @for (int j = 0; j < Model.Users.FirstOrDefault().ExamsResults.Count(); j++)
                     {
                         <td>
                             @Html.DisplayFor(model => model.Users.ElementAt(i).ExamsResults.ElementAt(j).PointsEarned)
@@ -84,6 +87,10 @@
                             @Html.DisplayFor(model => model.Users.ElementAt(i).ExamsResults.ElementAt(j).ExamOrdinalNumber)
                         </td>
                     }
+                    <td>
+                        <input type="checkbox" asp-for="@Model.DispensedGivenCertificates[i].GivenCertificateIsEarned" data-toggle="toggle" data-on="Przyznano" data-off="Nie przyznano" data-size="sm" />
+                        <input type="hidden" asp-for="@Model.DispensedGivenCertificates[i].UserIdentificator" />
+                    </td>
                 </tr>
             }
         </tbody>

@@ -2,10 +2,10 @@
 
 namespace Certification_System.DTOViewModels
 {
-    public class DisplayUserWithCourseResultsDataTableViewModel
+    public class DispenseGivenCertificatesDataTableViewModel
     {
         public ICollection<DisplayUserWithCourseResultsViewModel> Users { get; set; }
-        public int ExamsQuantity { get; set; }
+        public DispenseGivenCertificateCheckBoxViewModel[] DispensedGivenCertificates { get; set; }
         public DataTableOptionsViewModel Options { get; set; }
     }
 }
