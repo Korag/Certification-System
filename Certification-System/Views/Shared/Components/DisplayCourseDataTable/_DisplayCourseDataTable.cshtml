@@ -48,108 +48,102 @@
         <tbody>
             @foreach (var course in Model.Courses)
             {
-            <tr>
-                <td>
-                    @Html.DisplayFor(modelItem => course.CourseIndexer)
-                </td>
-                <td>
-                    @Html.DisplayFor(modelItem => course.Name)
-                </td>
-                <td>
-                    @Html.DisplayFor(modelItem => course.Description)
-                </td>
-                <td>
-                    @Html.DisplayFor(modelItem => course.DateOfStart)
-                </td>
-                <td>
-                    @Html.DisplayFor(modelItem => course.DateOfEnd)
-                </td>
-                <td>
-                    @Html.DisplayFor(modelItem => course.EnrolledUsersLimit)
-                </td>
-                <td>
-                    @Html.DisplayFor(modelItem => course.EnrolledUsersQuantity)
-                </td>
-                <td>
-                    <input type="checkbox" asp-for="@course.ExamIsRequired" class="form-control col-12" data-toggle="toggle" data-on="Tak" data-off="Nie" data-size="sm" disabled />
-                </td>
-                <td>
-                    @if (course.CourseEnded == true)
-                    {
-                        <p hidden>1</p>
-                    }
-                    else
-                    {
-                        <p hidden>0</p>
-                    }
-                    <input type="checkbox" asp-for="@course.CourseEnded" data-toggle="toggle" data-on="Tak" data-off="Nie" data-size="sm" disabled />
-                </td>
-                <td>
-                    @Html.DisplayFor(modelItem => course.CourseLength)
-                </td>
-                <td>
-                    <ul>
-                        @foreach (var branch in course.Branches)
+                <tr>
+                    <td>
+                        @Html.DisplayFor(modelItem => course.CourseIndexer)
+                    </td>
+                    <td>
+                        @Html.DisplayFor(modelItem => course.Name)
+                    </td>
+                    <td>
+                        @Html.DisplayFor(modelItem => course.Description)
+                    </td>
+                    <td>
+                        @Html.DisplayFor(modelItem => course.DateOfStart)
+                    </td>
+                    <td>
+                        @Html.DisplayFor(modelItem => course.DateOfEnd)
+                    </td>
+                    <td>
+                        @Html.DisplayFor(modelItem => course.EnrolledUsersLimit)
+                    </td>
+                    <td>
+                        @Html.DisplayFor(modelItem => course.EnrolledUsersQuantity)
+                    </td>
+                    <td>
+                        <input type="checkbox" asp-for="@course.ExamIsRequired" class="form-control col-12" data-toggle="toggle" data-on="Tak" data-off="Nie" data-size="sm" disabled />
+                    </td>
+                    <td>
+                        @if (course.CourseEnded == true)
                         {
-                            <li>@branch</li>
+                            <p hidden>1</p>
                         }
-                    </ul>
-                </td>
-                @if (Model.Options.OperationSet == 1)
-                {
-                    <td>
-                        <a asp-action="CourseDetails" asp-route-courseIdentificator="@course.CourseIdentificator" asp-controller="Courses" class="btn btn-info m-1">Szczegóły</a>
+                        else
+                        {
+                            <p hidden>0</p>
+                        }
+                        <input type="checkbox" asp-for="@course.CourseEnded" data-toggle="toggle" data-on="Tak" data-off="Nie" data-size="sm" disabled />
                     </td>
-                }
-                @if (Model.Options.OperationSet == 2)
-                {
                     <td>
-                        <div class="dropdown p-0">
-                            <button class="btn btn-success dropdown-toggle" type="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">Operacje</button>
-                            <div class="dropdown-menu nohover">
-                                <a asp-action="CourseDetails" asp-route-courseIdentificator="@course.CourseIdentificator" asp-controller="Courses" class="btn btn-info w-100 mb-1">Szczegóły</a>
-                                <a asp-action="EditCourseHub" asp-route-courseIdentificator="@course.CourseIdentificator" asp-controller="Courses" class="btn btn-warning w-100">Edytuj</a>
+                        @Html.DisplayFor(modelItem => course.CourseLength)
+                    </td>
+                    <td>
+                        <ul>
+                            @foreach (var branch in course.Branches)
+                            {
+                                <li>@branch</li>
+                            }
+                        </ul>
+                    </td>
+                    @if (Model.Options.OperationSet == 1)
+                    {
+                        <td>
+                            <a asp-action="CourseDetails" asp-route-courseIdentificator="@course.CourseIdentificator" asp-controller="Courses" class="btn btn-info m-1">Szczegóły</a>
+                        </td>
+                    }
+                    @if (Model.Options.OperationSet == 2)
+                    {
+                        <td>
+                            <div class="dropdown p-0">
+                                <button class="btn btn-success dropdown-toggle" type="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">Operacje</button>
+                                <div class="dropdown-menu nohover">
+                                    <a asp-action="CourseDetails" asp-route-courseIdentificator="@course.CourseIdentificator" asp-controller="Courses" class="btn btn-info w-100 mb-1">Szczegóły</a>
+                                    <a asp-action="EditCourseHub" asp-route-courseIdentificator="@course.CourseIdentificator" asp-controller="Courses" class="btn btn-warning w-100">Edytuj</a>
+                                </div>
                             </div>
-                        </div>
-                    </td>
-                }
-                @if (Model.Options.OperationSet == 3)
-                {
-                    <td>
-                        <div class="dropdown p-0">
-                            <button class="btn btn-success dropdown-toggle" type="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">Operacje</button>
-                            <div class="dropdown-menu nohover">
-                                <a asp-action="CourseDetails" asp-route-courseIdentificator="@course.CourseIdentificator" asp-controller="Courses" class="btn btn-info w-100 mb-1">Szczegóły</a>
-                                <a asp-action="EditCourseHub" asp-route-courseIdentificator="@course.CourseIdentificator" asp-controller="Courses" class="btn btn-warning w-100">Edytuj</a>
-                                @if (!course.CourseEnded && !String.IsNullOrWhiteSpace(Model.UserIdentificator))
-                                {
-                                    <form asp-action="DeleteUsersFromCourse" asp-controller="Courses">
-                                        <input value="@Model.UserIdentificator" name="UsersToDeleteFromCourse[0].UserIdentificator" class="form-control col-12" hidden />
-                                        <input value="true" name="UsersToDeleteFromCourse[0].IsToDelete" class="form-control col-12" hidden />
+                        </td>
+                    }
+                    @if (Model.Options.OperationSet == 3)
+                    {
+                        <td>
+                            <div class="dropdown p-0">
+                                <button class="btn btn-success dropdown-toggle" type="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">Operacje</button>
+                                <div class="dropdown-menu nohover">
+                                    <a asp-action="CourseDetails" asp-route-courseIdentificator="@course.CourseIdentificator" asp-controller="Courses" class="btn btn-info w-100 mb-1">Szczegóły</a>
+                                    <a asp-action="EditCourseHub" asp-route-courseIdentificator="@course.CourseIdentificator" asp-controller="Courses" class="btn btn-warning w-100">Edytuj</a>
+                                    @if (!course.CourseEnded && !String.IsNullOrWhiteSpace(Model.UserIdentificator))
+                                    {
+                                        <form asp-action="DeleteUsersFromCourse" asp-controller="Courses">
+                                            <input value="@Model.UserIdentificator" name="UsersToDeleteFromCourse[0].UserIdentificator" class="form-control col-12" hidden />
+                                            <input value="true" name="UsersToDeleteFromCourse[0].IsToDelete" class="form-control col-12" hidden />
 
-                                        <input value="@course.CourseIdentificator" name="CourseIdentificator" class="form-control col-12" hidden />
-                                        <input type="submit" value="Usuń użytkownika z kursu" class="btn btn-danger w-100 mt-1" />
-                                    </form>
+                                            <input value="@course.CourseIdentificator" name="CourseIdentificator" class="form-control col-12" hidden />
+                                            <input type="submit" value="Usuń użytkownika z kursu" class="btn btn-danger w-100 mt-1" />
+                                        </form>
 
-                                    @*<form asp-action="DeleteUserFromCourse" asp-controller="Courses">
-                                <input value="@Model.UserIdentificator" name="usersIdentificators" class="form-control col-12" hidden />
-                                <input value="@course.CourseIdentificator" name="courseIdentificator" class="form-control col-12" hidden />
-                                <input type="submit" value="Usuń użytkownika z kursu" class="btn btn-danger w-100" />
-                            </form>*@
+                                        @*<form asp-action="DeleteUserFromCourse" asp-controller="Courses">
+                                                <input value="@Model.UserIdentificator" name="usersIdentificators" class="form-control col-12" hidden />
+                                                <input value="@course.CourseIdentificator" name="courseIdentificator" class="form-control col-12" hidden />
+                                                <input type="submit" value="Usuń użytkownika z kursu" class="btn btn-danger w-100" />
+                                            </form>*@
 
-                                    @*<a asp-action="DeleteUserFromCourse" asp-route-userIdentificator="@Model.UserIdentificator" asp-route-courseIdentificator="@course.CourseIdentificator" asp-controller="Courses" class="btn btn-danger w-100">Usuń użytkownika z kursu</a>*@
-                                }
+                                        @*<a asp-action="DeleteUserFromCourse" asp-route-userIdentificator="@Model.UserIdentificator" asp-route-courseIdentificator="@course.CourseIdentificator" asp-controller="Courses" class="btn btn-danger w-100">Usuń użytkownika z kursu</a>*@
+                                    }
+                                </div>
                             </div>
-                        </div>
-                    </td>
-                }
-                @if (Model.Options.OperationSet == 4)
-                {
-                    <td>
-                        <a asp-action="InstructorCourseDetails" asp-route-courseIdentificator="@course.CourseIdentificator" asp-controller="Courses" class="btn btn-info m-1">Szczegóły</a>
-                    </td>
-                }
-            </tr>
+                        </td>
+                    }
+                </tr>
             }
         </tbody>
     </table>
