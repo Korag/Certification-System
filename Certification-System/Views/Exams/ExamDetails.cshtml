@@ -91,7 +91,7 @@
 
         </div>
     </form>
-</div>  
+</div>
 
 <h2 class="mt-4 mb-4">Kurs w ramach którego odbywa się egzamin</h2>
 
@@ -134,7 +134,8 @@ else
 
 @if (Model.EnrolledUsers.Count != 0)
 {
-    @await Component.InvokeAsync("DisplayUserWithExamResultsDataTable", new { userViewModel = Model.EnrolledUsers, tableIdentificator = "listUsers", operationSet = 1 })
+    //@await Component.InvokeAsync("DisplayUserWithExamResultsDataTable", new { userViewModel = Model.EnrolledUsers, tableIdentificator = "listUsers", operationSet = 1 })
+    @await Component.InvokeAsync("DisplayCrucialDataWithContactUserDataTable", new { userViewModel = Model.EnrolledUsers, tableIdentificator = "listUsers", operationSet = 3 })
 }
 else
 {

@@ -58,6 +58,12 @@
                         </div>
                     </td>
                 }
+                @if (Model.Options.OperationSet == 3)
+                {
+                    <td>
+                        <a asp-action="UserDetails" asp-route-userIdentificator="@user.UserIdentificator" asp-controller="Users" class="btn btn-info">Szczegóły</a>
+                    </td>
+                }
             </tr>
             }
         </tbody>

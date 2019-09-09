@@ -50,7 +50,10 @@ namespace Certification_System.DTOViewModels
         [Display(Name = "Egzaminatorzy")]
         public ICollection<DisplayCrucialDataWithContactUserViewModel> Examiners { get; set; }
 
+        //[Display(Name = "Użytkownicy")]
+        //public ICollection<DisplayUserWithExamResults> EnrolledUsers { get; set; }
+
         [Display(Name = "Użytkownicy")]
-        public ICollection<DisplayUserWithExamResults> EnrolledUsers { get; set; }
+        public ICollection<DisplayCrucialDataWithContactUserViewModel> EnrolledUsers { get; set; }
     }
 }

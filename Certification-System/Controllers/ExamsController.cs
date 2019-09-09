@@ -330,39 +330,43 @@ namespace Certification_System.Controllers
 
             List<DisplayExamTermViewModel> ListOfExamTerms = _mapper.Map<List<DisplayExamTermViewModel>>(ExamTerms);
 
-            List<string> ExaminersIdentificators = Exam.Examiners.ToList();
-            List<string> UsersIdentificators = Exam.EnrolledUsers.ToList();
+            //List<string> ExaminersIdentificators = Exam.Examiners.ToList();
+            //List<string> UsersIdentificators = Exam.EnrolledUsers.ToList();
 
-            foreach (var examTerm in ExamTerms)
-            {
-                ExaminersIdentificators.AddRange(examTerm.Examiners);
-                UsersIdentificators.AddRange(examTerm.EnrolledUsers);
-            }
-            ExaminersIdentificators.Distinct();
-            UsersIdentificators.Distinct();
+            //foreach (var examTerm in ExamTerms)
+            //{
+            //    ExaminersIdentificators.AddRange(examTerm.Examiners);
+            //    UsersIdentificators.AddRange(examTerm.EnrolledUsers);
+            //}
+            //ExaminersIdentificators.Distinct();
+            //UsersIdentificators.Distinct();
 
-            var Examiners = _context.userRepository.GetUsersById(ExaminersIdentificators);
+            //var Examiners = _context.userRepository.GetUsersById(ExaminersIdentificators);
+
+            var Examiners = _context.userRepository.GetUsersById(Exam.Examiners);
             List<DisplayCrucialDataWithContactUserViewModel> ListOfExaminers = _mapper.Map<List<DisplayCrucialDataWithContactUserViewModel>>(Examiners);
 
-            var Users = _context.userRepository.GetUsersById(UsersIdentificators);
-            List<DisplayUserWithExamResults> ListOfUsers = new List<DisplayUserWithExamResults>();
+            //var Users = _context.userRepository.GetUsersById(UsersIdentificators);
 
-            foreach (var user in Users)
-            {
-                var userExamResult = ExamResults.Where(z => z.User == user.Id).FirstOrDefault();
-                DisplayUserWithExamResults UserWithExamResult = new DisplayUserWithExamResults();
+            var Users = _context.userRepository.GetUsersById(Exam.EnrolledUsers);
+            List<DisplayCrucialDataWithContactUserViewModel> ListOfUsers = _mapper.Map<List<DisplayCrucialDataWithContactUserViewModel>>(Users);
 
-                if (userExamResult != null)
-                {
-                    UserWithExamResult = Mapper.Map<DisplayUserWithExamResults>(user);
-                    UserWithExamResult = _mapper.Map<DisplayUserWithExamResults>(userExamResult);
-                    UserWithExamResult.MaxAmountOfPointsToEarn = Exam.MaxAmountOfPointsToEarn;
-                }
-                else
-                {
-                    UserWithExamResult.HasExamResult = false;
-                }
-            }
+            //foreach (var user in Users)
+            //{
+            //    var userExamResult = ExamResults.Where(z => z.User == user.Id).FirstOrDefault();
+            //    DisplayUserWithExamResults UserWithExamResult = new DisplayUserWithExamResults();
+
+            //    if (userExamResult != null)
+            //    {
+            //        UserWithExamResult = Mapper.Map<DisplayUserWithExamResults>(user);
+            //        UserWithExamResult = _mapper.Map<DisplayUserWithExamResults>(userExamResult);
+            //        UserWithExamResult.MaxAmountOfPointsToEarn = Exam.MaxAmountOfPointsToEarn;
+            //    }
+            //    else
+            //    {
+            //        UserWithExamResult.HasExamResult = false;
+            //    }
+            //}
 
             var Course = _context.courseRepository.GetCourseByExamId(examIdentificator);
             DisplayCourseViewModel courseViewModel = _mapper.Map<DisplayCourseViewModel>(Course);
