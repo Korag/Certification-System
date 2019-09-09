@@ -276,8 +276,9 @@ namespace Certification_System.Controllers
 
             List<DisplayCompanyViewModel> ListOfCompanies = _mapper.Map<List<DisplayCompanyViewModel>>(Companies);
 
-            //todo: translate user roles
             UserDetailsViewModel UserDetails = _mapper.Map<UserDetailsViewModel>(User);
+            UserDetails.Roles = _context.userRepository.TranslateRoles(UserDetails.Roles);
+
             UserDetails.GivenCertificates = ListOfGivenCertificates;
             UserDetails.GivenDegrees = ListOfGivenDegrees;
             UserDetails.Courses = ListOfCourses;
@@ -388,6 +389,8 @@ namespace Certification_System.Controllers
             }
 
             InstructorDetailsViewModel InstructorDetails = _mapper.Map<InstructorDetailsViewModel>(User);
+            InstructorDetails.Roles = _context.userRepository.TranslateRoles(InstructorDetails.Roles);
+
             InstructorDetails.Courses = ListOfCourses;
             InstructorDetails.Meetings = ListOfMeetings;
 
@@ -410,6 +413,7 @@ namespace Certification_System.Controllers
             }
 
             AccountDetailsViewModel AccountDetails = _mapper.Map<AccountDetailsViewModel>(User);
+            AccountDetails.Roles = _context.userRepository.TranslateRoles(AccountDetails.Roles);
 
             return View(AccountDetails);
         }
@@ -526,6 +530,8 @@ namespace Certification_System.Controllers
             }
 
             ExaminerDetailsViewModel ExaminerDetails = _mapper.Map<ExaminerDetailsViewModel>(User);
+            ExaminerDetails.Roles = _context.userRepository.TranslateRoles(ExaminerDetails.Roles);
+
             ExaminerDetails.Courses = ListOfCourses;
             ExaminerDetails.Exams = ListOfExams;
             ExaminerDetails.ExamsTerms = ListOfExamsTerms;
@@ -613,15 +619,17 @@ namespace Certification_System.Controllers
                 }
             }
 
-            InstructorExaminerDetailsViewModel ExaminerDetails = _mapper.Map<InstructorExaminerDetailsViewModel>(User);
-            ExaminerDetails.CoursesInstructor = ListOfCoursesInstructor;
-            ExaminerDetails.CoursesExaminer = ListOfCoursesExaminer;
-            ExaminerDetails.Meetings = ListOfMeetings;
+            InstructorExaminerDetailsViewModel InstructorExaminerDetails = _mapper.Map<InstructorExaminerDetailsViewModel>(User);
+            InstructorExaminerDetails.Roles = _context.userRepository.TranslateRoles(InstructorExaminerDetails.Roles);
 
-            ExaminerDetails.Exams = ListOfExams;
-            ExaminerDetails.ExamsTerms = ListOfExamsTerms;
+            InstructorExaminerDetails.CoursesInstructor = ListOfCoursesInstructor;
+            InstructorExaminerDetails.CoursesExaminer = ListOfCoursesExaminer;
+            InstructorExaminerDetails.Meetings = ListOfMeetings;
 
-            return View(ExaminerDetails);
+            InstructorExaminerDetails.Exams = ListOfExams;
+            InstructorExaminerDetails.ExamsTerms = ListOfExamsTerms;
+
+            return View(InstructorExaminerDetails);
         }
     }
 }
