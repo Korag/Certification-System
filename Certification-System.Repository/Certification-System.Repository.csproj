@@ -23,6 +23,7 @@
   <ItemGroup>
     <ProjectReference Include="..\AspNetCore.Identity.Mongo\AspNetCore.Identity.Mongo.csproj" />
     <ProjectReference Include="..\Certification-System.RepositoryInterfaces\Certification-System.RepositoryInterfaces.csproj" />
+    <ProjectReference Include="..\Certification-System.ServicesInterfaces\Certification-System.ServicesInterfaces.csproj" />
   </ItemGroup>
 
 </Project>

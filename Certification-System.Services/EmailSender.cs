@@ -91,12 +91,12 @@ al. Armii Krajowej 220
                 ReceiverName = receiverName,
                 ReceiverEmailAddress = receiverEmailAddress,
 
-                Subject = EmailMessageTypes.EmailMessageSubject[messageType],
-                Header = EmailMessageTypes.EmailMessageHeader[messageType],
-                BodyMessage = EmailMessageTypes.EmailMessageBody[messageType],
+                Subject = EmailMessageTypesDictionary.EmailMessageSubject[messageType],
+                Header = EmailMessageTypesDictionary.EmailMessageHeader[messageType],
+                BodyMessage = EmailMessageTypesDictionary.EmailMessageBody[messageType],
 
                 Link = link,
-                LinkText = EmailMessageTypes.EmailMessageLinkText[messageType],
+                LinkText = EmailMessageTypesDictionary.EmailMessageLinkText[messageType],
             };
 
             return emailMessage;

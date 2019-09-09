@@ -13,4 +13,8 @@
     <ProjectReference Include="..\AspNetCore.Identity.Mongo\AspNetCore.Identity.Mongo.csproj" />
   </ItemGroup>
 
+  <ItemGroup>
+    <Folder Include="NewFolder\" />
+  </ItemGroup>
+
 </Project>

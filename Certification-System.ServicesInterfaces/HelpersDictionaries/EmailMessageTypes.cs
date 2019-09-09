@@ -2,7 +2,7 @@
 
 namespace Certification_System.ServicesInterfaces.Models
 {
-    public static class EmailMessageTypes
+    public static class EmailMessageTypesDictionary
     {
         public static readonly Dictionary<string, string> EmailMessageBody = new Dictionary<string, string>
          {

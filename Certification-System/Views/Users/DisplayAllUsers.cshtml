@@ -15,13 +15,8 @@
 
 <div class="row justify-content-center form-group">
     <label class="control-label" id="labelWithSelect" style="margin-bottom:0px; margin-top:7px">Rola użytkownka:</label>
-    <select id="select" data-style="btn-light" data-container="body" data-width="50%" data-size="auto" data-header="Wybierz filtrowaną rolę użytkownika" data-live-search="true" title="Nie wybrano żadnego elementu" class="form-control selectpicker show-tick">
-        <option value="" selected>Brak filtra</option>
-        <option value="ADMIN">Admin</option>
-        <option value="WORKER">Worker</option>
-        <option value="INSTRUCTOR">Instructor</option>
-        <option value="COMPANY">Company</option>
-        <option value="EXAMINER">Examiner</option>
+    <select id="select" data-style="btn-light" asp-items="ViewBag.AvailableRoleFilters" data-container="body" data-width="50%" data-size="auto" data-header="Wybierz filtrowaną rolę użytkownika" data-live-search="true" class="form-control selectpicker show-tick">
+
     </select>
 </div>
 

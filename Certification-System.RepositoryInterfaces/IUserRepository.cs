@@ -9,6 +9,7 @@ namespace Certification_System.RepositoryInterfaces
         ICollection<CertificationPlatformUser> GetListOfUsers();
         ICollection<CertificationPlatformUser> GetListOfInstructors();
         ICollection<SelectListItem> GetRolesAsSelectList();
+        ICollection<SelectListItem> GetAvailableRoleFiltersAsSelectList();
         void UpdateUser(CertificationPlatformUser user);
         CertificationPlatformUser GetUserById(string userIdentificator);
         ICollection<CertificationPlatformUser> GetUsersById(ICollection<string> userIdentificators);
@@ -27,6 +28,7 @@ namespace Certification_System.RepositoryInterfaces
         ICollection<SelectListItem> GetWorkersAsSelectList();
         void AddUsersToCourse(string courseIdentificator, ICollection<string> usersIdentificators);
         void DeleteCourseFromUsersCollection(string courseIdentificator, ICollection<string> usersIdentificators);
+        ICollection<string> TranslateRoles(ICollection<string> userRoles);
         CertificationPlatformUser GetUserByEmail(string emailAddress);
     }
 }

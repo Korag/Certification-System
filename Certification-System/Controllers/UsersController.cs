@@ -10,7 +10,6 @@ using AspNetCore.Identity.Mongo.Model;
 using Certification_System.Repository.DAL;
 using AutoMapper;
 using Certification_System.ServicesInterfaces;
-using Certification_System.ServicesInterfaces.Models;
 using Certification_System.Extensions;
 
 namespace Certification_System.Controllers
@@ -50,9 +49,13 @@ namespace Certification_System.Controllers
             var Users = _context.userRepository.GetListOfUsers();
             List<DisplayUserViewModel> usersToDisplay = new List<DisplayUserViewModel>();
 
+            ViewBag.AvailableRoleFilters = _context.userRepository.GetAvailableRoleFiltersAsSelectList();
+
             foreach (var user in Users)
             {
                 DisplayUserViewModel singleUser = _mapper.Map<DisplayUserViewModel>(user);
+
+                singleUser.Roles = _context.userRepository.TranslateRoles(singleUser.Roles);
 
                 singleUser.CompanyRoleManager = _context.companyRepository.GetCompaniesById(user.CompanyRoleManager).Select(s => s.CompanyName).ToList();
                 singleUser.CompanyRoleWorker = _context.companyRepository.GetCompaniesById(user.CompanyRoleWorker).Select(s => s.CompanyName).ToList();
@@ -114,17 +117,15 @@ namespace Certification_System.Controllers
                 {
                     await _roleManager.CreateAsync(new CertificationPlatformUserRole(newUser.SelectedRole));
                 }
-
-                var addToRole = await _userManager.AddToRoleAsync(user, newUser.SelectedRole);
-
-                if (newUser.SelectedRole == "Company")
+            
+                if (newUser.SelectedRole != "Instructor&Examiner")
                 {
-                    if (!await _roleManager.RoleExistsAsync("Worker"))
-                    {
-                        await _roleManager.CreateAsync(new CertificationPlatformUserRole("Worker"));
-                    }
-
-                    var addToWorkerRoleWhenSelectedCompanyRole = await _userManager.AddToRoleAsync(user, "Worker");
+                    var addToRole = await _userManager.AddToRoleAsync(user, newUser.SelectedRole);
+                }
+                else
+                {
+                    var addToFirstRole = await _userManager.AddToRoleAsync(user, "Instructor");
+                    var addToSecondRole = await _userManager.AddToRoleAsync(user, "Examiner");
                 }
 
                 var result = await _userManager.CreateAsync(user);
@@ -134,7 +135,7 @@ namespace Certification_System.Controllers
                     var callbackUrl = Url.SetUserPasswordLink(user.Id, Request.Scheme);
 
                     var emailToSend = _emailSender.GenerateEmailMessage(user.Email, user.FirstName + " " + user.LastName, "setPassword", callbackUrl);
-                    _emailSender.SendEmailAsync(emailToSend);
+                    await _emailSender.SendEmailAsync(emailToSend);
 
                     return RedirectToAction("ConfirmationOfActionOnUser", "Users", new { userIdentificator = user.Id, TypeOfAction = "Add" });
                 }

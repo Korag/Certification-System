@@ -14,9 +14,20 @@
                             var val = $.fn.dataTable.util.escapeRegex(
                                 $(this).val()
                             );
-                            column
-                                .search(val ? val : '', true, false)
-                                .draw();
+
+                            if (val.includes("&")) {
+                                var valSplitted = val.split('&')
+
+                                column
+                                    .search(val ? valSplitted[0] : '', true, false)
+                                    .search(val ? valSplitted[1] : '', true, false)
+                                    .draw();  
+                            }
+                            else {
+                                column
+                                    .search(val ? val : '', true, false)
+                                    .draw();               
+                            }
                         });
                     });
                 }

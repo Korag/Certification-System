@@ -1,6 +1,7 @@
 ﻿using Certification_System.Entities;
 using Certification_System.Repository.Context;
 using Certification_System.RepositoryInterfaces;
+using Certification_System.ServicesInterfaces.Models;
 using Microsoft.AspNetCore.Mvc.Rendering;
 using MongoDB.Driver;
 using System.Collections.Generic;
@@ -27,7 +28,7 @@ namespace Certification_System.Repository
 
         public ICollection<CertificationPlatformUser> GetListOfInstructors()
         {
-            return  GetUsers().AsQueryable().Where(z => z.Roles.Contains("INSTRUCTOR")).ToList();
+            return GetUsers().AsQueryable().Where(z => z.Roles.Contains("INSTRUCTOR")).ToList();
         }
 
         public ICollection<CertificationPlatformUser> GetListOfWorkers()
@@ -45,37 +46,60 @@ namespace Certification_System.Repository
             return GetUsers().AsQueryable().ToList();
         }
 
+        public ICollection<string> TranslateRoles(ICollection<string> userRoles)
+        {
+            List<string> translatedRoles = new List<string>();
+
+            foreach (var role in userRoles)
+            {
+                translatedRoles.Add(UserRolesDictionary.TranslationDictionary[role]);
+            }
+
+            return translatedRoles;
+        }
+
         public ICollection<SelectListItem> GetRolesAsSelectList()
         {
-            List<SelectListItem> SelectList = new List<SelectListItem>
+            List<SelectListItem> SelectList = new List<SelectListItem>();
+
+            foreach (var dictionaryItem in UserRolesDictionary.TranslationDictionary)
             {
-                 new SelectListItem()
-                        {
-                            Text = "Pracownik",
-                            Value = "Worker"
-                        },
-                  new SelectListItem()
-                        {
-                            Text = "Pracodawca",
-                            Value = "Company"
-                            // text from ResourceFile with Localization
-                        },
-                   new SelectListItem()
-                        {
-                            Text = "Administrator",
-                            Value = "Admin"
-                        },
-                    new SelectListItem()
-                        {
-                            Text = "Instruktor",
-                            Value = "Instructor"
-                        },
-                  new SelectListItem()
-                        {
-                            Text = "Egzaminator",
-                            Value = "Examiner"
-                        },
+                SelectListItem item = new SelectListItem
+                {
+                    Text = dictionaryItem.Value,
+                    Value = dictionaryItem.Key
+                };
+
+                SelectList.Add(item);
+            }
+
+            return SelectList;
+        }
+
+        public ICollection<SelectListItem> GetAvailableRoleFiltersAsSelectList()
+        {
+            List<SelectListItem> SelectList = new List<SelectListItem>();
+
+            SelectListItem noFilter = new SelectListItem()
+            {
+                Text = "Brak filtra",
+                Value = ""
             };
+
+            SelectList.Add(noFilter);
+
+            foreach (var dictionaryItem in UserRolesDictionary.TranslationDictionary)
+            {
+                SelectListItem item = new SelectListItem
+                {
+                    Text = dictionaryItem.Value,
+                    Value = dictionaryItem.Value
+                };
+
+                SelectList.Add(item);
+            }
+
+            SelectList.Last().Value = "Instruktor&Egzaminator";
 
             return SelectList;
         }
