@@ -175,7 +175,16 @@ namespace Certification_System.Controllers
             {
                 var OriginUser = _userManager.FindByIdAsync(editedUser.UserIdentificator).Result;
                 _userManager.RemoveFromRolesAsync(OriginUser, _userManager.GetRolesAsync(OriginUser).Result.ToArray()).Wait();
+
+                if (editedUser.SelectedRole.FirstOrDefault() != "Instructor&Examiner")
+                {
                 _userManager.AddToRolesAsync(OriginUser, editedUser.SelectedRole).Wait();
+                }
+                else
+                {
+                    _userManager.AddToRoleAsync(OriginUser, "Instructor").Wait();
+                    _userManager.AddToRoleAsync(OriginUser, "Examiner").Wait();
+                }
 
                 OriginUser = _mapper.Map<EditUserViewModel, CertificationPlatformUser>(editedUser, OriginUser);
 

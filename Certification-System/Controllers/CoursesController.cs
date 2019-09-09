@@ -287,6 +287,11 @@ namespace Certification_System.Controllers
                 }
             }
 
+            if (this.User.IsInRole("Instructor"))
+            {
+                return View("InstructorCourseDetails", courseDetails);
+            }
+
             return View(courseDetails);
         }
 
@@ -729,6 +734,7 @@ namespace Certification_System.Controllers
 
             return ListOfUsers;
         }
+
 
         // GetCourseListOfUsersWithAllStatistics
         private ICollection<DisplayUserWithCourseResultsViewModel> GetCourseListOfUsersWithAllStatistics(ICollection<CertificationPlatformUser> enrolledUsers, ICollection<Meeting> meetings, ICollection<Exam> exams)
