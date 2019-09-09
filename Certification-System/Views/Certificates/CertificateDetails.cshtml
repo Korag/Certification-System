@@ -43,25 +43,20 @@
                 </div>
             </div>
 
-            <div>
-                <label asp-for="Branches" class="control-label col-12 p-0"></label>
-                <div>
-                    <div class="btn-group btn-group-toggle row" data-toggle="buttons">
+            <div class="form-group">
+                <label asp-for="Branches" class="control-label"></label>
+                <div class="row ml-0 mb-2 mr-0">
+                    <div>
                         @foreach (var branch in Model.Branches)
                         {
-                            <label class="btn btn-outline-secondary m-2 active">
-                                <input type="checkbox"
-                                       name="SelectedBranches"
-                                       value="@branch"
-                                       autocomplete="off"
-                                       disabled
-                                       checked />
-                                <span>@branch</span>
-                            </label>
+                        <label class="btn btn-secondary align-content-center">
+                            <span>@branch</span>
+                        </label>
                         }
                     </div>
                 </div>
             </div>
+
         </div>
     </form>
 </div>
