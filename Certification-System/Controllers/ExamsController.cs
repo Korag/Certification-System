@@ -925,5 +925,35 @@ namespace Certification_System.Controllers
 
             return View(markedExamViewModel);
         }
+
+        // GET: DisplayExamSummary
+        [Authorize(Roles = "Admin")]
+        public ActionResult DisplayExamSummary(string examIdentificator)
+        {
+            var Exam = _context.examRepository.GetExamById(examIdentificator);
+            var ExamResults = _context.examResultRepository.GetExamsResultsById(Exam.ExamResults);
+
+            var Users = _context.userRepository.GetUsersById(Exam.EnrolledUsers);
+            List<DisplayUserWithExamResults> ListOfUsers = new List<DisplayUserWithExamResults>();
+
+            foreach (var user in Users)
+            {
+                var userExamResult = ExamResults.Where(z => z.User == user.Id).FirstOrDefault();
+                DisplayUserWithExamResults UserWithExamResult = new DisplayUserWithExamResults();
+
+                if (userExamResult != null)
+                {
+                    UserWithExamResult = Mapper.Map<DisplayUserWithExamResults>(user);
+                    UserWithExamResult = _mapper.Map<DisplayUserWithExamResults>(userExamResult);
+                    UserWithExamResult.MaxAmountOfPointsToEarn = Exam.MaxAmountOfPointsToEarn;
+                }
+                else
+                {
+                    UserWithExamResult.HasExamResult = false;
+                }
+            }
+
+            return View(ListOfUsers);
+        }
     }
 }
