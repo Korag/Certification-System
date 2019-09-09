@@ -11,7 +11,8 @@
                 <div class="dropdown-menu">
                     <p class="dropdown-header">Szkolenia zawodowe</p>
                     <div class="dropdown-divider"></div>
-                    <a asp-controller="InstructorCourses" asp-action="Courses" class="dropdown-item">Moje prowadzone kursy</a>
+                    <a asp-controller="Courses" asp-action="InstructorCourses" class="dropdown-item">Moje prowadzone kursy</a>
+
                     <a asp-controller="" asp-action="" class="dropdown-item">Sprawdź obecność</a>
                 </div>
             </li>
@@ -32,7 +33,6 @@
                     <a asp-controller="CompetenceVerification" asp-action="VerifyCompetenceManual" class="dropdown-item">Instrukcja z menu weryfikacji *</a>
                     <a asp-controller="CompetenceVerification" asp-action="VerifyUser" class="dropdown-item">Weryfikacja użytkownika *</a>
                     <a asp-controller="CompetenceVerification" asp-action="VerifyGivenCertificate" class="dropdown-item">Weryfikacja certyfikatu *</a>
-                    <a asp-controller="CompetenceVerification" asp-action="VerifyGivenDegree" class="dropdown-item">Weryfikacja stopnia zawodowego *</a>
                 </div>
             </li>
         </ul>

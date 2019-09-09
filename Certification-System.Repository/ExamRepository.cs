@@ -52,7 +52,7 @@ namespace Certification_System.Repository
             return resultListOfExams;
         }
 
-        public ICollection<Exam> GetExamsByExaminatorId(string userIdentificator)
+        public ICollection<Exam> GetExamsByExaminerId(string userIdentificator)
         {
             var filter = Builders<Exam>.Filter.Where(z => z.Examiners.Contains(userIdentificator));
             var resultListOfExams = GetExams().Find<Exam>(filter).ToList();

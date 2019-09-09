@@ -23,5 +23,6 @@ namespace Certification_System.RepositoryInterfaces
         ICollection<Course> GetExaminerCourses(string userIdentificator, ICollection<Exam> exams);
         Course GetCourseByExamId(string examIdentificator);
         ICollection<SelectListItem> GetActiveCoursesWhereExamIsRequiredAsSelectList();
+        ICollection<Course> GetCoursesByExamsId(ICollection<string> examsIdentificators);
     }
 }

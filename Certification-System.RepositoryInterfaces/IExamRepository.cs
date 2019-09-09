@@ -11,7 +11,7 @@ namespace Certification_System.RepositoryInterfaces
         void AddExam(Exam exam);
         ICollection<Exam> GetExamsById(ICollection<string> examsIdentificators);
         Exam GetExamById(string examIdentificator);
-        ICollection<Exam> GetExamsByExaminatorId(string userIdentificator);
+        ICollection<Exam> GetExamsByExaminerId(string userIdentificator);
         void UpdateExam(Exam exam);
         ICollection<SelectListItem> GetExamsAsSelectList();
         ICollection<SelectListItem> GetExamsWhichAreDividedToTermsAsSelectList();

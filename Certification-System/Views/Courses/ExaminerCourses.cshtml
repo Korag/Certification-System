@@ -1,0 +1,25 @@
+﻿@model IEnumerable<Certification_System.DTOViewModels.DisplayCourseViewModel>
+@using Certification_System.DTOViewModels
+
+@{
+    ViewData["Title"] = "ExaminerCourses";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+<h1>Moje egzaminowane kursy</h1>
+<hr />
+
+<div class="row justify-content-center form-group">
+    <label class="control-label" id="labelWithSelect" style="margin-bottom:0px; margin-top:7px">Status kursu:</label>
+    <select id="select" data-style="btn-light" data-container="body" data-width="50%" data-size="auto" data-header="Wybierz status kursu" data-live-search="true" title="Nie wybrano żadnego elementu" class="form-control selectpicker show-tick">
+        <option value="" selected>Brak filtra</option>
+        <option value="1">Archiwalne kursy</option>
+        <option value="0">Aktualne kursy</option>
+    </select>
+</div>
+
+@await Component.InvokeAsync("DisplayCourseDataTable", new { courseViewModel = Model, tableIdentificator = "listCourses", operationSet = 4 })
+
+@section Scripts{
+    @{await Html.RenderPartialAsync("_DataTableWithFilterOnColumnScript", new DataTableExtendedScriptViewModel { TableIdentificator = "listCourses", NumberOfColumn = 8 });}
+}

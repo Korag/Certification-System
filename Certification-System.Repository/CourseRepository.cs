@@ -214,5 +214,18 @@ namespace Certification_System.Repository
 
             return resultCourse;
         }
+
+        public ICollection<Course> GetCoursesByExamsId(ICollection<string> examsIdentificators)
+        {
+            List<Course> resultListOfCourses = new List<Course>();
+
+            foreach (var examIdentificator in examsIdentificators)
+            {
+                var filter = Builders<Course>.Filter.Where(x => x.Exams.Contains(examIdentificator));
+                resultListOfCourses.Add(GetCourses().Find<Course>(filter).FirstOrDefault());
+            }
+
+            return resultListOfCourses;
+        }
     }
 }

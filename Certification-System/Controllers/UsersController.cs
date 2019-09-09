@@ -478,7 +478,7 @@ namespace Certification_System.Controllers
         {
             var User = _context.userRepository.GetUserById(userIdentificator);
 
-            var Exams = _context.examRepository.GetExamsByExaminatorId(userIdentificator);
+            var Exams = _context.examRepository.GetExamsByExaminerId(userIdentificator);
             var ExamsTerms = _context.examTermRepository.GetExamTermsByExaminerId(userIdentificator);
 
             var Courses = _context.courseRepository.GetExaminerCourses(userIdentificator, Exams);
@@ -539,7 +539,7 @@ namespace Certification_System.Controllers
         {
             var User = _context.userRepository.GetUserById(userIdentificator);
 
-            var Exams = _context.examRepository.GetExamsByExaminatorId(userIdentificator);
+            var Exams = _context.examRepository.GetExamsByExaminerId(userIdentificator);
             var ExamsTerms = _context.examTermRepository.GetExamTermsByExaminerId(userIdentificator);
 
             var Meetings = _context.meetingRepository.GetMeetingsByInstructorId(userIdentificator);
