@@ -14,10 +14,8 @@
 </div>
 
 <div class="row justify-content-center form-group">
-    <label class="control-label" id="labelWithSelect" style="margin-bottom:0px; margin-top:7px">Rola użytkownka:</label>
-    <select id="select" data-style="btn-light" asp-items="ViewBag.AvailableRoleFilters" data-container="body" data-width="50%" data-size="auto" data-header="Wybierz filtrowaną rolę użytkownika" data-live-search="true" class="form-control selectpicker show-tick">
-
-    </select>
+    <label class="control-label" id="labelWithSelect" style="margin-bottom:0px; margin-top:7px">Rola użytkownika:</label>
+    <select id="select" data-style="btn-light" asp-items="ViewBag.AvailableRoleFilters" data-container="body" data-width="50%" data-size="auto" data-header="Wybierz filtrowaną rolę użytkownika" data-live-search="true" class="form-control selectpicker show-tick"> </select>
 </div>
 
 @await Component.InvokeAsync("DisplayUserDataTable", new { userViewModel = Model, tableIdentificator = "listUsers", operationSet = 2 })

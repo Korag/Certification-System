@@ -30,5 +30,6 @@ namespace Certification_System.RepositoryInterfaces
         void DeleteCourseFromUsersCollection(string courseIdentificator, ICollection<string> usersIdentificators);
         ICollection<string> TranslateRoles(ICollection<string> userRoles);
         CertificationPlatformUser GetUserByEmail(string emailAddress);
+        ICollection<SelectListItem> GetAvailableCourseRoleFiltersAsSelectList();
     }
 }

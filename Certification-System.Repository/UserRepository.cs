@@ -1,7 +1,7 @@
 ﻿using Certification_System.Entities;
 using Certification_System.Repository.Context;
 using Certification_System.RepositoryInterfaces;
-using Certification_System.ServicesInterfaces.Models;
+using Certification_System.ServicesInterfaces;
 using Microsoft.AspNetCore.Mvc.Rendering;
 using MongoDB.Driver;
 using System.Collections.Generic;
@@ -100,6 +100,35 @@ namespace Certification_System.Repository
             }
 
             SelectList.Last().Value = "Instruktor&Egzaminator";
+
+            return SelectList;
+        }
+
+        public ICollection<SelectListItem> GetAvailableCourseRoleFiltersAsSelectList()
+        {
+            List<SelectListItem> SelectList = new List<SelectListItem>
+            {
+                  new SelectListItem()
+              {
+                  Text = "Brak filtra",
+                  Value = ""
+              },
+                  new SelectListItem()
+              {
+                  Text = UserRolesDictionary.TranslationDictionary["Instructor"],
+                  Value = UserRolesDictionary.TranslationDictionary["Instructor"]
+              },
+                  new SelectListItem()
+              {
+                  Text = UserRolesDictionary.TranslationDictionary["Examiner"],
+                  Value = UserRolesDictionary.TranslationDictionary["Examiner"]
+              },
+                  new SelectListItem()
+              {
+                  Text = UserRolesDictionary.TranslationDictionary["Instructor&Examiner"],
+                  Value = "Instruktor&Egzaminator"
+              }
+            };
 
             return SelectList;
         }

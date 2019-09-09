@@ -1,7 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 
-namespace Certification_System.ServicesInterfaces
+namespace Certification_System.DataEntities
 {
     public static class UserRolesDictionary
     {

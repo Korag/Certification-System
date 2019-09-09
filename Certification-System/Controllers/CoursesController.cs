@@ -9,6 +9,7 @@ using Certification_System.Repository.DAL;
 using AutoMapper;
 using Certification_System.ServicesInterfaces;
 using System;
+using Certification_System.ServicesInterfaces.Models;
 
 namespace Certification_System.Controllers
 {
@@ -710,6 +711,66 @@ namespace Certification_System.Controllers
             return View(ListOfCourses);
         }
 
+        // GET: InstructorExaminerCourses
+        [Authorize(Roles = "Examiner")]
+        public ActionResult InstructorExaminerCourses()
+        {
+            ViewBag.AvailableRoleFilters = _context.userRepository.GetAvailableCourseRoleFiltersAsSelectList();
+
+            var User = _context.userRepository.GetUserByEmail(this.User.Identity.Name);
+
+            var Exams = _context.examRepository.GetExamsByExaminerId(User.Id);
+            var CoursesAsExaminer = _context.courseRepository.GetCoursesByExamsId(Exams.Select(z => z.ExamIdentificator).ToList()).ToList();
+
+            var Meetings = _context.meetingRepository.GetMeetingsByInstructorId(User.Id);
+            var CoursesAsInstructor = _context.courseRepository.GetCoursesByMeetingsId(Meetings.Select(z => z.MeetingIdentificator).ToList());
+
+            var BothRolesCourses = CoursesAsExaminer.Intersect(CoursesAsInstructor).ToList();
+
+            foreach (var course in BothRolesCourses)
+            {
+                CoursesAsExaminer.Remove(course);
+                CoursesAsInstructor.Remove(course);
+            }
+
+            List<DisplayCourseWithUserRoleViewModel> ListOfCoursesAsExaminer = new List<DisplayCourseWithUserRoleViewModel>();
+
+            if (CoursesAsExaminer.Count != 0)
+            {
+                ListOfCoursesAsExaminer = _mapper.Map<List<DisplayCourseWithUserRoleViewModel>>(CoursesAsExaminer);
+                ListOfCoursesAsExaminer.ForEach(z => z.Branches = _context.branchRepository.GetBranchesById(z.Branches));
+                ListOfCoursesAsExaminer.ForEach(z => z.Roles.Add(UserRolesDictionary.TranslationDictionary["Examiner"]));
+            }
+
+            List<DisplayCourseWithUserRoleViewModel> ListOfCoursesAsInstructor = new List<DisplayCourseWithUserRoleViewModel>();
+
+            if (CoursesAsInstructor.Count != 0)
+            {
+                ListOfCoursesAsInstructor = _mapper.Map<List<DisplayCourseWithUserRoleViewModel>>(CoursesAsInstructor);
+                ListOfCoursesAsInstructor.ForEach(z => z.Branches = _context.branchRepository.GetBranchesById(z.Branches));
+                ListOfCoursesAsInstructor.ForEach(z => z.Roles.Add(UserRolesDictionary.TranslationDictionary["Instructor"]));
+            }
+
+            List<DisplayCourseWithUserRoleViewModel> ListOfCoursesAsBothRoles = new List<DisplayCourseWithUserRoleViewModel>();
+
+            if (BothRolesCourses.Count != 0)
+            {
+                ListOfCoursesAsBothRoles = _mapper.Map<List<DisplayCourseWithUserRoleViewModel>>(CoursesAsInstructor);
+                ListOfCoursesAsBothRoles.ForEach(z => z.Branches = _context.branchRepository.GetBranchesById(z.Branches));
+
+                ListOfCoursesAsBothRoles.ForEach(z => z.Roles.Add(UserRolesDictionary.TranslationDictionary["Instructor"]));
+                ListOfCoursesAsBothRoles.ForEach(z => z.Roles.Add(UserRolesDictionary.TranslationDictionary["Examiner"]));
+            }
+
+            List<DisplayCourseWithUserRoleViewModel> AllCourses = new List<DisplayCourseWithUserRoleViewModel>();
+
+            AllCourses.AddRange(ListOfCoursesAsExaminer);
+            AllCourses.AddRange(ListOfCoursesAsInstructor);
+            AllCourses.AddRange(ListOfCoursesAsBothRoles);
+
+            return View(AllCourses);
+        }
+
         #region HelpersMethod
         // GetCourseListOfUsersWithStatistics
         private ICollection<DisplayUserWithCourseResultsViewModel> GetCourseListOfUsersWithStatistics(ICollection<CertificationPlatformUser> enrolledUsers, ICollection<Meeting> meetings, ICollection<Exam> exams)
@@ -755,7 +816,6 @@ namespace Certification_System.Controllers
 
             return ListOfUsers;
         }
-
 
         // GetCourseListOfUsersWithAllStatistics
         private ICollection<DisplayUserWithCourseResultsViewModel> GetCourseListOfUsersWithAllStatistics(ICollection<CertificationPlatformUser> enrolledUsers, ICollection<Meeting> meetings, ICollection<Exam> exams)
