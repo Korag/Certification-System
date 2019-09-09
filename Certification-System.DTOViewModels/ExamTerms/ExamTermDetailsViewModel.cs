@@ -39,6 +39,6 @@ namespace Certification_System.DTOViewModels
         public ICollection<DisplayCrucialDataWithContactUserViewModel> Examiners { get; set; }
 
         [Display(Name = "Uczestnicy tury egzaminu")]
-        public ICollection<DisplayUserWithExamResults> UsersWithResults { get; set; }
+        public ICollection<DisplayCrucialDataWithContactUserViewModel> Users { get; set; }
     }
 }

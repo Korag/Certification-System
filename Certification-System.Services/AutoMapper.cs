@@ -261,7 +261,7 @@ namespace Certification_System.Services
                     .ForMember(dest => dest.Exam, opts => opts.Ignore())
                     .ForMember(dest => dest.Course, opts => opts.Ignore())
                     .ForMember(dest => dest.Examiners, opts => opts.Ignore())
-                    .ForMember(dest => dest.UsersWithResults, opts => opts.Ignore());
+                    .ForMember(dest => dest.Users, opts => opts.Ignore());
 
             CreateMap<Course, DeleteUsersFromExamTermViewModel>()
                     .ForMember(dest => dest.Exam, opts => opts.Ignore())

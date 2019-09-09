@@ -110,9 +110,9 @@ else
     <a asp-action="AssignUserToExamTerm" asp-route-examTermIdentificator="@Model.ExamTermIdentificator" asp-controller="ExamsTerms" class="btn btn-primary">Dodaj użytkownika do tury egzaminu</a>
 </div>
 
-@if (Model.UsersWithResults.Count != 0)
+@if (Model.Users.Count != 0)
 {
-    @await Component.InvokeAsync("DisplayUserWithExamResultsDataTable", new { userViewModel = Model.UsersWithResults, tableIdentificator = "listUsers", operationSet = 1 })
+    @await Component.InvokeAsync("DisplayCrucialDataWithContactUserDataTable", new { userViewModel = Model.Users, tableIdentificator = "listUsers", operationSet = 3 })
 }
 else
 {

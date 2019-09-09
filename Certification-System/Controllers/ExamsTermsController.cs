@@ -185,33 +185,14 @@ namespace Certification_System.Controllers
             DisplayCourseViewModel courseViewModel = _mapper.Map<DisplayCourseViewModel>(Course);
             courseViewModel.Branches = _context.branchRepository.GetBranchesById(Course.Branches);
 
-            List<DisplayUserWithExamResults> usersViewModel = new List<DisplayUserWithExamResults>();
-
-            foreach (var user in EnrolledUsers)
-            {
-                DisplayUserWithExamResults singleUser = _mapper.Map<DisplayUserWithExamResults>(EnrolledUsers);
-
-                var userExamResult = ExamTermResults.ToList().Where(z => z.User == user.Id).FirstOrDefault();
-
-                if (userExamResult != null)
-                {
-                    singleUser = _mapper.Map<DisplayUserWithExamResults>(userExamResult);
-                    singleUser.MaxAmountOfPointsToEarn = Exam.MaxAmountOfPointsToEarn;
-                }
-                else
-                {
-                    singleUser.HasExamResult = false;
-                }
-
-                usersViewModel.Add(singleUser);
-            }
+            List<DisplayCrucialDataWithContactUserViewModel> usersViewModel = _mapper.Map<List<DisplayCrucialDataWithContactUserViewModel>>(EnrolledUsers);
 
             ExamTermDetailsViewModel ExamTermDetails = _mapper.Map<ExamTermDetailsViewModel>(ExamTerm);
             ExamTermDetails.Exam = examViewModel;
             ExamTermDetails.Examiners = examinersViewModel;
 
             ExamTermDetails.Course = courseViewModel;
-            ExamTermDetails.UsersWithResults = usersViewModel;
+            ExamTermDetails.Users = usersViewModel;
 
             return View(ExamTermDetails);
         }
