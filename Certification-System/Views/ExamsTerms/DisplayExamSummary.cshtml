@@ -1,0 +1,15 @@
+﻿@model IEnumerable<Certification_System.DTOViewModels.DisplayUserWithExamResults>
+
+@{
+    ViewData["Title"] = "DisplayExamSummary";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+<h2>Podsumowanie wyników uczestników tury egzaminu</h2>
+<hr />
+
+@await Component.InvokeAsync("DisplayUserWithExamResultsDataTable", new { userViewModel = Model, tableIdentificator = "listUsers", operationSet = 1 })
+
+@section Scripts {
+    @{await Html.RenderPartialAsync("_DataTableBasicScript", "listUsers");}
+}

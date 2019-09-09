@@ -515,5 +515,40 @@ namespace Certification_System.Controllers
 
             return View(markedExamTermViewModel);
         }
+
+        // GET: DisplayExamTermSummary
+        [Authorize(Roles = "Admin")]
+        public ActionResult DisplayExamSummary(string examTermIdentificator)
+        {
+            var Exam = _context.examRepository.GetExamByExamTermId(examTermIdentificator);
+            var ExamTerm = _context.examTermRepository.GetExamTermById(examTermIdentificator);
+
+            var ExamResults = _context.examResultRepository.GetExamsResultsById(Exam.ExamResults);
+            var ExamTermResults = ExamResults.Where(z => z.ExamTerm == examTermIdentificator);
+
+            var Users = _context.userRepository.GetUsersById(ExamTerm.EnrolledUsers);
+            List<DisplayUserWithExamResults> ListOfUsers = new List<DisplayUserWithExamResults>();
+
+            foreach (var user in Users)
+            {
+                var userExamResult = ExamTermResults.Where(z => z.User == user.Id).FirstOrDefault();
+                DisplayUserWithExamResults UserWithExamResult = new DisplayUserWithExamResults();
+
+                if (userExamResult != null)
+                {
+                    UserWithExamResult = Mapper.Map<DisplayUserWithExamResults>(user);
+                    UserWithExamResult = _mapper.Map<DisplayUserWithExamResults>(userExamResult);
+                    UserWithExamResult.MaxAmountOfPointsToEarn = Exam.MaxAmountOfPointsToEarn;
+                }
+                else
+                {
+                    UserWithExamResult.HasExamResult = false;
+                }
+
+                ListOfUsers.Add(UserWithExamResult);
+            }
+
+            return View(ListOfUsers);
+        }
     }
 }
