@@ -663,6 +663,27 @@ namespace Certification_System.Controllers
             return View(ListOfCourses);
         }
 
+        // GET: InstructorCourses
+        [Authorize(Roles = "Instructor")]
+        public ActionResult InstructorCourses()
+        {
+            var User = _context.userRepository.GetUserByEmail(this.User.Identity.Name);
+
+            var Meetings = _context.meetingRepository.GetMeetingsByInstructorId(User.Id);
+            var Courses = _context.courseRepository.GetCoursesByMeetingsId(Meetings.Select(z => z.MeetingIdentificator).ToList());
+
+            List<DisplayCourseViewModel> ListOfCourses = new List<DisplayCourseViewModel>();
+
+            if (Courses.Count != 0)
+            {
+                ListOfCourses = _mapper.Map<List<DisplayCourseViewModel>>(Courses);
+                ListOfCourses.ForEach(z => z.Branches = _context.branchRepository.GetBranchesById(z.Branches));
+                ListOfCourses.ForEach(z => z.EnrolledUsersQuantity = Courses.Where(s => s.CourseIdentificator == z.CourseIdentificator).FirstOrDefault().EnrolledUsers.Count);
+            }
+
+            return View(ListOfCourses);
+        }
+
         #region HelpersMethod
         // GetCourseListOfUsersWithStatistics
         private ICollection<DisplayUserWithCourseResultsViewModel> GetCourseListOfUsersWithStatistics(ICollection<CertificationPlatformUser> enrolledUsers, ICollection<Meeting> meetings, ICollection<Exam> exams)
