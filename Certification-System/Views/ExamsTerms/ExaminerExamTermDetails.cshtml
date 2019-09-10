@@ -1,0 +1,109 @@
+﻿@model Certification_System.DTOViewModels.ExamTermDetailsViewModel
+@using Certification_System.DTOViewModels
+
+@{
+    ViewData["Title"] = "ExamTermDetails";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+<h1>Szczegóły tury egzaminu</h1>
+<hr />
+
+@if (!string.IsNullOrWhiteSpace(ViewBag.message))
+{
+    <h2 class="alert alert-info" role="alert">@ViewBag.message</h2>
+}
+
+<div>
+    <h2>Informacje o turze</h2>
+
+    <div class="row m-0 mt-3 mb-3">
+        <a asp-action="DisplayExamsTerms" asp-controller="ExamsTerms" class="btn btn-outline-info mt-1 xs450px_FloatRight">Powrót do listy tur</a>
+    </div>
+
+    <form>
+        <div class="col-md-8 col-xl-6 col-lg-6 col-sm-12 col-xs-10 m-auto p-3 shadow p-3 mb-5 bg-light rounded border border-primary rounded-bottom" style="opacity:0.90">
+
+            <div class="form-group">
+                <label asp-for="DateOfStart" class="control-label"></label>
+                <input asp-for="DateOfStart" class="form-control col-12" disabled />
+            </div>
+
+            <div class="form-group">
+                <label asp-for="DateOfEnd" class="control-label"></label>
+                <input asp-for="DateOfEnd" class="form-control col-12" disabled />
+            </div>
+
+            <div class="form-group">
+                <label asp-for="DurationDays" class="control-label"></label>
+                <input asp-for="DurationDays" class="form-control col-12" disabled />
+            </div>
+
+            <div class="form-group">
+                <label asp-for="DurationMinutes" class="control-label"></label>
+                <input asp-for="DurationMinutes" class="form-control col-12" disabled />
+            </div>
+
+
+            <div class="form-group">
+                <label asp-for="UsersQuantity" class="control-label"></label>
+                <input asp-for="UsersQuantity" class="form-control col-12" disabled />
+            </div>
+
+            <div class="form-group">
+                <label asp-for="UsersLimit" class="control-label"></label>
+                <input asp-for="UsersLimit" class="form-control col-12" disabled />
+            </div>
+
+        </div>
+    </form>
+</div>
+
+<h2 class="mt-4 mb-4">Informacje dotyczące egzaminu</h2>
+
+@{List<DisplayExamWithoutCourseViewModel> examList = new List<DisplayExamWithoutCourseViewModel>();
+    examList.Add(Model.Exam);}
+
+@await Component.InvokeAsync("DisplayExamWithoutCourseDataTable", new { examViewModel = examList, tableIdentificator = "listExams", operationSet = 2 })
+
+<h2 class="mt-4 mb-4">Informacje dotyczące kursu</h2>
+
+<div class="mt-3 mb-3">
+    <a asp-action="CourseDetails" asp-route-courseIdentificator="@Model.Course.CourseIdentificator" asp-controller="Courses" class="btn btn-info mt-1">Szczegóły</a>
+</div>
+
+@await Component.InvokeAsync("DisplayCourseDataTable", new { courseViewModel = Model.Course, tableIdentificator = "listCourses"})
+
+<h2 class="mt-4 mb-4">Egzaminatorzy</h2>
+
+@if (Model.Examiners.Count != 0)
+{
+    @await Component.InvokeAsync("DisplayCrucialDataWithContactUserDataTable", new { userViewModel = Model.Examiners, tableIdentificator = "listExaminers"})
+}
+
+else
+{
+    <div class="mt-4 mb-4 alert alert-warning">Brak egzaminatorów przypisanych do egzaminu</div>
+}
+
+<h2 class="mt-4 mb-4">Użytkownicy zapisani na turę egzaminu</h2>
+
+<div class="mt-3 mb-3">
+    <a asp-action="MarkExamTerm" asp-route-courseIdentificator="@Model.ExamTermIdentificator" asp-controller="ExamsTerms" class="btn btn-warning mt-1 mr-1">Oceń turę egzaminu</a>
+</div>
+
+@if (Model.Users.Count != 0)
+{
+    @await Component.InvokeAsync("DisplayCrucialDataWithContactUserDataTable", new { userViewModel = Model.Users, tableIdentificator = "listUsers"})
+}
+else
+{
+    <div class="mt-4 mb-4 alert alert-warning">Żaden użytkownik nie został przypisany do tej tury egzaminu</div>
+}
+
+@section Scripts {
+    @{await Html.RenderPartialAsync("_DataTableBasicScript", "listExams");}
+    @{await Html.RenderPartialAsync("_DataTableBasicScript", "listCourses");}
+    @{await Html.RenderPartialAsync("_DataTableBasicScript", "listExaminers");}
+    @{await Html.RenderPartialAsync("_DataTableBasicScript", "listUsers");}
+}
