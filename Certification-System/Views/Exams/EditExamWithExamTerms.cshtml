@@ -180,7 +180,6 @@
 
             <div class="row m-0 mt-3">
                 <button type="button" class="btn btn-primary mt-1 xs300px_JustifyContentCenter" data-toggle="modal" data-target="#modal">Edytuj</button>
-                @await Component.InvokeAsync("Modal", new { Title = "Edycja egzaminu", Body = "Czy na pewno chcesz zaktualizować wybrany egzamin wraz z powiązanymi turami ?", FormSubmit = true, ButtonText = "Edytuj", ButtonClass = "btn-warning" })
                 <a asp-action="DisplayAllGivenCertificates" asp-controller="GivenCertificates" class="btn btn-outline-info mt-1 xs300px_FloatRight">Powrót do listy</a>
             </div>
 
@@ -188,6 +187,8 @@
 
     </form>
 </div>
+
+@await Component.InvokeAsync("Modal", new { Title = "Edycja egzaminu", Body = "Czy na pewno chcesz zaktualizować wybrany egzamin wraz z powiązanymi turami ?", FormSubmit = true, ButtonText = "Edytuj", ButtonClass = "btn-warning" })
 
 @section Scripts {
     @{await Html.RenderPartialAsync("_ValidationScriptsPartial");}

@@ -99,7 +99,6 @@
 
             <div class="row m-0 mt-3">
                 <button type="button" class="btn btn-primary mt-1 xs300px_JustifyContentCenter" data-toggle="modal" data-target="#modal">Edytuj</button>
-                @await Component.InvokeAsync("Modal", new { Title = "Edycja danych przedsiębiorstwa", Body = "Czy na pewno chcesz zaktualizować dane wybranego przedsiębiorstwa ?", FormSubmit = true, ButtonText = "Edytuj", ButtonClass = "btn-warning" })
                 <a asp-action="DisplayAllCompanies" asp-controller="Companies" class="btn btn-outline-info mt-1 xs300px_FloatRight">Powrót do listy</a>
             </div>
 
@@ -107,3 +106,5 @@
 
     </form>
 </div>
+
+@await Component.InvokeAsync("Modal", new { Title = "Edycja danych przedsiębiorstwa", Body = "Czy na pewno chcesz zaktualizować dane wybranego przedsiębiorstwa ?", FormSubmit = true, ButtonText = "Edytuj", ButtonClass = "btn-warning" })

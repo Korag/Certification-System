@@ -26,15 +26,13 @@
             <div asp-validation-summary="ModelOnly" class="row justify-content-center alert alert-danger validation-model"></div>
 
             <div class="row m-0 mt-3">
-                <input type="submit" value="Dodaj" class="btn btn-primary mt-1 xs300px_JustifyContentCenter" />
+                <button type="button" class="btn btn-primary" data-toggle="modal" data-target="#modal">Launch demo modal</button>
                 <a asp-action="DisplayAllBranches" asp-controller="Branches" class="btn btn-outline-info mt-1 xs300px_FloatRight">Powrót do listy</a>
             </div>
-
+        
         </div>
     </form>
 </div>
 
-<button type="button" class="btn btn-primary" data-toggle="modal" data-target="#modal">Launch demo modal</button>
-@await Component.InvokeAsync("Modal", new { Title = "TEST", Body = "Przykładowe body", Action="BlankMenu", Controller="Certificates", ButtonText = "Testuj", ButtonClass="btn-success" })
+@await Component.InvokeAsync("Modal", new { Title = "TEST", Body = "Przykładowe body", Action = "BlankMenu", Controller = "Certificates", ButtonText = "Testuj", ButtonClass = "btn-success" })
 
-  

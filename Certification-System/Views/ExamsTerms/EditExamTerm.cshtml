@@ -78,13 +78,14 @@
 
             <div class="row m-0 mt-3">
                 <button type="button" class="btn btn-primary mt-1 xs300px_JustifyContentCenter" data-toggle="modal" data-target="#modal">Edytuj</button>
-                @await Component.InvokeAsync("Modal", new { Title = "Edycja tury egzaminu", Body = "Czy na pewno chcesz zaktualizować wybraną turę egzaminu ?", FormSubmit = true, ButtonText = "Edytuj", ButtonClass = "btn-warning" })
                 <a asp-action="DisplayAllExamsTerms" asp-controller="ExamsTerms" class="btn btn-outline-info mt-1 xs300px_FloatRight">Powrót do listy</a>
             </div>
 
         </div>
     </form>
 </div>
+
+@await Component.InvokeAsync("Modal", new { Title = "Edycja tury egzaminu", Body = "Czy na pewno chcesz zaktualizować wybraną turę egzaminu ?", FormSubmit = true, ButtonText = "Edytuj", ButtonClass = "btn-warning" })
 
 @section Scripts {
     @{await Html.RenderPartialAsync("_ValidationScriptsPartial");}

@@ -84,7 +84,6 @@
         <div>
             <div class="row justify-content-center">
                 <button type="button" class="btn btn-danger" data-toggle="modal" data-target="#modal">Usuń użytkowników z tury egzaminu</button>
-                @await Component.InvokeAsync("Modal", new { Title = "Usuwanie użytkowników z egzaminu", Body = "Czy na pewno chcesz usunąć zaznaczonych użytkowników z tury egzaminu ?", FormSubmit = true, ButtonText = "Usuń", ButtonClass = "btn-danger" })
             </div>
         </div>
     }
@@ -94,6 +93,8 @@
     }
 
 </form>
+
+@await Component.InvokeAsync("Modal", new { Title = "Usuwanie użytkowników z egzaminu", Body = "Czy na pewno chcesz usunąć zaznaczonych użytkowników z tury egzaminu ?", FormSubmit = true, ButtonText = "Usuń", ButtonClass = "btn-danger" })
 
 @section Scripts {
     @{await Html.RenderPartialAsync("_ValidationScriptsPartial");}
