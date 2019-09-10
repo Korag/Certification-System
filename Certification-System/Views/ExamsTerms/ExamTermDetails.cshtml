@@ -19,7 +19,7 @@
 
     <div class="row m-0 mt-3 mb-3">
         <a asp-action="EditExamTerm" asp-route-examTermIdentificator="@Model.ExamTermIdentificator" asp-controller="ExamsTerms" class="btn btn-warning mt-1 mr-1 xs450px_FloatLeft">Edytuj</a>
-        <a asp-action="ExamTermDetails" asp-route-examTermIdentificator="@Model.ExamTermIdentificator" asp-controller="ExamsTerms" class="btn btn-info mt-1 xs450px_FloatLeft">Szczegóły</a>
+        <a asp-action="MarkExamTerm" asp-route-courseIdentificator="@Model.ExamTermIdentificator" asp-controller="ExamsTerms" class="btn btn-success mt-1 mr-1 xs450px_FloatLeft">Oceń turę egzaminu</a>
 
         <a asp-action="DisplayExamsTerms" asp-controller="ExamsTerms" class="btn btn-outline-info mt-1 xs450px_FloatRight">Powrót do listy tur</a>
     </div>
@@ -69,11 +69,9 @@
     <div class="dropdown p-0 mt-1">
         <button class="btn btn-success dropdown-toggle" type="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">Operacje</button>
         <div class="dropdown-menu nohover">
-            <a asp-action="MarkExam" asp-route-examIdentificator="@Model.Exam.ExamIdentificator" asp-controller="Exams" class="btn btn-primary w-100 mb-1">Oceń egzamin</a>
-            <a asp-action="AddNewExamTerm" asp-route-examIdentificator="@Model.Exam.ExamIdentificator" asp-controller="Exams" class="btn btn-secondary w-100">Dodaj termin egzaminu</a>
-            <a asp-action="ExamDetails" asp-route-examIdentificator="@Model.Exam.ExamIdentificator" asp-controller="Exams" class="btn btn-info w-100 mb-1">Szczegóły nadanego certyfikatu</a>
             <a asp-action="EditExamHub" asp-route-examIdentificator="@Model.Exam.ExamIdentificator" asp-controller="Exams" class="btn btn-warning w-100 mb-1">Edytuj egzamin</a>
-            <a asp-action="AddUsersToExam" asp-route-examIdentificator="@Model.Exam.ExamIdentificator" asp-controller="Exams" class="btn btn-light w-100">Przypisz użytkowników</a>
+            <a asp-action="ExamDetails" asp-route-examIdentificator="@Model.Exam.ExamIdentificator" asp-controller="Exams" class="btn btn-info w-100 mb-1">Szczegóły nadanego certyfikatu</a>
+            <a asp-action="AddNewExamTerm" asp-route-examIdentificator="@Model.Exam.ExamIdentificator" asp-controller="Exams" class="btn btn-secondary w-100">Dodaj termin egzaminu</a>
         </div>
     </div>
 </div>
@@ -107,7 +105,7 @@ else
 <h2 class="mt-4 mb-4">Użytkownicy zapisani na turę egzaminu</h2>
 
 <div class="mt-3 mb-3">
-    <a asp-action="AssignUserToExamTerm" asp-route-examTermIdentificator="@Model.ExamTermIdentificator" asp-controller="ExamsTerms" class="btn btn-primary">Dodaj użytkownika do tury egzaminu</a>
+    <a asp-action="AssignUsersFromCourseToExamTerm" asp-route-examTermIdentificator="@Model.ExamTermIdentificator" asp-controller="ExamsTerms" class="btn btn-primary">Dodaj użytkowników z kursu do tury egzaminu</a>
 </div>
 
 @if (Model.Users.Count != 0)

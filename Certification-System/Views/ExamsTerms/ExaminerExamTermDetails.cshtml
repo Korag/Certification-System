@@ -18,6 +18,10 @@
     <h2>Informacje o turze</h2>
 
     <div class="row m-0 mt-3 mb-3">
+        @if (Model.Examiners.Select(z => z.Email).Contains(this.User.Identity.Name))
+        {
+            <a asp-action="MarkExamTerm" asp-route-courseIdentificator="@Model.ExamTermIdentificator" asp-controller="ExamsTerms" class="btn btn-success mt-1 mr-1 xs450px_FloatLeft">Oceń turę egzaminu</a>
+        }
         <a asp-action="DisplayExamsTerms" asp-controller="ExamsTerms" class="btn btn-outline-info mt-1 xs450px_FloatRight">Powrót do listy tur</a>
     </div>
 
@@ -72,13 +76,13 @@
     <a asp-action="CourseDetails" asp-route-courseIdentificator="@Model.Course.CourseIdentificator" asp-controller="Courses" class="btn btn-info mt-1">Szczegóły</a>
 </div>
 
-@await Component.InvokeAsync("DisplayCourseDataTable", new { courseViewModel = Model.Course, tableIdentificator = "listCourses"})
+@await Component.InvokeAsync("DisplayCourseDataTable", new { courseViewModel = Model.Course, tableIdentificator = "listCourses" })
 
 <h2 class="mt-4 mb-4">Egzaminatorzy</h2>
 
 @if (Model.Examiners.Count != 0)
 {
-    @await Component.InvokeAsync("DisplayCrucialDataWithContactUserDataTable", new { userViewModel = Model.Examiners, tableIdentificator = "listExaminers"})
+    @await Component.InvokeAsync("DisplayCrucialDataWithContactUserDataTable", new { userViewModel = Model.Examiners, tableIdentificator = "listExaminers" })
 }
 
 else
@@ -94,7 +98,7 @@ else
 
 @if (Model.Users.Count != 0)
 {
-    @await Component.InvokeAsync("DisplayCrucialDataWithContactUserDataTable", new { userViewModel = Model.Users, tableIdentificator = "listUsers"})
+    @await Component.InvokeAsync("DisplayCrucialDataWithContactUserDataTable", new { userViewModel = Model.Users, tableIdentificator = "listUsers" })
 }
 else
 {

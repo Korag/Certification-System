@@ -8,11 +8,7 @@
 <h1>Moje egzaminy</h1>
 <hr />
 
-<div class="mt-3 mb-3">
-    <a asp-action="AddExamMenu" asp-controller="Exams" class="btn btn-primary">Dodaj nowy egzamin</a>
-</div>
-
-@await Component.InvokeAsync("DisplayExamDataTable", new { examViewModel = Model, tableIdentificator = "listExams", operationSet = 1 })
+@await Component.InvokeAsync("DisplayExamDataTable", new { examViewModel = Model, tableIdentificator = "listExams", operationSet = 2 })
 
 @section Scripts{
     @{await Html.RenderPartialAsync("_DataTableBasicScript", "listExams");}

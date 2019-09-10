@@ -425,7 +425,7 @@ namespace Certification_System.Controllers
         }
 
         // GET: MarkExamTerm
-        [Authorize(Roles = "Admin")]
+        [Authorize(Roles = "Admin, Examiner")]
         public ActionResult MarkExamTerm(string examTermIdentificator)
         {
             if (string.IsNullOrWhiteSpace(examTermIdentificator))
@@ -476,7 +476,7 @@ namespace Certification_System.Controllers
 
         // POST: MarkExamTerm
         [HttpPost]
-        [Authorize(Roles = "Admin")]
+        [Authorize(Roles = "Admin, Examiner")]
         public ActionResult MarkExamTerm(MarkExamTermViewModel markedExamTermViewModel)
         {
             if (ModelState.IsValid)
@@ -504,7 +504,7 @@ namespace Certification_System.Controllers
 
         // GET: DisplayExamTermSummary
         [Authorize(Roles = "Admin")]
-        public ActionResult DisplayExamSummary(string examTermIdentificator)
+        public ActionResult DisplayExamTermSummary(string examTermIdentificator)
         {
             var Exam = _context.examRepository.GetExamByExamTermId(examTermIdentificator);
             var ExamTerm = _context.examTermRepository.GetExamTermById(examTermIdentificator);
