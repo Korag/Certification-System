@@ -203,7 +203,7 @@ namespace Certification_System.Controllers
         }
 
         // GET: CourseDetails
-        [Authorize(Roles = "Admin")]
+        [Authorize(Roles = "Admin, Instructor")]
         public ActionResult CourseDetails(string courseIdentificator, string message)
         {
             ViewBag.Message = message;

@@ -144,7 +144,7 @@ namespace Certification_System.Controllers
         }
 
         // GET: MeetingDetails
-        [Authorize(Roles = "Admin")]
+        [Authorize(Roles = "Admin, Instructor")]
         public ActionResult MeetingDetails(string meetingIdentificator, bool checkedPresence)
         {
             ViewBag.CheckedPresence = checkedPresence;
@@ -173,6 +173,11 @@ namespace Certification_System.Controllers
             MeetingDetails.Instructors = ListOfInstructors;
             MeetingDetails.AttendanceList = Meeting.AttendanceList;
             MeetingDetails.AllCourseParticipants = ListOfUsers;
+
+            if (this.User.IsInRole("Instructor"))
+            {
+                return View("InstructorMeetingDetails", MeetingDetails);
+            }
 
             return View(MeetingDetails);
         }

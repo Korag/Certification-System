@@ -75,7 +75,7 @@
                         }
                     </ul>
                 </td>
-                @if (Model.Options.OperationSet != 0)
+                @if (Model.Options.OperationSet == 1)
                 {
                     <td>
                         <div class="dropdown p-0">
@@ -90,7 +90,19 @@
                         </div>
                     </td>
                 }
-                @if (Model.Options.OperationSet != 1)
+                @if (Model.Options.OperationSet == 2)
+                {
+                    <td>
+                        <div class="dropdown p-0">
+                            <button class="btn btn-success dropdown-toggle" type="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">Operacje</button>
+                            <div class="dropdown-menu nohover">
+                                <a asp-action="MeetingDetails" asp-route-meetingIdentificator="@meeting.MeetingIdentificator" asp-controller="Users" class="btn btn-info w-100 mb-1">Szczegóły spotkania</a>
+                                <a asp-action="CheckUsersPresence" asp-route-meetingIdentificator="@meeting.MeetingIdentificator" asp-controller="Users" class="btn btn-primary w-100">Sprawdź obecność</a>
+                            </div>
+                        </div>
+                    </td>
+                }
+                @if (Model.Options.OperationSet == 3 && meeting.Instructors.ToList().Select(z=> z.Email).Contains(this.User.Identity.Name))
                 {
                     <td>
                         <div class="dropdown p-0">
