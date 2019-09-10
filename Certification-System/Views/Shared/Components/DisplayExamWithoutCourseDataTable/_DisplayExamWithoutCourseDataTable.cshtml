@@ -93,21 +93,39 @@
                         }
                     </ul>
                 </td>
-                @if (Model.Options.OperationSet != 0)
+                @if (Model.Options.OperationSet == 1)
                 {
                     <td>
                         <div class="dropdown p-0">
                             <button class="btn btn-success dropdown-toggle" type="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">Operacje</button>
                             <div class="dropdown-menu nohover">
-                                <a asp-action="MarkExam" asp-route-examIdentificator="@exam.ExamIdentificator" asp-controller="Exams" class="btn btn-primary w-100 mb-1">Oceń egzamin</a>
                                 @if (exam.ExamDividedToTerms)
                                 {
                                     <a asp-action="AddNewExamTerm" asp-route-examIdentificator="@exam.ExamIdentificator" asp-controller="Exams" class="btn btn-secondary w-100 mb-1">Dodaj turę do egzaminu</a>
+                                }
+                                else
+                                {
+                                    <a asp-action="MarkExam" asp-route-examIdentificator="@exam.ExamIdentificator" asp-controller="Exams" class="btn btn-primary w-100 mb-1">Oceń egzamin</a>
                                 }
                                 <a asp-action="ExamDetails" asp-route-examIdentificator="@exam.ExamIdentificator" asp-controller="Exams" class="btn btn-info w-100 mb-1">Szczegóły egzaminu</a>
                                 <a asp-action="EditExamHub" asp-route-examIdentificator="@exam.ExamIdentificator" asp-controller="Exams" class="btn btn-warning w-100 mb-1">Edytuj</a>
                                 <a asp-action="AddUsersToExam" asp-route-examIdentificator="@exam.ExamIdentificator" asp-controller="Exams" class="btn btn-light w-100  mb-1">Przypisz użytkowników</a>
                                 <a asp-action="DeleteUsersFromExam" asp-route-examIdentificator="@exam.ExamIdentificator" asp-controller="Exams" class="btn btn-danger w-100">Usuń użytkowników</a>
+                            </div>
+                        </div>
+                    </td>
+                }
+                @if (Model.Options.OperationSet == 2)
+                {
+                    <td>
+                        <div class="dropdown p-0">
+                            <button class="btn btn-success dropdown-toggle" type="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">Operacje</button>
+                            <div class="dropdown-menu nohover">
+                                <a asp-action="ExamDetails" asp-route-examIdentificator="@exam.ExamIdentificator" asp-controller="Exams" class="btn btn-info w-100 mb-1">Szczegóły egzaminu</a>
+                                @if (!exam.ExamDividedToTerms)
+                                {
+                                    <a asp-action="MarkExam" asp-route-examIdentificator="@exam.ExamIdentificator" asp-controller="Exams" class="btn btn-primary w-100">Oceń egzamin</a>
+                                }
                             </div>
                         </div>
                     </td>
