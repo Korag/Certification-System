@@ -53,21 +53,6 @@
                                 <button class="btn btn-success dropdown-toggle" type="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">Operacje</button>
                                 <div class="dropdown-menu nohover">
                                     <a asp-action="UserDetails" asp-route-userIdentificator="@user.UserIdentificator" asp-controller="Users" class="btn btn-info w-100">Szczegóły</a>
-                                    @if (!Model.Course.CourseEnded && !String.IsNullOrWhiteSpace(user.UserIdentificator))
-                                    {
-                                        <form asp-action="DeleteUsersFromCourse" asp-controller="Courses">
-                                            <input value="@user.UserIdentificator" name="UsersToDeleteFromCourse[0].UserIdentificator" class="form-control col-12" hidden />
-                                            <input value="true" name="UsersToDeleteFromCourse[0].IsToDelete" class="form-control col-12" hidden />
-
-                                            <input value="@Model.Course.CourseIdentificator" name="CourseIdentificator" class="form-control col-12" hidden />
-                                            <input type="submit" value="Usuń użytkownika z kursu" class="btn btn-danger w-100 mt-1" />
-                                        </form>
-                                    }
-
-                                    @*@if (Model.Course != null)
-                                    {
-                                        <a asp-action="DeleteUsersFromCourse" asp-route-courseIdentificator="@Model.Course.CourseIdentificator" asp-controller="Courses" class="btn btn-danger w-100 mt-1">Usuń z kursu</a>
-                                    }*@
                                 </div>
                             </div>
                         </td>

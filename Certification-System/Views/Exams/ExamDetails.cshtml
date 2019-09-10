@@ -130,9 +130,13 @@ else
 
 @if (!Model.ExamDividedToTerms)
 {
-    <div class="mt-3 mb-3">
-        <a asp-action="AssignUsersFromCourseToExam" asp-route-examIdentificator="@Model.ExamIdentificator" asp-controller="Exams" class="btn btn-primary">Dodaj użytkowników do egzaminu</a>
-    </div>
+<div class="mt-3 mb-3">
+    <a asp-action="AssignUsersFromCourseToExam" asp-route-examIdentificator="@Model.ExamIdentificator" asp-controller="Exams" class="btn btn-primary mt-1 mr-1">Dodaj użytkowników do egzaminu</a>
+    @if ((Model.DateOfEnd > DateTime.Now) && Model.EnrolledUsers.Count != 0)
+    {
+        <a asp-action="DeleteUsersFromExam" asp-route-examIdentificator="@Model.ExamIdentificator" asp-controller="Exams" class="btn btn-danger mt-1">Usuń użytkowników z egzaminu</a>
+    }
+</div>
 }
 
 @if (Model.EnrolledUsers.Count != 0)

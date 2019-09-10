@@ -142,7 +142,6 @@ else
 {
     @await Component.InvokeAsync("DisplayGivenDegreeToUserDataTable", new { givenDegreeViewModel = Model.GivenDegrees, tableIdentificator = "listGivenDegrees", operationSet = 1 })
 }
-
 else
 {
     <div class="mt-4 mb-4 alert alert-warning">Użytkownikowi nie przyznano żadnych stopni zawodowych</div>
@@ -156,7 +155,7 @@ else
 
 @if (Model.Courses.Count != 0)
 {
-    @await Component.InvokeAsync("DisplayCourseDataTable", new { courseViewModel = Model.Courses, userIdentificator = Model.UserIdentificator, tableIdentificator = "listCourses", operationSet = 3 })
+    @await Component.InvokeAsync("DisplayCourseDataTable", new { courseViewModel = Model.Courses, userIdentificator = Model.UserIdentificator, tableIdentificator = "listCourses", operationSet = 2 })
 }
 else
 {
