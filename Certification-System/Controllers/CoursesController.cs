@@ -288,10 +288,10 @@ namespace Certification_System.Controllers
                 }
             }
 
-            //if (this.User.IsInRole("Instructor") && this.User.IsInRole("Examiner"))
-            //{
-            //    return View("InstructorCourseDetails", courseDetails);
-            //}
+            if (this.User.IsInRole("Instructor") && this.User.IsInRole("Examiner"))
+            {
+                return View("InstructorExaminerCourseDetails", courseDetails);
+            }
             else if (this.User.IsInRole("Instructor"))
             {
                 return View("InstructorCourseDetails", courseDetails);

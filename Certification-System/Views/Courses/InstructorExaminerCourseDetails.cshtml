@@ -1,7 +1,7 @@
 ﻿@model Certification_System.DTOViewModels.CourseDetailsViewModel
 
 @{
-    ViewData["Title"] = "CourseDetails";
+    ViewData["Title"] = "InstructorExaminerCourseDetails";
     Layout = "~/Views/Shared/_Layout.cshtml";
 }
 
@@ -16,19 +16,7 @@
 <h2>Informacje o kursie</h2>
 
 <div class="row m-0 mt-3 mb-3">
-    <a asp-action="EditCourseHub" asp-route-courseIdentificator="@Model.Course.CourseIdentificator" asp-controller="Courses" class="btn btn-warning mt-1 mr-1 xs450px_FloatLeft">Edytuj</a>
-
-    @if (Model.Course.CourseEnded == false)
-    {
-        <a asp-action="EndCourseAndDispenseGivenCertificates" asp-route-courseIdentificator="@Model.Course.CourseIdentificator" asp-controller="Courses" class="btn btn-secondary mt-1 mr-1 xs450px_FloatLeft">Zakończ kurs</a>
-    }
-
-    else
-    {
-        <a asp-action="EndCourseAndDispenseGivenCertificates" asp-route-courseIdentificator="@Model.Course.CourseIdentificator" asp-controller="Courses" class="btn btn-secondary mt-1 mr-1 xs450px_FloatLeft" disabled>Zakończ kurs</a>
-    }
-
-    <a asp-action="DisplayAllCourses" asp-controller="Courses" class="btn btn-outline-info mt-1 xs450px_FloatRight">Powrót do listy kursów</a>
+    <a asp-action="InstructorExaminerCourses" asp-controller="Courses" class="btn btn-outline-info mt-1 xs450px_FloatRight">Powrót do listy kursów</a>
 </div>
 
 <div>
@@ -112,7 +100,7 @@
 
 @if (Model.Instructors.Count != 0)
 {
-    @await Component.InvokeAsync("DisplayCrucialDataWithContactUserDataTable", new { userViewModel = Model.Instructors, tableIdentificator = "listInstructors", operationSet = 2 })
+    @await Component.InvokeAsync("DisplayCrucialDataWithContactUserDataTable", new { userViewModel = Model.Instructors, tableIdentificator = "listInstructors", operationSet = 0 })
 }
 
 else
@@ -122,13 +110,9 @@ else
 
 <h2 class="mt-4 mb-4">Spotkania w ramach kursu</h2>
 
-<div class="mt-3 mb-3">
-    <a asp-action="AddNewMeeting" asp-route-courseIdentificator="@Model.Course.CourseIdentificator" asp-controller="Meetings" class="btn btn-primary">Dodaj spotkanie do kursu</a>
-</div>
-
 @if (Model.Meetings.Count != 0)
 {
-    @await Component.InvokeAsync("DisplayMeetingWithoutCourseDataTable", new { meetingViewModel = Model.Meetings, tableIdentificator = "listMeetings", operationSet = 1 })
+    @await Component.InvokeAsync("DisplayMeetingWithoutCourseDataTable", new { meetingViewModel = Model.Meetings, tableIdentificator = "listMeetings", operationSet = 3 })
 }
 
 else
@@ -142,7 +126,7 @@ else
 
     @if (Model.Examiners.Count != 0)
     {
-        @await Component.InvokeAsync("DisplayCrucialDataWithContactUserDataTable", new { userViewModel = Model.Examiners, tableIdentificator = "listExaminers", operationSet = 2 })
+        @await Component.InvokeAsync("DisplayCrucialDataWithContactUserDataTable", new { userViewModel = Model.Examiners, tableIdentificator = "listExaminers", operationSet = 0 })
     }
 
     else
@@ -152,13 +136,9 @@ else
 
     <h2 class="mt-4 mb-4">Egzaminy w ramach kursu</h2>
 
-    <div class="mt-3 mb-3">
-        <a asp-action="AddExamMenu" asp-route-courseIdentificator="@Model.Course.CourseIdentificator" asp-controller="Exams" class="btn btn-primary">Dodaj egzamin do kursu</a>
-    </div>
-
     @if (Model.Exams.Count != 0)
     {
-        @await Component.InvokeAsync("DisplayExamWithoutCourseDataTable", new { examViewModel = Model.Exams, tableIdentificator = "listExams", operationSet = 1 })
+        @await Component.InvokeAsync("DisplayExamWithoutCourseDataTable", new { examViewModel = Model.Exams, tableIdentificator = "listExams", operationSet = 2 })
     }
 
     else
@@ -169,17 +149,9 @@ else
 
 <h2 class="mt-4 mb-4">Użytkownicy zapisani na kurs</h2>
 
-<div class="mt-3 mb-3">
-    <a asp-action="AssignUserToCourse" asp-route-courseIdentificator="@Model.Course.CourseIdentificator" asp-controller="Courses" class="btn btn-primary mr-1 mt-1">Dodaj użytkownika do kursu</a>
-    @if (!Model.Course.CourseEnded && Model.EnrolledUsers.Count != 0)
-    {
-        <a asp-action="DeleteUsersFromCourse" asp-route-courseIdentificator="@Model.Course.CourseIdentificator" asp-controller="Courses" class="btn btn-danger mt-1">Usuń użytkowników z kursu</a>
-    }
-</div>
-
 @if (Model.EnrolledUsers.Count != 0)
 {
-    @await Component.InvokeAsync("DisplayCrucialDataWithCourseSummaryUserDataTable", new { userViewModel = Model.EnrolledUsers, courseViewModel = Model.Course, dispensedGivenCertificateViewModel = Model.DispensedGivenCertificates, tableIdentificator = "listUsers", operationSet = 1 })
+    @await Component.InvokeAsync("DisplayCrucialDataWithCourseSummaryUserDataTable", new { userViewModel = Model.EnrolledUsers, courseViewModel = Model.Course, dispensedGivenCertificateViewModel = Model.DispensedGivenCertificates, tableIdentificator = "listUsers", operationSet = 0 })
 }
 
 else
