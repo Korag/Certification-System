@@ -51,7 +51,6 @@
 {
     @await Component.InvokeAsync("DisplayCompanyWithUserRoleDataTable", new { companyViewModel = Model.Companies, tableIdentificator = "listCompanies" })
 }
-
 else
 {
     <div class="mt-4 mb-4 alert alert-warning">Użytkownik nie jest zrzeszony z żadnym przedsiębiorstwem</div>

@@ -73,9 +73,9 @@
                 <input asp-for="User.DateOfBirth" class="form-control col-12" disabled />
             </div>
 
-            <div class="form-group">
+            <div class="form-group mb-0">
                 <label asp-for="User.Roles" class="control-label"></label>
-                <div class="row ml-0 mb-2 mr-0">
+                <div class="row ml-0 mr-0">
                     <div>
                         @foreach (var role in Model.User.Roles)
                         {

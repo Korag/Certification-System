@@ -102,7 +102,6 @@
 {
     @await Component.InvokeAsync("DisplayCrucialDataWithContactUserDataTable", new { userViewModel = Model.Instructors, tableIdentificator = "listInstructors", operationSet = 0 })
 }
-
 else
 {
     <div class="mt-4 mb-4 alert alert-warning">Brak instruktorów przypisanych do kursu</div>
@@ -114,7 +113,6 @@ else
 {
     @await Component.InvokeAsync("DisplayMeetingWithoutCourseDataTable", new { meetingViewModel = Model.Meetings, tableIdentificator = "listMeetings", operationSet = 3 })
 }
-
 else
 {
     <div class="mt-4 mb-4 alert alert-warning">Kurs nie posiada zdefiniowanych spotkań</div>
@@ -128,7 +126,6 @@ else
     {
         @await Component.InvokeAsync("DisplayCrucialDataWithContactUserDataTable", new { userViewModel = Model.Examiners, tableIdentificator = "listExaminers", operationSet = 0 })
     }
-
     else
     {
         <div class="mt-4 mb-4 alert alert-warning">Brak egzaminatorów przypisanych do kursu</div>
@@ -144,7 +141,6 @@ else
     {
         @await Component.InvokeAsync("DisplayExamWithoutCourseDataTable", new { examViewModel = Model.Exams, tableIdentificator = "listExams", operationSet = 0 })
     }
-
     else
     {
         <div class="mt-4 mb-4 alert alert-warning">Kurs nie posiada zdefiniowanych egzaminów</div>
@@ -157,7 +153,6 @@ else
 {
     @await Component.InvokeAsync("DisplayCrucialDataWithCourseSummaryUserDataTable", new { userViewModel = Model.EnrolledUsers, courseViewModel = Model.Course, dispensedGivenCertificateViewModel = Model.DispensedGivenCertificates, tableIdentificator = "listUsers", operationSet = 0 })
 }
-
 else
 {
     <div class="mt-4 mb-4 alert alert-warning">Brak użytkowników zapisanych na kurs</div>
