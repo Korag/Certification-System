@@ -319,7 +319,7 @@ namespace Certification_System.Controllers
         }
 
         // GET: ExamDetails
-        [Authorize(Roles = "Admin")]
+        [Authorize(Roles = "Admin, Examiner")]
         public ActionResult ExamDetails(string examIdentificator, string message)
         {
             ViewBag.Message = message;
@@ -378,6 +378,11 @@ namespace Certification_System.Controllers
 
             ExamDetails.Examiners = ListOfExaminers;
             ExamDetails.EnrolledUsers = ListOfUsers;
+
+            if (this.User.IsInRole("Examiner"))
+            {
+                return View("ExaminerExamDetails", ExamDetails);
+            }
 
             return View(ExamDetails);
         }

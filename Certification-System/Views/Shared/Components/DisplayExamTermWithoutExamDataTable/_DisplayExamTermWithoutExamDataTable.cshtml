@@ -61,7 +61,7 @@
                             }
                         </ul>
                     </td>
-                    @if (Model.Options.OperationSet != 0)
+                    @if (Model.Options.OperationSet == 1)
                     {
                         <td>
                             <div class="dropdown p-0">
@@ -74,6 +74,21 @@
                                     <a asp-action="DeleteUsersFromExamTerm" asp-route-examTermIdentificator="@examTerm.ExamTermIdentificator" asp-controller="ExamsTerms" class="btn btn-light w-100">Usuń użytkowników z tury</a>
                                 </div>
                             </div>
+                        </td>
+                    }
+                    @if (Model.Options.OperationSet == 2)
+                    {
+                        <td>
+                            @if (examTerm.Examiners.ToList().Select(z => z.Email).Contains(this.User.Identity.Name))
+                            {
+                                <div class="dropdown p-0">
+                                    <button class="btn btn-success dropdown-toggle" type="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">Operacje</button>
+                                    <div class="dropdown-menu nohover">
+                                        <a asp-action="ExamTermDetails" asp-route-examTermIdentificator="@examTerm.ExamTermIdentificator" asp-controller="ExamsTerms" class="btn btn-info w-100 mb-1">Szczegóły</a>
+                                        <a asp-action="MarkExamTerm" asp-route-examTermIdentificator="@examTerm.ExamTermIdentificator" asp-controller="ExamsTerms" class="btn btn-success w-100 mb-1">Oceń egzamin dla tury</a>
+                                    </div>
+                                </div>
+                            }
                         </td>
                     }
                 </tr>
