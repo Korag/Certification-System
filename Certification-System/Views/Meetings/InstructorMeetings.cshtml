@@ -1,0 +1,16 @@
+﻿@model IEnumerable<Certification_System.DTOViewModels.DisplayMeetingViewModel>
+
+@{
+    ViewData["Title"] = "InstructorMeetings";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+<h1>Moje spotkania</h1>
+<hr />
+
+@await Component.InvokeAsync("DisplayMeetingDataTable", new { meetingViewModel = Model, tableIdentificator = "listMeetings", operationSet = 2 })
+
+@section Scripts{
+    @{await Html.RenderPartialAsync("_DataTableBasicScript", "listMeetings");}
+}
+

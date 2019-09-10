@@ -7,21 +7,18 @@
     <div class="collapse navbar-collapse" id="navbarSupportedContent">
         <ul class="navbar-nav mr-auto">
             <li class="nav-item dropdown">
-                <a class="nav-link dropdown-toggle" href="#" id="navbarDropdown" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">Egzaminacja</a>
-                <div class="dropdown-menu">
-                    <p class="dropdown-header">Czynności egzaminacyjne</p>
-                    <div class="dropdown-divider"></div>
-                    <a asp-controller="" asp-action="" class="dropdown-item">Prowadzone kursy</a>
-                    <a asp-controller="" asp-action="" class="dropdown-item">Wprowadź oceny z egzaminu</a>
-                </div>
-            </li>
-            <li class="nav-item dropdown">
                 <a class="nav-link dropdown-toggle" href="#" id="navbarDropdown" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">Kursy</a>
                 <div class="dropdown-menu">
-                    <p class="dropdown-header">Szkolenia zawodowe</p>
+                    <p class="dropdown-header">Szkolnictwo i egzaminacja</p>
                     <div class="dropdown-divider"></div>
-                    <a asp-controller="" asp-action="" class="dropdown-item">Prowadzone kursy</a>
+                    <a asp-controller="Courses" asp-action="InstructorExaminerCourses" class="dropdown-item">Moje kursy</a>
+                    <a asp-controller="" asp-action="" class="dropdown-item">Moje spotkania</a>
+                    <a asp-controller="" asp-action="" class="dropdown-item">Moje egzaminy</a>
+                    <div class="dropdown-divider"></div>
+                    <p class="dropdown-header mt-1">Czynności</p>
+                    <div class="dropdown-divider"></div>
                     <a asp-controller="" asp-action="" class="dropdown-item">Sprawdź obecność</a>
+                    <a asp-controller="" asp-action="" class="dropdown-item">Oceń egzamin</a>
                 </div>
             </li>
             <li class="nav-item dropdown">

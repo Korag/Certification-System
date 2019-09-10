@@ -712,7 +712,7 @@ namespace Certification_System.Controllers
         }
 
         // GET: InstructorExaminerCourses
-        [Authorize(Roles = "Examiner")]
+        [Authorize(Roles = "Examiner, Instructor")]
         public ActionResult InstructorExaminerCourses()
         {
             ViewBag.AvailableRoleFilters = _context.userRepository.GetAvailableCourseRoleFiltersAsSelectList();

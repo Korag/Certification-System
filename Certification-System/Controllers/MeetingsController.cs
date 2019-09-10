@@ -213,5 +213,29 @@ namespace Certification_System.Controllers
 
             return RedirectToAction("MeetingDetails", "Meetings", new { meetingIdentificator = meetingWithPresenceToCheck.MeetingIdentificator, checkedPresence = true });
         }
+
+        // GET: InstructorMeetings
+        [Authorize(Roles = "Instructor")]
+        public ActionResult InstructorMeetings()
+        {
+            var User = _context.userRepository.GetUserByEmail(this.User.Identity.Name);
+
+            var Meetings = _context.meetingRepository.GetMeetingsByInstructorId(User.Id);
+            List<DisplayMeetingViewModel> ListOfMeetings = new List<DisplayMeetingViewModel>();
+
+            foreach (var meeting in Meetings)
+            {
+                var Course = _context.courseRepository.GetCourseByMeetingId(meeting.MeetingIdentificator);
+                var Instructors = _context.userRepository.GetInstructorsById(meeting.Instructors).ToList();
+
+                DisplayMeetingViewModel singleMeeting = _mapper.Map<DisplayMeetingViewModel>(meeting);
+                singleMeeting.Course = _mapper.Map<DisplayCrucialDataCourseViewModel>(Course);
+                singleMeeting.Instructors = _mapper.Map<List<DisplayCrucialDataUserViewModel>>(Instructors);
+
+                ListOfMeetings.Add(singleMeeting);
+            }
+
+            return View(ListOfMeetings);
+        }
     }
 }
