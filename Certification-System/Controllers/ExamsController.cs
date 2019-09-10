@@ -855,7 +855,7 @@ namespace Certification_System.Controllers
         }
 
         // GET: MarkExam
-        [Authorize(Roles = "Admin")]
+        [Authorize(Roles = "Admin, Examiner")]
         public ActionResult MarkExam(string examIdentificator)
         {
             if (string.IsNullOrWhiteSpace(examIdentificator))
@@ -902,7 +902,7 @@ namespace Certification_System.Controllers
 
         // POST: MarkExam
         [HttpPost]
-        [Authorize(Roles = "Admin")]
+        [Authorize(Roles = "Admin, Examiner")]
         public ActionResult MarkExam(MarkExamViewModel markedExamViewModel)
         {
             if (ModelState.IsValid)
@@ -954,6 +954,34 @@ namespace Certification_System.Controllers
             }
 
             return View(ListOfUsers);
+        }
+
+        // GET: ExaminerExams
+        [Authorize(Roles = "Examiner")]
+        public ActionResult ExaminerExams()
+        {
+            var User = _context.userRepository.GetUserByEmail(this.User.Identity.Name);
+
+            var Exams = _context.examRepository.GetExamsByExaminerId(User.Id);
+            var Courses = _context.courseRepository.GetCoursesByExamsId(Exams.Select(z=> z.ExamIdentificator).ToList());
+
+            List<DisplayExamViewModel> ListOfExams = new List<DisplayExamViewModel>();
+
+            foreach (var course in Courses)
+            {
+                foreach (var exam in course.Exams)
+                {
+                    Exam examModel = Exams.Where(z => z.ExamIdentificator == exam).FirstOrDefault();
+
+                    DisplayExamViewModel singleExam = _mapper.Map<DisplayExamViewModel>(examModel);
+                    singleExam.Examiners = _mapper.Map<List<DisplayCrucialDataUserViewModel>>(_context.userRepository.GetUsersById(examModel.Examiners));
+                    singleExam.Course = _mapper.Map<DisplayCrucialDataCourseViewModel>(course);
+
+                    ListOfExams.Add(singleExam);
+                }
+            }
+
+            return View(ListOfExams);
         }
     }
 }

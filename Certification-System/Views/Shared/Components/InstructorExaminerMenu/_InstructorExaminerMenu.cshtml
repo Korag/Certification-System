@@ -7,19 +7,13 @@
     <div class="collapse navbar-collapse" id="navbarSupportedContent">
         <ul class="navbar-nav mr-auto">
             <li class="nav-item dropdown">
-                <a class="nav-link dropdown-toggle" href="#" id="navbarDropdown" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">Kursy</a>
-                <div class="dropdown-menu">
-                    <p class="dropdown-header">Szkolnictwo i egzaminacja</p>
-                    <div class="dropdown-divider"></div>
-                    <a asp-controller="Courses" asp-action="InstructorExaminerCourses" class="dropdown-item">Moje kursy</a>
-                    <a asp-controller="" asp-action="" class="dropdown-item">Moje spotkania</a>
-                    <a asp-controller="" asp-action="" class="dropdown-item">Moje egzaminy</a>
-                    <div class="dropdown-divider"></div>
-                    <p class="dropdown-header mt-1">Czynności</p>
-                    <div class="dropdown-divider"></div>
-                    <a asp-controller="" asp-action="" class="dropdown-item">Sprawdź obecność</a>
-                    <a asp-controller="" asp-action="" class="dropdown-item">Oceń egzamin</a>
-                </div>
+                <a asp-controller="Courses" asp-action="InstructorExaminerCourses"  id="navbarDropdown" class="nav-link">Moje kursy</a>
+            </li>
+            <li class="nav-item dropdown">
+                <a asp-controller="InstructorMeetings" asp-action="Meetings" class="dropdown-item">Moje spotkania</a>
+            </li>
+            <li class="nav-item dropdown">
+                <a asp-controller="ExaminerExams" asp-action="Exams" class="dropdown-item">Moje egzaminy</a>
             </li>
             <li class="nav-item dropdown">
                 <a class="nav-link dropdown-toggle" href="#" id="navbarDropdown" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">Aktualności</a>

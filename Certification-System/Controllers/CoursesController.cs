@@ -203,7 +203,7 @@ namespace Certification_System.Controllers
         }
 
         // GET: CourseDetails
-        [Authorize(Roles = "Admin, Instructor")]
+        [Authorize(Roles = "Admin, Instructor, Examiner")]
         public ActionResult CourseDetails(string courseIdentificator, string message)
         {
             ViewBag.Message = message;
@@ -712,7 +712,8 @@ namespace Certification_System.Controllers
         }
 
         // GET: InstructorExaminerCourses
-        [Authorize(Roles = "Examiner, Instructor")]
+        [Authorize(Roles = "Instructor")]
+        [Authorize(Roles = "Examiner")]
         public ActionResult InstructorExaminerCourses()
         {
             ViewBag.AvailableRoleFilters = _context.userRepository.GetAvailableCourseRoleFiltersAsSelectList();

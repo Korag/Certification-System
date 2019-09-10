@@ -183,7 +183,7 @@ namespace Certification_System.Controllers
         }
 
         // GET: CheckUsersPresence
-        [Authorize(Roles = "Admin")]
+        [Authorize(Roles = "Admin, Instructor")]
         public ActionResult CheckUsersPresence(string meetingIdentificator)
         {
             var Meeting = _context.meetingRepository.GetMeetingById(meetingIdentificator);
@@ -209,7 +209,7 @@ namespace Certification_System.Controllers
         }
 
         // POST: CheckUsersPresence
-        [Authorize(Roles = "Admin")]
+        [Authorize(Roles = "Admin, Instructor")]
         [HttpPost]
         public ActionResult CheckUsersPresence(CheckMeetingPresenceCrucialDataViewModel meetingWithPresenceToCheck)
         {

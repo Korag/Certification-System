@@ -7,17 +7,10 @@
     <div class="collapse navbar-collapse" id="navbarSupportedContent">
         <ul class="navbar-nav mr-auto">
             <li class="nav-item dropdown">
-                <a class="nav-link dropdown-toggle" href="#" id="navbarDropdown" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">Kursy</a>
-                <div class="dropdown-menu">
-                    <p class="dropdown-header">Szkolenia zawodowe</p>
-                    <div class="dropdown-divider"></div>
-                    <a asp-controller="Courses" asp-action="InstructorCourses" class="dropdown-item">Moje kursy</a>
-                    <a asp-controller="Meetings" asp-action="InstructorMeetings" class="dropdown-item">Moje spotkania</a>
-                    <div class="dropdown-divider"></div>
-                    <p class="dropdown-header mt-1">Czynności dydaktyczne</p>
-                    <div class="dropdown-divider"></div>
-                    <a asp-controller="" asp-action="" class="dropdown-item">Sprawdź obecność</a>
-                </div>
+                <a asp-controller="Courses" asp-action="InstructorCourses" id="navbarDropdown" class="nav-link">Moje kursy</a>
+            </li>
+            <li class="nav-item dropdown">
+                <a asp-controller="Meetings" asp-action="InstructorMeetings" id="navbarDropdown" class="nav-link">Moje spotkania</a>
             </li>
             <li class="nav-item dropdown">
                 <a class="nav-link dropdown-toggle" href="#" id="navbarDropdown" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">Aktualności</a>
@@ -36,6 +29,7 @@
                     <a asp-controller="CompetenceVerification" asp-action="VerifyCompetenceManual" class="dropdown-item">Instrukcja z menu weryfikacji *</a>
                     <a asp-controller="CompetenceVerification" asp-action="VerifyUser" class="dropdown-item">Weryfikacja użytkownika *</a>
                     <a asp-controller="CompetenceVerification" asp-action="VerifyGivenCertificate" class="dropdown-item">Weryfikacja certyfikatu *</a>
+                    <a asp-controller="CompetenceVerification" asp-action="VerifyGivenDegree" class="dropdown-item">Weryfikacja stopnia zawodowego *</a>
                 </div>
             </li>
         </ul>
