@@ -17,10 +17,11 @@
 <h2>Informacje o egzaminie</h2>
 
 <div class="row m-0 mt-3 mb-3">
-    @if (Model.ExamDividedToTerms == false && Model.Examiners.Select(z=> z.Email).Contains(this.User.Identity.Name))
+    @if (Model.ExamDividedToTerms == false && Model.Examiners.Select(z => z.Email).Contains(this.User.Identity.Name))
     {
         <a asp-action="MarkExam" asp-controller="Exams" class="btn btn-success mt-1 mr-1 xs450px_FloatLeft">Oceń egzamin</a>
     }
+    <a asp-action="DisplayExamSummary" asp-route-examIdentificator="@Model.ExamIdentificator" asp-controller="Exams" class="btn btn-success mt-1 mr-1 xs450px_FloatLeft">Podsumowanie</a>
 
     <a asp-action="DisplayAllExams" asp-controller="Exams" class="btn btn-outline-info mt-1 xs450px_FloatRight">Powrót do listy egzaminów</a>
 </div>

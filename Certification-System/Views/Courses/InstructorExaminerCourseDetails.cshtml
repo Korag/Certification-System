@@ -16,6 +16,7 @@
 <h2>Informacje o kursie</h2>
 
 <div class="row m-0 mt-3 mb-3">
+    <a asp-action="DisplayCourseSummary" asp-route-courseIdentificator="@Model.Course.CourseIdentificator" asp-controller="Courses" class="btn btn-success mt-1 mr-1 xs450px_FloatLeft">Podsumowanie</a>
     <a asp-action="InstructorExaminerCourses" asp-controller="Courses" class="btn btn-outline-info mt-1 xs450px_FloatRight">Powrót do listy kursów</a>
 </div>
 

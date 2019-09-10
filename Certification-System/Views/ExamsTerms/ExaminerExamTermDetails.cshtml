@@ -22,6 +22,8 @@
         {
             <a asp-action="MarkExamTerm" asp-route-courseIdentificator="@Model.ExamTermIdentificator" asp-controller="ExamsTerms" class="btn btn-success mt-1 mr-1 xs450px_FloatLeft">Oceń turę egzaminu</a>
         }
+        <a asp-action="DisplayExamTermSummary" asp-route-examTermIdentificator="@Model.ExamTermIdentificator" asp-controller="ExamsTerms" class="btn btn-success mt-1 mr-1 xs450px_FloatLeft">Podsumowanie</a>
+
         <a asp-action="DisplayExamsTerms" asp-controller="ExamsTerms" class="btn btn-outline-info mt-1 xs450px_FloatRight">Powrót do listy tur</a>
     </div>
 
