@@ -13,7 +13,7 @@
 
         <div class="col-md-8 col-xl-6 col-lg-6 col-sm-12 col-xs-10 m-auto p-3 shadow p-3 mb-5 bg-light rounded border border-primary rounded-bottom" style="opacity:0.90">
 
-            <input asp-for="MeetingIdentificator" class="form-control col-12" hidden/>
+            <input asp-for="MeetingIdentificator" class="form-control col-12" hidden />
 
             <div class="form-group">
                 <label asp-for="MeetingIndexer" class="control-label"></label>
@@ -112,20 +112,15 @@
 
             <div asp-validation-summary="ModelOnly" class="row justify-content-center alert alert-danger validation-model"></div>
 
-            <input type="submit" value="Utwórz" class="btn btn-primary" />
-            <a asp-action="DisplayAllMeetings" asp-controller="Meetings" class="btn btn-info" style="float:right">Powrót do listy</a>
+            <div class="row m-0 mt-3">
+                <button type="button" class="btn btn-primary mt-1 xs300px_JustifyContentCenter" data-toggle="modal" data-target="#modal">Edytuj</button>
+                @await Component.InvokeAsync("Modal", new { Title = "Edycja spotkania w ramach kursu", Body = "Czy na pewno chcesz zaktualizować wybrane spotkanie ?", FormSubmit = true, ButtonText = "Edytuj", ButtonClass = "btn-warning" })
+                <a asp-action="DisplayAllMeetings" asp-controller="Meetings" class="btn btn-outline-info mt-1 xs300px_FloatRight">Powrót do listy</a>
+            </div>
 
         </div>
 
     </form>
-</div>
-
-<div>
-    @*jeżeli było to przekierowanie to możemy wrócić
-        @Html.ActionLink("Wróć do listy spotkań szkolenia", "Index")
-
-        jeżeli panel został ręcznie wywołany możemy z tego poziomu przejść do widoku aktywnych kursów
-        @Html.ActionLink("Przeglądaj aktywne kursy", "Index")*@
 </div>
 
 @section Scripts {

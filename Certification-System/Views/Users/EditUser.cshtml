@@ -179,7 +179,8 @@
             <div asp-validation-summary="ModelOnly" class="row justify-content-center alert alert-danger validation-model"></div>
 
             <div class="row m-0 mt-3">
-                <input type="submit" class="btn btn-primary mt-1 xs300px_JustifyContentCenter" value="Edytuj" />
+                <button type="button" class="btn btn-primary mt-1 xs300px_JustifyContentCenter" data-toggle="modal" data-target="#modal">Edytuj</button>
+                @await Component.InvokeAsync("Modal", new { Title = "Edycja użytkownika systemu", Body = "Czy na pewno chcesz zaktualizować dane wybranego użytkownika systemu ?", FormSubmit = true, ButtonText = "Edytuj", ButtonClass = "btn-warning" })
                 <a asp-action="DisplayAllUsers" asp-controller="Users" class="btn btn-outline-info mt-1 xs300px_FloatRight">Powrót do listy</a>
             </div>
 

@@ -86,7 +86,8 @@
             <div asp-validation-summary="ModelOnly" class="row justify-content-center alert alert-danger validation-model"></div>
 
             <div class="row m-0 mt-3">
-                <input type="submit" value="Aktualizuj" class="btn btn-warning mt-1 xs300px_JustifyContentCenter" />
+                <button type="button" class="btn btn-primary mt-1 xs300px_JustifyContentCenter" data-toggle="modal" data-target="#modal">Edytuj</button>
+                @await Component.InvokeAsync("Modal", new { Title = "Edycja nadanego certyfikatu", Body = "Czy na pewno chcesz zaktualizować wybrany certyfikat ?", FormSubmit = true, ButtonText = "Edytuj", ButtonClass = "btn-warning" })
                 <a asp-action="DisplayAllGivenCertificates" asp-controller="GivenCertificates" class="btn btn-outline-info mt-1 xs300px_FloatRight">Powrót do listy</a>
             </div>
 
