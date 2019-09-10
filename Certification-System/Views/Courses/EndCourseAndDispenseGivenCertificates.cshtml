@@ -130,7 +130,7 @@
             <div asp-validation-summary="ModelOnly" class="row justify-content-center alert alert-danger validation-model"></div>
 
             <div class="row m-0 mt-3">
-                <input type="submit" value="Zakończ kurs" class="btn btn-primary mt-1 mr-1 xs300px_JustifyContentCenter" />
+                <button type="button" class="btn btn-success mt-1 xs300px_JustifyContentCenter" data-toggle="modal" data-target="#modal">Zakończ kurs</button>
                 <a asp-action="CourseDetails" asp-route-courseIdentificator="@Model.CourseIdentificator" asp-controller="Courses" class="btn btn-outline-info mt-1 mr-1 xs300px_FloatRight">Powrót do szczegółów</a>
             </div>
 
@@ -143,6 +143,8 @@
     }
 
 </form>
+
+@await Component.InvokeAsync("Modal", new { Title = "Zamykanie kursu i rozdawanie certyfikatów", Body = "Czy na pewno chcesz zakończyć kurs i wystawić zaznaczonym użytkownikom stosowne certyfikaty ?", FormSubmit = true, ButtonText = "Zakończ kurs", ButtonClass = "btn-success" })
 
 @section Scripts {
     @{await Html.RenderPartialAsync("_ValidationScriptsPartial");}

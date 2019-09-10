@@ -100,7 +100,7 @@
 
         <div>
             <div class="row justify-content-center">
-                <input type="submit" value="Oceń turę egzaminu" class="btn btn-danger" />
+                <button type="button" class="btn btn-success mt-1 xs300px_JustifyContentCenter" data-toggle="modal" data-target="#modal">Oceń turę egzaminu</button>
             </div>
         </div>
     }
@@ -110,6 +110,8 @@
     }
 
 </form>
+
+@await Component.InvokeAsync("Modal", new { Title = "Ocenianie tury wchodzącej w skład egzaminu", Body = "Czy na pewno chcesz wprowadzić następujące wyniki tury egzaminu dla zapisanych użytkowników ?", FormSubmit = true, ButtonText = "Oceń turę egzaminu", ButtonClass = "btn-success" })
 
 @section Scripts {
     @{await Html.RenderPartialAsync("_ValidationScriptsPartial");}
