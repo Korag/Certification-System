@@ -85,10 +85,11 @@
 
         </div>
 
+        @await Component.InvokeAsync("Modal", new { Title = "Edycja typu stopnia zawodowego", Body = "Czy na pewno chcesz zaktualizować dane wybranego typu stopnia zawodowego ?", FormSubmit = true, ButtonText = "Edytuj", ButtonClass = "btn-warning" })
+
     </form>
 </div>
 
-@await Component.InvokeAsync("Modal", new { Title = "Edycja typu stopnia zawodowego", Body = "Czy na pewno chcesz zaktualizować dane wybranego typu stopnia zawodowego ?", FormSubmit = true, ButtonText = "Edytuj", ButtonClass = "btn-warning" })
 
 @section Scripts {
     @{await Html.RenderPartialAsync("_ValidationScriptsPartial");}

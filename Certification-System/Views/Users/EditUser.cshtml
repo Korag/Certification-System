@@ -185,10 +185,10 @@
 
         </div>
 
+        @await Component.InvokeAsync("Modal", new { Title = "Edycja użytkownika systemu", Body = "Czy na pewno chcesz zaktualizować dane wybranego użytkownika systemu ?", FormSubmit = true, ButtonText = "Edytuj", ButtonClass = "btn-warning" })
+
     </form>
 </div>
-
-@await Component.InvokeAsync("Modal", new { Title = "Edycja użytkownika systemu", Body = "Czy na pewno chcesz zaktualizować dane wybranego użytkownika systemu ?", FormSubmit = true, ButtonText = "Edytuj", ButtonClass = "btn-warning" })
 
 @section Scripts {
     @{await Html.RenderPartialAsync("_ValidationScriptsPartial");}

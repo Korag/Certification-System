@@ -124,10 +124,10 @@
 
         </div>
 
+        @await Component.InvokeAsync("Modal", new { Title = "Edycja egzaminu", Body = "Czy na pewno chcesz zaktualizować wybrany egzamin ?", FormSubmit = true, ButtonText = "Edytuj", ButtonClass = "btn-warning" })
+
     </form>
 </div>
-
-@await Component.InvokeAsync("Modal", new { Title = "Edycja egzaminu", Body = "Czy na pewno chcesz zaktualizować wybrany egzamin ?", FormSubmit = true, ButtonText = "Edytuj", ButtonClass = "btn-warning" })
 
 @section Scripts {
     @{await Html.RenderPartialAsync("_ValidationScriptsPartial");}

@@ -19,7 +19,6 @@
     <form>
         <div class="col-md-8 col-xl-6 col-lg-6 col-sm-12 col-xs-10 m-auto p-3 shadow p-3 mb-5 bg-light rounded border border-primary rounded-bottom" style="opacity:0.90">
 
-
             <div class="form-group">
                 <label asp-for="CertificateIndexer" class="control-label"></label>
                 <input asp-for="CertificateIndexer" class="form-control col-12" disabled />
@@ -59,9 +58,10 @@
     </form>
 </div>
 
+<h2 class="mt-4 mb-4">Użytkownicy posiadający certyfikat</h2>
+
 @if (Model.UsersWithCertificate.Count != 0)
 {
-    <h2 class="mt-4 mb-4">Użytkownicy posiadający certyfikat</h2>
     @await Component.InvokeAsync("DisplayCrucialDataWithCompaniesRoleUserDataTable", new { userViewModel = Model.UsersWithCertificate, tableIdentificator = "listUsers", operationSet = 1 })
 }
 else
@@ -69,9 +69,10 @@ else
     <div class="mt-4 mb-4 alert alert-warning">Brak użytkowników posiadających dany certyfikat</div>
 }
 
+<h2 class="mt-4 mb-4">Kursy, które zakończyły się przyznaniem tego typu certyfikatu</h2>
+
 @if (Model.CoursesWhichEndedWithCertificate.Count != 0)
 {
-    <h2 class="mt-4 mb-4">Kursy, które zakończyły się przyznaniem tego typu certyfikatu</h2>
     @await Component.InvokeAsync("DisplayCourseDataTable", new { courseViewModel = Model.CoursesWhichEndedWithCertificate, tableIdentificator = "listCourses", operationSet = 1 })
 }
 else

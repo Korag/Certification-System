@@ -92,10 +92,10 @@
 
         </div>
 
+        @await Component.InvokeAsync("Modal", new { Title = "Edycja nadanego certyfikatu", Body = "Czy na pewno chcesz zaktualizować wybrany certyfikat ?", FormSubmit = true, ButtonText = "Edytuj", ButtonClass = "btn-warning" })
+
     </form>
 </div>
-
-@await Component.InvokeAsync("Modal", new { Title = "Edycja nadanego certyfikatu", Body = "Czy na pewno chcesz zaktualizować wybrany certyfikat ?", FormSubmit = true, ButtonText = "Edytuj", ButtonClass = "btn-warning" })
 
 @*<div class="mt-3">
         <a asp-action="DisplayAllUsers" asp-controller="Users" class="btn btn-secondary">Wyświetl listę użytkowników</a>

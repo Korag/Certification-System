@@ -109,9 +109,9 @@
         <div class="mt-4 mb-4 alert alert-warning">Brak zapisanych użytkowników</div>
     }
 
-</form>
+    @await Component.InvokeAsync("Modal", new { Title = "Ocenianie tury wchodzącej w skład egzaminu", Body = "Czy na pewno chcesz wprowadzić następujące wyniki tury egzaminu dla zapisanych użytkowników ?", FormSubmit = true, ButtonText = "Oceń turę egzaminu", ButtonClass = "btn-success" })
 
-@await Component.InvokeAsync("Modal", new { Title = "Ocenianie tury wchodzącej w skład egzaminu", Body = "Czy na pewno chcesz wprowadzić następujące wyniki tury egzaminu dla zapisanych użytkowników ?", FormSubmit = true, ButtonText = "Oceń turę egzaminu", ButtonClass = "btn-success" })
+</form>
 
 @section Scripts {
     @{await Html.RenderPartialAsync("_ValidationScriptsPartial");}

@@ -83,10 +83,10 @@
 
         </div>
 
+        @await Component.InvokeAsync("Modal", new { Title = "Edycja nadanego stopnia zawodowego", Body = "Czy na pewno chcesz zaktualizować wybrany stopień zawodowy ?", FormSubmit = true, ButtonText = "Edytuj", ButtonClass = "btn-warning" })
+
     </form>
 </div>
-
-@await Component.InvokeAsync("Modal", new { Title = "Edycja nadanego stopnia zawodowego", Body = "Czy na pewno chcesz zaktualizować wybrany stopień zawodowy ?", FormSubmit = true, ButtonText = "Edytuj", ButtonClass = "btn-warning" })
 
 @*<div class="mt-3">
         <a asp-action="DisplayAllGivenDegrees" asp-controller="GivenDegrees" class="btn btn-primary">Wróć do listy wszystkich nadanych stopni zawodowy</a>

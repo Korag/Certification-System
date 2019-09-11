@@ -142,9 +142,9 @@
         <div class="mt-4 mb-4 alert alert-warning">Brak zapisanych użytkowników</div>
     }
 
-</form>
+    @await Component.InvokeAsync("Modal", new { Title = "Zamykanie kursu i rozdawanie certyfikatów", Body = "Czy na pewno chcesz zakończyć kurs i wystawić zaznaczonym użytkownikom stosowne certyfikaty ?", FormSubmit = true, ButtonText = "Zakończ kurs", ButtonClass = "btn-success" })
 
-@await Component.InvokeAsync("Modal", new { Title = "Zamykanie kursu i rozdawanie certyfikatów", Body = "Czy na pewno chcesz zakończyć kurs i wystawić zaznaczonym użytkownikom stosowne certyfikaty ?", FormSubmit = true, ButtonText = "Zakończ kurs", ButtonClass = "btn-success" })
+</form>
 
 @section Scripts {
     @{await Html.RenderPartialAsync("_ValidationScriptsPartial");}

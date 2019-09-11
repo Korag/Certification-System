@@ -29,10 +29,12 @@
                 <button type="button" class="btn btn-primary" data-toggle="modal" data-target="#modal">Launch demo modal</button>
                 <a asp-action="DisplayAllBranches" asp-controller="Branches" class="btn btn-outline-info mt-1 xs300px_FloatRight">Powrót do listy</a>
             </div>
-        
+
         </div>
+
+        @await Component.InvokeAsync("Modal", new { Title = "TEST", Body = "Przykładowe body", Action = "BlankMenu", Controller = "Certificates", ButtonText = "Testuj", ButtonClass = "btn-success" })
+
     </form>
 </div>
 
-@await Component.InvokeAsync("Modal", new { Title = "TEST", Body = "Przykładowe body", Action = "BlankMenu", Controller = "Certificates", ButtonText = "Testuj", ButtonClass = "btn-success" })
 

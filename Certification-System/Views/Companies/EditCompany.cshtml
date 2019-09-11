@@ -104,7 +104,8 @@
 
         </div>
 
+        @await Component.InvokeAsync("Modal", new { Title = "Edycja danych przedsiębiorstwa", Body = "Czy na pewno chcesz zaktualizować dane wybranego przedsiębiorstwa ?", FormSubmit = true, ButtonText = "Edytuj", ButtonClass = "btn-warning" })
+
     </form>
 </div>
 
-@await Component.InvokeAsync("Modal", new { Title = "Edycja danych przedsiębiorstwa", Body = "Czy na pewno chcesz zaktualizować dane wybranego przedsiębiorstwa ?", FormSubmit = true, ButtonText = "Edytuj", ButtonClass = "btn-warning" })

@@ -92,9 +92,9 @@
         <div class="mt-4 mb-4 alert alert-warning">Brak zapisanych użytkowników</div>
     }
 
-</form>
+    @await Component.InvokeAsync("Modal", new { Title = "Usuwanie użytkowników z egzaminu", Body = "Czy na pewno chcesz usunąć zaznaczonych użytkowników z tury egzaminu ?", FormSubmit = true, ButtonText = "Usuń", ButtonClass = "btn-danger" })
 
-@await Component.InvokeAsync("Modal", new { Title = "Usuwanie użytkowników z egzaminu", Body = "Czy na pewno chcesz usunąć zaznaczonych użytkowników z tury egzaminu ?", FormSubmit = true, ButtonText = "Usuń", ButtonClass = "btn-danger" })
+</form>
 
 @section Scripts {
     @{await Html.RenderPartialAsync("_ValidationScriptsPartial");}
