@@ -18,7 +18,7 @@ namespace Certification_System.Components
                 }
             };
 
-            return View("_DisplayGivenCertificateToUserDataTableV", givenCertificateDataTableViewModel);
+            return View("_DisplayGivenCertificateToUserDataTable", givenCertificateDataTableViewModel);
         }
     }
 }
