@@ -27,7 +27,7 @@ namespace Certification_System.Controllers
         }
 
         // GET: BlankMenu
-        [Authorize]
+        [Authorize(Roles = "Instructor")]
         public ActionResult BlankMenu(string message = null)
         {
             ViewBag.message = message;

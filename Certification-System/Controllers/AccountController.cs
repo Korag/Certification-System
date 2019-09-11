@@ -16,6 +16,7 @@ using Certification_System.Repository.DAL;
 using Certification_System.DTOViewModels;
 using System.Collections.Generic;
 using Certification_System.ServicesInterfaces.Models;
+using System.Diagnostics;
 
 namespace Certification_System.Controllers
 {
@@ -64,7 +65,6 @@ namespace Certification_System.Controllers
            {4, "Użytkownik nie może zresetować swojego hasła w przypadku, gdy adres email nie został potwierdzony. Najpierw należy wysłać wiadomość weryfikacyjną adres email, a następnie tą lub po potwierdzeniu adresu użytkownik sam może skorzystać z opcji \"Zapomniałem hasła\" w panelu logowania"}
         };
 
-
         [HttpGet]
         [AllowAnonymous]
         public async Task<ActionResult> Login(string returnUrl = null, string message = null)
@@ -100,7 +100,7 @@ namespace Certification_System.Controllers
                         var callbackUrl = Url.EmailConfirmationLink(user.Id, code, Request.Scheme);
 
                         var emailToSend = _emailSender.GenerateEmailMessage(model.Email, user.FirstName + " " + user.LastName, "emailConfirmation", callbackUrl);
-                        _emailSender.SendEmailAsync(emailToSend);
+                        await _emailSender.SendEmailAsync(emailToSend);
 
                         return View(model);
                     }
@@ -169,7 +169,7 @@ namespace Certification_System.Controllers
                     var callbackUrl = Url.EmailConfirmationLink(user.Id, code, Request.Scheme);
 
                     var emailToSend = _emailSender.GenerateEmailMessage(model.Email, user.FirstName + " " + user.LastName, "register", callbackUrl);
-                    _emailSender.SendEmailAsync(emailToSend);
+                    await _emailSender.SendEmailAsync(emailToSend);
 
                     //await _signInManager.SignInAsync(user, isPersistent: false);
                     _logger.LogInformation("Użytkownik utworzył nowe konto.");
@@ -316,7 +316,7 @@ namespace Certification_System.Controllers
                 if (user == null  || !(await _userManager.IsEmailConfirmedAsync(user)))
                 {
                     var emailMessage = _emailSender.GenerateEmailMessage(emailModel.Email, "" , "resetPasswordWithoutEmailConfirmation");
-                    _emailSender.SendEmailAsync(emailMessage);
+                    await _emailSender.SendEmailAsync(emailMessage);
 
                     return RedirectToAction(nameof(ForgotPasswordConfirmation));
                 }
@@ -326,7 +326,7 @@ namespace Certification_System.Controllers
                 var callbackUrl = Url.ResetPasswordCallbackLink(user.Id, code, Request.Scheme);
 
                 var emailToSend = _emailSender.GenerateEmailMessage(user.Email, user.FirstName + " " + user.LastName, "resetPassword");
-                _emailSender.SendEmailAsync(emailToSend);
+                await _emailSender.SendEmailAsync(emailToSend);
 
                 return RedirectToAction(nameof(ForgotPasswordConfirmation), new { messageNumber = 1 });
             }
@@ -432,6 +432,12 @@ namespace Certification_System.Controllers
             ViewBag.message = _messages[messageNumber];
 
             return View((object)returnUrl);
+        }
+
+        [ResponseCache(Duration = 0, Location = ResponseCacheLocation.None, NoStore = true)]
+        public IActionResult Error()
+        {
+            return View(new ErrorViewModel { RequestId = Activity.Current?.Id ?? HttpContext.TraceIdentifier });
         }
 
         #region Currently not-used
