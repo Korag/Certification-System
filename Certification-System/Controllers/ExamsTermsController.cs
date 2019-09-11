@@ -210,11 +210,20 @@ namespace Certification_System.Controllers
 
             AssignUserToExamTermViewModel userToAssignToExamTerm = new AssignUserToExamTermViewModel
             {
-                AvailableExamTerms = _context.examTermRepository.GetActiveExamTermsWithVacantSeatsAsSelectList(Exam).ToList(),
+                AvailableUsers = _context.userRepository.GetWorkersAsSelectList().ToList(),
+                AvailableExams = _context.examRepository.GetActiveExamsAsSelectList().ToList(),
+                AvailableExamTerms = _context.examTermRepository.GetActiveExamTermsWithVacantSeatsAsSelectList().ToList(),
 
-                UserIdentificator = userIdentificator,
-                ExamIdentificator = examIdentificator
+            UserIdentificator = userIdentificator,
             };
+
+            if (!string.IsNullOrWhiteSpace(examIdentificator))
+            {
+                userToAssignToExamTerm.ExamIdentificator = examIdentificator;
+                userToAssignToExamTerm.SelectedExams = examIdentificator;
+                userToAssignToExamTerm.AvailableExamTerms = _context.examTermRepository.GetActiveExamTermsWithVacantSeatsAsSelectList(Exam).ToList();
+            }
+
             return View(userToAssignToExamTerm);
         }
 
@@ -254,6 +263,8 @@ namespace Certification_System.Controllers
             {
                 var Exam = _context.examRepository.GetExamById(userAssignedToExamTerm.ExamIdentificator);
                 userAssignedToExamTerm.AvailableExamTerms = _context.examTermRepository.GetActiveExamTermsWithVacantSeatsAsSelectList(Exam).ToList();
+                userAssignedToExamTerm.AvailableExams = _context.examRepository.GetActiveExamsAsSelectList().ToList();
+                userAssignedToExamTerm.AvailableUsers = _context.userRepository.GetWorkersAsSelectList().ToList();
 
                 return View(userAssignedToExamTerm);
             }
@@ -536,5 +547,29 @@ namespace Certification_System.Controllers
 
             return View(ListOfUsers);
         }
+
+        #region AjaxQuery
+        // GET: GetUserAvailableToEnrollExamsByUserId
+        [Authorize(Roles = "Examiner")]
+        public string[][] GetUserAvailableToEnrollExamsTermsByUserId(string userIdentificator)
+        {
+            var user = _context.userRepository.GetUserById(userIdentificator);
+
+            var examsIdentificators = _context.courseRepository.GetCoursesById(user.Courses).SelectMany(z => z.Exams).ToList();
+            var exams = _context.examRepository.GetExamsById(examsIdentificators).ToList();
+
+            string[][] examsArray = new string[exams.Count()][];
+
+            for (int i = 0; i < exams.Count(); i++)
+            {
+                examsArray[i] = new string[2];
+
+                examsArray[i][0] = exams[i].ExamIdentificator;
+                examsArray[i][1] = exams[i].ExamIndexer + " " + exams[i].Name;
+            }
+
+            return examsArray;
+        }
+        #endregion
     }
 }
