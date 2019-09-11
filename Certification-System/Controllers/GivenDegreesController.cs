@@ -51,7 +51,7 @@ namespace Certification_System.Controllers
                 OriginGivenDegree = _mapper.Map<EditGivenDegreeViewModel, GivenDegree>(editedGivenDegree, OriginGivenDegree);
                 _context.givenDegreeRepository.UpdateGivenDegree(OriginGivenDegree);
 
-                return RedirectToAction("ConfirmationOfActionOnGivenDegree", "Degrees", new { givenDegreeIdentificator = OriginGivenDegree.GivenDegreeIdentificator, TypeOfAction = "Update" });
+                return RedirectToAction("ConfirmationOfActionOnGivenDegree", "GivenDegrees", new { givenDegreeIdentificator = OriginGivenDegree.GivenDegreeIdentificator, TypeOfAction = "Update" });
             }
 
             return View(editedGivenDegree);
@@ -114,7 +114,7 @@ namespace Certification_System.Controllers
         {
             AddGivenDegreeViewModel newGivenDegree = new AddGivenDegreeViewModel
             {
-                AvailableUsers = _context.userRepository.GetUsersAsSelectList().ToList(),
+                AvailableUsers = _context.userRepository.GetWorkersAsSelectList().ToList(),
                 AvailableDegrees = _context.degreeRepository.GetDegreesAsSelectList().ToList()
             };
 

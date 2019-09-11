@@ -108,7 +108,7 @@ else
 <div class="row m-0 mt-3 mb-3">
     <a asp-action="EditGivenCertificate" asp-route-givenCertificateIdentificator="@Model.GivenCertificate.GivenCertificateIdentificator" asp-controller="GivenCertificates" class="btn btn-warning mt-1 mr-1">Edytuj certyfikat</a>
     <a asp-action="CertificateDetails" asp-route-certificateIdentificator="@Model.GivenCertificate.Certificate.CertificateIdentificator" asp-controller="Certificates" class="btn btn-info mt-1 mr-1">Szczegóły certyfikatu</a>
-    <a asp-action="GivenCertificateDetails" asp-route-givenCertificateIdentificator="@Model.GivenCertificate.GivenCertificateIdentificator" asp-controller="GivenCertificates" class="btn btn-secondary mt-1 mr-1">Szczegóły przyznanego certyfikatu</a>
+    <a asp-action="GivenCertificateDetails" asp-route-givenCertificateIdentificator="@Model.GivenCertificate.GivenCertificateIdentificator" asp-controller="GivenCertificates" class="btn btn-secondary mt-1">Szczegóły przyznanego certyfikatu</a>
 </div>
 
 @{List<DisplayGivenCertificateToUserWithoutCourseExtendedViewModel> givenCertificateList = new List<DisplayGivenCertificateToUserWithoutCourseExtendedViewModel>();
@@ -118,10 +118,15 @@ else
 
 <h2 class="mt-4 mb-4">Dane kursu</h2>
 
+<div class="row m-0 mt-3 mb-3">
+    <a asp-action="EditCourse" asp-route-courseIdentificator="@Model.Course.CourseIdentificator" asp-controller="Courses" class="btn btn-warning mt-1 mr-1">Edytuj</a>
+    <a asp-action="CourseDetails" asp-route-courseIdentificator="@Model.Course.CourseIdentificator" asp-controller="Courses" class="btn btn-info mt-1">Szczegóły</a>
+</div>
+
 @{List<DisplayCourseViewModel> courseList = new List<DisplayCourseViewModel>();
     courseList.Add(Model.Course);}
 
-@await Component.InvokeAsync("DisplayCourseDataTable", new { courseViewModel = courseList, tableIdentificator = "listCourses", operationSet = 2 })
+@await Component.InvokeAsync("DisplayCourseDataTable", new { courseViewModel = courseList, tableIdentificator = "listCourses", operationSet = 0 })
 
 <h2 class="mt-4 mb-4">Spotkania w ramach kursu</h2>
 

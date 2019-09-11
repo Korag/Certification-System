@@ -159,7 +159,7 @@ namespace Certification_System.Repository
                     (
                         new SelectListItem()
                         {
-                            Text = instructor.FirstName + " " + instructor.LastName,
+                            Text = instructor.FirstName + " " + instructor.LastName + " | " + instructor.Email,
                             Value = instructor.Id
                         }
                     );
@@ -179,7 +179,7 @@ namespace Certification_System.Repository
                     (
                         new SelectListItem()
                         {
-                            Text = examiner.FirstName + " " + examiner.LastName,
+                            Text = examiner.FirstName + " " + examiner.LastName + " | " + examiner.Email,
                             Value = examiner.Id
                         }
                     );
@@ -199,7 +199,7 @@ namespace Certification_System.Repository
                     (
                         new SelectListItem()
                         {
-                            Text = worker.FirstName + " " + worker.LastName,
+                            Text = worker.FirstName + " " + worker.LastName + " | " + worker.Email,
                             Value = worker.Id
                         }
                     );

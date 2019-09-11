@@ -421,7 +421,8 @@ namespace Certification_System.Services
 
             CreateMap<EditUserViewModel, CertificationPlatformUser>()
                      .ForMember(dest => dest.NormalizedUserName, opts => opts.MapFrom(src => src.Email.ToUpper()))
-                     .ForMember(dest => dest.NormalizedEmail, opts => opts.MapFrom(src => src.Email.ToUpper()));
+                     .ForMember(dest => dest.NormalizedEmail, opts => opts.MapFrom(src => src.Email.ToUpper()))
+                     .ForMember(dest => dest.EmailConfirmed, opts => opts.Ignore());
 
             CreateMap<CertificationPlatformUser, UserDetailsViewModel>()
                      .ForMember(dest => dest.UserIdentificator, opts => opts.MapFrom(src => src.Id))
@@ -446,18 +447,16 @@ namespace Certification_System.Services
                     .ForMember(dest => dest.UserIdentificator, opts => opts.MapFrom(src => src.Id));
 
             CreateMap<EditAccountViewModel, CertificationPlatformUser>()
-                    .ForMember(dest => dest.Id, opts => opts.Ignore());
-
-            CreateMap<EditAccountViewModel, CertificationPlatformUser>()
+                    .ForMember(dest => dest.Id, opts => opts.Ignore())
                     .ForMember(dest => dest.NormalizedUserName, opts => opts.MapFrom(src => src.Email.ToUpper()))
-                    .ForMember(dest => dest.NormalizedEmail, opts => opts.MapFrom(src => src.Email.ToUpper()));
+                    .ForMember(dest => dest.NormalizedEmail, opts => opts.MapFrom(src => src.Email.ToUpper()))
+                    .ForMember(dest => dest.EmailConfirmed, opts => opts.Ignore());
 
             CreateMap<CertificationPlatformUser, ExaminerDetailsViewModel>()
                      .ForMember(dest => dest.UserIdentificator, opts => opts.MapFrom(src => src.Id))
                      .ForMember(dest => dest.Courses, opts => opts.Ignore())
                      .ForMember(dest => dest.Exams, opts => opts.Ignore())
                      .ForMember(dest => dest.ExamsTerms, opts => opts.Ignore());
-
 
             CreateMap<CertificationPlatformUser, InstructorExaminerDetailsViewModel>()
                      .ForMember(dest => dest.UserIdentificator, opts => opts.MapFrom(src => src.Id))

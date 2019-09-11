@@ -81,7 +81,7 @@ namespace Certification_System.Controllers
                 DisplayDegreeViewModel modifiedDegree = _mapper.Map<DisplayDegreeViewModel>(Degree);
 
                 modifiedDegree.RequiredCertificates = RequiredCertificates.Select(z => z.CertificateIndexer + " " + z.Name).ToList();
-                modifiedDegree.RequiredDegrees = RequiredDegrees.Select(z => z.DegreeIdentificator + " " + z.Name).ToList();
+                modifiedDegree.RequiredDegrees = RequiredDegrees.Select(z => z.DegreeIndexer + " " + z.Name).ToList();
                 modifiedDegree.Branches = Branches;
 
                 return View(modifiedDegree);

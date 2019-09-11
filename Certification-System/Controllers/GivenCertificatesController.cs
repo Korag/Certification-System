@@ -61,8 +61,8 @@ namespace Certification_System.Controllers
             AddGivenCertificateViewModel newGivenCertificate = new AddGivenCertificateViewModel
             {
                 AvailableCertificates = _context.certificateRepository.GetCertificatesAsSelectList().ToList(),
-                AvailableUsers = _context.userRepository.GetUsersAsSelectList().ToList(),
-                AvailableCourses = _context.courseRepository.GetActiveCoursesAsSelectList().ToList()
+                AvailableUsers = _context.userRepository.GetWorkersAsSelectList().ToList(),
+                AvailableCourses = _context.courseRepository.GetAllCoursesAsSelectList().ToList()
             };
 
             return View(newGivenCertificate);
@@ -151,7 +151,7 @@ namespace Certification_System.Controllers
                 OriginGivenCertificate = _mapper.Map<EditGivenCertificateViewModel, GivenCertificate>(editedGivenCertificate, OriginGivenCertificate);
                 _context.givenCertificateRepository.UpdateGivenCertificate(OriginGivenCertificate);
 
-                return RedirectToAction("ConfirmationOfActionOnGivenCertificate", "Certificates", new { givenCertificateIdentificator = OriginGivenCertificate.GivenCertificateIdentificator, TypeOfAction = "Update" });
+                return RedirectToAction("ConfirmationOfActionOnGivenCertificate", "GivenCertificates", new { givenCertificateIdentificator = OriginGivenCertificate.GivenCertificateIdentificator, TypeOfAction = "Update" });
             }
 
             return View(editedGivenCertificate);

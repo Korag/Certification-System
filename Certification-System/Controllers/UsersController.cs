@@ -186,6 +186,11 @@ namespace Certification_System.Controllers
                     _userManager.AddToRoleAsync(OriginUser, "Examiner").Wait();
                 }
 
+                if (OriginUser.Email != editedUser.Email)
+                {
+                    OriginUser.EmailConfirmed = false;
+                }
+
                 OriginUser = _mapper.Map<EditUserViewModel, CertificationPlatformUser>(editedUser, OriginUser);
 
                 _context.userRepository.UpdateUser(OriginUser);
@@ -465,6 +470,11 @@ namespace Certification_System.Controllers
             if (ModelState.IsValid)
             {
                 var OriginUser = _userManager.FindByIdAsync(editedAccount.UserIdentificator).Result;
+
+                if (OriginUser.Email != editedAccount.Email)
+                {
+                    OriginUser.EmailConfirmed = false;
+                }
 
                 OriginUser = _mapper.Map<EditAccountViewModel, CertificationPlatformUser>(editedAccount, OriginUser);
 

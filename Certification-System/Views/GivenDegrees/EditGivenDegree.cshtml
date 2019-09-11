@@ -88,13 +88,6 @@
     </form>
 </div>
 
-@*<div class="mt-3">
-        <a asp-action="DisplayAllGivenDegrees" asp-controller="GivenDegrees" class="btn btn-primary">Wróć do listy wszystkich nadanych stopni zawodowy</a>
-        <a asp-action="DisplayAllUsers" asp-controller="Users" class="btn btn-secondary">Wyświetl listę użytkowników</a>
-        <a asp-action="UserDetails" asp-route-userIdentificator="@Model.User.UserIdentificator" asp-controller="Users" class="btn btn-info">Przejdź do szczegółów użytkownika</a>
-        <a asp-action="DegreeDetails" asp-route-degreeIdentificator="@Model.Degree.DegreeIdentificator" asp-controller="Degrees" class="btn btn-info">Przejdź do szczegółów stopnia zawodowego</a>
-    </div>*@
-
 @section Scripts {
     @{await Html.RenderPartialAsync("_ValidationScriptsPartial");}
     @{await Html.RenderPartialAsync("_RelatedCalendarsInputScript", new RelatedCalendarsInputScriptViewModel { StartDate = "ReceiptDate", EndDate = "ExpirationDate" });}
