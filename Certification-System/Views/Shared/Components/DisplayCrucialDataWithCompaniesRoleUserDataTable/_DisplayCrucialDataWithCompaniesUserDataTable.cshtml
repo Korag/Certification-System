@@ -69,10 +69,6 @@
                                 <button class="btn btn-success dropdown-toggle" type="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">Operacje</button>
                                 <div class="dropdown-menu nohover">
                                     <a asp-action="UserDetails" asp-route-userIdentificator="@user.UserIdentificator" asp-controller="Users" class="btn btn-info w-100">Szczegóły</a>
-                                    @if (Model.Course != null)
-                                    {
-                                        <a asp-action="DeleteUsersFromCourse" asp-route-courseIdentificator="@Model.Course.CourseIdentificator" asp-controller="Courses" class="btn btn-danger w-100 mt-1">Usuń z kursu</a>
-                                    }
                                 </div>
                             </div>
                         </td>

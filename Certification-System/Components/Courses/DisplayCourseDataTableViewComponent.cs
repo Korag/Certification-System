@@ -6,12 +6,11 @@ namespace Certification_System.Components
 {
     public class DisplayCourseDataTableViewComponent : ViewComponent
     {
-        public IViewComponentResult Invoke(ICollection<DisplayCourseViewModel> courseViewModel, string tableIdentificator, int operationSet, string userIdentificator = null)
+        public IViewComponentResult Invoke(ICollection<DisplayCourseViewModel> courseViewModel, string tableIdentificator, int operationSet = 0)
         {
             DisplayCourseDataTableViewModel courseDataTableViewModel = new DisplayCourseDataTableViewModel
             {
                 Courses = courseViewModel,
-                UserIdentificator = userIdentificator,
                 Options = new DataTableOptionsViewModel
                 {
                     TableIdentificator = tableIdentificator,
