@@ -7,7 +7,7 @@ namespace Certification_System.RepositoryInterfaces
     public interface IExamRepository
     {
         ICollection<Exam> GetListOfExams();
-        ICollection<Exam> GetActiveExams();
+        ICollection<Exam> GetListOfActiveExams();
         void AddExam(Exam exam);
         ICollection<Exam> GetExamsById(ICollection<string> examsIdentificators);
         Exam GetExamById(string examIdentificator);
@@ -24,5 +24,6 @@ namespace Certification_System.RepositoryInterfaces
         void AddUsersToExam(string examIdentificator, ICollection<string> usersIdentificators);
         void SetMaxAmountOfPointsToEarn(string examIdentificator, double maxAmountOfPointsToEarn);
         ICollection<Exam> GetExamPeriods(string examIndexer);
+        IList<SelectListItem> GetActiveExamsAsSelectList();
     }
 }

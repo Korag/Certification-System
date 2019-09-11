@@ -31,6 +31,11 @@ namespace Certification_System.Repository
             return GetExams().AsQueryable().ToList();
         }
 
+        public ICollection<Exam> GetListOfActiveExams()
+        {
+            return GetExams().AsQueryable().Where(z => (z.DateOfStart > DateTime.Now) && (z.ExamDividedToTerms == false) || (z.DateOfEnd > DateTime.Now) && (z.ExamDividedToTerms == true)).ToList();
+        }
+
         public void AddExam(Exam exam)
         {
             GetExams().InsertOne(exam);
@@ -69,6 +74,26 @@ namespace Certification_System.Repository
         public ICollection<SelectListItem> GetExamsAsSelectList()
         {
             var Exams = GetListOfExams();
+            List<SelectListItem> SelectList = new List<SelectListItem>();
+
+            foreach (var exam in Exams)
+            {
+                SelectList.Add
+                    (
+                        new SelectListItem()
+                        {
+                            Text = exam.ExamIndexer + " " + exam.Name,
+                            Value = exam.ExamIdentificator
+                        }
+                    );
+            };
+
+            return SelectList;
+        }
+
+        public IList<SelectListItem> GetActiveExamsAsSelectList()
+        {
+            var Exams = GetListOfActiveExams();
             List<SelectListItem> SelectList = new List<SelectListItem>();
 
             foreach (var exam in Exams)
@@ -132,17 +157,9 @@ namespace Certification_System.Repository
             return SelectList;
         }
 
-        public ICollection<Exam> GetActiveExams()
-        {
-            var filter = Builders<Exam>.Filter.Gte(z => z.DateOfStart, DateTime.Now);
-            var resultListOfExams = GetExams().Find<Exam>(filter).ToList();
-
-            return resultListOfExams;
-        }
-
         public IList<SelectListItem> GetActiveExamsWithVacantSeatsAsSelectList()
         {
-            List<Exam> Exams = GetActiveExams().ToList();
+            List<Exam> Exams = GetListOfActiveExams().ToList();
             List<SelectListItem> SelectList = new List<SelectListItem>();
 
             foreach (var exam in Exams)

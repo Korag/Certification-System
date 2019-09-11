@@ -30,6 +30,10 @@ namespace Certification_System.Repository
         {
             return GetExamsTerms().AsQueryable().ToList();
         }
+        public ICollection<ExamTerm> GetListOfActiveExamsTerms()
+        {
+            return GetExamsTerms().AsQueryable().Where(z=> z.DateOfStart > DateTime.Now).ToList();
+        }
 
         public void AddExamTerm(ExamTerm examTerm)
         {
@@ -96,7 +100,8 @@ namespace Certification_System.Repository
 
         public IList<SelectListItem> GetActiveExamTermsWithVacantSeatsAsSelectList(Exam exam)
         {
-            var ExamTerms = GetActiveExamsTermsById(exam.ExamTerms);
+            var ExamTerms = GetActiveExamsTermsById(exam.ExamTerms).ToList();
+
             List<SelectListItem> SelectList = new List<SelectListItem>();
 
             foreach (var examTerm in ExamTerms)
@@ -107,8 +112,31 @@ namespace Certification_System.Repository
                     (
                         new SelectListItem()
                         {
-                            Text =  exam.DateOfStart + " - " + exam.DateOfEnd + " |wm.: " + VacantSeats,
+                            Text = exam.DateOfStart + " - " + exam.DateOfEnd + " |wm.: " + VacantSeats,
                             Value = exam.ExamIdentificator
+                        }
+                    );
+            };
+
+            return SelectList;
+        }
+
+        public IList<SelectListItem> GetActiveExamTermsWithVacantSeatsAsSelectList()
+        {
+            var ExamTerms = GetListOfActiveExamsTerms().ToList();
+
+            List<SelectListItem> SelectList = new List<SelectListItem>();
+
+            foreach (var examTerm in ExamTerms)
+            {
+                var VacantSeats = examTerm.UsersLimit - examTerm.EnrolledUsers.Count();
+
+                SelectList.Add
+                    (
+                        new SelectListItem()
+                        {
+                            Text = examTerm.DateOfStart + " - " + examTerm.DateOfEnd + " |wm.: " + VacantSeats,
+                            Value = examTerm.ExamTermIdentificator
                         }
                     );
             };
