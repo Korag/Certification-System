@@ -549,26 +549,24 @@ namespace Certification_System.Controllers
         }
 
         #region AjaxQuery
-        // GET: GetUserAvailableToEnrollExamsByUserId
+        // GET: GetUserAvailableToEnrollExamsTermsByExamId
         [Authorize(Roles = "Examiner")]
-        public string[][] GetUserAvailableToEnrollExamsTermsByUserId(string userIdentificator)
+        public string[][] GetUserAvailableToEnrollExamsTermsByExamId(string examIdentificator)
         {
-            var user = _context.userRepository.GetUserById(userIdentificator);
+            var exam = _context.examRepository.GetExamById(examIdentificator);
+            var examsTerms = _context.examTermRepository.GetExamsTermsById(exam.ExamTerms).ToList();
 
-            var examsIdentificators = _context.courseRepository.GetCoursesById(user.Courses).SelectMany(z => z.Exams).ToList();
-            var exams = _context.examRepository.GetExamsById(examsIdentificators).ToList();
+            string[][] examsTermsArray = new string[examsTerms.Count()][];
 
-            string[][] examsArray = new string[exams.Count()][];
-
-            for (int i = 0; i < exams.Count(); i++)
+            for (int i = 0; i < examsTerms.Count(); i++)
             {
-                examsArray[i] = new string[2];
+                examsTermsArray[i] = new string[2];
 
-                examsArray[i][0] = exams[i].ExamIdentificator;
-                examsArray[i][1] = exams[i].ExamIndexer + " " + exams[i].Name;
+                examsTermsArray[i][0] = examsTerms[i].ExamTermIdentificator;
+                examsTermsArray[i][1] = examsTerms[i].DateOfStart + "-" + examsTerms[i].DateOfEnd;
             }
 
-            return examsArray;
+            return examsTermsArray;
         }
         #endregion
     }
