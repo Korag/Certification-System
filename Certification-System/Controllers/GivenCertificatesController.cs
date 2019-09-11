@@ -236,7 +236,5 @@ namespace Certification_System.Controllers
 
             return View(VerifiedGivenCertificate);
         }
-
-        
     }
 }

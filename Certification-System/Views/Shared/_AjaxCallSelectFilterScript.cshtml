@@ -1,0 +1,23 @@
+@model Certification_System.DTOViewModels.AjaxCallSelectScriptViewModel
+
+<script>
+    $("#@Model.OnChangeSelect").change(function () {
+        var argument = $(this).find(":selected").val();
+        var request = $.ajax({
+            type: 'GET',
+            url: '@Model.ActionPath' + argument,
+        });
+        request.done(function (data) {
+            var courseList = data;
+
+            $("#@Model.FilteredSelect").empty();
+            for (var i = 0; i < courseList.length; i++) {
+                $("#@Model.FilteredSelect").append(
+                    $("<option></option>").attr(
+                        "value", courseList[i][0]).text(courseList[i][1])
+                );
+            }
+            $('#@Model.FilteredSelect').selectpicker('refresh');
+        });
+    });
+</script>

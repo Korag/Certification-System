@@ -780,6 +780,29 @@ namespace Certification_System.Controllers
             return View(AllCourses);
         }
 
+        #region AjaxQuery
+        // GET: GetCoursesByUserId
+        [Authorize(Roles = "Admin")]
+        public string[][] GetCoursesByUserId(string userIdentificator)
+        {
+            var user = _context.userRepository.GetUserById(userIdentificator);
+
+            var courses = _context.courseRepository.GetCoursesById(user.Courses).ToList();
+
+            string[][] coursesArray = new string[courses.Count()][];
+
+            for (int i = 0; i < courses.Count(); i++)
+            {
+                coursesArray[i] = new string[2];
+
+                coursesArray[i][0] = courses[i].CourseIdentificator;
+                coursesArray[i][1] = courses[i].CourseIndexer + " " + courses[i].Name;
+            }
+
+            return coursesArray;
+        }
+        #endregion
+
         #region HelpersMethod
         // GetCourseListOfUsersWithStatistics
         private ICollection<DisplayUserWithCourseResultsViewModel> GetCourseListOfUsersWithStatistics(ICollection<CertificationPlatformUser> enrolledUsers, ICollection<Meeting> meetings, ICollection<Exam> exams)
