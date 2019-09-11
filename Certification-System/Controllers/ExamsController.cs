@@ -988,5 +988,29 @@ namespace Certification_System.Controllers
 
             return View(ListOfExams);
         }
+
+        #region AjaxQuery
+        // GET: GetUserAvailableToEnrollExamsByUserId
+        [Authorize(Roles = "Examiner")]
+        public string[][] GetUserAvailableToEnrollExamsByUserId(string userIdentificator)
+        {
+            var user = _context.userRepository.GetUserById(userIdentificator);
+
+            var examsIdentificators = _context.courseRepository.GetCoursesById(user.Courses).SelectMany(z=> z.Exams).ToList();
+            var exams = _context.examRepository.GetExamsById(examsIdentificators).ToList();
+
+            string[][] examsArray = new string[exams.Count()][];
+
+            for (int i = 0; i < exams.Count(); i++)
+            {
+                examsArray[i] = new string[2];
+
+                examsArray[i][0] = exams[i].ExamIdentificator;
+                examsArray[i][1] = exams[i].ExamIndexer + " " + exams[i].Name;
+            }
+
+            return examsArray;
+        }   
+        #endregion
     }
 }
