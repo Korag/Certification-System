@@ -48,23 +48,20 @@ namespace Certification_System.Controllers
             return RedirectToAction(nameof(AddNewMeeting));
         }
 
-        // LEGACY
-        // GET: AddNewMeetingPartial
-        [Authorize(Roles = "Admin")]
-        public ActionResult AddNewMeetingPartial()
-        {
-            return PartialView();
-        }
-
         // GET: AddNewMeeting
         [Authorize(Roles = "Admin")]
-        public ActionResult AddNewMeeting()
+        public ActionResult AddNewMeeting(string courseIdentificator)
         {
             AddMeetingViewModel newMeeting = new AddMeetingViewModel
             {
                 AvailableCourses = _context.courseRepository.GetActiveCoursesAsSelectList().ToList(),
                 AvailableInstructors = _context.userRepository.GetInstructorsAsSelectList().ToList()
             };
+
+            if (string.IsNullOrWhiteSpace(courseIdentificator))
+            {
+                newMeeting.SelectedCourse = courseIdentificator;
+            }
 
             return View(newMeeting);
         }

@@ -110,13 +110,18 @@ namespace Certification_System.Controllers
 
         // GET: AddNewGivenDegree
         [Authorize(Roles = "Admin")]
-        public ActionResult AddNewGivenDegree()
+        public ActionResult AddNewGivenDegree(string userIdentificator)
         {
             AddGivenDegreeViewModel newGivenDegree = new AddGivenDegreeViewModel
             {
                 AvailableUsers = _context.userRepository.GetWorkersAsSelectList().ToList(),
                 AvailableDegrees = _context.degreeRepository.GetDegreesAsSelectList().ToList()
             };
+
+            if (string.IsNullOrWhiteSpace(userIdentificator))
+            {
+                newGivenDegree.SelectedUser = userIdentificator;
+            }
 
             return View(newGivenDegree);
         }

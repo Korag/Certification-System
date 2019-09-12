@@ -56,7 +56,7 @@ namespace Certification_System.Controllers
 
         // GET: AddNewGivenCertificate
         [Authorize(Roles = "Admin")]
-        public ActionResult AddNewGivenCertificate()
+        public ActionResult AddNewGivenCertificate(string userIdentificator)
         {
             AddGivenCertificateViewModel newGivenCertificate = new AddGivenCertificateViewModel
             {
@@ -64,6 +64,13 @@ namespace Certification_System.Controllers
                 AvailableUsers = _context.userRepository.GetWorkersAsSelectList().ToList(),
                 AvailableCourses = _context.courseRepository.GetAllCoursesAsSelectList().ToList()
             };
+
+            if (string.IsNullOrWhiteSpace(userIdentificator))
+            {
+                var user = _context.userRepository.GetUserById(userIdentificator);
+
+                newGivenCertificate.AvailableCourses = _context.courseRepository.GenerateSelectList(user.Courses).ToList();
+            }
 
             return View(newGivenCertificate);
         }
