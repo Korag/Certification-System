@@ -278,7 +278,7 @@ namespace Certification_System.Controllers
         [Authorize(Roles = "Admin")]
         public ActionResult DeleteUsersFromExamTerm(string examTermIdentificator)
         {
-            if (string.IsNullOrWhiteSpace(examTermIdentificator))
+            if (!string.IsNullOrWhiteSpace(examTermIdentificator))
             {
                 return RedirectToAction("BlankMenu", "Certificates");
             }
@@ -344,7 +344,7 @@ namespace Certification_System.Controllers
         [Authorize(Roles = "Admin")]
         public ActionResult AssignUsersFromCourseToExamTerm(string examTermIdentificator)
         {
-            if (string.IsNullOrWhiteSpace(examTermIdentificator))
+            if (!string.IsNullOrWhiteSpace(examTermIdentificator))
             {
                 return RedirectToAction("BlankMenu", "Certificates");
             }
@@ -439,7 +439,7 @@ namespace Certification_System.Controllers
         [Authorize(Roles = "Admin, Examiner")]
         public ActionResult MarkExamTerm(string examTermIdentificator)
         {
-            if (string.IsNullOrWhiteSpace(examTermIdentificator))
+            if (!string.IsNullOrWhiteSpace(examTermIdentificator))
             {
                 return RedirectToAction("BlankMenu", "Certificates");
             }

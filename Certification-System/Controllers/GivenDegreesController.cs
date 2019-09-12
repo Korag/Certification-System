@@ -118,7 +118,7 @@ namespace Certification_System.Controllers
                 AvailableDegrees = _context.degreeRepository.GetDegreesAsSelectList().ToList()
             };
 
-            if (string.IsNullOrWhiteSpace(userIdentificator))
+            if (!string.IsNullOrWhiteSpace(userIdentificator))
             {
                 newGivenDegree.SelectedUser = userIdentificator;
             }

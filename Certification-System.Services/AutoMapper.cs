@@ -344,6 +344,7 @@ namespace Certification_System.Services
 
             CreateMap<AddMeetingViewModel, Meeting>()
                      .ForMember(dest => dest.MeetingIdentificator, opts => opts.Ignore())
+                     .ForMember(dest => dest.AttendanceList, opts => opts.MapFrom(src => new List<string>()))
                      .ForMember(dest => dest.Instructors, opts => opts.MapFrom(src => src.SelectedInstructors));
 
             CreateMap<AddMeetingWithoutCourseViewModel, Meeting>()

@@ -155,7 +155,7 @@ namespace Certification_System.Controllers
 
         // GET: AddExamPeriod
         [Authorize(Roles = "Admin")]
-        public ActionResult AddExamPeriod(string courseIdentificator, string examIdentificator)
+        public ActionResult AddNewExamPeriod(string courseIdentificator, string examIdentificator)
         {
             AddExamPeriodViewModel newExamPeriod = new AddExamPeriodViewModel
             {
@@ -180,7 +180,7 @@ namespace Certification_System.Controllers
         // POST: AddExamPeriod
         [Authorize(Roles = "Admin")]
         [HttpPost]
-        public ActionResult AddExamPeriod(AddExamPeriodViewModel newExamPeriod)
+        public ActionResult AddNewExamPeriod(AddExamPeriodViewModel newExamPeriod)
         {
             if (ModelState.IsValid)
             {
@@ -210,7 +210,7 @@ namespace Certification_System.Controllers
 
         // GET: AddExamPeriodWithExamTerms
         [Authorize(Roles = "Admin")]
-        public ActionResult AddExamPeriodWithExamTerms(string courseIdentificator, string examIdentificator, int quantityOfExamTerms)
+        public ActionResult AddNewExamPeriodWithExamTerms(string courseIdentificator, string examIdentificator, int quantityOfExamTerms)
         {
             AddExamPeriodWithExamTermsViewModel newExamPeriod = new AddExamPeriodWithExamTermsViewModel
             {
@@ -242,7 +242,7 @@ namespace Certification_System.Controllers
         // POST: AddExamPeriodWithExamTerms
         [Authorize(Roles = "Admin")]
         [HttpPost]
-        public ActionResult AddExamPeriodWithExamTerms(AddExamPeriodWithExamTermsViewModel newExamPeriod)
+        public ActionResult AddNewExamPeriodWithExamTerms(AddExamPeriodWithExamTermsViewModel newExamPeriod)
         {
             if (ModelState.IsValid)
             {
@@ -330,43 +330,11 @@ namespace Certification_System.Controllers
 
             List<DisplayExamTermViewModel> ListOfExamTerms = _mapper.Map<List<DisplayExamTermViewModel>>(ExamTerms);
 
-            //List<string> ExaminersIdentificators = Exam.Examiners.ToList();
-            //List<string> UsersIdentificators = Exam.EnrolledUsers.ToList();
-
-            //foreach (var examTerm in ExamTerms)
-            //{
-            //    ExaminersIdentificators.AddRange(examTerm.Examiners);
-            //    UsersIdentificators.AddRange(examTerm.EnrolledUsers);
-            //}
-            //ExaminersIdentificators.Distinct();
-            //UsersIdentificators.Distinct();
-
-            //var Examiners = _context.userRepository.GetUsersById(ExaminersIdentificators);
-
             var Examiners = _context.userRepository.GetUsersById(Exam.Examiners);
             List<DisplayCrucialDataWithContactUserViewModel> ListOfExaminers = _mapper.Map<List<DisplayCrucialDataWithContactUserViewModel>>(Examiners);
 
-            //var Users = _context.userRepository.GetUsersById(UsersIdentificators);
-
             var Users = _context.userRepository.GetUsersById(Exam.EnrolledUsers);
             List<DisplayCrucialDataWithContactUserViewModel> ListOfUsers = _mapper.Map<List<DisplayCrucialDataWithContactUserViewModel>>(Users);
-
-            //foreach (var user in Users)
-            //{
-            //    var userExamResult = ExamResults.Where(z => z.User == user.Id).FirstOrDefault();
-            //    DisplayUserWithExamResults UserWithExamResult = new DisplayUserWithExamResults();
-
-            //    if (userExamResult != null)
-            //    {
-            //        UserWithExamResult = Mapper.Map<DisplayUserWithExamResults>(user);
-            //        UserWithExamResult = _mapper.Map<DisplayUserWithExamResults>(userExamResult);
-            //        UserWithExamResult.MaxAmountOfPointsToEarn = Exam.MaxAmountOfPointsToEarn;
-            //    }
-            //    else
-            //    {
-            //        UserWithExamResult.HasExamResult = false;
-            //    }
-            //}
 
             var Course = _context.courseRepository.GetCourseByExamId(examIdentificator);
             DisplayCourseViewModel courseViewModel = _mapper.Map<DisplayCourseViewModel>(Course);
@@ -704,7 +672,7 @@ namespace Certification_System.Controllers
         [Authorize(Roles = "Admin")]
         public ActionResult DeleteUsersFromExam(string examIdentificator)
         {
-            if (string.IsNullOrWhiteSpace(examIdentificator))
+            if (!string.IsNullOrWhiteSpace(examIdentificator))
             {
                 return RedirectToAction("BlankMenu", "Certificates");
             }
@@ -772,7 +740,7 @@ namespace Certification_System.Controllers
         [Authorize(Roles = "Admin")]
         public ActionResult AssignUsersFromCourseToExam(string examIdentificator)
         {
-            if (string.IsNullOrWhiteSpace(examIdentificator))
+            if (!string.IsNullOrWhiteSpace(examIdentificator))
             {
                 return RedirectToAction("BlankMenu", "Certificates");
             }
@@ -863,7 +831,7 @@ namespace Certification_System.Controllers
         [Authorize(Roles = "Admin, Examiner")]
         public ActionResult MarkExam(string examIdentificator)
         {
-            if (string.IsNullOrWhiteSpace(examIdentificator))
+            if (!string.IsNullOrWhiteSpace(examIdentificator))
             {
                 return RedirectToAction("BlankMenu", "Certificates");
             }

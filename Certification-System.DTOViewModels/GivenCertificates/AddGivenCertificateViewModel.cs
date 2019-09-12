@@ -39,6 +39,6 @@ namespace Certification_System.DTOViewModels
         public IList<SelectListItem> AvailableCourses { get; set; }
 
         [Required(ErrorMessage = "Pole \"{0}\" jest wymagane.")]
-        public string SelectedCourses { get; set; }
+        public string SelectedCourse { get; set; }
     }
 }

@@ -58,7 +58,7 @@ namespace Certification_System.Controllers
                 AvailableInstructors = _context.userRepository.GetInstructorsAsSelectList().ToList()
             };
 
-            if (string.IsNullOrWhiteSpace(courseIdentificator))
+            if (!string.IsNullOrWhiteSpace(courseIdentificator))
             {
                 newMeeting.SelectedCourse = courseIdentificator;
             }

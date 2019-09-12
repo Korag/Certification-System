@@ -65,7 +65,7 @@ namespace Certification_System.Controllers
                 AvailableCourses = _context.courseRepository.GetAllCoursesAsSelectList().ToList()
             };
 
-            if (string.IsNullOrWhiteSpace(userIdentificator))
+            if (!string.IsNullOrWhiteSpace(userIdentificator))
             {
                 var user = _context.userRepository.GetUserById(userIdentificator);
 
@@ -84,7 +84,7 @@ namespace Certification_System.Controllers
             {
                 GivenCertificate givenCertificate = _mapper.Map<GivenCertificate>(newGivenCertificate);
                 givenCertificate.GivenCertificateIdentificator = _keyGenerator.GenerateNewId();
-                givenCertificate.Course = _context.courseRepository.GetCourseById(newGivenCertificate.SelectedCourses).CourseIdentificator;
+                givenCertificate.Course = _context.courseRepository.GetCourseById(newGivenCertificate.SelectedCourse).CourseIdentificator;
                 givenCertificate.Certificate = _context.certificateRepository.GetCertificateById(newGivenCertificate.SelectedCertificate).CertificateIdentificator;
 
                 _context.givenCertificateRepository.AddGivenCertificate(givenCertificate);
