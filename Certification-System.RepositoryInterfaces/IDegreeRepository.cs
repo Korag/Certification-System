@@ -12,5 +12,6 @@ namespace Certification_System.RepositoryInterfaces
         Degree GetDegreeById(string degreeIdentificator);
         ICollection<Degree> GetDegreesById(ICollection<string> degreeIdentificators);
         void UpdateDegree(Degree degree);
+        ICollection<Degree> GetDegreesToDisposeByUserCompetences(ICollection<string> givenCertificates, ICollection<string> givenDegrees);
     }
 }

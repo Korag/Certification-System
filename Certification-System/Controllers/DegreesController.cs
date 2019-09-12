@@ -212,5 +212,28 @@ namespace Certification_System.Controllers
 
             return View(DegreeDetails);
         }
+
+        #region AjaxQuery
+        // GET: GetAvailableDegreesToDisposeByUserId
+        [Authorize(Roles = "Admin")]
+        public string[][] GetAvailableDegreesToDisposeByUserId(string userIdentificator)
+        {
+            var user = _context.userRepository.GetUserById(userIdentificator);
+
+            var availableGivenDegreesToDispose = _context.degreeRepository.GetDegreesToDisposeByUserCompetences(user.GivenCertificates, user.GivenDegrees).ToList();
+
+            string[][] givenDegreesArray = new string[availableGivenDegreesToDispose.Count()][];
+
+            for (int i = 0; i < givenDegreesArray.Count(); i++)
+            {
+                givenDegreesArray[i] = new string[2];
+
+                givenDegreesArray[i][0] = availableGivenDegreesToDispose[i].DegreeIdentificator;
+                givenDegreesArray[i][1] = availableGivenDegreesToDispose[i].DegreeIndexer + " " + availableGivenDegreesToDispose[i].Name;
+            }
+
+            return givenDegreesArray;
+        }
+        #endregion
     }
 }

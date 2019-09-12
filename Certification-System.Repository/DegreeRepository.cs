@@ -4,6 +4,7 @@ using Certification_System.RepositoryInterfaces;
 using Microsoft.AspNetCore.Mvc.Rendering;
 using MongoDB.Driver;
 using System.Collections.Generic;
+using System.Linq;
 
 namespace Certification_System.Repository
 {
@@ -74,6 +75,14 @@ namespace Certification_System.Repository
         {
             var filter = Builders<Degree>.Filter.Eq(x => x.DegreeIdentificator, degree.DegreeIdentificator);
             var result = GetDegrees().ReplaceOne(filter, degree);
+        }
+
+        public ICollection<Degree> GetDegreesToDisposeByUserCompetences(ICollection<string> givenCertificates, ICollection<string> givenDegrees)
+        {
+            var filter = Builders<Degree>.Filter.Where(z => (z.RequiredCertificates.Intersect(givenCertificates).Count() == z.RequiredCertificates.Count()) && (z.RequiredDegrees.Intersect(givenDegrees).Count() == z.RequiredDegrees.Count()));
+            var resultListOfGivenDegrees = GetDegrees().Find<Degree>(filter).ToList();
+
+            return resultListOfGivenDegrees;
         }
     }
 }
