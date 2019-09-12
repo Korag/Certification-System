@@ -82,7 +82,7 @@ namespace Certification_System
             services.AddSingleton<MongoOperations, MongoOperations>();
             services.AddSingleton<MongoContext, MongoContext>();
 
-            // Data Layer
+            // Repository Layer
             services.AddTransient<IBranchRepository, BranchRepository>();
             services.AddTransient<ICertificateRepository, CertificateRepository>();
             services.AddTransient<ICompanyRepository, CompanyRepository>();
@@ -95,6 +95,8 @@ namespace Certification_System
             services.AddTransient<IGivenDegreeRepository, GivenDegreeRepository>();
             services.AddTransient<IMeetingRepository, MeetingRepository>();
             services.AddTransient<IUserRepository, UserRepository>();
+
+            services.AddTransient<ILogRepository, LogRepository>();
 
             services.AddMvc(options =>
             {
