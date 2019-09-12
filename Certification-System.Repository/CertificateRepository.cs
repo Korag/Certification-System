@@ -60,7 +60,7 @@ namespace Certification_System.Repository
                     (
                         new SelectListItem()
                         {
-                            Text = certificate.CertificateIndexer + " " + certificate.Name,
+                            Text = certificate.CertificateIndexer + " | " + certificate.Name,
                             Value = certificate.CertificateIdentificator
                         }
                     );

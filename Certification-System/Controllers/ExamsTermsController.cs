@@ -563,7 +563,7 @@ namespace Certification_System.Controllers
                 examsTermsArray[i] = new string[2];
 
                 examsTermsArray[i][0] = examsTerms[i].ExamTermIdentificator;
-                examsTermsArray[i][1] = examsTerms[i].DateOfStart + "-" + examsTerms[i].DateOfEnd;
+                examsTermsArray[i][1] = examsTerms[i].DateOfStart + " - " + examsTerms[i].DateOfEnd;
             }
 
             return examsTermsArray;

@@ -82,7 +82,7 @@ namespace Certification_System.Repository
                     (
                         new SelectListItem()
                         {
-                            Text = exam.ExamIndexer + " " + exam.Name,
+                            Text = exam.ExamIndexer + " | " + exam.Name,
                             Value = exam.ExamIdentificator
                         }
                     );
@@ -102,7 +102,7 @@ namespace Certification_System.Repository
                     (
                         new SelectListItem()
                         {
-                            Text = exam.ExamIndexer + " " + exam.Name,
+                            Text = exam.ExamIndexer + " | " + exam.Name,
                             Value = exam.ExamIdentificator
                         }
                     );
@@ -122,7 +122,7 @@ namespace Certification_System.Repository
                     (
                         new SelectListItem()
                         {
-                            Text = exam.ExamIndexer + " " + exam.Name,
+                            Text = exam.ExamIndexer + " | " + exam.Name,
                             Value = exam.ExamIdentificator
                         }
                     );
@@ -170,7 +170,7 @@ namespace Certification_System.Repository
                     (
                         new SelectListItem()
                         {
-                            Text = exam.ExamIndexer + " " + exam.Name + " |wm.: " + VacantSeats,
+                            Text = exam.ExamIndexer + " | " + exam.Name + " |wm.: " + VacantSeats,
                             Value = exam.ExamIdentificator
                         }
                     );

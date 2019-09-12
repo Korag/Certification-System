@@ -796,7 +796,7 @@ namespace Certification_System.Controllers
                 coursesArray[i] = new string[2];
 
                 coursesArray[i][0] = courses[i].CourseIdentificator;
-                coursesArray[i][1] = courses[i].CourseIndexer + " " + courses[i].Name;
+                coursesArray[i][1] = courses[i].CourseIndexer + " | " + courses[i].Name;
             }
 
             return coursesArray;

@@ -1006,7 +1006,7 @@ namespace Certification_System.Controllers
                 examsArray[i] = new string[2];
 
                 examsArray[i][0] = exams[i].ExamIdentificator;
-                examsArray[i][1] = exams[i].ExamIndexer + " " + exams[i].Name;
+                examsArray[i][1] = exams[i].ExamIndexer + " | " + exams[i].Name;
             }
 
             return examsArray;

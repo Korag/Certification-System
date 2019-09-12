@@ -79,10 +79,19 @@ namespace Certification_System.Repository
 
         public ICollection<Degree> GetDegreesToDisposeByUserCompetences(ICollection<string> givenCertificates, ICollection<string> givenDegrees)
         {
-            var filter = Builders<Degree>.Filter.Where(z => (z.RequiredCertificates.Intersect(givenCertificates).Count() == z.RequiredCertificates.Count()) && (z.RequiredDegrees.Intersect(givenDegrees).Count() == z.RequiredDegrees.Count()));
-            var resultListOfGivenDegrees = GetDegrees().Find<Degree>(filter).ToList();
+            var Degrees = GetListOfDegrees();
 
-            return resultListOfGivenDegrees;
+            List<Degree> AvailableDegreesToDispose = new List<Degree>();
+
+            foreach (var degree in Degrees)
+            {
+                if ((degree.RequiredCertificates.Intersect(givenCertificates).Count() == degree.RequiredCertificates.Count() && (degree.RequiredDegrees.Intersect(givenDegrees).Count() == degree.RequiredDegrees.Count())))
+                {
+                    AvailableDegreesToDispose.Add(degree);
+                }
+            }
+
+            return AvailableDegreesToDispose;
         }
     }
 }

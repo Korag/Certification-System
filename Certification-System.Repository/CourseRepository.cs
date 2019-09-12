@@ -68,7 +68,7 @@ namespace Certification_System.Repository
                     (
                         new SelectListItem()
                         {
-                            Text = course.CourseIndexer + " " + course.Name,
+                            Text = course.CourseIndexer + " | " + course.Name,
                             Value = course.CourseIdentificator
                         }
                     );
@@ -88,7 +88,7 @@ namespace Certification_System.Repository
                     (
                         new SelectListItem()
                         {
-                            Text = course.CourseIndexer + " " + course.Name,
+                            Text = course.CourseIndexer + " | " + course.Name,
                             Value = course.CourseIdentificator
                         }
                     );
@@ -110,7 +110,7 @@ namespace Certification_System.Repository
                     (
                         new SelectListItem()
                         {
-                            Text = course.CourseIndexer + " " + course.Name + " |wm.: " + VacantSeats,
+                            Text = course.CourseIndexer + " | " + course.Name + " |wm.: " + VacantSeats,
                             Value = course.CourseIdentificator
                         }
                     );
@@ -130,7 +130,7 @@ namespace Certification_System.Repository
                     (
                         new SelectListItem()
                         {
-                            Text = course.CourseIndexer + " " + course.Name,
+                            Text = course.CourseIndexer + " | " + course.Name,
                             Value = course.CourseIdentificator
                         }
                     );

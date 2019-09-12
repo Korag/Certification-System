@@ -220,7 +220,13 @@ namespace Certification_System.Controllers
         {
             var user = _context.userRepository.GetUserById(userIdentificator);
 
-            var availableGivenDegreesToDispose = _context.degreeRepository.GetDegreesToDisposeByUserCompetences(user.GivenCertificates, user.GivenDegrees).ToList();
+            var userGivenCertificates = _context.givenCertificateRepository.GetGivenCertificatesById(user.GivenCertificates);
+            var userCertificatesTypes = userGivenCertificates.Select(z => z.Certificate).ToList();
+
+            var userGivenDegree = _context.givenDegreeRepository.GetGivenDegreesById(user.GivenDegrees);
+            var userDegreesTypes = userGivenDegree.Select(z => z.Degree).ToList();
+
+            var availableGivenDegreesToDispose = _context.degreeRepository.GetDegreesToDisposeByUserCompetences(userCertificatesTypes, userDegreesTypes).ToList();
 
             string[][] givenDegreesArray = new string[availableGivenDegreesToDispose.Count()][];
 
@@ -229,7 +235,7 @@ namespace Certification_System.Controllers
                 givenDegreesArray[i] = new string[2];
 
                 givenDegreesArray[i][0] = availableGivenDegreesToDispose[i].DegreeIdentificator;
-                givenDegreesArray[i][1] = availableGivenDegreesToDispose[i].DegreeIndexer + " " + availableGivenDegreesToDispose[i].Name;
+                givenDegreesArray[i][1] = availableGivenDegreesToDispose[i].DegreeIndexer + " | " + availableGivenDegreesToDispose[i].Name;
             }
 
             return givenDegreesArray;
