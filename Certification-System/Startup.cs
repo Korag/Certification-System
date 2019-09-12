@@ -1,13 +1,8 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Threading.Tasks;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Identity;
-using Microsoft.AspNetCore.Identity.UI;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.Http;
-using Microsoft.AspNetCore.HttpsPolicy;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
@@ -53,17 +48,18 @@ namespace Certification_System
             //    .AddDefaultUI(UIFramework.Bootstrap4)
             //    .AddEntityFrameworkStores<ApplicationDbContext>();
 
-            services.ConfigureApplicationCookie(o => {
-                o.ExpireTimeSpan = TimeSpan.FromDays(3);
-                o.SlidingExpiration = true;
-            });
-
             services.Configure<DataProtectionTokenProviderOptions>(o =>
               o.TokenLifespan = TimeSpan.FromHours(3));
 
             services.AddIdentityMongoDbProvider<CertificationPlatformUser>(mongo =>
             {
                 mongo.ConnectionString = ConnectionString;
+            });
+
+            services.ConfigureApplicationCookie(o => {
+                o.Cookie.Name = "Certification-System";
+                o.ExpireTimeSpan = TimeSpan.FromHours(10);
+                o.SlidingExpiration = true;
             });
 
             // Auto Mapper Configurations
