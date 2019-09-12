@@ -53,6 +53,13 @@ namespace Certification_System
             //    .AddDefaultUI(UIFramework.Bootstrap4)
             //    .AddEntityFrameworkStores<ApplicationDbContext>();
 
+            services.ConfigureApplicationCookie(o => {
+                o.ExpireTimeSpan = TimeSpan.FromDays(3);
+                o.SlidingExpiration = true;
+            });
+
+            services.Configure<DataProtectionTokenProviderOptions>(o =>
+              o.TokenLifespan = TimeSpan.FromHours(3));
 
             services.AddIdentityMongoDbProvider<CertificationPlatformUser>(mongo =>
             {
