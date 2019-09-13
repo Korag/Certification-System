@@ -8,6 +8,7 @@ using Certification_System.Repository.DAL;
 using AutoMapper;
 using Certification_System.ServicesInterfaces;
 using System;
+using Certification_System.DataEntities;
 
 namespace Certification_System.Controllers
 {
@@ -796,6 +797,7 @@ namespace Certification_System.Controllers
                 coursesArray[i][0] = courses[i].CourseIdentificator;
                 coursesArray[i][1] = courses[i].CourseIndexer + " | " + courses[i].Name;
             }
+
 
             return coursesArray;
         }

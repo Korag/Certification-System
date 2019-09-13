@@ -1,6 +1,6 @@
 ﻿using Certification_System.Entities;
 
-namespace Certification_System.Repository
+namespace Certification_System.RepositoryInterfaces
 {
     public interface ILogRepository
     {

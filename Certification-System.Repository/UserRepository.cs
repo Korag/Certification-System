@@ -1,7 +1,7 @@
-﻿using Certification_System.Entities;
+﻿using Certification_System.DataEntities;
+using Certification_System.Entities;
 using Certification_System.Repository.Context;
 using Certification_System.RepositoryInterfaces;
-using Certification_System.ServicesInterfaces;
 using Microsoft.AspNetCore.Mvc.Rendering;
 using MongoDB.Driver;
 using System.Collections.Generic;

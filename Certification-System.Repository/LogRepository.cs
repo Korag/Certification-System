@@ -1,5 +1,6 @@
 ﻿using Certification_System.Entities;
 using Certification_System.Repository.Context;
+using Certification_System.RepositoryInterfaces;
 
 namespace Certification_System.Repository
 {
