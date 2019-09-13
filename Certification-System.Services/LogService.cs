@@ -1,5 +1,4 @@
-﻿using AutoMapper;
-using Certification_System.Entities;
+﻿using Certification_System.Entities;
 using Certification_System.RepositoryInterfaces;
 using Certification_System.ServicesInterfaces;
 using System;
@@ -7,18 +6,20 @@ using System.Collections.Generic;
 
 namespace Certification_System.Services
 {
-    public class LogService
+    public class LogService : ILogService
     {
         private readonly ILogRepository _logRepository;
         private readonly IUserRepository _userRepository;
 
+        private readonly IIPGetterService _ipGetter;
         private readonly IKeyGenerator _keyGenerator;
 
-        public LogService(ILogRepository logRepository, IUserRepository userRepository, IKeyGenerator keyGenerator)
+        public LogService(ILogRepository logRepository, IUserRepository userRepository, IKeyGenerator keyGenerator, IIPGetterService ipGetter)
         {
             _logRepository = logRepository;
             _userRepository = userRepository;
 
+            _ipGetter = ipGetter;
             _keyGenerator = keyGenerator;
         }
 
@@ -34,7 +35,7 @@ namespace Certification_System.Services
                 ChangeAuthorIdentificator = user.Id,
 
                 DateTime = DateTime.Now,
-                IpAddress = LocalIPGetter.GetLocalIPAddress(),
+                IpAddress = _ipGetter.GetGlobalIPAddress(),
                 TypeOfAction = typeOfAction
             };
         }

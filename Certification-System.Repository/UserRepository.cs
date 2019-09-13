@@ -1,5 +1,4 @@
-﻿using Certification_System.DataEntities;
-using Certification_System.Entities;
+﻿using Certification_System.Entities;
 using Certification_System.Repository.Context;
 using Certification_System.RepositoryInterfaces;
 using Microsoft.AspNetCore.Mvc.Rendering;
