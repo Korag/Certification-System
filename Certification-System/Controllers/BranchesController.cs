@@ -6,6 +6,7 @@ using System.Collections.Generic;
 using Certification_System.Repository.DAL;
 using AutoMapper;
 using Certification_System.ServicesInterfaces;
+using Certification_System.Services;
 
 namespace Certification_System.Controllers
 {
@@ -15,18 +16,22 @@ namespace Certification_System.Controllers
 
         private readonly IMapper _mapper;
         private readonly IKeyGenerator _keyGenerator;
+        private readonly ILogService _logger;
 
-        public BranchesController(MongoOperations context, IMapper mapper, IKeyGenerator keyGenerator)
+        public BranchesController(MongoOperations context, IMapper mapper, IKeyGenerator keyGenerator, ILogService logger)
         {
             _context = context;
             _mapper = mapper;
             _keyGenerator = keyGenerator;
+            _logger = logger;
         }
 
         // GET: DisplayAllBranches
         [Authorize(Roles = "Admin")]
-        public ActionResult DisplayAllBranches()
+        public ActionResult DisplayAllBranches(string message = null)
         {
+            ViewBag.Message = message;
+
             var BranchesList = _context.branchRepository.GetListOfBranches();
             List<DisplayBranchViewModel> existingBranches = _mapper.Map<List<DisplayBranchViewModel>>(BranchesList);
 
@@ -71,6 +76,9 @@ namespace Certification_System.Controllers
 
                 _context.branchRepository.AddBranch(branch);
 
+                var logInfo = _logger.GenerateLogInformation(this.User.Identity.Name, LogTypeOfAction.TypesOfActions[0]);
+                _logger.AddBranchLog(branch, logInfo);
+
                 return RedirectToAction("ConfirmationOfActionOnBranch", "Branches", new { branchIdentificator = branch.BranchIdentificator, typeOfAction = "Add" });
             }
 
@@ -100,11 +108,29 @@ namespace Certification_System.Controllers
                 OriginBranch = _mapper.Map<EditBranchViewModel, Branch>(editedBranch, OriginBranch);
 
                 _context.branchRepository.UpdateBranch(OriginBranch);
+                var logInfo = _logger.GenerateLogInformation(this.User.Identity.Name, LogTypeOfAction.TypesOfActions[1]);
+                _logger.AddBranchLog(OriginBranch, logInfo);
 
-                return RedirectToAction("ConfirmationOfActionOnBranch", "Branches" , new { branchIdentificator = OriginBranch.BranchIdentificator, typeOfAction = "Update" });
+                return RedirectToAction("ConfirmationOfActionOnBranch", "Branches", new { branchIdentificator = OriginBranch.BranchIdentificator, typeOfAction = "Update" });
             }
 
             return View(editedBranch);
+        }
+
+        // GET: DeleteBranch
+        [Authorize(Roles = "Admin")]
+        [HttpGet]
+        public ActionResult DeleteBranch(string branchIdentificator)
+        {
+            if (!string.IsNullOrWhiteSpace(branchIdentificator))
+            {
+                var branch = _context.branchRepository.GetBranchById(branchIdentificator);
+                _context.branchRepository.DeleteBranch(branchIdentificator);
+
+                return RedirectToAction("DisplayAllBranches", "Branches", new { branchIdentificator = branchIdentificator, message = "Usunięto wskazany obszar certyfikacji" });
+            }
+
+            return RedirectToAction("BlankMenu", "Certificates");
         }
     }
 }

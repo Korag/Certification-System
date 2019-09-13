@@ -76,5 +76,11 @@ namespace Certification_System.Repository
 
             return resultListOfBranches;
         }
+
+        public void DeleteBranch(string branchIdentificator)
+        {
+            var filter = Builders<Branch>.Filter.Where(z => z.BranchIdentificator == branchIdentificator);
+            GetBranches().DeleteOne(filter);
+        }
     }
 }

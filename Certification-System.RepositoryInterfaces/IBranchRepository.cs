@@ -13,6 +13,6 @@ namespace Certification_System.RepositoryInterfaces
         void AddBranch(Branch branch);
         ICollection<SelectListItem> GetBranchesAsSelectList();
         ICollection<string> GetBranchesById(ICollection<string> branchesIdentificators);
-
+        void DeleteBranch(string branchIdentificator);
     }
 }

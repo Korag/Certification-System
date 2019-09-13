@@ -17,6 +17,8 @@ using Certification_System.Repository.Context;
 using AutoMapper;
 using Certification_System.Services.Models;
 using Certification_System.ServicesInterfaces.Models;
+using Microsoft.AspNetCore.Mvc.Infrastructure;
+using Microsoft.Extensions.DependencyInjection.Extensions;
 
 namespace Certification_System
 {
@@ -98,13 +100,22 @@ namespace Certification_System
 
             services.AddTransient<ILogRepository, LogRepository>();
 
+            // Logs
+            services.AddTransient<IIPGetterService, IPGetterService>();
+            services.AddSingleton<ILogService, LogService>();
+
+            // IP
+            services.AddSingleton<IHttpContextAccessor, HttpContextAccessor>();
+
             services.AddMvc(options =>
             {
                 options.Filters.Add(new AutoValidateAntiforgeryTokenAttribute());
             })
             .SetCompatibilityVersion(CompatibilityVersion.Version_2_2)
-            .AddDataAnnotationsLocalization();
+            .AddDataAnnotationsLocalization()
+            .AddSessionStateTempDataProvider();
 
+            services.AddSession();
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
@@ -126,6 +137,7 @@ namespace Certification_System
             app.UseStaticFiles();
             app.UseCookiePolicy();
 
+            app.UseSession();
             app.UseAuthentication();
 
             app.UseMvc(routes =>

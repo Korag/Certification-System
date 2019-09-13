@@ -59,6 +59,7 @@
     <PackageReference Include="Newtonsoft.Json" Version="12.0.2" />
     <PackageReference Include="popper.js" Version="1.14.3" />
     <PackageReference Include="QRCoder" Version="1.3.5" />
+    <PackageReference Include="Rotativa.AspNetCore" Version="1.1.1" />
   </ItemGroup>
 
 

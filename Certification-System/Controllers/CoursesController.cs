@@ -8,7 +8,6 @@ using Certification_System.Repository.DAL;
 using AutoMapper;
 using Certification_System.ServicesInterfaces;
 using System;
-using Certification_System.DataEntities;
 
 namespace Certification_System.Controllers
 {

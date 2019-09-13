@@ -8,6 +8,11 @@
 <h2>Obszary certyfikacji zdefiniowane w platformie</h2>
 <hr />
 
+@if (!string.IsNullOrWhiteSpace(ViewBag.message))
+{
+    <h2 class="alert alert-info" role="alert">@ViewBag.message</h2>
+}
+
 <div class="container col-12">
     <div class="mt-3 mb-3">
         <a asp-action="AddNewBranch" asp-controller="Branches" class="btn btn-primary">Dodaj nowy obszar</a>
