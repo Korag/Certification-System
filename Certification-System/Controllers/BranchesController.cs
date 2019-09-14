@@ -118,6 +118,7 @@ namespace Certification_System.Controllers
                 OriginBranch = _mapper.Map<EditBranchViewModel, Branch>(editedBranch, OriginBranch);
 
                 _context.branchRepository.UpdateBranch(OriginBranch);
+
                 var logInfo = _logger.GenerateLogInformation(this.User.Identity.Name, LogTypeOfAction.TypesOfActions[1]);
                 _logger.AddBranchLog(OriginBranch, logInfo);
 

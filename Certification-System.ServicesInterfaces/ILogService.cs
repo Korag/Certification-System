@@ -28,6 +28,7 @@ namespace Certification_System.Services
         void AddGivenCertificatesLogs(ICollection<GivenCertificate> givenCertificates, LogInformation logInfo);
         void AddGivenDegreeLog(GivenDegree givenDegree, LogInformation logInfo);
         void AddGivenDegreesLogs(ICollection<GivenDegree> givenDegrees, LogInformation logInfo);
+        void AddMeetingLog(Meeting meeting, LogInformation logInfo);
         void AddMeetingsLogs(ICollection<Meeting> meetings, LogInformation logInfo);
     }
 }

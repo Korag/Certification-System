@@ -7,6 +7,7 @@ using Certification_System.Repository.DAL;
 using AutoMapper;
 using Certification_System.ServicesInterfaces;
 using System.Linq;
+using Certification_System.Services;
 
 namespace Certification_System.Controllers
 {
@@ -16,12 +17,18 @@ namespace Certification_System.Controllers
 
         private readonly IMapper _mapper;
         private readonly IKeyGenerator _keyGenerator;
+        private readonly ILogService _logger;
 
-        public CompaniesController(MongoOperations context, IMapper mapper, IKeyGenerator keyGenerator)
+        public CompaniesController(
+            MongoOperations context, 
+            IMapper mapper, 
+            IKeyGenerator keyGenerator,
+            ILogService logger)
         {
             _context = context;
             _mapper = mapper;
             _keyGenerator = keyGenerator;
+            _logger = logger;
         }
 
         // GET: DisplayAllCompanies
@@ -70,6 +77,9 @@ namespace Certification_System.Controllers
 
                 _context.companyRepository.AddCompany(company);
 
+                var logInfo = _logger.GenerateLogInformation(this.User.Identity.Name, LogTypeOfAction.TypesOfActions[0]);
+                _logger.AddCompanyLog(company, logInfo);
+
                 return RedirectToAction("ConfirmationOfActionOnCompany", new { companyIdentificator = company.CompanyIdentificator, TypeOfAction = "Add" });
             }
 
@@ -95,6 +105,9 @@ namespace Certification_System.Controllers
             {
                 Company company = _mapper.Map<Company>(editedCompany);
                 _context.companyRepository.UpdateCompany(company);
+
+                var logInfo = _logger.GenerateLogInformation(this.User.Identity.Name, LogTypeOfAction.TypesOfActions[1]);
+                _logger.AddCompanyLog(company, logInfo);
 
                 return RedirectToAction("ConfirmationOfActionOnCompany", "Companies", new { companyIdentificator = editedCompany.CompanyIdentificator, TypeOfAction = "Update" });
             }
