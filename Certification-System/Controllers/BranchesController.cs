@@ -7,6 +7,8 @@ using Certification_System.Repository.DAL;
 using AutoMapper;
 using Certification_System.ServicesInterfaces;
 using Certification_System.Services;
+using Certification_System.Extensions;
+using Microsoft.AspNetCore.Identity;
 
 namespace Certification_System.Controllers
 {
@@ -14,16 +16,24 @@ namespace Certification_System.Controllers
     {
         private readonly MongoOperations _context;
 
+        private readonly IEmailSender _emailSender;
         private readonly IMapper _mapper;
         private readonly IKeyGenerator _keyGenerator;
         private readonly ILogService _logger;
 
-        public BranchesController(MongoOperations context, IMapper mapper, IKeyGenerator keyGenerator, ILogService logger)
+        public BranchesController(
+            MongoOperations context,
+            IMapper mapper,
+            IKeyGenerator keyGenerator,
+            ILogService logger,
+            IEmailSender emailSender)
         {
             _context = context;
+
             _mapper = mapper;
             _keyGenerator = keyGenerator;
             _logger = logger;
+            _emailSender = emailSender;
         }
 
         // GET: DisplayAllBranches
@@ -117,20 +127,65 @@ namespace Certification_System.Controllers
             return View(editedBranch);
         }
 
-        // GET: DeleteBranch
+        // GET: DeleteBranchHub
         [Authorize(Roles = "Admin")]
         [HttpGet]
-        public ActionResult DeleteBranch(string branchIdentificator)
+        public ActionResult DeleteBranchHub(string branchIdentificator, string returnUrl)
         {
             if (!string.IsNullOrWhiteSpace(branchIdentificator))
             {
-                var branch = _context.branchRepository.GetBranchById(branchIdentificator);
-                _context.branchRepository.DeleteBranch(branchIdentificator);
+                var user = _context.userRepository.GetUserByEmail(this.User.Identity.Name);
+                var generatedCode = _keyGenerator.GenerateUserTokenForEntityDeletion(user);
 
-                return RedirectToAction("DisplayAllBranches", "Branches", new { branchIdentificator = branchIdentificator, message = "Usunięto wskazany obszar certyfikacji" });
+                var url = Url.DeleteBranchEntityLink(user.Id, generatedCode, Request.Scheme);
+                var emailMessage = _emailSender.GenerateEmailMessage(user.Email, user.FirstName + " " + user.LastName, "authorizeAction", url);
+                _emailSender.SendEmailAsync(emailMessage);
+
+                return RedirectToAction("UniversalConfirmationPanel", "Account", new { messageNumber = 5, returnUrl });
             }
 
             return RedirectToAction("BlankMenu", "Certificates");
+        }
+
+        // GET: DeleteBranch
+        [Authorize(Roles = "Admin")]
+        [HttpGet]
+        public ActionResult DeleteBranch(string branchIdentificator, string code)
+        {
+            if (!string.IsNullOrWhiteSpace(branchIdentificator) && !string.IsNullOrWhiteSpace(code))
+            {
+                DeleteEntityViewModel branchToDelete = new DeleteEntityViewModel
+                {
+                    EntityIdentificator = branchIdentificator,
+
+                    Code = code
+                };
+
+                return View(branchToDelete);
+            }
+
+            return RedirectToAction("BlankMenu", "Certificates");
+        }
+
+        // POST: DeleteBranch
+        [Authorize(Roles = "Admin")]
+        [HttpPost]
+        public ActionResult DeleteBranch(DeleteEntityViewModel branchToDelete)
+        {
+            var user = _context.userRepository.GetUserByEmail(this.User.Identity.Name);
+            var branch = _context.branchRepository.GetBranchById(branchToDelete.EntityIdentificator);
+
+            if (ModelState.IsValid && _keyGenerator.ValidateUserTokenForEntityDeletion(user, branchToDelete.Code) && branch != null)
+            {
+                _context.branchRepository.DeleteBranch(branchToDelete.EntityIdentificator);
+
+                var logInfo = _logger.GenerateLogInformation(this.User.Identity.Name, LogTypeOfAction.TypesOfActions[2]);
+                _logger.AddBranchLog(branch, logInfo);
+
+                return RedirectToAction("DisplayAllBranches", "Branches", new { branchIdentificator = branchToDelete.EntityIdentificator, message = "Usunięto wskazany obszar certyfikacji" });
+            }
+
+            return View(branchToDelete);
         }
     }
 }

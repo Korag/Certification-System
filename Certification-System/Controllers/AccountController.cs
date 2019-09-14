@@ -15,7 +15,6 @@ using AutoMapper;
 using Certification_System.Repository.DAL;
 using Certification_System.DTOViewModels;
 using System.Collections.Generic;
-using Certification_System.ServicesInterfaces.Models;
 using System.Diagnostics;
 
 namespace Certification_System.Controllers
@@ -59,10 +58,12 @@ namespace Certification_System.Controllers
 
         private readonly Dictionary<int, string> _messages = new Dictionary<int, string>
          {
+           {0, "Wystąpił nieokreślony błąd" },
            {1, "Na podany przez Ciebie email została wysłana wiadomość, która pozwoli na zresetowanie hasła do konta."},
            {2, "Na adres email wybranego użytkownika została wysłana wiadomość pozwalająca na potwierdzenie jego adresu email."},
            {3, "Na adres email wybranego użytkownika została wysłana wiadomość pozwalająca na reset hasła do konta użytkownika."},
-           {4, "Użytkownik nie może zresetować swojego hasła w przypadku, gdy adres email nie został potwierdzony. Najpierw należy wysłać wiadomość weryfikacyjną adres email, a następnie tą lub po potwierdzeniu adresu użytkownik sam może skorzystać z opcji \"Zapomniałem hasła\" w panelu logowania"}
+           {4, "Użytkownik nie może zresetować swojego hasła w przypadku, gdy adres email nie został potwierdzony. Najpierw należy wysłać wiadomość weryfikacyjną adres email, a następnie tą lub po potwierdzeniu adresu użytkownik sam może skorzystać z opcji \"Zapomniałem hasła\" w panelu logowania"},
+           {5, "Ma Twój adres email została wysłana wiadomość umożliwiająca dokończenie rozpoczętego procesu."}
         };
 
         [HttpGet]
@@ -427,7 +428,7 @@ namespace Certification_System.Controllers
 
         [AllowAnonymous]
         [Authorize(Roles = "Admin")]
-        public ActionResult UniversalConfirmationPanel(string returnUrl, int messageNumber)
+        public ActionResult UniversalConfirmationPanel(string returnUrl, int messageNumber = 0)
         {
             ViewBag.message = _messages[messageNumber];
 
