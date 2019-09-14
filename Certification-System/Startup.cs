@@ -56,7 +56,8 @@ namespace Certification_System
             services.AddIdentityMongoDbProvider<CertificationPlatformUser>(mongo =>
             {
                 mongo.ConnectionString = ConnectionString;
-            });
+
+            }).AddTokenProvider<DataProtectorTokenProvider<CertificationPlatformUser>>("DeletionOfEntity");
 
             services.ConfigureApplicationCookie(o => {
                 o.Cookie.Name = "Certification-System";
@@ -102,7 +103,7 @@ namespace Certification_System
 
             // Logs
             services.AddTransient<IIPGetterService, IPGetterService>();
-            services.AddSingleton<ILogService, LogService>();
+            services.AddTransient<ILogService, LogService>();
 
             // IP
             services.AddSingleton<IHttpContextAccessor, HttpContextAccessor>();
