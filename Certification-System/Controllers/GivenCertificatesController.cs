@@ -2,6 +2,7 @@
 using Certification_System.DTOViewModels;
 using Certification_System.Entities;
 using Certification_System.Repository.DAL;
+using Certification_System.Services;
 using Certification_System.ServicesInterfaces;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
@@ -17,13 +18,20 @@ namespace Certification_System.Controllers
         private readonly IGeneratorQR _generatorQR;
         private readonly IMapper _mapper;
         private readonly IKeyGenerator _keyGenerator;
+        private readonly ILogService _logger;
 
-        public GivenCertificatesController(IGeneratorQR generatorQR, MongoOperations context, IMapper mapper, IKeyGenerator keyGenerator)
+        public GivenCertificatesController(
+            MongoOperations context,
+            IGeneratorQR generatorQR, 
+            IMapper mapper,
+            IKeyGenerator keyGenerator,
+            ILogService logger)
         {
             _generatorQR = generatorQR;
             _context = context;
             _mapper = mapper;
             _keyGenerator = keyGenerator;
+            _logger = logger;
         }
 
         // GET: DisplayAllGivenCertificates
@@ -89,6 +97,14 @@ namespace Certification_System.Controllers
 
                 _context.givenCertificateRepository.AddGivenCertificate(givenCertificate);
                 _context.userRepository.AddUserCertificate(newGivenCertificate.SelectedUser, givenCertificate.GivenCertificateIdentificator);
+
+                var logInfoAdd = _logger.GenerateLogInformation(this.User.Identity.Name, LogTypeOfAction.TypesOfActions[0]);
+                _logger.AddGivenCertificateLog(givenCertificate, logInfoAdd);
+
+                var user = _context.userRepository.GetUserById(newGivenCertificate.SelectedUser);
+
+                var logInfoUpdate = _logger.GenerateLogInformation(this.User.Identity.Name, LogTypeOfAction.TypesOfActions[1]);
+                _logger.AddUserLog(user, logInfoUpdate);
 
                 return RedirectToAction("ConfirmationOfActionOnGivenCertificate", new { givenCertificateIdentificator = givenCertificate.GivenCertificateIdentificator, TypeOfAction = "Add" });
             }
@@ -157,6 +173,9 @@ namespace Certification_System.Controllers
 
                 OriginGivenCertificate = _mapper.Map<EditGivenCertificateViewModel, GivenCertificate>(editedGivenCertificate, OriginGivenCertificate);
                 _context.givenCertificateRepository.UpdateGivenCertificate(OriginGivenCertificate);
+
+                var logInfo = _logger.GenerateLogInformation(this.User.Identity.Name, LogTypeOfAction.TypesOfActions[0]);
+                _logger.AddGivenCertificateLog(OriginGivenCertificate, logInfo);
 
                 return RedirectToAction("ConfirmationOfActionOnGivenCertificate", "GivenCertificates", new { givenCertificateIdentificator = OriginGivenCertificate.GivenCertificateIdentificator, TypeOfAction = "Update" });
             }
