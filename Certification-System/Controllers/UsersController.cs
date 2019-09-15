@@ -24,6 +24,7 @@ namespace Certification_System.Controllers
         private readonly IMapper _mapper;
         private readonly IKeyGenerator _keyGenerator;
         private readonly IEmailSender _emailSender;
+        private readonly ILogService _logger;
 
         public UsersController(
             UserManager<CertificationPlatformUser> userManager,
@@ -31,7 +32,8 @@ namespace Certification_System.Controllers
             MongoOperations context,
             IMapper mapper,
             IKeyGenerator keyGenerator,
-            IEmailSender emailSender)
+            IEmailSender emailSender,
+            ILogService logger)
         {
             _userManager = userManager;
             _roleManager = roleManager;
@@ -40,6 +42,7 @@ namespace Certification_System.Controllers
             _mapper = mapper;
             _keyGenerator = keyGenerator;
             _emailSender = emailSender;
+            _logger = logger;
         }
 
         // GET: DisplayAllUsers
@@ -137,6 +140,9 @@ namespace Certification_System.Controllers
                     var emailToSend = _emailSender.GenerateEmailMessage(user.Email, user.FirstName + " " + user.LastName, "setPassword", callbackUrl);
                     await _emailSender.SendEmailAsync(emailToSend);
 
+                    var logInfo = _logger.GenerateLogInformation(this.User.Identity.Name, LogTypeOfAction.TypesOfActions[0]);
+                    _logger.AddUserLog(user, logInfo);
+
                     return RedirectToAction("ConfirmationOfActionOnUser", "Users", new { userIdentificator = user.Id, TypeOfAction = "Add" });
                 }
 
@@ -194,6 +200,10 @@ namespace Certification_System.Controllers
                 OriginUser = _mapper.Map<EditUserViewModel, CertificationPlatformUser>(editedUser, OriginUser);
 
                 _context.userRepository.UpdateUser(OriginUser);
+
+                /// must check if the roles are valid in log
+                var logInfo = _logger.GenerateLogInformation(this.User.Identity.Name, LogTypeOfAction.TypesOfActions[0]);
+                _logger.AddUserLog(OriginUser, logInfo);
 
                 return RedirectToAction("ConfirmationOfActionOnUser", "Users", new { userIdentificator = OriginUser.Id, TypeOfAction = "Update" });
             }
