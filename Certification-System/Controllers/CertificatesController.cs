@@ -107,8 +107,10 @@ namespace Certification_System.Controllers
 
         // GET: DisplayAllCertificates
         [Authorize(Roles = "Admin")]
-        public ActionResult DisplayAllCertificates()
+        public ActionResult DisplayAllCertificates(string message = null)
         {
+            ViewBag.Message = message;
+
             var Certificates = _context.certificateRepository.GetListOfCertificates();
 
             List<DisplayCertificateViewModel> ListOfCertificates = _mapper.Map<List<DisplayCertificateViewModel>>(Certificates);
@@ -227,11 +229,13 @@ namespace Certification_System.Controllers
                 DeleteEntityViewModel certificateToDelete = new DeleteEntityViewModel
                 {
                     EntityIdentificator = certificateIdentificator,
+                    Code = code,
 
-                    Code = code
+                    ActionName = this.ControllerContext.RouteData.Values["action"].ToString(),
+                    FormHeader = "Usuwanie certyfikatu"
                 };
 
-                return View(certificateToDelete);
+                return View("DeleteEntity", certificateToDelete);
             }
 
             return RedirectToAction("BlankMenu", "Certificates");
@@ -242,23 +246,30 @@ namespace Certification_System.Controllers
         [HttpPost]
         public ActionResult DeleteCertificate(DeleteEntityViewModel certificateToDelete)
         {
-            //var user = _context.userRepository.GetUserByEmail(this.User.Identity.Name);
-            //var certificate = _context.certificateRepository.GetCertificateById(certificateToDelete.EntityIdentificator);
+            var user = _context.userRepository.GetUserByEmail(this.User.Identity.Name);
+            var certificate = _context.certificateRepository.GetCertificateById(certificateToDelete.EntityIdentificator);
 
-            //if (certificate == null)
-            //{
-            //    return RedirectToAction("UniversalConfirmationPanel", "Account", new { messageNumber = 6, returnUrl = Url.BlankMenuLink(Request.Scheme) });
-            //}
+            if (certificate == null)
+            {
+                return RedirectToAction("UniversalConfirmationPanel", "Account", new { messageNumber = 6, returnUrl = Url.BlankMenuLink(Request.Scheme) });
+            }
 
-            //if (ModelState.IsValid && _keyGenerator.ValidateUserTokenForEntityDeletion(user, certificateToDelete.Code))
-            //{
-            //    _context.certificateRepository.DeleteBranch(branchToDelete.EntityIdentificator);
+            if (ModelState.IsValid && _keyGenerator.ValidateUserTokenForEntityDeletion(user, certificateToDelete.Code))
+            {
+                var logInfo = _logger.GenerateLogInformation(this.User.Identity.Name, this.ControllerContext.RouteData.Values["action"].ToString(), LogTypeOfAction.TypesOfActions[2]);
+                var logInfoUpdate = _logger.GenerateLogInformation(this.User.Identity.Name, this.ControllerContext.RouteData.Values["action"].ToString(), LogTypeOfAction.TypesOfActions[1]);
 
-            //    var logInfo = _logger.GenerateLogInformation(this.User.Identity.Name, this.ControllerContext.RouteData.Values["action"].ToString(), LogTypeOfAction.TypesOfActions[2]);
-            //    _logger.AddBranchLog(branch, logInfo);
+                _context.certificateRepository.DeleteCertificate(certificateToDelete.EntityIdentificator);
+                _logger.AddCertificateLog(certificate, logInfo);
 
-            //    return RedirectToAction("DisplayAllBranches", "Branches", new { branchIdentificator = branchToDelete.EntityIdentificator, message = "Usunięto wskazany obszar certyfikacji" });
-            //}
+                var updatedGivenCertificates = _context.givenCertificateRepository.DeleteGivenCertificatesByCertificateId(certificateToDelete.EntityIdentificator);
+                _logger.AddGivenCertificatesLogs(updatedGivenCertificates, logInfoUpdate);
+
+                var updatedGivenDegrees = _context.degreeRepository.DeleteCertificateFromDegrees(certificateToDelete.EntityIdentificator);
+                _logger.AddDegreesLogs(updatedGivenDegrees, logInfoUpdate);
+
+                return RedirectToAction("DisplayAllCertificates", "Certificates", new { certificateIdentificator = certificateToDelete.EntityIdentificator, message = "Usunięto wskazany certyfikat" });
+            }
 
             return View(certificateToDelete);
         }

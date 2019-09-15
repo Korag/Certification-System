@@ -85,9 +85,15 @@ namespace Certification_System.Repository
             var resultListOfCertificates = GetCertificates().Find<Certificate>(filter).ToList();
             resultListOfCertificates.ForEach(z => z.Branches.Remove(branchIdentificator));
 
-            _certificates.UpdateOne(filter, update);
+            _certificates.UpdateMany(filter, update);
 
             return resultListOfCertificates;
+        }
+
+        public void DeleteCertificate(string certificateIdentificator)
+        {
+            var filter = Builders<Certificate>.Filter.Where(z => z.CertificateIdentificator == certificateIdentificator);
+            GetCertificates().DeleteOne(filter);
         }
     }
 }

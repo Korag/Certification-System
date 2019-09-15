@@ -11,5 +11,6 @@ namespace Certification_System.RepositoryInterfaces
         GivenCertificate GetGivenCertificateById(string givenCertificateIdentificator);
         ICollection<GivenCertificate> GetGivenCertificatesByIdOfCertificate(string certificateIdentificator);
         ICollection<GivenCertificate> GetGivenCertificatesById(ICollection<string> givenCertificatesIdentificators);
+        ICollection<GivenCertificate> DeleteGivenCertificatesByCertificateId(string certificateIdentificator);
     }
 }

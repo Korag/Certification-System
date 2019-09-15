@@ -102,7 +102,20 @@ namespace Certification_System.Repository
             var resultListOfDegrees = GetDegrees().Find<Degree>(filter).ToList();
             resultListOfDegrees.ForEach(z => z.Branches.Remove(branchIdentificator));
 
-            _degrees.UpdateOne(filter, update);
+            _degrees.UpdateMany(filter, update);
+
+            return resultListOfDegrees;
+        }
+
+        public ICollection<Degree> DeleteCertificateFromDegrees(string certificateIdentificator)
+        {
+            var filter = Builders<Degree>.Filter.Where(z => z.RequiredCertificates.Contains(certificateIdentificator));
+            var update = Builders<Degree>.Update.Pull(x => x.RequiredCertificates, certificateIdentificator);
+
+            var resultListOfDegrees = GetDegrees().Find<Degree>(filter).ToList();
+            resultListOfDegrees.ForEach(z => z.RequiredCertificates.Remove(certificateIdentificator));
+
+            _degrees.UpdateMany(filter, update);
 
             return resultListOfDegrees;
         }

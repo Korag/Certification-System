@@ -62,5 +62,15 @@ namespace Certification_System.Repository
 
             return resultListOfGivenCertificate;
         }
+
+        public ICollection<GivenCertificate> DeleteGivenCertificatesByCertificateId(string certificateIdentificator)
+        {
+            var filter = Builders<GivenCertificate>.Filter.Where(z => z.Certificate == certificateIdentificator);
+
+            var resultListOfGivenCertificates = GetGivenCertificates().Find<GivenCertificate>(filter).ToList();
+            var result = GetGivenCertificates().DeleteMany(filter);
+
+            return resultListOfGivenCertificates;
+        }
     }
 }

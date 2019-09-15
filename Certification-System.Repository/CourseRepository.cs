@@ -257,7 +257,7 @@ namespace Certification_System.Repository
             var resultListOfCourses = GetCourses().Find<Course>(filter).ToList();
             resultListOfCourses.ForEach(z => z.Branches.Remove(branchIdentificator));
 
-            _courses.UpdateOne(filter, update);
+            _courses.UpdateMany(filter, update);
 
             return resultListOfCourses;
         }
