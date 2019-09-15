@@ -8,6 +8,7 @@ using Certification_System.Repository.DAL;
 using AutoMapper;
 using Certification_System.ServicesInterfaces;
 using System;
+using Certification_System.Services;
 
 namespace Certification_System.Controllers
 {
@@ -17,12 +18,19 @@ namespace Certification_System.Controllers
 
         private readonly IMapper _mapper;
         private readonly IKeyGenerator _keyGenerator;
+        private readonly ILogService _logger;
 
-        public CoursesController(MongoOperations context, IMapper mapper, IKeyGenerator keyGenerator)
+        public CoursesController(
+            MongoOperations context, 
+            IMapper mapper, 
+            IKeyGenerator keyGenerator,
+            ILogService logger
+            )
         {
             _context = context;
             _mapper = mapper;
             _keyGenerator = keyGenerator;
+            _logger = logger;
         }
 
         // GET: ConfirmationOfActionOnCourse
@@ -111,6 +119,9 @@ namespace Certification_System.Controllers
 
                 _context.courseRepository.AddCourse(course);
 
+                var logInfo = _logger.GenerateLogInformation(this.User.Identity.Name, LogTypeOfAction.TypesOfActions[0]);
+                _logger.AddCourseLog(course, logInfo);
+
                 return RedirectToAction("ConfirmationOfActionOnCourse", new { courseIdentificator = course.CourseIdentificator, TypeOfAction = "Update" });
             }
 
@@ -166,6 +177,9 @@ namespace Certification_System.Controllers
                     }
 
                     _context.meetingRepository.AddMeetings(meetings);
+
+                    var logInfoMeetings = _logger.GenerateLogInformation(this.User.Identity.Name, LogTypeOfAction.TypesOfActions[0]);
+                    _logger.AddMeetingsLogs(meetings, logInfoMeetings);
                 }
 
                 var MeetingsIdentificators = meetings.Select(z => z.MeetingIdentificator);
@@ -173,6 +187,9 @@ namespace Certification_System.Controllers
                 course.Meetings.ToList().AddRange(MeetingsIdentificators);
 
                 _context.courseRepository.AddCourse(course);
+
+                var logInfo = _logger.GenerateLogInformation(this.User.Identity.Name, LogTypeOfAction.TypesOfActions[0]);
+                _logger.AddCourseLog(course, logInfo);
 
                 return RedirectToAction("ConfirmationOfActionOnCourse", new { courseIdentificator = course.CourseIdentificator, TypeOfAction = "Add" });
             }
@@ -348,6 +365,9 @@ namespace Certification_System.Controllers
 
                 _context.courseRepository.UpdateCourse(OriginCourse);
 
+                var logInfo = _logger.GenerateLogInformation(this.User.Identity.Name, LogTypeOfAction.TypesOfActions[1]);
+                _logger.AddCourseLog(OriginCourse, logInfo);
+
                 return RedirectToAction("ConfirmationOfActionOnCourse", "Courses", new { courseIdentificator = editedCourse.CourseIdentificator, TypeOfAction = "Update" });
             }
 
@@ -388,6 +408,21 @@ namespace Certification_System.Controllers
                 OriginMeetings = _mapper.Map<List<EditMeetingViewModel>, List<Meeting>>(editedCourse.Meetings.ToList(), OriginMeetings.ToList());
 
                 _context.meetingRepository.UpdateMeetings(OriginMeetings);
+
+                var logInfoMeetings = _logger.GenerateLogInformation(this.User.Identity.Name, LogTypeOfAction.TypesOfActions[1]);
+                _logger.AddMeetingsLogs(OriginMeetings, logInfoMeetings);
+
+                OriginCourse = _mapper.Map<EditCourseWithMeetingsViewModel, Course>(editedCourse, OriginCourse);
+
+                if (OriginCourse.DateOfEnd != null)
+                {
+                    OriginCourse.CourseLength = OriginCourse.DateOfEnd.Subtract(OriginCourse.DateOfStart).Days;
+                }
+
+                _context.courseRepository.UpdateCourse(OriginCourse);
+
+                var logInfo = _logger.GenerateLogInformation(this.User.Identity.Name, LogTypeOfAction.TypesOfActions[1]);
+                _logger.AddCourseLog(OriginCourse, logInfo);
 
                 return RedirectToAction("ConfirmationOfActionOnCourse", "Courses", new { courseIdentificator = editedCourse.CourseIdentificator, TypeOfAction = "Update" });
             }
@@ -449,8 +484,15 @@ namespace Certification_System.Controllers
                     }
                     else
                     {
-                        _context.userRepository.AddUsersToCourse(usersAssignedToCourse.SelectedCourse, usersAssignedToCourse.SelectedUsers);
-                        _context.courseRepository.AddEnrolledUsersToCourse(usersAssignedToCourse.SelectedCourse, usersAssignedToCourse.SelectedUsers);
+                        _context.userRepository.AddUsersToCourse(Course.CourseIdentificator, usersAssignedToCourse.SelectedUsers);
+                        _context.courseRepository.AddEnrolledUsersToCourse(Course.CourseIdentificator, usersAssignedToCourse.SelectedUsers);
+
+                        var UpdatedCourse = _context.courseRepository.GetCourseById(Course.CourseIdentificator);
+                        var logInfo = _logger.GenerateLogInformation(this.User.Identity.Name, LogTypeOfAction.TypesOfActions[1]);
+                        _logger.AddCourseLog(UpdatedCourse, logInfo);
+
+                        var UpdatedUsers= _context.userRepository.GetUsersById(usersAssignedToCourse.SelectedUsers);
+                        _logger.AddUsersLogs(UpdatedUsers, logInfo);
 
                         return RedirectToAction("CourseDetails", new { courseIdentificator = usersAssignedToCourse.SelectedCourse, message = "Zapisano nowych użytkowników na kurs" });
                     }
@@ -520,6 +562,9 @@ namespace Certification_System.Controllers
 
                 _context.courseRepository.UpdateCourse(Course);
 
+                List<GivenCertificate> disposedGivenCertificates = new List<GivenCertificate>();
+                List<CertificationPlatformUser> updatedUsers = new List<CertificationPlatformUser>();
+
                 for (int i = 0; i < courseToEndViewModel.DispensedGivenCertificates.Count(); i++)
                 {
                     if (courseToEndViewModel.DispensedGivenCertificates[i].GivenCertificateIsEarned == true)
@@ -538,14 +583,20 @@ namespace Certification_System.Controllers
                             Certificate = courseToEndViewModel.SelectedCertificate
                         };
 
+                        disposedGivenCertificates.Add(singleGivenCertificate);
                         _context.givenCertificateRepository.AddGivenCertificate(singleGivenCertificate);
 
-                        var User = _context.userRepository.GetUserById(courseToEndViewModel.DispensedGivenCertificates[i].UserIdentificator);
-                        User.GivenCertificates.Add(singleGivenCertificate.GivenCertificateIdentificator);
+                        var user = _context.userRepository.GetUserById(courseToEndViewModel.DispensedGivenCertificates[i].UserIdentificator);
+                        user.GivenCertificates.Add(singleGivenCertificate.GivenCertificateIdentificator);
 
-                        _context.userRepository.UpdateUser(User);
+                        updatedUsers.Add(user);
+                        _context.userRepository.UpdateUser(user);
                     }
                 }
+
+                var logInfo = _logger.GenerateLogInformation(this.User.Identity.Name, LogTypeOfAction.TypesOfActions[1]);
+                _logger.AddUsersLogs(updatedUsers, logInfo);
+                _logger.AddGivenCertificatesLogs(disposedGivenCertificates, logInfo);
 
                 return RedirectToAction("CourseDetails", new { courseIdentificator = courseToEndViewModel.CourseIdentificator, message = "Zaknięto kurs i rozdano certyfikaty." });
             }
@@ -642,6 +693,13 @@ namespace Certification_System.Controllers
 
                 _context.courseRepository.DeleteUsersFromCourse(deleteUsersFromCourseViewModel.CourseIdentificator, UsersToDeleteFromCourseIdentificators);
                 _context.userRepository.DeleteCourseFromUsersCollection(deleteUsersFromCourseViewModel.CourseIdentificator, UsersToDeleteFromCourseIdentificators);
+
+                var UpdatedCourse = _context.courseRepository.GetCourseById(deleteUsersFromCourseViewModel.CourseIdentificator);
+                var logInfo = _logger.GenerateLogInformation(this.User.Identity.Name, LogTypeOfAction.TypesOfActions[1]);
+                _logger.AddCourseLog(UpdatedCourse, logInfo);
+
+                var UpdatedUsers = _context.userRepository.GetUsersById(UsersToDeleteFromCourseIdentificators);
+                _logger.AddUsersLogs(UpdatedUsers, logInfo);
 
                 if (deleteUsersFromCourseViewModel.UsersToDeleteFromCourse.Count() == 1)
                 {
