@@ -42,6 +42,10 @@
     <Content Remove="Views\Manage Not-used\_ViewImports.cshtml" />
   </ItemGroup>
 
+  <ItemGroup>
+    <None Remove="Controllers\ExamsTermsController.cs~RF13e1830.TMP" />
+  </ItemGroup>
+
 
   <ItemGroup>
     <PackageReference Include="AutoMapper" Version="8.1.1" />

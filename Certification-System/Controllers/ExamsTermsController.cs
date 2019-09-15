@@ -1,11 +1,11 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
-using System.Threading.Tasks;
 using AutoMapper;
 using Certification_System.DTOViewModels;
 using Certification_System.Entities;
 using Certification_System.Repository.DAL;
+using Certification_System.Services;
 using Certification_System.ServicesInterfaces;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
@@ -18,12 +18,18 @@ namespace Certification_System.Controllers
 
         private readonly IMapper _mapper;
         private readonly IKeyGenerator _keyGenerator;
+        private readonly ILogService _logger;
 
-        public ExamsTermsController(MongoOperations context, IMapper mapper, IKeyGenerator keyGenerator)
+        public ExamsTermsController(
+            MongoOperations context, 
+            IMapper mapper,
+            IKeyGenerator keyGenerator,
+            ILogService logger)
         {
             _context = context;
             _mapper = mapper;
             _keyGenerator = keyGenerator;
+            _logger = logger;
         }
 
         // GET: AddNewExamTerm
@@ -59,7 +65,16 @@ namespace Certification_System.Controllers
                 ExamTerm.DurationDays = (int)ExamTerm.DateOfEnd.Subtract(ExamTerm.DateOfStart).TotalDays;
                 ExamTerm.DurationMinutes = (int)ExamTerm.DateOfEnd.Subtract(ExamTerm.DateOfStart).TotalMinutes;
 
+                Exam.ExamTerms.Add(ExamTerm.ExamTermIdentificator);
+                _context.examRepository.UpdateExam(Exam);
+
+                var logInfoExam = _logger.GenerateLogInformation(this.User.Identity.Name, LogTypeOfAction.TypesOfActions[1]);
+                _logger.AddExamLog(Exam, logInfoExam);
+
                 _context.examTermRepository.AddExamTerm(ExamTerm);
+
+                var logInfo = _logger.GenerateLogInformation(this.User.Identity.Name, LogTypeOfAction.TypesOfActions[0]);
+                _logger.AddExamTermLog(ExamTerm, logInfo);
 
                 return RedirectToAction("ConfirmationOfActionOnExamTerm", new { examTermIdentificator = ExamTerm.ExamTermIdentificator, TypeOfAction = "Add" });
             }
@@ -123,7 +138,11 @@ namespace Certification_System.Controllers
 
                     var Exam = _context.examRepository.GetExamById(editedExamTerm.SelectedExam);
                     Exam.ExamTerms.Add(editedExamTerm.ExamTermIdentificator);
+
                     _context.examRepository.UpdateExam(Exam);
+
+                    var logInfoExam = _logger.GenerateLogInformation(this.User.Identity.Name, LogTypeOfAction.TypesOfActions[1]);
+                    _logger.AddExamLog(Exam, logInfoExam);
                 }
 
                 OriginExamTerm = _mapper.Map<EditExamTermViewModel, ExamTerm>(editedExamTerm, OriginExamTerm);
@@ -131,6 +150,9 @@ namespace Certification_System.Controllers
                 OriginExamTerm.DurationMinutes = (int)OriginExamTerm.DateOfEnd.Subtract(OriginExamTerm.DateOfStart).TotalMinutes;
 
                 _context.examTermRepository.UpdateExamTerm(OriginExamTerm);
+
+                var logInfo = _logger.GenerateLogInformation(this.User.Identity.Name, LogTypeOfAction.TypesOfActions[1]);
+                _logger.AddExamTermLog(OriginExamTerm, logInfo);
 
                 return RedirectToAction("ConfirmationOfActionOnExamTerm", "ExamsTerms", new { examTermIdentificator = editedExamTerm.ExamTermIdentificator, TypeOfAction = "Update" });
             }
@@ -234,6 +256,7 @@ namespace Certification_System.Controllers
         {
             if (ModelState.IsValid)
             {
+                var exam = _context.examRepository.GetExamById(userAssignedToExamTerm.ExamIdentificator);
                 var ExamTerm = _context.examTermRepository.GetExamTermById(userAssignedToExamTerm.SelectedExamTerm);
                 var user = _context.userRepository.GetUserById(userAssignedToExamTerm.UserIdentificator);
 
@@ -249,6 +272,13 @@ namespace Certification_System.Controllers
                     {
                         _context.examRepository.AddUserToExam(userAssignedToExamTerm.ExamIdentificator, userAssignedToExamTerm.UserIdentificator);
                         _context.examTermRepository.AddUserToExamTerm(userAssignedToExamTerm.SelectedExamTerm, userAssignedToExamTerm.UserIdentificator);
+
+                        exam.EnrolledUsers.Add(userAssignedToExamTerm.UserIdentificator);
+                        ExamTerm.EnrolledUsers.Add(userAssignedToExamTerm.UserIdentificator);
+
+                        var logInfo = _logger.GenerateLogInformation(this.User.Identity.Name, LogTypeOfAction.TypesOfActions[1]);
+                        _logger.AddExamLog(exam, logInfo);
+                        _logger.AddExamTermLog(ExamTerm, logInfo);
 
                         return RedirectToAction("ExamTermDetails", new { examTermIdentificator = userAssignedToExamTerm.SelectedExamTerm, message = "Zapisano nowego użytkownika na turę egzaminu" });
                     }
@@ -323,6 +353,13 @@ namespace Certification_System.Controllers
 
                     _context.examTermRepository.DeleteUsersFromExamTerm(deleteUsersFromExamTermViewModel.ExamTermIdentificator, UsersToDeleteFromExamTermIdentificators);
                     _context.examRepository.DeleteUsersFromExam(deleteUsersFromExamTermViewModel.Exam.ExamIdentificator, UsersToDeleteFromExamTermIdentificators);
+
+                    var exam = _context.examRepository.GetExamByExamTermId(deleteUsersFromExamTermViewModel.ExamTermIdentificator);
+                    var examTerm = _context.examTermRepository.GetExamTermById(deleteUsersFromExamTermViewModel.ExamTermIdentificator);
+
+                    var logInfo = _logger.GenerateLogInformation(this.User.Identity.Name, LogTypeOfAction.TypesOfActions[1]);
+                    _logger.AddExamLog(exam, logInfo);
+                    _logger.AddExamTermLog(examTerm, logInfo);
 
                     if (deleteUsersFromExamTermViewModel.UsersToDeleteFromExamTerm.Count() == 1)
                     {
@@ -422,6 +459,15 @@ namespace Certification_System.Controllers
                         _context.examRepository.AddUsersToExam(addUsersToExamTermViewModel.Exam.ExamIdentificator, UsersToAddToExamIdentificators);
                         _context.examTermRepository.AddUsersToExamTerm(addUsersToExamTermViewModel.ExamTermIdentificator, UsersToAddToExamIdentificators);
 
+                        var examTerm = _context.examTermRepository.GetExamTermById(addUsersToExamTermViewModel.ExamTermIdentificator);
+
+                        Exam.EnrolledUsers.ToList().AddRange(UsersToAddToExamIdentificators);
+                        examTerm.EnrolledUsers.ToList().AddRange(UsersToAddToExamIdentificators);
+
+                        var logInfo = _logger.GenerateLogInformation(this.User.Identity.Name, LogTypeOfAction.TypesOfActions[1]);
+                        _logger.AddExamLog(Exam, logInfo);
+                        _logger.AddExamTermLog(examTerm, logInfo);
+
                         return RedirectToAction("ExamTermDetails", new { examTermIdentificator = addUsersToExamTermViewModel.ExamTermIdentificator, message = "Dodano grupę użytkowników do tury egzaminu" });
                     }
 
@@ -494,17 +540,29 @@ namespace Certification_System.Controllers
             {
                 if (markedExamTermViewModel.ExamTerm.DateOfStart < DateTime.Now)
                 {
+                    List<ExamResult> usersExamResults = new List<ExamResult>();
+
                     foreach (var user in markedExamTermViewModel.Users)
                     {
-                        ExamResult userExamResult = _mapper.Map<ExamResult>(user);
-                        userExamResult.ExamResultIdentificator = _keyGenerator.GenerateNewId();
+                        ExamResult singleUserExamResult = _mapper.Map<ExamResult>(user);
+                        singleUserExamResult.ExamResultIdentificator = _keyGenerator.GenerateNewId();
 
-                        userExamResult.ExamTerm = markedExamTermViewModel.ExamTerm.ExamTermIdentificator;
+                        singleUserExamResult.ExamTerm = markedExamTermViewModel.ExamTerm.ExamTermIdentificator;
 
-                        _context.examResultRepository.AddExamResult(userExamResult);
+                        _context.examResultRepository.AddExamResult(singleUserExamResult);
+
+                        usersExamResults.Add(singleUserExamResult);
                     }
 
+                    var logInfoAdd = _logger.GenerateLogInformation(this.User.Identity.Name, LogTypeOfAction.TypesOfActions[0]);
+                    _logger.AddExamsResultsLogs(usersExamResults, logInfoAdd);
+
                     _context.examRepository.SetMaxAmountOfPointsToEarn(markedExamTermViewModel.ExamTerm.Exam.ExamIdentificator, markedExamTermViewModel.MaxAmountOfPointsToEarn);
+
+                    var exam = _context.examRepository.GetExamById(markedExamTermViewModel.ExamTerm.Exam.ExamIdentificator);
+
+                    var logInfoUpdate = _logger.GenerateLogInformation(this.User.Identity.Name, LogTypeOfAction.TypesOfActions[1]);
+                    _logger.AddExamLog(exam, logInfoUpdate);
                 }
 
                 return RedirectToAction("ExamTermDetails", new { examTermIdentificator = markedExamTermViewModel.ExamTerm.ExamTermIdentificator, message = "Dokonano oceny tury egzaminu" });
