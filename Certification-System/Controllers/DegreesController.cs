@@ -7,6 +7,7 @@ using System.Linq;
 using Certification_System.Repository.DAL;
 using AutoMapper;
 using Certification_System.ServicesInterfaces;
+using Certification_System.Services;
 
 namespace Certification_System.Controllers
 {
@@ -16,12 +17,18 @@ namespace Certification_System.Controllers
 
         private readonly IMapper _mapper;
         private readonly IKeyGenerator _keyGenerator;
+        private readonly ILogService _logger;
 
-        public DegreesController(MongoOperations context, IMapper mapper, IKeyGenerator keyGenerator)
+        public DegreesController(
+            MongoOperations context, 
+            IMapper mapper, 
+            IKeyGenerator keyGenerator,
+            ILogService logger)
         {
             _context = context;
             _mapper = mapper;
             _keyGenerator = keyGenerator;
+            _logger = logger;
         }
 
         // GET: AddNewDegree
@@ -51,6 +58,9 @@ namespace Certification_System.Controllers
                 degree.DegreeIdentificator = _keyGenerator.GenerateNewId();
 
                 _context.degreeRepository.AddDegree(degree);
+
+                var logInfo = _logger.GenerateLogInformation(this.User.Identity.Name, LogTypeOfAction.TypesOfActions[0]);
+                _logger.AddDegreeLog(degree, logInfo);
 
                 return RedirectToAction("ConfirmationOfActionOnDegree", new { degreeIdentificator = degree.DegreeIdentificator, TypeOfAction = "Add" });
             }
@@ -141,6 +151,9 @@ namespace Certification_System.Controllers
                 OriginDegree =_mapper.Map<EditDegreeViewModel, Degree>(editedDegree, OriginDegree);
 
                 _context.degreeRepository.UpdateDegree(OriginDegree);
+
+                var logInfo = _logger.GenerateLogInformation(this.User.Identity.Name, LogTypeOfAction.TypesOfActions[1]);
+                _logger.AddDegreeLog(OriginDegree, logInfo);
 
                 return RedirectToAction("ConfirmationOfActionOnDegree", "Degrees", new { degreeIdentificator = editedDegree.DegreeIdentificator, TypeOfAction = "Update" });
             }
