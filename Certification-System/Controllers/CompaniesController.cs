@@ -77,7 +77,7 @@ namespace Certification_System.Controllers
 
                 _context.companyRepository.AddCompany(company);
 
-                var logInfo = _logger.GenerateLogInformation(this.User.Identity.Name, LogTypeOfAction.TypesOfActions[0]);
+                var logInfo = _logger.GenerateLogInformation(this.User.Identity.Name, this.ControllerContext.RouteData.Values["action"].ToString(), LogTypeOfAction.TypesOfActions[0]);
                 _logger.AddCompanyLog(company, logInfo);
 
                 return RedirectToAction("ConfirmationOfActionOnCompany", new { companyIdentificator = company.CompanyIdentificator, TypeOfAction = "Add" });
@@ -106,7 +106,7 @@ namespace Certification_System.Controllers
                 Company company = _mapper.Map<Company>(editedCompany);
                 _context.companyRepository.UpdateCompany(company);
 
-                var logInfo = _logger.GenerateLogInformation(this.User.Identity.Name, LogTypeOfAction.TypesOfActions[1]);
+                var logInfo = _logger.GenerateLogInformation(this.User.Identity.Name, this.ControllerContext.RouteData.Values["action"].ToString(), LogTypeOfAction.TypesOfActions[1]);
                 _logger.AddCompanyLog(company, logInfo);
 
                 return RedirectToAction("ConfirmationOfActionOnCompany", "Companies", new { companyIdentificator = editedCompany.CompanyIdentificator, TypeOfAction = "Update" });

@@ -119,7 +119,7 @@ namespace Certification_System.Controllers
 
                 _context.courseRepository.AddCourse(course);
 
-                var logInfo = _logger.GenerateLogInformation(this.User.Identity.Name, LogTypeOfAction.TypesOfActions[0]);
+                var logInfo = _logger.GenerateLogInformation(this.User.Identity.Name, this.ControllerContext.RouteData.Values["action"].ToString(), LogTypeOfAction.TypesOfActions[0]);
                 _logger.AddCourseLog(course, logInfo);
 
                 return RedirectToAction("ConfirmationOfActionOnCourse", new { courseIdentificator = course.CourseIdentificator, TypeOfAction = "Update" });
@@ -178,7 +178,7 @@ namespace Certification_System.Controllers
 
                     _context.meetingRepository.AddMeetings(meetings);
 
-                    var logInfoMeetings = _logger.GenerateLogInformation(this.User.Identity.Name, LogTypeOfAction.TypesOfActions[0]);
+                    var logInfoMeetings = _logger.GenerateLogInformation(this.User.Identity.Name, this.ControllerContext.RouteData.Values["action"].ToString(), LogTypeOfAction.TypesOfActions[0]);
                     _logger.AddMeetingsLogs(meetings, logInfoMeetings);
                 }
 
@@ -188,7 +188,7 @@ namespace Certification_System.Controllers
 
                 _context.courseRepository.AddCourse(course);
 
-                var logInfo = _logger.GenerateLogInformation(this.User.Identity.Name, LogTypeOfAction.TypesOfActions[0]);
+                var logInfo = _logger.GenerateLogInformation(this.User.Identity.Name, this.ControllerContext.RouteData.Values["action"].ToString(), LogTypeOfAction.TypesOfActions[0]);
                 _logger.AddCourseLog(course, logInfo);
 
                 return RedirectToAction("ConfirmationOfActionOnCourse", new { courseIdentificator = course.CourseIdentificator, TypeOfAction = "Add" });
@@ -365,7 +365,7 @@ namespace Certification_System.Controllers
 
                 _context.courseRepository.UpdateCourse(OriginCourse);
 
-                var logInfo = _logger.GenerateLogInformation(this.User.Identity.Name, LogTypeOfAction.TypesOfActions[1]);
+                var logInfo = _logger.GenerateLogInformation(this.User.Identity.Name, this.ControllerContext.RouteData.Values["action"].ToString(), LogTypeOfAction.TypesOfActions[1]);
                 _logger.AddCourseLog(OriginCourse, logInfo);
 
                 return RedirectToAction("ConfirmationOfActionOnCourse", "Courses", new { courseIdentificator = editedCourse.CourseIdentificator, TypeOfAction = "Update" });
@@ -409,7 +409,7 @@ namespace Certification_System.Controllers
 
                 _context.meetingRepository.UpdateMeetings(OriginMeetings);
 
-                var logInfoMeetings = _logger.GenerateLogInformation(this.User.Identity.Name, LogTypeOfAction.TypesOfActions[1]);
+                var logInfoMeetings = _logger.GenerateLogInformation(this.User.Identity.Name, this.ControllerContext.RouteData.Values["action"].ToString(), LogTypeOfAction.TypesOfActions[1]);
                 _logger.AddMeetingsLogs(OriginMeetings, logInfoMeetings);
 
                 OriginCourse = _mapper.Map<EditCourseWithMeetingsViewModel, Course>(editedCourse, OriginCourse);
@@ -421,7 +421,7 @@ namespace Certification_System.Controllers
 
                 _context.courseRepository.UpdateCourse(OriginCourse);
 
-                var logInfo = _logger.GenerateLogInformation(this.User.Identity.Name, LogTypeOfAction.TypesOfActions[1]);
+                var logInfo = _logger.GenerateLogInformation(this.User.Identity.Name, this.ControllerContext.RouteData.Values["action"].ToString(), LogTypeOfAction.TypesOfActions[1]);
                 _logger.AddCourseLog(OriginCourse, logInfo);
 
                 return RedirectToAction("ConfirmationOfActionOnCourse", "Courses", new { courseIdentificator = editedCourse.CourseIdentificator, TypeOfAction = "Update" });
@@ -488,7 +488,7 @@ namespace Certification_System.Controllers
                         _context.courseRepository.AddEnrolledUsersToCourse(Course.CourseIdentificator, usersAssignedToCourse.SelectedUsers);
 
                         var UpdatedCourse = _context.courseRepository.GetCourseById(Course.CourseIdentificator);
-                        var logInfo = _logger.GenerateLogInformation(this.User.Identity.Name, LogTypeOfAction.TypesOfActions[1]);
+                        var logInfo = _logger.GenerateLogInformation(this.User.Identity.Name, this.ControllerContext.RouteData.Values["action"].ToString(), LogTypeOfAction.TypesOfActions[1]);
                         _logger.AddCourseLog(UpdatedCourse, logInfo);
 
                         var UpdatedUsers= _context.userRepository.GetUsersById(usersAssignedToCourse.SelectedUsers);
@@ -594,7 +594,7 @@ namespace Certification_System.Controllers
                     }
                 }
 
-                var logInfo = _logger.GenerateLogInformation(this.User.Identity.Name, LogTypeOfAction.TypesOfActions[1]);
+                var logInfo = _logger.GenerateLogInformation(this.User.Identity.Name, this.ControllerContext.RouteData.Values["action"].ToString(), LogTypeOfAction.TypesOfActions[1]);
                 _logger.AddUsersLogs(updatedUsers, logInfo);
                 _logger.AddGivenCertificatesLogs(disposedGivenCertificates, logInfo);
 
@@ -695,7 +695,7 @@ namespace Certification_System.Controllers
                 _context.userRepository.DeleteCourseFromUsersCollection(deleteUsersFromCourseViewModel.CourseIdentificator, UsersToDeleteFromCourseIdentificators);
 
                 var UpdatedCourse = _context.courseRepository.GetCourseById(deleteUsersFromCourseViewModel.CourseIdentificator);
-                var logInfo = _logger.GenerateLogInformation(this.User.Identity.Name, LogTypeOfAction.TypesOfActions[1]);
+                var logInfo = _logger.GenerateLogInformation(this.User.Identity.Name, this.ControllerContext.RouteData.Values["action"].ToString(), LogTypeOfAction.TypesOfActions[1]);
                 _logger.AddCourseLog(UpdatedCourse, logInfo);
 
                 var UpdatedUsers = _context.userRepository.GetUsersById(UsersToDeleteFromCourseIdentificators);

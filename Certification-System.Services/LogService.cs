@@ -23,7 +23,7 @@ namespace Certification_System.Services
             _keyGenerator = keyGenerator;
         }
 
-        public LogInformation GenerateLogInformation(string userEmailAddress, string typeOfAction)
+        public LogInformation GenerateLogInformation(string userEmailAddress, string actionName, string typeOfAction)
         {
             var user = _userRepository.GetUserByEmail(userEmailAddress);
 
@@ -36,7 +36,9 @@ namespace Certification_System.Services
 
                 DateTime = DateTime.Now,
                 IpAddress = _ipGetter.GetGlobalIPAddress(),
-                TypeOfAction = typeOfAction
+                TypeOfAction = typeOfAction,
+
+                ActionName = actionName,
             };
         }
 

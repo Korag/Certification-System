@@ -59,7 +59,7 @@ namespace Certification_System.Controllers
 
                 _context.degreeRepository.AddDegree(degree);
 
-                var logInfo = _logger.GenerateLogInformation(this.User.Identity.Name, LogTypeOfAction.TypesOfActions[0]);
+                var logInfo = _logger.GenerateLogInformation(this.User.Identity.Name, this.ControllerContext.RouteData.Values["action"].ToString(), LogTypeOfAction.TypesOfActions[0]);
                 _logger.AddDegreeLog(degree, logInfo);
 
                 return RedirectToAction("ConfirmationOfActionOnDegree", new { degreeIdentificator = degree.DegreeIdentificator, TypeOfAction = "Add" });
@@ -152,7 +152,7 @@ namespace Certification_System.Controllers
 
                 _context.degreeRepository.UpdateDegree(OriginDegree);
 
-                var logInfo = _logger.GenerateLogInformation(this.User.Identity.Name, LogTypeOfAction.TypesOfActions[1]);
+                var logInfo = _logger.GenerateLogInformation(this.User.Identity.Name, this.ControllerContext.RouteData.Values["action"].ToString(), LogTypeOfAction.TypesOfActions[1]);
                 _logger.AddDegreeLog(OriginDegree, logInfo);
 
                 return RedirectToAction("ConfirmationOfActionOnDegree", "Degrees", new { degreeIdentificator = editedDegree.DegreeIdentificator, TypeOfAction = "Update" });

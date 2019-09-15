@@ -65,7 +65,8 @@ namespace Certification_System.Controllers
            {2, "Na adres email wybranego użytkownika została wysłana wiadomość pozwalająca na potwierdzenie jego adresu email."},
            {3, "Na adres email wybranego użytkownika została wysłana wiadomość pozwalająca na reset hasła do konta użytkownika."},
            {4, "Użytkownik nie może zresetować swojego hasła w przypadku, gdy adres email nie został potwierdzony. Najpierw należy wysłać wiadomość weryfikacyjną adres email, a następnie tą lub po potwierdzeniu adresu użytkownik sam może skorzystać z opcji \"Zapomniałem hasła\" w panelu logowania"},
-           {5, "Ma Twój adres email została wysłana wiadomość umożliwiająca dokończenie rozpoczętego procesu."}
+           {5, "Ma Twój adres email została wysłana wiadomość umożliwiająca dokończenie rozpoczętego procesu."},
+           {6, "Element, który chciałeś usunąć nie został znaleziony."},
         };
 
         [HttpGet]
@@ -174,7 +175,7 @@ namespace Certification_System.Controllers
                     var emailToSend = _emailSender.GenerateEmailMessage(model.Email, user.FirstName + " " + user.LastName, "register", callbackUrl);
                     await _emailSender.SendEmailAsync(emailToSend);
 
-                    var logInfo = _logger.GenerateLogInformation(this.User.Identity.Name, LogTypeOfAction.TypesOfActions[0]);
+                    var logInfo = _logger.GenerateLogInformation(this.User.Identity.Name, this.ControllerContext.RouteData.Values["action"].ToString(), LogTypeOfAction.TypesOfActions[0]);
                     _logger.AddUserLog(user, logInfo);
 
                     //await _signInManager.SignInAsync(user, isPersistent: false);
@@ -214,7 +215,7 @@ namespace Certification_System.Controllers
 
                 var updatedUser = _context.userRepository.GetUserById(user.Id);
 
-                var logInfo = _logger.GenerateLogInformation(this.User.Identity.Name, LogTypeOfAction.TypesOfActions[1]);
+                var logInfo = _logger.GenerateLogInformation(this.User.Identity.Name, this.ControllerContext.RouteData.Values["action"].ToString(), LogTypeOfAction.TypesOfActions[1]);
                 _logger.AddUserLog(updatedUser, logInfo);
 
                 if (result.Succeeded)
@@ -262,7 +263,7 @@ namespace Certification_System.Controllers
                 if (result.Succeeded)
                 {
                     var updatedUser = _context.userRepository.GetUserById(user.Id);
-                    var logInfo = _logger.GenerateLogInformation(this.User.Identity.Name, LogTypeOfAction.TypesOfActions[1]);
+                    var logInfo = _logger.GenerateLogInformation(this.User.Identity.Name, this.ControllerContext.RouteData.Values["action"].ToString(), LogTypeOfAction.TypesOfActions[1]);
                     _logger.AddUserLog(updatedUser, logInfo);
 
                     return RedirectToAction("Login", "Account", new { message = "Adres email został potwierdzony." });
@@ -308,7 +309,7 @@ namespace Certification_System.Controllers
                     _signInManager.SignInAsync(user, isPersistent: false).Wait();
 
                     var updatedUser = _context.userRepository.GetUserById(user.Id);
-                    var logInfo = _logger.GenerateLogInformation(this.User.Identity.Name, LogTypeOfAction.TypesOfActions[1]);
+                    var logInfo = _logger.GenerateLogInformation(this.User.Identity.Name, this.ControllerContext.RouteData.Values["action"].ToString(), LogTypeOfAction.TypesOfActions[1]);
                     _logger.AddUserLog(updatedUser, logInfo);
 
                     return RedirectToAction("BlankMenu", "Certificates", new { message = "Twoje hasło zostało ustawione - zostałeś zalogowany na swoje konto" });
@@ -403,7 +404,7 @@ namespace Certification_System.Controllers
                 if (result.Succeeded)
                 {
                     var updatedUser = _context.userRepository.GetUserById(user.Id);
-                    var logInfo = _logger.GenerateLogInformation(this.User.Identity.Name, LogTypeOfAction.TypesOfActions[1]);
+                    var logInfo = _logger.GenerateLogInformation(this.User.Identity.Name, this.ControllerContext.RouteData.Values["action"].ToString(), LogTypeOfAction.TypesOfActions[1]);
                     _logger.AddUserLog(updatedUser, logInfo);
 
                     return RedirectToAction(nameof(Login), "Account", new { message = "Hasło zostało zmienione" });

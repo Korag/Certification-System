@@ -86,7 +86,7 @@ namespace Certification_System.Controllers
 
                 _context.branchRepository.AddBranch(branch);
 
-                var logInfo = _logger.GenerateLogInformation(this.User.Identity.Name, LogTypeOfAction.TypesOfActions[0]);
+                var logInfo = _logger.GenerateLogInformation(this.User.Identity.Name, this.ControllerContext.RouteData.Values["action"].ToString(), LogTypeOfAction.TypesOfActions[0]);
                 _logger.AddBranchLog(branch, logInfo);
 
                 return RedirectToAction("ConfirmationOfActionOnBranch", "Branches", new { branchIdentificator = branch.BranchIdentificator, typeOfAction = "Add" });
@@ -119,7 +119,7 @@ namespace Certification_System.Controllers
 
                 _context.branchRepository.UpdateBranch(OriginBranch);
 
-                var logInfo = _logger.GenerateLogInformation(this.User.Identity.Name, LogTypeOfAction.TypesOfActions[1]);
+                var logInfo = _logger.GenerateLogInformation(this.User.Identity.Name, this.ControllerContext.RouteData.Values["action"].ToString(), LogTypeOfAction.TypesOfActions[1]);
                 _logger.AddBranchLog(OriginBranch, logInfo);
 
                 return RedirectToAction("ConfirmationOfActionOnBranch", "Branches", new { branchIdentificator = OriginBranch.BranchIdentificator, typeOfAction = "Update" });
@@ -138,7 +138,7 @@ namespace Certification_System.Controllers
                 var user = _context.userRepository.GetUserByEmail(this.User.Identity.Name);
                 var generatedCode = _keyGenerator.GenerateUserTokenForEntityDeletion(user);
 
-                var url = Url.DeleteBranchEntityLink(user.Id, generatedCode, Request.Scheme);
+                var url = Url.DeleteBranchEntityLink(branchIdentificator, generatedCode, Request.Scheme);
                 var emailMessage = _emailSender.GenerateEmailMessage(user.Email, user.FirstName + " " + user.LastName, "authorizeAction", url);
                 _emailSender.SendEmailAsync(emailMessage);
 
@@ -176,11 +176,16 @@ namespace Certification_System.Controllers
             var user = _context.userRepository.GetUserByEmail(this.User.Identity.Name);
             var branch = _context.branchRepository.GetBranchById(branchToDelete.EntityIdentificator);
 
-            if (ModelState.IsValid && _keyGenerator.ValidateUserTokenForEntityDeletion(user, branchToDelete.Code) && branch != null)
+            if (branch == null)
+            {
+                return RedirectToAction("UniversalConfirmationPanel", "Account", new { messageNumber = 6, returnUrl = Url.BlankMenuLink(Request.Scheme)});
+            }
+
+            if (ModelState.IsValid && _keyGenerator.ValidateUserTokenForEntityDeletion(user, branchToDelete.Code))
             {
                 _context.branchRepository.DeleteBranch(branchToDelete.EntityIdentificator);
 
-                var logInfo = _logger.GenerateLogInformation(this.User.Identity.Name, LogTypeOfAction.TypesOfActions[2]);
+                var logInfo = _logger.GenerateLogInformation(this.User.Identity.Name, this.ControllerContext.RouteData.Values["action"].ToString(), LogTypeOfAction.TypesOfActions[2]);
                 _logger.AddBranchLog(branch, logInfo);
 
                 return RedirectToAction("DisplayAllBranches", "Branches", new { branchIdentificator = branchToDelete.EntityIdentificator, message = "Usunięto wskazany obszar certyfikacji" });

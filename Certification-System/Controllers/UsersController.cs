@@ -140,7 +140,7 @@ namespace Certification_System.Controllers
                     var emailToSend = _emailSender.GenerateEmailMessage(user.Email, user.FirstName + " " + user.LastName, "setPassword", callbackUrl);
                     await _emailSender.SendEmailAsync(emailToSend);
 
-                    var logInfo = _logger.GenerateLogInformation(this.User.Identity.Name, LogTypeOfAction.TypesOfActions[0]);
+                    var logInfo = _logger.GenerateLogInformation(this.User.Identity.Name, this.ControllerContext.RouteData.Values["action"].ToString(), LogTypeOfAction.TypesOfActions[0]);
                     _logger.AddUserLog(user, logInfo);
 
                     return RedirectToAction("ConfirmationOfActionOnUser", "Users", new { userIdentificator = user.Id, TypeOfAction = "Add" });
@@ -201,9 +201,10 @@ namespace Certification_System.Controllers
 
                 _context.userRepository.UpdateUser(OriginUser);
 
-                /// must check if the roles are valid in log
-                var logInfo = _logger.GenerateLogInformation(this.User.Identity.Name, LogTypeOfAction.TypesOfActions[0]);
-                _logger.AddUserLog(OriginUser, logInfo);
+                var updatedUser = _context.userRepository.GetUserById(OriginUser.Id);
+
+                var logInfo = _logger.GenerateLogInformation(this.User.Identity.Name, this.ControllerContext.RouteData.Values["action"].ToString(), LogTypeOfAction.TypesOfActions[1]);
+                _logger.AddUserLog(updatedUser, logInfo);
 
                 return RedirectToAction("ConfirmationOfActionOnUser", "Users", new { userIdentificator = OriginUser.Id, TypeOfAction = "Update" });
             }

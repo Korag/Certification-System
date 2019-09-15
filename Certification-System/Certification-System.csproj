@@ -82,7 +82,6 @@
     <Folder Include="Extensions\" />
     <Folder Include="Views\Account\Not-used\" />
     <Folder Include="Views\Manage Not-used\" />
-    <Folder Include="Views\Shared\Components\DeleteUserFromCourse\" />
   </ItemGroup>
 
 </Project>

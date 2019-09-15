@@ -11,7 +11,10 @@ namespace Certification_System.Entities
         public string ChangeAuthorLastName { get; set; }
 
         public string TypeOfAction { get; set; }
+        public string ActionName { get; set; }
+
         public string IpAddress { get; set; }
         public DateTime DateTime { get; set; }
+
     }
 }

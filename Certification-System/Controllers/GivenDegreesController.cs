@@ -59,7 +59,7 @@ namespace Certification_System.Controllers
                 OriginGivenDegree = _mapper.Map<EditGivenDegreeViewModel, GivenDegree>(editedGivenDegree, OriginGivenDegree);
                 _context.givenDegreeRepository.UpdateGivenDegree(OriginGivenDegree);
 
-                var logInfo = _logger.GenerateLogInformation(this.User.Identity.Name, LogTypeOfAction.TypesOfActions[1]);
+                var logInfo = _logger.GenerateLogInformation(this.User.Identity.Name, this.ControllerContext.RouteData.Values["action"].ToString(), LogTypeOfAction.TypesOfActions[1]);
                 _logger.AddGivenDegreeLog(OriginGivenDegree, logInfo);
 
                 return RedirectToAction("ConfirmationOfActionOnGivenDegree", "GivenDegrees", new { givenDegreeIdentificator = OriginGivenDegree.GivenDegreeIdentificator, TypeOfAction = "Update" });
@@ -150,12 +150,12 @@ namespace Certification_System.Controllers
                 _context.givenDegreeRepository.AddGivenDegree(givenDegree);
                 _context.userRepository.AddUserDegree(newGivenDegree.SelectedUser, givenDegree.GivenDegreeIdentificator);
 
-                var logInfoAdd = _logger.GenerateLogInformation(this.User.Identity.Name, LogTypeOfAction.TypesOfActions[0]);
+                var logInfoAdd = _logger.GenerateLogInformation(this.User.Identity.Name, this.ControllerContext.RouteData.Values["action"].ToString(), LogTypeOfAction.TypesOfActions[0]);
                 _logger.AddGivenDegreeLog(givenDegree, logInfoAdd);
 
                 var user = _context.userRepository.GetUserById(newGivenDegree.SelectedUser);
 
-                var logInfoUpdate = _logger.GenerateLogInformation(this.User.Identity.Name, LogTypeOfAction.TypesOfActions[0]);
+                var logInfoUpdate = _logger.GenerateLogInformation(this.User.Identity.Name, this.ControllerContext.RouteData.Values["action"].ToString(), LogTypeOfAction.TypesOfActions[0]);
                 _logger.AddUserLog(user, logInfoUpdate);
 
                 return RedirectToAction("ConfirmationOfActionOnGivenDegree", new { givenDegreeIdentificator = givenDegree.GivenDegreeIdentificator, TypeOfAction = "Add" });

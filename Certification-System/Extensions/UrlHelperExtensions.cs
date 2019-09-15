@@ -5,6 +5,15 @@ namespace Certification_System.Extensions
 {
     public static class UrlHelperExtensions
     {
+        public static string BlankMenuLink(this IUrlHelper urlHelper, string scheme)
+        {
+            return urlHelper.Action(
+                action: nameof(CertificatesController.BlankMenu),
+                controller: "Certificates",
+                values: new { },
+                protocol: scheme);
+        }
+
         public static string EmailConfirmationLink(this IUrlHelper urlHelper, string userIdentificator, string code, string scheme)
         {
             return urlHelper.Action(
