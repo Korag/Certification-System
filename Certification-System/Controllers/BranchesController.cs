@@ -158,11 +158,13 @@ namespace Certification_System.Controllers
                 DeleteEntityViewModel branchToDelete = new DeleteEntityViewModel
                 {
                     EntityIdentificator = branchIdentificator,
+                    Code = code,
 
-                    Code = code
+                    ActionName = this.ControllerContext.RouteData.Values["action"].ToString(),
+                    FormHeader = "Usuwanie obszaru certyfikacji"
                 };
 
-                return View(branchToDelete);
+                return View("DeleteEntity", branchToDelete);
             }
 
             return RedirectToAction("BlankMenu", "Certificates");
@@ -186,12 +188,23 @@ namespace Certification_System.Controllers
                 _context.branchRepository.DeleteBranch(branchToDelete.EntityIdentificator);
 
                 var logInfo = _logger.GenerateLogInformation(this.User.Identity.Name, this.ControllerContext.RouteData.Values["action"].ToString(), LogTypeOfAction.TypesOfActions[2]);
+                var logInfoUpdate = _logger.GenerateLogInformation(this.User.Identity.Name, this.ControllerContext.RouteData.Values["action"].ToString(), LogTypeOfAction.TypesOfActions[1]);
+
                 _logger.AddBranchLog(branch, logInfo);
+
+                var updatedCourses = _context.courseRepository.DeleteBranchFromCourses(branch.BranchIdentificator);
+                _logger.AddCoursesLogs(updatedCourses, logInfoUpdate);
+
+                var updatedCertificates = _context.certificateRepository.DeleteBranchFromCertificates(branch.BranchIdentificator);
+                _logger.AddCertificatesLogs(updatedCertificates, logInfoUpdate);
+
+                var updatedDegrees = _context.degreeRepository.DeleteBranchFromDegrees(branch.BranchIdentificator);
+                _logger.AddDegreesLogs(updatedDegrees, logInfoUpdate);
 
                 return RedirectToAction("DisplayAllBranches", "Branches", new { branchIdentificator = branchToDelete.EntityIdentificator, message = "Usunięto wskazany obszar certyfikacji" });
             }
 
-            return View(branchToDelete);
+            return View("DeleteEntity", branchToDelete);
         }
     }
 }

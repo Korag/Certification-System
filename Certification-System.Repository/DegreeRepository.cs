@@ -93,5 +93,18 @@ namespace Certification_System.Repository
 
             return AvailableDegreesToDispose;
         }
+
+        public ICollection<Degree> DeleteBranchFromDegrees(string branchIdentificator)
+        {
+            var filter = Builders<Degree>.Filter.Where(z => z.Branches.Contains(branchIdentificator));
+            var update = Builders<Degree>.Update.Pull(x => x.Branches, branchIdentificator);
+
+            var resultListOfDegrees = GetDegrees().Find<Degree>(filter).ToList();
+            resultListOfDegrees.ForEach(z => z.Branches.Remove(branchIdentificator));
+
+            _degrees.UpdateOne(filter, update);
+
+            return resultListOfDegrees;
+        }
     }
 }

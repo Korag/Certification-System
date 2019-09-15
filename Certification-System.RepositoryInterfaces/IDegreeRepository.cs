@@ -13,5 +13,6 @@ namespace Certification_System.RepositoryInterfaces
         ICollection<Degree> GetDegreesById(ICollection<string> degreeIdentificators);
         void UpdateDegree(Degree degree);
         ICollection<Degree> GetDegreesToDisposeByUserCompetences(ICollection<string> givenCertificates, ICollection<string> givenDegrees);
+        ICollection<Degree> DeleteBranchFromDegrees(string branchIdentificator);
     }
 }

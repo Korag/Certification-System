@@ -76,5 +76,18 @@ namespace Certification_System.Repository
 
             return resultListOfCertificates;
         }
+
+        public ICollection<Certificate> DeleteBranchFromCertificates(string branchIdentificator)
+        {
+            var filter = Builders<Certificate>.Filter.Where(z => z.Branches.Contains(branchIdentificator));
+            var update = Builders<Certificate>.Update.Pull(x => x.Branches, branchIdentificator);
+
+            var resultListOfCertificates = GetCertificates().Find<Certificate>(filter).ToList();
+            resultListOfCertificates.ForEach(z => z.Branches.Remove(branchIdentificator));
+
+            _certificates.UpdateOne(filter, update);
+
+            return resultListOfCertificates;
+        }
     }
 }

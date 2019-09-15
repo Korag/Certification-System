@@ -248,5 +248,18 @@ namespace Certification_System.Repository
 
             return resultListOfCourses;
         }
+
+        public ICollection<Course> DeleteBranchFromCourses(string branchIdentificator)
+        {
+            var filter = Builders<Course>.Filter.Where(z => z.Branches.Contains(branchIdentificator));
+            var update = Builders<Course>.Update.Pull(x => x.Branches, branchIdentificator);
+
+            var resultListOfCourses = GetCourses().Find<Course>(filter).ToList();
+            resultListOfCourses.ForEach(z => z.Branches.Remove(branchIdentificator));
+
+            _courses.UpdateOne(filter, update);
+
+            return resultListOfCourses;
+        }
     }
 }

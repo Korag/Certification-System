@@ -20,5 +20,8 @@ namespace Certification_System.DTOViewModels
         [Display(Name = "Potwierdź hasło")]
         [Compare("Password", ErrorMessage = "Wprowadzone hasła różnią się.")]
         public string ConfirmPassword { get; set; }
+
+        public string ActionName { get; set; }
+        public string FormHeader { get; set; }
     }
 }

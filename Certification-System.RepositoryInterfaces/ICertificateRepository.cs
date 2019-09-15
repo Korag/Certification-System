@@ -12,5 +12,6 @@ namespace Certification_System.RepositoryInterfaces
         Certificate GetCertificateById(string certificateIdentificator);
         ICollection<SelectListItem> GetCertificatesAsSelectList();
         ICollection<Certificate> GetCertificatesById(ICollection<string> certificateIdentificators);
+        ICollection<Certificate> DeleteBranchFromCertificates(string branchIdentificator);
     }
 }

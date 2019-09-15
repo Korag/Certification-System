@@ -25,5 +25,6 @@ namespace Certification_System.RepositoryInterfaces
         ICollection<SelectListItem> GetActiveCoursesWhereExamIsRequiredAsSelectList();
         ICollection<Course> GetCoursesByExamsId(ICollection<string> examsIdentificators);
         ICollection<SelectListItem> GenerateSelectList(ICollection<string> coursesIdentificators);
+        ICollection<Course> DeleteBranchFromCourses(string branchIdentificator);
     }
 }

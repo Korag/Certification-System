@@ -65,8 +65,8 @@ namespace Certification_System.Controllers
            {2, "Na adres email wybranego użytkownika została wysłana wiadomość pozwalająca na potwierdzenie jego adresu email."},
            {3, "Na adres email wybranego użytkownika została wysłana wiadomość pozwalająca na reset hasła do konta użytkownika."},
            {4, "Użytkownik nie może zresetować swojego hasła w przypadku, gdy adres email nie został potwierdzony. Najpierw należy wysłać wiadomość weryfikacyjną adres email, a następnie tą lub po potwierdzeniu adresu użytkownik sam może skorzystać z opcji \"Zapomniałem hasła\" w panelu logowania"},
-           {5, "Ma Twój adres email została wysłana wiadomość umożliwiająca dokończenie rozpoczętego procesu."},
-           {6, "Element, który chciałeś usunąć nie został znaleziony."},
+           {5, "Ma Twój adres email została wysłana wiadomość umożliwiająca dokończenie rozpoczętego procesu usuwania instancji."},
+           {6, "Element, który chciałeś usunąć nie został odnaleziony."},
         };
 
         [HttpGet]

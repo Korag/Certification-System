@@ -32,15 +32,6 @@ namespace Certification_System.Extensions
                 protocol: scheme);
         }
 
-        public static string DeleteBranchEntityLink(this IUrlHelper urlHelper, string branchIdentificator, string code, string scheme)
-        {
-            return urlHelper.Action(
-                action: nameof(BranchesController.DeleteBranch),
-                controller: "Branches",
-                values: new { branchIdentificator, code },
-                protocol: scheme);
-        }
-
         public static string SetUserPasswordLink(this IUrlHelper urlHelper, string userIdentificator, string scheme)
         {
             return urlHelper.Action(
@@ -74,6 +65,24 @@ namespace Certification_System.Extensions
                 action: nameof(CompetenceVerificationController.VerifyGivenDegreeByQR),
                 controller: "CompetenceVerification",
                 values: new { givenDegreeIdentificator },
+                protocol: scheme);
+        }
+
+        public static string DeleteBranchEntityLink(this IUrlHelper urlHelper, string branchIdentificator, string code, string scheme)
+        {
+            return urlHelper.Action(
+                action: nameof(BranchesController.DeleteBranch),
+                controller: "Branches",
+                values: new { branchIdentificator, code },
+                protocol: scheme);
+        }
+
+        public static string DeleteCertificateEntityLink(this IUrlHelper urlHelper, string certificateIdentificator, string code, string scheme)
+        {
+            return urlHelper.Action(
+                action: nameof(CertificatesController.DeleteCertificate),
+                controller: "Certificates",
+                values: new { certificateIdentificator, code },
                 protocol: scheme);
         }
     }

@@ -1,8 +1,8 @@
 ﻿using AutoMapper;
 using Certification_System.DTOViewModels;
 using Certification_System.Entities;
+using Certification_System.Extensions;
 using Certification_System.Repository.DAL;
-using Certification_System.Services;
 using Certification_System.ServicesInterfaces;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
@@ -15,6 +15,7 @@ namespace Certification_System.Controllers
     {
         private readonly MongoOperations _context;
 
+        private readonly IEmailSender _emailSender;
         private readonly IGeneratorQR _generatorQR;
         private readonly IMapper _mapper;
         private readonly IKeyGenerator _keyGenerator;
@@ -25,13 +26,15 @@ namespace Certification_System.Controllers
             MongoOperations context,
             IMapper mapper,
             IKeyGenerator keyGenerator,
-            ILogService logger)
+            ILogService logger,
+            IEmailSender emailSender)
         {
             _generatorQR = generatorQR;
             _context = context;
             _mapper = mapper;
             _keyGenerator = keyGenerator;
             _logger = logger;
+            _emailSender = emailSender;
         }
 
         // GET: BlankMenu
@@ -192,6 +195,72 @@ namespace Certification_System.Controllers
             CertificateDetails.UsersWithCertificate = ListOfUsers;
 
             return View(CertificateDetails);
+        }
+
+        // GET: DeleteCertificateHub
+        [Authorize(Roles = "Admin")]
+        [HttpGet]
+        public ActionResult DeleteCertificateHub(string certificateIdentificator, string returnUrl)
+        {
+            if (!string.IsNullOrWhiteSpace(certificateIdentificator))
+            {
+                var user = _context.userRepository.GetUserByEmail(this.User.Identity.Name);
+                var generatedCode = _keyGenerator.GenerateUserTokenForEntityDeletion(user);
+
+                var url = Url.DeleteCertificateEntityLink(certificateIdentificator, generatedCode, Request.Scheme);
+                var emailMessage = _emailSender.GenerateEmailMessage(user.Email, user.FirstName + " " + user.LastName, "authorizeAction", url);
+                _emailSender.SendEmailAsync(emailMessage);
+
+                return RedirectToAction("UniversalConfirmationPanel", "Account", new { messageNumber = 5, returnUrl });
+            }
+
+            return RedirectToAction("BlankMenu", "Certificates");
+        }
+
+        // GET: DeleteCertificate
+        [Authorize(Roles = "Admin")]
+        [HttpGet]
+        public ActionResult DeleteCertificate(string certificateIdentificator, string code)
+        {
+            if (!string.IsNullOrWhiteSpace(certificateIdentificator) && !string.IsNullOrWhiteSpace(code))
+            {
+                DeleteEntityViewModel certificateToDelete = new DeleteEntityViewModel
+                {
+                    EntityIdentificator = certificateIdentificator,
+
+                    Code = code
+                };
+
+                return View(certificateToDelete);
+            }
+
+            return RedirectToAction("BlankMenu", "Certificates");
+        }
+
+        // POST: DeleteCertificate
+        [Authorize(Roles = "Admin")]
+        [HttpPost]
+        public ActionResult DeleteCertificate(DeleteEntityViewModel certificateToDelete)
+        {
+            //var user = _context.userRepository.GetUserByEmail(this.User.Identity.Name);
+            //var certificate = _context.certificateRepository.GetCertificateById(certificateToDelete.EntityIdentificator);
+
+            //if (certificate == null)
+            //{
+            //    return RedirectToAction("UniversalConfirmationPanel", "Account", new { messageNumber = 6, returnUrl = Url.BlankMenuLink(Request.Scheme) });
+            //}
+
+            //if (ModelState.IsValid && _keyGenerator.ValidateUserTokenForEntityDeletion(user, certificateToDelete.Code))
+            //{
+            //    _context.certificateRepository.DeleteBranch(branchToDelete.EntityIdentificator);
+
+            //    var logInfo = _logger.GenerateLogInformation(this.User.Identity.Name, this.ControllerContext.RouteData.Values["action"].ToString(), LogTypeOfAction.TypesOfActions[2]);
+            //    _logger.AddBranchLog(branch, logInfo);
+
+            //    return RedirectToAction("DisplayAllBranches", "Branches", new { branchIdentificator = branchToDelete.EntityIdentificator, message = "Usunięto wskazany obszar certyfikacji" });
+            //}
+
+            return View(certificateToDelete);
         }
     }
 }
