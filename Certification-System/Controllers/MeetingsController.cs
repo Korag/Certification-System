@@ -7,6 +7,7 @@ using System.Linq;
 using Certification_System.Repository.DAL;
 using Certification_System.ServicesInterfaces;
 using AutoMapper;
+using Certification_System.Services;
 
 namespace Certification_System.Controllers
 {
@@ -16,12 +17,18 @@ namespace Certification_System.Controllers
 
         private readonly IMapper _mapper;
         private readonly IKeyGenerator _keyGenerator;
+        private readonly ILogService _logger;
 
-        public MeetingsController(MongoOperations context, IMapper mapper, IKeyGenerator keyGenerator)
+        public MeetingsController(
+            MongoOperations context, 
+            IMapper mapper,
+            IKeyGenerator keyGenerator,
+            ILogService logger)
         {
             _context = context;
             _mapper = mapper;
             _keyGenerator = keyGenerator;
+            _logger = logger;
         }
 
         // GET: ConfirmationOfActionOnMeeting
@@ -79,6 +86,14 @@ namespace Certification_System.Controllers
                 _context.meetingRepository.AddMeeting(meeting);
                 _context.courseRepository.AddMeetingToCourse(meeting.MeetingIdentificator, newMeeting.SelectedCourse);
 
+                var logInfoAdd = _logger.GenerateLogInformation(this.User.Identity.Name, LogTypeOfAction.TypesOfActions[0]);
+                _logger.AddMeetingLog(meeting, logInfoAdd);
+
+                var updatedCourse = _context.courseRepository.GetCourseById(newMeeting.SelectedCourse);
+
+                var logInfoUpdate = _logger.GenerateLogInformation(this.User.Identity.Name, LogTypeOfAction.TypesOfActions[1]);
+                _logger.AddCourseLog(updatedCourse, logInfoUpdate);
+
                 return RedirectToAction("ConfirmationOfActionOnMeeting", new { meetingIdentificator = meeting.MeetingIdentificator, TypeOfAction = "Add" });
             }
 
@@ -111,6 +126,9 @@ namespace Certification_System.Controllers
                 OriginMeeting = _mapper.Map<EditMeetingViewModel, Meeting>(editedMeeting, OriginMeeting);
 
                 _context.meetingRepository.UpdateMeeting(OriginMeeting);
+
+                var logInfo = _logger.GenerateLogInformation(this.User.Identity.Name, LogTypeOfAction.TypesOfActions[1]);
+                _logger.AddMeetingLog(OriginMeeting, logInfo);
 
                 return RedirectToAction("ConfirmationOfActionOnMeeting", "Meetings", new { meetingIdentificator = editedMeeting.MeetingIdentificator, TypeOfAction = "Update" });
             }
@@ -212,6 +230,11 @@ namespace Certification_System.Controllers
         {
             var PresentUsersIdentificators = meetingWithPresenceToCheck.AttendanceList.ToList().Where(z => z.IsPresent == true).Select(z => z.UserIdentificator).ToList();
             _context.meetingRepository.ChangeUsersPresenceOnMeetings(meetingWithPresenceToCheck.MeetingIdentificator, PresentUsersIdentificators);
+
+            var updatedMeeting = _context.meetingRepository.GetMeetingById(meetingWithPresenceToCheck.MeetingIdentificator);
+
+            var logInfo = _logger.GenerateLogInformation(this.User.Identity.Name, LogTypeOfAction.TypesOfActions[1]);
+            _logger.AddMeetingLog(updatedMeeting, logInfo);
 
             return RedirectToAction("MeetingDetails", "Meetings", new { meetingIdentificator = meetingWithPresenceToCheck.MeetingIdentificator, checkedPresence = true });
         }

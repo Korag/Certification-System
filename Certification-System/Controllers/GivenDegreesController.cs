@@ -2,6 +2,7 @@
 using Certification_System.DTOViewModels;
 using Certification_System.Entities;
 using Certification_System.Repository.DAL;
+using Certification_System.Services;
 using Certification_System.ServicesInterfaces;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
@@ -17,13 +18,20 @@ namespace Certification_System.Controllers
         private readonly IGeneratorQR _generatorQR;
         private readonly IMapper _mapper;
         private readonly IKeyGenerator _keyGenerator;
+        private readonly ILogService _logger;
 
-        public GivenDegreesController(IGeneratorQR generatorQR, MongoOperations context, IMapper mapper, IKeyGenerator keyGenerator)
+        public GivenDegreesController(
+            MongoOperations context, 
+            IGeneratorQR generatorQR, 
+            IMapper mapper, 
+            IKeyGenerator keyGenerator,
+            ILogService logger)
         {
             _generatorQR = generatorQR;
             _context = context;
             _mapper = mapper;
             _keyGenerator = keyGenerator;
+            _logger = logger;
         }
 
         // GET: EditGivenDegree
@@ -50,6 +58,9 @@ namespace Certification_System.Controllers
 
                 OriginGivenDegree = _mapper.Map<EditGivenDegreeViewModel, GivenDegree>(editedGivenDegree, OriginGivenDegree);
                 _context.givenDegreeRepository.UpdateGivenDegree(OriginGivenDegree);
+
+                var logInfo = _logger.GenerateLogInformation(this.User.Identity.Name, LogTypeOfAction.TypesOfActions[1]);
+                _logger.AddGivenDegreeLog(OriginGivenDegree, logInfo);
 
                 return RedirectToAction("ConfirmationOfActionOnGivenDegree", "GivenDegrees", new { givenDegreeIdentificator = OriginGivenDegree.GivenDegreeIdentificator, TypeOfAction = "Update" });
             }
@@ -138,6 +149,14 @@ namespace Certification_System.Controllers
 
                 _context.givenDegreeRepository.AddGivenDegree(givenDegree);
                 _context.userRepository.AddUserDegree(newGivenDegree.SelectedUser, givenDegree.GivenDegreeIdentificator);
+
+                var logInfoAdd = _logger.GenerateLogInformation(this.User.Identity.Name, LogTypeOfAction.TypesOfActions[0]);
+                _logger.AddGivenDegreeLog(givenDegree, logInfoAdd);
+
+                var user = _context.userRepository.GetUserById(newGivenDegree.SelectedUser);
+
+                var logInfoUpdate = _logger.GenerateLogInformation(this.User.Identity.Name, LogTypeOfAction.TypesOfActions[0]);
+                _logger.AddUserLog(user, logInfoUpdate);
 
                 return RedirectToAction("ConfirmationOfActionOnGivenDegree", new { givenDegreeIdentificator = givenDegree.GivenDegreeIdentificator, TypeOfAction = "Add" });
             }

@@ -1,7 +1,7 @@
 ﻿using Certification_System.Entities;
 using System.Collections.Generic;
 
-namespace Certification_System.Services
+namespace Certification_System.ServicesInterfaces
 {
     public interface ILogService
     {
