@@ -112,5 +112,14 @@ namespace Certification_System.Extensions
                 values: new { givenCertificateIdentificator, code },
                 protocol: scheme);
         }
+
+        public static string DeleteDegreeEntityLink(this IUrlHelper urlHelper, string degreeIdentificator, string code, string scheme)
+        {
+            return urlHelper.Action(
+                action: nameof(DegreesController.DeleteDegree),
+                controller: "Degrees",
+                values: new { degreeIdentificator, code },
+                protocol: scheme);
+        }
     }
 }

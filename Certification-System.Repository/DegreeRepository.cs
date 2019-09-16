@@ -119,5 +119,24 @@ namespace Certification_System.Repository
 
             return resultListOfDegrees;
         }
+
+        public void DeleteDegree(string degreeIdentificator)
+        {
+            var filter = Builders<Degree>.Filter.Where(z => z.DegreeIdentificator == degreeIdentificator);
+            var result = GetDegrees().DeleteOne(filter);
+        }
+
+        public ICollection<Degree> DeleteRequiredDegreeFromDegree(string degreeIdentificator)
+        {
+            var filter = Builders<Degree>.Filter.Where(z => z.RequiredDegrees.Contains(degreeIdentificator));
+            var update = Builders<Degree>.Update.Pull(x => x.RequiredDegrees, degreeIdentificator);
+
+            var resultListOfDegrees = GetDegrees().Find<Degree>(filter).ToList();
+            resultListOfDegrees.ForEach(z => z.RequiredDegrees.Remove(degreeIdentificator));
+
+            var result = _degrees.UpdateMany(filter, update);
+
+            return resultListOfDegrees;
+        }
     }
 }

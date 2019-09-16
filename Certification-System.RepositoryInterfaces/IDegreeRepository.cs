@@ -15,5 +15,7 @@ namespace Certification_System.RepositoryInterfaces
         ICollection<Degree> GetDegreesToDisposeByUserCompetences(ICollection<string> givenCertificates, ICollection<string> givenDegrees);
         ICollection<Degree> DeleteBranchFromDegrees(string branchIdentificator);
         ICollection<Degree> DeleteCertificateFromDegrees(string certificateIdentificator);
+        void DeleteDegree(string degreeIdentificator);
+        ICollection<Degree> DeleteRequiredDegreeFromDegree(string degreeIdentificator);
     }
 }

@@ -69,5 +69,15 @@ namespace Certification_System.Repository
             var filter = Builders<GivenDegree>.Filter.Where(z => z.GivenDegreeIdentificator == givenDegreeIdentificator);
             GetGivenDegrees().DeleteOne(filter);
         }
+
+        public ICollection<GivenDegree> DeleteGivenDegreesByDegreeId(string degreedentificator)
+        {
+            var filter = Builders<GivenDegree>.Filter.Where(z => z.Degree == degreedentificator);
+
+            var resultListOfGivenDegrees = GetGivenDegrees().Find<GivenDegree>(filter).ToList();
+            var result = _givenDegrees.DeleteMany(filter);
+
+            return resultListOfGivenDegrees;
+        }
     }
 }

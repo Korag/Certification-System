@@ -12,5 +12,6 @@ namespace Certification_System.RepositoryInterfaces
         void UpdateGivenDegree(GivenDegree givenDegree);
         ICollection<GivenDegree> GetGivenDegreesById(ICollection<string> givenDegreeIdentificators);
         void DeleteGivenDegree(string givenDegreeIdentificator);
+        ICollection<GivenDegree> DeleteGivenDegreesByDegreeId(string degreeIdentificator);
     }
 }

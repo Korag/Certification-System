@@ -76,7 +76,7 @@ namespace Certification_System.Repository
         public void DeleteGivenCertificate(string givenCertificateIdentificator)
         {
             var filter = Builders<GivenCertificate>.Filter.Where(z => z.GivenCertificateIdentificator == givenCertificateIdentificator);
-            var result = _givenCertificates.DeleteOne(filter);
+            var result = GetGivenCertificates().DeleteOne(filter);
         }
     }
 }
