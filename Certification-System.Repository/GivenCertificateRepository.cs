@@ -73,6 +73,16 @@ namespace Certification_System.Repository
             return resultListOfGivenCertificates;
         }
 
+        public ICollection<GivenCertificate> DeleteGivenCertificatesByCourseId(string courseIdentificator)
+        {
+            var filter = Builders<GivenCertificate>.Filter.Where(z => z.Course == courseIdentificator);
+
+            var resultListOfGivenCertificates = GetGivenCertificates().Find<GivenCertificate>(filter).ToList();
+            var result = _givenCertificates.DeleteMany(filter);
+
+            return resultListOfGivenCertificates;
+        }
+
         public void DeleteGivenCertificate(string givenCertificateIdentificator)
         {
             var filter = Builders<GivenCertificate>.Filter.Where(z => z.GivenCertificateIdentificator == givenCertificateIdentificator);

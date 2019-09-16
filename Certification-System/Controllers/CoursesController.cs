@@ -9,6 +9,7 @@ using AutoMapper;
 using Certification_System.ServicesInterfaces;
 using System;
 using Certification_System.Services;
+using Certification_System.Extensions;
 
 namespace Certification_System.Controllers
 {
@@ -19,18 +20,20 @@ namespace Certification_System.Controllers
         private readonly IMapper _mapper;
         private readonly IKeyGenerator _keyGenerator;
         private readonly ILogService _logger;
+        private readonly IEmailSender _emailSender;
 
         public CoursesController(
             MongoOperations context, 
             IMapper mapper, 
             IKeyGenerator keyGenerator,
-            ILogService logger
-            )
+            ILogService logger,
+            IEmailSender emailSender)
         {
             _context = context;
             _mapper = mapper;
             _keyGenerator = keyGenerator;
             _logger = logger;
+            _emailSender = emailSender;
         }
 
         // GET: ConfirmationOfActionOnCourse
@@ -202,8 +205,10 @@ namespace Certification_System.Controllers
 
         // GET: DisplayAllCourses
         [Authorize(Roles = "Admin")]
-        public ActionResult DisplayAllCourses()
+        public ActionResult DisplayAllCourses(string message = null)
         {
+            ViewBag.Message = message;
+
             var Courses = _context.courseRepository.GetListOfCourses();
             List<DisplayCourseViewModel> ListOfCourses = new List<DisplayCourseViewModel>();
 
@@ -834,6 +839,93 @@ namespace Certification_System.Controllers
             AllCourses.AddRange(ListOfCoursesAsBothRoles);
 
             return View(AllCourses);
+        }
+
+        // GET: DeleteCourseHub
+        [Authorize(Roles = "Admin")]
+        [HttpGet]
+        public ActionResult DeleteCourseHub(string courseIdentificator, string returnUrl)
+        {
+            if (!string.IsNullOrWhiteSpace(courseIdentificator))
+            {
+                var user = _context.userRepository.GetUserByEmail(this.User.Identity.Name);
+                var generatedCode = _keyGenerator.GenerateUserTokenForEntityDeletion(user);
+
+                var url = Url.DeleteCourseEntityLink(courseIdentificator, generatedCode, Request.Scheme);
+                var emailMessage = _emailSender.GenerateEmailMessage(user.Email, user.FirstName + " " + user.LastName, "authorizeAction", url);
+                _emailSender.SendEmailAsync(emailMessage);
+
+                return RedirectToAction("UniversalConfirmationPanel", "Account", new { messageNumber = 5, returnUrl });
+            }
+
+            return RedirectToAction("BlankMenu", "Certificates");
+        }
+
+        // GET: DeleteCourse
+        [Authorize(Roles = "Admin")]
+        [HttpGet]
+        public ActionResult DeleteCourse(string courseIdentificator, string code)
+        {
+            if (!string.IsNullOrWhiteSpace(courseIdentificator) && !string.IsNullOrWhiteSpace(code))
+            {
+                DeleteEntityViewModel courseToDelete = new DeleteEntityViewModel
+                {
+                    EntityIdentificator = courseIdentificator,
+                    Code = code,
+
+                    ActionName = this.ControllerContext.RouteData.Values["action"].ToString(),
+                    FormHeader = "Usuwanie kursu"
+                };
+
+                return View("DeleteEntity", courseToDelete);
+            }
+
+            return RedirectToAction("BlankMenu", "Certificates");
+        }
+
+        // POST: DeleteCourse
+        [Authorize(Roles = "Admin")]
+        [HttpPost]
+        public ActionResult DeleteCourse(DeleteEntityViewModel courseToDelete)
+        {
+            var user = _context.userRepository.GetUserByEmail(this.User.Identity.Name);
+            var course = _context.courseRepository.GetCourseById(courseToDelete.EntityIdentificator);
+
+            if (course == null)
+            {
+                return RedirectToAction("UniversalConfirmationPanel", "Account", new { messageNumber = 6, returnUrl = Url.BlankMenuLink(Request.Scheme) });
+            }
+
+            if (ModelState.IsValid && _keyGenerator.ValidateUserTokenForEntityDeletion(user, courseToDelete.Code))
+            {
+                var logInfoDelete = _logger.GenerateLogInformation(this.User.Identity.Name, this.ControllerContext.RouteData.Values["action"].ToString(), LogTypeOfAction.TypesOfActions[2]);
+                var logInfoUpdate = _logger.GenerateLogInformation(this.User.Identity.Name, this.ControllerContext.RouteData.Values["action"].ToString(), LogTypeOfAction.TypesOfActions[1]);
+
+                _context.courseRepository.DeleteCourse(courseToDelete.EntityIdentificator);
+                _logger.AddCourseLog(course, logInfoDelete);
+
+                var deletedMeetings = _context.meetingRepository.DeleteMeetings(course.Meetings);
+                _logger.AddMeetingsLogs(deletedMeetings, logInfoDelete);
+
+                var deletedExams = _context.examRepository.DeleteExams(course.Exams);
+                _logger.AddExamsLogs(deletedExams, logInfoDelete);
+
+                var deletedExamsTerms = _context.examTermRepository.DeleteExamsTerms(deletedExams.SelectMany(z=> z.ExamTerms).ToList());
+                _logger.AddExamsTermsLogs(deletedExamsTerms, logInfoDelete);
+
+                var deletedExamsResults = _context.examResultRepository.DeleteExamsResults(deletedExams.SelectMany(z => z.ExamResults).ToList());
+                _logger.AddExamsResultsLogs(deletedExamsResults, logInfoDelete);
+
+                var deletedGivenCertificates = _context.givenCertificateRepository.DeleteGivenCertificatesByCourseId(courseToDelete.EntityIdentificator);
+                _logger.AddGivenCertificatesLogs(deletedGivenCertificates, logInfoDelete);
+
+                var updatedUsers = _context.userRepository.DeleteCourseFromUsers(courseToDelete.EntityIdentificator);
+                _logger.AddUsersLogs(updatedUsers, logInfoUpdate);
+
+                return RedirectToAction("DisplayAllCourses", "Courses", new { message = "Usunięto wskazany kurs" });
+            }
+
+            return View("DeleteEntity", courseToDelete);
         }
 
         #region AjaxQuery

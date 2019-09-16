@@ -92,5 +92,15 @@ namespace Certification_System.Repository
             var filter = Builders<Meeting>.Filter.Where(z => z.MeetingIdentificator == meetingIdentificator);
             var result = GetMeetings().DeleteOne(filter);
         }
+
+        public ICollection<Meeting> DeleteMeetings(ICollection<string> meetingsIdentificators)
+        {
+            var filter = Builders<Meeting>.Filter.Where(z => meetingsIdentificators.Contains(z.MeetingIdentificator));
+
+            var resultListOfMeetings = GetMeetings().Find<Meeting>(filter).ToList();
+            var result = _meetings.DeleteMany(filter);
+
+            return resultListOfMeetings;
+        }
     }
 }

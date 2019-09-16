@@ -28,5 +28,6 @@ namespace Certification_System.RepositoryInterfaces
         ICollection<Course> DeleteBranchFromCourses(string branchIdentificator);
         Course DeleteExamFromCourse(string examIdentificator);
         Course DeleteMeetingFromCourse(string meetingIdentificator);
+        void DeleteCourse(string courseIdentificator);
     }
 }

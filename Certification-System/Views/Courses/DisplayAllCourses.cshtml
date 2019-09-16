@@ -9,6 +9,11 @@
 <h1>Lista wszystkich kursów</h1>
 <hr />
 
+@if (!string.IsNullOrWhiteSpace(ViewBag.message))
+{
+    <h2 class="alert alert-info" role="alert">@ViewBag.message</h2>
+}
+
 <div class="mt-3 mb-3">
     <a asp-action="AddCourseMenu" asp-controller="Courses" class="btn btn-primary">Dodaj nowy kurs</a>
 </div>
@@ -25,5 +30,5 @@
 @await Component.InvokeAsync("DisplayCourseDataTable", new { courseViewModel = Model, tableIdentificator = "listCourses", operationSet = 2 })
 
 @section Scripts{
-    @{await Html.RenderPartialAsync("_DataTableWithFilterOnColumnScript", new DataTableExtendedScriptViewModel{ TableIdentificator = "listCourses", NumberOfColumn = 8 });}
+    @{await Html.RenderPartialAsync("_DataTableWithFilterOnColumnScript", new DataTableExtendedScriptViewModel { TableIdentificator = "listCourses", NumberOfColumn = 8 });}
 }

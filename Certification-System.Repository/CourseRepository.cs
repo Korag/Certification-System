@@ -287,5 +287,11 @@ namespace Certification_System.Repository
 
             return resultCourse;
         }
+
+        public void DeleteCourse(string courseIdentificator)
+        {
+            var filter = Builders<Course>.Filter.Where(z => z.CourseIdentificator == courseIdentificator);
+            var result = GetCourses().DeleteOne(filter);
+        }
     }
 }

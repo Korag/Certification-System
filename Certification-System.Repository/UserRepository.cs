@@ -389,5 +389,18 @@ namespace Certification_System.Repository
 
             return resultUser;
         }
+
+        public ICollection<CertificationPlatformUser> DeleteCourseFromUsers(string courseIdentificator)
+        {
+            var filter = Builders<CertificationPlatformUser>.Filter.Where(z => z.Courses.Contains(courseIdentificator));
+            var update = Builders<CertificationPlatformUser>.Update.Pull(x => x.Courses, courseIdentificator);
+
+            var resultListOfUsers = GetUsers().Find<CertificationPlatformUser>(filter).ToList();
+            resultListOfUsers.ForEach(z => z.Courses.Remove(courseIdentificator));
+
+            var result = _users.UpdateMany(filter, update);
+
+            return resultListOfUsers;
+        }
     }
 }

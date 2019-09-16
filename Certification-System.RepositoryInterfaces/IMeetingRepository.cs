@@ -15,5 +15,6 @@ namespace Certification_System.RepositoryInterfaces
         void AddMeetings(ICollection<Meeting> meetings);
         void UpdateMeetings(ICollection<Meeting> meetings);
         void DeleteMeeting(string meetingIdentificator);
+        ICollection<Meeting> DeleteMeetings(ICollection<string> meetingsIdentificators);
     }
 }

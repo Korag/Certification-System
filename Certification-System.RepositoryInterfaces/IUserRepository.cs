@@ -34,5 +34,6 @@ namespace Certification_System.RepositoryInterfaces
         ICollection<CertificationPlatformUser> DeleteCompanyFromUsers(string companyIdentificator);
         CertificationPlatformUser DeleteUserGivenDegree(string givenDegreeIdentificator);
         CertificationPlatformUser DeleteUserGivenCertificate(string givenCertificateIdentificator);
+        ICollection<CertificationPlatformUser> DeleteCourseFromUsers(string courseIdentificator);
     }
 }
