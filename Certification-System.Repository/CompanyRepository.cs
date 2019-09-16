@@ -75,5 +75,11 @@ namespace Certification_System.Repository
 
             return resultListOfCompanies;
         }
+
+        public void DeleteCompany(string companyIdentificator)
+        {
+            var filter = Builders<Company>.Filter.Where(z => z.CompanyIdentificator == companyIdentificator);
+            GetCompanies().DeleteOne(filter);
+        }
     }
 }

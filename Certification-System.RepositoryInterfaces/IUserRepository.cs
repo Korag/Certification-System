@@ -31,5 +31,6 @@ namespace Certification_System.RepositoryInterfaces
         ICollection<string> TranslateRoles(ICollection<string> userRoles);
         CertificationPlatformUser GetUserByEmail(string emailAddress);
         ICollection<SelectListItem> GetAvailableCourseRoleFiltersAsSelectList();
+        ICollection<CertificationPlatformUser> DeleteCompanyFromUsers(string companyIdentificator);
     }
 }

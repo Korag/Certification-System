@@ -348,5 +348,24 @@ namespace Certification_System.Repository
 
             return result;
         }
+
+        public ICollection<CertificationPlatformUser> DeleteCompanyFromUsers(string companyIdentificator)
+        {
+            var filter = Builders<CertificationPlatformUser>.Filter.Where(z => z.CompanyRoleManager.Contains(companyIdentificator) || z.CompanyRoleWorker.Contains(companyIdentificator));
+            var filterRoleManager = Builders<CertificationPlatformUser>.Filter.Where(z => z.CompanyRoleManager.Contains(companyIdentificator));
+            var filterRoleWorker = Builders<CertificationPlatformUser>.Filter.Where(z => z.CompanyRoleWorker.Contains(companyIdentificator));
+
+            var updateRoleManager = Builders<CertificationPlatformUser>.Update.Pull(x => x.CompanyRoleManager, companyIdentificator);
+            var updateRoleWorker = Builders<CertificationPlatformUser>.Update.Pull(x => x.CompanyRoleWorker, companyIdentificator);
+
+            var resultListOfUsers = GetUsers().Find<CertificationPlatformUser>(filter).ToList();
+            resultListOfUsers.ForEach(z => z.CompanyRoleManager.Remove(companyIdentificator));
+            resultListOfUsers.ForEach(z => z.CompanyRoleWorker.Remove(companyIdentificator));
+
+            _users.UpdateMany(filterRoleManager, updateRoleManager);
+            _users.UpdateMany(filterRoleWorker, updateRoleWorker);
+
+            return resultListOfUsers;
+        }
     }
 }

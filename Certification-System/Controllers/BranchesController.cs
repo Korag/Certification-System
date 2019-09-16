@@ -6,9 +6,7 @@ using System.Collections.Generic;
 using Certification_System.Repository.DAL;
 using AutoMapper;
 using Certification_System.ServicesInterfaces;
-using Certification_System.Services;
 using Certification_System.Extensions;
-using Microsoft.AspNetCore.Identity;
 
 namespace Certification_System.Controllers
 {

@@ -85,5 +85,14 @@ namespace Certification_System.Extensions
                 values: new { certificateIdentificator, code },
                 protocol: scheme);
         }
+
+        public static string DeleteCompanyEntityLink(this IUrlHelper urlHelper, string companyIdentificator, string code, string scheme)
+        {
+            return urlHelper.Action(
+                action: nameof(CompaniesController.DeleteCompany),
+                controller: "Companies",
+                values: new { companyIdentificator, code },
+                protocol: scheme);
+        }
     }
 }

@@ -7,7 +7,7 @@ using Certification_System.Repository.DAL;
 using AutoMapper;
 using Certification_System.ServicesInterfaces;
 using System.Linq;
-using Certification_System.Services;
+using Certification_System.Extensions;
 
 namespace Certification_System.Controllers
 {
@@ -18,23 +18,28 @@ namespace Certification_System.Controllers
         private readonly IMapper _mapper;
         private readonly IKeyGenerator _keyGenerator;
         private readonly ILogService _logger;
+        private readonly IEmailSender _emailSender;
 
         public CompaniesController(
-            MongoOperations context, 
-            IMapper mapper, 
+            MongoOperations context,
+            IMapper mapper,
             IKeyGenerator keyGenerator,
-            ILogService logger)
+            ILogService logger,
+            IEmailSender emailSender)
         {
             _context = context;
             _mapper = mapper;
             _keyGenerator = keyGenerator;
             _logger = logger;
+            _emailSender = emailSender;
         }
 
         // GET: DisplayAllCompanies
         [Authorize(Roles = "Admin")]
-        public ActionResult DisplayAllCompanies()
+        public ActionResult DisplayAllCompanies(string message = null)
         {
+            ViewBag.Message = message;
+
             var Companies = _context.companyRepository.GetListOfCompanies();
             List<DisplayCompanyViewModel> DisplayCompanies = _mapper.Map<List<DisplayCompanyViewModel>>(Companies);
 
@@ -135,6 +140,78 @@ namespace Certification_System.Controllers
             companyDetails.UsersConnectedToCompany = ListOfUsers;
 
             return View(companyDetails);
+        }
+
+        // GET: DeleteCompanyHub
+        [Authorize(Roles = "Admin")]
+        [HttpGet]
+        public ActionResult DeleteCompanyHub(string companyIdentificator, string returnUrl)
+        {
+            if (!string.IsNullOrWhiteSpace(companyIdentificator))
+            {
+                var user = _context.userRepository.GetUserByEmail(this.User.Identity.Name);
+                var generatedCode = _keyGenerator.GenerateUserTokenForEntityDeletion(user);
+
+                var url = Url.DeleteCompanyEntityLink(companyIdentificator, generatedCode, Request.Scheme);
+                var emailMessage = _emailSender.GenerateEmailMessage(user.Email, user.FirstName + " " + user.LastName, "authorizeAction", url);
+                _emailSender.SendEmailAsync(emailMessage);
+
+                return RedirectToAction("UniversalConfirmationPanel", "Account", new { messageNumber = 5, returnUrl });
+            }
+
+            return RedirectToAction("BlankMenu", "Certificates");
+        }
+
+        // GET: DeleteCompany
+        [Authorize(Roles = "Admin")]
+        [HttpGet]
+        public ActionResult DeleteCompany(string companyIdentificator, string code)
+        {
+            if (!string.IsNullOrWhiteSpace(companyIdentificator) && !string.IsNullOrWhiteSpace(code))
+            {
+                DeleteEntityViewModel companyToDelete = new DeleteEntityViewModel
+                {
+                    EntityIdentificator = companyIdentificator,
+                    Code = code,
+
+                    ActionName = this.ControllerContext.RouteData.Values["action"].ToString(),
+                    FormHeader = "Usuwanie przedsiębiorstwa"
+                };
+
+                return View("DeleteEntity", companyToDelete);
+            }
+
+            return RedirectToAction("BlankMenu", "Certificates");
+        }
+
+        // POST: DeleteCompany
+        [Authorize(Roles = "Admin")]
+        [HttpPost]
+        public ActionResult DeleteCompany(DeleteEntityViewModel companyToDelete)
+        {
+            var user = _context.userRepository.GetUserByEmail(this.User.Identity.Name);
+            var company = _context.companyRepository.GetCompanyById(companyToDelete.EntityIdentificator);
+
+            if (company == null)
+            {
+                return RedirectToAction("UniversalConfirmationPanel", "Account", new { messageNumber = 6, returnUrl = Url.BlankMenuLink(Request.Scheme) });
+            }
+
+            if (ModelState.IsValid && _keyGenerator.ValidateUserTokenForEntityDeletion(user, companyToDelete.Code))
+            {
+                var logInfo = _logger.GenerateLogInformation(this.User.Identity.Name, this.ControllerContext.RouteData.Values["action"].ToString(), LogTypeOfAction.TypesOfActions[2]);
+                var logInfoUpdate = _logger.GenerateLogInformation(this.User.Identity.Name, this.ControllerContext.RouteData.Values["action"].ToString(), LogTypeOfAction.TypesOfActions[1]);
+
+                _context.companyRepository.DeleteCompany(companyToDelete.EntityIdentificator);
+                _logger.AddCompanyLog(company, logInfo);
+
+                var updatedUsers = _context.userRepository.DeleteCompanyFromUsers(companyToDelete.EntityIdentificator);
+                _logger.AddUsersLogs(updatedUsers, logInfoUpdate);
+
+                return RedirectToAction("DisplayAllCertificates", "Certificates", new { companyIdentificator = companyToDelete.EntityIdentificator, message = "Usunięto wskazane przedsiębiorstwo" });
+            }
+
+            return View(companyToDelete);
         }
     }
 }

@@ -8,6 +8,11 @@
 <h2>Lista wszystkich przedsiębiorstw</h2>
 <hr />
 
+@if (!string.IsNullOrWhiteSpace(ViewBag.message))
+{
+    <h2 class="alert alert-info" role="alert">@ViewBag.message</h2>
+}
+
 <div class="mt-3 mb-3">
     <a asp-action="AddNewCompany" asp-controller="Companies" class="btn btn-primary">Dodaj nowe przedsiębiorstwo</a>
 </div>

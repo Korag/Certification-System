@@ -12,5 +12,6 @@ namespace Certification_System.RepositoryInterfaces
         void UpdateCompany(Company company);
         Company GetCompanyById(string companyIdentificator);
         ICollection<SelectListItem> GetCompaniesAsSelectList();
+        void DeleteCompany(string companyIdentificator);
     }
 }
