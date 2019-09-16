@@ -239,5 +239,18 @@ namespace Certification_System.Repository
 
             return resultExam;
         }
+
+        public Exam DeleteExamTermFromExam(string examTermIdentificator)
+        {
+            var filter = Builders<Exam>.Filter.Where(z => z.ExamTerms.Contains(examTermIdentificator));
+            var update = Builders<Exam>.Update.Pull(x => x.ExamTerms, examTermIdentificator);
+
+            var resultExam = GetExams().Find<Exam>(filter).FirstOrDefault();
+            resultExam.ExamTerms.Remove(examTermIdentificator);
+
+            var result = _exams.UpdateOne(filter, update);
+
+            return resultExam;
+        }
     }
 }

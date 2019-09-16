@@ -99,8 +99,10 @@ namespace Certification_System.Controllers
 
         // GET: DisplayAllGivenDegrees
         [Authorize(Roles = "Admin")]
-        public ActionResult DisplayAllGivenDegrees()
+        public ActionResult DisplayAllGivenDegrees(string message = null)
         {
+            ViewBag.Message = message;
+
             var GivenDegrees = _context.givenDegreeRepository.GetListOfGivenDegrees();
             List<DisplayGivenDegreeViewModel> ListOfGivenDegrees = new List<DisplayGivenDegreeViewModel>();
 

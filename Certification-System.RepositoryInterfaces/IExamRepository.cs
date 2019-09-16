@@ -26,5 +26,6 @@ namespace Certification_System.RepositoryInterfaces
         ICollection<Exam> GetExamPeriods(string examIndexer);
         IList<SelectListItem> GetActiveExamsAsSelectList();
         Exam DeleteExamResultFromExam(string examResultIdentificator);
+        Exam DeleteExamTermFromExam(string examTermIdentificator);
     }
 }

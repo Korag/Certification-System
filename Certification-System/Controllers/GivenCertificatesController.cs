@@ -40,8 +40,10 @@ namespace Certification_System.Controllers
 
         // GET: DisplayAllGivenCertificates
         [Authorize(Roles = "Admin")]
-        public ActionResult DisplayAllGivenCertificates()
+        public ActionResult DisplayAllGivenCertificates(string message = null)
         {
+            ViewBag.Message = message;
+
             var GivenCertificates = _context.givenCertificateRepository.GetListOfGivenCertificates();
             List<DisplayGivenCertificateViewModel> ListOfGivenCertificates = new List<DisplayGivenCertificateViewModel>();
 

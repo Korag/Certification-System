@@ -130,5 +130,14 @@ namespace Certification_System.Extensions
                 values: new { examResultIdentificator, code },
                 protocol: scheme);
         }
+
+        public static string DeleteExamTermEntityLink(this IUrlHelper urlHelper, string examTermIdentificator, string code, string scheme)
+        {
+            return urlHelper.Action(
+                action: nameof(ExamsTermsController.DeleteExamTerm),
+                controller: "ExamsTerms",
+                values: new { examTermIdentificator, code },
+                protocol: scheme);
+        }
     }
 }

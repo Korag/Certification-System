@@ -625,8 +625,10 @@ namespace Certification_System.Controllers
 
         // GET: DisplayAllExamsResults
         [Authorize(Roles = "Admin")]
-        public ActionResult DisplayAllExamsResults()
+        public ActionResult DisplayAllExamsResults(string message = null)
         {
+            ViewBag.Message = message;
+
             var ExamsResults = _context.examResultRepository.GetListOfExamsResults();
             var Exams = _context.examRepository.GetListOfExams();
             var Courses = _context.courseRepository.GetListOfCourses();
@@ -1097,7 +1099,7 @@ namespace Certification_System.Controllers
                 var updatedExam = _context.examRepository.DeleteExamResultFromExam(examResultToDelete.EntityIdentificator);
                 _logger.AddExamLog(updatedExam, logInfoUpdate);
 
-                return RedirectToAction("DisplayAllGivenCertificates", "GivenCertificates", new { message = "Usunięto wskazany nadany certyfikat" });
+                return RedirectToAction("DisplayAllExamsResults", "Exams", new { message = "Usunięto wskazany wynik z egzaminu" });
             }
 
             return View("DeleteEntity", examResultToDelete);

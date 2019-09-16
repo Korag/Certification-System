@@ -8,6 +8,11 @@
 <h1>Lista tur egzaminów</h1>
 <hr />
 
+@if (!string.IsNullOrWhiteSpace(ViewBag.message))
+{
+    <h2 class="alert alert-info" role="alert">@ViewBag.message</h2>
+}
+
 <div class="mt-3 mb-3">
     <a asp-action="AddNewExamTerm" asp-controller="ExamsTerms" class="btn btn-primary">Dodaj nową turę egzaminu</a>
 </div>

@@ -105,8 +105,10 @@ namespace Certification_System.Controllers
 
         // GET: DisplayAllDegrees
         [Authorize(Roles = "Admin")]
-        public ActionResult DisplayAllDegrees()
+        public ActionResult DisplayAllDegrees(string message = null)
         {
+            ViewBag.Message = message;
+
             var Degrees = _context.degreeRepository.GetListOfDegrees();
             List<DisplayDegreeViewModel> ListOfDegrees = new List<DisplayDegreeViewModel>();
 
@@ -298,7 +300,7 @@ namespace Certification_System.Controllers
                 var updatedDegrees = _context.degreeRepository.DeleteRequiredDegreeFromDegree(degreeToDelete.EntityIdentificator);
                 _logger.AddDegreesLogs(updatedDegrees, logInfoUpdate);
 
-                return RedirectToAction("DisplayAllGivenCertificates", "GivenCertificates", new { message = "Usunięto wskazany nadany certyfikat" });
+                return RedirectToAction("DisplayAllDegrees", "Degrees", new { message = "Usunięto wskazany stopień zawodowy" });
             }
 
             return View("DeleteEntity", degreeToDelete);

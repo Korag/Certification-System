@@ -175,5 +175,11 @@ namespace Certification_System.Repository
 
             var result = GetExamsTerms().UpdateOne(filter, update);
         }
+
+        public void DeleteExamTerm(string examTermIdentificator)
+        {
+            var filter = Builders<ExamTerm>.Filter.Where(z => z.ExamTermIdentificator == examTermIdentificator);
+            var result = GetExamsTerms().DeleteOne(filter);
+        }
     }
 }

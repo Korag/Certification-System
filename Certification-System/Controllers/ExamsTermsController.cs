@@ -4,6 +4,7 @@ using System.Linq;
 using AutoMapper;
 using Certification_System.DTOViewModels;
 using Certification_System.Entities;
+using Certification_System.Extensions;
 using Certification_System.Repository.DAL;
 using Certification_System.Services;
 using Certification_System.ServicesInterfaces;
@@ -19,12 +20,14 @@ namespace Certification_System.Controllers
         private readonly IMapper _mapper;
         private readonly IKeyGenerator _keyGenerator;
         private readonly ILogService _logger;
+        private readonly IEmailSender _emailSender;
 
         public ExamsTermsController(
             MongoOperations context, 
             IMapper mapper,
             IKeyGenerator keyGenerator,
-            ILogService logger)
+            ILogService logger,
+            IEmailSender emailSender)
         {
             _context = context;
             _mapper = mapper;
@@ -87,8 +90,10 @@ namespace Certification_System.Controllers
 
         // GET: DisplayAllExamsTerms
         [Authorize(Roles = "Admin")]
-        public ActionResult DisplayAllExamsTerms()
+        public ActionResult DisplayAllExamsTerms(string message = null)
         {
+            ViewBag.Message = message;
+
             var Exams = _context.examRepository.GetListOfExams();
             var ExamsTerms = _context.examTermRepository.GetListOfExamsTerms();
 
@@ -604,6 +609,81 @@ namespace Certification_System.Controllers
             }
 
             return View(ListOfUsers);
+        }
+
+        // GET: DeleteExamTermHub
+        [Authorize(Roles = "Admin")]
+        [HttpGet]
+        public ActionResult DeleteExamTermHub(string examTermIdentificator, string returnUrl)
+        {
+            if (!string.IsNullOrWhiteSpace(examTermIdentificator))
+            {
+                var user = _context.userRepository.GetUserByEmail(this.User.Identity.Name);
+                var generatedCode = _keyGenerator.GenerateUserTokenForEntityDeletion(user);
+
+                var url = Url.DeleteExamTermEntityLink(examTermIdentificator, generatedCode, Request.Scheme);
+                var emailMessage = _emailSender.GenerateEmailMessage(user.Email, user.FirstName + " " + user.LastName, "authorizeAction", url);
+                _emailSender.SendEmailAsync(emailMessage);
+
+                return RedirectToAction("UniversalConfirmationPanel", "Account", new { messageNumber = 5, returnUrl });
+            }
+
+            return RedirectToAction("BlankMenu", "Certificates");
+        }
+
+        // GET: DeleteExamTerm
+        [Authorize(Roles = "Admin")]
+        [HttpGet]
+        public ActionResult DeleteExamTerm(string examTermIdentificator, string code)
+        {
+            if (!string.IsNullOrWhiteSpace(examTermIdentificator) && !string.IsNullOrWhiteSpace(code))
+            {
+                DeleteEntityViewModel examTermToDelete = new DeleteEntityViewModel
+                {
+                    EntityIdentificator = examTermIdentificator,
+                    Code = code,
+
+                    ActionName = this.ControllerContext.RouteData.Values["action"].ToString(),
+                    FormHeader = "Usuwanie wyniku z egzaminu"
+                };
+
+                return View("DeleteEntity", examTermToDelete);
+            }
+
+            return RedirectToAction("BlankMenu", "Certificates");
+        }
+
+        // POST: DeleteExamTerm
+        [Authorize(Roles = "Admin")]
+        [HttpPost]
+        public ActionResult DeleteExamTerm(DeleteEntityViewModel examTermToDelete)
+        {
+            var user = _context.userRepository.GetUserByEmail(this.User.Identity.Name);
+            var examTerm = _context.examTermRepository.GetExamTermById(examTermToDelete.EntityIdentificator);
+
+            if (examTerm == null)
+            {
+                return RedirectToAction("UniversalConfirmationPanel", "Account", new { messageNumber = 6, returnUrl = Url.BlankMenuLink(Request.Scheme) });
+            }
+
+            if (ModelState.IsValid && _keyGenerator.ValidateUserTokenForEntityDeletion(user, examTermToDelete.Code))
+            {
+                var logInfoDelete = _logger.GenerateLogInformation(this.User.Identity.Name, this.ControllerContext.RouteData.Values["action"].ToString(), LogTypeOfAction.TypesOfActions[2]);
+                var logInfoUpdate = _logger.GenerateLogInformation(this.User.Identity.Name, this.ControllerContext.RouteData.Values["action"].ToString(), LogTypeOfAction.TypesOfActions[1]);
+
+                _context.examTermRepository.DeleteExamTerm(examTermToDelete.EntityIdentificator);
+                _logger.AddExamTermLog(examTerm, logInfoDelete);
+
+                var deletedExamsResults = _context.examResultRepository.DeleteExamsResultsByExamTermId(examTermToDelete.EntityIdentificator);
+                _logger.AddExamsResultsLogs(deletedExamsResults, logInfoDelete);
+
+                var updatedExam = _context.examRepository.DeleteExamTermFromExam(examTermToDelete.EntityIdentificator);
+                _logger.AddExamLog(updatedExam, logInfoUpdate);
+
+                return RedirectToAction("DisplayAllExamsTerms", "ExamsTerms", new { message = "Usunięto wskazaną turę egzaminu" });
+            }
+
+            return View("DeleteEntity", examTermToDelete);
         }
 
         #region AjaxQuery
