@@ -25,5 +25,6 @@ namespace Certification_System.RepositoryInterfaces
         void SetMaxAmountOfPointsToEarn(string examIdentificator, double maxAmountOfPointsToEarn);
         ICollection<Exam> GetExamPeriods(string examIndexer);
         IList<SelectListItem> GetActiveExamsAsSelectList();
+        Exam DeleteExamResultFromExam(string examResultIdentificator);
     }
 }

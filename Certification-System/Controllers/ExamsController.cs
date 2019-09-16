@@ -1,12 +1,11 @@
 ﻿using AutoMapper;
 using Certification_System.DTOViewModels;
 using Certification_System.Entities;
+using Certification_System.Extensions;
 using Certification_System.Repository.DAL;
-using Certification_System.Services;
 using Certification_System.ServicesInterfaces;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
-using Microsoft.AspNetCore.Mvc.Rendering;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -20,17 +19,20 @@ namespace Certification_System.Controllers
         private readonly IMapper _mapper;
         private readonly IKeyGenerator _keyGenerator;
         private readonly ILogService _logger;
+        private readonly IEmailSender _emailSender;
 
         public ExamsController(
             MongoOperations context,
             IMapper mapper,
             IKeyGenerator keyGenerator,
-            ILogService logger)
+            ILogService logger,
+            IEmailSender emailSender)
         {
             _context = context;
             _mapper = mapper;
             _keyGenerator = keyGenerator;
             _logger = logger;
+            _emailSender = emailSender;
         }
 
         // GET: AddNewExam
@@ -1027,6 +1029,78 @@ namespace Certification_System.Controllers
             }
 
             return View(ListOfExams);
+        }
+
+        // GET: DeleteExamResultHub
+        [Authorize(Roles = "Admin")]
+        [HttpGet]
+        public ActionResult DeleteExamResultHub(string examResultIdentificator, string returnUrl)
+        {
+            if (!string.IsNullOrWhiteSpace(examResultIdentificator))
+            {
+                var user = _context.userRepository.GetUserByEmail(this.User.Identity.Name);
+                var generatedCode = _keyGenerator.GenerateUserTokenForEntityDeletion(user);
+
+                var url = Url.DeleteExamResultEntityLink(examResultIdentificator, generatedCode, Request.Scheme);
+                var emailMessage = _emailSender.GenerateEmailMessage(user.Email, user.FirstName + " " + user.LastName, "authorizeAction", url);
+                _emailSender.SendEmailAsync(emailMessage);
+
+                return RedirectToAction("UniversalConfirmationPanel", "Account", new { messageNumber = 5, returnUrl });
+            }
+
+            return RedirectToAction("BlankMenu", "Certificates");
+        }
+
+        // GET: DeleteExamResult
+        [Authorize(Roles = "Admin")]
+        [HttpGet]
+        public ActionResult DeleteExamResult(string examResultIdentificator, string code)
+        {
+            if (!string.IsNullOrWhiteSpace(examResultIdentificator) && !string.IsNullOrWhiteSpace(code))
+            {
+                DeleteEntityViewModel examResultToDelete = new DeleteEntityViewModel
+                {
+                    EntityIdentificator = examResultIdentificator,
+                    Code = code,
+
+                    ActionName = this.ControllerContext.RouteData.Values["action"].ToString(),
+                    FormHeader = "Usuwanie wyniku z egzaminu"
+                };
+
+                return View("DeleteEntity", examResultToDelete);
+            }
+
+            return RedirectToAction("BlankMenu", "Certificates");
+        }
+
+        // POST: DeleteExamResult
+        [Authorize(Roles = "Admin")]
+        [HttpPost]
+        public ActionResult DeleteExamResult(DeleteEntityViewModel examResultToDelete)
+        {
+            var user = _context.userRepository.GetUserByEmail(this.User.Identity.Name);
+            var examResult = _context.examResultRepository.GetExamResultById(examResultToDelete.EntityIdentificator);
+
+            if (examResult == null)
+            {
+                return RedirectToAction("UniversalConfirmationPanel", "Account", new { messageNumber = 6, returnUrl = Url.BlankMenuLink(Request.Scheme) });
+            }
+
+            if (ModelState.IsValid && _keyGenerator.ValidateUserTokenForEntityDeletion(user, examResultToDelete.Code))
+            {
+                var logInfoDelete = _logger.GenerateLogInformation(this.User.Identity.Name, this.ControllerContext.RouteData.Values["action"].ToString(), LogTypeOfAction.TypesOfActions[2]);
+                var logInfoUpdate = _logger.GenerateLogInformation(this.User.Identity.Name, this.ControllerContext.RouteData.Values["action"].ToString(), LogTypeOfAction.TypesOfActions[1]);
+
+                _context.examResultRepository.DeleteExamResult(examResultToDelete.EntityIdentificator);
+                _logger.AddExamResultLog(examResult, logInfoDelete);
+
+                var updatedExam = _context.examRepository.DeleteExamResultFromExam(examResultToDelete.EntityIdentificator);
+                _logger.AddExamLog(updatedExam, logInfoUpdate);
+
+                return RedirectToAction("DisplayAllGivenCertificates", "GivenCertificates", new { message = "Usunięto wskazany nadany certyfikat" });
+            }
+
+            return View("DeleteEntity", examResultToDelete);
         }
 
         #region AjaxQuery
