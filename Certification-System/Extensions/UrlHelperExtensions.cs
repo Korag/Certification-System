@@ -148,5 +148,14 @@ namespace Certification_System.Extensions
                 values: new { examIdentificator, code },
                 protocol: scheme);
         }
+
+        public static string DeleteMeetingEntityLink(this IUrlHelper urlHelper, string meetingIdentificator, string code, string scheme)
+        {
+            return urlHelper.Action(
+                action: nameof(MeetingsController.DeleteMeeting),
+                controller: "Meetings",
+                values: new { meetingIdentificator, code },
+                protocol: scheme);
+        }
     }
 }

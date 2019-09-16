@@ -274,5 +274,18 @@ namespace Certification_System.Repository
 
             return resultCourse;
         }
+
+        public Course DeleteMeetingFromCourse(string meetingIdentificator)
+        {
+            var filter = Builders<Course>.Filter.Where(z => z.Meetings.Contains(meetingIdentificator));
+            var update = Builders<Course>.Update.Pull(x => x.Meetings, meetingIdentificator);
+
+            var resultCourse = GetCourses().Find<Course>(filter).FirstOrDefault();
+            resultCourse.Meetings.Remove(meetingIdentificator);
+
+            _courses.UpdateOne(filter, update);
+
+            return resultCourse;
+        }
     }
 }

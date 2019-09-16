@@ -8,6 +8,7 @@ using Certification_System.Repository.DAL;
 using Certification_System.ServicesInterfaces;
 using AutoMapper;
 using Certification_System.Services;
+using Certification_System.Extensions;
 
 namespace Certification_System.Controllers
 {
@@ -16,6 +17,7 @@ namespace Certification_System.Controllers
         private readonly MongoOperations _context;
 
         private readonly IMapper _mapper;
+        private readonly IEmailSender _emailSender;
         private readonly IKeyGenerator _keyGenerator;
         private readonly ILogService _logger;
 
@@ -23,7 +25,8 @@ namespace Certification_System.Controllers
             MongoOperations context, 
             IMapper mapper,
             IKeyGenerator keyGenerator,
-            ILogService logger)
+            ILogService logger,
+            IEmailSender emailSender)
         {
             _context = context;
             _mapper = mapper;
@@ -138,8 +141,10 @@ namespace Certification_System.Controllers
 
         // GET: DisplayAllMeetings
         [Authorize(Roles = "Admin")]
-        public ActionResult DisplayAllMeetings()
+        public ActionResult DisplayAllMeetings(string message = null)
         {
+            ViewBag.Message = message;
+
             var Meetings = _context.meetingRepository.GetListOfMeetings();
             List<DisplayMeetingViewModel> ListOfMeetings = new List<DisplayMeetingViewModel>();
 
@@ -261,6 +266,78 @@ namespace Certification_System.Controllers
             }
 
             return View(ListOfMeetings);
+        }
+
+        // GET: DeleteMeetingsHub
+        [Authorize(Roles = "Admin")]
+        [HttpGet]
+        public ActionResult DeleteMeetingHub(string meetingIdentificator, string returnUrl)
+        {
+            if (!string.IsNullOrWhiteSpace(meetingIdentificator))
+            {
+                var user = _context.userRepository.GetUserByEmail(this.User.Identity.Name);
+                var generatedCode = _keyGenerator.GenerateUserTokenForEntityDeletion(user);
+
+                var url = Url.DeleteMeetingEntityLink(meetingIdentificator, generatedCode, Request.Scheme);
+                var emailMessage = _emailSender.GenerateEmailMessage(user.Email, user.FirstName + " " + user.LastName, "authorizeAction", url);
+                _emailSender.SendEmailAsync(emailMessage);
+
+                return RedirectToAction("UniversalConfirmationPanel", "Account", new { messageNumber = 5, returnUrl });
+            }
+
+            return RedirectToAction("BlankMenu", "Certificates");
+        }
+
+        // GET: DeleteMeeting
+        [Authorize(Roles = "Admin")]
+        [HttpGet]
+        public ActionResult DeleteMeeting(string meetingIdentificator, string code)
+        {
+            if (!string.IsNullOrWhiteSpace(meetingIdentificator) && !string.IsNullOrWhiteSpace(code))
+            {
+                DeleteEntityViewModel meetingToDelete = new DeleteEntityViewModel
+                {
+                    EntityIdentificator = meetingIdentificator,
+                    Code = code,
+
+                    ActionName = this.ControllerContext.RouteData.Values["action"].ToString(),
+                    FormHeader = "Usuwanie spotkania w ramach kursu"
+                };
+
+                return View("DeleteEntity", meetingToDelete);
+            }
+
+            return RedirectToAction("BlankMenu", "Certificates");
+        }
+
+        // POST: DeleteMeeting
+        [Authorize(Roles = "Admin")]
+        [HttpPost]
+        public ActionResult DeleteMeeting(DeleteEntityViewModel meetingToDelete)
+        {
+            var user = _context.userRepository.GetUserByEmail(this.User.Identity.Name);
+            var meeting = _context.meetingRepository.GetMeetingById(meetingToDelete.EntityIdentificator);
+
+            if (meeting == null)
+            {
+                return RedirectToAction("UniversalConfirmationPanel", "Account", new { messageNumber = 6, returnUrl = Url.BlankMenuLink(Request.Scheme) });
+            }
+
+            if (ModelState.IsValid && _keyGenerator.ValidateUserTokenForEntityDeletion(user, meetingToDelete.Code))
+            {
+                var logInfoDelete = _logger.GenerateLogInformation(this.User.Identity.Name, this.ControllerContext.RouteData.Values["action"].ToString(), LogTypeOfAction.TypesOfActions[2]);
+                var logInfoUpdate = _logger.GenerateLogInformation(this.User.Identity.Name, this.ControllerContext.RouteData.Values["action"].ToString(), LogTypeOfAction.TypesOfActions[1]);
+
+                _context.meetingRepository.DeleteMeeting(meetingToDelete.EntityIdentificator);
+                _logger.AddMeetingLog(meeting, logInfoDelete);
+
+                var updatedCourse = _context.courseRepository.DeleteMeetingFromCourse(meetingToDelete.EntityIdentificator);
+                _logger.AddCourseLog(updatedCourse, logInfoUpdate);
+
+                return RedirectToAction("DisplayAllMeetings", "Meetings", new { message = "Usunięto wskazane spotkanie" });
+            }
+
+            return View("DeleteEntity", meetingToDelete);
         }
     }
 }

@@ -86,5 +86,11 @@ namespace Certification_System.Repository
                 var result = GetMeetings().ReplaceOne(filter, meeting);
             }
         }
+
+        public void DeleteMeeting(string meetingIdentificator)
+        {
+            var filter = Builders<Meeting>.Filter.Where(z => z.MeetingIdentificator == meetingIdentificator);
+            var result = GetMeetings().DeleteOne(filter);
+        }
     }
 }

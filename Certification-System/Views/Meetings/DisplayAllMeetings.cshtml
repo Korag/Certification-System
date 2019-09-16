@@ -8,6 +8,11 @@
 <h1>Lista spotkań</h1>
 <hr />
 
+@if (!string.IsNullOrWhiteSpace(ViewBag.message))
+{
+    <h2 class="alert alert-info" role="alert">@ViewBag.message</h2>
+}
+
 <div class="mt-3 mb-3">
     <a asp-action="AddNewMeeting" asp-controller="Meetings" class="btn btn-primary">Dodaj spotkanie</a>
 </div>
