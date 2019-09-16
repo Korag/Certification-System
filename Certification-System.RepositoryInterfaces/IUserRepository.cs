@@ -32,5 +32,6 @@ namespace Certification_System.RepositoryInterfaces
         CertificationPlatformUser GetUserByEmail(string emailAddress);
         ICollection<SelectListItem> GetAvailableCourseRoleFiltersAsSelectList();
         ICollection<CertificationPlatformUser> DeleteCompanyFromUsers(string companyIdentificator);
+        CertificationPlatformUser DeleteUserGivenDegree(string givenDegreeIdentificator);
     }
 }

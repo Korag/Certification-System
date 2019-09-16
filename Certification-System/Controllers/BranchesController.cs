@@ -199,7 +199,7 @@ namespace Certification_System.Controllers
                 var updatedDegrees = _context.degreeRepository.DeleteBranchFromDegrees(branch.BranchIdentificator);
                 _logger.AddDegreesLogs(updatedDegrees, logInfoUpdate);
 
-                return RedirectToAction("DisplayAllBranches", "Branches", new { branchIdentificator = branchToDelete.EntityIdentificator, message = "Usunięto wskazany obszar certyfikacji" });
+                return RedirectToAction("DisplayAllBranches", "Branches", new { message = "Usunięto wskazany obszar certyfikacji" });
             }
 
             return View("DeleteEntity", branchToDelete);

@@ -208,7 +208,7 @@ namespace Certification_System.Controllers
                 var updatedUsers = _context.userRepository.DeleteCompanyFromUsers(companyToDelete.EntityIdentificator);
                 _logger.AddUsersLogs(updatedUsers, logInfoUpdate);
 
-                return RedirectToAction("DisplayAllCertificates", "Certificates", new { companyIdentificator = companyToDelete.EntityIdentificator, message = "Usunięto wskazane przedsiębiorstwo" });
+                return RedirectToAction("DisplayAllCertificates", "Certificates", new { message = "Usunięto wskazane przedsiębiorstwo" });
             }
 
             return View(companyToDelete);

@@ -94,5 +94,14 @@ namespace Certification_System.Extensions
                 values: new { companyIdentificator, code },
                 protocol: scheme);
         }
+
+        public static string DeleteGivenDegreeEntityLink(this IUrlHelper urlHelper, string givenDegreeIdentificator, string code, string scheme)
+        {
+            return urlHelper.Action(
+                action: nameof(GivenDegreesController.DeleteGivenDegree),
+                controller: "GivenDegrees",
+                values: new { givenDegreeIdentificator, code },
+                protocol: scheme);
+        }
     }
 }

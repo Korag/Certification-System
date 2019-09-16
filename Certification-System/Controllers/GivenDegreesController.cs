@@ -1,8 +1,8 @@
 ﻿using AutoMapper;
 using Certification_System.DTOViewModels;
 using Certification_System.Entities;
+using Certification_System.Extensions;
 using Certification_System.Repository.DAL;
-using Certification_System.Services;
 using Certification_System.ServicesInterfaces;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
@@ -19,19 +19,22 @@ namespace Certification_System.Controllers
         private readonly IMapper _mapper;
         private readonly IKeyGenerator _keyGenerator;
         private readonly ILogService _logger;
+        private readonly IEmailSender _emailSender;
 
         public GivenDegreesController(
             MongoOperations context, 
             IGeneratorQR generatorQR, 
             IMapper mapper, 
             IKeyGenerator keyGenerator,
-            ILogService logger)
+            ILogService logger,
+            IEmailSender emailSender)
         {
             _generatorQR = generatorQR;
             _context = context;
             _mapper = mapper;
             _keyGenerator = keyGenerator;
             _logger = logger;
+            _emailSender = emailSender;
         }
 
         // GET: EditGivenDegree
@@ -262,6 +265,78 @@ namespace Certification_System.Controllers
             GivenDegreeDetails.Companies = companiesViewModel;
 
             return View(GivenDegreeDetails);
+        }
+
+        // GET: DeleteGivenDegreeHub
+        [Authorize(Roles = "Admin")]
+        [HttpGet]
+        public ActionResult DeleteGivenDegreeHub(string givenDegreeIdentificator, string returnUrl)
+        {
+            if (!string.IsNullOrWhiteSpace(givenDegreeIdentificator))
+            {
+                var user = _context.userRepository.GetUserByEmail(this.User.Identity.Name);
+                var generatedCode = _keyGenerator.GenerateUserTokenForEntityDeletion(user);
+
+                var url = Url.DeleteGivenDegreeEntityLink(givenDegreeIdentificator, generatedCode, Request.Scheme);
+                var emailMessage = _emailSender.GenerateEmailMessage(user.Email, user.FirstName + " " + user.LastName, "authorizeAction", url);
+                _emailSender.SendEmailAsync(emailMessage);
+
+                return RedirectToAction("UniversalConfirmationPanel", "Account", new { messageNumber = 5, returnUrl });
+            }
+
+            return RedirectToAction("BlankMenu", "Certificates");
+        }
+
+        // GET: DeleteGivenDegree
+        [Authorize(Roles = "Admin")]
+        [HttpGet]
+        public ActionResult DeleteGivenDegree(string givenDegreeIdentificator, string code)
+        {
+            if (!string.IsNullOrWhiteSpace(givenDegreeIdentificator) && !string.IsNullOrWhiteSpace(code))
+            {
+                DeleteEntityViewModel givenDegreeToDelete = new DeleteEntityViewModel
+                {
+                    EntityIdentificator = givenDegreeIdentificator,
+                    Code = code,
+
+                    ActionName = this.ControllerContext.RouteData.Values["action"].ToString(),
+                    FormHeader = "Usuwanie nadanego stopnia zawodowego"
+                };
+
+                return View("DeleteEntity", givenDegreeToDelete);
+            }
+
+            return RedirectToAction("BlankMenu", "Certificates");
+        }
+
+        // POST: DeleteGivenDegree
+        [Authorize(Roles = "Admin")]
+        [HttpPost]
+        public ActionResult DeleteGivenDegree(DeleteEntityViewModel givenDegreeToDelete)
+        {
+            var user = _context.userRepository.GetUserByEmail(this.User.Identity.Name);
+            var givenDegree = _context.givenDegreeRepository.GetGivenDegreeById(givenDegreeToDelete.EntityIdentificator);
+
+            if (givenDegree == null)
+            {
+                return RedirectToAction("UniversalConfirmationPanel", "Account", new { messageNumber = 6, returnUrl = Url.BlankMenuLink(Request.Scheme) });
+            }
+
+            if (ModelState.IsValid && _keyGenerator.ValidateUserTokenForEntityDeletion(user, givenDegreeToDelete.Code))
+            {
+                var logInfo = _logger.GenerateLogInformation(this.User.Identity.Name, this.ControllerContext.RouteData.Values["action"].ToString(), LogTypeOfAction.TypesOfActions[2]);
+                var logInfoUpdate = _logger.GenerateLogInformation(this.User.Identity.Name, this.ControllerContext.RouteData.Values["action"].ToString(), LogTypeOfAction.TypesOfActions[1]);
+
+                _context.givenDegreeRepository.DeleteGivenDegree(givenDegreeToDelete.EntityIdentificator);
+                _logger.AddGivenDegreeLog(givenDegree, logInfo);
+
+                var updatedUser = _context.userRepository.DeleteUserGivenDegree(givenDegreeToDelete.EntityIdentificator);
+                _logger.AddUserLog(updatedUser, logInfoUpdate);
+
+                return RedirectToAction("DisplayAllGivenDegrees", "GivenDegrees", new { message = "Usunięto wskazany nadany stopień zawodowy" });
+            }
+
+            return View(givenDegreeToDelete);
         }
     }
 }

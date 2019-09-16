@@ -268,7 +268,7 @@ namespace Certification_System.Controllers
                 var updatedGivenDegrees = _context.degreeRepository.DeleteCertificateFromDegrees(certificateToDelete.EntityIdentificator);
                 _logger.AddDegreesLogs(updatedGivenDegrees, logInfoUpdate);
 
-                return RedirectToAction("DisplayAllCertificates", "Certificates", new { certificateIdentificator = certificateToDelete.EntityIdentificator, message = "Usunięto wskazany certyfikat" });
+                return RedirectToAction("DisplayAllCertificates", "Certificates", new { message = "Usunięto wskazany certyfikat" });
             }
 
             return View(certificateToDelete);

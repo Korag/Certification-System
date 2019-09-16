@@ -367,5 +367,16 @@ namespace Certification_System.Repository
 
             return resultListOfUsers;
         }
+
+        public CertificationPlatformUser DeleteUserGivenDegree(string givenDegreeIdentificator)
+        {
+            var filter = Builders<CertificationPlatformUser>.Filter.Where(z => z.GivenDegrees.Contains(givenDegreeIdentificator));
+            var update = Builders<CertificationPlatformUser>.Update.Pull(x => x.GivenDegrees, givenDegreeIdentificator);
+
+            var resultUser = GetUsers().Find<CertificationPlatformUser>(filter).FirstOrDefault();
+            var result = _users.UpdateOne(filter, update);
+
+            return resultUser;
+        }
     }
 }

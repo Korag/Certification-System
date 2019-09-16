@@ -68,7 +68,7 @@ namespace Certification_System.Repository
             var filter = Builders<GivenCertificate>.Filter.Where(z => z.Certificate == certificateIdentificator);
 
             var resultListOfGivenCertificates = GetGivenCertificates().Find<GivenCertificate>(filter).ToList();
-            var result = GetGivenCertificates().DeleteMany(filter);
+            var result = _givenCertificates.DeleteMany(filter);
 
             return resultListOfGivenCertificates;
         }
