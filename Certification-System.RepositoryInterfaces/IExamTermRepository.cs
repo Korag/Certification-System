@@ -14,7 +14,7 @@ namespace Certification_System.RepositoryInterfaces
         ICollection<ExamTerm> GetExamTermsByExaminerId(string userIdentificator);
         void UpdateExamsTerms(ICollection<ExamTerm> examTerms);
         void UpdateExamTerm(ExamTerm examTerm);
-        void DeleteExamsTerms(ICollection<string> examsTermsIdentificators);
+        ICollection<ExamTerm> DeleteExamsTerms(ICollection<string> examsTermsIdentificators);
         IList<SelectListItem> GetActiveExamTermsWithVacantSeatsAsSelectList(Exam exam);
         IList<SelectListItem> GetActiveExamTermsWithVacantSeatsAsSelectList();
         void AddUserToExamTerm(string examTermIdentificator, string userIdentificator);

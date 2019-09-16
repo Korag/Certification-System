@@ -92,10 +92,14 @@ namespace Certification_System.Repository
             var result = GetExamsTerms().ReplaceOne(filter, examTerm);
         }
 
-        public void DeleteExamsTerms(ICollection<string> examsTermsIdentificators)
+        public ICollection<ExamTerm> DeleteExamsTerms(ICollection<string> examsTermsIdentificators)
         {
             var filter = Builders<ExamTerm>.Filter.Where(x => examsTermsIdentificators.Contains(x.ExamTermIdentificator));
+            var resultListOfExamsTerms = GetExamsTerms().Find<ExamTerm>(filter).ToList();
+
             var result = GetExamsTerms().DeleteMany(filter);
+
+            return resultListOfExamsTerms;
         }
 
         public IList<SelectListItem> GetActiveExamTermsWithVacantSeatsAsSelectList(Exam exam)

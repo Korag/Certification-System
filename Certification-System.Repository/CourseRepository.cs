@@ -261,5 +261,18 @@ namespace Certification_System.Repository
 
             return resultListOfCourses;
         }
+
+        public Course DeleteExamFromCourse(string examIdentificator)
+        {
+            var filter = Builders<Course>.Filter.Where(z => z.Exams.Contains(examIdentificator));
+            var update = Builders<Course>.Update.Pull(x => x.Exams, examIdentificator);
+
+            var resultCourse = GetCourses().Find<Course>(filter).FirstOrDefault();
+            resultCourse.Exams.Remove(examIdentificator);
+
+            _courses.UpdateOne(filter, update);
+
+            return resultCourse;
+        }
     }
 }

@@ -26,5 +26,6 @@ namespace Certification_System.RepositoryInterfaces
         ICollection<Course> GetCoursesByExamsId(ICollection<string> examsIdentificators);
         ICollection<SelectListItem> GenerateSelectList(ICollection<string> coursesIdentificators);
         ICollection<Course> DeleteBranchFromCourses(string branchIdentificator);
+        Course DeleteExamFromCourse(string examIdentificator);
     }
 }

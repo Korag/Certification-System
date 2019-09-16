@@ -333,8 +333,10 @@ namespace Certification_System.Controllers
 
         // GET: DisplayAllExams
         [Authorize(Roles = "Admin")]
-        public ActionResult DisplayAllExams()
+        public ActionResult DisplayAllExams(string message = null)
         {
+            ViewBag.Message = message;
+
             var Exams = _context.examRepository.GetListOfExams();
             var Courses = _context.courseRepository.GetListOfCourses();
 
@@ -1103,6 +1105,84 @@ namespace Certification_System.Controllers
             }
 
             return View("DeleteEntity", examResultToDelete);
+        }
+
+        // GET: DeleteExamHub
+        [Authorize(Roles = "Admin")]
+        [HttpGet]
+        public ActionResult DeleteExamHub(string examIdentificator, string returnUrl)
+        {
+            if (!string.IsNullOrWhiteSpace(examIdentificator))
+            {
+                var user = _context.userRepository.GetUserByEmail(this.User.Identity.Name);
+                var generatedCode = _keyGenerator.GenerateUserTokenForEntityDeletion(user);
+
+                var url = Url.DeleteExamEntityLink(examIdentificator, generatedCode, Request.Scheme);
+                var emailMessage = _emailSender.GenerateEmailMessage(user.Email, user.FirstName + " " + user.LastName, "authorizeAction", url);
+                _emailSender.SendEmailAsync(emailMessage);
+
+                return RedirectToAction("UniversalConfirmationPanel", "Account", new { messageNumber = 5, returnUrl });
+            }
+
+            return RedirectToAction("BlankMenu", "Certificates");
+        }
+
+        // GET: DeleteExam
+        [Authorize(Roles = "Admin")]
+        [HttpGet]
+        public ActionResult DeleteExam(string examIdentificator, string code)
+        {
+            if (!string.IsNullOrWhiteSpace(examIdentificator) && !string.IsNullOrWhiteSpace(code))
+            {
+                DeleteEntityViewModel examToDelete = new DeleteEntityViewModel
+                {
+                    EntityIdentificator = examIdentificator,
+                    Code = code,
+
+                    ActionName = this.ControllerContext.RouteData.Values["action"].ToString(),
+                    FormHeader = "Usuwanie egzaminu"
+                };
+
+                return View("DeleteEntity", examToDelete);
+            }
+
+            return RedirectToAction("BlankMenu", "Certificates");
+        }
+
+        // POST: DeleteExam
+        [Authorize(Roles = "Admin")]
+        [HttpPost]
+        public ActionResult DeleteExam(DeleteEntityViewModel examToDelete)
+        {
+            var user = _context.userRepository.GetUserByEmail(this.User.Identity.Name);
+            var exam = _context.examRepository.GetExamById(examToDelete.EntityIdentificator);
+
+            if (exam == null)
+            {
+                return RedirectToAction("UniversalConfirmationPanel", "Account", new { messageNumber = 6, returnUrl = Url.BlankMenuLink(Request.Scheme) });
+            }
+
+            if (ModelState.IsValid && _keyGenerator.ValidateUserTokenForEntityDeletion(user, examToDelete.Code))
+            {
+                var logInfoDelete = _logger.GenerateLogInformation(this.User.Identity.Name, this.ControllerContext.RouteData.Values["action"].ToString(), LogTypeOfAction.TypesOfActions[2]);
+                var logInfoUpdate = _logger.GenerateLogInformation(this.User.Identity.Name, this.ControllerContext.RouteData.Values["action"].ToString(), LogTypeOfAction.TypesOfActions[1]);
+
+                _context.examRepository.DeleteExam(examToDelete.EntityIdentificator);
+                _logger.AddExamLog(exam, logInfoDelete);
+
+                var deletedExamsTerms = _context.examTermRepository.DeleteExamsTerms(exam.ExamTerms);
+                _logger.AddExamsTermsLogs(deletedExamsTerms, logInfoDelete);
+                
+                var deletedExamsResults = _context.examResultRepository.DeleteExamsResults(exam.ExamResults);
+                _logger.AddExamsResultsLogs(deletedExamsResults, logInfoDelete);
+
+                var updatedCourse= _context.courseRepository.DeleteExamFromCourse(examToDelete.EntityIdentificator);
+                _logger.AddCourseLog(updatedCourse, logInfoUpdate);
+
+                return RedirectToAction("DisplayAllExams", "Exams", new { message = "Usunięto wskazany egzamin" });
+            }
+
+            return View("DeleteEntity", examToDelete);
         }
 
         #region AjaxQuery

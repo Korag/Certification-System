@@ -252,5 +252,11 @@ namespace Certification_System.Repository
 
             return resultExam;
         }
+
+        public void DeleteExam(string examIdentificator)
+        {
+            var filter = Builders<Exam>.Filter.Where(z => z.ExamIdentificator == examIdentificator);
+            var result = GetExams().DeleteOne(filter);
+        }
     }
 }

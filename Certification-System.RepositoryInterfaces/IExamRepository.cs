@@ -27,5 +27,6 @@ namespace Certification_System.RepositoryInterfaces
         IList<SelectListItem> GetActiveExamsAsSelectList();
         Exam DeleteExamResultFromExam(string examResultIdentificator);
         Exam DeleteExamTermFromExam(string examTermIdentificator);
+        void DeleteExam(string examIdentificator);
     }
 }
