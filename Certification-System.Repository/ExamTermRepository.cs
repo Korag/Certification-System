@@ -185,5 +185,30 @@ namespace Certification_System.Repository
             var filter = Builders<ExamTerm>.Filter.Where(z => z.ExamTermIdentificator == examTermIdentificator);
             var result = GetExamsTerms().DeleteOne(filter);
         }
+
+        public ICollection<ExamTerm> DeleteUserFromExamsTerms(string userIdentificator, ICollection<string> examsTermsIdentificators)
+        {
+            var filter = Builders<ExamTerm>.Filter.Where(z => examsTermsIdentificators.Contains(z.ExamTermIdentificator) && (z.EnrolledUsers.Contains(userIdentificator) || z.Examiners.Contains(userIdentificator)));
+            var update = Builders<ExamTerm>.Update.Pull(x => x.EnrolledUsers, userIdentificator).Pull(x => x.Examiners, userIdentificator);
+
+            List<ExamTerm> resultListOfExamsTerms = new List<ExamTerm>();
+
+            if (examsTermsIdentificators.Count() != 0)
+            {
+                var examsTerms = (IMongoCollection<ExamTerm>)examsTermsIdentificators;
+                resultListOfExamsTerms = examsTerms.Find<ExamTerm>(filter).ToList();
+            }
+            else
+            {
+                resultListOfExamsTerms = GetExamsTerms().Find<ExamTerm>(filter).ToList();
+            }
+
+            resultListOfExamsTerms.ForEach(z => z.EnrolledUsers.Remove(userIdentificator));
+            resultListOfExamsTerms.ForEach(z => z.Examiners.Remove(userIdentificator));
+
+            var result = _examsTerms.UpdateMany(filter, update);
+
+            return resultListOfExamsTerms;
+        }
     }
 }

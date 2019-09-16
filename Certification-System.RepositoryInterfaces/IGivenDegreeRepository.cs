@@ -13,5 +13,6 @@ namespace Certification_System.RepositoryInterfaces
         ICollection<GivenDegree> GetGivenDegreesById(ICollection<string> givenDegreeIdentificators);
         void DeleteGivenDegree(string givenDegreeIdentificator);
         ICollection<GivenDegree> DeleteGivenDegreesByDegreeId(string degreeIdentificator);
+        ICollection<GivenDegree> DeleteGivenDegrees(ICollection<string> givenDegreesIdentificators);
     }
 }

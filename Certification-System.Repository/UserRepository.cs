@@ -402,5 +402,11 @@ namespace Certification_System.Repository
 
             return resultListOfUsers;
         }
+
+        public void DeleteUser(string userIdentificator)
+        {
+            var filter = Builders<CertificationPlatformUser>.Filter.Where(z => z.Id == userIdentificator);
+            var result = GetUsers().DeleteOne(filter);
+        }
     }
 }

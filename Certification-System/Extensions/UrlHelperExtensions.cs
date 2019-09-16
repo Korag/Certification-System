@@ -166,5 +166,14 @@ namespace Certification_System.Extensions
                 values: new { courseIdentificator, code },
                 protocol: scheme);
         }
+
+        public static string DeleteUserEntityLink(this IUrlHelper urlHelper, string userIdentificator, string code, string scheme)
+        {
+            return urlHelper.Action(
+                action: nameof(UsersController.DeleteUser),
+                controller: "Users",
+                values: new { userIdentificator, code },
+                protocol: scheme);
+        }
     }
 }

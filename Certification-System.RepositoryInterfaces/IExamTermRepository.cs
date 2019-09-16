@@ -22,5 +22,6 @@ namespace Certification_System.RepositoryInterfaces
         void DeleteUsersFromExamTerm(string examTermIdentificator, ICollection<string> usersIdentificators);
         void AddUsersToExamTerm(string examTermIdentificator, ICollection<string> usersIdentificators);
         void DeleteExamTerm(string examTermIdentificator);
+        ICollection<ExamTerm> DeleteUserFromExamsTerms(string userIdentificator, ICollection<string> examsTermsIdentificators);
     }
 }

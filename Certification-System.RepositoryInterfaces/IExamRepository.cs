@@ -29,5 +29,6 @@ namespace Certification_System.RepositoryInterfaces
         Exam DeleteExamTermFromExam(string examTermIdentificator);
         void DeleteExam(string examIdentificator);
         ICollection<Exam> DeleteExams(ICollection<string> examsIdentificators);
+        ICollection<Exam> DeleteUserFromExams(string userIdentificator, ICollection<string> examsIdentificators);
     }
 }

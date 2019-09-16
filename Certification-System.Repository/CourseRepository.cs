@@ -293,5 +293,20 @@ namespace Certification_System.Repository
             var filter = Builders<Course>.Filter.Where(z => z.CourseIdentificator == courseIdentificator);
             var result = GetCourses().DeleteOne(filter);
         }
+
+        public ICollection<Course> DeleteUserFromCourses(ICollection<string> usersIdentificators)
+        {
+            var filter = Builders<Course>.Filter.Where(z => z.EnrolledUsers.ToList().Where(x => usersIdentificators.Contains(x)).ToList().Count() != 0);
+            var update = Builders<Course>.Update.PullAll(x => x.EnrolledUsers, usersIdentificators);
+
+            var resultListOfCourses = GetCourses().Find<Course>(filter).ToList();
+
+            // to check
+            resultListOfCourses.ForEach(z=> z.EnrolledUsers.ToList().RemoveAll(x=> usersIdentificators.Contains(x)));
+
+            var result = _courses.DeleteMany(filter);
+
+            return resultListOfCourses;
+        }
     }
 }

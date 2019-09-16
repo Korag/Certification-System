@@ -47,8 +47,10 @@ namespace Certification_System.Controllers
 
         // GET: DisplayAllUsers
         [Authorize(Roles = "Admin")]
-        public ActionResult DisplayAllUsers()
+        public ActionResult DisplayAllUsers(string message = null)
         {
+            ViewBag.Message = message;
+
             var Users = _context.userRepository.GetListOfUsers();
             List<DisplayUserViewModel> usersToDisplay = new List<DisplayUserViewModel>();
 
@@ -651,6 +653,96 @@ namespace Certification_System.Controllers
             InstructorExaminerDetails.ExamsTerms = ListOfExamsTerms;
 
             return View(InstructorExaminerDetails);
+        }
+
+        // GET: DeleteUserHub
+        [Authorize(Roles = "Admin")]
+        [HttpGet]
+        public ActionResult DeleteUserHub(string userIdentificator, string returnUrl)
+        {
+            if (!string.IsNullOrWhiteSpace(userIdentificator))
+            {
+                var user = _context.userRepository.GetUserByEmail(this.User.Identity.Name);
+                var generatedCode = _keyGenerator.GenerateUserTokenForEntityDeletion(user);
+
+                var url = Url.DeleteUserEntityLink(userIdentificator, generatedCode, Request.Scheme);
+                var emailMessage = _emailSender.GenerateEmailMessage(user.Email, user.FirstName + " " + user.LastName, "authorizeAction", url);
+                _emailSender.SendEmailAsync(emailMessage);
+
+                return RedirectToAction("UniversalConfirmationPanel", "Account", new { messageNumber = 5, returnUrl });
+            }
+
+            return RedirectToAction("BlankMenu", "Certificates");
+        }
+
+        // GET: DeleteUser
+        [Authorize(Roles = "Admin")]
+        [HttpGet]
+        public ActionResult DeleteUser(string userIdentificator, string code)
+        {
+            if (!string.IsNullOrWhiteSpace(userIdentificator) && !string.IsNullOrWhiteSpace(code))
+            {
+                DeleteEntityViewModel userToDelete = new DeleteEntityViewModel
+                {
+                    EntityIdentificator = userIdentificator,
+                    Code = code,
+
+                    ActionName = this.ControllerContext.RouteData.Values["action"].ToString(),
+                    FormHeader = "Usuwanie użytkownika systemu"
+                };
+
+                return View("DeleteEntity", userToDelete);
+            }
+
+            return RedirectToAction("BlankMenu", "Certificates");
+        }
+
+        // POST: DeleteUser
+        [Authorize(Roles = "Admin")]
+        [HttpPost]
+        public ActionResult DeleteUser(DeleteEntityViewModel userToDelete)
+        {
+            var user = _context.userRepository.GetUserByEmail(this.User.Identity.Name);
+            var userToDeleteModel = _context.userRepository.GetUserById(userToDelete.EntityIdentificator);
+
+            if (userToDeleteModel == null)
+            {
+                return RedirectToAction("UniversalConfirmationPanel", "Account", new { messageNumber = 6, returnUrl = Url.BlankMenuLink(Request.Scheme) });
+            }
+
+            if (ModelState.IsValid && _keyGenerator.ValidateUserTokenForEntityDeletion(user, userToDelete.Code))
+            {
+                var logInfoDelete = _logger.GenerateLogInformation(this.User.Identity.Name, this.ControllerContext.RouteData.Values["action"].ToString(), LogTypeOfAction.TypesOfActions[2]);
+                var logInfoUpdate = _logger.GenerateLogInformation(this.User.Identity.Name, this.ControllerContext.RouteData.Values["action"].ToString(), LogTypeOfAction.TypesOfActions[1]);
+
+                _context.userRepository.DeleteUser(userToDelete.EntityIdentificator);
+                _logger.AddUserLog(userToDeleteModel, logInfoDelete);
+
+                var deletedGivenCertificates = _context.givenCertificateRepository.DeleteGivenCertificates(userToDeleteModel.GivenCertificates);
+                _logger.AddGivenCertificatesLogs(deletedGivenCertificates, logInfoDelete);
+
+                var deletedGivenDegrees = _context.givenDegreeRepository.DeleteGivenDegrees(userToDeleteModel.GivenDegrees);
+                _logger.AddGivenDegreesLogs(deletedGivenDegrees, logInfoDelete);
+
+                var updatedCourses = _context.courseRepository.DeleteUserFromCourses(userToDeleteModel.Courses);
+                _logger.AddCoursesLogs(updatedCourses, logInfoUpdate);
+
+                var updatedMeetings = _context.meetingRepository.DeleteUserFromMeetings(userToDeleteModel.Id, updatedCourses.SelectMany(z=> z.Meetings).ToList());
+                _logger.AddMeetingsLogs(updatedMeetings, logInfoUpdate);
+
+                var updatedExams = _context.examRepository.DeleteUserFromExams(userToDeleteModel.Id, updatedCourses.SelectMany(z => z.Exams).ToList());
+                _logger.AddExamsLogs(updatedExams, logInfoUpdate);
+
+                var updatedExamsTerms = _context.examTermRepository.DeleteUserFromExamsTerms(userToDeleteModel.Id, updatedExams.SelectMany(z => z.ExamTerms).ToList());
+                _logger.AddExamsTermsLogs(updatedExamsTerms, logInfoUpdate);
+
+                var deletedExamsResults = _context.examResultRepository.DeleteExamsResultsByUserId(userToDelete.EntityIdentificator);
+                _logger.AddExamsResultsLogs(deletedExamsResults, logInfoDelete);
+
+                return RedirectToAction("DisplayAllUsers", "Users", new { message = "Usunięto wskazanego użytkownika systemu" });
+            }
+
+            return View("DeleteEntity", userToDelete);
         }
     }
 }

@@ -14,5 +14,6 @@ namespace Certification_System.RepositoryInterfaces
         ICollection<GivenCertificate> DeleteGivenCertificatesByCertificateId(string certificateIdentificator);
         void DeleteGivenCertificate(string givenCertificateIdentificator);
         ICollection<GivenCertificate> DeleteGivenCertificatesByCourseId(string courseIdentificator);
+        ICollection<GivenCertificate> DeleteGivenCertificates(ICollection<string> givenCertificatesIdentificators);
     }
 }

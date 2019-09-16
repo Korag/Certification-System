@@ -102,5 +102,19 @@ namespace Certification_System.Repository
 
             return resultListOfMeetings;
         }
+
+        public ICollection<Meeting> DeleteUserFromMeetings(string userIdentificator, ICollection<string> meetingIdentificators = null)
+        {
+            var filter = Builders<Meeting>.Filter.Where(z => meetingIdentificators.Contains(z.MeetingIdentificator) && (z.AttendanceList.Contains(userIdentificator) || z.Instructors.Contains(userIdentificator)));
+            var update = Builders<Meeting>.Update.Pull(x => x.AttendanceList, userIdentificator).Pull(x=> x.Instructors, userIdentificator);
+
+            var resultListOfMeetings = GetMeetings().Find<Meeting>(filter).ToList();
+            resultListOfMeetings.ForEach(z => z.AttendanceList.Remove(userIdentificator));
+            resultListOfMeetings.ForEach(z => z.Instructors.Remove(userIdentificator));
+
+            var result = _meetings.UpdateMany(filter, update);
+
+            return resultListOfMeetings;
+        }
     }
 }

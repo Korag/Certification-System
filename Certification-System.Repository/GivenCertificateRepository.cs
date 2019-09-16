@@ -88,5 +88,15 @@ namespace Certification_System.Repository
             var filter = Builders<GivenCertificate>.Filter.Where(z => z.GivenCertificateIdentificator == givenCertificateIdentificator);
             var result = GetGivenCertificates().DeleteOne(filter);
         }
+
+        public ICollection<GivenCertificate> DeleteGivenCertificates(ICollection<string> givenCertificatesIdentificators)
+        {
+            var filter = Builders<GivenCertificate>.Filter.Where(z => givenCertificatesIdentificators.Contains(z.GivenCertificateIdentificator));
+
+            var resultListOfGivenCertificates = GetGivenCertificates().Find<GivenCertificate>(filter).ToList();
+            var result = GetGivenCertificates().DeleteMany(filter);
+
+            return resultListOfGivenCertificates;
+        }
     }
 }

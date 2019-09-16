@@ -268,5 +268,30 @@ namespace Certification_System.Repository
 
             return resultListOfExams;
         }
+
+        public ICollection<Exam> DeleteUserFromExams(string userIdentificator, ICollection<string> examsIdentificators = null)
+        {
+            var filter = Builders<Exam>.Filter.Where(z => examsIdentificators.Contains(z.ExamIdentificator) && (z.EnrolledUsers.Contains(userIdentificator) || z.Examiners.Contains(userIdentificator)));
+            var update = Builders<Exam>.Update.Pull(x => x.EnrolledUsers, userIdentificator).Pull(x => x.Examiners, userIdentificator);
+
+            List<Exam> resultListOfExams = new List<Exam>();
+
+            if (examsIdentificators.Count() != 0)
+            {
+                var examsTerms = (IMongoCollection<Exam>)examsIdentificators;
+                resultListOfExams = examsTerms.Find<Exam>(filter).ToList();
+            }
+            else
+            {
+                resultListOfExams = GetExams().Find<Exam>(filter).ToList();
+            }
+
+            resultListOfExams.ForEach(z => z.EnrolledUsers.Remove(userIdentificator));
+            resultListOfExams.ForEach(z => z.Examiners.Remove(userIdentificator));
+
+            var result = _exams.UpdateMany(filter, update);
+
+            return resultListOfExams;
+        }
     }
 }

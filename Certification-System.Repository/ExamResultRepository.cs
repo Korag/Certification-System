@@ -87,5 +87,15 @@ namespace Certification_System.Repository
 
             return resultListOfExamsResults;
         }
+
+        public ICollection<ExamResult> DeleteExamsResultsByUserId(string userIdentificator)
+        {
+            var filter = Builders<ExamResult>.Filter.Where(z => z.User == userIdentificator);
+
+            var resultListOfExamsResults = GetExamsResults().Find<ExamResult>(filter).ToList();
+            var result = _examsResults.DeleteMany(filter);
+
+            return resultListOfExamsResults;
+        }
     }
 }

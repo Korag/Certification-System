@@ -29,5 +29,6 @@ namespace Certification_System.RepositoryInterfaces
         Course DeleteExamFromCourse(string examIdentificator);
         Course DeleteMeetingFromCourse(string meetingIdentificator);
         void DeleteCourse(string courseIdentificator);
+        ICollection<Course> DeleteUserFromCourses(ICollection<string> usersIdentificators);
     }
 }
