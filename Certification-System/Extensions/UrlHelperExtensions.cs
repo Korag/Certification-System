@@ -103,5 +103,14 @@ namespace Certification_System.Extensions
                 values: new { givenDegreeIdentificator, code },
                 protocol: scheme);
         }
+
+        public static string DeleteGivenCertificateEntityLink(this IUrlHelper urlHelper, string givenCertificateIdentificator, string code, string scheme)
+        {
+            return urlHelper.Action(
+                action: nameof(GivenCertificatesController.DeleteGivenCertificate),
+                controller: "GivenCertificates",
+                values: new { givenCertificateIdentificator, code },
+                protocol: scheme);
+        }
     }
 }

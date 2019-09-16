@@ -336,7 +336,7 @@ namespace Certification_System.Controllers
                 return RedirectToAction("DisplayAllGivenDegrees", "GivenDegrees", new { message = "Usunięto wskazany nadany stopień zawodowy" });
             }
 
-            return View(givenDegreeToDelete);
+            return View("DeleteEntity", givenDegreeToDelete);
         }
     }
 }

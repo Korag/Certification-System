@@ -33,5 +33,6 @@ namespace Certification_System.RepositoryInterfaces
         ICollection<SelectListItem> GetAvailableCourseRoleFiltersAsSelectList();
         ICollection<CertificationPlatformUser> DeleteCompanyFromUsers(string companyIdentificator);
         CertificationPlatformUser DeleteUserGivenDegree(string givenDegreeIdentificator);
+        CertificationPlatformUser DeleteUserGivenCertificate(string givenCertificateIdentificator);
     }
 }

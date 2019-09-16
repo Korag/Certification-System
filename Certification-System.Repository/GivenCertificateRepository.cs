@@ -72,5 +72,11 @@ namespace Certification_System.Repository
 
             return resultListOfGivenCertificates;
         }
+
+        public void DeleteGivenCertificate(string givenCertificateIdentificator)
+        {
+            var filter = Builders<GivenCertificate>.Filter.Where(z => z.GivenCertificateIdentificator == givenCertificateIdentificator);
+            var result = _givenCertificates.DeleteOne(filter);
+        }
     }
 }

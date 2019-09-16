@@ -1,6 +1,7 @@
 ﻿using AutoMapper;
 using Certification_System.DTOViewModels;
 using Certification_System.Entities;
+using Certification_System.Extensions;
 using Certification_System.Repository.DAL;
 using Certification_System.Services;
 using Certification_System.ServicesInterfaces;
@@ -15,6 +16,7 @@ namespace Certification_System.Controllers
     {
         private readonly MongoOperations _context;
 
+        private readonly IEmailSender _emailSender;
         private readonly IGeneratorQR _generatorQR;
         private readonly IMapper _mapper;
         private readonly IKeyGenerator _keyGenerator;
@@ -25,13 +27,15 @@ namespace Certification_System.Controllers
             IGeneratorQR generatorQR, 
             IMapper mapper,
             IKeyGenerator keyGenerator,
-            ILogService logger)
+            ILogService logger,
+            IEmailSender emailSender)
         {
             _generatorQR = generatorQR;
             _context = context;
             _mapper = mapper;
             _keyGenerator = keyGenerator;
             _logger = logger;
+            _emailSender = emailSender;
         }
 
         // GET: DisplayAllGivenCertificates
@@ -261,6 +265,78 @@ namespace Certification_System.Controllers
             VerifiedGivenCertificate.Companies = companiesViewModel;
 
             return View(VerifiedGivenCertificate);
+        }
+
+        // GET: DeleteGivenDegreeHub
+        [Authorize(Roles = "Admin")]
+        [HttpGet]
+        public ActionResult DeleteGivenCertificateHub(string givenCertificateIdentificator, string returnUrl)
+        {
+            if (!string.IsNullOrWhiteSpace(givenCertificateIdentificator))
+            {
+                var user = _context.userRepository.GetUserByEmail(this.User.Identity.Name);
+                var generatedCode = _keyGenerator.GenerateUserTokenForEntityDeletion(user);
+
+                var url = Url.DeleteGivenCertificateEntityLink(givenCertificateIdentificator, generatedCode, Request.Scheme);
+                var emailMessage = _emailSender.GenerateEmailMessage(user.Email, user.FirstName + " " + user.LastName, "authorizeAction", url);
+                _emailSender.SendEmailAsync(emailMessage);
+
+                return RedirectToAction("UniversalConfirmationPanel", "Account", new { messageNumber = 5, returnUrl });
+            }
+
+            return RedirectToAction("BlankMenu", "Certificates");
+        }
+
+        // GET: DeleteGivenCertificate
+        [Authorize(Roles = "Admin")]
+        [HttpGet]
+        public ActionResult DeleteGivenCertificate(string givenCertificateIdentificator, string code)
+        {
+            if (!string.IsNullOrWhiteSpace(givenCertificateIdentificator) && !string.IsNullOrWhiteSpace(code))
+            {
+                DeleteEntityViewModel givenCertificateToDelete = new DeleteEntityViewModel
+                {
+                    EntityIdentificator = givenCertificateIdentificator,
+                    Code = code,
+
+                    ActionName = this.ControllerContext.RouteData.Values["action"].ToString(),
+                    FormHeader = "Usuwanie nadanego certyfikatu"
+                };
+
+                return View("DeleteEntity", givenCertificateToDelete);
+            }
+
+            return RedirectToAction("BlankMenu", "Certificates");
+        }
+
+        // POST: DeleteGivenCertificate
+        [Authorize(Roles = "Admin")]
+        [HttpPost]
+        public ActionResult DeleteGivenCertificate(DeleteEntityViewModel givenCertificateToDelete)
+        {
+            var user = _context.userRepository.GetUserByEmail(this.User.Identity.Name);
+            var givenCertificate = _context.givenCertificateRepository.GetGivenCertificateById(givenCertificateToDelete.EntityIdentificator);
+
+            if (givenCertificate == null)
+            {
+                return RedirectToAction("UniversalConfirmationPanel", "Account", new { messageNumber = 6, returnUrl = Url.BlankMenuLink(Request.Scheme) });
+            }
+
+            if (ModelState.IsValid && _keyGenerator.ValidateUserTokenForEntityDeletion(user, givenCertificateToDelete.Code))
+            {
+                var logInfo = _logger.GenerateLogInformation(this.User.Identity.Name, this.ControllerContext.RouteData.Values["action"].ToString(), LogTypeOfAction.TypesOfActions[2]);
+                var logInfoUpdate = _logger.GenerateLogInformation(this.User.Identity.Name, this.ControllerContext.RouteData.Values["action"].ToString(), LogTypeOfAction.TypesOfActions[1]);
+
+                _context.givenCertificateRepository.DeleteGivenCertificate(givenCertificateToDelete.EntityIdentificator);
+                _logger.AddGivenCertificateLog(givenCertificate, logInfo);
+
+                var updatedUser = _context.userRepository.DeleteUserGivenCertificate(givenCertificateToDelete.EntityIdentificator);
+                _logger.AddUserLog(updatedUser, logInfoUpdate);
+
+                return RedirectToAction("DisplayAllGivenCertificates", "GivenCertificates", new { message = "Usunięto wskazany nadany certyfikat" });
+            }
+
+            return View("DeleteEntity", givenCertificateToDelete);
         }
     }
 }

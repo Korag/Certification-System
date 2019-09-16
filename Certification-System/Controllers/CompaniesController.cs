@@ -211,7 +211,7 @@ namespace Certification_System.Controllers
                 return RedirectToAction("DisplayAllCertificates", "Certificates", new { message = "Usunięto wskazane przedsiębiorstwo" });
             }
 
-            return View(companyToDelete);
+            return View("DeleteEntity", companyToDelete);
         }
     }
 }

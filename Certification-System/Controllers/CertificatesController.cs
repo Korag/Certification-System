@@ -271,7 +271,7 @@ namespace Certification_System.Controllers
                 return RedirectToAction("DisplayAllCertificates", "Certificates", new { message = "Usunięto wskazany certyfikat" });
             }
 
-            return View(certificateToDelete);
+            return View("DeleteEntity", certificateToDelete);
         }
     }
 }

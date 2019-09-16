@@ -378,5 +378,16 @@ namespace Certification_System.Repository
 
             return resultUser;
         }
+
+        public CertificationPlatformUser DeleteUserGivenCertificate(string givenCertificateIdentificator)
+        {
+            var filter = Builders<CertificationPlatformUser>.Filter.Where(z => z.GivenCertificates.Contains(givenCertificateIdentificator));
+            var update = Builders<CertificationPlatformUser>.Update.Pull(x => x.GivenCertificates, givenCertificateIdentificator);
+
+            var resultUser = GetUsers().Find<CertificationPlatformUser>(filter).FirstOrDefault();
+            var result = _users.UpdateOne(filter, update);
+
+            return resultUser;
+        }
     }
 }
