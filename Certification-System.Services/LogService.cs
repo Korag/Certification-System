@@ -42,6 +42,51 @@ namespace Certification_System.Services
             };
         }
 
+        public UserLoginLogInformation GenerateUserLoginInformation(string userEmailAddress, string loginActionResult)
+        {
+            var user = _userRepository.GetUserByEmail(userEmailAddress);
+
+            if (user != null)
+            {
+                return new UserLoginLogInformation
+                {
+                    UserEmail = user.Email,
+                    UserFirstName = user.FirstName,
+                    UserLastName = user.LastName,
+                    UserIdentificator = user.Id,
+
+                    DateTime = DateTime.Now,
+                    IpAddress = _ipGetter.GetGlobalIPAddress(),
+                    ActionResult = loginActionResult,
+                };
+            }
+            else
+            {
+                return new UserLoginLogInformation
+                {
+                    UserEmail = userEmailAddress,
+                    UserFirstName = "EmailAddress not valid",
+                    UserLastName = "EmailAddress not valid",
+                    UserIdentificator = "EmailAddress not valid",
+
+                    DateTime = DateTime.Now,
+                    IpAddress = _ipGetter.GetGlobalIPAddress(),
+                    ActionResult = loginActionResult,
+                };
+            }       
+        }
+
+        public void AddUserLoginLog(UserLoginLogInformation logInfo)
+        {
+            var userLoginLog = new UserLoginLog
+            {
+                UserLoginLogIdentificator = _keyGenerator.GenerateNewId(),
+                LogData = logInfo
+            };
+
+            _logRepository.AddUserLoginLog(userLoginLog);
+        }
+
         public void AddBranchLog(Branch branch, LogInformation logInfo)
         {
             var branchLog = new BranchLog

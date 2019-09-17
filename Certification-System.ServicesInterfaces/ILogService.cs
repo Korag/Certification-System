@@ -6,6 +6,7 @@ namespace Certification_System.ServicesInterfaces
     public interface ILogService
     {
         LogInformation GenerateLogInformation(string userEmailAddress, string actionName, string typeOfAction);
+        UserLoginLogInformation GenerateUserLoginInformation(string userEmailAddress, string loginActionResult);
         void AddBranchLog(Branch branch, LogInformation logInfo);
         void AddBranchesLogs(ICollection<Branch> branches, LogInformation logInfo);
         void AddCertificateLog(Certificate certificate, LogInformation logInfo);
@@ -30,5 +31,6 @@ namespace Certification_System.ServicesInterfaces
         void AddGivenDegreesLogs(ICollection<GivenDegree> givenDegrees, LogInformation logInfo);
         void AddMeetingLog(Meeting meeting, LogInformation logInfo);
         void AddMeetingsLogs(ICollection<Meeting> meetings, LogInformation logInfo);
+        void AddUserLoginLog(UserLoginLogInformation logInfo);
     }
 }

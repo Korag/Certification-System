@@ -20,6 +20,7 @@ namespace Certification_System.Repository
         private readonly string _givenDegreesLogCollectionName = "GivenDegreesLogs";
         private readonly string _meetingsLogCollectionName = "MeetingsLogs";
         private readonly string _usersLogCollectionName = "UsersLogs";
+        private readonly string _usersLoginLogCollectionName = "UsersLoginLogs";
 
         public LogRepository(MongoContext context)
         {
@@ -84,6 +85,11 @@ namespace Certification_System.Repository
         public void AddUserLog(CertificationPlatformUserLog userLog)
         {
             _context.db.GetCollection<CertificationPlatformUserLog>(_usersLogCollectionName).InsertOne(userLog);
+        }
+
+        public void AddUserLoginLog(UserLoginLog userLoginLog)
+        {
+            _context.db.GetCollection<UserLoginLog>(_usersLoginLogCollectionName).InsertOne(userLoginLog);
         }
     }
 }

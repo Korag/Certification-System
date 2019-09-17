@@ -16,5 +16,6 @@ namespace Certification_System.RepositoryInterfaces
         void AddGivenDegreeLog(GivenDegreeLog givenDegreeLog);
         void AddMeetingLog(MeetingLog meetingLog);
         void AddUserLog(CertificationPlatformUserLog userLog);
+        void AddUserLoginLog(UserLoginLog userLoginLog);
     }
 }

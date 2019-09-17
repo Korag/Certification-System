@@ -106,6 +106,9 @@ namespace Certification_System.Controllers
                         var emailToSend = _emailSender.GenerateEmailMessage(model.Email, user.FirstName + " " + user.LastName, "emailConfirmation", callbackUrl);
                         await _emailSender.SendEmailAsync(emailToSend);
 
+                        var logInfoUserLogin = _logger.GenerateUserLoginInformation(user.Email, UserLoginActionStatus.UserLoginStatus[2]);
+                        _logger.AddUserLoginLog(logInfoUserLogin);
+
                         return View(model);
                     }
                 }
@@ -117,6 +120,9 @@ namespace Certification_System.Controllers
                 if (result.Succeeded)
                 {
                     //_logger.LogInformation("User został zalogowany");
+                    var logInfoUserLogin = _logger.GenerateUserLoginInformation(user.Email, UserLoginActionStatus.UserLoginStatus[0]);
+                    _logger.AddUserLoginLog(logInfoUserLogin);
+
                     return RedirectToLocal(returnUrl);
                 }
                 //if (result.RequiresTwoFactor)
@@ -131,6 +137,10 @@ namespace Certification_System.Controllers
                 else
                 {
                     ModelState.AddModelError(string.Empty, "Adres email lub hasło są błędne.");
+
+                    var logInfoUserLogin = _logger.GenerateUserLoginInformation("", UserLoginActionStatus.UserLoginStatus[1]);
+                    _logger.AddUserLoginLog(logInfoUserLogin);
+
                     return View(model);
                 }
             }
@@ -242,6 +252,9 @@ namespace Certification_System.Controllers
         {
             await _signInManager.SignOutAsync();
             //_logger.LogInformation("Użytkownik został wylogowany");
+            var logInfoUserLogin = _logger.GenerateUserLoginInformation(this.User.Identity.Name, UserLoginActionStatus.UserLoginStatus[3]);
+            _logger.AddUserLoginLog(logInfoUserLogin);
+
             return RedirectToAction(nameof(Login), "Account");
         }
 
@@ -311,6 +324,9 @@ namespace Certification_System.Controllers
                     var updatedUser = _context.userRepository.GetUserById(user.Id);
                     var logInfo = _logger.GenerateLogInformation(this.User.Identity.Name, this.ControllerContext.RouteData.Values["action"].ToString(), LogTypeOfAction.TypesOfActions[1]);
                     _logger.AddUserLog(updatedUser, logInfo);
+
+                    var logInfoUserLogin = _logger.GenerateUserLoginInformation(user.Email, UserLoginActionStatus.UserLoginStatus[0]);
+                    _logger.AddUserLoginLog(logInfoUserLogin);
 
                     return RedirectToAction("BlankMenu", "Certificates", new { message = "Twoje hasło zostało ustawione - zostałeś zalogowany na swoje konto" });
                 }

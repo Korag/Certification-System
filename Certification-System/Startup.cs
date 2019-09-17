@@ -60,8 +60,8 @@ namespace Certification_System
             }).AddTokenProvider<DataProtectorTokenProvider<CertificationPlatformUser>>("DeletionOfEntity");
 
             services.ConfigureApplicationCookie(o => {
-                o.Cookie.Name = "Certification-System";
-                o.ExpireTimeSpan = TimeSpan.FromHours(10);
+                o.Cookie.Name = "Certification-Cookie";
+                o.ExpireTimeSpan = TimeSpan.FromHours(5);
                 o.SlidingExpiration = true;
             });
 
@@ -116,7 +116,10 @@ namespace Certification_System
             .AddDataAnnotationsLocalization()
             .AddSessionStateTempDataProvider();
 
-            services.AddSession();
+            services.AddSession(options =>
+            {
+                options.IdleTimeout = TimeSpan.FromHours(5);
+            });
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
