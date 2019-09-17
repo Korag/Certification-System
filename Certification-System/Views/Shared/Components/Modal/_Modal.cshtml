@@ -17,9 +17,13 @@
                 {
                     <button type="submit" class="btn @Model.ButtonClass mt-1 xs300px_JustifyContentCenter">@Model.ButtonText</button>
                 }
-                else
+                else if (Model.Arguments.Count() == 0)
                 {
                     <a asp-action="@Model.Action" asp-controller="@Model.Controller" class="btn @Model.ButtonClass mt-1 xs300px_JustifyContentCenter">@Model.ButtonText</a>
+                }
+                else
+                {
+                    <a asp-action="@Model.Action" asp-controller="@Model.Controller" asp-all-route-data="@Model.Arguments" class="btn @Model.ButtonClass mt-1 xs300px_JustifyContentCenter">@Model.ButtonText</a>
                 }
                 <button type="button" class="btn btn-secondary mt-1 xs300px_FloatRight" data-dismiss="modal">Anuluj</button>
             </div>

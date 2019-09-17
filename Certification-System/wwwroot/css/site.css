@@ -237,3 +237,15 @@ hr {
 .close:hover {
     color: #002873;
 }
+
+.icon-hover {
+    color: #E13C3C;
+    cursor: pointer;
+    transition: color 0.15s ease-in-out, background-color 0.15s ease-in-out, border-color 0.15s ease-in-out, box-shadow 0.15s ease-in-out;
+    width: 12px;
+    height: 12px;
+}
+
+.icon-hover:hover {
+    color: #990F0F;
+}

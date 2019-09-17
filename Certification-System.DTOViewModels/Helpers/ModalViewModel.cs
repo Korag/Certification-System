@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
 
 namespace Certification_System.DTOViewModels
@@ -16,5 +17,7 @@ namespace Certification_System.DTOViewModels
 
         public string ButtonText { get; set; }
         public string ButtonClass { get; set; }
+
+        public Dictionary<string, string> Arguments{ get; set; }
     }
 }
