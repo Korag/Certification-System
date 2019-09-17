@@ -224,3 +224,16 @@ ul {
     overflow-y: no-display;
 }
 
+hr {
+    border-top: 1px solid blue;
+    border-top-color: #4061ce5c;
+}
+
+.alert-cookie {
+    background-color: #e2e3e540;
+    color: #04233c;
+}
+
+.close:hover {
+    color: #002873;
+}
