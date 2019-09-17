@@ -3,6 +3,12 @@
 @{
     ViewData["Title"] = "MeetingDetails";
     Layout = "~/Views/Shared/_Layout.cshtml";
+
+    var deleteParams = new Dictionary<string, string>
+            {
+                { "meetingIdentificator", Model.MeetingIdentificator },
+                { "returnUrl", ($"{Context.Request.Scheme}://{Context.Request.Host}{Context.Request.Path}{Context.Request.QueryString}")}
+            };
 }
 
 <h2>Szczegóły spotkania</h2>
@@ -18,6 +24,9 @@
 
     <div class="row m-0 mt-3 mb-3">
         <a asp-action="EditMeeting" asp-route-meetingIdentificator="@Model.MeetingIdentificator" asp-controller="Meetings" class="btn btn-warning mt-1 xs350px_FloatLeft">Edytuj</a>
+        <i class="fas fa-times mt-1 mr-1 icon-hover xs450px_FloatLeft" data-toggle="modal" data-target="#modal"></i>
+        @await Component.InvokeAsync("Modal", new { Title = "Usuwanie spotkania", Body = "Czy na pewno chcesz usunąć to spotkanie wraz ze wszystkimi jego zależnościami ?", Action = "DeleteMeetingHub", Controller = "Meetings", Arguments = deleteParams, ButtonText = "Usuń", ButtonClass = "btn-danger" })
+
         <a asp-action="DisplayAllMeetings" asp-controller="Meetings" class="btn btn-outline-info mt-1 xs350px_FloatRight">Powrót do listy spotkań</a>
     </div>
 

@@ -3,6 +3,12 @@
 @{
     ViewData["Title"] = "UserDetails";
     Layout = "~/Views/Shared/_Layout.cshtml";
+
+    var deleteParams = new Dictionary<string, string>
+            {
+                { "userIdentificator", Model.UserIdentificator },
+                { "returnUrl", ($"{Context.Request.Scheme}://{Context.Request.Host}{Context.Request.Path}{Context.Request.QueryString}")}
+            };
 }
 
 <h1>Szczegóły użytkownika</h1>
@@ -26,6 +32,8 @@
                 <a asp-action="ForceResetUserPassword" asp-route-returnUrl="@($"{Context.Request.Scheme}://{Context.Request.Host}{Context.Request.Path}{Context.Request.QueryString}")" asp-route-userIdentificator="@Model.UserIdentificator" asp-controller="Account" class="btn btn-secondary w-100">Reset hasła</a>
             </div>
         </div>
+        <i class="fas fa-times mt-1 mr-1 icon-hover xs450px_FloatLeft" data-toggle="modal" data-target="#modal"></i>
+        @await Component.InvokeAsync("Modal", new { Title = "Usuwanie użytkownika", Body = "Czy na pewno chcesz usunąć tego użytkownika platformy wraz ze wszystkimi jego zależnościami ?", Action = "DeleteUserHub", Controller = "Users", Arguments = deleteParams, ButtonText = "Usuń", ButtonClass = "btn-danger" })
 
         <a asp-action="DisplayAllUsers" asp-controller="Users" class="btn btn-outline-info mt-1 xs450px_FloatRight">Powrót do listy użytkowników</a>
     </div>

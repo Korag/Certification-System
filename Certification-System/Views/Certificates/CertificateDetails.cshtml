@@ -3,6 +3,12 @@
 @{
     ViewData["Title"] = "CertificateDetails";
     Layout = "~/Views/Shared/_Layout.cshtml";
+
+    var deleteParams = new Dictionary<string, string>
+            {
+                { "certificateIdentificator", Model.CertificateIdentificator },
+                { "returnUrl", ($"{Context.Request.Scheme}://{Context.Request.Host}{Context.Request.Path}{Context.Request.QueryString}")}
+            };
 }
 
 <h1>Szczegóły certyfikatu</h1>
@@ -13,6 +19,9 @@
 
     <div class="row m-0 mt-3 mb-3">
         <a asp-action="EditCertificate" asp-route-certificateIdentificator="@Model.CertificateIdentificator" asp-controller="Certificates" class="btn btn-warning mt-1 xs350px_FloatLeft">Edytuj</a>
+        <i class="fas fa-times mt-1 mr-1 icon-hover xs450px_FloatLeft" data-toggle="modal" data-target="#modal"></i>
+        @await Component.InvokeAsync("Modal", new { Title = "Usuwanie certyfikatu", Body = "Czy na pewno chcesz usunąć ten certyfikat wraz ze wszystkimi jego zależnościami ?", Action = "DeleteCertificateHub", Controller = "Certificates", Arguments = deleteParams, ButtonText = "Usuń", ButtonClass = "btn-danger" })
+
         <a asp-action="DisplayAllCertificates" asp-controller="Certificates" class="btn btn-outline-info mt-1 xs350px_FloatRight">Powrót do listy certyfikatów</a>
     </div>
 

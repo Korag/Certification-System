@@ -4,6 +4,12 @@
 @{
     ViewData["Title"] = "ExamTermDetails";
     Layout = "~/Views/Shared/_Layout.cshtml";
+
+    var deleteParams = new Dictionary<string, string>
+            {
+                { "examTermIdentificator", Model.ExamTermIdentificator },
+                { "returnUrl", ($"{Context.Request.Scheme}://{Context.Request.Host}{Context.Request.Path}{Context.Request.QueryString}")}
+            };
 }
 
 <h1>Szczegóły tury egzaminu</h1>
@@ -21,6 +27,8 @@
         <a asp-action="EditExamTerm" asp-route-examTermIdentificator="@Model.ExamTermIdentificator" asp-controller="ExamsTerms" class="btn btn-warning mt-1 mr-1 xs450px_FloatLeft">Edytuj</a>
         <a asp-action="MarkExamTerm" asp-route-courseIdentificator="@Model.ExamTermIdentificator" asp-controller="ExamsTerms" class="btn btn-success mt-1 mr-1 xs450px_FloatLeft">Oceń turę egzaminu</a>
         <a asp-action="DisplayExamTermSummary" asp-route-examTermIdentificator="@Model.ExamTermIdentificator" asp-controller="ExamsTerms" class="btn btn-success mt-1 mr-1 xs450px_FloatLeft">Podsumowanie</a>
+        <i class="fas fa-times mt-1 mr-1 icon-hover xs450px_FloatLeft" data-toggle="modal" data-target="#modal"></i>
+        @await Component.InvokeAsync("Modal", new { Title = "Usuwanie tury egzaminu", Body = "Czy na pewno chcesz usunąć tą turę egzaminu wraz ze wszystkimi jej zależnościami ?", Action = "DeleteExamTermHub", Controller = "ExamsTerms", Arguments = deleteParams, ButtonText = "Usuń", ButtonClass = "btn-danger" })
 
         <a asp-action="DisplayExamsTerms" asp-controller="ExamsTerms" class="btn btn-outline-info mt-1 xs450px_FloatRight">Powrót do listy tur</a>
     </div>
