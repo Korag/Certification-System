@@ -17,5 +17,6 @@ namespace Certification_System.RepositoryInterfaces
         ICollection<Degree> DeleteCertificateFromDegrees(string certificateIdentificator);
         void DeleteDegree(string degreeIdentificator);
         ICollection<Degree> DeleteRequiredDegreeFromDegree(string degreeIdentificator);
+        string CountDegreesWithIndexerNamePart(string namePartOfIndexer);
     }
 }

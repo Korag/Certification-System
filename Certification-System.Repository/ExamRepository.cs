@@ -293,5 +293,13 @@ namespace Certification_System.Repository
 
             return resultListOfExams;
         }
+
+        public string CountExamsWithIndexerNamePart(string namePartOfIndexer)
+        {
+            var indexersNumber = GetExams().AsQueryable().Where(z => z.ExamIndexer.Contains(namePartOfIndexer)).Count();
+            indexersNumber++;
+
+            return indexersNumber.ToString();
+        }
     }
 }

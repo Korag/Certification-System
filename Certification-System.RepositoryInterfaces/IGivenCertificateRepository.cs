@@ -15,5 +15,6 @@ namespace Certification_System.RepositoryInterfaces
         void DeleteGivenCertificate(string givenCertificateIdentificator);
         ICollection<GivenCertificate> DeleteGivenCertificatesByCourseId(string courseIdentificator);
         ICollection<GivenCertificate> DeleteGivenCertificates(ICollection<string> givenCertificatesIdentificators);
+        string CountGivenCertificatesWithIndexerNamePart(string namePartOfIndexer);
     }
 }

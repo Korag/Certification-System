@@ -308,5 +308,13 @@ namespace Certification_System.Repository
 
             return resultListOfCourses;
         }
+
+        public string CountCoursesWithIndexerNamePart(string namePartOfIndexer)
+        {
+            var indexersNumber = GetCourses().AsQueryable().Where(z => z.CourseIndexer.Contains(namePartOfIndexer)).Count();
+            indexersNumber++;
+
+            return indexersNumber.ToString();
+        }
     }
 }

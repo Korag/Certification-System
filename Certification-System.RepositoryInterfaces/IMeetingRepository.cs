@@ -17,5 +17,6 @@ namespace Certification_System.RepositoryInterfaces
         void DeleteMeeting(string meetingIdentificator);
         ICollection<Meeting> DeleteMeetings(ICollection<string> meetingsIdentificators);
         ICollection<Meeting> DeleteUserFromMeetings(string userIdentificator, ICollection<string> meetingsIdentificators);
+        string CountMeetingsWithIndexerNamePart(string namePartOfIndexer);
     }
 }

@@ -3,6 +3,7 @@ using Certification_System.Repository.Context;
 using Certification_System.RepositoryInterfaces;
 using MongoDB.Driver;
 using System.Collections.Generic;
+using System.Linq;
 
 namespace Certification_System.Repository
 {
@@ -97,6 +98,14 @@ namespace Certification_System.Repository
             var result = GetGivenCertificates().DeleteMany(filter);
 
             return resultListOfGivenCertificates;
+        }
+
+        public string CountGivenCertificatesWithIndexerNamePart(string namePartOfIndexer)
+        {
+            var indexersNumber = GetGivenCertificates().AsQueryable().Where(z => z.GivenCertificateIndexer.Contains(namePartOfIndexer)).Count();
+            indexersNumber++;
+
+            return indexersNumber.ToString();
         }
     }
 }

@@ -9,5 +9,6 @@ namespace Certification_System.ServicesInterfaces
         string GenerateDeleteEntityCode(int codeLength);
         string GenerateUserTokenForEntityDeletion(CertificationPlatformUser user);
         bool ValidateUserTokenForEntityDeletion(CertificationPlatformUser user, string code);
+        string GenerateCertificateEntityIndexer(Certificate certificate);
     }
 }

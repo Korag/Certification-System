@@ -95,5 +95,13 @@ namespace Certification_System.Repository
             var filter = Builders<Certificate>.Filter.Where(z => z.CertificateIdentificator == certificateIdentificator);
             GetCertificates().DeleteOne(filter);
         }
+
+        public string CountCertificatesWithIndexerNamePart(string namePartOfIndexer)
+        {
+            var indexersNumber = GetCertificates().AsQueryable().Where(z => z.CertificateIndexer.Contains(namePartOfIndexer)).Count();
+            indexersNumber++;
+
+            return indexersNumber.ToString();
+        }
     }
 }

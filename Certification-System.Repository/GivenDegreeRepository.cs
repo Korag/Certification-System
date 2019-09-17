@@ -1,9 +1,9 @@
 ﻿using Certification_System.Entities;
 using Certification_System.Repository.Context;
 using Certification_System.RepositoryInterfaces;
-using Microsoft.AspNetCore.Mvc.Rendering;
 using MongoDB.Driver;
 using System.Collections.Generic;
+using System.Linq;
 
 namespace Certification_System.Repository
 {
@@ -88,6 +88,14 @@ namespace Certification_System.Repository
             var result = _givenDegrees.DeleteMany(filter);
 
             return resultListOfGivenDegrees;
+        }
+
+        public string CountGivenDegreesWithIndexerNamePart(string namePartOfIndexer)
+        {
+            var indexersNumber = GetGivenDegrees().AsQueryable().Where(z => z.GivenDegreeIndexer.Contains(namePartOfIndexer)).Count();
+            indexersNumber++;
+
+            return indexersNumber.ToString();
         }
     }
 }

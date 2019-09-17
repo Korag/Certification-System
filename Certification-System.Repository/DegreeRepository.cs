@@ -138,5 +138,13 @@ namespace Certification_System.Repository
 
             return resultListOfDegrees;
         }
+
+        public string CountDegreesWithIndexerNamePart(string namePartOfIndexer)
+        {
+            var indexersNumber = GetDegrees().AsQueryable().Where(z => z.DegreeIndexer.Contains(namePartOfIndexer)).Count();
+            indexersNumber++;
+
+            return indexersNumber.ToString();
+        }
     }
 }

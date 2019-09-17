@@ -30,5 +30,6 @@ namespace Certification_System.RepositoryInterfaces
         void DeleteExam(string examIdentificator);
         ICollection<Exam> DeleteExams(ICollection<string> examsIdentificators);
         ICollection<Exam> DeleteUserFromExams(string userIdentificator, ICollection<string> examsIdentificators);
+        string CountExamsWithIndexerNamePart(string namePartOfIndexer);
     }
 }

@@ -30,5 +30,6 @@ namespace Certification_System.RepositoryInterfaces
         Course DeleteMeetingFromCourse(string meetingIdentificator);
         void DeleteCourse(string courseIdentificator);
         ICollection<Course> DeleteUserFromCourses(ICollection<string> usersIdentificators);
+        string CountCoursesWithIndexerNamePart(string namePartOfIndexer);
     }
 }

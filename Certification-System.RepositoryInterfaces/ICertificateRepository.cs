@@ -14,5 +14,6 @@ namespace Certification_System.RepositoryInterfaces
         ICollection<Certificate> GetCertificatesById(ICollection<string> certificateIdentificators);
         ICollection<Certificate> DeleteBranchFromCertificates(string branchIdentificator);
         void DeleteCertificate(string certificateIdentificator);
+        string CountCertificatesWithIndexerNamePart(string namePartOfIndexer);
     }
 }
