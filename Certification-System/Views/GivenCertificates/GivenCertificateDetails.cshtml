@@ -20,9 +20,9 @@
     <h2>Informacje o użytkowniku</h2>
 
     <div class="row m-0 mt-3 mb-3">
-        <a asp-action="EditUser" asp-route-userIdentificator="@Model.User.UserIdentificator" asp-controller="Users" class="btn btn-warning mt-1 md650px_FloatLeft">Edytuj</a>
-        <a asp-action="UserDetails" asp-route-userIdentificator="@Model.User.UserIdentificator" asp-controller="Users" class="btn btn-info mt-1 md650px_FloatLeft">Szczegóły</a>
-        <i class="fas fa-times mt-1 mr-1 icon-hover xs450px_FloatLeft" data-toggle="modal" data-target="#modal"></i>
+        <a asp-action="EditUser" asp-route-userIdentificator="@Model.User.UserIdentificator" asp-controller="Users" class="btn btn-warning mt-1 mr-1  md650px_FloatLeft">Edytuj</a>
+        <a asp-action="UserDetails" asp-route-userIdentificator="@Model.User.UserIdentificator" asp-controller="Users" class="btn btn-info mt-1 mr-1  md650px_FloatLeft">Szczegóły</a>
+        <i class="fas fa-times mt-1 mr-1 icon-hover md650px_FloatLeft" data-toggle="modal" data-target="#modal"></i>
         @await Component.InvokeAsync("Modal", new { Title = "Usuwanie nadanego certyfikatu", Body = "Czy na pewno chcesz usunąć ten nadany certyfikat wraz ze wszystkimi jego zależnościami ?", Action = "DeleteGivenCertificateHub", Controller = "GivenCertificates", Arguments = deleteParams, ButtonText = "Usuń", ButtonClass = "btn-danger" })
 
         <a asp-action="DisplayAllGivenCertificates" asp-controller="GivenCertificates" class="btn btn-outline-info mt-1 md650px_FloatRight">Powrót do listy nadanych certyfikatów</a>

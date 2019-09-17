@@ -18,8 +18,8 @@
     <h2>Informacje o przedsiębiorstwie</h2>
 
     <div class="row m-0 mt-3 mb-3">
-        <a asp-action="EditCompany" asp-route-companyIdentificator="@Model.CompanyIdentificator" asp-controller="Companies" class="btn btn-warning mt-1 xs350px_FloatLeft">Edytuj</a>
-        <i class="fas fa-times mt-1 mr-1 icon-hover xs450px_FloatLeft" data-toggle="modal" data-target="#modal"></i>
+        <a asp-action="EditCompany" asp-route-companyIdentificator="@Model.CompanyIdentificator" asp-controller="Companies" class="btn btn-warning mt-1 mr-1 xs350px_FloatLeft">Edytuj</a>
+        <i class="fas fa-times mt-1 mr-1 icon-hover xs350px_FloatLeft" data-toggle="modal" data-target="#modal"></i>
         @await Component.InvokeAsync("Modal", new { Title = "Usuwanie przedsiębiorstwa", Body = "Czy na pewno chcesz usunąć to przedsiębiorstwo wraz ze wszystkimi jego zależnościami ?", Action = "DeleteCompanyHub", Controller = "Companies", Arguments = deleteParams, ButtonText = "Usuń", ButtonClass = "btn-danger" })
 
         <a asp-action="DisplayAllCompanies" asp-controller="Companies" class="btn btn-outline-info mt-1 xs350px_FloatRight">Powrót do listy przedsiębiorstw</a>

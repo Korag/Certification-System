@@ -18,7 +18,7 @@
     <h2>Informacje o stopniu zawodowym</h2>
 
     <div class="row m-0 mt-3 mb-3">
-        <a asp-action="EditDegree" asp-route-degreeIdentificator="@Model.DegreeIdentificator" asp-controller="Degrees" class="btn btn-warning mt-1 xs450px_FloatLeft">Edytuj</a>
+        <a asp-action="EditDegree" asp-route-degreeIdentificator="@Model.DegreeIdentificator" asp-controller="Degrees" class="btn btn-warning mt-1 mr-1 xs450px_FloatLeft">Edytuj</a>
         <i class="fas fa-times mt-1 mr-1 icon-hover xs450px_FloatLeft" data-toggle="modal" data-target="#modal"></i>
         @await Component.InvokeAsync("Modal", new { Title = "Usuwanie stopnia zawodowego", Body = "Czy na pewno chcesz usunąć ten stopień zawodowy wraz ze wszystkimi jego zależnościami ?", Action = "DeleteDegreeHub", Controller = "Degrees", Arguments = deleteParams, ButtonText = "Usuń", ButtonClass = "btn-danger" })
 

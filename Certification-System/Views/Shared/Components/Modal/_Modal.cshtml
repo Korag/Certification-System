@@ -17,7 +17,7 @@
                 {
                     <button type="submit" class="btn @Model.ButtonClass mt-1 xs300px_JustifyContentCenter">@Model.ButtonText</button>
                 }
-                else if (Model.Arguments.Count() == 0)
+                else if (Model.Arguments != null)
                 {
                     <a asp-action="@Model.Action" asp-controller="@Model.Controller" class="btn @Model.ButtonClass mt-1 xs300px_JustifyContentCenter">@Model.ButtonText</a>
                 }

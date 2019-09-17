@@ -94,7 +94,8 @@ namespace Certification_System.Services
                      .ForMember(dest => dest.SelectedBranches, opts => opts.MapFrom(src => src.Branches));
 
             CreateMap<Course, EditCourseWithMeetingsViewModel>()
-                     .ForMember(dest => dest.SelectedBranches, opts => opts.MapFrom(src => src.Branches));
+                     .ForMember(dest => dest.SelectedBranches, opts => opts.MapFrom(src => src.Branches))
+                     .ForMember(dest => dest.Meetings, opts => opts.Ignore());
 
             CreateMap<EditCourseWithMeetingsViewModel, Course>()
                    .ForMember(dest => dest.CourseIdentificator, opts => opts.Ignore())
