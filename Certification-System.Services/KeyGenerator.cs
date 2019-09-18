@@ -77,11 +77,11 @@ namespace Certification_System.Services
             return _userManager.VerifyUserTokenAsync(user, "DeletionOfEntity", "DeletionOfEntity", code).Result;
         }
 
-        public string GenerateCertificateEntityIndexer(Certificate certificate)
+        public string GenerateCertificateEntityIndexer(string certificateName)
         {
             StringBuilder certificateIndexer = new StringBuilder();
 
-            certificate.Name.ToUpper().Split(' ', StringSplitOptions.RemoveEmptyEntries).ToList().ForEach(i => certificateIndexer.Append(i[0]));
+            certificateName.ToUpper().Split(' ', StringSplitOptions.RemoveEmptyEntries).ToList().ForEach(i => certificateIndexer.Append(i[0]));
 
             if (certificateIndexer.Length < 5)
             {
@@ -112,11 +112,11 @@ namespace Certification_System.Services
             return certificateIndexer.ToString();
         }
 
-        public string GenerateGivenCertificateEntityIndexer(Certificate certificate)
+        public string GenerateGivenCertificateEntityIndexer(string certificateIndexer)
         {
             StringBuilder givenCertificateIndexer = new StringBuilder();
 
-            var splittedCertificateIndexer = certificate.CertificateIndexer.ToUpper().Split("-", 5, StringSplitOptions.RemoveEmptyEntries).ToList();
+            var splittedCertificateIndexer = certificateIndexer.ToUpper().Split("-", 5, StringSplitOptions.RemoveEmptyEntries).ToList();
             givenCertificateIndexer.Append(splittedCertificateIndexer[0]);
 
             var numerator = _context.givenCertificateRepository.CountGivenCertificatesWithIndexerNamePart(givenCertificateIndexer.ToString());
@@ -139,11 +139,11 @@ namespace Certification_System.Services
             return givenCertificateIndexer.ToString();
         }
 
-        public string GenerateDegreeEntityIndexer(Degree degree)
+        public string GenerateDegreeEntityIndexer(string degreeName)
         {
             StringBuilder degreeIndexer = new StringBuilder();
 
-            degree.Name.ToUpper().Split(' ', StringSplitOptions.RemoveEmptyEntries).ToList().ForEach(i => degreeIndexer.Append(i[0]));
+            degreeName.ToUpper().Split(' ', StringSplitOptions.RemoveEmptyEntries).ToList().ForEach(i => degreeIndexer.Append(i[0]));
 
             if (degreeIndexer.Length < 5)
             {
@@ -174,11 +174,11 @@ namespace Certification_System.Services
             return degreeIndexer.ToString();
         }
 
-        public string GenerateGivenCDegreeEntityIndexer(Degree degree)
+        public string GenerateGivenDegreeEntityIndexer(string degreeIndexer)
         {
             StringBuilder givenDegreeIndexer = new StringBuilder();
 
-            var splittedDegreeIndexer = degree.DegreeIndexer.ToUpper().Split("-", 5, StringSplitOptions.RemoveEmptyEntries).ToList();
+            var splittedDegreeIndexer = degreeIndexer.ToUpper().Split("-", 5, StringSplitOptions.RemoveEmptyEntries).ToList();
             givenDegreeIndexer.Append(splittedDegreeIndexer[0]);
 
             var numerator = _context.givenDegreeRepository.CountGivenDegreesWithIndexerNamePart(givenDegreeIndexer.ToString());
@@ -201,11 +201,11 @@ namespace Certification_System.Services
             return givenDegreeIndexer.ToString();
         }
 
-        public string GenerateCourseEntityIndexer(Course course)
+        public string GenerateCourseEntityIndexer(string courseName)
         {
             StringBuilder courseIndexer = new StringBuilder();
 
-            course.Name.ToUpper().Split(' ', StringSplitOptions.RemoveEmptyEntries).ToList().ForEach(i => courseIndexer.Append(i[0]));
+            courseName.ToUpper().Split(' ', StringSplitOptions.RemoveEmptyEntries).ToList().ForEach(i => courseIndexer.Append(i[0]));
 
             if (courseIndexer.Length < 5)
             {
@@ -236,11 +236,11 @@ namespace Certification_System.Services
             return courseIndexer.ToString();
         }
 
-        public string GenerateMeetingEntityIndexer(Course course)
+        public string GenerateMeetingEntityIndexer(string courseIndexer)
         {
             StringBuilder meetingIndexer = new StringBuilder();
 
-            var splittedCourseIndexer = course.CourseIndexer.ToUpper().Split("-", 5, StringSplitOptions.RemoveEmptyEntries).ToList();
+            var splittedCourseIndexer = courseIndexer.ToUpper().Split("-", 5, StringSplitOptions.RemoveEmptyEntries).ToList();
             meetingIndexer.Append(splittedCourseIndexer[0]);
 
             var numerator = _context.meetingRepository.CountMeetingsWithIndexerNamePart(meetingIndexer.ToString());
@@ -263,11 +263,11 @@ namespace Certification_System.Services
             return meetingIndexer.ToString();
         }
 
-        public string GenerateExamEntityIndexer(Exam exam)
+        public string GenerateExamEntityIndexer(string examName)
         {
             StringBuilder examIndexer = new StringBuilder();
 
-            exam.Name.ToUpper().Split(' ', StringSplitOptions.RemoveEmptyEntries).ToList().ForEach(i => examIndexer.Append(i[0]));
+            examName.ToUpper().Split(' ', StringSplitOptions.RemoveEmptyEntries).ToList().ForEach(i => examIndexer.Append(i[0]));
 
             if (examIndexer.Length < 5)
             {

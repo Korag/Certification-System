@@ -6,9 +6,18 @@ namespace Certification_System.ServicesInterfaces
     {
         string GenerateNewId();
         string GenerateNewGuid();
+
         string GenerateDeleteEntityCode(int codeLength);
         string GenerateUserTokenForEntityDeletion(CertificationPlatformUser user);
         bool ValidateUserTokenForEntityDeletion(CertificationPlatformUser user, string code);
-        string GenerateCertificateEntityIndexer(Certificate certificate);
+
+        string GenerateCertificateEntityIndexer(string certificateName);
+        string GenerateGivenCertificateEntityIndexer(string certificateIndexer);
+        string GenerateDegreeEntityIndexer(string degreeName);
+        string GenerateGivenDegreeEntityIndexer(string degreeIndexer);
+        string GenerateCourseEntityIndexer(string courseName);
+        string GenerateMeetingEntityIndexer(string courseIndexer);
+        string GenerateExamEntityIndexer(string examName);
+
     }
 }

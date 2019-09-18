@@ -1,12 +1,8 @@
-﻿using System;
-using System.Security.Claims;
-using System.Threading.Tasks;
-using Certification_System.DTOViewModels.AccountViewModels;
+﻿using System.Threading.Tasks;
 using Microsoft.AspNetCore.Authentication;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
-using Microsoft.Extensions.Logging;
 using Certification_System.Entities;
 using Certification_System.ServicesInterfaces;
 using Certification_System.Extensions;
@@ -194,6 +190,8 @@ namespace Certification_System.Controllers
 
                     return RedirectToAction("Login", "Account", new { message = "Na Twój adres email została wysłana wiadomość z informacją dotyczącą potwierdzenia adresu email." });
                 }
+
+                ModelState.AddModelError(string.Empty, "Użytkownik o podanym adresie email już widnieje w systemie.");
                 AddErrors(result);
             }
 

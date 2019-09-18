@@ -68,6 +68,7 @@ namespace Certification_System.Controllers
             {
                 Certificate certificate = _mapper.Map<Certificate>(newCertificate);
                 certificate.CertificateIdentificator = _keyGenerator.GenerateNewId();
+                certificate.CertificateIndexer = _keyGenerator.GenerateCertificateEntityIndexer(certificate.Name);
 
                 _context.certificateRepository.AddCertificate(certificate);
 
