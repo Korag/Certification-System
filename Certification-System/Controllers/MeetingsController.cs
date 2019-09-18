@@ -32,6 +32,7 @@ namespace Certification_System.Controllers
             _mapper = mapper;
             _keyGenerator = keyGenerator;
             _logger = logger;
+            _emailSender = emailSender;
         }
 
         // GET: ConfirmationOfActionOnMeeting
@@ -85,6 +86,9 @@ namespace Certification_System.Controllers
             {
                 Meeting meeting = _mapper.Map<Meeting>(newMeeting);
                 meeting.MeetingIdentificator = _keyGenerator.GenerateNewId();
+
+                var course = _context.courseRepository.GetCourseById(newMeeting.SelectedCourse);
+                meeting.MeetingIndexer = _keyGenerator.GenerateMeetingEntityIndexer(course.CourseIndexer);
 
                 _context.meetingRepository.AddMeeting(meeting);
                 _context.courseRepository.AddMeetingToCourse(meeting.MeetingIdentificator, newMeeting.SelectedCourse);

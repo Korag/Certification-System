@@ -13,10 +13,6 @@ namespace Certification_System.DTOViewModels
         [Display(Name = "Kurs")]
         public IList<SelectListItem> AvailableCourses { get; set; }
 
-        [Required(ErrorMessage = "Pole \"{0}\" jest wymagane.")]
-        [Display(Name = "Identyfikator")]
-        public string MeetingIndexer { get; set; }
-
         [Display(Name = "Opis")]
         [MaxLength(255)]
         public string Description { get; set; }

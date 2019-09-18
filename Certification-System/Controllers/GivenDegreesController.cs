@@ -152,6 +152,9 @@ namespace Certification_System.Controllers
                 GivenDegree givenDegree = _mapper.Map<GivenDegree>(newGivenDegree);
                 givenDegree.GivenDegreeIdentificator = _keyGenerator.GenerateNewId();
 
+                var degree = _context.degreeRepository.GetDegreeById(newGivenDegree.SelectedDegree);
+                givenDegree.GivenDegreeIndexer = _keyGenerator.GenerateGivenDegreeEntityIndexer(degree.DegreeIndexer);
+
                 _context.givenDegreeRepository.AddGivenDegree(givenDegree);
                 _context.userRepository.AddUserDegree(newGivenDegree.SelectedUser, givenDegree.GivenDegreeIdentificator);
 

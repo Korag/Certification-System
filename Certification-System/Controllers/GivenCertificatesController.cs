@@ -98,8 +98,12 @@ namespace Certification_System.Controllers
             {
                 GivenCertificate givenCertificate = _mapper.Map<GivenCertificate>(newGivenCertificate);
                 givenCertificate.GivenCertificateIdentificator = _keyGenerator.GenerateNewId();
+
                 givenCertificate.Course = _context.courseRepository.GetCourseById(newGivenCertificate.SelectedCourse).CourseIdentificator;
-                givenCertificate.Certificate = _context.certificateRepository.GetCertificateById(newGivenCertificate.SelectedCertificate).CertificateIdentificator;
+
+                var certificate = _context.certificateRepository.GetCertificateById(newGivenCertificate.SelectedCertificate);
+                givenCertificate.Certificate = certificate.CertificateIdentificator;
+                givenCertificate.GivenCertificateIndexer = _keyGenerator.GenerateGivenCertificateEntityIndexer(certificate.CertificateIndexer);
 
                 _context.givenCertificateRepository.AddGivenCertificate(givenCertificate);
                 _context.userRepository.AddUserCertificate(newGivenCertificate.SelectedUser, givenCertificate.GivenCertificateIdentificator);

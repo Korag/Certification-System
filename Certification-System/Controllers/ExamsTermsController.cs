@@ -33,6 +33,7 @@ namespace Certification_System.Controllers
             _mapper = mapper;
             _keyGenerator = keyGenerator;
             _logger = logger;
+            _emailSender = emailSender;
         }
 
         // GET: AddNewExamTerm
