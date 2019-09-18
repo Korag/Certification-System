@@ -1,0 +1,61 @@
+@model Certification_System.DTOViewModels.DataTableMultipleFilterScriptViewModel
+
+<script>
+        $(document).ready(function () {
+            $('#@Model.TableIdentificator').DataTable({
+                "language": {
+                    "url": "//cdn.datatables.net/plug-ins/1.10.19/i18n/Polish.json"
+                },
+                retrieve: true,
+                initComplete: function () {
+                    this.api().columns(@Model.NumberOfColumn.ToList().ElementAt(0)).every(function () {
+                        var column = this;
+
+                        $('#@Model.SelectId.ToList().ElementAt(0)').on('change', function () {
+                            var val = $.fn.dataTable.util.escapeRegex(
+                                $(this).val()
+                            );
+
+                            if (val.includes("&")) {
+                                var valSplitted = val.split('&');
+                                var regex = ".*(" + valSplitted[0] + ")+.*(" + valSplitted[1] + ")+|.*(" + valSplitted[1] + ")+.*(" + valSplitted[0] + ")+.*"
+
+                                column
+                                    .search(regex, true, false)
+                                    .draw();
+                            }
+                            else {
+                                column
+                                    .search(val ? val : '', true, false)
+                                    .draw();
+                            }
+                        });
+                    });
+
+                     this.api().columns(@Model.NumberOfColumn.ToList().ElementAt(1)).every(function () {
+                        var column = this;
+
+                        $('#@Model.SelectId.ToList().ElementAt(1)').on('change', function () {
+                            var val = $.fn.dataTable.util.escapeRegex(
+                                $(this).val()
+                            );
+
+                            if (val.includes("&")) {
+                                var valSplitted = val.split('&');
+                                var regex = ".*(" + valSplitted[0] + ")+.*(" + valSplitted[1] + ")+|.*(" + valSplitted[1] + ")+.*(" + valSplitted[0] + ")+.*"
+
+                                column
+                                    .search(regex, true, false)
+                                    .draw();
+                            }
+                            else {
+                                column
+                                    .search(val ? val : '', true, false)
+                                    .draw();
+                            }
+                        });
+                    });
+                }
+            });
+        });
+</script>

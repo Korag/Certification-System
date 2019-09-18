@@ -66,7 +66,8 @@ namespace Certification_System.Services
                      .ForMember(dest => dest.EnrolledUsersQuantity, opts => opts.MapFrom(src => src.EnrolledUsers.Count()));
 
             CreateMap<Course, DisplayCourseWithUserRoleViewModel>()
-                     .ForMember(dest => dest.EnrolledUsersQuantity, opts => opts.MapFrom(src => src.EnrolledUsers.Count()));
+                     .ForMember(dest => dest.EnrolledUsersQuantity, opts => opts.MapFrom(src => src.EnrolledUsers.Count()))
+                     .ForMember(dest => dest.Roles, opts => opts.MapFrom(src => new List<string>()));
 
             CreateMap<Course, DisplayCrucialDataCourseViewModel>();
 
@@ -462,8 +463,7 @@ namespace Certification_System.Services
 
             CreateMap<CertificationPlatformUser, InstructorExaminerDetailsViewModel>()
                      .ForMember(dest => dest.UserIdentificator, opts => opts.MapFrom(src => src.Id))
-                     .ForMember(dest => dest.CoursesInstructor, opts => opts.Ignore())
-                     .ForMember(dest => dest.CoursesExaminer, opts => opts.Ignore())
+                     .ForMember(dest => dest.Courses, opts => opts.Ignore())
                      .ForMember(dest => dest.Exams, opts => opts.Ignore())
                      .ForMember(dest => dest.ExamsTerms, opts => opts.Ignore());
 

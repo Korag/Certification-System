@@ -10,17 +10,17 @@
                     this.api().columns(@Model.NumberOfColumn).every(function () {
                         var column = this;
 
-                        $('#select').on('change', function () {
+                        $('#@Model.SelectId').on('change', function () {
                             var val = $.fn.dataTable.util.escapeRegex(
                                 $(this).val()
                             );
 
                             if (val.includes("&")) {
-                                var valSplitted = val.split('&')
+                                var valSplitted = val.split('&');
+                                var regex = ".*(" + valSplitted[0] + ")+.*(" + valSplitted[1] + ")+|.*(" + valSplitted[1] + ")+.*(" + valSplitted[0] + ")+.*"
 
                                 column
-                                    .search(val ? valSplitted[0] : '', true, false)
-                                    .search(val ? valSplitted[1] : '', true, false)
+                                    .search(regex, true, false)
                                     .draw();  
                             }
                             else {

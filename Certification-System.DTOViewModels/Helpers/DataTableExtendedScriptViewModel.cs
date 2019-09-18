@@ -4,5 +4,6 @@
     {
         public string TableIdentificator { get; set; }
         public int NumberOfColumn { get; set; }
+        public string SelectId { get; set; }
     }
 }
