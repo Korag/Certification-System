@@ -165,7 +165,6 @@
 
 @if (Model.UsersConnectedToCompany.Count != 0)
 {
-    <h2 class="mt-4 mb-4">Użytkownicy zrzeszeni z przedsiębiorstwem</h2>
     @await Component.InvokeAsync("DisplayCrucialDataWithCompaniesRoleUserDataTable", new { userViewModel = Model.UsersConnectedToCompany, tableIdentificator = "listUsers", operationSet = 1 })
 }
 else

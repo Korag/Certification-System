@@ -35,6 +35,6 @@ namespace Certification_System.DTOViewModels
         public AccountDetailsViewModel UserAccount { get; set; }
 
         [Display(Name = "Użytkownicy zrzeszeni z przedsiębiorstwem")]
-        public ICollection<DisplayUserViewModel> UsersConnectedToCompany{ get; set; }
+        public ICollection<DisplayCrucialDataWithCompaniesRoleUserViewModel> UsersConnectedToCompany{ get; set; }
     }
 }

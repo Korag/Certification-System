@@ -453,11 +453,11 @@ namespace Certification_System.Controllers
             var Company = _context.companyRepository.GetCompanyById(User.CompanyRoleManager.FirstOrDefault());
             var UsersConnectedToCompany = _context.userRepository.GetUsersConnectedToCompany(Company.CompanyIdentificator);
 
-            List<DisplayUserViewModel> ListOfUsers = new List<DisplayUserViewModel>();
+            List<DisplayCrucialDataWithCompaniesRoleUserViewModel> ListOfUsers = new List<DisplayCrucialDataWithCompaniesRoleUserViewModel>();
 
             if (UsersConnectedToCompany.Count != 0)
             {
-                ListOfUsers = _mapper.Map<List<DisplayUserViewModel>>(UsersConnectedToCompany);
+                ListOfUsers = _mapper.Map<List<DisplayCrucialDataWithCompaniesRoleUserViewModel>>(UsersConnectedToCompany);
 
                 ListOfUsers.ForEach(z => z.CompanyRoleManager = _context.companyRepository.GetCompaniesById(z.CompanyRoleManager).ToList().Select(s => s.CompanyName).ToList());
                 ListOfUsers.ForEach(z => z.CompanyRoleWorker = _context.companyRepository.GetCompaniesById(z.CompanyRoleWorker).ToList().Select(s => s.CompanyName).ToList());

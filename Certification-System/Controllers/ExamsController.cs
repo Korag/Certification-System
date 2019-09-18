@@ -1217,6 +1217,27 @@ namespace Certification_System.Controllers
 
             return examsArray;
         }
+
+        // GET: GetExamsByCourseId
+        [Authorize(Roles = "Admin")]
+        public string[][] GetExamsByCourseId(string courseIdentificator)
+        {
+            var course = _context.courseRepository.GetCourseById(courseIdentificator);
+            var exams = _context.examRepository.GetExamsById(course.Exams).ToList();
+
+            string[][] examsArray = new string[exams.Count()][];
+
+            for (int i = 0; i < exams.Count(); i++)
+            {
+                examsArray[i] = new string[2];
+
+                examsArray[i][0] = exams[i].ExamIdentificator;
+                examsArray[i][1] = exams[i].ExamIndexer + " | " + exams[i].Name;
+            }
+
+
+            return examsArray;
+        }
         #endregion
     }
 }
