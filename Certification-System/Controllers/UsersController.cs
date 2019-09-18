@@ -86,6 +86,8 @@ namespace Certification_System.Controllers
                 modifiedUser.CompanyRoleWorker = _context.companyRepository.GetCompaniesById(User.CompanyRoleWorker).Select(z => z.CompanyName).ToList();
                 modifiedUser.CompanyRoleManager = _context.companyRepository.GetCompaniesById(User.CompanyRoleManager).Select(z => z.CompanyName).ToList();
 
+                modifiedUser.Roles = _context.userRepository.TranslateRoles(modifiedUser.Roles);
+
                 return View(modifiedUser);
             }
 
@@ -124,7 +126,7 @@ namespace Certification_System.Controllers
                 }
             
                 if (newUser.SelectedRole != "Instructor&Examiner")
-                {
+                {    
                     var addToRole = await _userManager.AddToRoleAsync(user, newUser.SelectedRole);
                 }
                 else
@@ -132,7 +134,7 @@ namespace Certification_System.Controllers
                     var addToFirstRole = await _userManager.AddToRoleAsync(user, "Instructor");
                     var addToSecondRole = await _userManager.AddToRoleAsync(user, "Examiner");
                 }
-
+       
                 var result = await _userManager.CreateAsync(user);
 
                 if (result.Succeeded)
@@ -171,6 +173,12 @@ namespace Certification_System.Controllers
             userToUpdate.AvailableCompanies = _context.companyRepository.GetCompaniesAsSelectList().ToList();
             userToUpdate.AvailableRoles = _context.userRepository.GetRolesAsSelectList().ToList();
 
+            if (userToUpdate.SelectedRole.Contains("INSTRUCTOR") && userToUpdate.SelectedRole.Contains("EXAMINER"))
+            {
+                userToUpdate.SelectedRole.Clear();
+                userToUpdate.SelectedRole.Add("Instructor&Examiner");
+            }
+            
             return View(userToUpdate);
         }
 
@@ -566,40 +574,59 @@ namespace Certification_System.Controllers
         [Authorize(Roles = "Admin")]
         public ActionResult InstructorExaminerDetails(string userIdentificator)
         {
+            ViewBag.AvailableRoleFilters = _context.userRepository.GetAvailableCourseRoleFiltersAsSelectList();
+
             var User = _context.userRepository.GetUserById(userIdentificator);
 
             var Exams = _context.examRepository.GetExamsByExaminerId(userIdentificator);
             var ExamsTerms = _context.examTermRepository.GetExamTermsByExaminerId(userIdentificator);
 
             var Meetings = _context.meetingRepository.GetMeetingsByInstructorId(userIdentificator);
-            var CoursesInstructor = _context.courseRepository.GetCoursesByMeetingsId(Meetings.Select(z => z.MeetingIdentificator).ToList());
-            var CoursesExaminer = _context.courseRepository.GetExaminerCourses(userIdentificator, Exams);
+            var CoursesAsInstructor = _context.courseRepository.GetCoursesByMeetingsId(Meetings.Select(z => z.MeetingIdentificator).ToList());
+            var CoursesAsExaminer = _context.courseRepository.GetExaminerCourses(userIdentificator, Exams);
 
-            List<DisplayCourseViewModel> ListOfCoursesInstructor = new List<DisplayCourseViewModel>();
+            var BothRolesCourses = CoursesAsExaminer.Intersect(CoursesAsInstructor).ToList();
 
-            if (CoursesInstructor.Count != 0)
+            foreach (var course in BothRolesCourses)
             {
-                foreach (var course in CoursesInstructor)
-                {
-                    DisplayCourseViewModel singleCourse = _mapper.Map<DisplayCourseViewModel>(course);
-                    singleCourse.Branches = _context.branchRepository.GetBranchesById(course.Branches);
-
-                    ListOfCoursesInstructor.Add(singleCourse);
-                }
+                CoursesAsExaminer.Remove(course);
+                CoursesAsInstructor.Remove(course);
             }
 
-            List<DisplayCourseViewModel> ListOfCoursesExaminer = new List<DisplayCourseViewModel>();
+            List<DisplayCourseWithUserRoleViewModel> ListOfCoursesAsExaminer = new List<DisplayCourseWithUserRoleViewModel>();
 
-            if (CoursesExaminer.Count != 0)
+            if (CoursesAsExaminer.Count != 0)
             {
-                foreach (var course in CoursesExaminer)
-                {
-                    DisplayCourseViewModel singleCourse = _mapper.Map<DisplayCourseViewModel>(course);
-                    singleCourse.Branches = _context.branchRepository.GetBranchesById(course.Branches);
-
-                    ListOfCoursesExaminer.Add(singleCourse);
-                }
+                ListOfCoursesAsExaminer = _mapper.Map<List<DisplayCourseWithUserRoleViewModel>>(CoursesAsExaminer);
+                ListOfCoursesAsExaminer.ForEach(z => z.Branches = _context.branchRepository.GetBranchesById(z.Branches));
+                ListOfCoursesAsExaminer.ForEach(z => z.Roles.Add(UserRolesDictionary.TranslationDictionary["Examiner"]));
             }
+
+            List<DisplayCourseWithUserRoleViewModel> ListOfCoursesAsInstructor = new List<DisplayCourseWithUserRoleViewModel>();
+
+            if (CoursesAsInstructor.Count != 0)
+            {
+                ListOfCoursesAsInstructor = _mapper.Map<List<DisplayCourseWithUserRoleViewModel>>(CoursesAsInstructor);
+                ListOfCoursesAsInstructor.ForEach(z => z.Branches = _context.branchRepository.GetBranchesById(z.Branches));
+                ListOfCoursesAsInstructor.ForEach(z => z.Roles.Add(UserRolesDictionary.TranslationDictionary["Instructor"]));
+            }
+
+            List<DisplayCourseWithUserRoleViewModel> ListOfCoursesAsBothRoles = new List<DisplayCourseWithUserRoleViewModel>();
+
+            if (BothRolesCourses.Count != 0)
+            {
+                ListOfCoursesAsBothRoles = _mapper.Map<List<DisplayCourseWithUserRoleViewModel>>(CoursesAsInstructor);
+                ListOfCoursesAsBothRoles.ForEach(z => z.Branches = _context.branchRepository.GetBranchesById(z.Branches));
+
+                ListOfCoursesAsBothRoles.ForEach(z => z.Roles.Add(UserRolesDictionary.TranslationDictionary["Instructor"]));
+                ListOfCoursesAsBothRoles.ForEach(z => z.Roles.Add(UserRolesDictionary.TranslationDictionary["Examiner"]));
+            }
+
+            List<DisplayCourseWithUserRoleViewModel> ListOfCourses = new List<DisplayCourseWithUserRoleViewModel>();
+
+            ListOfCourses.AddRange(ListOfCoursesAsExaminer);
+            ListOfCourses.AddRange(ListOfCoursesAsInstructor);
+            ListOfCourses.AddRange(ListOfCoursesAsBothRoles);
 
             List<DisplayMeetingWithoutInstructorViewModel> ListOfMeetings = new List<DisplayMeetingWithoutInstructorViewModel>();
 
@@ -608,7 +635,7 @@ namespace Certification_System.Controllers
                 foreach (var meeting in Meetings)
                 {
                     DisplayMeetingWithoutInstructorViewModel singleMeeting = _mapper.Map<DisplayMeetingWithoutInstructorViewModel>(meeting);
-                    singleMeeting.Course = _mapper.Map<DisplayCrucialDataCourseViewModel>(CoursesInstructor.Where(z => z.Meetings.Contains(meeting.MeetingIdentificator)).FirstOrDefault());
+                    singleMeeting.Course = _mapper.Map<DisplayCrucialDataCourseViewModel>(CoursesAsInstructor.Where(z => z.Meetings.Contains(meeting.MeetingIdentificator)).FirstOrDefault());
 
                     ListOfMeetings.Add(singleMeeting);
                 }
@@ -622,8 +649,7 @@ namespace Certification_System.Controllers
                 {
                     DisplayExamWithoutExaminerViewModel singleExam = _mapper.Map<DisplayExamWithoutExaminerViewModel>(exam);
                     singleExam.UsersQuantitiy = exam.EnrolledUsers.Count();
-                    singleExam.Course = _mapper.Map<DisplayCrucialDataCourseViewModel>(CoursesExaminer.ToList().Where(z => z.Exams.Contains(exam.ExamIdentificator)).FirstOrDefault());
-
+                    singleExam.Course = _mapper.Map<DisplayCrucialDataCourseViewModel>(CoursesAsExaminer.ToList().Where(z => z.Exams.Contains(exam.ExamIdentificator)).FirstOrDefault());
 
                     ListOfExams.Add(singleExam);
                 }
@@ -645,8 +671,7 @@ namespace Certification_System.Controllers
             InstructorExaminerDetailsViewModel InstructorExaminerDetails = _mapper.Map<InstructorExaminerDetailsViewModel>(User);
             InstructorExaminerDetails.Roles = _context.userRepository.TranslateRoles(InstructorExaminerDetails.Roles);
 
-            InstructorExaminerDetails.CoursesInstructor = ListOfCoursesInstructor;
-            InstructorExaminerDetails.CoursesExaminer = ListOfCoursesExaminer;
+            InstructorExaminerDetails.Courses = ListOfCourses;
             InstructorExaminerDetails.Meetings = ListOfMeetings;
 
             InstructorExaminerDetails.Exams = ListOfExams;

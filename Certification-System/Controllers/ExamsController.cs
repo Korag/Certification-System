@@ -194,6 +194,9 @@ namespace Certification_System.Controllers
             if (!string.IsNullOrWhiteSpace(courseIdentificator))
             {
                 newExamPeriod.SelectedCourse = courseIdentificator;
+
+                var course = _context.courseRepository.GetCourseById(newExamPeriod.SelectedCourse);
+                newExamPeriod.AvailableExams = _context.examRepository.GetExamsByIdAsSelectList(course.Exams);
             }
             if (!string.IsNullOrWhiteSpace(courseIdentificator) && !string.IsNullOrWhiteSpace(examIdentificator))
             {
@@ -215,7 +218,7 @@ namespace Certification_System.Controllers
 
                 Exam exam = _mapper.Map<Exam>(newExamPeriod);
                 exam.ExamIdentificator = _keyGenerator.GenerateNewId();
-                // indexer the same as previous
+                exam.ExamIndexer = examsInCourse.Where(z => z.ExamIdentificator == newExamPeriod.SelectedExam).FirstOrDefault().ExamIndexer;
 
                 course.Exams.Add(exam.ExamIdentificator);
 
@@ -263,6 +266,9 @@ namespace Certification_System.Controllers
             if (!string.IsNullOrWhiteSpace(courseIdentificator))
             {
                 newExamPeriod.SelectedCourse = courseIdentificator;
+
+                var course = _context.courseRepository.GetCourseById(newExamPeriod.SelectedExam);
+                newExamPeriod.AvailableExams = _context.examRepository.GetExamsByIdAsSelectList(course.Exams);
             }
             if (!string.IsNullOrWhiteSpace(courseIdentificator) && !string.IsNullOrWhiteSpace(examIdentificator))
             {
@@ -284,7 +290,7 @@ namespace Certification_System.Controllers
 
                 Exam exam = _mapper.Map<Exam>(newExamPeriod);
                 exam.ExamIdentificator = _keyGenerator.GenerateNewId();
-                // indexer the same as previous periods
+                exam.ExamIndexer = examsInCourse.Where(z => z.ExamIdentificator == newExamPeriod.SelectedExam).FirstOrDefault().ExamIndexer;
 
                 course.Exams.Add(exam.ExamIdentificator);
 

@@ -40,13 +40,10 @@ namespace Certification_System.DTOViewModels
         [Display(Name = "Data urodzenia")]
         public string DateOfBirth { get; set; }
 
-        [Display(Name = "Kursy instruktora")]
-        public ICollection<DisplayCourseViewModel> CoursesInstructor { get; set; }
-
-        [Display(Name = "Kursy egzaminatora")]
-        public ICollection<DisplayCourseViewModel> CoursesExaminer { get; set; }
-
         [Display(Name = "Kursy")]
+        public ICollection<DisplayCourseWithUserRoleViewModel> Courses{ get; set; }
+
+        [Display(Name = "Spotkania")]
         public ICollection<DisplayMeetingWithoutInstructorViewModel> Meetings { get; set; }
 
         [Display(Name = "Egzaminy")]

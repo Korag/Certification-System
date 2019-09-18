@@ -31,5 +31,6 @@ namespace Certification_System.RepositoryInterfaces
         ICollection<Exam> DeleteExams(ICollection<string> examsIdentificators);
         ICollection<Exam> DeleteUserFromExams(string userIdentificator, ICollection<string> examsIdentificators);
         string CountExamsWithIndexerNamePart(string namePartOfIndexer);
+        IList<SelectListItem> GetExamsByIdAsSelectList(ICollection<string> examsIdentificators);
     }
 }

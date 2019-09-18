@@ -107,11 +107,11 @@ namespace Certification_System.Repository
         {
             List<SelectListItem> SelectList = new List<SelectListItem>
             {
-                  new SelectListItem()
-              {
-                  Text = "Brak filtra",
-                  Value = ""
-              },
+              //    new SelectListItem()
+              //{
+              //    Text = "Brak filtra",
+              //    Value = ""
+              //},
                   new SelectListItem()
               {
                   Text = UserRolesDictionary.TranslationDictionary["Instructor"],

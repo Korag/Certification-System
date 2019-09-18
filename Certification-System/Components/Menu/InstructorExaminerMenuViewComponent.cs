@@ -6,7 +6,7 @@ namespace Certification_System.Components
     {
         public IViewComponentResult Invoke()
         {
-            return View("_InstructorExaminatorMenu");
+            return View("_InstructorExaminerMenu");
         }
     }
 }

@@ -2,9 +2,9 @@
 
 namespace Certification_System.DTOViewModels
 {
-    public class DisplayMeetingWithoutInstructorDataTableViewModel
+    public class DisplayMeetingWithoutCourseDataTableViewModel
     {
-        public ICollection<DisplayMeetingWithoutInstructorViewModel> Meetings { get; set; }
+        public ICollection<DisplayMeetingWithoutCourseViewModel> Meetings { get; set; }
         public DataTableOptionsViewModel Options { get; set; }
     }
 }

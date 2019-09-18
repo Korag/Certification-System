@@ -11,7 +11,7 @@
 
 <div class="row justify-content-center form-group">
     <label class="control-label" id="labelWithSelect" style="margin-bottom:0px; margin-top:7px">Status kursu:</label>
-    <select id="select" data-style="btn-light" data-container="body" data-width="50%" data-size="auto" data-header="Wybierz status kursu" data-live-search="true" title="Nie wybrano żadnego elementu" data-none-results-text="Nie znaleziono szukanej frazy" class="form-control selectpicker show-tick">
+    <select id="selectCourseEndedFilter" data-style="btn-light" data-container="body" data-width="50%" data-size="auto" data-header="Wybierz status kursu" data-live-search="true" title="Nie wybrano żadnego elementu" data-none-results-text="Nie znaleziono szukanej frazy" class="form-control selectpicker show-tick">
         <option value="" selected>Brak filtra</option>
         <option value="1">Archiwalne kursy</option>
         <option value="0">Aktualne kursy</option>
@@ -21,5 +21,5 @@
 @await Component.InvokeAsync("DisplayCourseDataTable", new { courseViewModel = Model, tableIdentificator = "listCourses", operationSet = 1 })
 
 @section Scripts{
-    @{await Html.RenderPartialAsync("_DataTableWithFilterOnColumnScript", new DataTableExtendedScriptViewModel { TableIdentificator = "listCourses", NumberOfColumn = 8 });}
+    @{await Html.RenderPartialAsync("_DataTableWithFilterOnColumnScript", new DataTableExtendedScriptViewModel { TableIdentificator = "listCourses", NumberOfColumn = 8, SelectId = "selectCourseEndedFilter" });}
 }

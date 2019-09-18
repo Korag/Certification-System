@@ -40,6 +40,12 @@
                 <th>
                     @Html.DisplayNameFor(model => model.Courses.FirstOrDefault().Roles)
                 </th>
+                @if (Model.Options.OperationSet != 0)
+                {
+                    <th>
+                        Operacje
+                    </th>
+                }
             </tr>
         </thead>
         <tbody>
@@ -100,6 +106,24 @@
                         }
                     </ul>
                 </td>
+                @if (Model.Options.OperationSet == 1)
+                {
+                    <td>
+                        <a asp-action="CourseDetails" asp-route-courseIdentificator="@course.CourseIdentificator" asp-controller="Courses" class="btn btn-info m-1">Szczegóły</a>
+                    </td>
+                }
+                @if (Model.Options.OperationSet == 2)
+                {
+                    <td>
+                        <div class="dropdown p-0">
+                            <button class="btn btn-success dropdown-toggle" type="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">Operacje</button>
+                            <div class="dropdown-menu nohover">
+                                <a asp-action="CourseDetails" asp-route-courseIdentificator="@course.CourseIdentificator" asp-controller="Courses" class="btn btn-info w-100 mb-1">Szczegóły</a>
+                                <a asp-action="EditCourseHub" asp-route-courseIdentificator="@course.CourseIdentificator" asp-controller="Courses" class="btn btn-warning w-100">Edytuj</a>
+                            </div>
+                        </div>
+                    </td>
+                }
             </tr>
             }
         </tbody>

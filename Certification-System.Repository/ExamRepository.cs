@@ -301,5 +301,27 @@ namespace Certification_System.Repository
 
             return indexersNumber.ToString();
         }
+
+        public IList<SelectListItem> GetExamsByIdAsSelectList(ICollection<string> examsIdentificators)
+        {
+            List<Exam> Exams = GetExamsById(examsIdentificators).ToList();
+            List<SelectListItem> SelectList = new List<SelectListItem>();
+
+            foreach (var exam in Exams)
+            {
+                var VacantSeats = exam.UsersLimit - exam.EnrolledUsers.Count();
+
+                SelectList.Add
+                    (
+                        new SelectListItem()
+                        {
+                            Text = exam.ExamIndexer + " | " + exam.Name,
+                            Value = exam.ExamIdentificator
+                        }
+                    );
+            };
+
+            return SelectList;
+        }
     }
 }
