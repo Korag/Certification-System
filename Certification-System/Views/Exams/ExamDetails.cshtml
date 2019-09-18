@@ -29,6 +29,10 @@
         <a asp-action="MarkExam" asp-controller="Exams" class="btn btn-success mt-1 mr-1 xs450px_FloatLeft">Oceń egzamin</a>
     }
     <a asp-action="DisplayExamSummary" asp-route-examIdentificator="@Model.ExamIdentificator" asp-controller="Exams" class="btn btn-success mt-1 mr-1 xs450px_FloatLeft">Podsumowanie</a>
+    @if (!Model.Course.CourseEnded)
+    {
+        <a asp-action="AddNewExamPeriod" asp-route-examIdentificator="@Model.ExamIdentificator" asp-route-courseIdentificator="@Model.Course.CourseIdentificator" asp-controller="Exams" class="btn btn-primary mt-1 mr-1 xs450px_FloatLeft">Dodaj termin</a>
+    }
     <i class="fas fa-times mt-1 mr-1 icon-hover xs450px_FloatLeft" data-toggle="modal" data-target="#modal"></i>
     @await Component.InvokeAsync("Modal", new { Title = "Usuwanie egzaminu", Body = "Czy na pewno chcesz usunąć ten egzamin wraz ze wszystkimi jego zależnościami ?", Action = "DeleteExamHub", Controller = "Exams", Arguments = deleteParams, ButtonText = "Usuń", ButtonClass = "btn-danger" })
 

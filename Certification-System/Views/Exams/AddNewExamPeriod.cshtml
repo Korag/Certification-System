@@ -1,4 +1,5 @@
 ﻿@model Certification_System.DTOViewModels.AddExamPeriodViewModel
+@using Certification_System.DTOViewModels
 
 @{
     ViewData["Title"] = "AddNewExamPeriod";
@@ -107,4 +108,5 @@
 
 @section Scripts {
     @{await Html.RenderPartialAsync("_ValidationScriptsPartial");}
+    @{await Html.RenderPartialAsync("_RelatedCalendarsInputScript", new RelatedCalendarsInputScriptViewModel { StartDate = "DateOfStart", EndDate = "DateOfEnd" });}
 }
