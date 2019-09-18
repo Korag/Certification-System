@@ -14,10 +14,6 @@ namespace Certification_System.DTOViewModels
         public string SelectedCourse { get; set; }
 
         [Required(ErrorMessage = "Pole \"{0}\" jest wymagane.")]
-        [Display(Name = "Identyfikator egzaminu")]
-        public string ExamIndexer { get; set; }
-
-        [Required(ErrorMessage = "Pole \"{0}\" jest wymagane.")]
         [StringLength(100, ErrorMessage = "Pole \"{0}\" musi mieć długość conajmniej {2} znaków.", MinimumLength = 6)]
         [Display(Name = "Nazwa egzaminu")]
         public string Name { get; set; }

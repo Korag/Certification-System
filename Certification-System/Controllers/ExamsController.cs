@@ -64,6 +64,7 @@ namespace Certification_System.Controllers
 
                 Exam exam = _mapper.Map<Exam>(newExam);
                 exam.ExamIdentificator = _keyGenerator.GenerateNewId();
+                exam.ExamIndexer = _keyGenerator.GenerateExamEntityIndexer(exam.Name);
 
                 course.Exams.Add(exam.ExamIdentificator);
 
@@ -124,6 +125,7 @@ namespace Certification_System.Controllers
 
                 Exam exam = _mapper.Map<Exam>(newExam);
                 exam.ExamIdentificator = _keyGenerator.GenerateNewId();
+                exam.ExamIndexer = _keyGenerator.GenerateExamEntityIndexer(exam.Name);
 
                 course.Exams.Add(exam.ExamIdentificator);
 
@@ -177,7 +179,7 @@ namespace Certification_System.Controllers
             return View(newExam);
         }
 
-        // GET: AddExamPeriod
+        // GET: AddNewExamPeriod
         [Authorize(Roles = "Admin")]
         public ActionResult AddNewExamPeriod(string courseIdentificator, string examIdentificator)
         {
@@ -201,7 +203,7 @@ namespace Certification_System.Controllers
             return View(newExamPeriod);
         }
 
-        // POST: AddExamPeriod
+        // POST: AddNewExamPeriod
         [Authorize(Roles = "Admin")]
         [HttpPost]
         public ActionResult AddNewExamPeriod(AddExamPeriodViewModel newExamPeriod)
@@ -213,6 +215,7 @@ namespace Certification_System.Controllers
 
                 Exam exam = _mapper.Map<Exam>(newExamPeriod);
                 exam.ExamIdentificator = _keyGenerator.GenerateNewId();
+                // indexer the same as previous
 
                 course.Exams.Add(exam.ExamIdentificator);
 
@@ -238,7 +241,7 @@ namespace Certification_System.Controllers
             return View(newExamPeriod);
         }
 
-        // GET: AddExamPeriodWithExamTerms
+        // GET: AddNewExamPeriodWithExamTerms
         [Authorize(Roles = "Admin")]
         public ActionResult AddNewExamPeriodWithExamTerms(string courseIdentificator, string examIdentificator, int quantityOfExamTerms)
         {
@@ -269,7 +272,7 @@ namespace Certification_System.Controllers
             return View(newExamPeriod);
         }
 
-        // POST: AddExamPeriodWithExamTerms
+        // POST: AddNewExamPeriodWithExamTerms
         [Authorize(Roles = "Admin")]
         [HttpPost]
         public ActionResult AddNewExamPeriodWithExamTerms(AddExamPeriodWithExamTermsViewModel newExamPeriod)
@@ -281,6 +284,7 @@ namespace Certification_System.Controllers
 
                 Exam exam = _mapper.Map<Exam>(newExamPeriod);
                 exam.ExamIdentificator = _keyGenerator.GenerateNewId();
+                // indexer the same as previous periods
 
                 course.Exams.Add(exam.ExamIdentificator);
 
