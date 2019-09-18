@@ -59,6 +59,7 @@ namespace Certification_System.Controllers
             {
                 Degree degree = _mapper.Map<Degree>(newDegree);
                 degree.DegreeIdentificator = _keyGenerator.GenerateNewId();
+                degree.DegreeIndexer = _keyGenerator.GenerateDegreeEntityIndexer(degree.Name);
 
                 _context.degreeRepository.AddDegree(degree);
 

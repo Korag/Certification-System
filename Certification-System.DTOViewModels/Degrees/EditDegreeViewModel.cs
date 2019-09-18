@@ -9,10 +9,6 @@ namespace Certification_System.DTOViewModels
         public string DegreeIdentificator { get; set; }
 
         [Required(ErrorMessage = "Pole \"{0}\" jest wymagane.")]
-        [Display(Name = "Identyfikator")]
-        public string DegreeIndexer { get; set; }
-
-        [Required(ErrorMessage = "Pole \"{0}\" jest wymagane.")]
         [Display(Name = "Nazwa stopnia zawodowego")]
         public string Name { get; set; }
 
