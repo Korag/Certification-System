@@ -8,10 +8,6 @@ namespace Certification_System.DTOViewModels
     public class AddCourseWithMeetingsViewModel
     {
         [Required]
-        [Display(Name = "Identyfikator")]
-        public string CourseIndexer { get; set; }
-
-        [Required]
         [Display(Name = "Nazwa kursu")]
         public string Name { get; set; }
 

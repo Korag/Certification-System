@@ -8,7 +8,6 @@ using Certification_System.Repository.DAL;
 using AutoMapper;
 using Certification_System.ServicesInterfaces;
 using System;
-using Certification_System.Services;
 using Certification_System.Extensions;
 
 namespace Certification_System.Controllers
@@ -114,6 +113,7 @@ namespace Certification_System.Controllers
             {
                 Course course = _mapper.Map<Course>(newCourse);
                 course.CourseIdentificator = _keyGenerator.GenerateNewId();
+                course.CourseIndexer = _keyGenerator.GenerateCourseEntityIndexer(course.Name);
 
                 if (course.DateOfEnd != null)
                 {
@@ -161,6 +161,7 @@ namespace Certification_System.Controllers
             {
                 Course course = _mapper.Map<Course>(newCourse);
                 course.CourseIdentificator = _keyGenerator.GenerateNewId();
+                course.CourseIndexer = _keyGenerator.GenerateCourseEntityIndexer(course.Name);
 
                 if (course.DateOfEnd != null)
                 {
@@ -175,6 +176,7 @@ namespace Certification_System.Controllers
                     {
                         Meeting meeting = _mapper.Map<Meeting>(newMeeting);
                         meeting.MeetingIdentificator = _keyGenerator.GenerateNewId();
+                        meeting.MeetingIndexer = _keyGenerator.GenerateMeetingEntityIndexer(course.CourseIndexer);
 
                         meetings.Add(meeting);
                     }
@@ -362,6 +364,7 @@ namespace Certification_System.Controllers
             if (ModelState.IsValid)
             {
                 OriginCourse = _mapper.Map<EditCourseViewModel, Course>(editedCourse, OriginCourse);
+
 
                 if (OriginCourse.DateOfEnd != null)
                 {
