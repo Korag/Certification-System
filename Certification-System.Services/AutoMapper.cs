@@ -472,6 +472,9 @@ namespace Certification_System.Services
 
             CreateMap<CertificationPlatformUser, MarkUserViewModel>()
                      .ForMember(dest => dest.UserIdentificator, opts => opts.MapFrom(src => src.Id));
+
+            CreateMap<CertificationPlatformUser, UserIdentificatorWithQRViewModel>()
+                    .ForMember(dest => dest.UserIdentificator, opts => opts.MapFrom(src => src.Id));
             #endregion
 
             #region ViewModels to ViewModels 

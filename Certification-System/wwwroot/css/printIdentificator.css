@@ -1,0 +1,83 @@
+﻿@page {
+    margin-left: 11.5cm;
+    margin-top: 2cm;
+    margin-right: 2cm;
+}
+
+@page :first {
+    size: A4 portrait;
+    margin: 2cm 1cm;
+}
+
+@media print {
+    .pagebreak {
+        page-break-before: always;
+        margin-bottom: 300px;
+    }
+}
+
+.identificatorPart {
+    width: 300px;
+    height: 300px;
+    border: 4px dotted;
+    border-color: #4162ce;
+    -webkit-print-color-adjust: exact;
+    background-image: url('../image/logo_ziad_big_grey_t30.jpg');
+    background-size: 300px 300px;
+    background-repeat: no-repeat;
+    /*background-attachment: fixed;
+    background-position-x: 5px;*/
+}
+
+.identificatorPart2 {
+    width: 300px;
+    height: 300px;
+    border: 4px dotted;
+    border-color: #4162ce;
+    -webkit-print-color-adjust: exact;
+    background-image: url('../image/logo_ziad_big_grey_t40.jpg');
+    background-size: 300px 300px;
+    background-repeat: no-repeat;
+    /*background-attachment: fixed;
+    background-position-y: 400px;
+    background-position-x: 400px;*/
+}
+
+.qrCode {
+    margin-top: 20px;
+    width: 180px;
+    height: 180px;
+    border: 4px dotted;
+    border-color: #4162ce;
+}
+
+.img-container {
+    text-align: center;
+}
+
+p {
+    color: #4162ce;
+    margin-bottom: 0px;
+}
+
+span {
+    color: #871414;
+}
+
+.platformName{
+    font-size: 22px;
+}
+
+.frontImage {
+    margin-top: 10px;
+    margin-bottom: 2px;
+    width: 180px;
+    height: 180px;
+    border: 2px double;
+    border-color: #4162ce;
+}
+
+.person {
+    width: 280px;
+    margin: 5px 4px 5px 4px;
+}

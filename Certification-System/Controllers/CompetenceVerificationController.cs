@@ -261,46 +261,5 @@ namespace Certification_System.Controllers
                 return RedirectToAction("VerifyGivenDegree", "CompetenceVerification", new { givenDegreeIdentificator = givenDegreeToVerify.GivenDegreeIdentificator, givenDegreeIdentificatorNotExist = true });
             }
         }
-
-        // GET: GenerateQRCodeFromGivenURL
-        public ActionResult GenerateQRCodeFromGivenURL(string URL)
-        {
-            var QRBitmap = _generatorQR.GenerateQRCode(URL);
-
-            using (MemoryStream stream = new MemoryStream())
-            {
-                QRBitmap.Save(stream, System.Drawing.Imaging.ImageFormat.Png);
-                var ByteArray = stream.ToArray();
-
-                return File(ByteArray, "image/jpeg");
-            }
-        }
-
-        // GET: GenerateUserQR
-        [AllowAnonymous]
-        public ActionResult GenerateUserQR(string userIdentificator)
-        {
-            string URL = Url.VerifyUserCompetencesByQRLink(userIdentificator, Request.Scheme);
-
-            return RedirectToAction("GenerateQRCodeFromGivenURL", "CompetenceVerification", new { URL = URL });
-        }
-
-        // GET: GenerateGivenCertificateQR
-        [AllowAnonymous]
-        public ActionResult GenerateGivenCertificateQR(string givenCertificateIdentificator)
-        {
-            string URL = Url.VerifyGivenCertificateByQRLink(givenCertificateIdentificator, Request.Scheme);
-
-            return RedirectToAction("GenerateQRCodeFromGivenURL", "CompetenceVerification", new { URL = URL });
-        }
-
-        // GET: GenerateGivenDegreeQR
-        [AllowAnonymous]
-        public ActionResult GenerateGivenDegreeQR(string givenDegreeIdentificator)
-        {
-            string URL = Url.VerifyGivenDegreeByQRLink(givenDegreeIdentificator, Request.Scheme);
-
-            return RedirectToAction("GenerateQRCodeFromGivenURL", "CompetenceVerification", new { URL = URL });
-        }
     }
 }
