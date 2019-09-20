@@ -17,9 +17,6 @@ using Certification_System.Repository.Context;
 using AutoMapper;
 using Certification_System.Services.Models;
 using Certification_System.ServicesInterfaces.Models;
-using Microsoft.AspNetCore.Mvc.Infrastructure;
-using Microsoft.Extensions.DependencyInjection.Extensions;
-using Rotativa.AspNetCore;
 
 namespace Certification_System
 {
@@ -137,8 +134,6 @@ namespace Certification_System
                 // The default HSTS value is 30 days. You may want to change this for production scenarios, see https://aka.ms/aspnetcore-hsts.
                 app.UseHsts();
             }
-
-            RotativaConfiguration.Setup(env, "./resources/rotativa");
 
             app.UseHttpsRedirection();
             app.UseStaticFiles();
