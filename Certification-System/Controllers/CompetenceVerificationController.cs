@@ -4,6 +4,8 @@ using Certification_System.Extensions;
 using Certification_System.Repository.DAL;
 using Certification_System.ServicesInterfaces;
 using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Hosting;
+using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using MongoDB.Bson;
 using System.IO;
@@ -17,13 +19,20 @@ namespace Certification_System.Controllers
         private readonly IGeneratorQR _generatorQR;
         private readonly IMapper _mapper;
         private readonly IKeyGenerator _keyGenerator;
+        private readonly IHostingEnvironment _environment;
 
-        public CompetenceVerificationController(IGeneratorQR generatorQR, MongoOperations context, IMapper mapper, IKeyGenerator keyGenerator)
+        public CompetenceVerificationController(
+                         MongoOperations context,
+                         IGeneratorQR generatorQR,
+                         IMapper mapper,
+                         IKeyGenerator keyGenerator,
+                         IHostingEnvironment environment)
         {
             _generatorQR = generatorQR;
             _context = context;
             _mapper = mapper;
             _keyGenerator = keyGenerator;
+            _environment = environment;
         }
 
         // GET: VerifyCompetenceManual
@@ -261,5 +270,65 @@ namespace Certification_System.Controllers
                 return RedirectToAction("VerifyGivenDegree", "CompetenceVerification", new { givenDegreeIdentificator = givenDegreeToVerify.GivenDegreeIdentificator, givenDegreeIdentificatorNotExist = true });
             }
         }
+
+        // GET: GenerateUserPhysicalIdentificator
+        [Authorize(Roles = "Admin, Worker")]
+        public ActionResult GenerateUserPhysicalIdentificator(string userIdentificator)
+        {
+            if (!string.IsNullOrWhiteSpace(userIdentificator))
+            {
+                var user = _context.userRepository.GetUserById(userIdentificator);
+
+                if (user != null)
+                {
+                    GetUserImageViewModel userImage = _mapper.Map<GetUserImageViewModel>(user);
+
+                    return View("GenerateUserPhysicalIdentificatorPreparation", userImage);
+                }
+
+                return RedirectToAction("BlankMenu", "Certificates");
+            }
+
+            return RedirectToAction("BlankMenu", "Certificates");
+        }
+
+        //https://localhost:44378/CompetenceVerification/GenerateUserPhysicalIdentificator?userIdentificator=5d6ff3d85596d1c6a9e44124
+        // GET: GenerateUserPhysicalIdentificator
+        [Authorize(Roles = "Admin, Worker")]
+        [HttpPost]
+        public ActionResult GenerateUserPhysicalIdentificator(GetUserImageViewModel userImage)
+        {
+            if (!string.IsNullOrWhiteSpace(userImage.UserIdentificator))
+            {
+                var user = _context.userRepository.GetUserById(userImage.UserIdentificator);
+
+                if (user != null)
+                {
+                    string URL = Url.VerifyUserCompetencesByQRLink(userImage.UserIdentificator, Request.Scheme);
+                    string pathToIcon = Path.Combine(_environment.WebRootPath, "Image") + $@"\logo_ziad_medium_bitmap.bmp";
+
+                    var userQRCode = _generatorQR.GenerateQRCodeFromGivenURL(URL, pathToIcon);
+
+                    UserIdentificatorWithQRViewModel userData = _mapper.Map<UserIdentificatorWithQRViewModel>(user);
+                    userData.QRCode = userQRCode;
+
+                    if (userImage.Image != null)
+                    {
+                        using (var memoryStream = new MemoryStream())
+                        {
+                            userImage.Image.CopyToAsync(memoryStream);
+                            userData.UserImage = memoryStream.ToArray();
+                        }
+                    }
+
+                    return View(userData);
+                }
+
+                return RedirectToAction("BlankMenu", "Certificates");
+            }
+
+            return RedirectToAction("BlankMenu", "Certificates");
+        }
     }
 }
+

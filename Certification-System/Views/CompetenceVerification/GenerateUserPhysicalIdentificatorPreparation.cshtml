@@ -1,0 +1,41 @@
+﻿@model Certification_System.DTOViewModels.GetUserImageViewModel
+
+@{
+    ViewData["Title"] = "GenerateUserPhysicalIdentificatorPreparation";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+<h1>Generowanie identyfikatora użytkownika - dodawanie zdjęcia</h1>
+<hr />
+
+<div style="padding-top:8vw; padding-bottom:10vw">
+
+    <form asp-action="GenerateUserPhysicalIdentificator" enctype="multipart/form-data">
+
+        <div class="col-md-8 col-xl-6 col-lg-6 col-sm-12 col-xs-10 m-auto p-3 shadow p-3 mb-5 bg-light rounded border border-primary rounded-bottom" style="opacity:0.90">
+
+            <input asp-for="UserIdentificator" class="form-control col-12" hidden />
+
+            <div class="form-group" id="inputFormGroup">
+                <label asp-for="Image" class="control-label"></label>
+                <input asp-for="Image" type="file" name="Image" class="btn btn-secondary form-control-file" />
+            </div>
+
+            <div class="row m-0 mt-3">
+                <input type="submit" value="Generuj" class="btn btn-primary mt-1 xs300px_JustifyContentCenter" />
+
+                @if (this.User.IsInRole("Admin"))
+                {
+                    <a asp-action="UserDetails" asp-controller="Users" asp-route-userIdentificator="@Model.UserIdentificator" class="btn btn-outline-info mt-1 xs300px_FloatRight">Powrót do szczegółów użytkownika</a>
+                }
+                else
+                {
+                    <a asp-action="" asp-controller="" class="btn btn-outline-info mt-1 xs300px_FloatRight">Powrót do moich osiągnieć</a>
+                }
+            </div>
+
+        </div>
+
+    </form>
+
+</div>

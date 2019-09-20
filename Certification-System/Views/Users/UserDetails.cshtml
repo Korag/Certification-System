@@ -128,7 +128,8 @@ else
 <h2 class="mt-4 mb-4">Certyfikaty użytkownika</h2>
 
 <div class="mt-4 mb-4">
-    <a asp-action="AddNewGivenCertificate" asp-controller="GivenCertificates" class="btn btn-primary">Nadaj nowy certyfikat</a>
+    <a asp-action="AddNewGivenCertificate" asp-controller="GivenCertificates" asp-route-userIdentificator="@Model.UserIdentificator" class="btn btn-primary mr-1">Nadaj nowy certyfikat</a>
+    <a asp-action="GenerateUserPhysicalIdentificator" asp-controller="CompetenceVerification" asp-route-userIdentificator="@Model.UserIdentificator" class="btn btn-success">Generuj identyfikator użytkownika</a>
 </div>
 
 @if (Model.GivenCertificates.Count != 0)
