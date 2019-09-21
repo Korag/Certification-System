@@ -18,6 +18,12 @@ Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "MongoDB Scheme", "MongoDB S
 		MongoDB Scheme\certification-system_mongoCollectionScheme_v3.0.pdf = MongoDB Scheme\certification-system_mongoCollectionScheme_v3.0.pdf
 		MongoDB Scheme\certification-system_mongoCollectionScheme_v3.0.png = MongoDB Scheme\certification-system_mongoCollectionScheme_v3.0.png
 		MongoDB Scheme\certification-system_mongoCollectionScheme_v3.0.vsdx = MongoDB Scheme\certification-system_mongoCollectionScheme_v3.0.vsdx
+		MongoDB Scheme\certification_mongoStructure_v4.0.pdf = MongoDB Scheme\certification_mongoStructure_v4.0.pdf
+		MongoDB Scheme\certification_mongoStructure_v4.0.png = MongoDB Scheme\certification_mongoStructure_v4.0.png
+		MongoDB Scheme\certification_mongoStructure_v4.0.vsdx = MongoDB Scheme\certification_mongoStructure_v4.0.vsdx
+		MongoDB Scheme\certification_mongoStructure_v5.0.pdf = MongoDB Scheme\certification_mongoStructure_v5.0.pdf
+		MongoDB Scheme\certification_mongoStructure_v5.0.png = MongoDB Scheme\certification_mongoStructure_v5.0.png
+		MongoDB Scheme\certification_mongoStructure_v5.0.vsdx = MongoDB Scheme\certification_mongoStructure_v5.0.vsdx
 	EndProjectSection
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Certification-System", "Certification-System\Certification-System.csproj", "{60C0AB49-802A-479A-BC44-9A88FA32105A}"
