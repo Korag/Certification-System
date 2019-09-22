@@ -1,4 +1,5 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 
 namespace Certification_System.DTOViewModels
 {
@@ -12,8 +13,11 @@ namespace Certification_System.DTOViewModels
         public byte[] QRCode;
 
         public string GivenDegreeIdentificator { get; set; }
-        public string ReceiptDate { get; set; }
-        public string ExpirationDate { get; set; }
+        public DateTime ReceiptDate { get; set; }
+        public DateTime ExpirationDate { get; set; }
+        public ICollection<string> RequiredCertificatesNames { get; set; }
+        public ICollection<string> RequiredDegreesNames { get; set; }
+        public ICollection<string> Conditions { get; set; }
 
         public string DegreeIdentificator { get; set; }
         public string DegreeName { get; set; }

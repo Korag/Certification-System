@@ -1,6 +1,5 @@
 ﻿using AutoMapper;
 using Certification_System.DTOViewModels;
-using Certification_System.DTOViewModels.AccountViewModels;
 using Certification_System.Entities;
 using System.Collections.Generic;
 using System.Linq;
@@ -357,7 +356,7 @@ namespace Certification_System.Services
             CreateMap<GivenDegree, DisplayGivenDegreeToUserExtendedViewModel>()
                      .ForMember(dest => dest.Degree, opts => opts.Ignore());
 
-            CreateMap<Degree, UserGivenDegreePossessionConfirmationViewModel>(); 
+            CreateMap<GivenDegree, UserGivenDegreePossessionConfirmationViewModel>(); 
             #endregion
 
             #region Meetings

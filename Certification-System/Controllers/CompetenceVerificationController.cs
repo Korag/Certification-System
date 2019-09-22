@@ -388,9 +388,12 @@ namespace Certification_System.Controllers
 
                     var userQRCode = _generatorQR.GenerateQRCodeFromGivenURL(URL, pathToIcon);
 
-                    var user = _context.userRepository.GetUserByGivenCertificateId(givenDegreeIdentificator);
+                    var user = _context.userRepository.GetUserByGivenDegreeId(givenDegreeIdentificator);
                     var degree = _context.degreeRepository.GetDegreeById(givenDegree.Degree);
                     var branches = _context.branchRepository.GetBranchesById(degree.Branches);
+
+                    var requiredCertificatesNames = _context.certificateRepository.GetCertificatesById(degree.RequiredCertificates).Select(z => z.Name).ToList();
+                    var requiredDegreesNames = _context.degreeRepository.GetDegreesById(degree.RequiredDegrees).Select(z => z.Name).ToList();
 
                     UserGivenDegreePossessionConfirmationViewModel userData = _mapper.Map<UserGivenDegreePossessionConfirmationViewModel>(user);
                     userData.QRCode = userQRCode;
@@ -398,6 +401,9 @@ namespace Certification_System.Controllers
 
                     userData = _mapper.Map<GivenDegree, UserGivenDegreePossessionConfirmationViewModel>(givenDegree, userData);
                     userData = _mapper.Map<Degree, UserGivenDegreePossessionConfirmationViewModel>(degree, userData);
+
+                    userData.RequiredCertificatesNames = requiredCertificatesNames;
+                    userData.RequiredDegreesNames = requiredDegreesNames;
 
                     return View(userData);
                 }
