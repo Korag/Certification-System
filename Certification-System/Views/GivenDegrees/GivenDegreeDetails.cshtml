@@ -118,7 +118,7 @@ else
 <div class="row 0 m-0 mt-3 mb-3">
     <a asp-action="EditGivenDegree" asp-route-givenDegreeIdentificator="@Model.GivenDegree.GivenDegreeIdentificator" asp-controller="GivenDegrees" class="btn btn-warning mt-1 mr-1">Edytuj nadany stopień</a>
     <a asp-action="DegreeDetails" asp-route-degreeIdentificator="@Model.GivenDegree.Degree.DegreeIdentificator" asp-controller="Degrees" class="btn btn-info mt-1 mr-1">Szczegóły stopnia zawodowego</a>
-    <a asp-action="GivenDegreeDetails" asp-route-givenDegreeIdentificator="@Model.GivenDegree.GivenDegreeIdentificator" asp-controller="GivenDegrees" class="btn btn-secondary mt-1 mr-1">Szczegóły przyznanego stopnia zawodowego</a>
+    <a asp-action="GenerateGivenDegreePossessionConfirmation" asp-route-givenDegreeIdentificator="@Model.GivenDegree.GivenDegreeIdentificator" asp-controller="CompetenceVerification" class="btn btn-success mt-1">Wyświetl nadany stopień</a>
 </div>
 
 @{List<DisplayGivenDegreeToUserExtendedViewModel> givenDegreeList = new List<DisplayGivenDegreeToUserExtendedViewModel>();

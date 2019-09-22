@@ -50,25 +50,25 @@
         if (this.User.IsInRole("Admin"))
         {@await Component.InvokeAsync("AdminMenu")}
 
-    // Menu Pracodawca
-    else if (this.User.IsInRole("Company"))
-    {@await Component.InvokeAsync("CompanyMenu")}
+        // Menu Pracodawca
+        else if (this.User.IsInRole("Company"))
+        {@await Component.InvokeAsync("CompanyMenu")}
 
-// Menu Pracownik
-else if (this.User.IsInRole("Worker"))
-{@await Component.InvokeAsync("WorkerMenu")}
-
-// Menu Instruktor-Egzaminator
-else if (this.User.IsInRole("Instructor") && this.User.IsInRole("Examiner"))
-{@await Component.InvokeAsync("InstructorExaminerMenu")}
-
-// Menu Instruktor
-else if (this.User.IsInRole("Instructor"))
-{@await Component.InvokeAsync("InstructorMenu")}
-
-// Menu Egzaminator
-else if (this.User.IsInRole("Examiner"))
-{@await Component.InvokeAsync("ExaminerMenu")}
+        // Menu Pracownik
+        else if (this.User.IsInRole("Worker"))
+        {@await Component.InvokeAsync("WorkerMenu")}
+        
+        // Menu Instruktor-Egzaminator
+        else if (this.User.IsInRole("Instructor") && this.User.IsInRole("Examiner"))
+        {@await Component.InvokeAsync("InstructorExaminerMenu")}
+        
+        // Menu Instruktor
+        else if (this.User.IsInRole("Instructor"))
+        {@await Component.InvokeAsync("InstructorMenu")}
+        
+        // Menu Egzaminator
+        else if (this.User.IsInRole("Examiner"))
+        {@await Component.InvokeAsync("ExaminerMenu")}
 }
 else
 {

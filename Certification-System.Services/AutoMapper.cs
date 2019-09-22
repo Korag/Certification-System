@@ -41,6 +41,10 @@ namespace Certification_System.Services
                      .ForMember(dest => dest.Branches, opts => opts.Ignore())
                      .ForMember(dest => dest.CoursesWhichEndedWithCertificate, opts => opts.Ignore())
                      .ForMember(dest => dest.UsersWithCertificate, opts => opts.Ignore());
+
+            CreateMap<Certificate, UserGivenCertificatePossessionConfirmationViewModel>()
+                     .ForMember(dest => dest.CertificateName, opts => opts.MapFrom(src => src.Name))
+                     .ForMember(dest => dest.CertificateDescription, opts => opts.MapFrom(src => src.Description));
             #endregion
 
             #region Companies
@@ -120,6 +124,12 @@ namespace Certification_System.Services
             CreateMap<Course, DeleteUsersFromCourseViewModel>()
                      .ForMember(dest => dest.UsersToDeleteFromCourse, opts => opts.Ignore())
                      .ForMember(dest => dest.AllCourseParticipants, opts => opts.Ignore());
+
+            CreateMap<Course, UserGivenCertificatePossessionConfirmationViewModel>()
+                    .ForMember(dest => dest.CourseName, opts => opts.MapFrom(src => src.Name))
+                    .ForMember(dest => dest.CourseDateOfStart, opts => opts.MapFrom(src => src.DateOfStart))
+                    .ForMember(dest => dest.CourseDateOfEnd, opts => opts.MapFrom(src => src.DateOfEnd))
+                    .ForMember(dest => dest.Exams, opts => opts.Ignore());
             #endregion
 
             #region Degrees
@@ -153,6 +163,11 @@ namespace Certification_System.Services
             CreateMap<Degree, DisplayCrucialDataDegreeViewModel>();
 
             CreateMap<Degree, DisplayDegreeWithoutRequirementsViewModel>();
+
+            CreateMap<Degree, UserGivenDegreePossessionConfirmationViewModel>()
+                     .ForMember(dest => dest.Branches, opts => opts.Ignore())
+                     .ForMember(dest => dest.DegreeName, opts => opts.MapFrom(src => src.Name))
+                     .ForMember(dest => dest.DegreeDescription, opts => opts.MapFrom(src => src.Description));
             #endregion
 
             #region Exams
@@ -228,6 +243,7 @@ namespace Certification_System.Services
                     .ForMember(dest => dest.UsersToAssignToExam, opts => opts.Ignore())
                     .ForMember(dest => dest.CourseParticipants, opts => opts.Ignore());
 
+            CreateMap<Exam, DisplayExamNameTypeViewModel>();
             #endregion
 
             #region ExamTerms
@@ -315,6 +331,8 @@ namespace Certification_System.Services
             CreateMap<GivenCertificate, EditGivenCertificateViewModel>()
                      .ForMember(dest => dest.Certificate, opts => opts.Ignore())
                      .ForMember(dest => dest.Course, opts => opts.Ignore());
+
+            CreateMap<GivenCertificate, UserGivenCertificatePossessionConfirmationViewModel>();
             #endregion
 
             #region GivenDegrees
@@ -338,6 +356,8 @@ namespace Certification_System.Services
 
             CreateMap<GivenDegree, DisplayGivenDegreeToUserExtendedViewModel>()
                      .ForMember(dest => dest.Degree, opts => opts.Ignore());
+
+            CreateMap<Degree, UserGivenDegreePossessionConfirmationViewModel>(); 
             #endregion
 
             #region Meetings
@@ -478,6 +498,12 @@ namespace Certification_System.Services
 
             CreateMap<CertificationPlatformUser, GetUserImageViewModel>()
                     .ForMember(dest => dest.UserIdentificator, opts => opts.MapFrom(src => src.Id));
+
+            CreateMap<CertificationPlatformUser, UserGivenCertificatePossessionConfirmationViewModel>()
+                    .ForMember(dest => dest.UserIdentificator, opts => opts.MapFrom(src => src.Id));
+
+            CreateMap<CertificationPlatformUser, UserGivenDegreePossessionConfirmationViewModel>()
+                     .ForMember(dest => dest.UserIdentificator, opts => opts.MapFrom(src => src.Id));
             #endregion
 
             #region ViewModels to ViewModels 
@@ -507,4 +533,3 @@ namespace Certification_System.Services
         }
     }
 }
-

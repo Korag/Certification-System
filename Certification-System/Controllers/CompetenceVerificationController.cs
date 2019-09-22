@@ -1,5 +1,6 @@
 ﻿using AutoMapper;
 using Certification_System.DTOViewModels;
+using Certification_System.Entities;
 using Certification_System.Extensions;
 using Certification_System.Repository.DAL;
 using Certification_System.ServicesInterfaces;
@@ -8,7 +9,9 @@ using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using MongoDB.Bson;
+using System.Collections.Generic;
 using System.IO;
+using System.Linq;
 
 namespace Certification_System.Controllers
 {
@@ -320,6 +323,81 @@ namespace Certification_System.Controllers
                             userData.UserImage = memoryStream.ToArray();
                         }
                     }
+
+                    return View(userData);
+                }
+
+                return RedirectToAction("BlankMenu", "Certificates");
+            }
+
+            return RedirectToAction("BlankMenu", "Certificates");
+        }
+
+        // GET: GenerateGivenCertificatePossessionConfirmation
+        [Authorize(Roles = "Admin, Worker")]
+        public ActionResult GenerateGivenCertificatePossessionConfirmation(string givenCertificateIdentificator)
+        {
+            if (!string.IsNullOrWhiteSpace(givenCertificateIdentificator))
+            {
+                var givenCertificate = _context.givenCertificateRepository.GetGivenCertificateById(givenCertificateIdentificator);
+
+                if (givenCertificate != null)
+                {
+                    string URL = Url.VerifyGivenCertificateByQRLink(givenCertificateIdentificator, Request.Scheme);
+                    string pathToIcon = Path.Combine(_environment.WebRootPath, "Image") + $@"\logo_ziad_medium_bitmap.bmp";
+
+                    var userQRCode = _generatorQR.GenerateQRCodeFromGivenURL(URL, pathToIcon);
+
+                    var user = _context.userRepository.GetUserByGivenCertificateId(givenCertificateIdentificator);
+                    var certificate = _context.certificateRepository.GetCertificateById(givenCertificate.Certificate);
+                    var branches = _context.branchRepository.GetBranchesById(certificate.Branches);
+                    var course = _context.courseRepository.GetCourseById(givenCertificate.Course);
+                    var exams = _context.examRepository.GetExamsById(course.Exams).Where(z=> z.OrdinalNumber == 1);
+
+                    UserGivenCertificatePossessionConfirmationViewModel userData = _mapper.Map<UserGivenCertificatePossessionConfirmationViewModel>(user);
+                    userData.QRCode = userQRCode;
+                    userData.Branches = branches;
+
+                    userData = _mapper.Map<GivenCertificate, UserGivenCertificatePossessionConfirmationViewModel>(givenCertificate, userData);
+                    userData = _mapper.Map<Certificate, UserGivenCertificatePossessionConfirmationViewModel>(certificate, userData);
+                    userData = _mapper.Map<Course, UserGivenCertificatePossessionConfirmationViewModel>(course, userData);
+
+                    userData.Exams = _mapper.Map<List<DisplayExamNameTypeViewModel>>(exams);
+
+                    return View(userData);
+                }
+
+                return RedirectToAction("BlankMenu", "Certificates");
+            }
+
+            return RedirectToAction("BlankMenu", "Certificates");
+        }
+
+        // GET: GenerateGivenDegreePossessionConfirmation
+        [Authorize(Roles = "Admin, Worker")]
+        public ActionResult GenerateGivenDegreePossessionConfirmation(string givenDegreeIdentificator)
+        {
+            if (!string.IsNullOrWhiteSpace(givenDegreeIdentificator))
+            {
+                var givenDegree = _context.givenDegreeRepository.GetGivenDegreeById(givenDegreeIdentificator);
+
+                if (givenDegree != null)
+                {
+                    string URL = Url.VerifyGivenDegreeByQRLink(givenDegreeIdentificator, Request.Scheme);
+                    string pathToIcon = Path.Combine(_environment.WebRootPath, "Image") + $@"\logo_ziad_medium_bitmap.bmp";
+
+                    var userQRCode = _generatorQR.GenerateQRCodeFromGivenURL(URL, pathToIcon);
+
+                    var user = _context.userRepository.GetUserByGivenCertificateId(givenDegreeIdentificator);
+                    var degree = _context.degreeRepository.GetDegreeById(givenDegree.Degree);
+                    var branches = _context.branchRepository.GetBranchesById(degree.Branches);
+
+                    UserGivenDegreePossessionConfirmationViewModel userData = _mapper.Map<UserGivenDegreePossessionConfirmationViewModel>(user);
+                    userData.QRCode = userQRCode;
+                    userData.Branches = branches;
+
+                    userData = _mapper.Map<GivenDegree, UserGivenDegreePossessionConfirmationViewModel>(givenDegree, userData);
+                    userData = _mapper.Map<Degree, UserGivenDegreePossessionConfirmationViewModel>(degree, userData);
 
                     return View(userData);
                 }

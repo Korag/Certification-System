@@ -1,0 +1,128 @@
+﻿@model Certification_System.DTOViewModels.UserGivenDegreePossessionConfirmationViewModel
+
+@{
+    ViewData["Title"] = "GenerateGivenDegreePossessionConfirmation";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+<h1>Wygenerowany stopień zawodowy użytkownika</h1>
+<hr />
+
+<div class="row m-0 mt-3 mb-3">
+    <button id="printButton" class="btn btn-primary mt-1 mr-1 xs450px_FloatLeft">Drukuj</button>
+
+    @if (this.User.IsInRole("Admin"))
+    {
+        <a asp-action="DisplayAllGivenDegrees" asp-controller="GivenDegrees" asp-route-givenDegreeIdentificator="@Model.GivenDegreeIdentificator" class="btn btn-outline-info mt-1 mr-1 xs450px_FloatRight">Powrót do listy nadanych stopni zawodowych</a>
+        <a asp-action="UserDetails" asp-controller="Users" asp-route-userIdentificator="@Model.UserIdentificator" class="btn btn-outline-info mt-1">Powrót do szczegółów użytkownika</a>
+    }
+    else
+    {
+        <a asp-action="" asp-controller="" class="btn btn-outline-info mt-1 xs350px_FloatRight">Powrót do moich osiągnieć</a>
+    }
+</div>
+
+<div class="row justify-content-center">
+    <div class="userGivenDegree">
+        <div class="innerContainer">
+            <p align="center" class="platformName"><span><b>Certification-System</b></span></p>
+
+            <div>
+                <p>
+                    ZIAD Bielsko-Biała SA <br />
+                    al. Armii Krajowej 220 <br />
+                    43-316 Bielsko-Biała <br />
+                </p>
+
+                <img class="frontImage" src="~/Image/logo_ziad_big.jpg" />
+
+                <p>Wygenerowano: <br /> @DateTime.Now.ToShortDateString() @DateTime.Now.ToShortTimeString()</p>
+            </div>
+
+            <p align="center" class="platformName"><span><b>STOPIEŃ ZAWODOWY</b></span></p>
+
+            <p align="center" class="platformName">Pan/Pani @Model.FirstName @Model.LastName</p>
+            <p align="center"><b>(identyfikator</b> <br /> <span>@Model.UserIdentificator)</span></p>
+
+
+            <p align="center" class="platformName">Otrzymuje stopień zawodowy o nazwie "@Model.DegreeName"<b></b>  </p>
+            <p align="center">(@Model.DegreeDescription)</p>
+
+            <p align="center">Stopień zawodowy pozostaje ważny od @Model.ReceiptDate do @Model.ExpirationDate</p>
+
+            <div>
+                <div class="img-container">
+                    <img class="qrCode" src="@String.Format("data:image/png;base64,{0}", Convert.ToBase64String(Model.QRCode))" />
+                </div>
+                <p><b>Identyfikator</b> <br /> <span>@Model.GivenDegreeIdentificator</span></p>
+
+                <p>________________</p>
+                <p>Łukasz Czepielik</p>
+            </div>
+
+            <p align="center"><span><b>certification-system.azurewebsites.net</b></span></p>
+
+        </div>
+    </div>
+</div>
+
+<div hidden>
+    <div id="userGivenDegree" class="userGivenDegree">
+        <div class="innerContainer">
+            <p align="center" class="platformName"><span><b>Certification-System</b></span></p>
+
+            <div>
+                <p>
+                    ZIAD Bielsko-Biała SA <br />
+                    al. Armii Krajowej 220 <br />
+                    43-316 Bielsko-Biała <br />
+                </p>
+
+                <img class="frontImage" src="~/Image/logo_ziad_big.jpg" />
+
+                <p>Wygenerowano: <br /> @DateTime.Now.ToShortDateString() @DateTime.Now.ToShortTimeString()</p>
+            </div>
+
+            <p align="center" class="platformName"><span><b>STOPIEŃ ZAWODOWY</b></span></p>
+
+            <p align="center" class="platformName">Pan/Pani @Model.FirstName @Model.LastName</p>
+            <p align="center"><b>(identyfikator</b> <br /> <span>@Model.UserIdentificator)</span></p>
+
+
+            <p align="center" class="platformName">Otrzymuje stopień zawodowy o nazwie "@Model.DegreeName"<b></b>  </p>
+            <p align="center">(@Model.DegreeDescription)</p>
+
+            <p align="center">Stopień zawodowy pozostaje ważny od @Model.ReceiptDate do @Model.ExpirationDate</p>
+
+            <div>
+                <div class="img-container">
+                    <img class="qrCode" src="@String.Format("data:image/png;base64,{0}", Convert.ToBase64String(Model.QRCode))" />
+                </div>
+                <p><b>Identyfikator</b> <br /> <span>@Model.GivenDegreeIdentificator</span></p>
+
+                <p>________________</p>
+                <p>Łukasz Czepielik</p>
+            </div>
+
+            <p align="center"><span><b>certification-system.azurewebsites.net</b></span></p>
+
+        </div>
+    </div>
+</div>
+
+@section Scripts {
+    <script>
+        $(document).ready(function () {
+        });
+
+        $("#printButton").click(function () {
+            $("#userGivenDegree").printThis({
+                importCSS: false,
+                importStyle: true,
+                loadCSS: ["/css/printUserDocument.css","/lib/bootstrap/dist/css/bootstrap.min.css"],
+                header: null,
+                footer: null,
+            });
+        });
+    </script>
+}

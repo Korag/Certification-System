@@ -1,0 +1,80 @@
+﻿.platformName {
+    font-size: 22px;
+    margin-top: 18px;
+}
+
+.frontImage {
+    margin-top: 10px;
+    margin-bottom: 2px;
+    max-width: 180px;
+    max-height: 180px;
+    border: 2px double;
+    border-color: #4162ce;
+}
+
+.person {
+    width: 280px;
+    margin: 5px 4px 5px 4px;
+    font-size: 18px;
+}
+
+.identificatorPart {
+    width: 300px;
+    height: 300px;
+    border: 4px dotted;
+    border-color: #4162ce;
+    -webkit-print-color-adjust: exact;
+    background-image: url('../image/logo_ziad_big_grey_t30.jpg');
+    background-size: 300px 300px;
+    background-repeat: no-repeat;
+}
+
+.identificatorPart2 {
+    width: 300px;
+    height: 300px;
+    border: 4px dotted;
+    border-color: #4162ce;
+    -webkit-print-color-adjust: exact;
+    background-image: url('../image/logo_ziad_big_grey_t40.jpg');
+    background-size: 300px 300px;
+    background-repeat: no-repeat;
+}
+
+.identificatorPart2 p {
+    margin-top: 10px;
+}
+
+.qrCode {
+    margin-top: 20px;
+    width: 180px;
+    height: 180px;
+    border: 4px dotted;
+    border-color: #4162ce;
+}
+
+.img-container {
+    text-align: center;
+}
+
+.userPhysicalIdentificator *, *::before, *::after {
+    box-sizing: initial;
+}
+
+.userPhysicalIdentificator p {
+    color: #4162ce;
+    margin-bottom: 0px;
+}
+
+.userPhysicalIdentificator span {
+    color: #871414;
+}
+
+.userIdentificatorSpan {
+    font-size: 14px;
+    font-weight: bold;
+}
+
+.userIdentificatorParagraph {
+    line-height: 1.3;
+}
+

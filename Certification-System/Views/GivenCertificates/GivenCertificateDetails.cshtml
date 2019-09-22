@@ -117,7 +117,7 @@ else
 <div class="row m-0 mt-3 mb-3">
     <a asp-action="EditGivenCertificate" asp-route-givenCertificateIdentificator="@Model.GivenCertificate.GivenCertificateIdentificator" asp-controller="GivenCertificates" class="btn btn-warning mt-1 mr-1">Edytuj certyfikat</a>
     <a asp-action="CertificateDetails" asp-route-certificateIdentificator="@Model.GivenCertificate.Certificate.CertificateIdentificator" asp-controller="Certificates" class="btn btn-info mt-1 mr-1">Szczegóły certyfikatu</a>
-    <a asp-action="GivenCertificateDetails" asp-route-givenCertificateIdentificator="@Model.GivenCertificate.GivenCertificateIdentificator" asp-controller="GivenCertificates" class="btn btn-secondary mt-1">Szczegóły przyznanego certyfikatu</a>
+    <a asp-action="GenerateGivenCertificatePossessionConfirmation" asp-route-givenCertificateIdentificator="@Model.GivenCertificate.GivenCertificateIdentificator" asp-controller="CompetenceVerification" class="btn btn-success mt-1">Wyświetl nadany certyfikat</a>
 </div>
 
 @{List<DisplayGivenCertificateToUserWithoutCourseExtendedViewModel> givenCertificateList = new List<DisplayGivenCertificateToUserWithoutCourseExtendedViewModel>();
