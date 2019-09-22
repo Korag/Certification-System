@@ -8,7 +8,7 @@
 <h1>Wygenerowany certyfikat użytkownika</h1>
 <hr />
 
-<link href="~/css/printUserDocument.css" rel="stylesheet" />
+<link href="~/css/printUserDocumentPreview.css" rel="stylesheet" />
 
 <div class="row m-0 mt-3 mb-3">
     <button id="printButton" class="btn btn-primary mt-1 mr-1 xs450px_FloatLeft">Drukuj</button>
@@ -20,79 +20,92 @@
     }
     else
     {
-        <a asp-action="" asp-controller="" class="btn btn-outline-info mt-1 xs350px_FloatRight">Powrót do moich osiągnieć</a>
+        <a asp-action="" asp-controller="" class="btn btn-outline-info m-auto mt-1 xs350px_FloatRight">Powrót do moich osiągnieć</a>
     }
 </div>
 
-@*<div class="row justify-content-center col-12 col-xl-12 col-lg-12 col-md-12 col-sm-12">
-    <div class="userDocument">
-        <div class="innerContainer">
-            <p align="center" class="platformName">Certification-System</p>
+<div class="container">
+    <div class="row justify-content-center col-12 col-xl-12 col-lg-12 col-md-12 col-sm-12 mt-4 ml-0 mr-0">
+        <div class="userDocument">
+            <div class="innerContainer">
 
-            <div class="row">
-                <div class="col-6 contactAddress">
-                    ZIAD Bielsko-Biała SA <br />
-                    al. Armii Krajowej 220 <br />
-                    43-316 Bielsko-Biała <br />
-                </div>
+                <div>
+                    <p align="center" class="platformName">Certification-System</p>
 
-                <div class="col-6 ml-auto dateOfGeneration">
-                    <p>Wygenerowano: <br /> @DateTime.Now.ToShortDateString() @DateTime.Now.ToShortTimeString()</p>
-                </div>
-            </div>
+                    <div class="row">
+                        <div class="col-6 contactAddress">
+                            ZIAD Bielsko-Biała SA <br />
+                            al. Armii Krajowej 220 <br />
+                            43-316 Bielsko-Biała <br />
+                        </div>
 
-            <div class="row justify-content-center">
-                <img class="frontImage" src="~/Image/logo_ziad_big.jpg" />
-            </div>
-
-            <p align="center" class="documentType">CERTYFIKAT UMIEJĘTNOŚCI</p>
-
-            <p align="center" class="platformName">Pan/Pani @Model.FirstName @Model.LastName</p>
-            <p align="center">(Identyfikator: <br /> <span>@Model.UserIdentificator)</span></p>
-
-
-            <p align="center" class="platformName">Otrzymuje certyfikat o nazwie "@Model.CertificateName"<b></b>  </p>
-            <p align="center">(@Model.CertificateDescription)</p>
-
-            <p align="center"> za uczestnictwo w kursie "@Model.CourseName"</p>
-
-            <p align="center">W ramach kursu Pan/Pani @Model.FirstName @Model.LastName otrzymał/a pozytywny wynik z następujących egzaminów</p>
-
-            <uL>
-                @foreach (var exam in Model.Exams)
-                {
-                    <li>@exam.Name - @exam.TypeOfExam</li>
-                }
-            </uL>
-
-            <p align="center">Certyfikat pozostaje ważny od @Model.ReceiptDate do @Model.ExpirationDate</p>
-
-            <div class="documentFooter">
-                <div class="row">
-                    <div class="col-8">
-                        <div class="row">
-                            <div class="col-4">
-                                <img class="qrCode" src="@String.Format("data:image/png;base64,{0}", Convert.ToBase64String(Model.QRCode))" />
-                            </div>
-                            <div class="col-8 qrIdentificator">
-                                Identyfikator
-                                <span>@Model.GivenCertificateIdentificator</span>
-                            </div>
+                        <div class="col-6 ml-auto dateOfGeneration">
+                            <p>Wygenerowano: <br /> @DateTime.Now.ToShortDateString() @DateTime.Now.ToShortTimeString()</p>
                         </div>
                     </div>
-                    <div class="col-4 sign">
-                        <p>
-                            __________________________________ <br />
-                            Łukasz Czepielik
-                        </p>
+
+                    <div class="row justify-content-center">
+                        <img class="frontImage" src="~/Image/logo_ziad_big.jpg" />
                     </div>
                 </div>
 
-                <p class="siteAddress">certification-system.azurewebsites.net</p>
+                <div>
+                    <p align="center" class="documentType">CERTYFIKAT UMIEJĘTNOŚCI</p>
+
+                    <p align="center" class="mb-0"> Panu/Pani <span class="crucialInformation">@Model.FirstName @Model.LastName</span></p>
+                    <p align="center">(Identyfikator: <span class="additionalInformation">@Model.UserIdentificator)</span></p>
+
+                    <p align="center" class="mt-3 mb-0">zostaje nadany certyfikat o nazwie: <span class="crucialInformation">"@Model.CertificateName".</span></p>
+                    <p align="center">(@Model.CertificateDescription)</p>
+
+                    <p align="center">Certyfikat zostaje przyznany w związku z uczestnictwem w kursie o nazwie: <span class="crucialInformation">"@Model.CourseName"</span></p>
+
+                    @if (Model.Exams.Count() != 0)
+                    {
+                        <p align="center" class="mt-2">W ramach kursu Pan/Pani <span class="crucialInformation">@Model.FirstName @Model.LastName</span> otrzymał/a pozytywny wynik z następujących egzaminów:</p>
+
+                        <uL>
+                            @foreach (var exam in Model.Exams)
+                            {
+                                <li><span class="additionalInformation">@exam.Name - @exam.TypeOfExam</span></li>
+                            }
+                        </uL>
+                    }
+                </div>
+
+                <div class="documentPeriodOfValidity">
+                    <p align="center">
+                        Certyfikat zachowuje swoją ważność w terminie: <br />
+                        <span class="crucialInformation">@Model.ReceiptDate.ToShortDateString()r. godz. @Model.ReceiptDate.ToShortTimeString() do @Model.ExpirationDate.ToShortDateString()r. godz. @Model.ExpirationDate.ToShortTimeString().</span>
+                    </p>
+                </div>
+
+                <div class="documentFooter">
+                    <div class="row qrIdentificator">
+                        <div class="col-12 col-sm-12 col-md-6 col-lg-6">
+                            <img class="qrCode" src="@String.Format("data:image/png;base64,{0}", Convert.ToBase64String(Model.QRCode))" />
+                            <div>
+                                Identyfikator
+                            </div>
+                            <div>
+                                <span class="additionalInformation">@Model.GivenCertificateIdentificator</span>
+                            </div>
+                        </div>
+
+                        <div class="col-12 col-sm-12 col-md-6 col-lg-6 sign">
+                            <p>
+                                __________________________________ <br />
+                                Łukasz Czepielik
+                            </p>
+                        </div>
+                    </div>
+
+                    <p class="siteAddress">certification-system.azurewebsites.net</p>
+                </div>
             </div>
         </div>
     </div>
-</div>*@
+</div>
 
 <div hidden>
     <div id="userDocument" class="userDocument">

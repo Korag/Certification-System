@@ -1,0 +1,85 @@
+﻿.userDocument {
+    width: 100%;
+    border: 4px dashed red;
+    border-color: #871414;
+    background-image: url('../image/page-bg_70.jpg');
+    background-repeat: repeat;
+}
+
+.qrCode {
+    width: 160px;
+    height: 160px;
+}
+
+.innerContainer{
+    margin: 30px;
+}
+
+.frontImage {
+    margin-top: 10px;
+    margin-bottom: 10px;
+    width: 150px;
+    height: 150px;
+    border: 2px double;
+    border-color: #4162ce;
+}
+
+.contactAddress {
+    text-align: left;
+    font-weight: bold;
+    color: #6c757d;
+}
+
+.dateOfGeneration {
+    text-align: right;
+    font-weight: bold;
+    color: #6c757d;
+}
+
+.platformName {
+    font-size: 30px;
+    color: #871414;
+    font-weight: bold;
+}
+
+.documentType {
+    font-weight: bold;
+    color: #4162ce;
+    font-size: 32px;
+    text-decoration: underline;
+    margin-top: 20px;
+    margin-bottom: 20px;
+}
+
+.siteAddress {
+    font-weight: bold;
+    color: #871414;
+    font-size: 22px;
+    text-align: center;
+    margin-top: 20px;
+}
+
+.sign {
+    margin-top: 110px;
+    text-align: center;
+    color: #6c757d;
+}
+
+.additionalInformation {
+    font-weight: bold;
+    color: #4162ce;
+}
+
+.crucialInformation {
+    color: #871414;
+    font-size: 22px;
+    font-weight: bold;
+}
+
+.userDocument {
+    font-size: 18px;
+}
+
+.qrIdentificator{
+    text-align: center;
+}
