@@ -8,6 +8,7 @@ namespace Certification_System.Entities
         [BsonId]
         [BsonRepresentation(BsonType.ObjectId)]
         public string ExamResultIdentificator { get; set; }
+        public string ExamResultIndexer { get; set; }
 
         public string User { get; set; }
 

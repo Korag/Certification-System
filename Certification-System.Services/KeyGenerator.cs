@@ -262,5 +262,59 @@ namespace Certification_System.Services
 
             return examIndexer.ToString();
         }
+
+        public string GenerateExamTermEntityIndexer(string examIndexer)
+        {
+            StringBuilder examTermIndexer = new StringBuilder();
+
+            var splittedExamIndexer = examIndexer.ToUpper().Split("-", 5, StringSplitOptions.RemoveEmptyEntries).ToList();
+            examTermIndexer.Append(splittedExamIndexer[0]);
+
+            var numerator = _context.examTermRepository.CountExamsTermsWithIndexerNamePart(examTermIndexer.ToString());
+            examTermIndexer.Append(numerator);
+
+            if (examTermIndexer.Length < 8)
+            {
+                StringBuilder fillByZero = new StringBuilder();
+
+                for (int i = 0; i < 8 - examTermIndexer.Length; i++)
+                {
+                    fillByZero.Append(0);
+                }
+
+                examTermIndexer.Insert(examTermIndexer.Length - numerator.Length, fillByZero);
+            }
+
+            examTermIndexer.Append("ET");
+
+            return examTermIndexer.ToString();
+        }
+
+        public string GenerateExamResultEntityIndexer(string examIndexer)
+        {
+            StringBuilder examResultIndexer = new StringBuilder();
+
+            var splittedExamIndexer = examIndexer.ToUpper().Split("-", 5, StringSplitOptions.RemoveEmptyEntries).ToList();
+            examResultIndexer.Append(splittedExamIndexer[0]);
+
+            var numerator = _context.examResultRepository.CountExamsResultsWithIndexerNamePart(examResultIndexer.ToString());
+            examResultIndexer.Append(numerator);
+
+            if (examResultIndexer.Length < 8)
+            {
+                StringBuilder fillByZero = new StringBuilder();
+
+                for (int i = 0; i < 8 - examResultIndexer.Length; i++)
+                {
+                    fillByZero.Append(0);
+                }
+
+                examResultIndexer.Insert(examResultIndexer.Length - numerator.Length, fillByZero);
+            }
+
+            examResultIndexer.Append("ER");
+
+            return examResultIndexer.ToString();
+        }
     }
 }
