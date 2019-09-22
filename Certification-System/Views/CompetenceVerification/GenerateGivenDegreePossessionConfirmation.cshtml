@@ -24,6 +24,111 @@
     }
 </div>
 
+<div class="container">
+    <div class="row justify-content-center col-12 col-xl-12 col-lg-12 col-md-12 col-sm-12 mt-4 ml-0 mr-0">
+        <div class="userDocument">
+            <div class="innerContainer">
+
+                <div>
+                    <p align="center" class="platformName">Certification-System</p>
+
+                    <div class="row">
+                        <div class="col-6 contactAddress">
+                            ZIAD Bielsko-Biała SA <br />
+                            al. Armii Krajowej 220 <br />
+                            43-316 Bielsko-Biała <br />
+                        </div>
+
+                        <div class="col-6 ml-auto dateOfGeneration">
+                            <p>Wygenerowano: <br /> @DateTime.Now.ToShortDateString() @DateTime.Now.ToShortTimeString()</p>
+                        </div>
+                    </div>
+
+                    <div class="row justify-content-center">
+                        <img class="frontImage" src="~/Image/logo_ziad_big.jpg" />
+                    </div>
+                </div>
+
+                <div>
+                    <p align="center" class="documentType">STOPIEŃ ZAWODOWY</p>
+
+                    <p align="center" class="mb-0"> Panu/Pani <span class="crucialInformation">@Model.FirstName @Model.LastName</span></p>
+                    <p align="center">(Identyfikator: <span class="additionalInformation">@Model.UserIdentificator)</span></p>
+
+                    <p align="center" class="mt-3 mb-0">zostaje nadany stopień zawodowy o nazwie: <span class="crucialInformation">"@Model.DegreeName".</span></p>
+                    <p align="center">(@Model.DegreeDescription)</p>
+
+                    @if (Model.RequiredCertificatesNames.Count() != 0)
+                    {
+                        <p align="center" class="mt-2">Do otrzymania stopnia zawodowego wymagane jest posiadanie niżej wymienionych certyfikatów, które w trakcie przyznawania potwierdzenia posiadanych kompetencji muszą być obowiązujące:</p>
+
+                        <uL>
+                            @foreach (var certificateName in Model.RequiredCertificatesNames)
+                            {
+                                <li><span class="additionalInformation">@certificateName</span></li>
+                            }
+                        </uL>
+                    }
+
+                    @if (Model.RequiredDegreesNames.Count() != 0)
+                    {
+                        <p align="center" class="mt-2">Do otrzymania stopnia zawodowego wymagane jest posiadanie niżej wymienionych stopni zawodowych, które w trakcie przyznawania potwierdzenia posiadanych kompetencji muszą być obowiązujące:</p>
+
+                        <uL>
+                            @foreach (var degreeName in Model.RequiredDegreesNames)
+                            {
+                                <li><span class="additionalInformation">degreeName</span></li>
+                            }
+                        </uL>
+                    }
+
+                    @*@if (Model.Conditions.Count() != 0)
+                    {
+                        <p align="center" class="mt-2">Do otrzymania stopnia zawodowego wymagane jest również spełnienie odpowiednich dodatkowych kryterii:</p>
+
+                        <uL>
+                            @foreach (var condtion in Model.Conditions)
+                            {
+                                <li><span class="additionalInformation">condtion</span></li>
+                            }
+                        </uL>
+                    }*@
+                </div>
+
+                <div class="documentPeriodOfValidity">
+                    <p align="center">
+                        Certyfikat zachowuje swoją ważność w terminie: <br />
+                        <span class="crucialInformation">@Model.ReceiptDate.ToShortDateString()r. godz. @Model.ReceiptDate.ToShortTimeString() do @Model.ExpirationDate.ToShortDateString()r. godz. @Model.ExpirationDate.ToShortTimeString().</span>
+                    </p>
+                </div>
+
+                <div class="documentFooter">
+                    <div class="row qrIdentificator">
+                        <div class="col-12 col-sm-12 col-md-6 col-lg-6">
+                            <img class="qrCode" src="@String.Format("data:image/png;base64,{0}", Convert.ToBase64String(Model.QRCode))" />
+                            <div>
+                                Identyfikator
+                            </div>
+                            <div>
+                                <span class="additionalInformation">@Model.GivenDegreeIdentificator</span>
+                            </div>
+                        </div>
+
+                        <div class="col-12 col-sm-12 col-md-6 col-lg-6 sign">
+                            <p>
+                                __________________________________ <br />
+                                Łukasz Czepielik
+                            </p>
+                        </div>
+                    </div>
+
+                    <p class="siteAddress">certification-system.azurewebsites.net</p>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
 <div hidden>
     <div id="userDocument" class="userDocument">
         <div class="innerContainer">
@@ -82,18 +187,18 @@
                 }
 
                 @*@if (Model.Conditions.Count() != 0)
-                {
-                    <p align="center" class="mt-2">Do otrzymania stopnia zawodowego wymagane jest również spełnienie odpowiednich dodatkowych kryterii:</p>
+                    {
+                        <p align="center" class="mt-2">Do otrzymania stopnia zawodowego wymagane jest również spełnienie odpowiednich dodatkowych kryterii:</p>
 
-                    <uL>
-                        @foreach (var condtion in Model.Conditions)
-                        {
-                            <li><span class="additionalInformation">condtion</span></li>
-                        }
-                    </uL>
-                }*@
+                        <uL>
+                            @foreach (var condtion in Model.Conditions)
+                            {
+                                <li><span class="additionalInformation">condtion</span></li>
+                            }
+                        </uL>
+                    }*@
             </div>
-   
+
             <div class="documentPeriodOfValidity">
                 <p align="center">
                     Stopień zawodowy zachowuje swoją ważność w terminie: <br />
