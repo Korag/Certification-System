@@ -28,6 +28,7 @@ namespace Certification_System.RepositoryInterfaces
         Exam DeleteExamResultFromExam(string examResultIdentificator);
         Exam DeleteExamTermFromExam(string examTermIdentificator);
         void DeleteExam(string examIdentificator);
+        IList<SelectListItem> GetExamsTypesAsSelectList();
         ICollection<Exam> DeleteExams(ICollection<string> examsIdentificators);
         ICollection<Exam> DeleteUserFromExams(string userIdentificator, ICollection<string> examsIdentificators);
         string CountExamsWithIndexerNamePart(string namePartOfIndexer);

@@ -20,6 +20,9 @@
                     @Html.DisplayNameFor(model => model.ExamsResults.FirstOrDefault().Exam.OrdinalNumber)
                 </th>
                 <th>
+                    @Html.DisplayNameFor(model => model.ExamsResults.FirstOrDefault().Exam.TypeOfExam)
+                </th>
+                <th>
                     @Html.DisplayNameFor(model => model.ExamsResults.FirstOrDefault().User.Email)
                 </th>
                 <th>
@@ -54,60 +57,63 @@
         <tbody>
             @foreach (var examResult in Model.ExamsResults)
             {
-                <tr>
+            <tr>
+                <td>
+                    @Html.DisplayFor(modelItem => examResult.Course.CourseIndexer)
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => examResult.Course.Name)
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => examResult.Exam.ExamIndexer)
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => examResult.Exam.Name)
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => examResult.Exam.OrdinalNumber)
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => examResult.Exam.TypeOfExam)
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => examResult.User.Email)
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => examResult.User.FirstName)
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => examResult.User.LastName)
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => examResult.ExamResultIndexer)
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => examResult.PointsEarned)
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => examResult.MaxAmountOfPointsToEarn)
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => examResult.PercentageOfResult)
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => examResult.ExamPassed)
+                </td>
+                @if (Model.Options.OperationSet != 0)
+                {
                     <td>
-                        @Html.DisplayFor(modelItem => examResult.Course.CourseIndexer)
-                    </td>
-                    <td>
-                        @Html.DisplayFor(modelItem => examResult.Course.Name)
-                    </td>
-                    <td>
-                        @Html.DisplayFor(modelItem => examResult.Exam.ExamIndexer)
-                    </td>
-                    <td>
-                        @Html.DisplayFor(modelItem => examResult.Exam.Name)
-                    </td>
-                    <td>
-                        @Html.DisplayFor(modelItem => examResult.Exam.OrdinalNumber)
-                    </td>
-                    <td>
-                        @Html.DisplayFor(modelItem => examResult.User.Email)
-                    </td>
-                    <td>
-                        @Html.DisplayFor(modelItem => examResult.User.FirstName)
-                    </td>
-                    <td>
-                        @Html.DisplayFor(modelItem => examResult.User.LastName)
-                    </td>
-                    <td>
-                        @Html.DisplayFor(modelItem => examResult.ExamResultIndexer)
-                    </td>
-                    <td>
-                        @Html.DisplayFor(modelItem => examResult.PointsEarned)
-                    </td>
-                    <td>
-                        @Html.DisplayFor(modelItem => examResult.MaxAmountOfPointsToEarn)
-                    </td>
-                    <td>
-                        @Html.DisplayFor(modelItem => examResult.PercentageOfResult)
-                    </td>
-                    <td>
-                        @Html.DisplayFor(modelItem => examResult.ExamPassed)
-                    </td>
-                    @if (Model.Options.OperationSet != 0)
-                    {
-                        <td>
-                            <div class="dropdown p-0">
-                                <button class="btn btn-success dropdown-toggle" type="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">Operacje</button>
-                                <div class="dropdown-menu nohover">
-                                    <a asp-action="UserDetails" asp-route-userIdentificator="@examResult.User.UserIdentificator" asp-controller="Users" class="btn btn-primary w-100 mb-1">Szczegóły użytkownika</a>
-                                    <a asp-action="CourseDetails" asp-route-courseIdentificator="@examResult.Course.CourseIdentificator" asp-controller="Courses" class="btn btn-info w-100 mb-1">Szczegóły kursu</a>
-                                    <a asp-action="ExamDetails" asp-route-examIdentificator="@examResult.Exam.ExamIdentificator" asp-controller="Exams" class="btn btn-secondary  w-100">Szczegóły egzaminu</a>
-                                </div>
+                        <div class="dropdown p-0">
+                            <button class="btn btn-success dropdown-toggle" type="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">Operacje</button>
+                            <div class="dropdown-menu nohover">
+                                <a asp-action="UserDetails" asp-route-userIdentificator="@examResult.User.UserIdentificator" asp-controller="Users" class="btn btn-primary w-100 mb-1">Szczegóły użytkownika</a>
+                                <a asp-action="CourseDetails" asp-route-courseIdentificator="@examResult.Course.CourseIdentificator" asp-controller="Courses" class="btn btn-info w-100 mb-1">Szczegóły kursu</a>
+                                <a asp-action="ExamDetails" asp-route-examIdentificator="@examResult.Exam.ExamIdentificator" asp-controller="Exams" class="btn btn-secondary  w-100">Szczegóły egzaminu</a>
                             </div>
-                        </td>
-                    }
-                </tr>
+                        </div>
+                    </td>
+                }
+            </tr>
             }
         </tbody>
     </table>

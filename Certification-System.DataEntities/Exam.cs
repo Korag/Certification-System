@@ -14,6 +14,7 @@ namespace Certification_System.Entities
         public string ExamIndexer { get; set; }
         public string Name { get; set; }
         public string Description { get; set; }
+        public string TypeOfExam { get; set; }
 
         public DateTime DateOfStart { get; set; }
         public DateTime DateOfEnd { get; set; }

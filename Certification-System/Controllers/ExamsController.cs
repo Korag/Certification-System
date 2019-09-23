@@ -43,6 +43,7 @@ namespace Certification_System.Controllers
             {
                 AvailableCourses = _context.courseRepository.GetActiveCoursesWhereExamIsRequiredAsSelectList().ToList(),
                 AvailableExaminers = _context.userRepository.GetExaminersAsSelectList().ToList(),
+                AvailableExamTypes = _context.examRepository.GetExamsTypesAsSelectList()
             };
 
             if (!string.IsNullOrWhiteSpace(courseIdentificator))
@@ -84,6 +85,7 @@ namespace Certification_System.Controllers
 
             newExam.AvailableCourses = _context.courseRepository.GetActiveCoursesWhereExamIsRequiredAsSelectList().ToList();
             newExam.AvailableExaminers = _context.userRepository.GetExaminersAsSelectList().ToList();
+            newExam.AvailableExamTypes = _context.examRepository.GetExamsTypesAsSelectList();
 
             return View(newExam);
         }
@@ -96,6 +98,7 @@ namespace Certification_System.Controllers
             {
                 AvailableCourses = _context.courseRepository.GetActiveCoursesWhereExamIsRequiredAsSelectList().ToList(),
                 AvailableExaminers = _context.userRepository.GetExaminersAsSelectList().ToList(),
+                AvailableExamTypes = _context.examRepository.GetExamsTypesAsSelectList(),
                 ExamDividedToTerms = true,
                 ExamTerms = new List<AddExamTermWithoutExamViewModel>()
             };
@@ -168,6 +171,7 @@ namespace Certification_System.Controllers
 
             newExam.AvailableCourses = _context.courseRepository.GetActiveCoursesWhereExamIsRequiredAsSelectList().ToList();
             newExam.AvailableExaminers = _context.userRepository.GetExaminersAsSelectList().ToList();
+            newExam.AvailableExamTypes = _context.examRepository.GetExamsTypesAsSelectList();
 
             return View(newExam);
         }
@@ -515,6 +519,7 @@ namespace Certification_System.Controllers
 
             examToUpdate.AvailableExaminers = _context.userRepository.GetExaminersAsSelectList().ToList();
             examToUpdate.AvailableCourses = _context.courseRepository.GetActiveCoursesAsSelectList().ToList();
+            examToUpdate.AvailableExamTypes = _context.examRepository.GetExamsTypesAsSelectList();
 
             examToUpdate.SelectedExaminers = _context.userRepository.GetUsersById(Exam.Examiners).Select(z => z.Id).ToList();
             examToUpdate.SelectedCourse = Course.CourseIdentificator;
@@ -550,6 +555,7 @@ namespace Certification_System.Controllers
 
             editedExam.AvailableExaminers = _context.userRepository.GetExaminersAsSelectList().ToList();
             editedExam.AvailableCourses = _context.courseRepository.GetActiveCoursesAsSelectList().ToList();
+            editedExam.AvailableExamTypes = _context.examRepository.GetExamsTypesAsSelectList();
 
             return View(editedExam);
         }
@@ -567,6 +573,7 @@ namespace Certification_System.Controllers
 
             examToUpdate.AvailableExaminers = _context.userRepository.GetExaminersAsSelectList().ToList();
             examToUpdate.AvailableCourses = _context.courseRepository.GetActiveCoursesAsSelectList().ToList();
+            examToUpdate.AvailableExamTypes = _context.examRepository.GetExamsTypesAsSelectList();
 
             examToUpdate.SelectedExaminers = _context.userRepository.GetUsersById(Exam.Examiners).Select(z => z.Id).ToList();
             examToUpdate.SelectedCourse = Course.CourseIdentificator;
@@ -632,6 +639,7 @@ namespace Certification_System.Controllers
 
             editedExam.AvailableExaminers = _context.userRepository.GetExaminersAsSelectList().ToList();
             editedExam.AvailableCourses = _context.courseRepository.GetActiveCoursesAsSelectList().ToList();
+            editedExam.AvailableExamTypes = _context.examRepository.GetExamsTypesAsSelectList();
 
             return View(editedExam);
         }

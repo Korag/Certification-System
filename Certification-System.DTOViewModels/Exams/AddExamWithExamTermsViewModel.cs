@@ -51,5 +51,11 @@ namespace Certification_System.DTOViewModels
 
         [Display(Name = "Terminy")]
         public IList<AddExamTermWithoutExamViewModel> ExamTerms { get; set; }
+
+        public IList<SelectListItem> AvailableExamTypes { get; set; }
+
+        [Display(Name = "Typ egzaminu")]
+        [Required(ErrorMessage = "Pole \"{0}\" jest wymagane.")]
+        public string ExamType { get; set; }
     }
 }

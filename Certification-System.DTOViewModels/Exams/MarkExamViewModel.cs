@@ -20,6 +20,9 @@ namespace Certification_System.DTOViewModels
         [Display(Name = "Opis egzaminu")]
         public string Description { get; set; }
 
+        [Display(Name = "Typ egzaminu")]
+        public string TypeOfExam { get; set; }
+
         [Display(Name = "Data rozpoczęcia")]
         public DateTime DateOfStart { get; set; }
 

@@ -323,5 +323,24 @@ namespace Certification_System.Repository
 
             return SelectList;
         }
+
+        public IList<SelectListItem> GetExamsTypesAsSelectList()
+        {
+            List<SelectListItem> SelectList = new List<SelectListItem>();
+
+            foreach (var examType in ExamsTypes.TypesOfExams)
+            {
+                SelectList.Add
+                    (
+                        new SelectListItem()
+                        {
+                            Text = examType.Value,
+                            Value = examType.Value
+                        }
+                    );
+            };
+
+            return SelectList;
+        }
     }
 }
