@@ -14,6 +14,7 @@ namespace Certification_System.Entities
         public string Name { get; set; }
         public string Description { get; set; }
 
+        public ICollection<string> Conditions { get; set; }
         public ICollection<string> RequiredCertificates { get; set; }
         public ICollection<string> RequiredDegrees { get; set; }
         public ICollection<string> Branches { get; set; }

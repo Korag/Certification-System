@@ -16,6 +16,9 @@ namespace Certification_System.DTOViewModels
         [Display(Name = "Opis")]
         public string Description { get; set; }
 
+        [Display(Name = "Warunki uzyskania")]
+        public string ConditionsList { get; set; }
+
         [Display(Name = "Obszary stopnia zawodowego")]
         public ICollection<string> Branches { get; set; }
 

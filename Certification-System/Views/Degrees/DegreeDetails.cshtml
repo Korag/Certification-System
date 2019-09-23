@@ -11,6 +11,12 @@
             };
 }
 
+<style>
+    .bootstrap-tagsinput {
+        background-color: #e9ecef;
+    }
+</style>
+
 <h1>Szczegóły stopnia zawodowego</h1>
 <hr />
 
@@ -42,6 +48,16 @@
             <div class="form-group">
                 <label asp-for="Description" class="control-label"></label>
                 <textarea asp-for="Description" class="form-control col-12" style="width:100%; min-width:100%;" disabled></textarea>
+            </div>
+
+            <div class="form-group">
+                <label asp-for="Description" class="control-label"></label>
+                <textarea asp-for="Description" class="form-control col-12" style="width:100%; min-width:100%;" disabled></textarea>
+            </div>
+
+            <div class="form-group">
+                <label asp-for="ConditionsList" class="control-label"></label>
+                <input asp-for="ConditionsList" class="form-control col-12" style="width:100%; min-width:100%;" id="tagInput" data-role="tagsinput" disabled />
             </div>
 
             <div class="form-group mb-0">

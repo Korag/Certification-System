@@ -14,6 +14,9 @@ namespace Certification_System.DTOViewModels
         [MaxLength(255)]
         public string Description { get; set; }
 
+        [Display(Name = "Warunki uzyskania")]
+        public string ConditionsList { get; set; }
+
         [Required(ErrorMessage = "Należy zaznaczyć conajmniej jeden Obszar.")]
         public ICollection<string> SelectedBranches { get; set; }
 

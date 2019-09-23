@@ -8,6 +8,7 @@ using Certification_System.Repository.DAL;
 using AutoMapper;
 using Certification_System.ServicesInterfaces;
 using Certification_System.Extensions;
+using System;
 
 namespace Certification_System.Controllers
 {
@@ -60,6 +61,8 @@ namespace Certification_System.Controllers
                 Degree degree = _mapper.Map<Degree>(newDegree);
                 degree.DegreeIdentificator = _keyGenerator.GenerateNewId();
                 degree.DegreeIndexer = _keyGenerator.GenerateDegreeEntityIndexer(degree.Name);
+
+                degree.Conditions = newDegree.ConditionsList.Split(",").ToList();
 
                 _context.degreeRepository.AddDegree(degree);
 
@@ -135,13 +138,15 @@ namespace Certification_System.Controllers
         [Authorize(Roles = "Admin")]
         public ActionResult EditDegree(string degreeIdentificator)
         {
-            var Degree = _context.degreeRepository.GetDegreeById(degreeIdentificator);
+            var degree = _context.degreeRepository.GetDegreeById(degreeIdentificator);
 
-            EditDegreeViewModel degreeViewModel = _mapper.Map<EditDegreeViewModel>(Degree);
+            EditDegreeViewModel degreeViewModel = _mapper.Map<EditDegreeViewModel>(degree);
 
             degreeViewModel.AvailableBranches = _context.branchRepository.GetBranchesAsSelectList().ToList();
             degreeViewModel.AvailableCertificates = _context.certificateRepository.GetCertificatesAsSelectList().ToList();
             degreeViewModel.AvailableDegrees = _context.degreeRepository.GetDegreesAsSelectList().ToList();
+
+            degreeViewModel.ConditionsList = String.Join(",", degree.Conditions); 
 
             return View(degreeViewModel);
         }
@@ -155,6 +160,8 @@ namespace Certification_System.Controllers
             {
                 var OriginDegree = _context.degreeRepository.GetDegreeById(editedDegree.DegreeIdentificator);
                 OriginDegree =_mapper.Map<EditDegreeViewModel, Degree>(editedDegree, OriginDegree);
+
+                OriginDegree.Conditions = editedDegree.ConditionsList.Split(",").ToList();
 
                 _context.degreeRepository.UpdateDegree(OriginDegree);
 
@@ -224,6 +231,8 @@ namespace Certification_System.Controllers
             }
 
             DegreeDetailsViewModel DegreeDetails = _mapper.Map<DegreeDetailsViewModel>(Degree);
+            DegreeDetails.ConditionsList = String.Join(",", Degree.Conditions);
+
             DegreeDetails.Branches = _context.branchRepository.GetBranchesById(Degree.Branches);
             DegreeDetails.RequiredCertificates = ListOfCertificates;
             DegreeDetails.RequiredDegrees = ListOfDegrees;

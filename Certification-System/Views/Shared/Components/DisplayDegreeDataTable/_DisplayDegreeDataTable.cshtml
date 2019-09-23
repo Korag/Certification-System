@@ -14,6 +14,9 @@
                     @Html.DisplayNameFor(model => model.Degrees.FirstOrDefault().Description)
                 </th>
                 <th>
+                    @Html.DisplayNameFor(model => model.Degrees.FirstOrDefault().Conditions)
+                </th>
+                <th>
                     @Html.DisplayNameFor(model => model.Degrees.FirstOrDefault().RequiredCertificates)
                 </th>
                 <th>
@@ -33,53 +36,61 @@
         <tbody>
             @foreach (var degree in Model.Degrees)
             {
-                <tr>
+            <tr>
+                <td>
+                    @Html.DisplayFor(model => degree.DegreeIndexer)
+                </td>
+                <td>
+                    @Html.DisplayFor(model => degree.Name)
+                </td>
+                <td>
+                    @Html.DisplayFor(model => degree.Description)
+                </td>
+                <td>
+                    <ul>
+                        @foreach (var condition in degree.Conditions)
+                        {
+                            <li>@condition</li>
+                        }
+                    </ul>
+                </td>
+                <td>
+                    <ul>
+                        @foreach (var requiredCertificate in degree.RequiredCertificates)
+                        {
+                            <li>@requiredCertificate</li>
+                        }
+                    </ul>
+                </td>
+                <td>
+                    <ul>
+                        @foreach (var requiredDegree in degree.RequiredDegrees)
+                        {
+                            <li>@requiredDegree</li>
+                        }
+                    </ul>
+                </td>
+                <td>
+                    <ul>
+                        @foreach (var branch in degree.Branches)
+                        {
+                            <li>@branch</li>
+                        }
+                    </ul>
+                </td>
+                @if (Model.Options.OperationSet != 0)
+                {
                     <td>
-                        @Html.DisplayFor(model => degree.DegreeIndexer)
-                    </td>
-                    <td>
-                        @Html.DisplayFor(model => degree.Name)
-                    </td>
-                    <td>
-                        @Html.DisplayFor(model => degree.Description)
-                    </td>
-                    <td>
-                        <ul>
-                            @foreach (var requiredCertificate in degree.RequiredCertificates)
-                            {
-                                <li>@requiredCertificate</li>
-                            }
-                        </ul>
-                    </td>
-                    <td>
-                        <ul>
-                            @foreach (var requiredDegree in degree.RequiredDegrees)
-                            {
-                                <li>@requiredDegree</li>
-                            }
-                        </ul>
-                    </td>
-                    <td>
-                        <ul>
-                            @foreach (var branch in degree.Branches)
-                            {
-                                <li>@branch</li>
-                            }
-                        </ul>
-                    </td>
-                    @if (Model.Options.OperationSet != 0)
-                    {
-                        <td>
-                            <div class="dropdown p-0">
-                                <button class="btn btn-success dropdown-toggle" type="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">Operacje</button>
-                                <div class="dropdown-menu nohover">
-                                    <a asp-action="DegreeDetails" asp-route-degreeIdentificator="@degree.DegreeIdentificator" asp-controller="Degrees" class="btn btn-info w-100 mb-1">Szczegóły</a>
-                                    <a asp-action="EditDegree" asp-route-degreeIdentificator="@degree.DegreeIdentificator" asp-controller="Degrees" class="btn btn-warning w-100">Edytuj</a>
-                                </div>
+                        <div class="dropdown p-0">
+                            <button class="btn btn-success dropdown-toggle" type="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">Operacje</button>
+                            <div class="dropdown-menu nohover">
+                                <a asp-action="DegreeDetails" asp-route-degreeIdentificator="@degree.DegreeIdentificator" asp-controller="Degrees" class="btn btn-info w-100 mb-1">Szczegóły</a>
+                                <a asp-action="EditDegree" asp-route-degreeIdentificator="@degree.DegreeIdentificator" asp-controller="Degrees" class="btn btn-warning w-100">Edytuj</a>
                             </div>
-                        </td>
-                    }
-                </tr>
+                        </div>
+                    </td>
+                }
+            </tr>
             }
         </tbody>
     </table>
