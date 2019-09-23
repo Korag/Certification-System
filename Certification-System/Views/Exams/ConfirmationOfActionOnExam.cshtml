@@ -20,7 +20,7 @@ else
     <a asp-action="DisplayAllExams" asp-controller="Exams" class="btn btn-outline-info mt-1 xs450px_FloatRight">Powrót do listy egzaminów</a>
 </div>
 
-@await Component.InvokeAsync("DisplayExamDataTable", new { examViewModel = Model.Exam, tableIdentificator = "examConfirmation" })
+@await Component.InvokeAsync("DisplayExamWithLocationDataTable", new { examViewModel = Model.Exam, tableIdentificator = "examConfirmation" })
 
 <div class="row m-0 mt-3">
     <a asp-action="MarkExam" asp-route-examIdentificator="@Model.Exam.ExamIdentificator" asp-controller="Exams" class="btn btn-primary mt-1 mr-1">Oceń egzamin</a>

@@ -50,5 +50,20 @@ namespace Certification_System.DTOViewModels
         [Display(Name = "Oceniani uczestnicy")]
         [Required(ErrorMessage = "Pole \"{0}\" jest wymagane.")]
         public ICollection<MarkUserViewModel> Users { get; set; }
+
+        [Display(Name = "Kraj")]
+        public string Country { get; set; }
+
+        [Display(Name = "Miasto")]
+        public string City { get; set; }
+
+        [Display(Name = "Kod pocztowy")]
+        public string PostCode { get; set; }
+
+        [Display(Name = "Ulica")]
+        public string Address { get; set; }
+
+        [Display(Name = "Numer domu/mieszkania")]
+        public string NumberOfApartment { get; set; }
     }
 }

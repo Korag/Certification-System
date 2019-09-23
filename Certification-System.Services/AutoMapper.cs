@@ -189,6 +189,9 @@ namespace Certification_System.Services
             CreateMap<Exam, DisplayExamViewModel>()
                      .ForMember(dest => dest.Examiners, opts => opts.Ignore());
 
+            CreateMap<Exam, DisplayExamWithLocationViewModel>()
+                     .ForMember(dest => dest.Examiners, opts => opts.Ignore());
+
             CreateMap<Exam, MarkExamViewModel>()
                     .ForMember(dest => dest.Users, opts => opts.Ignore());
 

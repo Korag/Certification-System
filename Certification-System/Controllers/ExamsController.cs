@@ -416,9 +416,9 @@ namespace Certification_System.Controllers
 
                 var Course = _context.courseRepository.GetCourseByExamId(examIdentificator);
 
-                DisplayExamWithTermsViewModel modifiedExam = new DisplayExamWithTermsViewModel();
+                DisplayExamWithTermsAndLocationViewModel modifiedExam = new DisplayExamWithTermsAndLocationViewModel();
 
-                modifiedExam.Exam = _mapper.Map<DisplayExamViewModel>(Exam);
+                modifiedExam.Exam = _mapper.Map<DisplayExamWithLocationViewModel>(Exam);
                 modifiedExam.Exam.DurationDays = (int)Exam.DateOfEnd.Subtract(Exam.DateOfStart).Days;
                 modifiedExam.Exam.DurationMinutes = (int)Exam.DateOfEnd.Subtract(Exam.DateOfStart).Minutes;
 
