@@ -14,7 +14,8 @@ namespace Certification_System.Entities
         public string MeetingIndexer { get; set; }
         public string Description { get; set; }
 
-        public DateTime DateOfMeeting { get; set; }
+        public DateTime DateOfStart { get; set; }
+        public DateTime DateOfEnd { get; set; }
 
         public string Country { get; set; }
         public string City { get; set; }

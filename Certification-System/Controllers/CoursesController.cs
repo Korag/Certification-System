@@ -569,6 +569,8 @@ namespace Certification_System.Controllers
             {
                 Course.CourseEnded = true;
 
+                var certificate = _context.certificateRepository.GetCertificateById(courseToEndViewModel.SelectedCertificate);
+
                 _context.courseRepository.UpdateCourse(Course);
 
                 List<GivenCertificate> disposedGivenCertificates = new List<GivenCertificate>();
@@ -581,8 +583,7 @@ namespace Certification_System.Controllers
                         GivenCertificate singleGivenCertificate = new GivenCertificate
                         {
                             GivenCertificateIdentificator = _keyGenerator.GenerateNewId(),
-                            //GivenCertificateIndexer = from generator
-                            GivenCertificateIndexer = "AAAAAAAAAA",
+                            GivenCertificateIndexer = _keyGenerator.GenerateGivenCertificateEntityIndexer(certificate.CertificateIndexer),
 
                             ReceiptDate = courseToEndViewModel.ReceiptDate,
                             ExpirationDate = courseToEndViewModel.ExpirationDate,

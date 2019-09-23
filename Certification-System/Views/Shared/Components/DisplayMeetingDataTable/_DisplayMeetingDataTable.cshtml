@@ -20,7 +20,10 @@
                     @Html.DisplayNameFor(model => model.Meetings.FirstOrDefault().Description)
                 </th>
                 <th>
-                    @Html.DisplayNameFor(model => model.Meetings.FirstOrDefault().DateOfMeeting)
+                    @Html.DisplayNameFor(model => model.Meetings.FirstOrDefault().DateOfStart)
+                </th>
+                <th>
+                    @Html.DisplayNameFor(model => model.Meetings.FirstOrDefault().DateOfEnd)
                 </th>
                 <th>
                     @Html.DisplayNameFor(model => model.Meetings.FirstOrDefault().Country)
@@ -68,7 +71,10 @@
                     @Html.DisplayFor(modelItem => meeting.Description)
                 </td>
                 <td>
-                    @Html.DisplayFor(modelItem => meeting.DateOfMeeting)
+                    @Html.DisplayFor(modelItem => meeting.DateOfStart)
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => meeting.DateOfEnd)
                 </td>
                 <td>
                     @Html.DisplayFor(modelItem => meeting.Country)

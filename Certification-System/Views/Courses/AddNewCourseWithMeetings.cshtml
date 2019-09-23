@@ -106,17 +106,33 @@
                     </div>
 
                     <div class="form-group">
-                        <label asp-for="Meetings[i].DateOfMeeting" class="control-label"></label>
+                        <label asp-for="Meetings[i].DateOfStart" class="control-label"></label>
                         <div>
-                            @{string id_DoM = "DateOfMeeting" + i; }
-                            <div class='input-group date' id='@id_DoM'>
+                            @{string id_DoS = "DateOfStart" + i; }
+                            <div class='input-group date' id='@id_DoS'>
                                 <input type='text' class="form-control col-12" value="@DateTime.Now.ToShortDateString() @DateTime.Now.ToShortTimeString()" />
                                 <span class="input-group-addon">
                                     <span class="fa fa-calendar pl-1 pt-0.5" style="font-size:34px"></span>
                                 </span>
                             </div>
                             <div class="row justify-content-center">
-                                <span asp-validation-for="Meetings[i].DateOfMeeting" class="text-danger"></span>
+                                <span asp-validation-for="Meetings[i].DateOfStart" class="text-danger"></span>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="form-group">
+                        <label asp-for="Meetings[i].DateOfEnd" class="control-label"></label>
+                        <div>
+                            @{string id_DoE = "DateOfEnd" + i; }
+                            <div class='input-group date' id='@id_DoE'>
+                                <input type='text' class="form-control col-12" value="@DateTime.Now.ToShortDateString() @DateTime.Now.ToShortTimeString()" />
+                                <span class="input-group-addon">
+                                    <span class="fa fa-calendar pl-1 pt-0.5" style="font-size:34px"></span>
+                                </span>
+                            </div>
+                            <div class="row justify-content-center">
+                                <span asp-validation-for="Meetings[i].DateOfEnd" class="text-danger"></span>
                             </div>
                         </div>
                     </div>
@@ -199,5 +215,6 @@
 @section Scripts {
     @{await Html.RenderPartialAsync("_ValidationScriptsPartial");}
     @{await Html.RenderPartialAsync("_RelatedCalendarsInputScript", new RelatedCalendarsInputScriptViewModel { StartDate = "DateOfStart", EndDate = "DateOfEnd" });}
-    @{await Html.RenderPartialAsync("_ManyCalendarsInputScript", new ManyCalendarsInputScriptViewModel { Date = "DateOfMeeting", QuantityOfInputs = Model.Meetings.Count() });}
+    @{await Html.RenderPartialAsync("_ManyCalendarsInputScript", new ManyCalendarsInputScriptViewModel { Date = "DateOfStart", QuantityOfInputs = Model.Meetings.Count() });}
+    @{await Html.RenderPartialAsync("_ManyCalendarsInputScript", new ManyCalendarsInputScriptViewModel { Date = "DateOfEnd", QuantityOfInputs = Model.Meetings.Count() });}
 }

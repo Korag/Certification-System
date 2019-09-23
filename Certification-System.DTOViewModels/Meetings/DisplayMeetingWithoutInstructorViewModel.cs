@@ -14,8 +14,11 @@ namespace Certification_System.DTOViewModels
         [Display(Name = "Opis")]
         public string Description { get; set; }
 
-        [Display(Name = "Data szkolenia")]
-        public DateTime DateOfMeeting { get; set; }
+        [Display(Name = "Data rozpoczęcia szkolenia")]
+        public DateTime DateOfStart { get; set; }
+
+        [Display(Name = "Data zakończenia szkolenia")]
+        public DateTime DateOfEnd { get; set; }
 
         [Display(Name = "Państwo")]
         public string Country { get; set; }

@@ -26,16 +26,31 @@
             </div>
 
             <div class="form-group">
-                <label asp-for="DateOfMeeting" class="control-label"></label>
+                <label asp-for="DateOfStart" class="control-label"></label>
                 <div>
-                    <div class='input-group date' id='DateOfMeeting'>
-                        <input type='text' class="form-control col-12" name="DateOfMeeting" value="@Model.DateOfMeeting" />
+                    <div class='input-group date' id='DateOfStart'>
+                        <input type='text' class="form-control col-12" name="DateOfStart" value="@Model.DateOfStart" />
                         <span class="input-group-addon">
                             <span class="fa fa-calendar pl-1 pt-0.5" style="font-size:34px"></span>
                         </span>
                     </div>
                     <div class="row justify-content-center">
-                        <span asp-validation-for="DateOfMeeting" class="text-danger"></span>
+                        <span asp-validation-for="DateOfStart" class="text-danger"></span>
+                    </div>
+                </div>
+            </div>
+
+            <div class="form-group">
+                <label asp-for="DateOfEnd" class="control-label"></label>
+                <div>
+                    <div class='input-group date' id='DateOfEnd'>
+                        <input type='text' class="form-control col-12" name="DateOfEnd" value="@Model.DateOfEnd" />
+                        <span class="input-group-addon">
+                            <span class="fa fa-calendar pl-1 pt-0.5" style="font-size:34px"></span>
+                        </span>
+                    </div>
+                    <div class="row justify-content-center">
+                        <span asp-validation-for="DateOfEnd" class="text-danger"></span>
                     </div>
                 </div>
             </div>
@@ -116,5 +131,6 @@
 
 @section Scripts {
     @{await Html.RenderPartialAsync("_ValidationScriptsPartial");}
-    @{await Html.RenderPartialAsync("_SingleCalendarInputScript", "DateOfMeeting");}
+    @{await Html.RenderPartialAsync("_SingleCalendarInputScript", "DateOfStart");}
+    @{await Html.RenderPartialAsync("_SingleCalendarInputScript", "DateOfEnd");}
 }

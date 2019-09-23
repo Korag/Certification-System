@@ -14,8 +14,14 @@ namespace Certification_System.DTOViewModels
         [Required(ErrorMessage = "Pole \"{0}\" jest wymagane.")]
         [DataType(DataType.Date)]
         [DisplayFormat(DataFormatString = "{0:DD/MM/YYYY}")]
-        [Display(Name = "Data szkolenia")]
-        public DateTime DateOfMeeting { get; set; }
+        [Display(Name = "Data rozpoczęcia szkolenia")]
+        public DateTime DateOfStart { get; set; }
+
+        [Required(ErrorMessage = "Pole \"{0}\" jest wymagane.")]
+        [DataType(DataType.Date)]
+        [DisplayFormat(DataFormatString = "{0:DD/MM/YYYY}")]
+        [Display(Name = "Data zakończenia szkolenia")]
+        public DateTime DateOfEnd { get; set; }
 
         [Required(ErrorMessage = "Pole \"{0}\" jest wymagane.")]
         [DataType(DataType.Text)]

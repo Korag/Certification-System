@@ -11,7 +11,10 @@
                     @Html.DisplayNameFor(model => model.Meetings.First().Description)
                 </th>
                 <th>
-                    @Html.DisplayNameFor(model => model.Meetings.First().DateOfMeeting)
+                    @Html.DisplayNameFor(model => model.Meetings.First().DateOfStart)
+                </th>
+                <th>
+                    @Html.DisplayNameFor(model => model.Meetings.First().DateOfEnd)
                 </th>
                 <th>
                     @Html.DisplayNameFor(model => model.Meetings.First().Country)
@@ -42,82 +45,85 @@
         <tbody>
             @foreach (var meeting in Model.Meetings)
             {
-                <tr>
+            <tr>
+                <td>
+                    @Html.DisplayFor(modelItem => meeting.MeetingIndexer)
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => meeting.Description)
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => meeting.DateOfStart)
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => meeting.DateOfEnd)
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => meeting.Country)
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => meeting.City)
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => meeting.PostCode)
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => meeting.Address)
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => meeting.NumberOfApartment)
+                </td>
+                <td>
+                    <ul>
+                        @foreach (var instructor in meeting.Instructors)
+                        {
+                            <li>@instructor.FirstName @instructor.LastName</li>
+                        }
+                    </ul>
+                </td>
+                @if (Model.Options.OperationSet == 1)
+                {
                     <td>
-                        @Html.DisplayFor(modelItem => meeting.MeetingIndexer)
+                        <div class="dropdown p-0">
+                            <button class="btn btn-success dropdown-toggle" type="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">Operacje</button>
+                            <div class="dropdown-menu nohover">
+                                <a asp-action="MeetingDetails" asp-route-meetingIdentificator="@meeting.MeetingIdentificator" asp-controller="Users" class="btn btn-info w-100 mb-1">Szczegóły spotkania</a>
+                                <a asp-action="EditMeeting" asp-route-meetingIdentificator="@meeting.MeetingIdentificator" asp-controller="Users" class="btn btn-warning w-100 mb-1">Edytuj spotkanie</a>
+                                <a asp-action="CheckUsersPresence" asp-route-meetingIdentificator="@meeting.MeetingIdentificator" asp-controller="Users" class="btn btn-primary w-100">Sprawdź obecność</a>
+                                @*@Html.ActionLink("Szczegóły instruktora", "InstructorDetail", new { instructorIdentificator = item.Instructors }, new { @class = "btn btn-secondary" })*@
+                                @*@Html.ActionLink("Usuń spotkanie ze szkolenia", "DeleteMeeting", new { meetingIdentificator = item.MeetingIdentificator }) |*@
+                            </div>
+                        </div>
                     </td>
+                }
+                @if (Model.Options.OperationSet == 2)
+                {
                     <td>
-                        @Html.DisplayFor(modelItem => meeting.Description)
+                        <div class="dropdown p-0">
+                            <button class="btn btn-success dropdown-toggle" type="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">Operacje</button>
+                            <div class="dropdown-menu nohover">
+                                <a asp-action="MeetingDetails" asp-route-meetingIdentificator="@meeting.MeetingIdentificator" asp-controller="Users" class="btn btn-info w-100 mb-1">Szczegóły spotkania</a>
+                                <a asp-action="CheckUsersPresence" asp-route-meetingIdentificator="@meeting.MeetingIdentificator" asp-controller="Users" class="btn btn-primary w-100">Sprawdź obecność</a>
+                            </div>
+                        </div>
                     </td>
+                }
+                @if (Model.Options.OperationSet == 3)
+                {
                     <td>
-                        @Html.DisplayFor(modelItem => meeting.DateOfMeeting)
-                    </td>
-                    <td>
-                        @Html.DisplayFor(modelItem => meeting.Country)
-                    </td>
-                    <td>
-                        @Html.DisplayFor(modelItem => meeting.City)
-                    </td>
-                    <td>
-                        @Html.DisplayFor(modelItem => meeting.PostCode)
-                    </td>
-                    <td>
-                        @Html.DisplayFor(modelItem => meeting.Address)
-                    </td>
-                    <td>
-                        @Html.DisplayFor(modelItem => meeting.NumberOfApartment)
-                    </td>
-                    <td>
-                        <ul>
-                            @foreach (var instructor in meeting.Instructors)
-                            {
-                                <li>@instructor.FirstName @instructor.LastName</li>
-                            }
-                        </ul>
-                    </td>
-                    @if (Model.Options.OperationSet == 1)
-                    {
-                        <td>
+                        @if (meeting.Instructors.ToList().Select(z => z.Email).Contains(this.User.Identity.Name))
+                        {
                             <div class="dropdown p-0">
                                 <button class="btn btn-success dropdown-toggle" type="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">Operacje</button>
                                 <div class="dropdown-menu nohover">
                                     <a asp-action="MeetingDetails" asp-route-meetingIdentificator="@meeting.MeetingIdentificator" asp-controller="Users" class="btn btn-info w-100 mb-1">Szczegóły spotkania</a>
-                                    <a asp-action="EditMeeting" asp-route-meetingIdentificator="@meeting.MeetingIdentificator" asp-controller="Users" class="btn btn-warning w-100 mb-1">Edytuj spotkanie</a>
-                                    <a asp-action="CheckUsersPresence" asp-route-meetingIdentificator="@meeting.MeetingIdentificator" asp-controller="Users" class="btn btn-primary w-100">Sprawdź obecność</a>
-                                    @*@Html.ActionLink("Szczegóły instruktora", "InstructorDetail", new { instructorIdentificator = item.Instructors }, new { @class = "btn btn-secondary" })*@
-                                    @*@Html.ActionLink("Usuń spotkanie ze szkolenia", "DeleteMeeting", new { meetingIdentificator = item.MeetingIdentificator }) |*@
-                                </div>
-                            </div>
-                        </td>
-                    }
-                    @if (Model.Options.OperationSet == 2)
-                    {
-                        <td>
-                            <div class="dropdown p-0">
-                                <button class="btn btn-success dropdown-toggle" type="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">Operacje</button>
-                                <div class="dropdown-menu nohover">
-                                    <a asp-action="MeetingDetails" asp-route-meetingIdentificator="@meeting.MeetingIdentificator" asp-controller="Users" class="btn btn-info w-100 mb-1">Szczegóły spotkania</a>
                                     <a asp-action="CheckUsersPresence" asp-route-meetingIdentificator="@meeting.MeetingIdentificator" asp-controller="Users" class="btn btn-primary w-100">Sprawdź obecność</a>
                                 </div>
                             </div>
-                        </td>
-                    }
-                    @if (Model.Options.OperationSet == 3)
-                    {
-                        <td>
-                            @if (meeting.Instructors.ToList().Select(z => z.Email).Contains(this.User.Identity.Name))
-                            {
-                                <div class="dropdown p-0">
-                                    <button class="btn btn-success dropdown-toggle" type="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">Operacje</button>
-                                    <div class="dropdown-menu nohover">
-                                        <a asp-action="MeetingDetails" asp-route-meetingIdentificator="@meeting.MeetingIdentificator" asp-controller="Users" class="btn btn-info w-100 mb-1">Szczegóły spotkania</a>
-                                        <a asp-action="CheckUsersPresence" asp-route-meetingIdentificator="@meeting.MeetingIdentificator" asp-controller="Users" class="btn btn-primary w-100">Sprawdź obecność</a>
-                                    </div>
-                                </div>
-                            }
-                        </td>
-                    }
-                </tr>
+                        }
+                    </td>
+                }
+            </tr>
             }
         </tbody>
     </table>
