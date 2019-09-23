@@ -14,10 +14,10 @@ namespace Certification_System.Entities
         public string ExamIndexer { get; set; }
         public string Name { get; set; }
         public string Description { get; set; }
+
         public DateTime DateOfStart { get; set; }
         public DateTime DateOfEnd { get; set; }
-        public int DurationDays { get; set; }
-        public int DurationMinutes { get; set; }
+
         public int OrdinalNumber { get; set; }
         public double MaxAmountOfPointsToEarn { get; set; }
         public int UsersLimit { get; set; }

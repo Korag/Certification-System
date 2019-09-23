@@ -210,16 +210,12 @@ namespace Certification_System.Services
 
             CreateMap<EditExamWithExamTermsViewModel, Exam>()
                      .ForMember(dest => dest.Examiners, opts => opts.MapFrom(src => src.SelectedExaminers))
-                     .ForMember(dest => dest.DurationDays, opts => opts.MapFrom(src => src.DateOfEnd.Subtract(src.DateOfStart).Days))
-                     .ForMember(dest => dest.DurationMinutes, opts => opts.MapFrom(src => src.DateOfEnd.Subtract(src.DateOfStart).Minutes))
                      .ForMember(dest => dest.ExamTerms, opts => opts.Ignore());
 
             CreateMap<Exam, EditExamViewModel>();
 
             CreateMap<EditExamViewModel, Exam>()
                      .ForMember(dest => dest.Examiners, opts => opts.MapFrom(src => src.SelectedExaminers))
-                     .ForMember(dest => dest.DurationDays, opts => opts.MapFrom(src => src.DateOfEnd.Subtract(src.DateOfStart).Days))
-                     .ForMember(dest => dest.DurationMinutes, opts => opts.MapFrom(src => src.DateOfEnd.Subtract(src.DateOfStart).Minutes))
                      .ForMember(dest => dest.ExamTerms, opts => opts.Ignore());
 
             CreateMap<AddExamPeriodViewModel, Exam>()

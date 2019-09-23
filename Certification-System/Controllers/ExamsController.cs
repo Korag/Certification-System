@@ -68,7 +68,6 @@ namespace Certification_System.Controllers
 
                 course.Exams.Add(exam.ExamIdentificator);
 
-                exam.DurationDays = (int)exam.DateOfEnd.Subtract(exam.DateOfStart).TotalDays;
                 exam.OrdinalNumber = 1;
 
                 _context.courseRepository.UpdateCourse(course);
@@ -128,9 +127,6 @@ namespace Certification_System.Controllers
                 exam.ExamIndexer = _keyGenerator.GenerateExamEntityIndexer(exam.Name);
 
                 course.Exams.Add(exam.ExamIdentificator);
-
-                exam.DurationDays = (int)exam.DateOfEnd.Subtract(exam.DateOfStart).TotalDays;
-                exam.DurationMinutes = (int)exam.DateOfEnd.Subtract(exam.DateOfStart).TotalMinutes;
 
                 exam.OrdinalNumber = 1;
                 exam.UsersLimit = newExam.ExamTerms.Select(z => z.UsersLimit).Sum();
@@ -219,7 +215,6 @@ namespace Certification_System.Controllers
 
                 course.Exams.Add(exam.ExamIdentificator);
 
-                exam.DurationDays = (int)exam.DateOfEnd.Subtract(exam.DateOfStart).TotalDays;
                 exam.OrdinalNumber = examsInCourse.Where(z => z.ExamIndexer == exam.ExamIndexer).Count();
 
                 _context.courseRepository.UpdateCourse(course);
@@ -291,8 +286,6 @@ namespace Certification_System.Controllers
 
                 course.Exams.Add(exam.ExamIdentificator);
 
-                exam.DurationDays = (int)exam.DateOfEnd.Subtract(exam.DateOfStart).TotalDays;
-                exam.DurationMinutes = (int)exam.DateOfEnd.Subtract(exam.DateOfStart).TotalMinutes;
                 exam.OrdinalNumber = examsInCourse.Where(z => z.ExamIndexer == exam.ExamIndexer).Count();
 
                 List<ExamTerm> examsTerms = new List<ExamTerm>();
@@ -430,9 +423,15 @@ namespace Certification_System.Controllers
                     var ExamTerms = _context.examTermRepository.GetExamsTermsById(Exam.ExamTerms);
                     modifiedExam.ExamTerms = _mapper.Map<List<DisplayExamTermViewModel>>(ExamTerms);
 
+                    modifiedExam.Exam.DurationDays = (int)Exam.DateOfEnd.Subtract(Exam.DateOfStart).Days;
+                    modifiedExam.Exam.DurationMinutes = (int)Exam.DateOfEnd.Subtract(Exam.DateOfStart).Minutes;
+
                     foreach (var examTerm in modifiedExam.ExamTerms)
                     {
                         var SingleExamTermExaminers = _context.userRepository.GetUsersById(ExamTerms.Where(z => z.ExamTermIdentificator == examTerm.ExamTermIdentificator).Select(z => z.Examiners).FirstOrDefault());
+
+                        examTerm.DurationDays = (int)examTerm.DateOfEnd.Subtract(examTerm.DateOfStart).Days;
+                        examTerm.DurationMinutes = (int)examTerm.DateOfEnd.Subtract(examTerm.DateOfStart).Minutes;
 
                         examTerm.Examiners = _mapper.Map<List<DisplayCrucialDataUserViewModel>>(SingleExamTermExaminers);
                     }

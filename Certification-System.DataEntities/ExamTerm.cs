@@ -11,7 +11,6 @@ namespace Certification_System.Entities
         [BsonRepresentation(BsonType.ObjectId)]
         public string ExamTermIdentificator { get; set; }
         public string ExamTermIndexer { get; set; }
-        public string TypeOfExam { get; set; }
 
         public DateTime DateOfStart { get; set; }
         public DateTime DateOfEnd { get; set; }
