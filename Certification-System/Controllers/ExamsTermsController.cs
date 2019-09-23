@@ -66,9 +66,6 @@ namespace Certification_System.Controllers
                 examTerm.ExamTermIdentificator = _keyGenerator.GenerateNewId();
                 examTerm.ExamTermIndexer = _keyGenerator.GenerateExamTermEntityIndexer(exam.ExamIndexer);
 
-                examTerm.DurationDays = (int)examTerm.DateOfEnd.Subtract(examTerm.DateOfStart).TotalDays;
-                examTerm.DurationMinutes = (int)examTerm.DateOfEnd.Subtract(examTerm.DateOfStart).TotalMinutes;
-
                 exam.ExamTerms.Add(examTerm.ExamTermIdentificator);
                 _context.examRepository.UpdateExam(exam);
 
@@ -152,8 +149,6 @@ namespace Certification_System.Controllers
                 }
 
                 OriginExamTerm = _mapper.Map<EditExamTermViewModel, ExamTerm>(editedExamTerm, OriginExamTerm);
-                OriginExamTerm.DurationDays = (int)OriginExamTerm.DateOfEnd.Subtract(OriginExamTerm.DateOfStart).TotalDays;
-                OriginExamTerm.DurationMinutes = (int)OriginExamTerm.DateOfEnd.Subtract(OriginExamTerm.DateOfStart).TotalMinutes;
 
                 _context.examTermRepository.UpdateExamTerm(OriginExamTerm);
 
@@ -207,6 +202,9 @@ namespace Certification_System.Controllers
 
             DisplayExamWithoutCourseViewModel examViewModel = _mapper.Map<DisplayExamWithoutCourseViewModel>(Exam);
             examViewModel.Examiners = _mapper.Map<List<DisplayCrucialDataUserViewModel>>(_context.userRepository.GetUsersById(Exam.Examiners).Select(z => z.Id).ToList());
+
+            examViewModel.DurationDays = (int)Exam.DateOfEnd.Subtract(Exam.DateOfStart).Days;
+            examViewModel.DurationMinutes = (int)Exam.DateOfEnd.Subtract(Exam.DateOfStart).Minutes;
 
             List<DisplayCrucialDataWithContactUserViewModel> examinersViewModel = _mapper.Map<List<DisplayCrucialDataWithContactUserViewModel>>(Examiners);
 

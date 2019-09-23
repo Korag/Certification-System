@@ -146,9 +146,6 @@ namespace Certification_System.Controllers
                         ExamTerm examTerm = _mapper.Map<ExamTerm>(newExamTerm);
                         examTerm.ExamTermIdentificator = _keyGenerator.GenerateNewId();
 
-                        examTerm.DurationDays = (int)newExamTerm.DateOfEnd.Subtract(newExamTerm.DateOfStart).TotalDays;
-                        examTerm.DurationMinutes = (int)newExamTerm.DateOfEnd.Subtract(newExamTerm.DateOfStart).TotalMinutes;
-
                         exam.ExamTerms.Add(examTerm.ExamTermIdentificator);
                         examsTerms.Add(examTerm);
                     }
@@ -307,9 +304,6 @@ namespace Certification_System.Controllers
                         ExamTerm examTerm = _mapper.Map<ExamTerm>(newExamTerm);
                         examTerm.ExamTermIdentificator = _keyGenerator.GenerateNewId();
 
-                        examTerm.DurationDays = (int)newExamTerm.DateOfEnd.Subtract(newExamTerm.DateOfStart).TotalDays;
-                        examTerm.DurationMinutes = (int)newExamTerm.DateOfEnd.Subtract(newExamTerm.DateOfStart).TotalMinutes;
-
                         exam.ExamTerms.Add(examTerm.ExamTermIdentificator);
                         examsTerms.Add(examTerm);
                     }
@@ -362,6 +356,9 @@ namespace Certification_System.Controllers
                     singleExam.Examiners = _mapper.Map<List<DisplayCrucialDataUserViewModel>>(_context.userRepository.GetUsersById(examModel.Examiners));
                     singleExam.Course = _mapper.Map<DisplayCrucialDataCourseViewModel>(course);
 
+                    singleExam.DurationDays = (int)examModel.DateOfEnd.Subtract(examModel.DateOfStart).Days;
+                    singleExam.DurationMinutes = (int)examModel.DateOfEnd.Subtract(examModel.DateOfStart).Minutes;
+
                     ListOfExams.Add(singleExam);
                 }
             }
@@ -398,6 +395,9 @@ namespace Certification_System.Controllers
             ExamDetails.Examiners = ListOfExaminers;
             ExamDetails.EnrolledUsers = ListOfUsers;
 
+            ExamDetails.DurationDays = (int)Exam.DateOfEnd.Subtract(Exam.DateOfStart).Days;
+            ExamDetails.DurationMinutes = (int)Exam.DateOfEnd.Subtract(Exam.DateOfStart).Minutes;
+
             if (this.User.IsInRole("Examiner"))
             {
                 return View("ExaminerExamDetails", ExamDetails);
@@ -422,6 +422,8 @@ namespace Certification_System.Controllers
                 DisplayExamWithTermsViewModel modifiedExam = new DisplayExamWithTermsViewModel();
 
                 modifiedExam.Exam = _mapper.Map<DisplayExamViewModel>(Exam);
+                modifiedExam.Exam.DurationDays = (int)Exam.DateOfEnd.Subtract(Exam.DateOfStart).Days;
+                modifiedExam.Exam.DurationMinutes = (int)Exam.DateOfEnd.Subtract(Exam.DateOfStart).Minutes;
 
                 if (Exam.ExamTerms.Count() != 0)
                 {
@@ -758,6 +760,9 @@ namespace Certification_System.Controllers
                 DeleteUsersFromExamViewModel deleteUsersFromExamViewModel = _mapper.Map<DeleteUsersFromExamViewModel>(Exam);
                 deleteUsersFromExamViewModel.AllExamParticipants = ListOfUsers;
 
+                deleteUsersFromExamViewModel.DurationDays = (int)Exam.DateOfEnd.Subtract(Exam.DateOfStart).Days;
+                deleteUsersFromExamViewModel.DurationMinutes = (int)Exam.DateOfEnd.Subtract(Exam.DateOfStart).Minutes;
+
                 deleteUsersFromExamViewModel.UsersToDeleteFromExam = _mapper.Map<DeleteUsersFromCheckBoxViewModel[]>(ListOfUsers);
 
                 return View(deleteUsersFromExamViewModel);
@@ -860,6 +865,9 @@ namespace Certification_System.Controllers
                     addUsersToExamViewModel.CourseParticipants = ListOfUsers;
                     addUsersToExamViewModel.VacantSeats = VacantSeats;
 
+                    addUsersToExamViewModel.DurationDays = (int)Exam.DateOfEnd.Subtract(Exam.DateOfStart).Days;
+                    addUsersToExamViewModel.DurationMinutes = (int)Exam.DateOfEnd.Subtract(Exam.DateOfStart).Minutes;
+
                     addUsersToExamViewModel.UsersToAssignToExam = _mapper.Map<AddUsersFromCheckBoxViewModel[]>(ListOfUsers);
 
                     return View(addUsersToExamViewModel);
@@ -941,6 +949,9 @@ namespace Certification_System.Controllers
                 }
 
                 MarkExamViewModel markExamViewModel = _mapper.Map<MarkExamViewModel>(Exam);
+
+                markExamViewModel.DurationDays = (int)Exam.DateOfEnd.Subtract(Exam.DateOfStart).Days;
+                markExamViewModel.DurationMinutes = (int)Exam.DateOfEnd.Subtract(Exam.DateOfStart).Minutes;
 
                 markExamViewModel.Users = ListOfUsers;
 
@@ -1036,6 +1047,9 @@ namespace Certification_System.Controllers
                     DisplayExamViewModel singleExam = _mapper.Map<DisplayExamViewModel>(examModel);
                     singleExam.Examiners = _mapper.Map<List<DisplayCrucialDataUserViewModel>>(_context.userRepository.GetUsersById(examModel.Examiners));
                     singleExam.Course = _mapper.Map<DisplayCrucialDataCourseViewModel>(course);
+
+                    singleExam.DurationDays = (int)examModel.DateOfEnd.Subtract(examModel.DateOfStart).Days;
+                    singleExam.DurationMinutes = (int)examModel.DateOfEnd.Subtract(examModel.DateOfStart).Minutes;
 
                     ListOfExams.Add(singleExam);
                 }

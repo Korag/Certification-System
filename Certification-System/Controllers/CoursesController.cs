@@ -261,23 +261,24 @@ namespace Certification_System.Controllers
             var Exams = _context.examRepository.GetExamsById(Course.Exams);
             List<DisplayExamWithoutCourseViewModel> examsViewModel = new List<DisplayExamWithoutCourseViewModel>();
 
+            List<string> ListOfExaminatorsIdentificators = new List<string>();
+
             foreach (var exam in Exams)
             {
                 DisplayExamWithoutCourseViewModel singleExam = _mapper.Map<DisplayExamWithoutCourseViewModel>(exam);
                 singleExam.Examiners = _mapper.Map<List<DisplayCrucialDataUserViewModel>>(_context.userRepository.GetUsersById(exam.Examiners));
 
-                examsViewModel.Add(singleExam);
-            }
+                singleExam.DurationDays = (int)exam.DateOfEnd.Subtract(exam.DateOfStart).Days;
+                singleExam.DurationMinutes = (int)exam.DateOfEnd.Subtract(exam.DateOfStart).Minutes;
 
-            List<string> ListOfExaminatorsIdentificators = new List<string>();
-
-            foreach (var exam in Exams)
-            {
                 var ExamTermsOfExam = _context.examTermRepository.GetExamsTermsById(exam.ExamTerms);
                 ExamTermsOfExam.ToList().ForEach(z => ListOfExaminatorsIdentificators.AddRange(z.Examiners));
 
                 ListOfExaminatorsIdentificators.AddRange(exam.Examiners);
+
+                examsViewModel.Add(singleExam);
             }
+
             ListOfExaminatorsIdentificators.Distinct();
 
             var Examiners = _context.userRepository.GetUsersById(ListOfExaminatorsIdentificators);
