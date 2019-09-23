@@ -17,6 +17,7 @@ namespace Certification_System.ServicesInterfaces
         string GenerateCourseEntityIndexer(string courseName);
         string GenerateMeetingEntityIndexer(string courseIndexer);
         string GenerateExamEntityIndexer(string examName);
-
+        string GenerateExamTermEntityIndexer(string examIndexer);
+        string GenerateExamResultEntityIndexer(string examIndexer);
     }
 }

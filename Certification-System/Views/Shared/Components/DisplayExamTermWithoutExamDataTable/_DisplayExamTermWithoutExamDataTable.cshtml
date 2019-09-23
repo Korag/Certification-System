@@ -6,6 +6,9 @@
 
             <tr>
                 <th>
+                    @Html.DisplayNameFor(model => model.ExamsTerms.FirstOrDefault().ExamTermIndexer)
+                </th>
+                <th>
                     @Html.DisplayNameFor(model => model.ExamsTerms.FirstOrDefault().DateOfStart)
                 </th>
                 <th>
@@ -37,61 +40,64 @@
         <tbody>
             @foreach (var examTerm in Model.ExamsTerms)
             {
-                <tr>
+            <tr>
+                <td>
+                    @Html.DisplayFor(modelItem => examTerm.ExamTermIndexer)
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => examTerm.DateOfStart)
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => examTerm.DurationDays)
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => examTerm.DurationMinutes)
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => examTerm.UsersQuantitiy)
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => examTerm.UsersLimit)
+                </td>
+                <td>
+                    <ul>
+                        @foreach (var examiner in examTerm.Examiners)
+                        {
+                            <li>@examiner.FirstName @examiner.LastName</li>
+                        }
+                    </ul>
+                </td>
+                @if (Model.Options.OperationSet == 1)
+                {
                     <td>
-                        @Html.DisplayFor(modelItem => examTerm.DateOfStart)
+                        <div class="dropdown p-0">
+                            <button class="btn btn-success dropdown-toggle" type="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">Operacje</button>
+                            <div class="dropdown-menu nohover">
+                                <a asp-action="EditExamTerm" asp-route-examTermIdentificator="@examTerm.ExamTermIdentificator" asp-controller="ExamsTerms" class="btn btn-warning w-100 mb-1">Edytuj</a>
+                                <a asp-action="ExamTermDetails" asp-route-examTermIdentificator="@examTerm.ExamTermIdentificator" asp-controller="ExamsTerms" class="btn btn-info w-100 mb-1">Szczegóły</a>
+                                <a asp-action="AddUsersToExamTerm" asp-route-examTermIdentificator="@examTerm.ExamTermIdentificator" asp-controller="ExamsTerms" class="btn btn-primary w-100 mb-1">Dodaj użytkowników do tury</a>
+                                <a asp-action="MarkExamTerm" asp-route-examTermIdentificator="@examTerm.ExamTermIdentificator" asp-controller="ExamsTerms" class="btn btn-success w-100 mb-1">Oceń egzamin dla tury</a>
+                                <a asp-action="DeleteUsersFromExamTerm" asp-route-examTermIdentificator="@examTerm.ExamTermIdentificator" asp-controller="ExamsTerms" class="btn btn-light w-100">Usuń użytkowników z tury</a>
+                            </div>
+                        </div>
                     </td>
+                }
+                @if (Model.Options.OperationSet == 2)
+                {
                     <td>
-                        @Html.DisplayFor(modelItem => examTerm.DurationDays)
-                    </td>
-                    <td>
-                        @Html.DisplayFor(modelItem => examTerm.DurationMinutes)
-                    </td>
-                    <td>
-                        @Html.DisplayFor(modelItem => examTerm.UsersQuantitiy)
-                    </td>
-                    <td>
-                        @Html.DisplayFor(modelItem => examTerm.UsersLimit)
-                    </td>
-                    <td>
-                        <ul>
-                            @foreach (var examiner in examTerm.Examiners)
-                            {
-                                <li>@examiner.FirstName @examiner.LastName</li>
-                            }
-                        </ul>
-                    </td>
-                    @if (Model.Options.OperationSet == 1)
-                    {
-                        <td>
+                        @if (examTerm.Examiners.ToList().Select(z => z.Email).Contains(this.User.Identity.Name))
+                        {
                             <div class="dropdown p-0">
                                 <button class="btn btn-success dropdown-toggle" type="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">Operacje</button>
                                 <div class="dropdown-menu nohover">
-                                    <a asp-action="EditExamTerm" asp-route-examTermIdentificator="@examTerm.ExamTermIdentificator" asp-controller="ExamsTerms" class="btn btn-warning w-100 mb-1">Edytuj</a>
                                     <a asp-action="ExamTermDetails" asp-route-examTermIdentificator="@examTerm.ExamTermIdentificator" asp-controller="ExamsTerms" class="btn btn-info w-100 mb-1">Szczegóły</a>
-                                    <a asp-action="AddUsersToExamTerm" asp-route-examTermIdentificator="@examTerm.ExamTermIdentificator" asp-controller="ExamsTerms" class="btn btn-primary w-100 mb-1">Dodaj użytkowników do tury</a>
                                     <a asp-action="MarkExamTerm" asp-route-examTermIdentificator="@examTerm.ExamTermIdentificator" asp-controller="ExamsTerms" class="btn btn-success w-100 mb-1">Oceń egzamin dla tury</a>
-                                    <a asp-action="DeleteUsersFromExamTerm" asp-route-examTermIdentificator="@examTerm.ExamTermIdentificator" asp-controller="ExamsTerms" class="btn btn-light w-100">Usuń użytkowników z tury</a>
                                 </div>
                             </div>
-                        </td>
-                    }
-                    @if (Model.Options.OperationSet == 2)
-                    {
-                        <td>
-                            @if (examTerm.Examiners.ToList().Select(z => z.Email).Contains(this.User.Identity.Name))
-                            {
-                                <div class="dropdown p-0">
-                                    <button class="btn btn-success dropdown-toggle" type="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">Operacje</button>
-                                    <div class="dropdown-menu nohover">
-                                        <a asp-action="ExamTermDetails" asp-route-examTermIdentificator="@examTerm.ExamTermIdentificator" asp-controller="ExamsTerms" class="btn btn-info w-100 mb-1">Szczegóły</a>
-                                        <a asp-action="MarkExamTerm" asp-route-examTermIdentificator="@examTerm.ExamTermIdentificator" asp-controller="ExamsTerms" class="btn btn-success w-100 mb-1">Oceń egzamin dla tury</a>
-                                    </div>
-                                </div>
-                            }
-                        </td>
-                    }
-                </tr>
+                        }
+                    </td>
+                }
+            </tr>
             }
         </tbody>
     </table>

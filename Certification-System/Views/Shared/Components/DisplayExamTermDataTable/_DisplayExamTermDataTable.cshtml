@@ -17,6 +17,9 @@
                     @Html.DisplayNameFor(model => model.ExamsTerms.FirstOrDefault().Exam.OrdinalNumber)
                 </th>
                 <th>
+                    @Html.DisplayNameFor(model => model.ExamsTerms.FirstOrDefault().ExamTermIndexer)
+                </th>
+                <th>
                     @Html.DisplayNameFor(model => model.ExamsTerms.FirstOrDefault().DateOfStart)
                 </th>
                 <th>
@@ -60,6 +63,9 @@
                 </td>
                 <td>
                     @Html.DisplayFor(modelItem => examTerm.Exam.OrdinalNumber)
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => examTerm.ExamTermIndexer)
                 </td>
                 <td>
                     @Html.DisplayFor(modelItem => examTerm.DateOfStart)
