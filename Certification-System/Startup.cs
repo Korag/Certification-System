@@ -17,6 +17,8 @@ using Certification_System.Repository.Context;
 using AutoMapper;
 using Certification_System.Services.Models;
 using Certification_System.ServicesInterfaces.Models;
+using System.Globalization;
+using Microsoft.AspNetCore.Localization;
 
 namespace Certification_System
 {
@@ -134,6 +136,14 @@ namespace Certification_System
                 // The default HSTS value is 30 days. You may want to change this for production scenarios, see https://aka.ms/aspnetcore-hsts.
                 app.UseHsts();
             }
+
+            var supportedCultures = new[] { new CultureInfo("pl-PL") };
+            app.UseRequestLocalization(new RequestLocalizationOptions
+            {
+                DefaultRequestCulture = new RequestCulture("pl-PL"),
+                SupportedCultures = supportedCultures,
+                SupportedUICultures = supportedCultures
+            });
 
             app.UseHttpsRedirection();
             app.UseStaticFiles();
