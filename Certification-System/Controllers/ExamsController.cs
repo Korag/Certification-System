@@ -641,31 +641,28 @@ namespace Certification_System.Controllers
         {
             ViewBag.Message = message;
 
-            var ExamsResults = _context.examResultRepository.GetListOfExamsResults();
-            var Exams = _context.examRepository.GetListOfExams();
-            var Courses = _context.courseRepository.GetListOfCourses();
-            var Users = _context.userRepository.GetListOfUsers();
+            var examsResults = _context.examResultRepository.GetListOfExamsResults();
 
-            List<DisplayExamResultViewModel> ListOfExamsResults = new List<DisplayExamResultViewModel>();
+            List<DisplayExamResultViewModel> listOfExamsResults = new List<DisplayExamResultViewModel>();
 
-            foreach (var examResult in ExamsResults)
+            foreach (var examResult in examsResults)
             {
                 DisplayExamResultViewModel singleExamResult = _mapper.Map<DisplayExamResultViewModel>(examResult);
 
-                var RelatedExam = _context.examRepository.GetExamByExamResultId(examResult.ExamResultIdentificator);
-                var RelatedCourse = _context.courseRepository.GetCourseByExamId(RelatedExam.ExamIdentificator);
-                var RelatedUser = _context.userRepository.GetUserById(examResult.User);
+                var relatedExam = _context.examRepository.GetExamByExamResultId(examResult.ExamResultIdentificator);
+                var relatedCourse = _context.courseRepository.GetCourseByExamId(relatedExam.ExamIdentificator);
+                var relatedUser = _context.userRepository.GetUserById(examResult.User);
 
-                singleExamResult.MaxAmountOfPointsToEarn = RelatedExam.MaxAmountOfPointsToEarn;
+                singleExamResult.MaxAmountOfPointsToEarn = relatedExam.MaxAmountOfPointsToEarn;
 
-                singleExamResult.Exam = _mapper.Map<DisplayCrucialDataExamViewModel>(RelatedExam);
-                singleExamResult.Course = _mapper.Map<DisplayCrucialDataCourseViewModel>(RelatedCourse);
-                singleExamResult.User = _mapper.Map<DisplayCrucialDataUserViewModel>(RelatedUser);
+                singleExamResult.Exam = _mapper.Map<DisplayCrucialDataExamViewModel>(relatedExam);
+                singleExamResult.Course = _mapper.Map<DisplayCrucialDataCourseViewModel>(relatedCourse);
+                singleExamResult.User = _mapper.Map<DisplayCrucialDataUserViewModel>(relatedUser);
 
-                ListOfExamsResults.Add(singleExamResult);
+                listOfExamsResults.Add(singleExamResult);
             }
 
-            return View(ListOfExamsResults);
+            return View(listOfExamsResults);
         }
 
         // GET: AssignUserToExam
@@ -964,16 +961,18 @@ namespace Certification_System.Controllers
                 {
                     List<ExamResult> usersExamsResults = new List<ExamResult>();
 
+                    var exam = _context.examRepository.GetExamById(markedExamViewModel.ExamIdentificator);
+
                     foreach (var user in markedExamViewModel.Users)
                     {
                         ExamResult sinlgeUserExamResult = _mapper.Map<ExamResult>(user);
                         sinlgeUserExamResult.ExamResultIdentificator = _keyGenerator.GenerateNewId();
+                        sinlgeUserExamResult.ExamResultIndexer = _keyGenerator.GenerateExamResultEntityIndexer(exam.ExamIndexer);
 
                         usersExamsResults.Add(sinlgeUserExamResult);
                         _context.examResultRepository.AddExamResult(sinlgeUserExamResult);
                     }
 
-                    var exam = _context.examRepository.GetExamById(markedExamViewModel.ExamIdentificator);
                     _context.examRepository.SetMaxAmountOfPointsToEarn(markedExamViewModel.ExamIdentificator, markedExamViewModel.MaxAmountOfPointsToEarn);
 
                     var logInfo = _logger.GenerateLogInformation(this.User.Identity.Name, this.ControllerContext.RouteData.Values["action"].ToString(), LogTypeOfAction.TypesOfActions[1]);

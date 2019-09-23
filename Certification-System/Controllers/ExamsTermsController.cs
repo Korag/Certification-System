@@ -548,10 +548,13 @@ namespace Certification_System.Controllers
                 {
                     List<ExamResult> usersExamResults = new List<ExamResult>();
 
+                    var exam = _context.examRepository.GetExamById(markedExamTermViewModel.ExamTerm.Exam.ExamIdentificator);
+
                     foreach (var user in markedExamTermViewModel.Users)
                     {
                         ExamResult singleUserExamResult = _mapper.Map<ExamResult>(user);
                         singleUserExamResult.ExamResultIdentificator = _keyGenerator.GenerateNewId();
+                        singleUserExamResult.ExamResultIndexer = _keyGenerator.GenerateExamResultEntityIndexer(exam.ExamIndexer);
 
                         singleUserExamResult.ExamTerm = markedExamTermViewModel.ExamTerm.ExamTermIdentificator;
 
@@ -564,8 +567,6 @@ namespace Certification_System.Controllers
                     _logger.AddExamsResultsLogs(usersExamResults, logInfoAdd);
 
                     _context.examRepository.SetMaxAmountOfPointsToEarn(markedExamTermViewModel.ExamTerm.Exam.ExamIdentificator, markedExamTermViewModel.MaxAmountOfPointsToEarn);
-
-                    var exam = _context.examRepository.GetExamById(markedExamTermViewModel.ExamTerm.Exam.ExamIdentificator);
 
                     var logInfoUpdate = _logger.GenerateLogInformation(this.User.Identity.Name, this.ControllerContext.RouteData.Values["action"].ToString(), LogTypeOfAction.TypesOfActions[1]);
                     _logger.AddExamLog(exam, logInfoUpdate);

@@ -6,6 +6,9 @@ namespace Certification_System.DTOViewModels
     {
         public string UserIdentificator { get; set; }
 
+        [Display(Name = "Identyfikator wyniku")]
+        public string ExamResultIndexer { get; set; }
+
         [Display(Name = "Adres email")]
         public string Email { get; set; }
 

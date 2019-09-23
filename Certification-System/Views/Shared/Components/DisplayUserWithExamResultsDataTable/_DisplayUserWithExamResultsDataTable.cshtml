@@ -5,6 +5,9 @@
         <thead>
             <tr>
                 <th>
+                    @Html.DisplayNameFor(model => model.Users.FirstOrDefault().ExamResultIndexer)
+                </th>
+                <th>
                     @Html.DisplayNameFor(model => model.Users.FirstOrDefault().Email)
                 </th>
                 <th>
@@ -36,50 +39,53 @@
         <tbody>
             @foreach (var user in Model.Users)
             {
-                <tr>
+            <tr>
+                <td>
+                    @Html.DisplayFor(modelItem => user.ExamResultIndexer)
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => user.Email)
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => user.FirstName)
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => user.LastName)
+                </td>
+                @if (!user.HasExamResult)
+                {
                     <td>
-                        @Html.DisplayFor(modelItem => user.Email)
+                        @Html.DisplayFor(modelItem => user.PointsEarned)
                     </td>
                     <td>
-                        @Html.DisplayFor(modelItem => user.FirstName)
+                        @Html.DisplayFor(modelItem => user.MaxAmountOfPointsToEarn)
                     </td>
                     <td>
-                        @Html.DisplayFor(modelItem => user.LastName)
+                        @Html.DisplayFor(modelItem => user.PercentageOfResult)
                     </td>
-                    @if (!user.HasExamResult)
-                    {
-                        <td>
-                            @Html.DisplayFor(modelItem => user.PointsEarned)
-                        </td>
-                        <td>
-                            @Html.DisplayFor(modelItem => user.MaxAmountOfPointsToEarn)
-                        </td>
-                        <td>
-                            @Html.DisplayFor(modelItem => user.PercentageOfResult)
-                        </td>
-                        <td>
-                            <input type="checkbox" asp-for="@user.ExamPassed" data-toggle="toggle" data-on="Tak" data-off="Nie" data-size="sm" disabled />
-                        </td>
-                    }
-                    else
-                    {
-                        <td>
-                            Nie oceniony
-                        </td>
-                        <td>
-                            Nie oceniony
-                        </td>
-                        <td>
-                            Nie oceniony
-                        </td>
-                        <td>
-                            Nie oceniony
-                        </td>
-                    }
                     <td>
-                        <a asp-action="UserDetails" asp-route-userIdentificator="@user.UserIdentificator" asp-controller="Users" class="btn btn-info">Szczegóły użytkownika</a>
+                        <input type="checkbox" asp-for="@user.ExamPassed" data-toggle="toggle" data-on="Tak" data-off="Nie" data-size="sm" disabled />
                     </td>
-                </tr>
+                }
+                else
+                {
+                    <td>
+                        Nie oceniony
+                    </td>
+                    <td>
+                        Nie oceniony
+                    </td>
+                    <td>
+                        Nie oceniony
+                    </td>
+                    <td>
+                        Nie oceniony
+                    </td>
+                }
+                <td>
+                    <a asp-action="UserDetails" asp-route-userIdentificator="@user.UserIdentificator" asp-controller="Users" class="btn btn-info">Szczegóły użytkownika</a>
+                </td>
+            </tr>
             }
         </tbody>
     </table>
