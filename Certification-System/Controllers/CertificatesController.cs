@@ -95,10 +95,10 @@ namespace Certification_System.Controllers
             {
                 ViewBag.TypeOfAction = TypeOfAction;
 
-                var Certificate = _context.certificateRepository.GetCertificateById(certificateIdentificator);
-                DisplayCertificateViewModel modifiedCertificate = _mapper.Map<DisplayCertificateViewModel>(Certificate);
+                var certificate = _context.certificateRepository.GetCertificateById(certificateIdentificator);
+                DisplayCertificateViewModel modifiedCertificate = _mapper.Map<DisplayCertificateViewModel>(certificate);
 
-                modifiedCertificate.Branches = _context.branchRepository.GetBranchesById(Certificate.Branches);
+                modifiedCertificate.Branches = _context.branchRepository.GetBranchesById(certificate.Branches);
 
                 return View(modifiedCertificate);
             }
@@ -112,21 +112,21 @@ namespace Certification_System.Controllers
         {
             ViewBag.Message = message;
 
-            var Certificates = _context.certificateRepository.GetListOfCertificates();
+            var certificates = _context.certificateRepository.GetListOfCertificates();
 
-            List<DisplayCertificateViewModel> ListOfCertificates = _mapper.Map<List<DisplayCertificateViewModel>>(Certificates);
-            ListOfCertificates.ForEach(z => z.Branches = _context.branchRepository.GetBranchesById(z.Branches));
+            List<DisplayCertificateViewModel> listOfCertificates = _mapper.Map<List<DisplayCertificateViewModel>>(certificates);
+            listOfCertificates.ForEach(z => z.Branches = _context.branchRepository.GetBranchesById(z.Branches));
 
-            return View(ListOfCertificates);
+            return View(listOfCertificates);
         }
 
         // GET: EditCertificate
         [Authorize(Roles = "Admin")]
         public ActionResult EditCertificate(string certificateIdentificator)
         {
-            var Certificate = _context.certificateRepository.GetCertificateById(certificateIdentificator);
+            var certificate = _context.certificateRepository.GetCertificateById(certificateIdentificator);
 
-            EditCertificateViewModel certificateToUpdate = _mapper.Map<EditCertificateViewModel>(Certificate);
+            EditCertificateViewModel certificateToUpdate = _mapper.Map<EditCertificateViewModel>(certificate);
             certificateToUpdate.AvailableBranches = _context.branchRepository.GetBranchesAsSelectList().ToList();
 
             return View(certificateToUpdate);
@@ -161,43 +161,43 @@ namespace Certification_System.Controllers
         [Authorize(Roles = "Admin")]
         public ActionResult CertificateDetails(string certificateIdentificator)
         {
-            var Certificate = _context.certificateRepository.GetCertificateById(certificateIdentificator);
+            var certificate = _context.certificateRepository.GetCertificateById(certificateIdentificator);
 
-            var GivenCertificatesInstances = _context.givenCertificateRepository.GetGivenCertificatesByIdOfCertificate(certificateIdentificator);
-            var GivenCertificatesIdentificators = GivenCertificatesInstances.Select(z => z.GivenCertificateIdentificator);
+            var givenCertificatesInstances = _context.givenCertificateRepository.GetGivenCertificatesByIdOfCertificate(certificateIdentificator);
+            var givenCertificatesIdentificators = givenCertificatesInstances.Select(z => z.GivenCertificateIdentificator);
 
-            var UsersWithCertificate = _context.userRepository.GetUsersByGivenCertificateId(GivenCertificatesIdentificators.ToList());
+            var usersWithCertificate = _context.userRepository.GetUsersByGivenCertificateId(givenCertificatesIdentificators.ToList());
 
-            List<DisplayCrucialDataWithCompaniesRoleUserViewModel> ListOfUsers = new List<DisplayCrucialDataWithCompaniesRoleUserViewModel>();
+            List<DisplayCrucialDataWithCompaniesRoleUserViewModel> listOfUsers = new List<DisplayCrucialDataWithCompaniesRoleUserViewModel>();
 
-            if (UsersWithCertificate.Count != 0)
+            if (usersWithCertificate.Count != 0)
             {
-                foreach (var user in UsersWithCertificate)
+                foreach (var user in usersWithCertificate)
                 {
                     DisplayCrucialDataWithCompaniesRoleUserViewModel singleUser = _mapper.Map<DisplayCrucialDataWithCompaniesRoleUserViewModel>(user);
                     singleUser.CompanyRoleManager = _context.companyRepository.GetCompaniesById(user.CompanyRoleManager).Select(s => s.CompanyName).ToList();
                     singleUser.CompanyRoleWorker = _context.companyRepository.GetCompaniesById(user.CompanyRoleWorker).Select(s => s.CompanyName).ToList();
 
-                    ListOfUsers.Add(singleUser);
+                    listOfUsers.Add(singleUser);
                 }
             }
 
-            var CoursesWhichEndedWithSuchCertificate = _context.courseRepository.GetCoursesById(GivenCertificatesInstances.Select(z => z.Course).ToList());
+            var coursesWhichEndedWithSuchCertificate = _context.courseRepository.GetCoursesById(givenCertificatesInstances.Select(z => z.Course).ToList());
 
-            List<DisplayCourseViewModel> ListOfCourses = new List<DisplayCourseViewModel>();
+            List<DisplayCourseViewModel> listOfCourses = new List<DisplayCourseViewModel>();
 
-            if (CoursesWhichEndedWithSuchCertificate.Count != 0)
+            if (coursesWhichEndedWithSuchCertificate.Count != 0)
             {
-                ListOfCourses = _mapper.Map<List<DisplayCourseViewModel>>(CoursesWhichEndedWithSuchCertificate);
-                ListOfCourses.ForEach(z => z.Branches = _context.branchRepository.GetBranchesById(z.Branches));
+                listOfCourses = _mapper.Map<List<DisplayCourseViewModel>>(coursesWhichEndedWithSuchCertificate);
+                listOfCourses.ForEach(z => z.Branches = _context.branchRepository.GetBranchesById(z.Branches));
             }
 
-            CertificateDetailsViewModel CertificateDetails = _mapper.Map<CertificateDetailsViewModel>(Certificate);
-            CertificateDetails.Branches = _context.branchRepository.GetBranchesById(Certificate.Branches);
-            CertificateDetails.CoursesWhichEndedWithCertificate = ListOfCourses;
-            CertificateDetails.UsersWithCertificate = ListOfUsers;
+            CertificateDetailsViewModel certificateDetails = _mapper.Map<CertificateDetailsViewModel>(certificate);
+            certificateDetails.Branches = _context.branchRepository.GetBranchesById(certificate.Branches);
+            certificateDetails.CoursesWhichEndedWithCertificate = listOfCourses;
+            certificateDetails.UsersWithCertificate = listOfUsers;
 
-            return View(CertificateDetails);
+            return View(certificateDetails);
         }
 
         // GET: DeleteCertificateHub

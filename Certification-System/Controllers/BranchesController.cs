@@ -40,8 +40,8 @@ namespace Certification_System.Controllers
         {
             ViewBag.Message = message;
 
-            var BranchesList = _context.branchRepository.GetListOfBranches();
-            List<DisplayBranchViewModel> existingBranches = _mapper.Map<List<DisplayBranchViewModel>>(BranchesList);
+            var branchesList = _context.branchRepository.GetListOfBranches();
+            List<DisplayBranchViewModel> existingBranches = _mapper.Map<List<DisplayBranchViewModel>>(branchesList);
 
             return View(existingBranches);
         }
@@ -52,14 +52,14 @@ namespace Certification_System.Controllers
         {
             ViewBag.TypeOfAction = typeOfAction;
 
-            var Branch = _context.branchRepository.GetBranchById(branchIdentificator);
+            var branch = _context.branchRepository.GetBranchById(branchIdentificator);
 
             if (branchIdentificator == null)
             {
                 return RedirectToAction(nameof(AddNewBranch));
             }
 
-            DisplayBranchViewModel modifiedBranch = _mapper.Map<DisplayBranchViewModel>(Branch);
+            DisplayBranchViewModel modifiedBranch = _mapper.Map<DisplayBranchViewModel>(branch);
 
             return View(modifiedBranch);
         }
@@ -98,8 +98,8 @@ namespace Certification_System.Controllers
         [HttpGet]
         public ActionResult EditBranch(string branchIdentificator)
         {
-            var Branch = _context.branchRepository.GetBranchById(branchIdentificator);
-            EditBranchViewModel branchToUpdate = _mapper.Map<EditBranchViewModel>(Branch);
+            var branch = _context.branchRepository.GetBranchById(branchIdentificator);
+            EditBranchViewModel branchToUpdate = _mapper.Map<EditBranchViewModel>(branch);
 
             return View(branchToUpdate);
         }
@@ -111,16 +111,16 @@ namespace Certification_System.Controllers
         {
             if (ModelState.IsValid)
             {
-                var OriginBranch = _context.branchRepository.GetBranchById(editedBranch.BranchIdentificator);
+                var originBranch = _context.branchRepository.GetBranchById(editedBranch.BranchIdentificator);
 
-                OriginBranch = _mapper.Map<EditBranchViewModel, Branch>(editedBranch, OriginBranch);
+                originBranch = _mapper.Map<EditBranchViewModel, Branch>(editedBranch, originBranch);
 
-                _context.branchRepository.UpdateBranch(OriginBranch);
+                _context.branchRepository.UpdateBranch(originBranch);
 
                 var logInfo = _logger.GenerateLogInformation(this.User.Identity.Name, this.ControllerContext.RouteData.Values["action"].ToString(), LogTypeOfAction.TypesOfActions[1]);
-                _logger.AddBranchLog(OriginBranch, logInfo);
+                _logger.AddBranchLog(originBranch, logInfo);
 
-                return RedirectToAction("ConfirmationOfActionOnBranch", "Branches", new { branchIdentificator = OriginBranch.BranchIdentificator, typeOfAction = "Update" });
+                return RedirectToAction("ConfirmationOfActionOnBranch", "Branches", new { branchIdentificator = originBranch.BranchIdentificator, typeOfAction = "Update" });
             }
 
             return View(editedBranch);
