@@ -10,10 +10,14 @@
 
 <div>
     <form asp-action="DeleteUsersFromCourse">
-        
-        <div class="col-md-8 col-xl-6 col-lg-6 col-sm-12 col-xs-10 m-auto p-3 shadow p-3 mb-5 bg-light rounded border border-primary rounded-bottom" style="opacity:0.90">
 
-            <h2>Informacje o kursie</h2>
+        <h2>Informacje o kursie</h2>
+
+        <div class="row m-0 mt-3 mb-3">
+            <a asp-action="CourseDetails" asp-route-courseIdentificator="@Model.CourseIdentificator" asp-controller="Courses" class="btn btn-outline-info mt-1 xs450px_FloatRight">Powrót do szczegółów kursu</a>
+        </div>
+
+        <div class="col-md-8 col-xl-6 col-lg-6 col-sm-12 col-xs-10 m-auto p-3 shadow p-3 mb-5 bg-light rounded border border-primary rounded-bottom" style="opacity:0.90">
 
             <input asp-for="CourseIdentificator" class="form-control col-12" hidden />
 
@@ -53,15 +57,15 @@
             </div>
 
             <div class="form-group">
+                <label asp-for="CourseLength" class="control-label"></label>
+                <input asp-for="CourseLength" class="form-control col-12" disabled />
+            </div>
+
+            <div class="form-group">
                 <label asp-for="ExamIsRequired" class="control-label"></label>
                 <div class="row pl-3">
                     <input type="checkbox" asp-for="ExamIsRequired" class="form-control col-12" data-toggle="toggle" data-on="Tak" data-off="Nie" data-size="sm" disabled />
                 </div>
-            </div>
-
-            <div class="form-group">
-                <label asp-for="CourseLength" class="control-label"></label>
-                <input asp-for="CourseLength" class="form-control col-12" disabled />
             </div>
 
             <div class="form-group mb-0">
@@ -92,7 +96,7 @@
         {
             @await Component.InvokeAsync("DeleteUserFromCourseDataTable", new { userViewModel = Model.AllCourseParticipants, userToDeleteViewModel = Model.UsersToDeleteFromCourse, tableIdentificator = "listUsers" })
 
-            <div>
+            <div class="mt-4">
                 <div class="row justify-content-center">
                     <button type="button" class="btn btn-danger" data-toggle="modal" data-target="#modal">Usuń użytkowników z kursu</button>
                 </div>

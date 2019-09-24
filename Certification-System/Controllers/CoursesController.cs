@@ -43,26 +43,26 @@ namespace Certification_System.Controllers
             {
                 ViewBag.TypeOfAction = TypeOfAction;
 
-                var Course = _context.courseRepository.GetCourseById(courseIdentificator);
+                var course = _context.courseRepository.GetCourseById(courseIdentificator);
 
                 DisplayCourseWithMeetingsViewModel modifiedCourse = new DisplayCourseWithMeetingsViewModel();
-                modifiedCourse.Course = _mapper.Map<DisplayCourseViewModel>(Course);
+                modifiedCourse.Course = _mapper.Map<DisplayCourseViewModel>(course);
 
-                if (Course.Meetings.Count() != 0)
+                if (course.Meetings != null)
                 {
-                    var Meetings = _context.meetingRepository.GetMeetingsById(Course.Meetings);
-                    modifiedCourse.Meetings = _mapper.Map<List<DisplayMeetingWithoutCourseViewModel>>(Meetings);
+                    var meetings = _context.meetingRepository.GetMeetingsById(course.Meetings);
+                    modifiedCourse.Meetings = _mapper.Map<List<DisplayMeetingWithoutCourseViewModel>>(meetings);
 
                     foreach (var meeting in modifiedCourse.Meetings)
                     {
-                        var Instructors = _context.userRepository.GetUsersById(Meetings.Where(z => z.MeetingIdentificator == meeting.MeetingIdentificator).Select(z => z.Instructors).FirstOrDefault());
+                        var instructors = _context.userRepository.GetUsersById(meetings.Where(z => z.MeetingIdentificator == meeting.MeetingIdentificator).Select(z => z.Instructors).FirstOrDefault());
 
-                        meeting.Instructors = _mapper.Map<List<DisplayCrucialDataUserViewModel>>(Instructors);
+                        meeting.Instructors = _mapper.Map<List<DisplayCrucialDataUserViewModel>>(instructors);
                     }
                 }
 
-                var BranchNames = _context.branchRepository.GetBranchesById(Course.Branches);
-                modifiedCourse.Course.Branches = BranchNames;
+                var branchNames = _context.branchRepository.GetBranchesById(course.Branches);
+                modifiedCourse.Course.Branches = branchNames;
 
                 return View(modifiedCourse);
             }
@@ -170,9 +170,9 @@ namespace Certification_System.Controllers
 
                 List<Meeting> meetings = new List<Meeting>();
 
-                if (course.Meetings.Count() != 0)
+                if (newCourse.Meetings.Count() != 0)
                 {
-                    foreach (var newMeeting in course.Meetings)
+                    foreach (var newMeeting in newCourse.Meetings)
                     {
                         Meeting meeting = _mapper.Map<Meeting>(newMeeting);
                         meeting.MeetingIdentificator = _keyGenerator.GenerateNewId();
@@ -187,9 +187,7 @@ namespace Certification_System.Controllers
                     _logger.AddMeetingsLogs(meetings, logInfoMeetings);
                 }
 
-                var MeetingsIdentificators = meetings.Select(z => z.MeetingIdentificator);
-
-                course.Meetings.ToList().AddRange(MeetingsIdentificators);
+                course.Meetings = meetings.Select(z => z.MeetingIdentificator).ToList();
 
                 _context.courseRepository.AddCourse(course);
 
@@ -211,17 +209,17 @@ namespace Certification_System.Controllers
         {
             ViewBag.Message = message;
 
-            var Courses = _context.courseRepository.GetListOfCourses();
-            List<DisplayCourseViewModel> ListOfCourses = new List<DisplayCourseViewModel>();
+            var courses = _context.courseRepository.GetListOfCourses();
+            List<DisplayCourseViewModel> listOfCourses = new List<DisplayCourseViewModel>();
 
-            if (Courses.Count != 0)
+            if (courses.Count != 0)
             {
-                ListOfCourses = _mapper.Map<List<DisplayCourseViewModel>>(Courses);
-                ListOfCourses.ForEach(z => z.Branches = _context.branchRepository.GetBranchesById(z.Branches));
-                ListOfCourses.ForEach(z => z.EnrolledUsersQuantity = Courses.Where(s => s.CourseIdentificator == z.CourseIdentificator).FirstOrDefault().EnrolledUsers.Count);
+                listOfCourses = _mapper.Map<List<DisplayCourseViewModel>>(courses);
+                listOfCourses.ForEach(z => z.Branches = _context.branchRepository.GetBranchesById(z.Branches));
+                listOfCourses.ForEach(z => z.EnrolledUsersQuantity = courses.Where(s => s.CourseIdentificator == z.CourseIdentificator).FirstOrDefault().EnrolledUsers.Count);
             }
 
-            return View(ListOfCourses);
+            return View(listOfCourses);
         }
 
         // GET: CourseDetails
@@ -230,13 +228,13 @@ namespace Certification_System.Controllers
         {
             ViewBag.Message = message;
 
-            var Course = _context.courseRepository.GetCourseById(courseIdentificator);
-            var Meetings = _context.meetingRepository.GetMeetingsById(Course.Meetings);
+            var course = _context.courseRepository.GetCourseById(courseIdentificator);
+            var meetings = _context.meetingRepository.GetMeetingsById(course.Meetings);
 
             List<DisplayMeetingWithoutCourseViewModel> meetingsViewModel = new List<DisplayMeetingWithoutCourseViewModel>();
 
             // przemyśleć nad zmniejszeniem ViewModelu -> niepotrzebne pola
-            foreach (var meeting in Meetings)
+            foreach (var meeting in meetings)
             {
                 var meetingInstructors = _context.userRepository.GetInstructorsById(meeting.Instructors).ToList();
 
@@ -246,24 +244,24 @@ namespace Certification_System.Controllers
                 meetingsViewModel.Add(singleMeeting);
             }
 
-            var Users = _context.userRepository.GetUsersById(Course.EnrolledUsers);
+            var users = _context.userRepository.GetUsersById(course.EnrolledUsers);
 
-            List<DisplayCrucialDataUserViewModel> usersViewModel = _mapper.Map<List<DisplayCrucialDataUserViewModel>>(Users);
+            List<DisplayCrucialDataUserViewModel> usersViewModel = _mapper.Map<List<DisplayCrucialDataUserViewModel>>(users);
             //usersViewModel.ForEach(z => z.CompanyRoleManager = _context.companyRepository.GetCompaniesById(z.CompanyRoleManager).Select(s => s.CompanyName).ToList());
             //usersViewModel.ForEach(z => z.CompanyRoleWorker = _context.companyRepository.GetCompaniesById(z.CompanyRoleWorker).Select(s => s.CompanyName).ToList());
 
-            var InstructorsIdentificators = new List<string>();
-            Meetings.ToList().ForEach(z => z.Instructors.ToList().ForEach(s => InstructorsIdentificators.Add(s)));
+            var instructorsIdentificators = new List<string>();
+            meetings.ToList().ForEach(z => z.Instructors.ToList().ForEach(s => instructorsIdentificators.Add(s)));
 
-            var Instructors = _context.userRepository.GetUsersById(InstructorsIdentificators.Distinct().ToList());
-            List<DisplayCrucialDataWithContactUserViewModel> instructorsViewModel = _mapper.Map<List<DisplayCrucialDataWithContactUserViewModel>>(Instructors);
+            var instructors = _context.userRepository.GetUsersById(instructorsIdentificators.Distinct().ToList());
+            List<DisplayCrucialDataWithContactUserViewModel> instructorsViewModel = _mapper.Map<List<DisplayCrucialDataWithContactUserViewModel>>(instructors);
 
-            var Exams = _context.examRepository.GetExamsById(Course.Exams);
+            var exams = _context.examRepository.GetExamsById(course.Exams);
             List<DisplayExamWithoutCourseViewModel> examsViewModel = new List<DisplayExamWithoutCourseViewModel>();
 
-            List<string> ListOfExaminatorsIdentificators = new List<string>();
+            List<string> listOfExaminatorsIdentificators = new List<string>();
 
-            foreach (var exam in Exams)
+            foreach (var exam in exams)
             {
                 DisplayExamWithoutCourseViewModel singleExam = _mapper.Map<DisplayExamWithoutCourseViewModel>(exam);
                 singleExam.Examiners = _mapper.Map<List<DisplayCrucialDataUserViewModel>>(_context.userRepository.GetUsersById(exam.Examiners));
@@ -271,45 +269,47 @@ namespace Certification_System.Controllers
                 singleExam.DurationDays = (int)exam.DateOfEnd.Subtract(exam.DateOfStart).Days;
                 singleExam.DurationMinutes = (int)exam.DateOfEnd.Subtract(exam.DateOfStart).Minutes;
 
-                var ExamTermsOfExam = _context.examTermRepository.GetExamsTermsById(exam.ExamTerms);
-                ExamTermsOfExam.ToList().ForEach(z => ListOfExaminatorsIdentificators.AddRange(z.Examiners));
+                var examTerms= _context.examTermRepository.GetExamsTermsById(exam.ExamTerms);
+                examTerms.ToList().ForEach(z => listOfExaminatorsIdentificators.AddRange(z.Examiners));
 
-                ListOfExaminatorsIdentificators.AddRange(exam.Examiners);
+                listOfExaminatorsIdentificators.AddRange(exam.Examiners);
 
                 examsViewModel.Add(singleExam);
             }
 
-            ListOfExaminatorsIdentificators.Distinct();
+            listOfExaminatorsIdentificators.Distinct();
 
-            var Examiners = _context.userRepository.GetUsersById(ListOfExaminatorsIdentificators);
-            List<DisplayCrucialDataWithContactUserViewModel> examinersViewModel = _mapper.Map<List<DisplayCrucialDataWithContactUserViewModel>>(Examiners);
+            var examiners = _context.userRepository.GetUsersById(listOfExaminatorsIdentificators);
+            List<DisplayCrucialDataWithContactUserViewModel> examinersViewModel = _mapper.Map<List<DisplayCrucialDataWithContactUserViewModel>>(examiners);
 
             CourseDetailsViewModel courseDetails = new CourseDetailsViewModel();
-            courseDetails.Course = _mapper.Map<DisplayCourseViewModel>(Course);
-            courseDetails.Course.Branches = _context.branchRepository.GetBranchesById(Course.Branches);
+            courseDetails.Course = _mapper.Map<DisplayCourseViewModel>(course);
+            courseDetails.Course.Branches = _context.branchRepository.GetBranchesById(course.Branches);
 
             courseDetails.Meetings = meetingsViewModel;
             courseDetails.Exams = examsViewModel;
 
-            courseDetails.Course.EnrolledUsersQuantity = Course.EnrolledUsers.Count;
+            courseDetails.Course.EnrolledUsersQuantity = course.EnrolledUsers.Count;
             courseDetails.EnrolledUsers = usersViewModel;
             courseDetails.Instructors = instructorsViewModel;
             courseDetails.Examiners = examinersViewModel;
 
-            courseDetails.DispensedGivenCertificates = _mapper.Map<DispenseGivenCertificateCheckBoxViewModel[]>(usersViewModel);
+            // check and delete
 
-            if (Course.CourseEnded)
-            {
-                foreach (var user in Users)
-                {
-                    var UsersGivenCertificates = _context.givenCertificateRepository.GetGivenCertificatesById(user.GivenCertificates);
+            //courseDetails.DispensedGivenCertificates = _mapper.Map<DispenseGivenCertificateCheckBoxViewModel[]>(usersViewModel);
 
-                    if (UsersGivenCertificates.Where(z => z.Course == Course.CourseIdentificator).Count() != 0)
-                    {
-                        courseDetails.DispensedGivenCertificates.Where(z => z.UserIdentificator == user.Id).Select(z => z.GivenCertificateIsEarned = true);
-                    }
-                }
-            }
+            //if (Course.CourseEnded)
+            //{
+            //    foreach (var user in Users)
+            //    {
+            //        var UsersGivenCertificates = _context.givenCertificateRepository.GetGivenCertificatesById(user.GivenCertificates);
+
+            //        if (UsersGivenCertificates.Where(z => z.Course == Course.CourseIdentificator).Count() != 0)
+            //        {
+            //            courseDetails.DispensedGivenCertificates.Where(z => z.UserIdentificator == user.Id).Select(z => z.GivenCertificateIsEarned = true);
+            //        }
+            //    }
+            //}
 
             if (this.User.IsInRole("Instructor") && this.User.IsInRole("Examiner"))
             {
@@ -331,9 +331,9 @@ namespace Certification_System.Controllers
         [Authorize(Roles = "Admin")]
         public ActionResult EditCourseHub(string courseIdentificator)
         {
-            var Course = _context.courseRepository.GetCourseById(courseIdentificator);
+            var course = _context.courseRepository.GetCourseById(courseIdentificator);
 
-            if (Course.Meetings.Count() != 0)
+            if (course.Meetings.Count() != 0)
             {
                 return RedirectToAction("EditCourseWithMeetings", "Courses", new { courseIdentificator = courseIdentificator });
             }
@@ -347,9 +347,9 @@ namespace Certification_System.Controllers
         [Authorize(Roles = "Admin")]
         public ActionResult EditCourse(string courseIdentificator)
         {
-            var Course = _context.courseRepository.GetCourseById(courseIdentificator);
+            var course = _context.courseRepository.GetCourseById(courseIdentificator);
 
-            EditCourseViewModel courseToUpdate = _mapper.Map<EditCourseViewModel>(Course);
+            EditCourseViewModel courseToUpdate = _mapper.Map<EditCourseViewModel>(course);
             courseToUpdate.AvailableBranches = _context.branchRepository.GetBranchesAsSelectList().ToList();
 
             return View(courseToUpdate);
@@ -360,22 +360,21 @@ namespace Certification_System.Controllers
         [HttpPost]
         public ActionResult EditCourse(EditCourseViewModel editedCourse)
         {
-            var OriginCourse = _context.courseRepository.GetCourseById(editedCourse.CourseIdentificator);
+            var originCourse = _context.courseRepository.GetCourseById(editedCourse.CourseIdentificator);
 
             if (ModelState.IsValid)
             {
-                OriginCourse = _mapper.Map<EditCourseViewModel, Course>(editedCourse, OriginCourse);
+                originCourse = _mapper.Map<EditCourseViewModel, Course>(editedCourse, originCourse);
 
-
-                if (OriginCourse.DateOfEnd != null)
+                if (originCourse.DateOfEnd != null)
                 {
-                    OriginCourse.CourseLength = OriginCourse.DateOfEnd.Subtract(OriginCourse.DateOfStart).Days;
+                    originCourse.CourseLength = originCourse.DateOfEnd.Subtract(originCourse.DateOfStart).Days;
                 }
 
-                _context.courseRepository.UpdateCourse(OriginCourse);
+                _context.courseRepository.UpdateCourse(originCourse);
 
                 var logInfo = _logger.GenerateLogInformation(this.User.Identity.Name, this.ControllerContext.RouteData.Values["action"].ToString(), LogTypeOfAction.TypesOfActions[1]);
-                _logger.AddCourseLog(OriginCourse, logInfo);
+                _logger.AddCourseLog(originCourse, logInfo);
 
                 return RedirectToAction("ConfirmationOfActionOnCourse", "Courses", new { courseIdentificator = editedCourse.CourseIdentificator, TypeOfAction = "Update" });
             }
@@ -393,13 +392,13 @@ namespace Certification_System.Controllers
         [Authorize(Roles = "Admin")]
         public ActionResult EditCourseWithMeetings(string courseIdentificator)
         {
-            var Course = _context.courseRepository.GetCourseById(courseIdentificator);
-            var Meetings = _context.meetingRepository.GetMeetingsById(Course.Meetings);
+            var course = _context.courseRepository.GetCourseById(courseIdentificator);
+            var meetings = _context.meetingRepository.GetMeetingsById(course.Meetings);
 
-            EditCourseWithMeetingsViewModel courseToUpdate = _mapper.Map<EditCourseWithMeetingsViewModel>(Course);
+            EditCourseWithMeetingsViewModel courseToUpdate = _mapper.Map<EditCourseWithMeetingsViewModel>(course);
             courseToUpdate.AvailableBranches = _context.branchRepository.GetBranchesAsSelectList().ToList();
             courseToUpdate.AvailableInstructors = _context.userRepository.GetInstructorsAsSelectList().ToList();
-            courseToUpdate.Meetings = _mapper.Map<List<EditMeetingViewModel>>(Meetings);
+            courseToUpdate.Meetings = _mapper.Map<List<EditMeetingViewModel>>(meetings);
 
             return View(courseToUpdate);
         }
@@ -409,29 +408,29 @@ namespace Certification_System.Controllers
         [HttpPost]
         public ActionResult EditCourseWithMeetings(EditCourseWithMeetingsViewModel editedCourse)
         {
-            var OriginCourse = _context.courseRepository.GetCourseById(editedCourse.CourseIdentificator);
-            var OriginMeetings = _context.meetingRepository.GetMeetingsById(editedCourse.Meetings.Select(z => z.MeetingIdentificator).ToList());
+            var originCourse = _context.courseRepository.GetCourseById(editedCourse.CourseIdentificator);
+            var originMeetings = _context.meetingRepository.GetMeetingsById(editedCourse.Meetings.Select(z => z.MeetingIdentificator).ToList());
 
             if (ModelState.IsValid)
             {
-                OriginMeetings = _mapper.Map<List<EditMeetingViewModel>, List<Meeting>>(editedCourse.Meetings.ToList(), OriginMeetings.ToList());
+                originMeetings = _mapper.Map<IList<EditMeetingViewModel>, ICollection<Meeting>>(editedCourse.Meetings, originMeetings);
 
-                _context.meetingRepository.UpdateMeetings(OriginMeetings);
+                _context.meetingRepository.UpdateMeetings(originMeetings);
 
                 var logInfoMeetings = _logger.GenerateLogInformation(this.User.Identity.Name, this.ControllerContext.RouteData.Values["action"].ToString(), LogTypeOfAction.TypesOfActions[1]);
-                _logger.AddMeetingsLogs(OriginMeetings, logInfoMeetings);
+                _logger.AddMeetingsLogs(originMeetings, logInfoMeetings);
 
-                OriginCourse = _mapper.Map<EditCourseWithMeetingsViewModel, Course>(editedCourse, OriginCourse);
+                originCourse = _mapper.Map<EditCourseWithMeetingsViewModel, Course>(editedCourse, originCourse);
 
-                if (OriginCourse.DateOfEnd != null)
+                if (originCourse.DateOfEnd != null)
                 {
-                    OriginCourse.CourseLength = OriginCourse.DateOfEnd.Subtract(OriginCourse.DateOfStart).Days;
+                    originCourse.CourseLength = originCourse.DateOfEnd.Subtract(originCourse.DateOfStart).Days;
                 }
 
-                _context.courseRepository.UpdateCourse(OriginCourse);
+                _context.courseRepository.UpdateCourse(originCourse);
 
                 var logInfo = _logger.GenerateLogInformation(this.User.Identity.Name, this.ControllerContext.RouteData.Values["action"].ToString(), LogTypeOfAction.TypesOfActions[1]);
-                _logger.AddCourseLog(OriginCourse, logInfo);
+                _logger.AddCourseLog(originCourse, logInfo);
 
                 return RedirectToAction("ConfirmationOfActionOnCourse", "Courses", new { courseIdentificator = editedCourse.CourseIdentificator, TypeOfAction = "Update" });
             }
@@ -446,27 +445,27 @@ namespace Certification_System.Controllers
         [Authorize(Roles = "Admin")]
         public ActionResult AssignUserToCourse(ICollection<string> userIdentificators, string courseIdentificator)
         {
-            ICollection<string> ChosenUsers;
-            string ChosenCourse = "";
+            ICollection<string> chosenUsers;
+            string chosenCourse = "";
 
             if (userIdentificators.Count() != 0)
-                ChosenUsers = _context.userRepository.GetUsersById(userIdentificators).Select(z => z.Id).ToList();
+                chosenUsers = _context.userRepository.GetUsersById(userIdentificators).Select(z => z.Id).ToList();
             else
-                ChosenUsers = new List<string>();
+                chosenUsers = new List<string>();
 
             if (courseIdentificator != null)
-                ChosenCourse = _context.courseRepository.GetCourseById(courseIdentificator).CourseIdentificator;
+                chosenCourse = _context.courseRepository.GetCourseById(courseIdentificator).CourseIdentificator;
 
-            var AvailableUsers = _context.userRepository.GetWorkersAsSelectList().ToList();
-            var AvailableCourses = _context.courseRepository.GetActiveCoursesWithVacantSeatsAsSelectList().ToList();
+            var availableUsers = _context.userRepository.GetWorkersAsSelectList().ToList();
+            var availableCourses = _context.courseRepository.GetActiveCoursesWithVacantSeatsAsSelectList().ToList();
 
             AssignUserToCourseViewModel usersToAssignToCourse = new AssignUserToCourseViewModel
             {
-                AvailableCourses = AvailableCourses,
-                SelectedCourse = ChosenCourse,
+                AvailableCourses = availableCourses,
+                SelectedCourse = chosenCourse,
 
-                AvailableUsers = AvailableUsers,
-                SelectedUsers = ChosenUsers
+                AvailableUsers = availableUsers,
+                SelectedUsers = chosenUsers
             };
 
             return View(usersToAssignToCourse);
@@ -479,36 +478,36 @@ namespace Certification_System.Controllers
         {
             if (ModelState.IsValid)
             {
-                var UsersAlreadyInChosenCourse = _context.userRepository.GetUsersById(usersAssignedToCourse.SelectedUsers.ToList()).Where(z => z.Courses.Contains(usersAssignedToCourse.SelectedCourse)).ToList();
+                var usersAlreadyInChosenCourse = _context.userRepository.GetUsersById(usersAssignedToCourse.SelectedUsers.ToList()).Where(z => z.Courses.Contains(usersAssignedToCourse.SelectedCourse)).ToList();
 
-                if (UsersAlreadyInChosenCourse.Count() == 0)
+                if (usersAlreadyInChosenCourse.Count() == 0)
                 {
-                    var Course = _context.courseRepository.GetCourseById(usersAssignedToCourse.SelectedCourse);
-                    var VacantSeats = Course.EnrolledUsersLimit - Course.EnrolledUsers.Count();
+                    var course = _context.courseRepository.GetCourseById(usersAssignedToCourse.SelectedCourse);
+                    var vacantSeats = course.EnrolledUsersLimit - course.EnrolledUsers.Count();
 
-                    if (VacantSeats < usersAssignedToCourse.SelectedUsers.Count())
+                    if (vacantSeats < usersAssignedToCourse.SelectedUsers.Count())
                     {
                         ModelState.AddModelError("", "Brak wystarczającej liczby miejsc dla wybranych użytkowników");
-                        ModelState.AddModelError("", $"Do wybranego kursu maksymalnie możesz zapisać jeszcze: {VacantSeats} użytkowników");
+                        ModelState.AddModelError("", $"Do wybranego kursu maksymalnie możesz zapisać jeszcze: {vacantSeats} użytkowników");
                     }
                     else
                     {
-                        _context.userRepository.AddUsersToCourse(Course.CourseIdentificator, usersAssignedToCourse.SelectedUsers);
-                        _context.courseRepository.AddEnrolledUsersToCourse(Course.CourseIdentificator, usersAssignedToCourse.SelectedUsers);
+                        _context.userRepository.AddUsersToCourse(course.CourseIdentificator, usersAssignedToCourse.SelectedUsers);
+                        _context.courseRepository.AddEnrolledUsersToCourse(course.CourseIdentificator, usersAssignedToCourse.SelectedUsers);
 
-                        var UpdatedCourse = _context.courseRepository.GetCourseById(Course.CourseIdentificator);
+                        var updatedCourse = _context.courseRepository.GetCourseById(course.CourseIdentificator);
                         var logInfo = _logger.GenerateLogInformation(this.User.Identity.Name, this.ControllerContext.RouteData.Values["action"].ToString(), LogTypeOfAction.TypesOfActions[1]);
-                        _logger.AddCourseLog(UpdatedCourse, logInfo);
+                        _logger.AddCourseLog(updatedCourse, logInfo);
 
-                        var UpdatedUsers= _context.userRepository.GetUsersById(usersAssignedToCourse.SelectedUsers);
-                        _logger.AddUsersLogs(UpdatedUsers, logInfo);
+                        var updatedUsers= _context.userRepository.GetUsersById(usersAssignedToCourse.SelectedUsers);
+                        _logger.AddUsersLogs(updatedUsers, logInfo);
 
                         return RedirectToAction("CourseDetails", new { courseIdentificator = usersAssignedToCourse.SelectedCourse, message = "Zapisano nowych użytkowników na kurs" });
                     }
                 }
                 else
                 {
-                    foreach (var user in UsersAlreadyInChosenCourse)
+                    foreach (var user in usersAlreadyInChosenCourse)
                     {
                         ModelState.AddModelError("", user.FirstName + " " + user.LastName + " już jest zapisany/a do wybranego kursu");
                     }
@@ -525,31 +524,31 @@ namespace Certification_System.Controllers
         [Authorize(Roles = "Admin")]
         public ActionResult EndCourseAndDispenseGivenCertificates(string courseIdentificator)
         {
-            var Course = _context.courseRepository.GetCourseById(courseIdentificator);
-            var Meetings = _context.meetingRepository.GetMeetingsById(Course.Meetings);
+            var course = _context.courseRepository.GetCourseById(courseIdentificator);
+            var meetings = _context.meetingRepository.GetMeetingsById(course.Meetings);
 
-            var Exams = _context.examRepository.GetExamsById(Course.Exams);
+            var exams = _context.examRepository.GetExamsById(course.Exams);
 
-            if (Course.CourseEnded != true)
+            if (course.CourseEnded != true)
             {
-                var EnrolledUsersList = _context.userRepository.GetUsersById(Course.EnrolledUsers);
+                var enrolledUsersList = _context.userRepository.GetUsersById(course.EnrolledUsers);
 
-                List<DisplayUserWithCourseResultsViewModel> ListOfUsers = new List<DisplayUserWithCourseResultsViewModel>();
+                List<DisplayUserWithCourseResultsViewModel> listOfUsers = new List<DisplayUserWithCourseResultsViewModel>();
 
-                if (EnrolledUsersList.Count != 0)
+                if (enrolledUsersList.Count != 0)
                 {
-                    ListOfUsers = GetCourseListOfUsersWithStatistics(EnrolledUsersList, Meetings, Exams).ToList();
+                    listOfUsers = GetCourseListOfUsersWithStatistics(enrolledUsersList, meetings, exams).ToList();
                 }
 
-                DispenseGivenCertificatesViewModel courseToEndViewModel = _mapper.Map<DispenseGivenCertificatesViewModel>(Course);
-                courseToEndViewModel.AllCourseParticipants = ListOfUsers;
+                DispenseGivenCertificatesViewModel courseToEndViewModel = _mapper.Map<DispenseGivenCertificatesViewModel>(course);
+                courseToEndViewModel.AllCourseParticipants = listOfUsers;
                 courseToEndViewModel.AvailableCertificates = _context.certificateRepository.GetCertificatesAsSelectList().ToList();
 
                 courseToEndViewModel.CourseLength = courseToEndViewModel.DateOfEnd.Subtract(courseToEndViewModel.DateOfStart).Days;
-                courseToEndViewModel.Branches = _context.branchRepository.GetBranchesById(Course.Branches);
-                courseToEndViewModel.EnrolledUsersQuantity = Course.EnrolledUsers.Count;
+                courseToEndViewModel.Branches = _context.branchRepository.GetBranchesById(course.Branches);
+                courseToEndViewModel.EnrolledUsersQuantity = course.EnrolledUsers.Count;
 
-                courseToEndViewModel.DispensedGivenCertificates = _mapper.Map<DispenseGivenCertificateCheckBoxViewModel[]>(ListOfUsers);
+                courseToEndViewModel.DispensedGivenCertificates = _mapper.Map<DispenseGivenCertificateCheckBoxViewModel[]>(listOfUsers);
 
                 return View(courseToEndViewModel);
             }
@@ -562,16 +561,16 @@ namespace Certification_System.Controllers
         [Authorize(Roles = "Admin")]
         public ActionResult EndCourseAndDispenseGivenCertificates(DispenseGivenCertificatesViewModel courseToEndViewModel)
         {
-            var Course = _context.courseRepository.GetCourseById(courseToEndViewModel.CourseIdentificator);
-            var Meetings = _context.meetingRepository.GetMeetingsById(Course.Meetings);
+            var course = _context.courseRepository.GetCourseById(courseToEndViewModel.CourseIdentificator);
+            var meetings = _context.meetingRepository.GetMeetingsById(course.Meetings);
 
             if (ModelState.IsValid)
             {
-                Course.CourseEnded = true;
+                course.CourseEnded = true;
 
                 var certificate = _context.certificateRepository.GetCertificateById(courseToEndViewModel.SelectedCertificate);
 
-                _context.courseRepository.UpdateCourse(Course);
+                _context.courseRepository.UpdateCourse(course);
 
                 List<GivenCertificate> disposedGivenCertificates = new List<GivenCertificate>();
                 List<CertificationPlatformUser> updatedUsers = new List<CertificationPlatformUser>();
@@ -611,21 +610,22 @@ namespace Certification_System.Controllers
                 return RedirectToAction("CourseDetails", new { courseIdentificator = courseToEndViewModel.CourseIdentificator, message = "Zaknięto kurs i rozdano certyfikaty." });
             }
 
-            var EnrolledUsersList = _context.userRepository.GetUsersById(Course.EnrolledUsers);
-            List<DisplayUserWithCourseResultsViewModel> ListOfUsers = new List<DisplayUserWithCourseResultsViewModel>();
+            var enrolledUsersList = _context.userRepository.GetUsersById(course.EnrolledUsers);
+            List<DisplayUserWithCourseResultsViewModel> listOfUsers = new List<DisplayUserWithCourseResultsViewModel>();
 
-            var Exams = _context.examRepository.GetExamsById(Course.Exams);
+            var exams = _context.examRepository.GetExamsById(course.Exams);
 
             List<string> AllExamsResultsIdentificators = new List<string>();
-            Exams.ToList().ForEach(z => AllExamsResultsIdentificators.AddRange(z.ExamResults));
-            var AllExamsResults = _context.examResultRepository.GetExamsResultsById(AllExamsResultsIdentificators);
+            exams.ToList().ForEach(z => AllExamsResultsIdentificators.AddRange(z.ExamResults));
 
-            if (EnrolledUsersList.Count != 0)
+            var allExamsResults = _context.examResultRepository.GetExamsResultsById(AllExamsResultsIdentificators);
+
+            if (enrolledUsersList.Count != 0)
             {
-                ListOfUsers = GetCourseListOfUsersWithStatistics(EnrolledUsersList, Meetings, Exams).ToList();
+                listOfUsers = GetCourseListOfUsersWithStatistics(enrolledUsersList, meetings, exams).ToList();
             }
 
-            courseToEndViewModel.AllCourseParticipants = ListOfUsers;
+            courseToEndViewModel.AllCourseParticipants = listOfUsers;
             courseToEndViewModel.AvailableCertificates = _context.certificateRepository.GetCertificatesAsSelectList().ToList();
 
             return View(courseToEndViewModel);
@@ -635,27 +635,27 @@ namespace Certification_System.Controllers
         [Authorize(Roles = "Admin")]
         public ActionResult DisplayCourseSummary(string courseIdentificator)
         {
-            var Course = _context.courseRepository.GetCourseById(courseIdentificator);
-            var Meetings = _context.meetingRepository.GetMeetingsById(Course.Meetings);
+            var course = _context.courseRepository.GetCourseById(courseIdentificator);
+            var meetings = _context.meetingRepository.GetMeetingsById(course.Meetings);
 
-            var Exams = _context.examRepository.GetExamsById(Course.Exams);
+            var exams = _context.examRepository.GetExamsById(course.Exams);
 
-            var EnrolledUsersList = _context.userRepository.GetUsersById(Course.EnrolledUsers);
+            var enrolledUsersList = _context.userRepository.GetUsersById(course.EnrolledUsers);
 
-            List<DisplayUserWithCourseResultsViewModel> ListOfUsers = new List<DisplayUserWithCourseResultsViewModel>();
+            List<DisplayUserWithCourseResultsViewModel> listOfUsers = new List<DisplayUserWithCourseResultsViewModel>();
 
-            if (EnrolledUsersList.Count != 0)
+            if (enrolledUsersList.Count != 0)
             {
-                ListOfUsers = GetCourseListOfUsersWithAllStatistics(EnrolledUsersList, Meetings, Exams).ToList();
+                listOfUsers = GetCourseListOfUsersWithAllStatistics(enrolledUsersList, meetings, exams).ToList();
             }
 
-            DisplayCourseSummaryViewModel courseSummaryViewModel = _mapper.Map<DisplayCourseSummaryViewModel>(Course);
-            courseSummaryViewModel.AllCourseParticipants = ListOfUsers;
-            courseSummaryViewModel.Branches = _context.branchRepository.GetBranchesById(Course.Branches);
+            DisplayCourseSummaryViewModel courseSummaryViewModel = _mapper.Map<DisplayCourseSummaryViewModel>(course);
+            courseSummaryViewModel.AllCourseParticipants = listOfUsers;
+            courseSummaryViewModel.Branches = _context.branchRepository.GetBranchesById(course.Branches);
 
-            courseSummaryViewModel.ExamsQuantity = Course.Exams.Count();
+            courseSummaryViewModel.ExamsQuantity = course.Exams.Count();
             courseSummaryViewModel.CourseLength = courseSummaryViewModel.DateOfEnd.Subtract(courseSummaryViewModel.DateOfStart).Days;
-            courseSummaryViewModel.EnrolledUsersQuantity = Course.EnrolledUsers.Count;
+            courseSummaryViewModel.EnrolledUsersQuantity = course.EnrolledUsers.Count;
 
             return View(courseSummaryViewModel);
         }
@@ -664,25 +664,24 @@ namespace Certification_System.Controllers
         [Authorize(Roles = "Admin")]
         public ActionResult DeleteUsersFromCourse(string courseIdentificator)
         {
-            var Course = _context.courseRepository.GetCourseById(courseIdentificator);
+            var course = _context.courseRepository.GetCourseById(courseIdentificator);
 
-            if (Course.CourseEnded != true)
+            if (course.CourseEnded != true)
             {
-                var EnrolledUsersList = _context.userRepository.GetUsersById(Course.EnrolledUsers);
+                var enrolledUsersList = _context.userRepository.GetUsersById(course.EnrolledUsers);
 
                 List<DisplayCrucialDataUserViewModel> ListOfUsers = new List<DisplayCrucialDataUserViewModel>();
 
-                if (EnrolledUsersList.Count != 0)
+                if (enrolledUsersList.Count != 0)
                 {
-                    ListOfUsers = _mapper.Map<List<DisplayCrucialDataUserViewModel>>(EnrolledUsersList);
+                    ListOfUsers = _mapper.Map<List<DisplayCrucialDataUserViewModel>>(enrolledUsersList);
                 }
 
-                DeleteUsersFromCourseViewModel deleteUsersFromCourseViewModel = _mapper.Map<DeleteUsersFromCourseViewModel>(Course);
+                DeleteUsersFromCourseViewModel deleteUsersFromCourseViewModel = _mapper.Map<DeleteUsersFromCourseViewModel>(course);
                 deleteUsersFromCourseViewModel.AllCourseParticipants = ListOfUsers;
 
                 deleteUsersFromCourseViewModel.CourseLength = deleteUsersFromCourseViewModel.DateOfEnd.Subtract(deleteUsersFromCourseViewModel.DateOfStart).Days;
-                deleteUsersFromCourseViewModel.Branches = _context.branchRepository.GetBranchesById(Course.Branches);
-                deleteUsersFromCourseViewModel.EnrolledUsersQuantity = Course.EnrolledUsers.Count;
+                deleteUsersFromCourseViewModel.Branches = _context.branchRepository.GetBranchesById(course.Branches);
 
                 deleteUsersFromCourseViewModel.UsersToDeleteFromCourse = _mapper.Map<DeleteUsersFromCheckBoxViewModel[]>(ListOfUsers);
 
@@ -695,21 +694,21 @@ namespace Certification_System.Controllers
         // POST: DeleteUserFromCourse
         [HttpPost]
         [Authorize(Roles = "Admin")]
-        public ActionResult DeleteUsersFromCourse(DeleteUsersFromCourseViewModel deleteUsersFromCourseViewModel)
+        public ActionResult DeleteUsersFromCourse(DeleteUsersFromCourseCrucialViewModel deleteUsersFromCourseViewModel)
         {
             if (ModelState.IsValid)
             {
-                var UsersToDeleteFromCourseIdentificators = deleteUsersFromCourseViewModel.UsersToDeleteFromCourse.ToList().Where(z => z.IsToDelete == true).Select(z => z.UserIdentificator).ToList();
+                var usersToDeleteFromCourseIdentificators = deleteUsersFromCourseViewModel.UsersToDeleteFromCourse.ToList().Where(z => z.IsToDelete == true).Select(z => z.UserIdentificator).ToList();
 
-                _context.courseRepository.DeleteUsersFromCourse(deleteUsersFromCourseViewModel.CourseIdentificator, UsersToDeleteFromCourseIdentificators);
-                _context.userRepository.DeleteCourseFromUsersCollection(deleteUsersFromCourseViewModel.CourseIdentificator, UsersToDeleteFromCourseIdentificators);
+                _context.courseRepository.DeleteUsersFromCourse(deleteUsersFromCourseViewModel.CourseIdentificator, usersToDeleteFromCourseIdentificators);
+                _context.userRepository.DeleteCourseFromUsersCollection(deleteUsersFromCourseViewModel.CourseIdentificator, usersToDeleteFromCourseIdentificators);
 
-                var UpdatedCourse = _context.courseRepository.GetCourseById(deleteUsersFromCourseViewModel.CourseIdentificator);
+                var updatedCourse = _context.courseRepository.GetCourseById(deleteUsersFromCourseViewModel.CourseIdentificator);
                 var logInfo = _logger.GenerateLogInformation(this.User.Identity.Name, this.ControllerContext.RouteData.Values["action"].ToString(), LogTypeOfAction.TypesOfActions[1]);
-                _logger.AddCourseLog(UpdatedCourse, logInfo);
+                _logger.AddCourseLog(updatedCourse, logInfo);
 
-                var UpdatedUsers = _context.userRepository.GetUsersById(UsersToDeleteFromCourseIdentificators);
-                _logger.AddUsersLogs(UpdatedUsers, logInfo);
+                var updatedUsers = _context.userRepository.GetUsersById(usersToDeleteFromCourseIdentificators);
+                _logger.AddUsersLogs(updatedUsers, logInfo);
 
                 if (deleteUsersFromCourseViewModel.UsersToDeleteFromCourse.Count() == 1)
                 {
@@ -728,61 +727,61 @@ namespace Certification_System.Controllers
         [Authorize(Roles = "Worker")]
         public ActionResult WorkerCourses()
         {
-            var User = _context.userRepository.GetUserByEmail(this.User.Identity.Name);
+            var user = _context.userRepository.GetUserByEmail(this.User.Identity.Name);
 
-            var Courses = _context.courseRepository.GetCoursesById(User.Courses);
-            List<DisplayCourseViewModel> ListOfCourses = new List<DisplayCourseViewModel>();
+            var courses = _context.courseRepository.GetCoursesById(user.Courses);
+            List<DisplayCourseViewModel> listOfCourses = new List<DisplayCourseViewModel>();
 
-            if (Courses.Count != 0)
+            if (courses.Count != 0)
             {
-                ListOfCourses = _mapper.Map<List<DisplayCourseViewModel>>(Courses);
-                ListOfCourses.ForEach(z => z.Branches = _context.branchRepository.GetBranchesById(z.Branches));
-                ListOfCourses.ForEach(z => z.EnrolledUsersQuantity = Courses.Where(s => s.CourseIdentificator == z.CourseIdentificator).FirstOrDefault().EnrolledUsers.Count);
+                listOfCourses = _mapper.Map<List<DisplayCourseViewModel>>(courses);
+                listOfCourses.ForEach(z => z.Branches = _context.branchRepository.GetBranchesById(z.Branches));
+                listOfCourses.ForEach(z => z.EnrolledUsersQuantity = courses.Where(s => s.CourseIdentificator == z.CourseIdentificator).FirstOrDefault().EnrolledUsers.Count);
             }
 
-            return View(ListOfCourses);
+            return View(listOfCourses);
         }
 
         // GET: InstructorCourses
         [Authorize(Roles = "Instructor")]
         public ActionResult InstructorCourses()
         {
-            var User = _context.userRepository.GetUserByEmail(this.User.Identity.Name);
+            var user = _context.userRepository.GetUserByEmail(this.User.Identity.Name);
 
-            var Meetings = _context.meetingRepository.GetMeetingsByInstructorId(User.Id);
-            var Courses = _context.courseRepository.GetCoursesByMeetingsId(Meetings.Select(z => z.MeetingIdentificator).ToList());
+            var meetings = _context.meetingRepository.GetMeetingsByInstructorId(user.Id);
+            var courses = _context.courseRepository.GetCoursesByMeetingsId(meetings.Select(z => z.MeetingIdentificator).ToList());
 
-            List<DisplayCourseViewModel> ListOfCourses = new List<DisplayCourseViewModel>();
+            List<DisplayCourseViewModel> listOfCourses = new List<DisplayCourseViewModel>();
 
-            if (Courses.Count != 0)
+            if (courses.Count != 0)
             {
-                ListOfCourses = _mapper.Map<List<DisplayCourseViewModel>>(Courses);
-                ListOfCourses.ForEach(z => z.Branches = _context.branchRepository.GetBranchesById(z.Branches));
-                ListOfCourses.ForEach(z => z.EnrolledUsersQuantity = Courses.Where(s => s.CourseIdentificator == z.CourseIdentificator).FirstOrDefault().EnrolledUsers.Count);
+                listOfCourses = _mapper.Map<List<DisplayCourseViewModel>>(courses);
+                listOfCourses.ForEach(z => z.Branches = _context.branchRepository.GetBranchesById(z.Branches));
+                //ListOfCourses.ForEach(z => z.EnrolledUsersQuantity = Courses.Where(s => s.CourseIdentificator == z.CourseIdentificator).FirstOrDefault().EnrolledUsers.Count);
             }
 
-            return View(ListOfCourses);
+            return View(listOfCourses);
         }
 
         // GET: ExaminerCourses
         [Authorize(Roles = "Examiner")]
         public ActionResult ExaminerCourses()
         {
-            var User = _context.userRepository.GetUserByEmail(this.User.Identity.Name);
+            var user = _context.userRepository.GetUserByEmail(this.User.Identity.Name);
 
-            var Exams = _context.examRepository.GetExamsByExaminerId(User.Id);
-            var Courses = _context.courseRepository.GetCoursesByExamsId(Exams.Select(z => z.ExamIdentificator).ToList()).ToList();
+            var exams = _context.examRepository.GetExamsByExaminerId(user.Id);
+            var courses = _context.courseRepository.GetCoursesByExamsId(exams.Select(z => z.ExamIdentificator).ToList()).ToList();
 
-            List<DisplayCourseViewModel> ListOfCourses = new List<DisplayCourseViewModel>();
+            List<DisplayCourseViewModel> listOfCourses = new List<DisplayCourseViewModel>();
 
-            if (Courses.Count != 0)
+            if (courses.Count != 0)
             {
-                ListOfCourses = _mapper.Map<List<DisplayCourseViewModel>>(Courses);
-                ListOfCourses.ForEach(z => z.Branches = _context.branchRepository.GetBranchesById(z.Branches));
-                ListOfCourses.ForEach(z => z.EnrolledUsersQuantity = Courses.Where(s => s.CourseIdentificator == z.CourseIdentificator).FirstOrDefault().EnrolledUsers.Count);
+                listOfCourses = _mapper.Map<List<DisplayCourseViewModel>>(courses);
+                listOfCourses.ForEach(z => z.Branches = _context.branchRepository.GetBranchesById(z.Branches));
+                //ListOfCourses.ForEach(z => z.EnrolledUsersQuantity = Courses.Where(s => s.CourseIdentificator == z.CourseIdentificator).FirstOrDefault().EnrolledUsers.Count);
             }
 
-            return View(ListOfCourses);
+            return View(listOfCourses);
         }
 
         // GET: InstructorExaminerCourses
@@ -792,58 +791,58 @@ namespace Certification_System.Controllers
         {
             ViewBag.AvailableRoleFilters = _context.userRepository.GetAvailableCourseRoleFiltersAsSelectList();
 
-            var User = _context.userRepository.GetUserByEmail(this.User.Identity.Name);
+            var user = _context.userRepository.GetUserByEmail(this.User.Identity.Name);
 
-            var Exams = _context.examRepository.GetExamsByExaminerId(User.Id);
-            var CoursesAsExaminer = _context.courseRepository.GetCoursesByExamsId(Exams.Select(z => z.ExamIdentificator).ToList()).ToList();
+            var exams = _context.examRepository.GetExamsByExaminerId(user.Id);
+            var coursesAsExaminer = _context.courseRepository.GetCoursesByExamsId(exams.Select(z => z.ExamIdentificator).ToList()).ToList();
 
-            var Meetings = _context.meetingRepository.GetMeetingsByInstructorId(User.Id);
-            var CoursesAsInstructor = _context.courseRepository.GetCoursesByMeetingsId(Meetings.Select(z => z.MeetingIdentificator).ToList());
+            var meetings = _context.meetingRepository.GetMeetingsByInstructorId(user.Id);
+            var coursesAsInstructor = _context.courseRepository.GetCoursesByMeetingsId(meetings.Select(z => z.MeetingIdentificator).ToList());
 
-            var BothRolesCourses = CoursesAsExaminer.Intersect(CoursesAsInstructor).ToList();
+            var bothRolesCourses = coursesAsExaminer.Intersect(coursesAsInstructor).ToList();
 
-            foreach (var course in BothRolesCourses)
+            foreach (var course in bothRolesCourses)
             {
-                CoursesAsExaminer.Remove(course);
-                CoursesAsInstructor.Remove(course);
+                coursesAsExaminer.Remove(course);
+                coursesAsInstructor.Remove(course);
             }
 
-            List<DisplayCourseWithUserRoleViewModel> ListOfCoursesAsExaminer = new List<DisplayCourseWithUserRoleViewModel>();
+            List<DisplayCourseWithUserRoleViewModel> listOfCoursesAsExaminer = new List<DisplayCourseWithUserRoleViewModel>();
 
-            if (CoursesAsExaminer.Count != 0)
+            if (coursesAsExaminer.Count != 0)
             {
-                ListOfCoursesAsExaminer = _mapper.Map<List<DisplayCourseWithUserRoleViewModel>>(CoursesAsExaminer);
-                ListOfCoursesAsExaminer.ForEach(z => z.Branches = _context.branchRepository.GetBranchesById(z.Branches));
-                ListOfCoursesAsExaminer.ForEach(z => z.Roles.Add(UserRolesDictionary.TranslationDictionary["Examiner"]));
+                listOfCoursesAsExaminer = _mapper.Map<List<DisplayCourseWithUserRoleViewModel>>(coursesAsExaminer);
+                listOfCoursesAsExaminer.ForEach(z => z.Branches = _context.branchRepository.GetBranchesById(z.Branches));
+                listOfCoursesAsExaminer.ForEach(z => z.Roles.Add(UserRolesDictionary.TranslationDictionary["Examiner"]));
             }
 
-            List<DisplayCourseWithUserRoleViewModel> ListOfCoursesAsInstructor = new List<DisplayCourseWithUserRoleViewModel>();
+            List<DisplayCourseWithUserRoleViewModel> listOfCoursesAsInstructor = new List<DisplayCourseWithUserRoleViewModel>();
 
-            if (CoursesAsInstructor.Count != 0)
+            if (coursesAsInstructor.Count != 0)
             {
-                ListOfCoursesAsInstructor = _mapper.Map<List<DisplayCourseWithUserRoleViewModel>>(CoursesAsInstructor);
-                ListOfCoursesAsInstructor.ForEach(z => z.Branches = _context.branchRepository.GetBranchesById(z.Branches));
-                ListOfCoursesAsInstructor.ForEach(z => z.Roles.Add(UserRolesDictionary.TranslationDictionary["Instructor"]));
+                listOfCoursesAsInstructor = _mapper.Map<List<DisplayCourseWithUserRoleViewModel>>(coursesAsInstructor);
+                listOfCoursesAsInstructor.ForEach(z => z.Branches = _context.branchRepository.GetBranchesById(z.Branches));
+                listOfCoursesAsInstructor.ForEach(z => z.Roles.Add(UserRolesDictionary.TranslationDictionary["Instructor"]));
             }
 
-            List<DisplayCourseWithUserRoleViewModel> ListOfCoursesAsBothRoles = new List<DisplayCourseWithUserRoleViewModel>();
+            List<DisplayCourseWithUserRoleViewModel> listOfCoursesAsBothRoles = new List<DisplayCourseWithUserRoleViewModel>();
 
-            if (BothRolesCourses.Count != 0)
+            if (bothRolesCourses.Count != 0)
             {
-                ListOfCoursesAsBothRoles = _mapper.Map<List<DisplayCourseWithUserRoleViewModel>>(CoursesAsInstructor);
-                ListOfCoursesAsBothRoles.ForEach(z => z.Branches = _context.branchRepository.GetBranchesById(z.Branches));
+                listOfCoursesAsBothRoles = _mapper.Map<List<DisplayCourseWithUserRoleViewModel>>(coursesAsInstructor);
+                listOfCoursesAsBothRoles.ForEach(z => z.Branches = _context.branchRepository.GetBranchesById(z.Branches));
 
-                ListOfCoursesAsBothRoles.ForEach(z => z.Roles.Add(UserRolesDictionary.TranslationDictionary["Instructor"]));
-                ListOfCoursesAsBothRoles.ForEach(z => z.Roles.Add(UserRolesDictionary.TranslationDictionary["Examiner"]));
+                listOfCoursesAsBothRoles.ForEach(z => z.Roles.Add(UserRolesDictionary.TranslationDictionary["Instructor"]));
+                listOfCoursesAsBothRoles.ForEach(z => z.Roles.Add(UserRolesDictionary.TranslationDictionary["Examiner"]));
             }
 
-            List<DisplayCourseWithUserRoleViewModel> AllCourses = new List<DisplayCourseWithUserRoleViewModel>();
+            List<DisplayCourseWithUserRoleViewModel> allCourses = new List<DisplayCourseWithUserRoleViewModel>();
 
-            AllCourses.AddRange(ListOfCoursesAsExaminer);
-            AllCourses.AddRange(ListOfCoursesAsInstructor);
-            AllCourses.AddRange(ListOfCoursesAsBothRoles);
+            allCourses.AddRange(listOfCoursesAsExaminer);
+            allCourses.AddRange(listOfCoursesAsInstructor);
+            allCourses.AddRange(listOfCoursesAsBothRoles);
 
-            return View(AllCourses);
+            return View(allCourses);
         }
 
         // GET: DeleteCourseHub
@@ -982,7 +981,7 @@ namespace Certification_System.Controllers
         // GetCourseListOfUsersWithStatistics
         private ICollection<DisplayUserWithCourseResultsViewModel> GetCourseListOfUsersWithStatistics(ICollection<CertificationPlatformUser> enrolledUsers, ICollection<Meeting> meetings, ICollection<Exam> exams)
         {
-            List<DisplayUserWithCourseResultsViewModel> ListOfUsers = new List<DisplayUserWithCourseResultsViewModel>();
+            List<DisplayUserWithCourseResultsViewModel> listOfUsers = new List<DisplayUserWithCourseResultsViewModel>();
 
             foreach (var user in enrolledUsers)
             {
@@ -1001,33 +1000,33 @@ namespace Certification_System.Controllers
                     singleUser.PercentageOfUserPresenceOnMeetings = 0.00;
                 }
 
-                var UserExams = exams.Where(z => z.EnrolledUsers.Contains(user.Id)).GroupBy(z => z.ExamIndexer).ToList();
+                var userExams = exams.Where(z => z.EnrolledUsers.Contains(user.Id)).GroupBy(z => z.ExamIndexer).ToList();
 
-                for (int i = 0; i < UserExams.Count; i++)
+                for (int i = 0; i < userExams.Count; i++)
                 {
-                    var LastExamPeriod = UserExams[i].ToList().OrderByDescending(z => z.OrdinalNumber).FirstOrDefault();
-                    var LastUserResult = _context.examResultRepository.GetExamsResultsById(LastExamPeriod.ExamResults).ToList().Where(z => z.User == user.Id).ToList();
+                    var lastExamPeriod = userExams[i].ToList().OrderByDescending(z => z.OrdinalNumber).FirstOrDefault();
+                    var lastUserResult = _context.examResultRepository.GetExamsResultsById(lastExamPeriod.ExamResults).ToList().Where(z => z.User == user.Id).ToList();
 
-                    if (LastUserResult != null)
+                    if (lastUserResult != null)
                     {
-                        var singleExamResult = _mapper.Map<DisplayExamResultWithExamNumber>(LastUserResult);
-                        singleExamResult.MaxAmountOfPointsToEarn = LastExamPeriod.MaxAmountOfPointsToEarn;
-                        singleExamResult.ExamOrdinalNumber = LastExamPeriod.OrdinalNumber;
+                        var singleExamResult = _mapper.Map<DisplayExamResultWithExamNumber>(lastUserResult);
+                        singleExamResult.MaxAmountOfPointsToEarn = lastExamPeriod.MaxAmountOfPointsToEarn;
+                        singleExamResult.ExamOrdinalNumber = lastExamPeriod.OrdinalNumber;
 
                         singleUser.ExamsResults.Add(singleExamResult);
                     }
                 }
 
-                ListOfUsers.Add(singleUser);
+                listOfUsers.Add(singleUser);
             }
 
-            return ListOfUsers;
+            return listOfUsers;
         }
 
         // GetCourseListOfUsersWithAllStatistics
         private ICollection<DisplayUserWithCourseResultsViewModel> GetCourseListOfUsersWithAllStatistics(ICollection<CertificationPlatformUser> enrolledUsers, ICollection<Meeting> meetings, ICollection<Exam> exams)
         {
-            List<DisplayUserWithCourseResultsViewModel> ListOfUsers = new List<DisplayUserWithCourseResultsViewModel>();
+            List<DisplayUserWithCourseResultsViewModel> listOfUsers = new List<DisplayUserWithCourseResultsViewModel>();
 
             foreach (var user in enrolledUsers)
             {
@@ -1046,29 +1045,29 @@ namespace Certification_System.Controllers
                     singleUser.PercentageOfUserPresenceOnMeetings = 0.00;
                 }
 
-                var UserExams = exams.Where(z => z.EnrolledUsers.Contains(user.Id)).GroupBy(z => z.ExamIndexer).ToList();
+                var userExams = exams.Where(z => z.EnrolledUsers.Contains(user.Id)).GroupBy(z => z.ExamIndexer).ToList();
 
-                for (int i = 0; i < UserExams.Count; i++)
+                for (int i = 0; i < userExams.Count; i++)
                 {
-                    foreach (var exam in UserExams[i])
+                    foreach (var exam in userExams[i])
                     {
-                        var UserResult = _context.examResultRepository.GetExamsResultsById(exam.ExamResults).ToList().Where(z => z.User == user.Id).ToList();
+                        var userResult = _context.examResultRepository.GetExamsResultsById(exam.ExamResults).ToList().Where(z => z.User == user.Id).ToList();
 
-                        if (UserResult != null)
+                        if (userResult != null)
                         {
-                            var singleExamResult = _mapper.Map<DisplayExamResultWithExamNumber>(UserResult);
+                            var singleExamResult = _mapper.Map<DisplayExamResultWithExamNumber>(userResult);
                             singleExamResult.MaxAmountOfPointsToEarn = exam.MaxAmountOfPointsToEarn;
                             singleExamResult.ExamOrdinalNumber = exam.OrdinalNumber;
 
                             singleUser.ExamsResults.Add(singleExamResult);
                         }
 
-                        ListOfUsers.Add(singleUser);
+                        listOfUsers.Add(singleUser);
                     }
                 }
             }
 
-            return ListOfUsers;
+            return listOfUsers;
         }
         #endregion
     }

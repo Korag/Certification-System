@@ -67,7 +67,7 @@
             <div class="form-group">
                 <label asp-for="EnrolledUsersLimit" class="control-label"></label>
                 <div>
-                    <input asp-for="EnrolledUsersLimit" class="form-control col-12" />
+                    <input asp-for="EnrolledUsersLimit" class="form-control col-12" min="1" value="1"/>
                     <div class="row justify-content-center">
                         <span asp-validation-for="EnrolledUsersLimit" class="text-danger"></span>
                     </div>

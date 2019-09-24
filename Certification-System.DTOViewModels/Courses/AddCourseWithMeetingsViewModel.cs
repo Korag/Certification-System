@@ -27,6 +27,7 @@ namespace Certification_System.DTOViewModels
         public DateTime DateOfEnd { get; set; }
 
         [Required(ErrorMessage = "Pole \"{0}\" jest wymagane.")]
+        [Range(1, Int32.MaxValue, ErrorMessage = "Pole \"{0}\" musi mieć minimalną wartość \"{1}\" lub więcej.")]
         [Display(Name = "Limit uczestników")]
         public int EnrolledUsersLimit { get; set; }
 
@@ -36,9 +37,6 @@ namespace Certification_System.DTOViewModels
 
         [Display(Name = "Kurs zakończony")]
         public bool CourseEnded { get; set; }
-
-        [Display(Name = "Długość kursu")]
-        public int CourseLength { get; set; }
 
         [Required(ErrorMessage = "Należy zaznaczyć conajmniej jeden Obszar.")]
         public ICollection<string> SelectedBranches { get; set; }

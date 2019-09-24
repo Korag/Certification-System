@@ -10,7 +10,7 @@
 <hr />
 
 <div>
-    <form asp-action="EditCourseHub">
+    <form asp-action="EditCourse">
 
         <div class="col-md-8 col-xl-6 col-lg-6 col-sm-12 col-xs-10 m-auto p-3 shadow p-3 mb-5 bg-light rounded border border-primary rounded-bottom" style="opacity:0.90">
 
@@ -69,7 +69,7 @@
             <div class="form-group">
                 <label asp-for="EnrolledUsersLimit" class="control-label"></label>
                 <div>
-                    <input asp-for="EnrolledUsersLimit" class="form-control col-12" />
+                    <input asp-for="EnrolledUsersLimit" class="form-control col-12" min="1" value="1"/>
                     <div class="row justify-content-center">
                         <span asp-validation-for="EnrolledUsersLimit" class="text-danger"></span>
                     </div>

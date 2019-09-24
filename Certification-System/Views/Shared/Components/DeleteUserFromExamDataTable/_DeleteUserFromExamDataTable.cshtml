@@ -33,7 +33,7 @@
                         @Html.DisplayFor(model => model.Users.ElementAt(i).LastName)
                     </td>
                     <td>
-                        <input type="checkbox" asp-for="@Model.UsersToDeleteFromExam[i].IsToDelete" data-toggle="toggle" data-on="Tak" data-off="Nie" data-size="sm" />
+                        <input type="checkbox" asp-for="@Model.UsersToDeleteFromExam[i].IsToDelete" data-toggle="toggle" data-on="Tak" data-off="Nie" data-size="sm" data-onstyle="danger"/>
                         <input type="hidden" asp-for="@Model.UsersToDeleteFromExam[i].UserIdentificator" />
                     </td>
                 </tr>

@@ -19,6 +19,8 @@ using Certification_System.Services.Models;
 using Certification_System.ServicesInterfaces.Models;
 using System.Globalization;
 using Microsoft.AspNetCore.Localization;
+using MongoDB.Bson.Serialization;
+using MongoDB.Bson.Serialization.Serializers;
 
 namespace Certification_System
 {
@@ -70,6 +72,8 @@ namespace Certification_System
             {
                 mc.AddProfile(new MappingProfile());
             });
+
+            BsonSerializer.RegisterSerializer(DateTimeSerializer.LocalInstance);
 
             IMapper mapper = mappingConfig.CreateMapper();
             services.AddSingleton(mapper);

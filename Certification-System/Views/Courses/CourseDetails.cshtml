@@ -5,10 +5,10 @@
     Layout = "~/Views/Shared/_Layout.cshtml";
 
     var deleteParams = new Dictionary<string, string>
-            {
-                { "courseIdentificator", Model.Course.CourseIdentificator },
-                { "returnUrl", ($"{Context.Request.Scheme}://{Context.Request.Host}{Context.Request.Path}{Context.Request.QueryString}")}
-            };
+    {
+        { "courseIdentificator", Model.Course.CourseIdentificator },
+        { "returnUrl", ($"{Context.Request.Scheme}://{Context.Request.Host}{Context.Request.Path}{Context.Request.QueryString}")}
+    };
 }
 
 <h1>Szczegóły szkolenia</h1>
@@ -180,7 +180,8 @@ else
 
 @if (Model.EnrolledUsers.Count != 0)
 {
-    @await Component.InvokeAsync("DisplayCrucialDataWithCourseSummaryUserDataTable", new { userViewModel = Model.EnrolledUsers, courseViewModel = Model.Course, dispensedGivenCertificateViewModel = Model.DispensedGivenCertificates, tableIdentificator = "listUsers", operationSet = 1 })
+    @*@await Component.InvokeAsync("DisplayCrucialDataWithCourseSummaryUserDataTable", new { userViewModel = Model.EnrolledUsers, courseViewModel = Model.Course, dispensedGivenCertificateViewModel = Model.DispensedGivenCertificates, tableIdentificator = "listUsers", operationSet = 1 })*@
+    @await Component.InvokeAsync("DisplayCrucialDataUserDataTable", new { userViewModel = Model.EnrolledUsers, tableIdentificator = "listUsers", operationSet = 1 })
 }
 
 else

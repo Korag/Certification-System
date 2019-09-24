@@ -39,9 +39,6 @@ namespace Certification_System.DTOViewModels
         [Display(Name = "Kurs zakończony")]
         public bool CourseEnded { get; set; }
 
-        [Display(Name = "Długość kursu")]
-        public int CourseLength { get; set; }
-
         [Required(ErrorMessage = "Należy zaznaczyć conajmniej jeden Obszar.")]
         public ICollection<string> SelectedBranches { get; set; }
 

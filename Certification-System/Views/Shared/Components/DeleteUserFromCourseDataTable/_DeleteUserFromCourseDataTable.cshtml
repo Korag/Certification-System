@@ -33,7 +33,7 @@
                         @Html.DisplayFor(model => model.Users.ElementAt(i).LastName)
                     </td>
                     <td>
-                        <input type="checkbox" asp-for="@Model.UsersToDeleteFromCourse[i].IsToDelete" data-toggle="toggle" data-on="Tak" data-off="Nie" data-size="sm" />
+                        <input type="checkbox" asp-for="@Model.UsersToDeleteFromCourse[i].IsToDelete" data-toggle="toggle" data-on="Tak" data-off="Nie" data-size="sm" data-onstyle="danger"/>
                         <input type="hidden" asp-for="@Model.UsersToDeleteFromCourse[i].UserIdentificator" />
                     </td>
                 </tr>
@@ -42,8 +42,3 @@
     </table>
 </div>
 
-<div>
-    <div class="row justify-content-center">
-        <input type="submit" value="Usuń użytkowników z kursu" class="btn btn-danger" />
-    </div>
-</div> 

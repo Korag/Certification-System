@@ -20,10 +20,10 @@
                     @Html.DisplayNameFor(model => model.Courses.FirstOrDefault().DateOfEnd)
                 </th>
                 <th>
-                    @Html.DisplayNameFor(model => model.Courses.FirstOrDefault().EnrolledUsersLimit)
+                    @Html.DisplayNameFor(model => model.Courses.FirstOrDefault().EnrolledUsersQuantity)
                 </th>
                 <th>
-                    @Html.DisplayNameFor(model => model.Courses.FirstOrDefault().EnrolledUsersQuantity)
+                    @Html.DisplayNameFor(model => model.Courses.FirstOrDefault().EnrolledUsersLimit)
                 </th>
                 <th>
                     @Html.DisplayNameFor(model => model.Courses.FirstOrDefault().ExamIsRequired)
@@ -48,72 +48,72 @@
         <tbody>
             @foreach (var course in Model.Courses)
             {
-                <tr>
-                    <td>
-                        @Html.DisplayFor(modelItem => course.CourseIndexer)
-                    </td>
-                    <td>
-                        @Html.DisplayFor(modelItem => course.Name)
-                    </td>
-                    <td>
-                        @Html.DisplayFor(modelItem => course.Description)
-                    </td>
-                    <td>
-                        @Html.DisplayFor(modelItem => course.DateOfStart)
-                    </td>
-                    <td>
-                        @Html.DisplayFor(modelItem => course.DateOfEnd)
-                    </td>
-                    <td>
-                        @Html.DisplayFor(modelItem => course.EnrolledUsersLimit)
-                    </td>
-                    <td>
-                        @Html.DisplayFor(modelItem => course.EnrolledUsersQuantity)
-                    </td>
-                    <td>
-                        <input type="checkbox" asp-for="@course.ExamIsRequired" class="form-control col-12" data-toggle="toggle" data-on="Tak" data-off="Nie" data-size="sm" disabled />
-                    </td>
-                    <td>
-                        @if (course.CourseEnded == true)
-                        {
-                            <p hidden>1</p>
-                        }
-                        else
-                        {
-                            <p hidden>0</p>
-                        }
-                        <input type="checkbox" asp-for="@course.CourseEnded" data-toggle="toggle" data-on="Tak" data-off="Nie" data-size="sm" disabled />
-                    </td>
-                    <td>
-                        @Html.DisplayFor(modelItem => course.CourseLength)
-                    </td>
-                    <td>
-                        <ul>
-                            @foreach (var branch in course.Branches)
-                            {
-                                <li>@branch</li>
-                            }
-                        </ul>
-                    </td>
-                    @if (Model.Options.OperationSet == 1)
+            <tr>
+                <td>
+                    @Html.DisplayFor(modelItem => course.CourseIndexer)
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => course.Name)
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => course.Description)
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => course.DateOfStart)
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => course.DateOfEnd)
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => course.EnrolledUsersQuantity)
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => course.EnrolledUsersLimit)
+                </td>
+                <td>
+                    <input type="checkbox" asp-for="@course.ExamIsRequired" class="form-control col-12" data-toggle="toggle" data-on="Tak" data-off="Nie" data-size="sm" disabled />
+                </td>
+                <td>
+                    @if (course.CourseEnded == true)
                     {
-                        <td>
-                            <a asp-action="CourseDetails" asp-route-courseIdentificator="@course.CourseIdentificator" asp-controller="Courses" class="btn btn-info m-1">Szczegóły</a>
-                        </td>
+                        <p hidden>1</p>
                     }
-                    @if (Model.Options.OperationSet == 2)
+                    else
                     {
-                        <td>
-                            <div class="dropdown p-0">
-                                <button class="btn btn-success dropdown-toggle" type="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">Operacje</button>
-                                <div class="dropdown-menu nohover">
-                                    <a asp-action="CourseDetails" asp-route-courseIdentificator="@course.CourseIdentificator" asp-controller="Courses" class="btn btn-info w-100 mb-1">Szczegóły</a>
-                                    <a asp-action="EditCourseHub" asp-route-courseIdentificator="@course.CourseIdentificator" asp-controller="Courses" class="btn btn-warning w-100">Edytuj</a>
-                                </div>
+                        <p hidden>0</p>
+                    }
+                    <input type="checkbox" asp-for="@course.CourseEnded" data-toggle="toggle" data-on="Tak" data-off="Nie" data-size="sm" disabled />
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => course.CourseLength)
+                </td>
+                <td>
+                    <ul>
+                        @foreach (var branch in course.Branches)
+                        {
+                            <li>@branch</li>
+                        }
+                    </ul>
+                </td>
+                @if (Model.Options.OperationSet == 1)
+                {
+                    <td>
+                        <a asp-action="CourseDetails" asp-route-courseIdentificator="@course.CourseIdentificator" asp-controller="Courses" class="btn btn-info m-1">Szczegóły</a>
+                    </td>
+                }
+                @if (Model.Options.OperationSet == 2)
+                {
+                    <td>
+                        <div class="dropdown p-0">
+                            <button class="btn btn-success dropdown-toggle" type="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">Operacje</button>
+                            <div class="dropdown-menu nohover">
+                                <a asp-action="CourseDetails" asp-route-courseIdentificator="@course.CourseIdentificator" asp-controller="Courses" class="btn btn-info w-100 mb-1">Szczegóły</a>
+                                <a asp-action="EditCourseHub" asp-route-courseIdentificator="@course.CourseIdentificator" asp-controller="Courses" class="btn btn-warning w-100">Edytuj</a>
                             </div>
-                        </td>
-                    }
-                </tr>
+                        </div>
+                    </td>
+                }
+            </tr>
             }
         </tbody>
     </table>
