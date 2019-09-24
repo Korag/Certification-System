@@ -40,10 +40,10 @@ namespace Certification_System.Controllers
         {
             ViewBag.Message = message;
 
-            var Companies = _context.companyRepository.GetListOfCompanies();
-            List<DisplayCompanyViewModel> DisplayCompanies = _mapper.Map<List<DisplayCompanyViewModel>>(Companies);
+            var companies = _context.companyRepository.GetListOfCompanies();
+            List<DisplayCompanyViewModel> listOfCompanies = _mapper.Map<List<DisplayCompanyViewModel>>(companies);
 
-            return View(DisplayCompanies);
+            return View(listOfCompanies);
         }
 
         // GET: AddNewCompany
@@ -95,8 +95,8 @@ namespace Certification_System.Controllers
         [Authorize(Roles = "Admin")]
         public ActionResult EditCompany(string companyIdentificator)
         {
-            var Company = _context.companyRepository.GetCompanyById(companyIdentificator);
-            EditCompanyViewModel companyToUpdate = _mapper.Map<EditCompanyViewModel>(Company);
+            var company = _context.companyRepository.GetCompanyById(companyIdentificator);
+            EditCompanyViewModel companyToUpdate = _mapper.Map<EditCompanyViewModel>(company);
 
             return View(companyToUpdate);
         }
@@ -124,20 +124,20 @@ namespace Certification_System.Controllers
         [Authorize(Roles = "Admin")]
         public ActionResult CompanyDetails(string companyIdentificator)
         {
-            var Company = _context.companyRepository.GetCompanyById(companyIdentificator);
-            var UsersConnectedToCompany = _context.userRepository.GetUsersConnectedToCompany(companyIdentificator);
+            var company = _context.companyRepository.GetCompanyById(companyIdentificator);
+            var usersConnectedToCompany = _context.userRepository.GetUsersConnectedToCompany(companyIdentificator);
 
-            List<DisplayUserViewModel> ListOfUsers = new List<DisplayUserViewModel>();
+            List<DisplayUserViewModel> listOfUsers = new List<DisplayUserViewModel>();
 
-            if (UsersConnectedToCompany.Count != 0)
+            if (usersConnectedToCompany.Count != 0)
             {
-                ListOfUsers = _mapper.Map<List<DisplayUserViewModel>>(UsersConnectedToCompany);
-                ListOfUsers.ForEach(z => z.CompanyRoleManager = _context.companyRepository.GetCompaniesById(z.CompanyRoleManager).ToList().Select(s => s.CompanyName).ToList());
-                ListOfUsers.ForEach(z => z.CompanyRoleWorker = _context.companyRepository.GetCompaniesById(z.CompanyRoleWorker).ToList().Select(s => s.CompanyName).ToList());
+                listOfUsers = _mapper.Map<List<DisplayUserViewModel>>(usersConnectedToCompany);
+                listOfUsers.ForEach(z => z.CompanyRoleManager = _context.companyRepository.GetCompaniesById(z.CompanyRoleManager).ToList().Select(s => s.CompanyName).ToList());
+                listOfUsers.ForEach(z => z.CompanyRoleWorker = _context.companyRepository.GetCompaniesById(z.CompanyRoleWorker).ToList().Select(s => s.CompanyName).ToList());
             }
 
-            CompanyDetailsViewModel companyDetails = _mapper.Map<CompanyDetailsViewModel>(Company);
-            companyDetails.UsersConnectedToCompany = ListOfUsers;
+            CompanyDetailsViewModel companyDetails = _mapper.Map<CompanyDetailsViewModel>(company);
+            companyDetails.UsersConnectedToCompany = listOfUsers;
 
             return View(companyDetails);
         }

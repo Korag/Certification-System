@@ -89,17 +89,17 @@ namespace Certification_System.Controllers
             {
                 ViewBag.TypeOfAction = TypeOfAction;
 
-                var Degree = _context.degreeRepository.GetDegreeById(degreeIdentificator);
+                var degree = _context.degreeRepository.GetDegreeById(degreeIdentificator);
 
-                var RequiredCertificates = _context.certificateRepository.GetCertificatesById(Degree.RequiredCertificates);
-                var RequiredDegrees = _context.degreeRepository.GetDegreesById(Degree.RequiredDegrees);
-                var Branches = _context.branchRepository.GetBranchesById(Degree.Branches);
+                var requiredCertificates = _context.certificateRepository.GetCertificatesById(degree.RequiredCertificates);
+                var requiredDegrees = _context.degreeRepository.GetDegreesById(degree.RequiredDegrees);
+                var branches = _context.branchRepository.GetBranchesById(degree.Branches);
 
-                DisplayDegreeViewModel modifiedDegree = _mapper.Map<DisplayDegreeViewModel>(Degree);
+                DisplayDegreeViewModel modifiedDegree = _mapper.Map<DisplayDegreeViewModel>(degree);
 
-                modifiedDegree.RequiredCertificates = RequiredCertificates.Select(z => z.CertificateIndexer + " " + z.Name).ToList();
-                modifiedDegree.RequiredDegrees = RequiredDegrees.Select(z => z.DegreeIndexer + " " + z.Name).ToList();
-                modifiedDegree.Branches = Branches;
+                modifiedDegree.RequiredCertificates = requiredCertificates.Select(z => z.CertificateIndexer + " " + z.Name).ToList();
+                modifiedDegree.RequiredDegrees = requiredDegrees.Select(z => z.DegreeIndexer + " " + z.Name).ToList();
+                modifiedDegree.Branches = branches;
 
                 return View(modifiedDegree);
             }
@@ -113,25 +113,25 @@ namespace Certification_System.Controllers
         {
             ViewBag.Message = message;
 
-            var Degrees = _context.degreeRepository.GetListOfDegrees();
-            List<DisplayDegreeViewModel> ListOfDegrees = new List<DisplayDegreeViewModel>();
+            var degrees = _context.degreeRepository.GetListOfDegrees();
+            List<DisplayDegreeViewModel> listOfDegrees = new List<DisplayDegreeViewModel>();
 
-            foreach (var degree in Degrees)
+            foreach (var degree in degrees)
             {
-                var RequiredCertificates = _context.certificateRepository.GetCertificatesById(degree.RequiredCertificates);
-                var RequiredDegrees = _context.degreeRepository.GetDegreesById(degree.RequiredDegrees);
+                var requiredCertificates = _context.certificateRepository.GetCertificatesById(degree.RequiredCertificates);
+                var requiredDegrees = _context.degreeRepository.GetDegreesById(degree.RequiredDegrees);
 
                 DisplayDegreeViewModel singleDegree = _mapper.Map<DisplayDegreeViewModel>(degree);
 
-                singleDegree.RequiredCertificates = RequiredCertificates.Select(z => z.CertificateIndexer + " " + z.Name).ToList();
-                singleDegree.RequiredDegrees = RequiredDegrees.Select(z => z.DegreeIndexer + " " + z.Name).ToList();
+                singleDegree.RequiredCertificates = requiredCertificates.Select(z => z.CertificateIndexer + " " + z.Name).ToList();
+                singleDegree.RequiredDegrees = requiredDegrees.Select(z => z.DegreeIndexer + " " + z.Name).ToList();
                 singleDegree.Branches = _context.branchRepository.GetBranchesById(degree.Branches);
 
 
-                ListOfDegrees.Add(singleDegree);
+                listOfDegrees.Add(singleDegree);
             }
 
-            return View(ListOfDegrees);
+            return View(listOfDegrees);
         }
 
         // GET: EditDegree
@@ -158,15 +158,15 @@ namespace Certification_System.Controllers
         {
             if (ModelState.IsValid)
             {
-                var OriginDegree = _context.degreeRepository.GetDegreeById(editedDegree.DegreeIdentificator);
-                OriginDegree =_mapper.Map<EditDegreeViewModel, Degree>(editedDegree, OriginDegree);
+                var originDegree = _context.degreeRepository.GetDegreeById(editedDegree.DegreeIdentificator);
+                originDegree = _mapper.Map<EditDegreeViewModel, Degree>(editedDegree, originDegree);
 
-                OriginDegree.Conditions = editedDegree.ConditionsList.Split(",").ToList();
+                originDegree.Conditions = editedDegree.ConditionsList.Split(",").ToList();
 
-                _context.degreeRepository.UpdateDegree(OriginDegree);
+                _context.degreeRepository.UpdateDegree(originDegree);
 
                 var logInfo = _logger.GenerateLogInformation(this.User.Identity.Name, this.ControllerContext.RouteData.Values["action"].ToString(), LogTypeOfAction.TypesOfActions[1]);
-                _logger.AddDegreeLog(OriginDegree, logInfo);
+                _logger.AddDegreeLog(originDegree, logInfo);
 
                 return RedirectToAction("ConfirmationOfActionOnDegree", "Degrees", new { degreeIdentificator = editedDegree.DegreeIdentificator, TypeOfAction = "Update" });
             }
@@ -182,63 +182,63 @@ namespace Certification_System.Controllers
         [Authorize(Roles = "Admin")]
         public ActionResult DegreeDetails(string degreeIdentificator)
         {
-            var Degree = _context.degreeRepository.GetDegreeById(degreeIdentificator);
+            var degree = _context.degreeRepository.GetDegreeById(degreeIdentificator);
 
-            var RequiredDegrees = _context.degreeRepository.GetDegreesById(Degree.RequiredDegrees);
-            var RequiredCertificates = _context.certificateRepository.GetCertificatesById(Degree.RequiredCertificates);
+            var requiredDegrees = _context.degreeRepository.GetDegreesById(degree.RequiredDegrees);
+            var requiredCertificates = _context.certificateRepository.GetCertificatesById(degree.RequiredCertificates);
 
-            var GivenDegreesInstances = _context.givenDegreeRepository.GetGivenDegreesByIdOfDegree(degreeIdentificator);
-            var GivenDegreesIdentificators = GivenDegreesInstances.Select(z => z.GivenDegreeIdentificator);
-            var UsersWithDegree = _context.userRepository.GetUsersByDegreeId(GivenDegreesIdentificators.ToList());
+            var givenDegreesInstances = _context.givenDegreeRepository.GetGivenDegreesByIdOfDegree(degreeIdentificator);
+            var givenDegreesIdentificators = givenDegreesInstances.Select(z => z.GivenDegreeIdentificator);
+            var usersWithDegree = _context.userRepository.GetUsersByDegreeId(givenDegreesIdentificators.ToList());
 
-            List<DisplayCertificateViewModel> ListOfCertificates = new List<DisplayCertificateViewModel>();
+            List<DisplayCertificateViewModel> listOfCertificates = new List<DisplayCertificateViewModel>();
 
-            if (RequiredCertificates.Count != 0)
+            if (requiredCertificates.Count != 0)
             {
-                foreach (var certificate in RequiredCertificates)
+                foreach (var certificate in requiredCertificates)
                 {
                     DisplayCertificateViewModel singleCertificate = _mapper.Map<DisplayCertificateViewModel>(certificate);
                     singleCertificate.Branches = _context.branchRepository.GetBranchesById(certificate.Branches);
 
-                    ListOfCertificates.Add(singleCertificate);
+                    listOfCertificates.Add(singleCertificate);
                 }
             }
 
-            List<DisplayDegreeViewModel> ListOfDegrees = new List<DisplayDegreeViewModel>();
+            List<DisplayDegreeViewModel> listOfDegrees = new List<DisplayDegreeViewModel>();
 
-            if (RequiredDegrees.Count != 0)
+            if (requiredDegrees.Count != 0)
             {
-                foreach (var degree in RequiredDegrees)
+                foreach (var requiredSingleDegree in requiredDegrees)
                 {
-                    DisplayDegreeViewModel singleDegree = _mapper.Map<DisplayDegreeViewModel>(degree);
-                    singleDegree.Branches = _context.branchRepository.GetBranchesById(degree.Branches);
-                    singleDegree.RequiredCertificates = _context.degreeRepository.GetDegreesById(degree.RequiredDegrees).Select(z => z.DegreeIndexer + " " + z.Name).ToList();
-                    singleDegree.RequiredDegrees = _context.certificateRepository.GetCertificatesById(degree.RequiredCertificates).Select(z => z.CertificateIndexer + " " + z.Name).ToList();
+                    DisplayDegreeViewModel singleDegree = _mapper.Map<DisplayDegreeViewModel>(requiredSingleDegree);
+                    singleDegree.Branches = _context.branchRepository.GetBranchesById(requiredSingleDegree.Branches);
+                    singleDegree.RequiredCertificates = _context.degreeRepository.GetDegreesById(requiredSingleDegree.RequiredDegrees).Select(z => z.DegreeIndexer + " " + z.Name).ToList();
+                    singleDegree.RequiredDegrees = _context.certificateRepository.GetCertificatesById(requiredSingleDegree.RequiredCertificates).Select(z => z.CertificateIndexer + " " + z.Name).ToList();
 
-                    ListOfDegrees.Add(singleDegree);
+                    listOfDegrees.Add(singleDegree);
                 }
             }
 
-            List<DisplayUserViewModel> ListOfUsers = new List<DisplayUserViewModel>();
+            List<DisplayUserViewModel> listOfUsers = new List<DisplayUserViewModel>();
 
-            foreach (var user in UsersWithDegree)
+            foreach (var user in usersWithDegree)
             {
                 DisplayUserViewModel singleUser = _mapper.Map<DisplayUserViewModel>(user);
                 singleUser.CompanyRoleManager = _context.companyRepository.GetCompaniesById(user.CompanyRoleManager).Select(s => s.CompanyName).ToList();
                 singleUser.CompanyRoleWorker = _context.companyRepository.GetCompaniesById(user.CompanyRoleWorker).Select(s => s.CompanyName).ToList();
 
-                ListOfUsers.Add(singleUser);
+                listOfUsers.Add(singleUser);
             }
 
-            DegreeDetailsViewModel DegreeDetails = _mapper.Map<DegreeDetailsViewModel>(Degree);
-            DegreeDetails.ConditionsList = String.Join(",", Degree.Conditions);
+            DegreeDetailsViewModel degreeDetails = _mapper.Map<DegreeDetailsViewModel>(degree);
+            degreeDetails.ConditionsList = String.Join(",", degree.Conditions);
 
-            DegreeDetails.Branches = _context.branchRepository.GetBranchesById(Degree.Branches);
-            DegreeDetails.RequiredCertificates = ListOfCertificates;
-            DegreeDetails.RequiredDegrees = ListOfDegrees;
-            DegreeDetails.UsersWithDegree = ListOfUsers;
+            degreeDetails.Branches = _context.branchRepository.GetBranchesById(degree.Branches);
+            degreeDetails.RequiredCertificates = listOfCertificates;
+            degreeDetails.RequiredDegrees = listOfDegrees;
+            degreeDetails.UsersWithDegree = listOfUsers;
 
-            return View(DegreeDetails);
+            return View(degreeDetails);
         }
 
         // GET: DeleteDegreeHub
