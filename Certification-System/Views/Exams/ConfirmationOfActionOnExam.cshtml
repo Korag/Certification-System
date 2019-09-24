@@ -41,7 +41,7 @@ else
         <a asp-action="AddNewExamTerm" asp-route-examIdentificator="@Model.Exam.ExamIdentificator" asp-controller="Exams" class="btn btn-primary">Dodaj nową turę do egzaminu</a>
     </div>
 
-    @await Component.InvokeAsync("DisplayExamTermWithoutExamDataTable", new { examTermViewModel = Model.ExamTerms, tableIdentificator = "examTermsConfirmation", operationSet = 1 })
+    @await Component.InvokeAsync("DisplayExamTermWtExamWhLocationDataTable", new { examTermViewModel = Model.ExamTerms, tableIdentificator = "examTermsConfirmation", operationSet = 1 })
 }
 
 @section Scripts{

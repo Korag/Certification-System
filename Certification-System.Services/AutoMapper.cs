@@ -262,9 +262,17 @@ namespace Certification_System.Services
                     .ForMember(dest => dest.Examiners, opts => opts.Ignore())
                     .ForMember(dest => dest.UsersQuantity, opts => opts.MapFrom(src => src.EnrolledUsers.Count()));
 
+            CreateMap<ExamTerm, DisplayExamTermWithLocationViewModel>()
+                    .ForMember(dest => dest.Examiners, opts => opts.Ignore())
+                    .ForMember(dest => dest.UsersQuantity, opts => opts.MapFrom(src => src.EnrolledUsers.Count()));
+
             CreateMap<ExamTerm, DisplayExamTermWithoutExamViewModel>()
                     .ForMember(dest => dest.Examiners, opts => opts.Ignore())
                     .ForMember(dest => dest.UsersQuantitiy, opts => opts.MapFrom(src => src.EnrolledUsers.Count()));
+
+            CreateMap<ExamTerm, DisplayExamTermWithoutExamWithLocationViewModel>()
+                 .ForMember(dest => dest.Examiners, opts => opts.Ignore())
+                 .ForMember(dest => dest.UsersQuantity, opts => opts.MapFrom(src => src.EnrolledUsers.Count()));
 
             CreateMap<EditExamTermViewModel, ExamTerm>()
                     .ForMember(dest => dest.Examiners, opts => opts.MapFrom(src => src.SelectedExaminers));

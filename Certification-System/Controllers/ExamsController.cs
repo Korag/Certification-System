@@ -425,7 +425,7 @@ namespace Certification_System.Controllers
                 if (Exam.ExamTerms.Count() != 0)
                 {
                     var ExamTerms = _context.examTermRepository.GetExamsTermsById(Exam.ExamTerms);
-                    modifiedExam.ExamTerms = _mapper.Map<List<DisplayExamTermViewModel>>(ExamTerms);
+                    modifiedExam.ExamTerms = _mapper.Map<List<DisplayExamTermWithoutExamWithLocationViewModel>>(ExamTerms);
 
                     modifiedExam.Exam.DurationDays = (int)Exam.DateOfEnd.Subtract(Exam.DateOfStart).Days;
                     modifiedExam.Exam.DurationMinutes = (int)Exam.DateOfEnd.Subtract(Exam.DateOfStart).Minutes;

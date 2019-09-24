@@ -8,7 +8,7 @@ namespace Certification_System.DTOViewModels
     public class MarkExamTermViewModel
     {
         [Display(Name = "Tura egzaminu")]
-        public DisplayExamTermViewModel ExamTerm { get; set; }
+        public DisplayExamTermWithLocationViewModel ExamTerm { get; set; }
 
         [Display(Name = "Maks. liczba punktów")]
         public double MaxAmountOfPointsToEarn { get; set; }

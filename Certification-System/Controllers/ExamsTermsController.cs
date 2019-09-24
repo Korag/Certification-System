@@ -179,7 +179,7 @@ namespace Certification_System.Controllers
                 var Exam = _context.examRepository.GetExamByExamTermId(examTermIdentificator);
                 var ExamTerm = _context.examTermRepository.GetExamTermById(examTermIdentificator);
 
-                DisplayExamTermViewModel modifiedExamTerm = _mapper.Map<DisplayExamTermViewModel>(ExamTerm);
+                DisplayExamTermWithLocationViewModel modifiedExamTerm = _mapper.Map<DisplayExamTermWithLocationViewModel>(ExamTerm);
 
                 modifiedExamTerm.DurationDays = (int)ExamTerm.DateOfEnd.Subtract(ExamTerm.DateOfStart).Days;
                 modifiedExamTerm.DurationMinutes = (int)ExamTerm.DateOfEnd.Subtract(ExamTerm.DateOfStart).Minutes;
@@ -542,7 +542,7 @@ namespace Certification_System.Controllers
 
                 MarkExamTermViewModel markExamTermViewModel = new MarkExamTermViewModel();
 
-                markExamTermViewModel.ExamTerm = _mapper.Map<DisplayExamTermViewModel>(ExamTerm);
+                markExamTermViewModel.ExamTerm = _mapper.Map<DisplayExamTermWithLocationViewModel>(ExamTerm);
                 markExamTermViewModel.ExamTerm.DurationDays = (int)ExamTerm.DateOfEnd.Subtract(ExamTerm.DateOfStart).Days;
                 markExamTermViewModel.ExamTerm.DurationMinutes = (int)ExamTerm.DateOfEnd.Subtract(ExamTerm.DateOfStart).Minutes;
 

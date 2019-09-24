@@ -8,6 +8,6 @@ namespace Certification_System.DTOViewModels
         public DisplayExamWithLocationViewModel Exam { get; set; }
 
         [Display(Name = "Tury egzaminu")]
-        public ICollection<DisplayExamTermViewModel> ExamTerms { get; set; }
+        public ICollection<DisplayExamTermWithoutExamWithLocationViewModel> ExamTerms { get; set; }
     }
 }

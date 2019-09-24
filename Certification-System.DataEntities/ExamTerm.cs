@@ -15,6 +15,12 @@ namespace Certification_System.Entities
         public DateTime DateOfStart { get; set; }
         public DateTime DateOfEnd { get; set; }
 
+        public string Country { get; set; }
+        public string City { get; set; }
+        public string PostCode { get; set; }
+        public string Address { get; set; }
+        public string NumberOfApartment { get; set; }
+
         public int UsersLimit { get; set; }
 
         public ICollection<string> EnrolledUsers { get; set; }
