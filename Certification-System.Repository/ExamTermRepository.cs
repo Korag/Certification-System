@@ -104,48 +104,46 @@ namespace Certification_System.Repository
 
         public IList<SelectListItem> GetActiveExamTermsWithVacantSeatsAsSelectList(Exam exam)
         {
-            var ExamTerms = GetActiveExamsTermsById(exam.ExamTerms).ToList();
+            var examTerms = GetActiveExamsTermsById(exam.ExamTerms).ToList();
+            List<SelectListItem> selectList = new List<SelectListItem>();
 
-            List<SelectListItem> SelectList = new List<SelectListItem>();
-
-            foreach (var examTerm in ExamTerms)
+            foreach (var examTerm in examTerms)
             {
-                var VacantSeats = examTerm.UsersLimit - examTerm.EnrolledUsers.Count();
+                var vacantSeats = examTerm.UsersLimit - examTerm.EnrolledUsers.Count();
 
-                SelectList.Add
+                selectList.Add
                     (
                         new SelectListItem()
                         {
-                            Text = exam.DateOfStart + " - " + exam.DateOfEnd + " |wm.: " + VacantSeats,
+                            Text = exam.DateOfStart + " - " + exam.DateOfEnd + " |wm.: " + vacantSeats,
                             Value = exam.ExamIdentificator
                         }
                     );
             };
 
-            return SelectList;
+            return selectList;
         }
 
         public IList<SelectListItem> GetActiveExamTermsWithVacantSeatsAsSelectList()
         {
-            var ExamTerms = GetListOfActiveExamsTerms().ToList();
+            var examTerms = GetListOfActiveExamsTerms().ToList();
+            List<SelectListItem> selectList = new List<SelectListItem>();
 
-            List<SelectListItem> SelectList = new List<SelectListItem>();
-
-            foreach (var examTerm in ExamTerms)
+            foreach (var examTerm in examTerms)
             {
-                var VacantSeats = examTerm.UsersLimit - examTerm.EnrolledUsers.Count();
+                var vacantSeats = examTerm.UsersLimit - examTerm.EnrolledUsers.Count();
 
-                SelectList.Add
+                selectList.Add
                     (
                         new SelectListItem()
                         {
-                            Text = examTerm.DateOfStart + " - " + examTerm.DateOfEnd + " |wm.: " + VacantSeats,
+                            Text = examTerm.DateOfStart + " - " + examTerm.DateOfEnd + " |wm.: " + vacantSeats,
                             Value = examTerm.ExamTermIdentificator
                         }
                     );
             };
 
-            return SelectList;
+            return selectList;
         }
 
         public void AddUserToExamTerm(string examTermIdentificator, string userIdentificator)

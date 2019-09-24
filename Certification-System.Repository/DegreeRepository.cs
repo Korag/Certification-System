@@ -33,11 +33,11 @@ namespace Certification_System.Repository
         public ICollection<SelectListItem> GetDegreesAsSelectList()
         {
             GetDegrees();
-            List<SelectListItem> SelectList = new List<SelectListItem>();
+            List<SelectListItem> selectList = new List<SelectListItem>();
 
             foreach (var degree in _degrees.AsQueryable().ToList())
             {
-                SelectList.Add
+                selectList.Add
                     (
                         new SelectListItem()
                         {
@@ -47,7 +47,7 @@ namespace Certification_System.Repository
                     );
             };
 
-            return SelectList;
+            return selectList;
         }
 
         public void AddDegree(Degree degree)
@@ -79,19 +79,19 @@ namespace Certification_System.Repository
 
         public ICollection<Degree> GetDegreesToDisposeByUserCompetences(ICollection<string> givenCertificates, ICollection<string> givenDegrees)
         {
-            var Degrees = GetListOfDegrees();
+            var degrees = GetListOfDegrees();
 
-            List<Degree> AvailableDegreesToDispose = new List<Degree>();
+            List<Degree> availableDegreesToDispose = new List<Degree>();
 
-            foreach (var degree in Degrees)
+            foreach (var degree in degrees)
             {
                 if ((degree.RequiredCertificates.Intersect(givenCertificates).Count() == degree.RequiredCertificates.Count() && (degree.RequiredDegrees.Intersect(givenDegrees).Count() == degree.RequiredDegrees.Count())))
                 {
-                    AvailableDegreesToDispose.Add(degree);
+                    availableDegreesToDispose.Add(degree);
                 }
             }
 
-            return AvailableDegreesToDispose;
+            return availableDegreesToDispose;
         }
 
         public ICollection<Degree> DeleteBranchFromDegrees(string branchIdentificator)

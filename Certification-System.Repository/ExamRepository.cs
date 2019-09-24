@@ -73,12 +73,12 @@ namespace Certification_System.Repository
 
         public ICollection<SelectListItem> GetExamsAsSelectList()
         {
-            var Exams = GetListOfExams();
-            List<SelectListItem> SelectList = new List<SelectListItem>();
+            var exams = GetListOfExams();
+            List<SelectListItem> selectList = new List<SelectListItem>();
 
-            foreach (var exam in Exams)
+            foreach (var exam in exams)
             {
-                SelectList.Add
+                selectList.Add
                     (
                         new SelectListItem()
                         {
@@ -88,17 +88,17 @@ namespace Certification_System.Repository
                     );
             };
 
-            return SelectList;
+            return selectList;
         }
 
         public IList<SelectListItem> GetActiveExamsAsSelectList()
         {
-            var Exams = GetListOfActiveExams();
-            List<SelectListItem> SelectList = new List<SelectListItem>();
+            var exams = GetListOfActiveExams();
+            List<SelectListItem> selectList = new List<SelectListItem>();
 
-            foreach (var exam in Exams)
+            foreach (var exam in exams)
             {
-                SelectList.Add
+                selectList.Add
                     (
                         new SelectListItem()
                         {
@@ -108,17 +108,17 @@ namespace Certification_System.Repository
                     );
             };
 
-            return SelectList;
+            return selectList;
         }
 
         public ICollection<SelectListItem> GetExamsWhichAreDividedToTermsAsSelectList()
         {
-            var Exams = GetListOfExams().ToList().Where(z => z.ExamDividedToTerms == true);
-            List<SelectListItem> SelectList = new List<SelectListItem>();
+            var exams = GetListOfExams().ToList().Where(z => z.ExamDividedToTerms == true);
+            List<SelectListItem> selectList = new List<SelectListItem>();
 
-            foreach (var exam in Exams)
+            foreach (var exam in exams)
             {
-                SelectList.Add
+                selectList.Add
                     (
                         new SelectListItem()
                         {
@@ -128,7 +128,7 @@ namespace Certification_System.Repository
                     );
             };
 
-            return SelectList;
+            return selectList;
         }
 
         public Exam GetExamByExamTermId(string examTermIdentificator)
@@ -141,8 +141,7 @@ namespace Certification_System.Repository
 
         public ICollection<SelectListItem> GetAddExamMenuOptions()
         {
-            var Exams = GetListOfExams();
-            List<SelectListItem> SelectList = new List<SelectListItem>
+            List<SelectListItem> selectList = new List<SelectListItem>
                 {
                 new SelectListItem(){
                             Text = "Dodaj egzamin",
@@ -154,29 +153,29 @@ namespace Certification_System.Repository
                 },
             };
 
-            return SelectList;
+            return selectList;
         }
 
         public IList<SelectListItem> GetActiveExamsWithVacantSeatsAsSelectList()
         {
-            List<Exam> Exams = GetListOfActiveExams().ToList();
-            List<SelectListItem> SelectList = new List<SelectListItem>();
+            List<Exam> exams = GetListOfActiveExams().ToList();
+            List<SelectListItem> selectList = new List<SelectListItem>();
 
-            foreach (var exam in Exams)
+            foreach (var exam in exams)
             {
-                var VacantSeats = exam.UsersLimit - exam.EnrolledUsers.Count();
+                var vacantSeats = exam.UsersLimit - exam.EnrolledUsers.Count();
 
-                SelectList.Add
+                selectList.Add
                     (
                         new SelectListItem()
                         {
-                            Text = exam.ExamIndexer + " | " + exam.Name + " |wm.: " + VacantSeats,
+                            Text = exam.ExamIndexer + " | " + exam.Name + " |wm.: " + vacantSeats,
                             Value = exam.ExamIdentificator
                         }
                     );
             };
 
-            return SelectList;
+            return selectList;
         }
 
         public Exam GetExamByExamResultId(string examResultId)
@@ -304,14 +303,14 @@ namespace Certification_System.Repository
 
         public IList<SelectListItem> GetExamsByIdAsSelectList(ICollection<string> examsIdentificators)
         {
-            List<Exam> Exams = GetExamsById(examsIdentificators).ToList();
-            List<SelectListItem> SelectList = new List<SelectListItem>();
+            List<Exam> exams = GetExamsById(examsIdentificators).ToList();
+            List<SelectListItem> selectList = new List<SelectListItem>();
 
-            foreach (var exam in Exams)
+            foreach (var exam in exams)
             {
                 var VacantSeats = exam.UsersLimit - exam.EnrolledUsers.Count();
 
-                SelectList.Add
+                selectList.Add
                     (
                         new SelectListItem()
                         {
@@ -321,16 +320,16 @@ namespace Certification_System.Repository
                     );
             };
 
-            return SelectList;
+            return selectList;
         }
 
         public IList<SelectListItem> GetExamsTypesAsSelectList()
         {
-            List<SelectListItem> SelectList = new List<SelectListItem>();
+            List<SelectListItem> selectList = new List<SelectListItem>();
 
             foreach (var examType in ExamsTypes.TypesOfExams)
             {
-                SelectList.Add
+                selectList.Add
                     (
                         new SelectListItem()
                         {
@@ -340,7 +339,7 @@ namespace Certification_System.Repository
                     );
             };
 
-            return SelectList;
+            return selectList;
         }
     }
 }

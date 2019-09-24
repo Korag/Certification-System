@@ -59,12 +59,12 @@ namespace Certification_System.Repository
 
         public ICollection<SelectListItem> GetActiveCoursesAsSelectList()
         {
-            List<Course> Courses = GetActiveCourses().ToList();
-            List<SelectListItem> SelectList = new List<SelectListItem>();
+            List<Course> courses = GetActiveCourses().ToList();
+            List<SelectListItem> selectList = new List<SelectListItem>();
 
-            foreach (var course in Courses)
+            foreach (var course in courses)
             {
-                SelectList.Add
+                selectList.Add
                     (
                         new SelectListItem()
                         {
@@ -74,17 +74,17 @@ namespace Certification_System.Repository
                     );
             };
 
-            return SelectList;
+            return selectList;
         }
 
         public ICollection<SelectListItem> GetActiveCoursesWhereExamIsRequiredAsSelectList()
         {
-            List<Course> Courses = GetActiveCourses().ToList().Where(z => z.ExamIsRequired == true).ToList();
-            List<SelectListItem> SelectList = new List<SelectListItem>();
+            List<Course> courses = GetActiveCourses().ToList().Where(z => z.ExamIsRequired == true).ToList();
+            List<SelectListItem> selectList = new List<SelectListItem>();
 
-            foreach (var course in Courses)
+            foreach (var course in courses)
             {
-                SelectList.Add
+                selectList.Add
                     (
                         new SelectListItem()
                         {
@@ -94,39 +94,39 @@ namespace Certification_System.Repository
                     );
             };
 
-            return SelectList;
+            return selectList;
         }
 
         public ICollection<SelectListItem> GetActiveCoursesWithVacantSeatsAsSelectList()
         {
-            List<Course> Courses = GetActiveCourses().ToList();
-            List<SelectListItem> SelectList = new List<SelectListItem>();
+            List<Course> courses = GetActiveCourses().ToList();
+            List<SelectListItem> selectList = new List<SelectListItem>();
 
-            foreach (var course in Courses)
+            foreach (var course in courses)
             {
-                var VacantSeats = course.EnrolledUsersLimit - course.EnrolledUsers.Count();
+                var vacantSeats = course.EnrolledUsersLimit - course.EnrolledUsers.Count();
 
-                SelectList.Add
+                selectList.Add
                     (
                         new SelectListItem()
                         {
-                            Text = course.CourseIndexer + " | " + course.Name + " |wm.: " + VacantSeats,
+                            Text = course.CourseIndexer + " | " + course.Name + " |wm.: " + vacantSeats,
                             Value = course.CourseIdentificator
                         }
                     );
             };
 
-            return SelectList;
+            return selectList;
         }
 
         public ICollection<SelectListItem> GetAllCoursesAsSelectList()
         {
             GetCourses();
-            List<SelectListItem> SelectList = new List<SelectListItem>();
+            List<SelectListItem> selectList = new List<SelectListItem>();
 
             foreach (var course in _courses.AsQueryable().ToList())
             {
-                SelectList.Add
+                selectList.Add
                     (
                         new SelectListItem()
                         {
@@ -136,18 +136,18 @@ namespace Certification_System.Repository
                     );
             };
 
-            return SelectList;
+            return selectList;
         }
 
         public ICollection<SelectListItem> GenerateSelectList(ICollection<string> coursesIdentificators)
         {
             var courses = GetCoursesById(coursesIdentificators);
 
-            List<SelectListItem> SelectList = new List<SelectListItem>();
+            List<SelectListItem> selectList = new List<SelectListItem>();
 
             foreach (var course in courses)
             {
-                SelectList.Add
+                selectList.Add
                     (
                         new SelectListItem()
                         {
@@ -157,7 +157,7 @@ namespace Certification_System.Repository
                     );
             };
 
-            return SelectList;
+            return selectList;
         }
 
         public void AddEnrolledUsersToCourse(string courseIdentificator, ICollection<string> usersIdentificators)
@@ -217,11 +217,11 @@ namespace Certification_System.Repository
 
             foreach (var exam in exams)
             {
-                var Course = _courses.AsQueryable().ToList().Where(z => z.Exams.Contains(exam.ExamIdentificator)).FirstOrDefault();
+                var course = _courses.AsQueryable().ToList().Where(z => z.Exams.Contains(exam.ExamIdentificator)).FirstOrDefault();
 
-                if (resultListOfCourses.Contains(Course))
+                if (resultListOfCourses.Contains(course))
                 {
-                    resultListOfCourses.Add(Course);
+                    resultListOfCourses.Add(course);
                 }
             }
 

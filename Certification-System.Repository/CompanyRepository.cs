@@ -32,11 +32,11 @@ namespace Certification_System.Repository
         public ICollection<SelectListItem> GetCompaniesAsSelectList()
         {
             GetCompanies();
-            List<SelectListItem> SelectList = new List<SelectListItem>();
+            List<SelectListItem> selectList = new List<SelectListItem>();
 
             foreach (var company in _companies.AsQueryable().ToList())
             {
-                SelectList.Add
+                selectList.Add
                     (
                         new SelectListItem()
                         {
@@ -46,7 +46,7 @@ namespace Certification_System.Repository
                     );
             };
 
-            return SelectList;
+            return selectList;
         }
 
         public void AddCompany(Company company)

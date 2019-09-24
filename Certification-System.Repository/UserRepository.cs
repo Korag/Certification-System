@@ -59,7 +59,7 @@ namespace Certification_System.Repository
 
         public ICollection<SelectListItem> GetRolesAsSelectList()
         {
-            List<SelectListItem> SelectList = new List<SelectListItem>();
+            List<SelectListItem> selectList = new List<SelectListItem>();
 
             foreach (var dictionaryItem in UserRolesDictionary.TranslationDictionary)
             {
@@ -69,15 +69,15 @@ namespace Certification_System.Repository
                     Value = dictionaryItem.Key
                 };
 
-                SelectList.Add(item);
+                selectList.Add(item);
             }
 
-            return SelectList;
+            return selectList;
         }
 
         public ICollection<SelectListItem> GetAvailableRoleFiltersAsSelectList()
         {
-            List<SelectListItem> SelectList = new List<SelectListItem>();
+            List<SelectListItem> selectList = new List<SelectListItem>();
 
             SelectListItem noFilter = new SelectListItem()
             {
@@ -85,7 +85,7 @@ namespace Certification_System.Repository
                 Value = ""
             };
 
-            SelectList.Add(noFilter);
+            selectList.Add(noFilter);
 
             foreach (var dictionaryItem in UserRolesDictionary.TranslationDictionary)
             {
@@ -95,17 +95,17 @@ namespace Certification_System.Repository
                     Value = dictionaryItem.Value
                 };
 
-                SelectList.Add(item);
+                selectList.Add(item);
             }
 
-            SelectList.Last().Value = "Instruktor&Egzaminator";
+            selectList.Last().Value = "Instruktor&Egzaminator";
 
-            return SelectList;
+            return selectList;
         }
 
         public ICollection<SelectListItem> GetAvailableCourseRoleFiltersAsSelectList()
         {
-            List<SelectListItem> SelectList = new List<SelectListItem>
+            List<SelectListItem> selectList = new List<SelectListItem>
             {
               //    new SelectListItem()
               //{
@@ -129,7 +129,7 @@ namespace Certification_System.Repository
               }
             };
 
-            return SelectList;
+            return selectList;
         }
 
         public CertificationPlatformUser GetUserById(string userIdentificator)
@@ -149,12 +149,12 @@ namespace Certification_System.Repository
 
         public ICollection<SelectListItem> GetInstructorsAsSelectList()
         {
-            var Instructors = GetListOfInstructors();
-            List<SelectListItem> SelectList = new List<SelectListItem>();
+            var instructors = GetListOfInstructors();
+            List<SelectListItem> selectList = new List<SelectListItem>();
 
-            foreach (var instructor in Instructors)
+            foreach (var instructor in instructors)
             {
-                SelectList.Add
+                selectList.Add
                     (
                         new SelectListItem()
                         {
@@ -164,17 +164,17 @@ namespace Certification_System.Repository
                     );
             };
 
-            return SelectList;
+            return selectList;
         }
 
         public ICollection<SelectListItem> GetExaminersAsSelectList()
         {
-            var Examiners = GetListOfExaminers();
-            List<SelectListItem> SelectList = new List<SelectListItem>();
+            var examiners = GetListOfExaminers();
+            List<SelectListItem> selectList = new List<SelectListItem>();
 
-            foreach (var examiner in Examiners)
+            foreach (var examiner in examiners)
             {
-                SelectList.Add
+                selectList.Add
                     (
                         new SelectListItem()
                         {
@@ -184,17 +184,17 @@ namespace Certification_System.Repository
                     );
             };
 
-            return SelectList;
+            return selectList;
         }
 
         public ICollection<SelectListItem> GetWorkersAsSelectList()
         {
-            var Workers = GetListOfWorkers();
-            List<SelectListItem> SelectList = new List<SelectListItem>();
+            var workers = GetListOfWorkers();
+            List<SelectListItem> selectList = new List<SelectListItem>();
 
-            foreach (var worker in Workers)
+            foreach (var worker in workers)
             {
-                SelectList.Add
+                selectList.Add
                     (
                         new SelectListItem()
                         {
@@ -204,7 +204,7 @@ namespace Certification_System.Repository
                     );
             };
 
-            return SelectList;
+            return selectList;
         }
 
         public ICollection<CertificationPlatformUser> GetInstructorsById(ICollection<string> userIdentificators)
@@ -225,11 +225,11 @@ namespace Certification_System.Repository
         public ICollection<SelectListItem> GetUsersAsSelectList()
         {
             GetUsers();
-            List<SelectListItem> SelectList = new List<SelectListItem>();
+            List<SelectListItem> selectList = new List<SelectListItem>();
 
             foreach (var user in _users.AsQueryable().ToList())
             {
-                SelectList.Add
+                selectList.Add
                     (
                         new SelectListItem()
                         {
@@ -239,25 +239,25 @@ namespace Certification_System.Repository
                     );
             };
 
-            return SelectList;
+            return selectList;
         }
 
         public void AddUserCertificate(string userIdentificator, string givenCertificateIdentificator)
         {
-            var User = GetUserById(userIdentificator);
-            User.GivenCertificates.Add(givenCertificateIdentificator);
+            var user = GetUserById(userIdentificator);
+            user.GivenCertificates.Add(givenCertificateIdentificator);
 
             var filter = Builders<CertificationPlatformUser>.Filter.Eq(x => x.Id, userIdentificator);
-            GetUsers().ReplaceOne(filter, User);
+            GetUsers().ReplaceOne(filter, user);
         }
 
         public void AddUserDegree(string userIdentificator, string givenDegreeIdentificator)
         {
-            var User = GetUserById(userIdentificator);
-            User.GivenDegrees.Add(givenDegreeIdentificator);
+            var user = GetUserById(userIdentificator);
+            user.GivenDegrees.Add(givenDegreeIdentificator);
 
             var filter = Builders<CertificationPlatformUser>.Filter.Eq(x => x.Id, userIdentificator);
-            GetUsers().ReplaceOne(filter, User);
+            GetUsers().ReplaceOne(filter, user);
         }
 
         public void AddUsersToCourse(string courseIdentificator, ICollection<string> usersIdentificators)
