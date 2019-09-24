@@ -7,7 +7,6 @@ using System.Linq;
 using Certification_System.Repository.DAL;
 using Certification_System.ServicesInterfaces;
 using AutoMapper;
-using Certification_System.Services;
 using Certification_System.Extensions;
 
 namespace Certification_System.Controllers
@@ -41,16 +40,16 @@ namespace Certification_System.Controllers
         {
             if (meetingIdentificator != null)
             {
-                var Meeting = _context.meetingRepository.GetMeetingById(meetingIdentificator);
-                var Course = _context.courseRepository.GetCourseByMeetingId(meetingIdentificator);
+                var meeting = _context.meetingRepository.GetMeetingById(meetingIdentificator);
+                var course = _context.courseRepository.GetCourseByMeetingId(meetingIdentificator);
 
-                DisplayMeetingViewModel modifiedMeeting = _mapper.Map<DisplayMeetingViewModel>(Meeting);
-                modifiedMeeting.Course = _mapper.Map<DisplayCrucialDataCourseViewModel>(Course);
+                DisplayMeetingViewModel modifiedMeeting = _mapper.Map<DisplayMeetingViewModel>(meeting);
+                modifiedMeeting.Course = _mapper.Map<DisplayCrucialDataCourseViewModel>(course);
 
-                if (Meeting.Instructors.Count() != 0)
+                if (meeting.Instructors.Count() != 0)
                 {
-                    var Instructors = _context.userRepository.GetInstructorsById(Meeting.Instructors);
-                    modifiedMeeting.Instructors = _mapper.Map<List<DisplayCrucialDataUserViewModel>>(Instructors);
+                    var instructors = _context.userRepository.GetInstructorsById(meeting.Instructors);
+                    modifiedMeeting.Instructors = _mapper.Map<List<DisplayCrucialDataUserViewModel>>(instructors);
                 }
 
                 return View(modifiedMeeting);
@@ -114,9 +113,9 @@ namespace Certification_System.Controllers
         [Authorize(Roles = "Admin")]
         public ActionResult EditMeeting(string meetingIdentificator)
         {
-            var Meeting = _context.meetingRepository.GetMeetingById(meetingIdentificator);
+            var meeting = _context.meetingRepository.GetMeetingById(meetingIdentificator);
 
-            EditMeetingViewModel meetingViewModel = _mapper.Map<EditMeetingViewModel>(Meeting);
+            EditMeetingViewModel meetingViewModel = _mapper.Map<EditMeetingViewModel>(meeting);
             meetingViewModel.AvailableInstructors = _context.userRepository.GetInstructorsAsSelectList().ToList();
 
             return View(meetingViewModel);
@@ -129,13 +128,13 @@ namespace Certification_System.Controllers
         {
             if (ModelState.IsValid)
             {
-                var OriginMeeting = _context.meetingRepository.GetMeetingById(editedMeeting.MeetingIdentificator);
-                OriginMeeting = _mapper.Map<EditMeetingViewModel, Meeting>(editedMeeting, OriginMeeting);
+                var originMeeting = _context.meetingRepository.GetMeetingById(editedMeeting.MeetingIdentificator);
+                originMeeting = _mapper.Map<EditMeetingViewModel, Meeting>(editedMeeting, originMeeting);
 
-                _context.meetingRepository.UpdateMeeting(OriginMeeting);
+                _context.meetingRepository.UpdateMeeting(originMeeting);
 
                 var logInfo = _logger.GenerateLogInformation(this.User.Identity.Name, this.ControllerContext.RouteData.Values["action"].ToString(), LogTypeOfAction.TypesOfActions[1]);
-                _logger.AddMeetingLog(OriginMeeting, logInfo);
+                _logger.AddMeetingLog(originMeeting, logInfo);
 
                 return RedirectToAction("ConfirmationOfActionOnMeeting", "Meetings", new { meetingIdentificator = editedMeeting.MeetingIdentificator, TypeOfAction = "Update" });
             }
@@ -149,22 +148,22 @@ namespace Certification_System.Controllers
         {
             ViewBag.Message = message;
 
-            var Meetings = _context.meetingRepository.GetListOfMeetings();
-            List<DisplayMeetingViewModel> ListOfMeetings = new List<DisplayMeetingViewModel>();
+            var meetings = _context.meetingRepository.GetListOfMeetings();
+            List<DisplayMeetingViewModel> listOfMeetings = new List<DisplayMeetingViewModel>();
 
-            foreach (var meeting in Meetings)
+            foreach (var meeting in meetings)
             {
-                var Course = _context.courseRepository.GetCourseByMeetingId(meeting.MeetingIdentificator);
-                var Instructors = _context.userRepository.GetInstructorsById(meeting.Instructors).ToList();
+                var course = _context.courseRepository.GetCourseByMeetingId(meeting.MeetingIdentificator);
+                var instructors = _context.userRepository.GetInstructorsById(meeting.Instructors).ToList();
 
                 DisplayMeetingViewModel singleMeeting = _mapper.Map<DisplayMeetingViewModel>(meeting);
-                singleMeeting.Course = _mapper.Map<DisplayCrucialDataCourseViewModel>(Course);
-                singleMeeting.Instructors = _mapper.Map<List<DisplayCrucialDataUserViewModel>>(Instructors);
+                singleMeeting.Course = _mapper.Map<DisplayCrucialDataCourseViewModel>(course);
+                singleMeeting.Instructors = _mapper.Map<List<DisplayCrucialDataUserViewModel>>(instructors);
 
-                ListOfMeetings.Add(singleMeeting);
+                listOfMeetings.Add(singleMeeting);
             }
 
-            return View(ListOfMeetings);
+            return View(listOfMeetings);
         }
 
         // GET: MeetingDetails
@@ -173,29 +172,29 @@ namespace Certification_System.Controllers
         {
             ViewBag.CheckedPresence = checkedPresence;
 
-            var Meeting = _context.meetingRepository.GetMeetingById(meetingIdentificator);
-            var RelatedInstructors = _context.userRepository.GetInstructorsById(Meeting.Instructors);
+            var meeting = _context.meetingRepository.GetMeetingById(meetingIdentificator);
+            var relatedInstructors = _context.userRepository.GetInstructorsById(meeting.Instructors);
             
-            var EnrolledUsersIdentificators = _context.courseRepository.GetCourseByMeetingId(meetingIdentificator).EnrolledUsers;
-            var EnrolledUsersList = _context.userRepository.GetUsersById(EnrolledUsersIdentificators);
+            var enrolledUsersIdentificators = _context.courseRepository.GetCourseByMeetingId(meetingIdentificator).EnrolledUsers;
+            var enrolledUsersList = _context.userRepository.GetUsersById(enrolledUsersIdentificators);
 
-            List<DisplayCrucialDataWithContactUserViewModel> ListOfInstructors = new List<DisplayCrucialDataWithContactUserViewModel>();
+            List<DisplayCrucialDataWithContactUserViewModel> listOfInstructors = new List<DisplayCrucialDataWithContactUserViewModel>();
 
-            if (RelatedInstructors.Count != 0)
+            if (relatedInstructors.Count != 0)
             {
-               ListOfInstructors = _mapper.Map<List<DisplayCrucialDataWithContactUserViewModel>>(RelatedInstructors);
+                listOfInstructors = _mapper.Map<List<DisplayCrucialDataWithContactUserViewModel>>(relatedInstructors);
             }
 
             List<DisplayCrucialDataUserViewModel> ListOfUsers = new List<DisplayCrucialDataUserViewModel>();
 
-            if (EnrolledUsersList.Count != 0)
+            if (enrolledUsersList.Count != 0)
             {
-                ListOfUsers = _mapper.Map<List<DisplayCrucialDataUserViewModel>>(EnrolledUsersList);
+                ListOfUsers = _mapper.Map<List<DisplayCrucialDataUserViewModel>>(enrolledUsersList);
             }
 
-            MeetingDetailsViewModel MeetingDetails = _mapper.Map<MeetingDetailsViewModel>(Meeting);
-            MeetingDetails.Instructors = ListOfInstructors;
-            MeetingDetails.AttendanceList = Meeting.AttendanceList;
+            MeetingDetailsViewModel MeetingDetails = _mapper.Map<MeetingDetailsViewModel>(meeting);
+            MeetingDetails.Instructors = listOfInstructors;
+            MeetingDetails.AttendanceList = meeting.AttendanceList;
             MeetingDetails.AllCourseParticipants = ListOfUsers;
 
             if (this.User.IsInRole("Instructor"))
@@ -210,24 +209,24 @@ namespace Certification_System.Controllers
         [Authorize(Roles = "Admin, Instructor")]
         public ActionResult CheckUsersPresence(string meetingIdentificator)
         {
-            var Meeting = _context.meetingRepository.GetMeetingById(meetingIdentificator);
+            var meeting = _context.meetingRepository.GetMeetingById(meetingIdentificator);
 
-            var EnrolledUsersIdentificators = _context.courseRepository.GetCourseByMeetingId(meetingIdentificator).EnrolledUsers;
-            var EnrolledUsersList = _context.userRepository.GetUsersById(EnrolledUsersIdentificators);
+            var enrolledUsersIdentificators = _context.courseRepository.GetCourseByMeetingId(meetingIdentificator).EnrolledUsers;
+            var enrolledUsersList = _context.userRepository.GetUsersById(enrolledUsersIdentificators);
 
-            List<DisplayCrucialDataUserViewModel> ListOfUsers = new List<DisplayCrucialDataUserViewModel>();
+            List<DisplayCrucialDataUserViewModel> listOfUsers = new List<DisplayCrucialDataUserViewModel>();
 
-            if (EnrolledUsersList.Count != 0)
+            if (enrolledUsersList.Count != 0)
             {
-                ListOfUsers = _mapper.Map<List<DisplayCrucialDataUserViewModel>>(EnrolledUsersList);
+                listOfUsers = _mapper.Map<List<DisplayCrucialDataUserViewModel>>(enrolledUsersList);
             }
 
-            CheckMeetingPresenceViewModel MeetingPresence = _mapper.Map<CheckMeetingPresenceViewModel>(Meeting);
+            CheckMeetingPresenceViewModel MeetingPresence = _mapper.Map<CheckMeetingPresenceViewModel>(meeting);
 
-            MeetingPresence.AttendanceList = _mapper.Map<PresenceCheckBoxViewModel[]>(ListOfUsers);
-            MeetingPresence.AttendanceList.ToList().ForEach(z => z.IsPresent = Meeting.AttendanceList.Contains(z.UserIdentificator));
+            MeetingPresence.AttendanceList = _mapper.Map<PresenceCheckBoxViewModel[]>(enrolledUsersList);
+            MeetingPresence.AttendanceList.ToList().ForEach(z => z.IsPresent = meeting.AttendanceList.Contains(z.UserIdentificator));
 
-            MeetingPresence.AllCourseParticipants = ListOfUsers;
+            MeetingPresence.AllCourseParticipants = listOfUsers;
 
             return View(MeetingPresence);
         }
@@ -237,8 +236,8 @@ namespace Certification_System.Controllers
         [HttpPost]
         public ActionResult CheckUsersPresence(CheckMeetingPresenceCrucialDataViewModel meetingWithPresenceToCheck)
         {
-            var PresentUsersIdentificators = meetingWithPresenceToCheck.AttendanceList.ToList().Where(z => z.IsPresent == true).Select(z => z.UserIdentificator).ToList();
-            _context.meetingRepository.ChangeUsersPresenceOnMeetings(meetingWithPresenceToCheck.MeetingIdentificator, PresentUsersIdentificators);
+            var presentUsersIdentificators = meetingWithPresenceToCheck.AttendanceList.ToList().Where(z => z.IsPresent == true).Select(z => z.UserIdentificator).ToList();
+            _context.meetingRepository.ChangeUsersPresenceOnMeetings(meetingWithPresenceToCheck.MeetingIdentificator, presentUsersIdentificators);
 
             var updatedMeeting = _context.meetingRepository.GetMeetingById(meetingWithPresenceToCheck.MeetingIdentificator);
 
@@ -252,24 +251,24 @@ namespace Certification_System.Controllers
         [Authorize(Roles = "Instructor")]
         public ActionResult InstructorMeetings()
         {
-            var User = _context.userRepository.GetUserByEmail(this.User.Identity.Name);
+            var user = _context.userRepository.GetUserByEmail(this.User.Identity.Name);
 
-            var Meetings = _context.meetingRepository.GetMeetingsByInstructorId(User.Id);
-            List<DisplayMeetingViewModel> ListOfMeetings = new List<DisplayMeetingViewModel>();
+            var meetings = _context.meetingRepository.GetMeetingsByInstructorId(user.Id);
+            List<DisplayMeetingViewModel> listOfMeetings = new List<DisplayMeetingViewModel>();
 
-            foreach (var meeting in Meetings)
+            foreach (var meeting in meetings)
             {
-                var Course = _context.courseRepository.GetCourseByMeetingId(meeting.MeetingIdentificator);
-                var Instructors = _context.userRepository.GetInstructorsById(meeting.Instructors).ToList();
+                var course = _context.courseRepository.GetCourseByMeetingId(meeting.MeetingIdentificator);
+                var instructors = _context.userRepository.GetInstructorsById(meeting.Instructors).ToList();
 
                 DisplayMeetingViewModel singleMeeting = _mapper.Map<DisplayMeetingViewModel>(meeting);
-                singleMeeting.Course = _mapper.Map<DisplayCrucialDataCourseViewModel>(Course);
-                singleMeeting.Instructors = _mapper.Map<List<DisplayCrucialDataUserViewModel>>(Instructors);
+                singleMeeting.Course = _mapper.Map<DisplayCrucialDataCourseViewModel>(course);
+                singleMeeting.Instructors = _mapper.Map<List<DisplayCrucialDataUserViewModel>>(instructors);
 
-                ListOfMeetings.Add(singleMeeting);
+                listOfMeetings.Add(singleMeeting);
             }
 
-            return View(ListOfMeetings);
+            return View(listOfMeetings);
         }
 
         // GET: DeleteMeetingsHub

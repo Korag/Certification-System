@@ -122,6 +122,7 @@ namespace Certification_System.Services
 
             CreateMap<Course, DeleteUsersFromCourseViewModel>()
                      .ForMember(dest => dest.UsersToDeleteFromCourse, opts => opts.Ignore())
+                     .ForMember(dest => dest.EnrolledUsersQuantity, opts => opts.MapFrom(src => src.EnrolledUsers.Count()))
                      .ForMember(dest => dest.AllCourseParticipants, opts => opts.Ignore());
 
             CreateMap<Course, UserGivenCertificatePossessionConfirmationViewModel>()
@@ -383,7 +384,6 @@ namespace Certification_System.Services
                      .ForMember(dest => dest.SelectedInstructors, opts => opts.MapFrom(src => src.Instructors));
 
             CreateMap<EditMeetingViewModel, Meeting>()
-                     .ForMember(dest => dest.AttendanceList, opts => opts.Ignore())
                      .ForMember(dest => dest.MeetingIdentificator, opts => opts.Ignore())
                      .ForMember(dest => dest.Instructors, opts => opts.MapFrom(src => src.SelectedInstructors));
 

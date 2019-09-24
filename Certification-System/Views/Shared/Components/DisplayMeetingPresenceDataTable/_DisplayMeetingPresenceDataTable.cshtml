@@ -40,28 +40,31 @@
                     <td>
                         @if (Model.AttendanceList.Contains(user.UserIdentificator))
                         {
-                            <input type="checkbox" checked data-toggle="toggle" data-on="<i class='fas fa-clipboard-check'></i> Obecny" data-off="<i class='fas fa-times'></i> Nieobecny" data-size="sm" disabled />
+                            <input type="checkbox" checked data-toggle="toggle" data-on="<i class='fas fa-clipboard-check'></i> <br/>Obecny" data-off="<i class='fas fa-times'></i> <br/>Nieobecny" data-size="sm" disabled />
+                        }
+                        else if (DateTime.Now > Model.MeetingStartDate)
+                        {
+                            <input type="checkbox" data-toggle="toggle" data-on="<i class='fas fa-clipboard-check'></i> <br/>Obecny" data-off="<i class='fas fa-times'></i> <br/>Spotkanie jeszcze się nie zaczęło" data-size="sm" disabled />
                         }
                         else
                         {
-                            <input type="checkbox" data-toggle="toggle" data-on="<i class='fas fa-clipboard-check'></i> Obecny" data-off="<i class='fas fa-times'></i> Nieobecny" data-size="sm" disabled />
+                            <input type="checkbox" data-toggle="toggle" data-on="<i class='fas fa-clipboard-check'></i> <br/>Obecny" data-off="<i class='fas fa-times'></i> <br/>Nieobecny" data-size="sm" disabled />
                         }
-
                         @*@if (Model.AttendanceList.Count != 0)
-                            {
-                                @if (Model.AttendanceList.Contains(user.UserIdentificator))
-                                {
-                                    <span class="fas fa-clipboard-check" style="font-size:34px"></span>
-                                }
-                                else
-                                {
-                                    <span class="fas fa-times" style="font-size:34px"></span>
-                                }
-                            }
-                            else
-                            {
-                                <span class="fas fa-file-signature" style="font-size:34px"></span>
-                            }*@
+        {
+            @if (Model.AttendanceList.Contains(user.UserIdentificator))
+            {
+                <span class="fas fa-clipboard-check" style="font-size:34px"></span>
+            }
+            else
+            {
+                <span class="fas fa-times" style="font-size:34px"></span>
+            }
+        }
+        else
+        {
+            <span class="fas fa-file-signature" style="font-size:34px"></span>
+        }*@
                     </td>
                     @if (Model.Options.OperationSet != 0)
                     {

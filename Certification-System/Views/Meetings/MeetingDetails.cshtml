@@ -106,7 +106,7 @@ else
 
 @if (Model.AllCourseParticipants.Count != 0)
 {
-    @await Component.InvokeAsync("DisplayMeetingPresenceDataTable", new { userViewModel = Model.AllCourseParticipants, attendanceViewModel = Model.AttendanceList, tableIdentificator = "listUsers", operationSet = 1 })
+    @await Component.InvokeAsync("DisplayMeetingPresenceDataTable", new { userViewModel = Model.AllCourseParticipants, attendanceViewModel = Model.AttendanceList, meetingStartDate = Model.DateOfStart ,tableIdentificator = "listUsers", operationSet = 1 })
 }
 else
 {
