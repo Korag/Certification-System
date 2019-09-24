@@ -7,6 +7,14 @@ namespace Certification_System.Entities
 {
     public class Course
     {
+        public Course()
+        {
+            Exams = new List<string>();
+            EnrolledUsers = new List<string>();
+            Branches = new List<string>();
+            Meetings = new List<string>();
+        }
+
         [BsonId]
         [BsonRepresentation(BsonType.ObjectId)]
         public string CourseIdentificator { get; set; }

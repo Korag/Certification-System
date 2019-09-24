@@ -7,6 +7,14 @@ namespace Certification_System.Entities
 {
     public class Exam
     {
+        public Exam()
+        {
+            ExamTerms = new List<string>();
+            Examiners = new List<string>();
+            ExamResults = new List<string>();
+            EnrolledUsers = new List<string>();
+        }
+
         [BsonId]
         [BsonRepresentation(BsonType.ObjectId)]
         public string ExamIdentificator { get; set; }

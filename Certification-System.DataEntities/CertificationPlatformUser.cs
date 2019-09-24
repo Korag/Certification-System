@@ -5,6 +5,15 @@ namespace Certification_System.Entities
 {
     public class CertificationPlatformUser : MongoUser
     {
+        public CertificationPlatformUser() : base()
+        {
+            CompanyRoleManager = new List<string>();
+            CompanyRoleWorker = new List<string>();
+            Courses = new List<string>();
+            GivenCertificates = new List<string>();
+            GivenDegrees = new List<string>();
+        }
+
         public string FirstName { get; set; }
 
         public string LastName { get; set; }

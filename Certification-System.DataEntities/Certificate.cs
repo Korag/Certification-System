@@ -6,6 +6,11 @@ namespace Certification_System.Entities
 {
     public class Certificate
     {
+        public Certificate()
+        {
+            Branches = new List<string>();
+        }
+
         [BsonId]
         [BsonRepresentation(BsonType.ObjectId)]
         public string CertificateIdentificator { get; set; }

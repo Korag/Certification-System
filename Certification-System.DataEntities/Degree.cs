@@ -6,6 +6,14 @@ namespace Certification_System.Entities
 {
     public class Degree
     {
+        public Degree()
+        {
+            Conditions = new List<string>();
+            RequiredCertificates = new List<string>();
+            RequiredDegrees = new List<string>();
+            Branches = new List<string>();
+        }
+
         [BsonId]
         [BsonRepresentation(BsonType.ObjectId)]
         public string DegreeIdentificator { get; set; }

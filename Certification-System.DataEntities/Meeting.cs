@@ -7,6 +7,12 @@ namespace Certification_System.Entities
 {
     public class Meeting
     {
+        public Meeting()
+        {
+            AttendanceList = new List<string>();
+            Instructors = new List<string>();
+        }
+
         [BsonId]
         [BsonRepresentation(BsonType.ObjectId)]
         public string MeetingIdentificator { get; set; }

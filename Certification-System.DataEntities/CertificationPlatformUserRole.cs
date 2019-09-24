@@ -8,6 +8,7 @@ namespace Certification_System.Entities
         {
 
         }
+
         public CertificationPlatformUserRole(string name)
         {
             Name = name;
