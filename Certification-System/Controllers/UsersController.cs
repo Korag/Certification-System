@@ -51,12 +51,12 @@ namespace Certification_System.Controllers
         {
             ViewBag.Message = message;
 
-            var Users = _context.userRepository.GetListOfUsers();
+            var users = _context.userRepository.GetListOfUsers();
             List<DisplayUserViewModel> usersToDisplay = new List<DisplayUserViewModel>();
 
             ViewBag.AvailableRoleFilters = _context.userRepository.GetAvailableRoleFiltersAsSelectList();
 
-            foreach (var user in Users)
+            foreach (var user in users)
             {
                 DisplayUserViewModel singleUser = _mapper.Map<DisplayUserViewModel>(user);
 
@@ -79,12 +79,12 @@ namespace Certification_System.Controllers
             {
                 ViewBag.TypeOfAction = TypeOfAction;
 
-                var User = _context.userRepository.GetUserById(userIdentificator);
+                var user = _context.userRepository.GetUserById(userIdentificator);
 
-                DisplayAllUserInformationViewModel modifiedUser = _mapper.Map<DisplayAllUserInformationViewModel>(User);
+                DisplayAllUserInformationViewModel modifiedUser = _mapper.Map<DisplayAllUserInformationViewModel>(user);
 
-                modifiedUser.CompanyRoleWorker = _context.companyRepository.GetCompaniesById(User.CompanyRoleWorker).Select(z => z.CompanyName).ToList();
-                modifiedUser.CompanyRoleManager = _context.companyRepository.GetCompaniesById(User.CompanyRoleManager).Select(z => z.CompanyName).ToList();
+                modifiedUser.CompanyRoleWorker = _context.companyRepository.GetCompaniesById(user.CompanyRoleWorker).Select(z => z.CompanyName).ToList();
+                modifiedUser.CompanyRoleManager = _context.companyRepository.GetCompaniesById(user.CompanyRoleManager).Select(z => z.CompanyName).ToList();
 
                 modifiedUser.Roles = _context.userRepository.TranslateRoles(modifiedUser.Roles);
 
@@ -167,9 +167,9 @@ namespace Certification_System.Controllers
         [Authorize(Roles = "Admin")]
         public ActionResult EditUser(string userIdentificator)
         {
-            var User = _context.userRepository.GetUserById(userIdentificator);
+            var user = _context.userRepository.GetUserById(userIdentificator);
 
-            EditUserViewModel userToUpdate = _mapper.Map<EditUserViewModel>(User);
+            EditUserViewModel userToUpdate = _mapper.Map<EditUserViewModel>(user);
             userToUpdate.AvailableCompanies = _context.companyRepository.GetCompaniesAsSelectList().ToList();
             userToUpdate.AvailableRoles = _context.userRepository.GetRolesAsSelectList().ToList();
 
@@ -189,34 +189,34 @@ namespace Certification_System.Controllers
         {
             if (ModelState.IsValid)
             {
-                var OriginUser = _userManager.FindByIdAsync(editedUser.UserIdentificator).Result;
-                _userManager.RemoveFromRolesAsync(OriginUser, _userManager.GetRolesAsync(OriginUser).Result.ToArray()).Wait();
+                var originUser = _userManager.FindByIdAsync(editedUser.UserIdentificator).Result;
+                _userManager.RemoveFromRolesAsync(originUser, _userManager.GetRolesAsync(originUser).Result.ToArray()).Wait();
 
                 if (editedUser.SelectedRole.FirstOrDefault() != "Instructor&Examiner")
                 {
-                _userManager.AddToRolesAsync(OriginUser, editedUser.SelectedRole).Wait();
+                _userManager.AddToRolesAsync(originUser, editedUser.SelectedRole).Wait();
                 }
                 else
                 {
-                    _userManager.AddToRoleAsync(OriginUser, "Instructor").Wait();
-                    _userManager.AddToRoleAsync(OriginUser, "Examiner").Wait();
+                    _userManager.AddToRoleAsync(originUser, "Instructor").Wait();
+                    _userManager.AddToRoleAsync(originUser, "Examiner").Wait();
                 }
 
-                if (OriginUser.Email != editedUser.Email)
+                if (originUser.Email != editedUser.Email)
                 {
-                    OriginUser.EmailConfirmed = false;
+                    originUser.EmailConfirmed = false;
                 }
 
-                OriginUser = _mapper.Map<EditUserViewModel, CertificationPlatformUser>(editedUser, OriginUser);
+                originUser = _mapper.Map<EditUserViewModel, CertificationPlatformUser>(editedUser, originUser);
 
-                _context.userRepository.UpdateUser(OriginUser);
+                _context.userRepository.UpdateUser(originUser);
 
-                var updatedUser = _context.userRepository.GetUserById(OriginUser.Id);
+                var updatedUser = _context.userRepository.GetUserById(originUser.Id);
 
                 var logInfo = _logger.GenerateLogInformation(this.User.Identity.Name, this.ControllerContext.RouteData.Values["action"].ToString(), LogTypeOfAction.TypesOfActions[1]);
                 _logger.AddUserLog(updatedUser, logInfo);
 
-                return RedirectToAction("ConfirmationOfActionOnUser", "Users", new { userIdentificator = OriginUser.Id, TypeOfAction = "Update" });
+                return RedirectToAction("ConfirmationOfActionOnUser", "Users", new { userIdentificator = originUser.Id, TypeOfAction = "Update" });
             }
 
             editedUser.AvailableRoles = _context.userRepository.GetRolesAsSelectList().ToList();
@@ -231,86 +231,86 @@ namespace Certification_System.Controllers
         {
             ViewBag.Message = message;
 
-            var User = _context.userRepository.GetUserById(userIdentificator);
-            var GivenCertificates = _context.givenCertificateRepository.GetGivenCertificatesById(User.GivenCertificates);
-            var Courses = _context.courseRepository.GetCoursesById(User.Courses);
-            var GivenDegrees = _context.givenDegreeRepository.GetGivenDegreesById(User.GivenDegrees);
+            var user = _context.userRepository.GetUserById(userIdentificator);
+            var givenCertificates = _context.givenCertificateRepository.GetGivenCertificatesById(user.GivenCertificates);
+            var courses = _context.courseRepository.GetCoursesById(user.Courses);
+            var givenDegrees = _context.givenDegreeRepository.GetGivenDegreesById(user.GivenDegrees);
 
-            var CompaniesRoleWorker = _context.companyRepository.GetCompaniesById(User.CompanyRoleWorker);
-            var CompaniesRoleManager = _context.companyRepository.GetCompaniesById(User.CompanyRoleManager);
+            var companiesRoleWorker = _context.companyRepository.GetCompaniesById(user.CompanyRoleWorker);
+            var companiesRoleManager = _context.companyRepository.GetCompaniesById(user.CompanyRoleManager);
 
-            List<Company> Companies = CompaniesRoleWorker.ToList();
+            List<Company> companies = companiesRoleWorker.ToList();
 
-            foreach (var company in CompaniesRoleManager)
+            foreach (var company in companiesRoleManager)
             {
-                if (Companies.Where(z => z.CompanyIdentificator == company.CompanyIdentificator).Count() == 0)
+                if (companies.Where(z => z.CompanyIdentificator == company.CompanyIdentificator).Count() == 0)
                 {
-                    Companies.Add(company);
+                    companies.Add(company);
                 }
             }
 
-            List<DisplayCourseViewModel> ListOfCourses = new List<DisplayCourseViewModel>();
+            List<DisplayCourseViewModel> listOfCourses = new List<DisplayCourseViewModel>();
 
-            if (Courses.Count != 0)
+            if (courses.Count != 0)
             {
-                foreach (var course in Courses)
+                foreach (var course in courses)
                 {
                     DisplayCourseViewModel singleCourse = _mapper.Map<DisplayCourseViewModel>(course);
                     singleCourse.Branches = _context.branchRepository.GetBranchesById(course.Branches);
 
-                    ListOfCourses.Add(singleCourse);
+                    listOfCourses.Add(singleCourse);
                 }
             }
 
-            List<DisplayGivenCertificateToUserViewModel> ListOfGivenCertificates = new List<DisplayGivenCertificateToUserViewModel>();
+            List<DisplayGivenCertificateToUserViewModel> listOfGivenCertificates = new List<DisplayGivenCertificateToUserViewModel>();
 
-            if (GivenCertificates.Count != 0)
+            if (givenCertificates.Count != 0)
             {
-                foreach (var givenCertificate in GivenCertificates)
+                foreach (var givenCertificate in givenCertificates)
                 {
-                    var Course = _context.courseRepository.GetCourseById(givenCertificate.Course);
-                    var Certificate = _context.certificateRepository.GetCertificateById(givenCertificate.Certificate);
+                    var course = _context.courseRepository.GetCourseById(givenCertificate.Course);
+                    var certificate = _context.certificateRepository.GetCertificateById(givenCertificate.Certificate);
 
-                    DisplayCrucialDataCourseViewModel courseViewModel = _mapper.Map<DisplayCrucialDataCourseViewModel>(Course);
+                    DisplayCrucialDataCourseViewModel courseViewModel = _mapper.Map<DisplayCrucialDataCourseViewModel>(course);
 
-                    DisplayCrucialDataCertificateViewModel certificateViewModel = _mapper.Map<DisplayCrucialDataCertificateViewModel>(Certificate);
+                    DisplayCrucialDataCertificateViewModel certificateViewModel = _mapper.Map<DisplayCrucialDataCertificateViewModel>(certificate);
 
                     DisplayGivenCertificateToUserViewModel singleGivenCertificate = _mapper.Map<DisplayGivenCertificateToUserViewModel>(givenCertificate);
                     singleGivenCertificate.Certificate = certificateViewModel;
                     singleGivenCertificate.Course = courseViewModel;
 
-                    ListOfGivenCertificates.Add(singleGivenCertificate);
+                    listOfGivenCertificates.Add(singleGivenCertificate);
                 }
             }
 
-            List<DisplayGivenDegreeToUserViewModel> ListOfGivenDegrees = new List<DisplayGivenDegreeToUserViewModel>();
+            List<DisplayGivenDegreeToUserViewModel> listOfGivenDegrees = new List<DisplayGivenDegreeToUserViewModel>();
 
-            if (GivenDegrees.Count != 0)
+            if (givenDegrees.Count != 0)
             {
-                foreach (var givenDegree in GivenDegrees)
+                foreach (var givenDegree in givenDegrees)
                 {
-                    var Degree = _context.degreeRepository.GetDegreeById(givenDegree.Degree);
+                    var degree = _context.degreeRepository.GetDegreeById(givenDegree.Degree);
 
-                    DisplayCrucialDataDegreeViewModel degreeViewModel = _mapper.Map<DisplayCrucialDataDegreeViewModel>(Degree);
+                    DisplayCrucialDataDegreeViewModel degreeViewModel = _mapper.Map<DisplayCrucialDataDegreeViewModel>(degree);
 
                     DisplayGivenDegreeToUserViewModel singleGivenDegree = _mapper.Map<DisplayGivenDegreeToUserViewModel>(givenDegree);
                     singleGivenDegree.Degree = degreeViewModel;
 
-                    ListOfGivenDegrees.Add(singleGivenDegree);
+                    listOfGivenDegrees.Add(singleGivenDegree);
                 }
             }
 
-            List<DisplayCompanyViewModel> ListOfCompanies = _mapper.Map<List<DisplayCompanyViewModel>>(Companies);
+            List<DisplayCompanyViewModel> listOfCompanies = _mapper.Map<List<DisplayCompanyViewModel>>(companies);
 
-            UserDetailsViewModel UserDetails = _mapper.Map<UserDetailsViewModel>(User);
-            UserDetails.Roles = _context.userRepository.TranslateRoles(UserDetails.Roles);
+            UserDetailsViewModel userDetails = _mapper.Map<UserDetailsViewModel>(user);
+            userDetails.Roles = _context.userRepository.TranslateRoles(userDetails.Roles);
 
-            UserDetails.GivenCertificates = ListOfGivenCertificates;
-            UserDetails.GivenDegrees = ListOfGivenDegrees;
-            UserDetails.Courses = ListOfCourses;
-            UserDetails.Companies = ListOfCompanies;
+            userDetails.GivenCertificates = listOfGivenCertificates;
+            userDetails.GivenDegrees = listOfGivenDegrees;
+            userDetails.Courses = listOfCourses;
+            userDetails.Companies = listOfCompanies;
 
-            return View(UserDetails);
+            return View(userDetails);
         }
 
 
@@ -318,153 +318,153 @@ namespace Certification_System.Controllers
         [AllowAnonymous]
         public ActionResult AnonymouslyVerificationOfUser(string userIdentificator)
         {
-            var User = _context.userRepository.GetUserById(userIdentificator);
-            var GivenCertificates = _context.givenCertificateRepository.GetGivenCertificatesById(User.GivenCertificates);
-            var GivenDegrees = _context.givenDegreeRepository.GetGivenDegreesById(User.GivenDegrees);
+            var user = _context.userRepository.GetUserById(userIdentificator);
+            var givenCertificates = _context.givenCertificateRepository.GetGivenCertificatesById(user.GivenCertificates);
+            var givenDegrees = _context.givenDegreeRepository.GetGivenDegreesById(user.GivenDegrees);
 
-            var CompaniesRoleWorker = _context.companyRepository.GetCompaniesById(User.CompanyRoleWorker);
-            var CompaniesRoleManager = _context.companyRepository.GetCompaniesById(User.CompanyRoleManager);
+            var companiesRoleWorker = _context.companyRepository.GetCompaniesById(user.CompanyRoleWorker);
+            var companiesRoleManager = _context.companyRepository.GetCompaniesById(user.CompanyRoleManager);
 
-            List<Company> Companies = CompaniesRoleWorker.ToList();
+            List<Company> companies = companiesRoleWorker.ToList();
 
-            foreach (var company in CompaniesRoleManager)
+            foreach (var company in companiesRoleManager)
             {
-                if (Companies.Where(z => z.CompanyIdentificator == company.CompanyIdentificator).Count() == 0)
+                if (companies.Where(z => z.CompanyIdentificator == company.CompanyIdentificator).Count() == 0)
                 {
-                    Companies.Add(company);
+                    companies.Add(company);
                 }
             }
 
-            List<DisplayGivenCertificateToUserWithoutCourseViewModel> ListOfGivenCertificates = new List<DisplayGivenCertificateToUserWithoutCourseViewModel>();
+            List<DisplayGivenCertificateToUserWithoutCourseViewModel> listOfGivenCertificates = new List<DisplayGivenCertificateToUserWithoutCourseViewModel>();
 
-            if (GivenCertificates.Count != 0)
+            if (givenCertificates.Count != 0)
             {
-                foreach (var givenCertificate in GivenCertificates)
+                foreach (var givenCertificate in givenCertificates)
                 {
-                    var Certificate = _context.certificateRepository.GetCertificateById(givenCertificate.Certificate);
+                    var certificate = _context.certificateRepository.GetCertificateById(givenCertificate.Certificate);
 
-                    DisplayCrucialDataCertificateViewModel certificateViewModel = _mapper.Map<DisplayCrucialDataCertificateViewModel>(Certificate);
+                    DisplayCrucialDataCertificateViewModel certificateViewModel = _mapper.Map<DisplayCrucialDataCertificateViewModel>(certificate);
 
                     DisplayGivenCertificateToUserWithoutCourseViewModel singleGivenCertificate = _mapper.Map<DisplayGivenCertificateToUserWithoutCourseViewModel>(givenCertificate);
                     singleGivenCertificate.Certificate = certificateViewModel;
 
-                    ListOfGivenCertificates.Add(singleGivenCertificate);
+                    listOfGivenCertificates.Add(singleGivenCertificate);
                 }
             }
 
-            List<DisplayGivenDegreeToUserViewModel> ListOfGivenDegrees = new List<DisplayGivenDegreeToUserViewModel>();
+            List<DisplayGivenDegreeToUserViewModel> listOfGivenDegrees = new List<DisplayGivenDegreeToUserViewModel>();
 
-            if (GivenDegrees.Count != 0)
+            if (givenDegrees.Count != 0)
             {
-                foreach (var givenDegree in GivenDegrees)
+                foreach (var givenDegree in givenDegrees)
                 {
-                    var Degree = _context.degreeRepository.GetDegreeById(givenDegree.Degree);
+                    var degree = _context.degreeRepository.GetDegreeById(givenDegree.Degree);
 
-                    DisplayCrucialDataDegreeViewModel degreeViewModel = _mapper.Map<DisplayCrucialDataDegreeViewModel>(Degree);
+                    DisplayCrucialDataDegreeViewModel degreeViewModel = _mapper.Map<DisplayCrucialDataDegreeViewModel>(degree);
 
                     DisplayGivenDegreeToUserViewModel singleGivenDegree = _mapper.Map<DisplayGivenDegreeToUserViewModel>(givenDegree);
                     singleGivenDegree.Degree = degreeViewModel;
 
-                    ListOfGivenDegrees.Add(singleGivenDegree);
+                    listOfGivenDegrees.Add(singleGivenDegree);
                 }
             }
 
-            List<DisplayCompanyViewModel> ListOfCompanies = _mapper.Map<List<DisplayCompanyViewModel>>(Companies);
+            List<DisplayCompanyViewModel> ListOfCompanies = _mapper.Map<List<DisplayCompanyViewModel>>(companies);
 
-            UserDetailsForAnonymousViewModel VerifiedUser = _mapper.Map<UserDetailsForAnonymousViewModel>(User);
-            VerifiedUser.GivenCertificates = ListOfGivenCertificates;
-            VerifiedUser.GivenDegrees = ListOfGivenDegrees;
-            VerifiedUser.Companies = ListOfCompanies;
+            UserDetailsForAnonymousViewModel verifiedUser = _mapper.Map<UserDetailsForAnonymousViewModel>(user);
+            verifiedUser.GivenCertificates = listOfGivenCertificates;
+            verifiedUser.GivenDegrees = listOfGivenDegrees;
+            verifiedUser.Companies = ListOfCompanies;
 
-            return View(VerifiedUser);
+            return View(verifiedUser);
         }
 
         // GET: InstructorDetails
         [Authorize(Roles = "Admin")]
         public ActionResult InstructorDetails(string userIdentificator)
         {
-            var User = _context.userRepository.GetUserById(userIdentificator);
+            //var user = _context.userRepository.GetUserById(userIdentificator);
 
-            var Meetings = _context.meetingRepository.GetMeetingsByInstructorId(userIdentificator);
-            var Courses = _context.courseRepository.GetCoursesByMeetingsId(Meetings.Select(z => z.MeetingIdentificator).ToList());
+            var meetings = _context.meetingRepository.GetMeetingsByInstructorId(userIdentificator);
+            var courses = _context.courseRepository.GetCoursesByMeetingsId(meetings.Select(z => z.MeetingIdentificator).ToList());
 
-            List<DisplayCourseViewModel> ListOfCourses = new List<DisplayCourseViewModel>();
+            List<DisplayCourseViewModel> listOfCourses = new List<DisplayCourseViewModel>();
 
-            if (Courses.Count != 0)
+            if (courses.Count != 0)
             {
-                foreach (var course in Courses)
+                foreach (var course in courses)
                 {
                     DisplayCourseViewModel singleCourse = _mapper.Map<DisplayCourseViewModel>(course);
                     singleCourse.Branches = _context.branchRepository.GetBranchesById(course.Branches);
 
-                    ListOfCourses.Add(singleCourse);
+                    listOfCourses.Add(singleCourse);
                 }
             }
 
-            List<DisplayMeetingWithoutInstructorViewModel> ListOfMeetings = new List<DisplayMeetingWithoutInstructorViewModel>();
+            List<DisplayMeetingWithoutInstructorViewModel> listOfMeetings = new List<DisplayMeetingWithoutInstructorViewModel>();
 
-            if (Meetings.Count != 0)
+            if (meetings.Count != 0)
             {
-                foreach (var meeting in Meetings)
+                foreach (var meeting in meetings)
                 {
                     DisplayMeetingWithoutInstructorViewModel singleMeeting = _mapper.Map<DisplayMeetingWithoutInstructorViewModel>(meeting);
-                    singleMeeting.Course = _mapper.Map<DisplayCrucialDataCourseViewModel>(Courses.Where(z => z.Meetings.Contains(meeting.MeetingIdentificator)).FirstOrDefault());
+                    singleMeeting.Course = _mapper.Map<DisplayCrucialDataCourseViewModel>(courses.Where(z => z.Meetings.Contains(meeting.MeetingIdentificator)).FirstOrDefault());
 
-                    ListOfMeetings.Add(singleMeeting);
+                    listOfMeetings.Add(singleMeeting);
                 }
             }
 
-            InstructorDetailsViewModel InstructorDetails = _mapper.Map<InstructorDetailsViewModel>(User);
-            InstructorDetails.Roles = _context.userRepository.TranslateRoles(InstructorDetails.Roles);
+            InstructorDetailsViewModel instructorDetails = _mapper.Map<InstructorDetailsViewModel>(User);
+            instructorDetails.Roles = _context.userRepository.TranslateRoles(instructorDetails.Roles);
 
-            InstructorDetails.Courses = ListOfCourses;
-            InstructorDetails.Meetings = ListOfMeetings;
+            instructorDetails.Courses = listOfCourses;
+            instructorDetails.Meetings = listOfMeetings;
 
-            return View(InstructorDetails);
+            return View(instructorDetails);
         }
 
         // GET: AccountDetails
         [Authorize]
         public ActionResult AccountDetails(string userIdentificator)
         {
-            CertificationPlatformUser User;
+            CertificationPlatformUser user;
 
             if (userIdentificator == null)
             {
-                User = _userManager.FindByEmailAsync(this.User.Identity.Name).Result;
+                user = _userManager.FindByEmailAsync(this.User.Identity.Name).Result;
             }
             else
             {
-                User = _context.userRepository.GetUserById(userIdentificator);
+                user = _context.userRepository.GetUserById(userIdentificator);
             }
 
-            AccountDetailsViewModel AccountDetails = _mapper.Map<AccountDetailsViewModel>(User);
-            AccountDetails.Roles = _context.userRepository.TranslateRoles(AccountDetails.Roles);
+            AccountDetailsViewModel accountDetails = _mapper.Map<AccountDetailsViewModel>(user);
+            accountDetails.Roles = _context.userRepository.TranslateRoles(accountDetails.Roles);
 
-            return View(AccountDetails);
+            return View(accountDetails);
         }
 
         // GET: CompanyWithAccountDetails
         [Authorize(Roles = "Admin")]
         public ActionResult CompanyWithAccountDetails(string userIdentificator)
         {
-            var User = _context.userRepository.GetUserById(userIdentificator);
+            var user = _context.userRepository.GetUserById(userIdentificator);
 
-            var Company = _context.companyRepository.GetCompanyById(User.CompanyRoleManager.FirstOrDefault());
-            var UsersConnectedToCompany = _context.userRepository.GetUsersConnectedToCompany(Company.CompanyIdentificator);
+            var company = _context.companyRepository.GetCompanyById(user.CompanyRoleManager.FirstOrDefault());
+            var usersConnectedToCompany = _context.userRepository.GetUsersConnectedToCompany(company.CompanyIdentificator);
 
-            List<DisplayCrucialDataWithCompaniesRoleUserViewModel> ListOfUsers = new List<DisplayCrucialDataWithCompaniesRoleUserViewModel>();
+            List<DisplayCrucialDataWithCompaniesRoleUserViewModel> listOfUsers = new List<DisplayCrucialDataWithCompaniesRoleUserViewModel>();
 
-            if (UsersConnectedToCompany.Count != 0)
+            if (usersConnectedToCompany.Count != 0)
             {
-                ListOfUsers = _mapper.Map<List<DisplayCrucialDataWithCompaniesRoleUserViewModel>>(UsersConnectedToCompany);
+                listOfUsers = _mapper.Map<List<DisplayCrucialDataWithCompaniesRoleUserViewModel>>(usersConnectedToCompany);
 
-                ListOfUsers.ForEach(z => z.CompanyRoleManager = _context.companyRepository.GetCompaniesById(z.CompanyRoleManager).ToList().Select(s => s.CompanyName).ToList());
-                ListOfUsers.ForEach(z => z.CompanyRoleWorker = _context.companyRepository.GetCompaniesById(z.CompanyRoleWorker).ToList().Select(s => s.CompanyName).ToList());
+                listOfUsers.ForEach(z => z.CompanyRoleManager = _context.companyRepository.GetCompaniesById(z.CompanyRoleManager).ToList().Select(s => s.CompanyName).ToList());
+                listOfUsers.ForEach(z => z.CompanyRoleWorker = _context.companyRepository.GetCompaniesById(z.CompanyRoleWorker).ToList().Select(s => s.CompanyName).ToList());
             }
 
-            CompanyWithAccountDetailsViewModel companyWithAccountDetails = _mapper.Map<CompanyWithAccountDetailsViewModel>(Company);
-            companyWithAccountDetails.UsersConnectedToCompany = ListOfUsers;
+            CompanyWithAccountDetailsViewModel companyWithAccountDetails = _mapper.Map<CompanyWithAccountDetailsViewModel>(company);
+            companyWithAccountDetails.UsersConnectedToCompany = listOfUsers;
             companyWithAccountDetails.UserAccount = _mapper.Map<AccountDetailsViewModel>(User);
 
             return View(companyWithAccountDetails);
@@ -476,11 +476,11 @@ namespace Certification_System.Controllers
         {
             ViewBag.message = message;
 
-            CertificationPlatformUser User = _context.userRepository.GetUserById(userIdentificator);
+            CertificationPlatformUser user = _context.userRepository.GetUserById(userIdentificator);
 
-            EditAccountViewModel AccountDetails = _mapper.Map<EditAccountViewModel>(User);
+            EditAccountViewModel accountDetails = _mapper.Map<EditAccountViewModel>(user);
 
-            return View(AccountDetails);
+            return View(accountDetails);
         }
 
         // POST: EditAccount
@@ -490,18 +490,18 @@ namespace Certification_System.Controllers
         {
             if (ModelState.IsValid)
             {
-                var OriginUser = _userManager.FindByIdAsync(editedAccount.UserIdentificator).Result;
+                var originUser = _userManager.FindByIdAsync(editedAccount.UserIdentificator).Result;
 
-                if (OriginUser.Email != editedAccount.Email)
+                if (originUser.Email != editedAccount.Email)
                 {
-                    OriginUser.EmailConfirmed = false;
+                    originUser.EmailConfirmed = false;
                 }
 
-                OriginUser = _mapper.Map<EditAccountViewModel, CertificationPlatformUser>(editedAccount, OriginUser);
+                originUser = _mapper.Map<EditAccountViewModel, CertificationPlatformUser>(editedAccount, originUser);
 
-                _context.userRepository.UpdateUser(OriginUser);
+                _context.userRepository.UpdateUser(originUser);
 
-                return RedirectToAction("EditAccount", "Users", new { userIdentificator = OriginUser.Id, message = "Pomyślnie zaktualizowano dane" });
+                return RedirectToAction("EditAccount", "Users", new { userIdentificator = originUser.Id, message = "Pomyślnie zaktualizowano dane" });
             }
 
             return View(editedAccount);
@@ -511,63 +511,63 @@ namespace Certification_System.Controllers
         [Authorize(Roles = "Admin")]
         public ActionResult ExaminerDetails(string userIdentificator)
         {
-            var User = _context.userRepository.GetUserById(userIdentificator);
+            //var user = _context.userRepository.GetUserById(userIdentificator);
 
-            var Exams = _context.examRepository.GetExamsByExaminerId(userIdentificator);
-            var ExamsTerms = _context.examTermRepository.GetExamTermsByExaminerId(userIdentificator);
+            var exams = _context.examRepository.GetExamsByExaminerId(userIdentificator);
+            var examsTerms = _context.examTermRepository.GetExamTermsByExaminerId(userIdentificator);
 
-            var Courses = _context.courseRepository.GetExaminerCourses(userIdentificator, Exams);
+            var courses = _context.courseRepository.GetExaminerCourses(userIdentificator, exams);
 
-            List<DisplayCourseViewModel> ListOfCourses = new List<DisplayCourseViewModel>();
+            List<DisplayCourseViewModel> listOfCourses = new List<DisplayCourseViewModel>();
 
-            if (Courses.Count != 0)
+            if (courses.Count != 0)
             {
-                foreach (var course in Courses)
+                foreach (var course in courses)
                 {
                     DisplayCourseViewModel singleCourse = _mapper.Map<DisplayCourseViewModel>(course);
                     singleCourse.Branches = _context.branchRepository.GetBranchesById(course.Branches);
 
-                    ListOfCourses.Add(singleCourse);
+                    listOfCourses.Add(singleCourse);
                 }
             }
 
-            List<DisplayExamWithoutExaminerViewModel> ListOfExams = new List<DisplayExamWithoutExaminerViewModel>();
+            List<DisplayExamWithoutExaminerViewModel> listOfExams = new List<DisplayExamWithoutExaminerViewModel>();
 
-            if (Exams.Count != 0)
+            if (exams.Count != 0)
             {
-                foreach (var exam in Exams)
+                foreach (var exam in exams)
                 {
                     DisplayExamWithoutExaminerViewModel singleExam = _mapper.Map<DisplayExamWithoutExaminerViewModel>(exam);
                     singleExam.UsersQuantitiy = exam.EnrolledUsers.Count();
-                    singleExam.Course = _mapper.Map<DisplayCrucialDataCourseViewModel>(Courses.ToList().Where(z => z.Exams.Contains(exam.ExamIdentificator)));
+                    singleExam.Course = _mapper.Map<DisplayCrucialDataCourseViewModel>(courses.ToList().Where(z => z.Exams.Contains(exam.ExamIdentificator)));
 
 
-                    ListOfExams.Add(singleExam);
+                    listOfExams.Add(singleExam);
                 }
             }
 
-            List<DisplayExamTermWithoutExaminerViewModel> ListOfExamsTerms = new List<DisplayExamTermWithoutExaminerViewModel>();
+            List<DisplayExamTermWithoutExaminerViewModel> listOfExamsTerms = new List<DisplayExamTermWithoutExaminerViewModel>();
 
-            if (ExamsTerms.Count != 0)
+            if (examsTerms.Count != 0)
             {
-                foreach (var examTerm in ExamsTerms)
+                foreach (var examTerm in examsTerms)
                 {
                     DisplayExamTermWithoutExaminerViewModel singleExamTerm = _mapper.Map<DisplayExamTermWithoutExaminerViewModel>(examTerm);
                     singleExamTerm.UsersQuantitiy = examTerm.EnrolledUsers.Count();
-                    singleExamTerm.Exam = _mapper.Map<DisplayCrucialDataExamViewModel>(Exams.Where(z => z.ExamDividedToTerms == true && z.ExamTerms.Contains(examTerm.ExamTermIdentificator)).FirstOrDefault());
+                    singleExamTerm.Exam = _mapper.Map<DisplayCrucialDataExamViewModel>(exams.Where(z => z.ExamDividedToTerms == true && z.ExamTerms.Contains(examTerm.ExamTermIdentificator)).FirstOrDefault());
 
-                    ListOfExamsTerms.Add(singleExamTerm);
+                    listOfExamsTerms.Add(singleExamTerm);
                 }
             }
 
-            ExaminerDetailsViewModel ExaminerDetails = _mapper.Map<ExaminerDetailsViewModel>(User);
-            ExaminerDetails.Roles = _context.userRepository.TranslateRoles(ExaminerDetails.Roles);
+            ExaminerDetailsViewModel examinerDetails = _mapper.Map<ExaminerDetailsViewModel>(User);
+            examinerDetails.Roles = _context.userRepository.TranslateRoles(examinerDetails.Roles);
 
-            ExaminerDetails.Courses = ListOfCourses;
-            ExaminerDetails.Exams = ListOfExams;
-            ExaminerDetails.ExamsTerms = ListOfExamsTerms;
+            examinerDetails.Courses = listOfCourses;
+            examinerDetails.Exams = listOfExams;
+            examinerDetails.ExamsTerms = listOfExamsTerms;
 
-            return View(ExaminerDetails);
+            return View(examinerDetails);
         }
 
         // GET: InstructorExaminerDetails
@@ -576,108 +576,108 @@ namespace Certification_System.Controllers
         {
             ViewBag.AvailableRoleFilters = _context.userRepository.GetAvailableCourseRoleFiltersAsSelectList();
 
-            var User = _context.userRepository.GetUserById(userIdentificator);
+            //var user = _context.userRepository.GetUserById(userIdentificator);
 
-            var Exams = _context.examRepository.GetExamsByExaminerId(userIdentificator);
-            var ExamsTerms = _context.examTermRepository.GetExamTermsByExaminerId(userIdentificator);
+            var exams = _context.examRepository.GetExamsByExaminerId(userIdentificator);
+            var examsTerms = _context.examTermRepository.GetExamTermsByExaminerId(userIdentificator);
 
-            var Meetings = _context.meetingRepository.GetMeetingsByInstructorId(userIdentificator);
-            var CoursesAsInstructor = _context.courseRepository.GetCoursesByMeetingsId(Meetings.Select(z => z.MeetingIdentificator).ToList());
-            var CoursesAsExaminer = _context.courseRepository.GetExaminerCourses(userIdentificator, Exams);
+            var meetings = _context.meetingRepository.GetMeetingsByInstructorId(userIdentificator);
+            var coursesAsInstructor = _context.courseRepository.GetCoursesByMeetingsId(meetings.Select(z => z.MeetingIdentificator).ToList());
+            var coursesAsExaminer = _context.courseRepository.GetExaminerCourses(userIdentificator, exams);
 
-            var BothRolesCourses = CoursesAsExaminer.Intersect(CoursesAsInstructor).ToList();
+            var bothRolesCourses = coursesAsExaminer.Intersect(coursesAsInstructor).ToList();
 
-            foreach (var course in BothRolesCourses)
+            foreach (var course in bothRolesCourses)
             {
-                CoursesAsExaminer.Remove(course);
-                CoursesAsInstructor.Remove(course);
+                coursesAsExaminer.Remove(course);
+                coursesAsInstructor.Remove(course);
             }
 
-            List<DisplayCourseWithUserRoleViewModel> ListOfCoursesAsExaminer = new List<DisplayCourseWithUserRoleViewModel>();
+            List<DisplayCourseWithUserRoleViewModel> listOfCoursesAsExaminer = new List<DisplayCourseWithUserRoleViewModel>();
 
-            if (CoursesAsExaminer.Count != 0)
+            if (coursesAsExaminer.Count != 0)
             {
-                ListOfCoursesAsExaminer = _mapper.Map<List<DisplayCourseWithUserRoleViewModel>>(CoursesAsExaminer);
-                ListOfCoursesAsExaminer.ForEach(z => z.Branches = _context.branchRepository.GetBranchesById(z.Branches));
-                ListOfCoursesAsExaminer.ForEach(z => z.Roles.Add(UserRolesDictionary.TranslationDictionary["Examiner"]));
+                listOfCoursesAsExaminer = _mapper.Map<List<DisplayCourseWithUserRoleViewModel>>(coursesAsExaminer);
+                listOfCoursesAsExaminer.ForEach(z => z.Branches = _context.branchRepository.GetBranchesById(z.Branches));
+                listOfCoursesAsExaminer.ForEach(z => z.Roles.Add(UserRolesDictionary.TranslationDictionary["Examiner"]));
             }
 
-            List<DisplayCourseWithUserRoleViewModel> ListOfCoursesAsInstructor = new List<DisplayCourseWithUserRoleViewModel>();
+            List<DisplayCourseWithUserRoleViewModel> listOfCoursesAsInstructor = new List<DisplayCourseWithUserRoleViewModel>();
 
-            if (CoursesAsInstructor.Count != 0)
+            if (coursesAsInstructor.Count != 0)
             {
-                ListOfCoursesAsInstructor = _mapper.Map<List<DisplayCourseWithUserRoleViewModel>>(CoursesAsInstructor);
-                ListOfCoursesAsInstructor.ForEach(z => z.Branches = _context.branchRepository.GetBranchesById(z.Branches));
-                ListOfCoursesAsInstructor.ForEach(z => z.Roles.Add(UserRolesDictionary.TranslationDictionary["Instructor"]));
+                listOfCoursesAsInstructor = _mapper.Map<List<DisplayCourseWithUserRoleViewModel>>(coursesAsInstructor);
+                listOfCoursesAsInstructor.ForEach(z => z.Branches = _context.branchRepository.GetBranchesById(z.Branches));
+                listOfCoursesAsInstructor.ForEach(z => z.Roles.Add(UserRolesDictionary.TranslationDictionary["Instructor"]));
             }
 
-            List<DisplayCourseWithUserRoleViewModel> ListOfCoursesAsBothRoles = new List<DisplayCourseWithUserRoleViewModel>();
+            List<DisplayCourseWithUserRoleViewModel> listOfCoursesAsBothRoles = new List<DisplayCourseWithUserRoleViewModel>();
 
-            if (BothRolesCourses.Count != 0)
+            if (bothRolesCourses.Count != 0)
             {
-                ListOfCoursesAsBothRoles = _mapper.Map<List<DisplayCourseWithUserRoleViewModel>>(CoursesAsInstructor);
-                ListOfCoursesAsBothRoles.ForEach(z => z.Branches = _context.branchRepository.GetBranchesById(z.Branches));
+                listOfCoursesAsBothRoles = _mapper.Map<List<DisplayCourseWithUserRoleViewModel>>(coursesAsInstructor);
+                listOfCoursesAsBothRoles.ForEach(z => z.Branches = _context.branchRepository.GetBranchesById(z.Branches));
 
-                ListOfCoursesAsBothRoles.ForEach(z => z.Roles.Add(UserRolesDictionary.TranslationDictionary["Instructor"]));
-                ListOfCoursesAsBothRoles.ForEach(z => z.Roles.Add(UserRolesDictionary.TranslationDictionary["Examiner"]));
+                listOfCoursesAsBothRoles.ForEach(z => z.Roles.Add(UserRolesDictionary.TranslationDictionary["Instructor"]));
+                listOfCoursesAsBothRoles.ForEach(z => z.Roles.Add(UserRolesDictionary.TranslationDictionary["Examiner"]));
             }
 
-            List<DisplayCourseWithUserRoleViewModel> ListOfCourses = new List<DisplayCourseWithUserRoleViewModel>();
+            List<DisplayCourseWithUserRoleViewModel> listOfCourses = new List<DisplayCourseWithUserRoleViewModel>();
 
-            ListOfCourses.AddRange(ListOfCoursesAsExaminer);
-            ListOfCourses.AddRange(ListOfCoursesAsInstructor);
-            ListOfCourses.AddRange(ListOfCoursesAsBothRoles);
+            listOfCourses.AddRange(listOfCoursesAsExaminer);
+            listOfCourses.AddRange(listOfCoursesAsInstructor);
+            listOfCourses.AddRange(listOfCoursesAsBothRoles);
 
-            List<DisplayMeetingWithoutInstructorViewModel> ListOfMeetings = new List<DisplayMeetingWithoutInstructorViewModel>();
+            List<DisplayMeetingWithoutInstructorViewModel> listOfMeetings = new List<DisplayMeetingWithoutInstructorViewModel>();
 
-            if (Meetings.Count != 0)
+            if (meetings.Count != 0)
             {
-                foreach (var meeting in Meetings)
+                foreach (var meeting in meetings)
                 {
                     DisplayMeetingWithoutInstructorViewModel singleMeeting = _mapper.Map<DisplayMeetingWithoutInstructorViewModel>(meeting);
-                    singleMeeting.Course = _mapper.Map<DisplayCrucialDataCourseViewModel>(CoursesAsInstructor.Where(z => z.Meetings.Contains(meeting.MeetingIdentificator)).FirstOrDefault());
+                    singleMeeting.Course = _mapper.Map<DisplayCrucialDataCourseViewModel>(coursesAsInstructor.Where(z => z.Meetings.Contains(meeting.MeetingIdentificator)).FirstOrDefault());
 
-                    ListOfMeetings.Add(singleMeeting);
+                    listOfMeetings.Add(singleMeeting);
                 }
             }
 
-            List<DisplayExamWithoutExaminerViewModel> ListOfExams = new List<DisplayExamWithoutExaminerViewModel>();
+            List<DisplayExamWithoutExaminerViewModel> listOfExams = new List<DisplayExamWithoutExaminerViewModel>();
 
-            if (Exams.Count != 0)
+            if (exams.Count != 0)
             {
-                foreach (var exam in Exams)
+                foreach (var exam in exams)
                 {
                     DisplayExamWithoutExaminerViewModel singleExam = _mapper.Map<DisplayExamWithoutExaminerViewModel>(exam);
                     singleExam.UsersQuantitiy = exam.EnrolledUsers.Count();
-                    singleExam.Course = _mapper.Map<DisplayCrucialDataCourseViewModel>(CoursesAsExaminer.ToList().Where(z => z.Exams.Contains(exam.ExamIdentificator)).FirstOrDefault());
+                    singleExam.Course = _mapper.Map<DisplayCrucialDataCourseViewModel>(coursesAsExaminer.ToList().Where(z => z.Exams.Contains(exam.ExamIdentificator)).FirstOrDefault());
 
-                    ListOfExams.Add(singleExam);
+                    listOfExams.Add(singleExam);
                 }
             }
 
-            List<DisplayExamTermWithoutExaminerViewModel> ListOfExamsTerms = new List<DisplayExamTermWithoutExaminerViewModel>();
+            List<DisplayExamTermWithoutExaminerViewModel> listOfExamsTerms = new List<DisplayExamTermWithoutExaminerViewModel>();
 
-            if (ExamsTerms.Count != 0)
+            if (examsTerms.Count != 0)
             {
-                foreach (var examTerm in ExamsTerms)
+                foreach (var examTerm in examsTerms)
                 {
                     DisplayExamTermWithoutExaminerViewModel singleExamTerm = _mapper.Map<DisplayExamTermWithoutExaminerViewModel>(examTerm);
                     singleExamTerm.UsersQuantitiy = examTerm.EnrolledUsers.Count();
 
-                    ListOfExamsTerms.Add(singleExamTerm);
+                    listOfExamsTerms.Add(singleExamTerm);
                 }
             }
 
-            InstructorExaminerDetailsViewModel InstructorExaminerDetails = _mapper.Map<InstructorExaminerDetailsViewModel>(User);
-            InstructorExaminerDetails.Roles = _context.userRepository.TranslateRoles(InstructorExaminerDetails.Roles);
+            InstructorExaminerDetailsViewModel instructorExaminerDetails = _mapper.Map<InstructorExaminerDetailsViewModel>(User);
+            instructorExaminerDetails.Roles = _context.userRepository.TranslateRoles(instructorExaminerDetails.Roles);
 
-            InstructorExaminerDetails.Courses = ListOfCourses;
-            InstructorExaminerDetails.Meetings = ListOfMeetings;
+            instructorExaminerDetails.Courses = listOfCourses;
+            instructorExaminerDetails.Meetings = listOfMeetings;
 
-            InstructorExaminerDetails.Exams = ListOfExams;
-            InstructorExaminerDetails.ExamsTerms = ListOfExamsTerms;
+            instructorExaminerDetails.Exams = listOfExams;
+            instructorExaminerDetails.ExamsTerms = listOfExamsTerms;
 
-            return View(InstructorExaminerDetails);
+            return View(instructorExaminerDetails);
         }
 
         // GET: DeleteUserHub
