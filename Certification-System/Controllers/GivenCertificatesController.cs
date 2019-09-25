@@ -44,28 +44,28 @@ namespace Certification_System.Controllers
         {
             ViewBag.Message = message;
 
-            var GivenCertificates = _context.givenCertificateRepository.GetListOfGivenCertificates();
-            List<DisplayGivenCertificateViewModel> ListOfGivenCertificates = new List<DisplayGivenCertificateViewModel>();
+            var givenCertificates = _context.givenCertificateRepository.GetListOfGivenCertificates();
+            List<DisplayGivenCertificateViewModel> listOfGivenCertificates = new List<DisplayGivenCertificateViewModel>();
 
-            foreach (var givenCertificate in GivenCertificates)
+            foreach (var givenCertificate in givenCertificates)
             {
-                var Course = _context.courseRepository.GetCourseById(givenCertificate.Course);
-                var Certificate = _context.certificateRepository.GetCertificateById(givenCertificate.Certificate);
-                var User = _context.userRepository.GetUserByGivenCertificateId(givenCertificate.GivenCertificateIdentificator);
+                var course = _context.courseRepository.GetCourseById(givenCertificate.Course);
+                var certificate = _context.certificateRepository.GetCertificateById(givenCertificate.Certificate);
+                var user = _context.userRepository.GetUserByGivenCertificateId(givenCertificate.GivenCertificateIdentificator);
 
-                DisplayCrucialDataCourseViewModel courseViewModel = _mapper.Map<DisplayCrucialDataCourseViewModel>(Course);
-                DisplayCrucialDataCertificateViewModel certificateViewModel = _mapper.Map<DisplayCrucialDataCertificateViewModel>(Certificate);
-                DisplayCrucialDataUserViewModel userViewModel = _mapper.Map<DisplayCrucialDataUserViewModel>(User);
+                DisplayCrucialDataCourseViewModel courseViewModel = _mapper.Map<DisplayCrucialDataCourseViewModel>(course);
+                DisplayCrucialDataCertificateViewModel certificateViewModel = _mapper.Map<DisplayCrucialDataCertificateViewModel>(certificate);
+                DisplayCrucialDataUserViewModel userViewModel = _mapper.Map<DisplayCrucialDataUserViewModel>(user);
 
                 DisplayGivenCertificateViewModel singleGivenCertificate = _mapper.Map<DisplayGivenCertificateViewModel>(givenCertificate);
                 singleGivenCertificate.Certificate = certificateViewModel;
                 singleGivenCertificate.Course = courseViewModel;
                 singleGivenCertificate.User = userViewModel;
 
-                ListOfGivenCertificates.Add(singleGivenCertificate);
+                listOfGivenCertificates.Add(singleGivenCertificate);
             }
 
-            return View(ListOfGivenCertificates);
+            return View(listOfGivenCertificates);
         }
 
         // GET: AddNewGivenCertificate
@@ -134,17 +134,17 @@ namespace Certification_System.Controllers
             {
                 ViewBag.TypeOfAction = TypeOfAction;
 
-                var GivenCertificate = _context.givenCertificateRepository.GetGivenCertificateById(givenCertificateIdentificator);
+                var givenCertificate = _context.givenCertificateRepository.GetGivenCertificateById(givenCertificateIdentificator);
 
-                var Course = _context.courseRepository.GetCourseById(GivenCertificate.Course);
-                var Certificate = _context.certificateRepository.GetCertificateById(GivenCertificate.Certificate);
-                var User = _context.userRepository.GetUserByGivenCertificateId(GivenCertificate.GivenCertificateIdentificator);
+                var course = _context.courseRepository.GetCourseById(givenCertificate.Course);
+                var certificate = _context.certificateRepository.GetCertificateById(givenCertificate.Certificate);
+                //var user = _context.userRepository.GetUserByGivenCertificateId(givenCertificate.GivenCertificateIdentificator);
 
                 DisplayCrucialDataUserViewModel userViewModel = _mapper.Map<DisplayCrucialDataUserViewModel>(User);
-                DisplayCrucialDataCourseViewModel courseViewModel = _mapper.Map<DisplayCrucialDataCourseViewModel>(Course);
-                DisplayCrucialDataCertificateViewModel certificateViewModel = _mapper.Map<DisplayCrucialDataCertificateViewModel>(Certificate);
+                DisplayCrucialDataCourseViewModel courseViewModel = _mapper.Map<DisplayCrucialDataCourseViewModel>(course);
+                DisplayCrucialDataCertificateViewModel certificateViewModel = _mapper.Map<DisplayCrucialDataCertificateViewModel>(certificate);
 
-                DisplayGivenCertificateViewModel modifiedGivenCertificate = _mapper.Map<DisplayGivenCertificateViewModel>(GivenCertificate);
+                DisplayGivenCertificateViewModel modifiedGivenCertificate = _mapper.Map<DisplayGivenCertificateViewModel>(givenCertificate);
                 modifiedGivenCertificate.Course = courseViewModel;
                 modifiedGivenCertificate.Certificate = certificateViewModel;
                 modifiedGivenCertificate.User = userViewModel;
@@ -159,15 +159,15 @@ namespace Certification_System.Controllers
         [Authorize(Roles = "Admin")]
         public ActionResult EditGivenCertificate(string givenCertificateIdentificator)
         {
-            var GivenCertificate = _context.givenCertificateRepository.GetGivenCertificateById(givenCertificateIdentificator);
-            var OwnerOfTheCertificate = _context.userRepository.GetUserByGivenCertificateId(givenCertificateIdentificator);
-            var CourseWhichEndedWithSuchCertificate = _context.courseRepository.GetCourseById(GivenCertificate.Course);
-            var Certificate = _context.certificateRepository.GetCertificateById(GivenCertificate.Certificate);
+            var givenCertificate = _context.givenCertificateRepository.GetGivenCertificateById(givenCertificateIdentificator);
+            var ownerOfTheCertificate = _context.userRepository.GetUserByGivenCertificateId(givenCertificateIdentificator);
+            var courseWhichEndedWithSuchCertificate = _context.courseRepository.GetCourseById(givenCertificate.Course);
+            var certificate = _context.certificateRepository.GetCertificateById(givenCertificate.Certificate);
 
-            EditGivenCertificateViewModel givenCertificateToUpdate = _mapper.Map<EditGivenCertificateViewModel>(GivenCertificate);
-            givenCertificateToUpdate.User = _mapper.Map<DisplayCrucialDataUserViewModel>(OwnerOfTheCertificate);
-            givenCertificateToUpdate.Course = _mapper.Map<DisplayCrucialDataCourseViewModel>(CourseWhichEndedWithSuchCertificate);
-            givenCertificateToUpdate.Certificate = _mapper.Map<DisplayCrucialDataCertificateViewModel>(Certificate);
+            EditGivenCertificateViewModel givenCertificateToUpdate = _mapper.Map<EditGivenCertificateViewModel>(givenCertificate);
+            givenCertificateToUpdate.User = _mapper.Map<DisplayCrucialDataUserViewModel>(ownerOfTheCertificate);
+            givenCertificateToUpdate.Course = _mapper.Map<DisplayCrucialDataCourseViewModel>(courseWhichEndedWithSuchCertificate);
+            givenCertificateToUpdate.Certificate = _mapper.Map<DisplayCrucialDataCertificateViewModel>(certificate);
 
             return View(givenCertificateToUpdate);
         }
@@ -179,15 +179,15 @@ namespace Certification_System.Controllers
         {
             if (ModelState.IsValid)
             {
-                var OriginGivenCertificate = _context.givenCertificateRepository.GetGivenCertificateById(editedGivenCertificate.GivenCertificateIdentificator);
+                var originGivenCertificate = _context.givenCertificateRepository.GetGivenCertificateById(editedGivenCertificate.GivenCertificateIdentificator);
 
-                OriginGivenCertificate = _mapper.Map<EditGivenCertificateViewModel, GivenCertificate>(editedGivenCertificate, OriginGivenCertificate);
-                _context.givenCertificateRepository.UpdateGivenCertificate(OriginGivenCertificate);
+                originGivenCertificate = _mapper.Map<EditGivenCertificateViewModel, GivenCertificate>(editedGivenCertificate, originGivenCertificate);
+                _context.givenCertificateRepository.UpdateGivenCertificate(originGivenCertificate);
 
                 var logInfo = _logger.GenerateLogInformation(this.User.Identity.Name, this.ControllerContext.RouteData.Values["action"].ToString(), LogTypeOfAction.TypesOfActions[0]);
-                _logger.AddGivenCertificateLog(OriginGivenCertificate, logInfo);
+                _logger.AddGivenCertificateLog(originGivenCertificate, logInfo);
 
-                return RedirectToAction("ConfirmationOfActionOnGivenCertificate", "GivenCertificates", new { givenCertificateIdentificator = OriginGivenCertificate.GivenCertificateIdentificator, TypeOfAction = "Update" });
+                return RedirectToAction("ConfirmationOfActionOnGivenCertificate", "GivenCertificates", new { givenCertificateIdentificator = originGivenCertificate.GivenCertificateIdentificator, TypeOfAction = "Update" });
             }
 
             return View(editedGivenCertificate);
@@ -197,80 +197,80 @@ namespace Certification_System.Controllers
         [AllowAnonymous]
         public ActionResult AnonymouslyVerificationOfGivenCertificate(string givenCertificateIdentificator)
         {
-            var GivenCertificate = _context.givenCertificateRepository.GetGivenCertificateById(givenCertificateIdentificator);
-            var Certificate = _context.certificateRepository.GetCertificateById(GivenCertificate.Certificate);
+            var givenCertificate = _context.givenCertificateRepository.GetGivenCertificateById(givenCertificateIdentificator);
+            var certificate = _context.certificateRepository.GetCertificateById(givenCertificate.Certificate);
 
-            var User = _context.userRepository.GetUserByGivenCertificateId(GivenCertificate.GivenCertificateIdentificator);
-            var Companies = _context.companyRepository.GetCompaniesById(User.CompanyRoleManager.Concat(User.CompanyRoleWorker).Distinct().ToList());
+            var user = _context.userRepository.GetUserByGivenCertificateId(givenCertificate.GivenCertificateIdentificator);
+            var companies = _context.companyRepository.GetCompaniesById(user.CompanyRoleManager.Concat(user.CompanyRoleWorker).Distinct().ToList());
 
-            List<DisplayCompanyViewModel> companiesViewModel = _mapper.Map<List<DisplayCompanyViewModel>>(Companies);
+            List<DisplayCompanyViewModel> companiesViewModel = _mapper.Map<List<DisplayCompanyViewModel>>(companies);
 
             DisplayCrucialDataWithBirthDateUserViewModel userViewModel = _mapper.Map<DisplayCrucialDataWithBirthDateUserViewModel>(User);
 
-            DisplayCrucialDataCertificateViewModel certificateViewModel = _mapper.Map<DisplayCrucialDataCertificateViewModel>(Certificate);
+            DisplayCrucialDataCertificateViewModel certificateViewModel = _mapper.Map<DisplayCrucialDataCertificateViewModel>(certificate);
 
-            GivenCertificateDetailsForAnonymousViewModel VerifiedGivenCertificate = new GivenCertificateDetailsForAnonymousViewModel();
+            GivenCertificateDetailsForAnonymousViewModel verifiedGivenCertificate = new GivenCertificateDetailsForAnonymousViewModel();
 
-            VerifiedGivenCertificate.GivenCertificate = _mapper.Map<DisplayGivenCertificateToUserWithoutCourseViewModel>(GivenCertificate);
-            VerifiedGivenCertificate.GivenCertificate.Certificate = certificateViewModel;
-            VerifiedGivenCertificate.User = userViewModel;
-            VerifiedGivenCertificate.Companies = companiesViewModel;
+            verifiedGivenCertificate.GivenCertificate = _mapper.Map<DisplayGivenCertificateToUserWithoutCourseViewModel>(givenCertificate);
+            verifiedGivenCertificate.GivenCertificate.Certificate = certificateViewModel;
+            verifiedGivenCertificate.User = userViewModel;
+            verifiedGivenCertificate.Companies = companiesViewModel;
 
-            return View(VerifiedGivenCertificate);
+            return View(verifiedGivenCertificate);
         }
 
         // GET: GivenCertificateDetails
         [Authorize(Roles = "Admin")]
         public ActionResult GivenCertificateDetails(string givenCertificateIdentificator)
         {
-            var GivenCertificate = _context.givenCertificateRepository.GetGivenCertificateById(givenCertificateIdentificator);
-            var Certificate = _context.certificateRepository.GetCertificateById(GivenCertificate.Certificate);
+            var givenCertificate = _context.givenCertificateRepository.GetGivenCertificateById(givenCertificateIdentificator);
+            var certificate = _context.certificateRepository.GetCertificateById(givenCertificate.Certificate);
 
-            var User = _context.userRepository.GetUserByGivenCertificateId(GivenCertificate.GivenCertificateIdentificator);
-            var Companies = _context.companyRepository.GetCompaniesById(User.CompanyRoleManager.Concat(User.CompanyRoleWorker).Distinct().ToList());
+            var user = _context.userRepository.GetUserByGivenCertificateId(givenCertificate.GivenCertificateIdentificator);
+            var companies = _context.companyRepository.GetCompaniesById(user.CompanyRoleManager.Concat(user.CompanyRoleWorker).Distinct().ToList());
 
-            var Course = _context.courseRepository.GetCourseById(GivenCertificate.Course);
-            var Meetings = _context.meetingRepository.GetMeetingsById(Course.Meetings);
+            var course = _context.courseRepository.GetCourseById(givenCertificate.Course);
+            var meetings = _context.meetingRepository.GetMeetingsById(course.Meetings);
 
-            List<string> InstructorsIdentificators = new List<string>();
-            Meetings.ToList().ForEach(z=> z.Instructors.ToList().ForEach(s=> InstructorsIdentificators.Add(s)));
-            InstructorsIdentificators.Distinct();
+            List<string> instructorsIdentificators = new List<string>();
+            meetings.ToList().ForEach(z=> z.Instructors.ToList().ForEach(s=> instructorsIdentificators.Add(s)));
+            instructorsIdentificators.Distinct();
 
-            var Instructors = _context.userRepository.GetInstructorsById(InstructorsIdentificators);
+            var instructors = _context.userRepository.GetInstructorsById(instructorsIdentificators);
 
-            DisplayCourseViewModel courseViewModel = _mapper.Map<DisplayCourseViewModel>(Course);
+            DisplayCourseViewModel courseViewModel = _mapper.Map<DisplayCourseViewModel>(course);
             courseViewModel.Branches = _context.branchRepository.GetBranchesById(courseViewModel.Branches);
 
             List<DisplayMeetingWithoutCourseViewModel> meetingsViewModel = new List<DisplayMeetingWithoutCourseViewModel>();
 
-            foreach (var meeting in Meetings)
+            foreach (var meeting in meetings)
             {
                 DisplayMeetingWithoutCourseViewModel singleMeeting =  _mapper.Map<DisplayMeetingWithoutCourseViewModel>(meeting);
-                singleMeeting.Instructors = _mapper.Map<List<DisplayCrucialDataUserViewModel>>(Instructors.Where(z => meeting.Instructors.Contains(z.Id)).ToList());
+                singleMeeting.Instructors = _mapper.Map<List<DisplayCrucialDataUserViewModel>>(instructors.Where(z => meeting.Instructors.Contains(z.Id)).ToList());
 
                 meetingsViewModel.Add(singleMeeting);
             }
 
-            List<DisplayCompanyViewModel> companiesViewModel = _mapper.Map<List<DisplayCompanyViewModel>>(Companies);
+            List<DisplayCompanyViewModel> companiesViewModel = _mapper.Map<List<DisplayCompanyViewModel>>(companies);
 
             DisplayAllUserInformationViewModel userViewModel = _mapper.Map<DisplayAllUserInformationViewModel>(User);
-            List<DisplayCrucialDataWithContactUserViewModel> instructorsViewModel = _mapper.Map<List<DisplayCrucialDataWithContactUserViewModel>>(Instructors);
+            List<DisplayCrucialDataWithContactUserViewModel> instructorsViewModel = _mapper.Map<List<DisplayCrucialDataWithContactUserViewModel>>(instructors);
 
-            DisplayCertificateViewModel certificateViewModel = _mapper.Map<DisplayCertificateViewModel>(Certificate);
+            DisplayCertificateViewModel certificateViewModel = _mapper.Map<DisplayCertificateViewModel>(certificate);
             certificateViewModel.Branches = _context.branchRepository.GetBranchesById(certificateViewModel.Branches);
 
-            GivenCertificateDetailsViewModel VerifiedGivenCertificate = new GivenCertificateDetailsViewModel();
-            VerifiedGivenCertificate.GivenCertificate = _mapper.Map<DisplayGivenCertificateToUserWithoutCourseExtendedViewModel>(GivenCertificate);
-            VerifiedGivenCertificate.GivenCertificate.Certificate = certificateViewModel;
+            GivenCertificateDetailsViewModel verifiedGivenCertificate = new GivenCertificateDetailsViewModel();
+            verifiedGivenCertificate.GivenCertificate = _mapper.Map<DisplayGivenCertificateToUserWithoutCourseExtendedViewModel>(givenCertificate);
+            verifiedGivenCertificate.GivenCertificate.Certificate = certificateViewModel;
 
-            VerifiedGivenCertificate.Course = courseViewModel;
-            VerifiedGivenCertificate.Meetings = meetingsViewModel;
+            verifiedGivenCertificate.Course = courseViewModel;
+            verifiedGivenCertificate.Meetings = meetingsViewModel;
 
-            VerifiedGivenCertificate.User = userViewModel;
-            VerifiedGivenCertificate.Instructors = instructorsViewModel;
-            VerifiedGivenCertificate.Companies = companiesViewModel;
+            verifiedGivenCertificate.User = userViewModel;
+            verifiedGivenCertificate.Instructors = instructorsViewModel;
+            verifiedGivenCertificate.Companies = companiesViewModel;
 
-            return View(VerifiedGivenCertificate);
+            return View(verifiedGivenCertificate);
         }
 
         // GET: DeleteGivenDegreeHub
