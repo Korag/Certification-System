@@ -35,10 +35,20 @@
             </div>
 
             <div class="form-group">
+                <label asp-for="TypeOfExam" class="control-label"></label>
+                <div>
+                    <select asp-for="TypeOfExam" asp-items="@Model.AvailableExamTypes" data-style="btn-white" data-container="body" data-width="100%" data-size="auto" data-header="Wybierz typ egzaminu" data-live-search="true" title="Nie wybrano żadnego elementu" data-none-results-text="Nie znaleziono szukanej frazy" class="form-control selectpicker show-tick"> </select>
+                    <div class="row justify-content-center">
+                        <span asp-validation-for="TypeOfExam" class="text-danger"></span>
+                    </div>
+                </div>
+            </div>
+
+            <div class="form-group">
                 <label asp-for="DateOfStart" class="control-label"></label>
                 <div>
                     <div class='input-group date' id='DateOfStart'>
-                        <input type='text' class="form-control col-12" name="DateOfStart" value="@DateTime.Now.ToShortDateString() @DateTime.Now.ToShortTimeString()" />
+                        <input asp-for="DateOfStart" type='text' class="form-control col-12" name="DateOfStart" value="@DateTime.Now.ToShortDateString() @DateTime.Now.ToShortTimeString()" />
                         <span class="input-group-addon">
                             <span class="fa fa-calendar pl-1 pt-0.5" style="font-size:34px"></span>
                         </span>
@@ -53,7 +63,7 @@
                 <label asp-for="DateOfEnd" class="control-label"></label>
                 <div>
                     <div class='input-group date' id='DateOfEnd'>
-                        <input type='text' class="form-control col-12" name="DateOfEnd" value="@DateTime.Now.AddDays(3).ToShortDateString() @DateTime.Now.ToShortTimeString()" />
+                        <input asp-for="DateOfEnd" type='text' class="form-control col-12" name="DateOfEnd" value="@DateTime.Now.ToShortDateString() @DateTime.Now.AddHours(3).ToShortTimeString()" />
                         <span class="input-group-addon">
                             <span class="fa fa-calendar pl-1 pt-0.5" style="font-size:34px"></span>
                         </span>
@@ -90,6 +100,16 @@
                     <input type="checkbox" asp-for="ExamDividedToTerms" id="ExamDividedToTerms" class="form-control col-12" data-toggle="toggle" data-on="Tak" data-off="Nie" data-size="sm" />
                     <div class="row justify-content-center">
                         <span asp-validation-for="ExamDividedToTerms" class="text-danger"></span>
+                    </div>
+                </div>
+            </div>
+
+            <div class="form-group">
+                <label asp-for="Country" class="control-label"></label>
+                <div>
+                    <input asp-for="Country" class="form-control col-12" />
+                    <div class="row justify-content-center">
+                        <span asp-validation-for="Country" class="text-danger"></span>
                     </div>
                 </div>
             </div>

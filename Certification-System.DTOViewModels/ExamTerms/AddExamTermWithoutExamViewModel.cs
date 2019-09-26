@@ -19,10 +19,9 @@ namespace Certification_System.DTOViewModels
         public DateTime DateOfEnd { get; set; }
 
         [Required(ErrorMessage = "Pole \"{0}\" jest wymagane.")]
+        [Range(1, Int32.MaxValue, ErrorMessage = "Pole \"{0}\" musi mieć minimalną wartość \"{1}\" lub więcej.")]
         [Display(Name = "Limit uczestników")]
         public int UsersLimit { get; set; }
-
-        public IList<SelectListItem> AvailableExaminers { get; set; }
 
         [Display(Name = "Egzaminatorzy")]
         [Required(ErrorMessage = "Pole \"{0}\" jest wymagane.")]

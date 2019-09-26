@@ -1,7 +1,7 @@
 @model Certification_System.DTOViewModels.ManyCalendarsInputScriptViewModel
 
 <script>
-        $(function () {
+    $(document).ready(function () {
              for (var i = 0; i < @Model.QuantityOfInputs; i++) {
                 $("#@Model.Date" + i).datetimepicker({
                     format: 'DD.MM.YYYY HH:mm',

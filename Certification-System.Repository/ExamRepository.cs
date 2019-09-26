@@ -28,7 +28,7 @@ namespace Certification_System.Repository
 
         public ICollection<Exam> GetListOfExams()
         {
-            return GetExams().AsQueryable().ToList();
+            return GetExams().AsQueryable().Where(z=> z.OrdinalNumber == 1).ToList();
         }
 
         public ICollection<Exam> GetListOfActiveExams()

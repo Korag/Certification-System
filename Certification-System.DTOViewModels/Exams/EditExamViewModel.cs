@@ -53,7 +53,7 @@ namespace Certification_System.DTOViewModels
 
         [Display(Name = "Typ egzaminu")]
         [Required(ErrorMessage = "Pole \"{0}\" jest wymagane.")]
-        public string ExamType { get; set; }
+        public string TypeOfExam { get; set; }
 
         [Required(ErrorMessage = "Pole \"{0}\" jest wymagane.")]
         [DataType(DataType.Text)]

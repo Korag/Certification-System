@@ -45,6 +45,12 @@ namespace Certification_System.DTOViewModels
         [Required(ErrorMessage = "Pole \"{0}\" jest wymagane.")]
         public ICollection<string> SelectedExaminers { get; set; }
 
+        public IList<SelectListItem> AvailableExamTypes { get; set; }
+
+        [Display(Name = "Typ egzaminu")]
+        [Required(ErrorMessage = "Pole \"{0}\" jest wymagane.")]
+        public string TypeOfExam { get; set; }
+
         [Required(ErrorMessage = "Pole \"{0}\" jest wymagane.")]
         [DataType(DataType.Text)]
         [StringLength(100, MinimumLength = 3, ErrorMessage = "Nazwa kraju powinna mieć długość pomiędzy 3 a 100 znakami")]

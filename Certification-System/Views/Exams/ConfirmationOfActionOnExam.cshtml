@@ -1,4 +1,5 @@
-﻿@model Certification_System.DTOViewModels.DisplayExamWithTermsViewModel
+﻿@model Certification_System.DTOViewModels.DisplayExamWithTermsAndLocationViewModel
+@using Certification_System.DTOViewModels
 
 @{
     ViewData["Title"] = "ConfirmationOfActionOnExam";
@@ -20,7 +21,10 @@ else
     <a asp-action="DisplayAllExams" asp-controller="Exams" class="btn btn-outline-info mt-1 xs450px_FloatRight">Powrót do listy egzaminów</a>
 </div>
 
-@await Component.InvokeAsync("DisplayExamWithLocationDataTable", new { examViewModel = Model.Exam, tableIdentificator = "examConfirmation" })
+@{List<DisplayExamWithLocationViewModel> examList = new List<DisplayExamWithLocationViewModel>();
+    examList.Add(Model.Exam);}
+
+@await Component.InvokeAsync("DisplayExamWithLocationDataTable", new { examViewModel = examList, tableIdentificator = "examConfirmation" })
 
 <div class="row m-0 mt-3">
     <a asp-action="MarkExam" asp-route-examIdentificator="@Model.Exam.ExamIdentificator" asp-controller="Exams" class="btn btn-primary mt-1 mr-1">Oceń egzamin</a>
@@ -33,7 +37,7 @@ else
     <a asp-action="AddUsersToExam" asp-route-examIdentificator="@Model.Exam.ExamIdentificator" asp-controller="Exams" class="btn btn-light mt-1 mr-1">Przypisz użytkowników</a>
 </div>
 
-@if (Model.Exam.ExamDividedToTerms && Model.ExamTerms.Count != 0)
+@if (Model.Exam.ExamDividedToTerms && Model.ExamTerms.Count() != 0)
 {
     <h2 class="mt-4 mb-4">Tury egzaminu</h2>
 

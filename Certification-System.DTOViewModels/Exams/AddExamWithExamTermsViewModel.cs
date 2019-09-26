@@ -34,20 +34,10 @@ namespace Certification_System.DTOViewModels
         public DateTime DateOfEnd { get; set; }
 
         [Required(ErrorMessage = "Pole \"{0}\" jest wymagane.")]
-        [Range(1, Int32.MaxValue, ErrorMessage = "Pole \"{0}\" musi mieć minimalną wartość \"{1}\" lub więcej.")]
-        [Display(Name = "Limit uczestników")]
-        public int UsersLimit { get; set; }
-
-        [Required(ErrorMessage = "Pole \"{0}\" jest wymagane.")]
         [Display(Name = "Egzamin podzielony na tury ?")]
         public bool ExamDividedToTerms { get; set; }
 
         public IList<SelectListItem> AvailableExaminers { get; set; }
-
-        [Display(Name = "Egzaminatorzy")]
-        [Required(ErrorMessage = "Pole \"{0}\" jest wymagane.")]
-        public ICollection<string> SelectedExaminers { get; set; }
-
 
         [Display(Name = "Terminy")]
         public IList<AddExamTermWithoutExamViewModel> ExamTerms { get; set; }
@@ -56,6 +46,6 @@ namespace Certification_System.DTOViewModels
 
         [Display(Name = "Typ egzaminu")]
         [Required(ErrorMessage = "Pole \"{0}\" jest wymagane.")]
-        public string ExamType { get; set; }
+        public string TypeOfExam { get; set; }
     }
 }

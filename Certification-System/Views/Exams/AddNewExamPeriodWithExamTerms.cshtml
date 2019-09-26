@@ -17,7 +17,7 @@
             <div class="form-group">
                 <label asp-for="SelectedCourse" class="control-label"></label>
                 <div>
-                    <select asp-for="SelectedCourse" asp-items="@Model.AvailableCourses" data-style="btn-white" data-container="body" data-width="100%" data-size="auto" data-header="Wybierz kurs" data-live-search="true" title="Nie wybrano żadnego elementu" data-none-results-text="Nie znaleziono szukanej frazy" class="form-control selectpicker show-tick"> </select>
+                    <select asp-for="SelectedCourse" asp-items="@Model.AvailableCourses" id="courseSelect" data-style="btn-white" data-container="body" data-width="100%" data-size="auto" data-header="Wybierz kurs" data-live-search="true" title="Nie wybrano żadnego elementu" data-none-results-text="Nie znaleziono szukanej frazy" class="form-control selectpicker show-tick"> </select>
                     <div class="row justify-content-center">
                         <span asp-validation-for="SelectedCourse" class="text-danger"></span>
                     </div>
@@ -27,9 +27,19 @@
             <div class="form-group">
                 <label asp-for="SelectedExam" class="control-label"></label>
                 <div>
-                    <select asp-for="SelectedExam" asp-items="@Model.AvailableExams" data-style="btn-white" data-container="body" data-width="100%" data-size="auto" data-header="Wybierz egzamin" data-live-search="true" title="Nie wybrano żadnego elementu" data-none-results-text="Nie znaleziono szukanej frazy" class="form-control selectpicker show-tick"> </select>
+                    <select asp-for="SelectedExam" asp-items="@Model.AvailableExams" id="examSelect" data-style="btn-white" data-container="body" data-width="100%" data-size="auto" data-header="Wybierz egzamin" data-live-search="true" title="Nie wybrano żadnego elementu" data-none-results-text="Nie znaleziono szukanej frazy" class="form-control selectpicker show-tick"> </select>
                     <div class="row justify-content-center">
                         <span asp-validation-for="SelectedExam" class="text-danger"></span>
+                    </div>
+                </div>
+            </div>
+
+            <div class="form-group">
+                <label asp-for="TypeOfExam" class="control-label"></label>
+                <div>
+                    <select asp-for="TypeOfExam" asp-items="@Model.AvailableExamTypes" data-style="btn-white" data-container="body" data-width="100%" data-size="auto" data-header="Wybierz typ egzaminu" data-live-search="true" title="Nie wybrano żadnego elementu" data-none-results-text="Nie znaleziono szukanej frazy" class="form-control selectpicker show-tick"> </select>
+                    <div class="row justify-content-center">
+                        <span asp-validation-for="TypeOfExam" class="text-danger"></span>
                     </div>
                 </div>
             </div>
@@ -38,7 +48,7 @@
                 <label asp-for="DateOfStart" class="control-label"></label>
                 <div>
                     <div class='input-group date' id='DateOfStart'>
-                        <input type='text' class="form-control col-12" name="DateOfStart" value="@DateTime.Now.ToShortDateString() @DateTime.Now.ToShortTimeString()" />
+                        <input asp-for="DateOfStart" type='text' class="form-control col-12" name="DateOfStart" value="@DateTime.Now.ToShortDateString() @DateTime.Now.ToShortTimeString()" />
                         <span class="input-group-addon">
                             <span class="fa fa-calendar pl-1 pt-0.5" style="font-size:34px"></span>
                         </span>
@@ -53,33 +63,13 @@
                 <label asp-for="DateOfEnd" class="control-label"></label>
                 <div>
                     <div class='input-group date' id='DateOfEnd'>
-                        <input type='text' class="form-control col-12" name="DateOfEnd" value="@DateTime.Now.AddDays(3).ToShortDateString() @DateTime.Now.ToShortTimeString()" />
+                        <input asp-for="DateOfEnd" type='text' class="form-control col-12" name="DateOfEnd" value="@DateTime.Now.AddDays(3).ToShortDateString() @DateTime.Now.ToShortTimeString()" />
                         <span class="input-group-addon">
                             <span class="fa fa-calendar pl-1 pt-0.5" style="font-size:34px"></span>
                         </span>
                     </div>
                     <div class="row justify-content-center">
                         <span asp-validation-for="DateOfEnd" class="text-danger"></span>
-                    </div>
-                </div>
-            </div>
-
-            <div class="form-group">
-                <label asp-for="UsersLimit" class="control-label"></label>
-                <div>
-                    <input asp-for="UsersLimit" class="form-control col-12" min="1" value="1" />
-                    <div class="row justify-content-center">
-                        <span asp-validation-for="UsersLimit" class="text-danger"></span>
-                    </div>
-                </div>
-            </div>
-
-            <div class="form-group">
-                <label asp-for="SelectedExaminers" class="control-label"></label>
-                <div>
-                    <select asp-for="SelectedExaminers" asp-items="@Model.AvailableExaminers" data-style="btn-white" data-container="body" data-width="100%" data-size="auto" data-header="Wybierz kurs" data-live-search="true" title="Nie wybrano żadnego elementu" data-none-results-text="Nie znaleziono szukanej frazy" class="form-control selectpicker show-tick"> </select>
-                    <div class="row justify-content-center">
-                        <span asp-validation-for="SelectedExaminers" class="text-danger"></span>
                     </div>
                 </div>
             </div>
@@ -94,113 +84,120 @@
                 </div>
             </div>
 
+            @if (Model.ExamTerms.Count() != 0)
+            {
+                <hr />
+                <h4 class="mt-3 mb-3 text-center">Dodaj tury egzaminu</h4>
+                <hr />
+            }
+
             @for (int i = 0; i < Model.ExamTerms.Count(); i++)
             {
-            <div class="col-12 bg-light rounded border border-secondary rounded-bottom">
+                <div class="col-12 bg-light rounded border border-primary rounded-bottom mb-2 p-3">
 
-                <div class="form-group">
-                    <label asp-for="ExamTerms[i].UsersLimit" class="control-label"></label>
-                    <div>
-                        <input asp-for="ExamTerms[i].UsersLimit" class="form-control col-12" min="1" />
-                        <div class="row justify-content-center">
-                            <span asp-validation-for="ExamTerms[i].UsersLimit" class="text-danger"></span>
+                    <div class="form-group">
+                        <label asp-for="ExamTerms[i].UsersLimit" class="control-label"></label>
+                        <div>
+                            <input asp-for="ExamTerms[i].UsersLimit" class="form-control col-12" min="1" value="1" />
+                            <div class="row justify-content-center">
+                                <span asp-validation-for="ExamTerms[i].UsersLimit" class="text-danger"></span>
+                            </div>
                         </div>
                     </div>
-                </div>
 
-                <div class="form-group">
-                    <label asp-for="ExamTerms[i].SelectedExaminers" class="control-label"></label>
-                    <div>
-                        <select asp-for="ExamTerms[i].SelectedExaminers" asp-items="@Model.AvailableExaminers" data-style="btn-white" data-container="body" data-width="100%" data-size="auto" data-header="Wybierz kurs" data-live-search="true" title="Nie wybrano żadnego elementu" data-none-results-text="Nie znaleziono szukanej frazy" class="form-control selectpicker show-tick"> </select>
-                        <div class="row justify-content-center">
-                            <span asp-validation-for="ExamTerms[i].SelectedExaminers" class="text-danger"></span>
+                    <div class="form-group">
+                        <label asp-for="ExamTerms[i].DateOfStart" class="control-label"></label>
+                        <div>
+                            @{string id_DoS = "DateOfStart" + i; }
+                            <div class='input-group date' id='@id_DoS'>
+                                <input asp-for="ExamTerms[i].DateOfStart" type='text' class="form-control col-12" value="@DateTime.Now.ToShortDateString() @DateTime.Now.ToShortTimeString()" />
+                                <span class="input-group-addon">
+                                    <span class="fa fa-calendar pl-1 pt-0.5" style="font-size:34px"></span>
+                                </span>
+                            </div>
+                            <div class="row justify-content-center">
+                                <span asp-validation-for="ExamTerms[i].DateOfStart" class="text-danger"></span>
+                            </div>
                         </div>
                     </div>
-                </div>
 
-                <div class="form-group">
-                    <label asp-for="ExamTerms[i].DateOfStart" class="control-label"></label>
-                    <div>
-                        @{string id_DoS = "DateOfStart" + i; }
-                        <div class='input-group date' id='@id_DoS'>
-                            <input type='text' class="form-control col-12" value="@DateTime.Now.ToShortDateString() @DateTime.Now.ToShortTimeString()" />
-                            <span class="input-group-addon">
-                                <span class="fa fa-calendar pl-1 pt-0.5" style="font-size:34px"></span>
-                            </span>
-                        </div>
-                        <div class="row justify-content-center">
-                            <span asp-validation-for="ExamTerms[i].DateOfStart" class="text-danger"></span>
+                    <div class="form-group">
+                        <label asp-for="ExamTerms[i].DateOfEnd" class="control-label"></label>
+                        <div>
+                            @{string id_DoE = "DateOfEnd" + i; }
+                            <div class='input-group date' id='@id_DoE'>
+                                <input asp-for="ExamTerms[i].DateOfEnd" type='text' class="form-control col-12" value="@DateTime.Now.ToShortDateString() @DateTime.Now.AddHours(3).ToShortTimeString()" />
+                                <span class="input-group-addon">
+                                    <span class="fa fa-calendar pl-1 pt-0.5" style="font-size:34px"></span>
+                                </span>
+                            </div>
+                            <div class="row justify-content-center">
+                                <span asp-validation-for="ExamTerms[i].DateOfEnd" class="text-danger"></span>
+                            </div>
                         </div>
                     </div>
-                </div>
 
-                <div class="form-group">
-                    <label asp-for="ExamTerms[i].DateOfEnd" class="control-label"></label>
-                    <div>
-                        @{string id_DoE = "DateOfEnd" + i; }
-                        <div class='input-group date' id='@id_DoE'>
-                            <input type='text' class="form-control col-12" value="@DateTime.Now.AddDays(3).ToShortDateString() @DateTime.Now.ToShortTimeString()" />
-                            <span class="input-group-addon">
-                                <span class="fa fa-calendar pl-1 pt-0.5" style="font-size:34px"></span>
-                            </span>
-                        </div>
-                        <div class="row justify-content-center">
-                            <span asp-validation-for="ExamTerms[i].DateOfEnd" class="text-danger"></span>
+                    <div class="form-group">
+                        <label asp-for="ExamTerms[i].SelectedExaminers" class="control-label"></label>
+                        <div>
+                            <select asp-for="ExamTerms[i].SelectedExaminers" asp-items="@Model.AvailableExaminers" id="courseSelect" data-style="btn-white" data-container="body" data-width="100%" data-size="auto" data-header="Wybierz egzaminatorów" data-live-search="true" title="Nie wybrano żadnego elementu" data-none-results-text="Nie znaleziono szukanej frazy" class="form-control selectpicker show-tick"> </select>
+                            <div class="row justify-content-center">
+                                <span asp-validation-for="ExamTerms[i].SelectedExaminers" class="text-danger"></span>
+                            </div>
                         </div>
                     </div>
-                </div>
 
-                <div class="form-group">
-                    <label asp-for="ExamTerms[i].Country" class="control-label"></label>
-                    <div>
-                        <input asp-for="ExamTerms[i].Country" class="form-control col-12" />
-                        <div class="row justify-content-center">
-                            <span asp-validation-for="ExamTerms[i].Country" class="text-danger"></span>
+                    <div class="form-group">
+                        <label asp-for="ExamTerms[i].Country" class="control-label"></label>
+                        <div>
+                            <input asp-for="ExamTerms[i].Country" class="form-control col-12" />
+                            <div class="row justify-content-center">
+                                <span asp-validation-for="ExamTerms[i].Country" class="text-danger"></span>
+                            </div>
                         </div>
                     </div>
-                </div>
 
-                <div class="form-group">
-                    <label asp-for="ExamTerms[i].City" class="control-label"></label>
-                    <div>
-                        <input asp-for="ExamTerms[i].City" class="form-control col-12" />
-                        <div class="row justify-content-center">
-                            <span asp-validation-for="ExamTerms[i].City" class="text-danger"></span>
+                    <div class="form-group">
+                        <label asp-for="ExamTerms[i].City" class="control-label"></label>
+                        <div>
+                            <input asp-for="ExamTerms[i].City" class="form-control col-12" />
+                            <div class="row justify-content-center">
+                                <span asp-validation-for="ExamTerms[i].City" class="text-danger"></span>
+                            </div>
                         </div>
                     </div>
-                </div>
 
-                <div class="form-group">
-                    <label asp-for="ExamTerms[i].PostCode" class="control-label"></label>
-                    <div>
-                        <input asp-for="ExamTerms[i].PostCode" class="form-control col-12" />
-                        <div class="row justify-content-center">
-                            <span asp-validation-for="ExamTerms[i].PostCode" class="text-danger"></span>
+                    <div class="form-group">
+                        <label asp-for="ExamTerms[i].PostCode" class="control-label"></label>
+                        <div>
+                            <input asp-for="ExamTerms[i].PostCode" class="form-control col-12" />
+                            <div class="row justify-content-center">
+                                <span asp-validation-for="ExamTerms[i].PostCode" class="text-danger"></span>
+                            </div>
                         </div>
                     </div>
-                </div>
 
-                <div class="form-group">
-                    <label asp-for="ExamTerms[i].Address" class="control-label"></label>
-                    <div>
-                        <input asp-for="ExamTerms[i].Address" class="form-control col-12" />
-                        <div class="row justify-content-center">
-                            <span asp-validation-for="ExamTerms[i].Address" class="text-danger"></span>
+                    <div class="form-group">
+                        <label asp-for="ExamTerms[i].Address" class="control-label"></label>
+                        <div>
+                            <input asp-for="ExamTerms[i].Address" class="form-control col-12" />
+                            <div class="row justify-content-center">
+                                <span asp-validation-for="ExamTerms[i].Address" class="text-danger"></span>
+                            </div>
                         </div>
                     </div>
-                </div>
 
-                <div class="form-group">
-                    <label asp-for="ExamTerms[i].NumberOfApartment" class="control-label"></label>
-                    <div>
-                        <input asp-for="ExamTerms[i].NumberOfApartment" class="form-control col-12" />
-                        <div class="row justify-content-center">
-                            <span asp-validation-for="ExamTerms[i].NumberOfApartment" class="text-danger"></span>
+                    <div class="form-group">
+                        <label asp-for="ExamTerms[i].NumberOfApartment" class="control-label"></label>
+                        <div>
+                            <input asp-for="ExamTerms[i].NumberOfApartment" class="form-control col-12" />
+                            <div class="row justify-content-center">
+                                <span asp-validation-for="ExamTerms[i].NumberOfApartment" class="text-danger"></span>
+                            </div>
                         </div>
                     </div>
-                </div>
 
-            </div>
+                </div>
             }
 
             <div asp-validation-summary="ModelOnly" class="row justify-content-center alert alert-danger validation-model"></div>
@@ -219,4 +216,5 @@
     @{await Html.RenderPartialAsync("_ValidationScriptsPartial");}
     @{await Html.RenderPartialAsync("_RelatedCalendarsInputScript", new RelatedCalendarsInputScriptViewModel { StartDate = "DateOfStart", EndDate = "DateOfEnd" });}
     @{await Html.RenderPartialAsync("_RelatedManyCalendarsInputScript", new RelatedManyCalendarsInputScriptViewModel { StartDate = "DateOfStart", EndDate = "DateOfEnd", QuantityOfInputs = Model.ExamTerms.Count() });}
+    @{await Html.RenderPartialAsync("_AjaxCallSelectFilterScript", new AjaxCallSelectScriptViewModel { OnChangeSelect = "courseSelect", FilteredSelect = "examSelect", ActionPath = "/Exams/GetExamsByCourseId?courseIdentificator=" });}
 }

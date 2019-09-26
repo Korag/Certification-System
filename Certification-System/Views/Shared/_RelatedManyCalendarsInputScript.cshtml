@@ -1,27 +1,27 @@
 @model Certification_System.DTOViewModels.RelatedManyCalendarsInputScriptViewModel
 
 <script>
-        $(function () {
-            for (var i = 0; i < @Model.QuantityOfInputs; i++) {
-                $("#@Model.StartDate" + i).datetimepicker({
-                    format: 'DD.MM.YYYY HH:mm',
-                    locale: moment.locale('pl', {
-                        week: { dow: 1 }
-                    })
-                });
-                $("#@Model.EndDate" + i).datetimepicker({
-                    format: 'DD.MM.YYYY HH:mm',
-                    locale: moment.locale('pl', {
-                        week: { dow: 1 }
-                    }),
-                    useCurrent: false
-                });
-                $("#@Model.StartDate" + i).on("dp.change", function (e) {
-                    $("#@Model.EndDate" + i).data("DateTimePicker").minDate(e.date);
-                });
-                $("#@Model.EndDate" + i).on("dp.change", function (e) {
-                    $("#@Model.StartDate" + i).data("DateTimePicker").maxDate(e.date);
-                });
-            }
-        });
+    $(document).ready(function () {
+        for (var i = 0; i < @Model.QuantityOfInputs; i++) {
+            $("#@Model.StartDate" + i).datetimepicker({
+                format: 'DD.MM.YYYY HH:mm',
+                locale: moment.locale('pl', {
+                    week: { dow: 1 }
+                })
+            });
+            $("#@Model.EndDate" + i).datetimepicker({
+                format: 'DD.MM.YYYY HH:mm',
+                locale: moment.locale('pl', {
+                    week: { dow: 1 }
+                }),
+                useCurrent: false
+            });
+            $("#@Model.StartDate" + i).on("dp.change", function (e) {
+                $("#@Model.EndDate" + i).data("DateTimePicker").minDate(e.date);
+            });
+            $("#@Model.EndDate" + i).on("dp.change", function (e) {
+                $("#@Model.StartDate" + i).data("DateTimePicker").maxDate(e.date);
+            });
+        }
+    });
 </script>
