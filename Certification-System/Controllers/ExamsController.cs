@@ -413,8 +413,8 @@ namespace Certification_System.Controllers
             examDetails.Examiners = listOfExaminers;
             examDetails.EnrolledUsers = listOfUsers;
 
-            examDetails.DurationDays = (int)exam.DateOfEnd.Subtract(exam.DateOfStart).Days;
-            examDetails.DurationMinutes = (int)exam.DateOfEnd.Subtract(exam.DateOfStart).Minutes;
+            examDetails.DurationDays = (int)exam.DateOfEnd.Subtract(exam.DateOfStart).TotalDays;
+            examDetails.DurationMinutes = (int)exam.DateOfEnd.Subtract(exam.DateOfStart).TotalMinutes;
 
             if (this.User.IsInRole("Examiner"))
             {
@@ -1075,8 +1075,8 @@ namespace Certification_System.Controllers
                     singleExam.Examiners = _mapper.Map<List<DisplayCrucialDataUserViewModel>>(_context.userRepository.GetUsersById(examModel.Examiners));
                     singleExam.Course = _mapper.Map<DisplayCrucialDataCourseViewModel>(course);
 
-                    singleExam.DurationDays = (int)examModel.DateOfEnd.Subtract(examModel.DateOfStart).Days;
-                    singleExam.DurationMinutes = (int)examModel.DateOfEnd.Subtract(examModel.DateOfStart).Minutes;
+                    singleExam.DurationDays = (int)examModel.DateOfEnd.Subtract(examModel.DateOfStart).TotalDays;
+                    singleExam.DurationMinutes = (int)examModel.DateOfEnd.Subtract(examModel.DateOfStart).TotalMinutes;
 
                     listOfExams.Add(singleExam);
                 }

@@ -15,6 +15,10 @@
             }),
             useCurrent: false
         });
+
+        var value = $("#@Model.StartDate").moment;
+        $("#@Model.EndDate").data("DateTimePicker").minDate(value);
+
         $("#@Model.StartDate").on("dp.change", function (e) {
             $('#@Model.EndDate').data("DateTimePicker").minDate(e.date);
         });
