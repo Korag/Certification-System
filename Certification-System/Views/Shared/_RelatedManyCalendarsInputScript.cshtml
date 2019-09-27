@@ -7,18 +7,16 @@
                 format: 'DD.MM.YYYY HH:mm',
                 locale: moment.locale('pl', {
                     week: { dow: 1 }
-                })
+                }),
+                useCurrent: true
             });
             $("#@Model.EndDate" + i).datetimepicker({
                 format: 'DD.MM.YYYY HH:mm',
                 locale: moment.locale('pl', {
                     week: { dow: 1 }
                 }),
-                useCurrent: false,
+                useCurrent: true
             });
-
-            var value = $("#@Model.StartDate" + i).moment;
-            $("#@Model.EndDate" + i).data("DateTimePicker").minDate(value);
 
             $("#@Model.StartDate" + i).on("dp.change", function (e) {
                 $("#@Model.EndDate" + i).data("DateTimePicker").minDate(e.date);
