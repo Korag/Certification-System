@@ -849,7 +849,7 @@ namespace Certification_System.Controllers
         [Authorize(Roles = "Admin")]
         public ActionResult AssignUsersFromCourseToExam(string examIdentificator)
         {
-            if (!string.IsNullOrWhiteSpace(examIdentificator))
+            if (string.IsNullOrWhiteSpace(examIdentificator))
             {
                 return RedirectToAction("BlankMenu", "Certificates");
             }

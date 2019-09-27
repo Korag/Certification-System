@@ -124,9 +124,9 @@ namespace Certification_System.Controllers
                 {
                     await _roleManager.CreateAsync(new CertificationPlatformUserRole(newUser.SelectedRole));
                 }
-            
+
                 if (newUser.SelectedRole != "Instructor&Examiner")
-                {    
+                {
                     var addToRole = await _userManager.AddToRoleAsync(user, newUser.SelectedRole);
                 }
                 else
@@ -134,7 +134,7 @@ namespace Certification_System.Controllers
                     var addToFirstRole = await _userManager.AddToRoleAsync(user, "Instructor");
                     var addToSecondRole = await _userManager.AddToRoleAsync(user, "Examiner");
                 }
-       
+
                 var result = await _userManager.CreateAsync(user);
 
                 if (result.Succeeded)
@@ -178,7 +178,7 @@ namespace Certification_System.Controllers
                 userToUpdate.SelectedRole.Clear();
                 userToUpdate.SelectedRole.Add("Instructor&Examiner");
             }
-            
+
             return View(userToUpdate);
         }
 
@@ -194,7 +194,7 @@ namespace Certification_System.Controllers
 
                 if (editedUser.SelectedRole.FirstOrDefault() != "Instructor&Examiner")
                 {
-                _userManager.AddToRolesAsync(originUser, editedUser.SelectedRole).Wait();
+                    _userManager.AddToRolesAsync(originUser, editedUser.SelectedRole).Wait();
                 }
                 else
                 {
@@ -752,7 +752,7 @@ namespace Certification_System.Controllers
                 var updatedCourses = _context.courseRepository.DeleteUserFromCourses(userToDeleteModel.Courses);
                 _logger.AddCoursesLogs(updatedCourses, logInfoUpdate);
 
-                var updatedMeetings = _context.meetingRepository.DeleteUserFromMeetings(userToDeleteModel.Id, updatedCourses.SelectMany(z=> z.Meetings).ToList());
+                var updatedMeetings = _context.meetingRepository.DeleteUserFromMeetings(userToDeleteModel.Id, updatedCourses.SelectMany(z => z.Meetings).ToList());
                 _logger.AddMeetingsLogs(updatedMeetings, logInfoUpdate);
 
                 var updatedExams = _context.examRepository.DeleteUserFromExams(userToDeleteModel.Id, updatedCourses.SelectMany(z => z.Exams).ToList());
@@ -769,5 +769,28 @@ namespace Certification_System.Controllers
 
             return View("DeleteEntity", userToDelete);
         }
+
+        #region AjaxQuery
+        // GET: GetUsersNotEnrolledInCourse
+        [Authorize(Roles = "Admin, Examiner")]
+        public string[][] GetUsersNotEnrolledInCourse(string courseIdentificator)
+        {
+            var users = _context.userRepository.GetListOfWorkers();
+            var notEnrolledInCourseUsers = users.Where(z => !z.Courses.Contains(courseIdentificator)).ToList();
+
+            string[][] usersArray = new string[notEnrolledInCourseUsers.Count()][];
+
+            for (int i = 0; i < notEnrolledInCourseUsers.Count(); i++)
+            {
+                usersArray[i] = new string[2];
+
+                usersArray[i][0] = notEnrolledInCourseUsers[i].Id;
+                usersArray[i][1] = notEnrolledInCourseUsers[i].FirstName + " " + notEnrolledInCourseUsers[i].LastName + " | " + notEnrolledInCourseUsers[i].Email;
+            }
+
+            return usersArray;
+        }
+        #endregion  
     }
 }
+
