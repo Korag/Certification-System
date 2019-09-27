@@ -212,7 +212,6 @@ namespace Certification_System.Services
             CreateMap<Exam, EditExamWithExamTermsViewModel>();
 
             CreateMap<EditExamWithExamTermsViewModel, Exam>()
-                     .ForMember(dest => dest.Examiners, opts => opts.MapFrom(src => src.SelectedExaminers))
                      .ForMember(dest => dest.ExamTerms, opts => opts.Ignore());
 
             CreateMap<Exam, EditExamViewModel>();

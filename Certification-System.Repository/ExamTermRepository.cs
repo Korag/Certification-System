@@ -137,7 +137,7 @@ namespace Certification_System.Repository
                     (
                         new SelectListItem()
                         {
-                            Text = examTerm.DateOfStart + " - " + examTerm.DateOfEnd + " |wm.: " + vacantSeats,
+                            Text = examTerm.ExamTermIndexer + " | " + examTerm.DateOfStart + " - " + examTerm.DateOfEnd + " |wm.: " + vacantSeats,
                             Value = examTerm.ExamTermIdentificator
                         }
                     );

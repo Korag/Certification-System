@@ -1,4 +1,5 @@
 ﻿@model Certification_System.DTOViewModels.EditExamViewModel
+@using Certification_System.DTOViewModels
 
 @{
     ViewData["Title"] = "EditExam";
@@ -9,16 +10,17 @@
 <hr />
 
 <div>
-    <form asp-action="EditExam">
+    <form asp-action="EditExam" id="form">
 
         <div class="col-md-8 col-xl-6 col-lg-6 col-sm-12 col-xs-10 m-auto p-3 shadow p-3 mb-5 bg-light rounded border border-primary rounded-bottom" style="opacity:0.90">
 
-            <input asp-for="ExamIdentificator" class="form-control col-12" hidden />
+            <input asp-for="ExamIdentificator" class="form-control col-12" hidden/>
+            <input asp-for="SelectedCourse" class="form-control col-12" hidden/>
 
             <div class="form-group">
                 <label asp-for="SelectedCourse" class="control-label"></label>
                 <div>
-                    <select asp-for="SelectedCourse" asp-items="@Model.AvailableCourses" data-style="btn-white" data-container="body" data-width="100%" data-size="auto" data-header="Wybierz kurs" data-live-search="true" title="Nie wybrano żadnego elementu" data-none-results-text="Nie znaleziono szukanej frazy" class="form-control selectpicker show-tick"> </select>
+                    <select asp-for="SelectedCourse" asp-items="@Model.AvailableCourses" data-style="btn-white" data-container="body" data-width="100%" data-size="auto" data-header="Wybierz kurs" data-live-search="true" title="Nie wybrano żadnego elementu" data-none-results-text="Nie znaleziono szukanej frazy" class="form-control selectpicker show-tick" disabled> </select>
                     <div class="row justify-content-center">
                         <span asp-validation-for="SelectedCourse" class="text-danger"></span>
                     </div>
@@ -28,7 +30,7 @@
             <div class="form-group">
                 <label asp-for="Name" class="control-label"></label>
                 <div>
-                    <input asp-for="Name" class="form-control col-12" />
+                    <textarea asp-for="Name" class="form-control col-12" style="width:100%; min-width:100%;"></textarea>
                     <div class="row justify-content-center">
                         <span asp-validation-for="Name" class="text-danger"></span>
                     </div>
@@ -59,7 +61,7 @@
                 <label asp-for="DateOfStart" class="control-label"></label>
                 <div>
                     <div class='input-group date' id='DateOfStart'>
-                        <input type='text' class="form-control col-12" name="DateOfStart" value="@Model.DateOfStart" />
+                        <input asp-for="DateOfStart" type='text' class="form-control col-12" name="DateOfStart" value="@Model.DateOfStart" />
                         <span class="input-group-addon">
                             <span class="fa fa-calendar pl-1 pt-0.5" style="font-size:34px"></span>
                         </span>
@@ -74,7 +76,7 @@
                 <label asp-for="DateOfEnd" class="control-label"></label>
                 <div>
                     <div class='input-group date' id='DateOfEnd'>
-                        <input type='text' class="form-control col-12" name="DateOfEnd" value="@Model.DateOfEnd" />
+                        <input asp-for="DateOfEnd" type='text' class="form-control col-12" name="DateOfEnd" value="@Model.DateOfEnd" />
                         <span class="input-group-addon">
                             <span class="fa fa-calendar pl-1 pt-0.5" style="font-size:34px"></span>
                         </span>
@@ -155,6 +157,16 @@
                 </div>
             </div>
 
+            <div class="form-group">
+                <label asp-for="NumberOfApartment" class="control-label"></label>
+                <div>
+                    <input asp-for="NumberOfApartment" class="form-control col-12" />
+                    <div class="row justify-content-center">
+                        <span asp-validation-for="NumberOfApartment" class="text-danger"></span>
+                    </div>
+                </div>
+            </div>
+
             <div asp-validation-summary="ModelOnly" class="row justify-content-center alert alert-danger validation-model"></div>
 
             <div class="row m-0 mt-3">
@@ -171,4 +183,13 @@
 
 @section Scripts {
     @{await Html.RenderPartialAsync("_ValidationScriptsPartial");}
+    @{await Html.RenderPartialAsync("_RelatedCalendarsInputScript", new RelatedCalendarsInputScriptViewModel { StartDate = "DateOfStart", EndDate = "DateOfEnd" });}
+
+<script>
+    $(document).ready(function () {
+        $(".hide-modal").click(function () {
+            $('#modal').modal('hide');
+        });
+    });
+</script>
 }

@@ -26,14 +26,24 @@ namespace Certification_System.Repository
             return _exams = _context.db.GetCollection<Exam>(_examsCollectionName);
         }
 
-        public ICollection<Exam> GetListOfExams()
-        {
-            return GetExams().AsQueryable().Where(z=> z.OrdinalNumber == 1).ToList();
-        }
-
-        public ICollection<Exam> GetListOfActiveExams()
+        private ICollection<Exam> GetActiveExams()
         {
             return GetExams().AsQueryable().Where(z => (z.DateOfStart > DateTime.Now) && (z.ExamDividedToTerms == false) || (z.DateOfEnd > DateTime.Now) && (z.ExamDividedToTerms == true)).ToList();
+        }
+
+        public ICollection<Exam> GetListOfExams()
+        {
+            return GetExams().AsQueryable().ToList();
+        }
+
+        public ICollection<Exam> GetListOfFirstPeriodExams()
+        {
+            return GetExams().AsQueryable().Where(z => z.OrdinalNumber == 1).ToList();
+        }
+        
+        public ICollection<Exam> GetListOfActiveExams()
+        {
+            return GetActiveExams().AsQueryable().ToList();
         }
 
         public void AddExam(Exam exam)
@@ -57,6 +67,11 @@ namespace Certification_System.Repository
             return resultListOfExams;
         }
 
+        public ICollection<Exam> GetOnlyActiveExamsById(ICollection<string> examsIdentificators)
+        {
+            return GetActiveExams().Where(z => examsIdentificators.Contains(z.ExamIdentificator)).ToList();
+        }
+
         public ICollection<Exam> GetExamsByExaminerId(string userIdentificator)
         {
             var filter = Builders<Exam>.Filter.Where(z => z.Examiners.Contains(userIdentificator));
@@ -74,6 +89,26 @@ namespace Certification_System.Repository
         public ICollection<SelectListItem> GetExamsAsSelectList()
         {
             var exams = GetListOfExams();
+            List<SelectListItem> selectList = new List<SelectListItem>();
+
+            foreach (var exam in exams)
+            {
+                selectList.Add
+                    (
+                        new SelectListItem()
+                        {
+                            Text = exam.ExamIndexer + " | " + exam.Name,
+                            Value = exam.ExamIdentificator
+                        }
+                    );
+            };
+
+            return selectList;
+        }
+
+        public IList<SelectListItem> GetFirstPeriodExamsAsSelectList()
+        {
+            var exams = GetListOfFirstPeriodExams();
             List<SelectListItem> selectList = new List<SelectListItem>();
 
             foreach (var exam in exams)
@@ -169,7 +204,7 @@ namespace Certification_System.Repository
                     (
                         new SelectListItem()
                         {
-                            Text = exam.ExamIndexer + " | " + exam.Name + " |wm.: " + vacantSeats,
+                            Text = exam.ExamIndexer + " |Term." + exam.OrdinalNumber + " | " + exam.Name + " |wm.: " + vacantSeats,
                             Value = exam.ExamIdentificator
                         }
                     );

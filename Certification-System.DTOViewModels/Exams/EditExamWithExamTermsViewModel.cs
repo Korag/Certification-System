@@ -36,18 +36,10 @@ namespace Certification_System.DTOViewModels
         public DateTime DateOfEnd { get; set; }
 
         [Required(ErrorMessage = "Pole \"{0}\" jest wymagane.")]
-        [Display(Name = "Limit uczestników")]
-        public int UsersLimit { get; set; }
-
-        [Required(ErrorMessage = "Pole \"{0}\" jest wymagane.")]
         [Display(Name = "Egzamin podzielony na tury ?")]
         public bool ExamDividedToTerms { get; set; }
 
         public IList<SelectListItem> AvailableExaminers { get; set; }
-
-        [Display(Name = "Egzaminatorzy")]
-        [Required(ErrorMessage = "Pole \"{0}\" jest wymagane.")]
-        public ICollection<string> SelectedExaminers { get; set; }
 
         [Display(Name = "Tury")]
         public IList<EditExamTermViewModel> ExamTerms { get; set; }

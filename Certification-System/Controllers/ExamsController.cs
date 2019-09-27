@@ -257,7 +257,7 @@ namespace Certification_System.Controllers
             AddExamPeriodWithExamTermsViewModel newExamPeriod = new AddExamPeriodWithExamTermsViewModel
             {
                 AvailableCourses = _context.courseRepository.GetActiveCoursesWhereExamIsRequiredAsSelectList().ToList(),
-                AvailableExams = _context.examRepository.GetExamsAsSelectList().ToList(),
+                AvailableExams = _context.examRepository.GetFirstPeriodExamsAsSelectList().ToList(),
                 AvailableExamTypes = _context.examRepository.GetExamsTypesAsSelectList(),
 
                 AvailableExaminers = _context.userRepository.GetExaminersAsSelectList().ToList(),
@@ -443,6 +443,8 @@ namespace Certification_System.Controllers
                 modifiedExam.Exam.DurationDays = (int)exam.DateOfEnd.Subtract(exam.DateOfStart).TotalDays;
                 modifiedExam.Exam.DurationMinutes = (int)exam.DateOfEnd.Subtract(exam.DateOfStart).TotalMinutes;
 
+                modifiedExam.ExamTerms = new List<DisplayExamTermWithoutExamWithLocationViewModel>();
+
                 if (exam.ExamTerms.Count() != 0)
                 {
                     var examTerms = _context.examTermRepository.GetExamsTermsById(exam.ExamTerms);
@@ -593,7 +595,6 @@ namespace Certification_System.Controllers
             examToUpdate.AvailableCourses = _context.courseRepository.GetActiveCoursesAsSelectList().ToList();
             examToUpdate.AvailableExamTypes = _context.examRepository.GetExamsTypesAsSelectList();
 
-            examToUpdate.SelectedExaminers = _context.userRepository.GetUsersById(exam.Examiners).Select(z => z.Id).ToList();
             examToUpdate.SelectedCourse = course.CourseIdentificator;
 
             return View(examToUpdate);
@@ -609,6 +610,8 @@ namespace Certification_System.Controllers
 
             if (ModelState.IsValid)
             {
+                originExam = _mapper.Map<EditExamWithExamTermsViewModel, Exam>(editedExam, originExam);
+
                 if (!editedExam.ExamDividedToTerms)
                 {
                     originExam.ExamTerms.Clear();
@@ -622,6 +625,10 @@ namespace Certification_System.Controllers
                 {
                     originExamTerms = _mapper.Map<List<EditExamTermViewModel>, List<ExamTerm>>(editedExam.ExamTerms.ToList(), originExamTerms.ToList());
 
+                    originExam.UsersLimit = editedExam.ExamTerms.Select(z => z.UsersLimit).Sum();
+                    originExam.ExamDividedToTerms = true;
+
+                    originExam.Examiners = editedExam.ExamTerms.SelectMany(z => z.SelectedExaminers).Distinct().ToList();
                     originExam.ExamTerms = editedExam.ExamTerms.Select(z => z.ExamTermIdentificator).ToList();
 
                     _context.examTermRepository.UpdateExamsTerms(originExamTerms);
@@ -646,7 +653,6 @@ namespace Certification_System.Controllers
                     //OriginExam.ExamTerms.ToList().AddRange(NewExamTermsIdentificators);
                 }
 
-                originExam = _mapper.Map<EditExamWithExamTermsViewModel, Exam>(editedExam, originExam);
                 _context.examRepository.UpdateExam(originExam);
 
                 var logInfo = _logger.GenerateLogInformation(this.User.Identity.Name, this.ControllerContext.RouteData.Values["action"].ToString(), LogTypeOfAction.TypesOfActions[1]);
@@ -764,7 +770,7 @@ namespace Certification_System.Controllers
         [Authorize(Roles = "Admin")]
         public ActionResult DeleteUsersFromExam(string examIdentificator)
         {
-            if (!string.IsNullOrWhiteSpace(examIdentificator))
+            if (string.IsNullOrWhiteSpace(examIdentificator))
             {
                 return RedirectToAction("BlankMenu", "Certificates");
             }
@@ -785,8 +791,8 @@ namespace Certification_System.Controllers
                 DeleteUsersFromExamViewModel deleteUsersFromExamViewModel = _mapper.Map<DeleteUsersFromExamViewModel>(exam);
                 deleteUsersFromExamViewModel.AllExamParticipants = listOfUsers;
 
-                deleteUsersFromExamViewModel.DurationDays = (int)exam.DateOfEnd.Subtract(exam.DateOfStart).Days;
-                deleteUsersFromExamViewModel.DurationMinutes = (int)exam.DateOfEnd.Subtract(exam.DateOfStart).Minutes;
+                deleteUsersFromExamViewModel.DurationDays = (int)exam.DateOfEnd.Subtract(exam.DateOfStart).TotalDays;
+                deleteUsersFromExamViewModel.DurationMinutes = (int)exam.DateOfEnd.Subtract(exam.DateOfStart).TotalMinutes;
 
                 deleteUsersFromExamViewModel.UsersToDeleteFromExam = _mapper.Map<DeleteUsersFromCheckBoxViewModel[]>(listOfUsers);
 
@@ -1237,22 +1243,24 @@ namespace Certification_System.Controllers
 
         #region AjaxQuery
         // GET: GetUserAvailableToEnrollExamsByUserId
-        [Authorize(Roles = "Examiner")]
+        [Authorize(Roles = "Admin, Examiner")]
         public string[][] GetUserAvailableToEnrollExamsByUserId(string userIdentificator)
         {
             var user = _context.userRepository.GetUserById(userIdentificator);
 
             var examsIdentificators = _context.courseRepository.GetCoursesById(user.Courses).SelectMany(z => z.Exams).ToList();
-            var exams = _context.examRepository.GetExamsById(examsIdentificators).ToList();
+            var exams = _context.examRepository.GetOnlyActiveExamsById(examsIdentificators).ToList();
 
             string[][] examsArray = new string[exams.Count()][];
 
             for (int i = 0; i < exams.Count(); i++)
             {
+                var vacantSeats = exams[i].UsersLimit - exams[i].EnrolledUsers.Count();
+
                 examsArray[i] = new string[2];
 
                 examsArray[i][0] = exams[i].ExamIdentificator;
-                examsArray[i][1] = exams[i].ExamIndexer + " | " + exams[i].Name;
+                examsArray[i][1] = exams[i].ExamIndexer + " |Term." + exams[i].OrdinalNumber + " | " + exams[i].Name + " |wm.: " + vacantSeats;
             }
 
             return examsArray;

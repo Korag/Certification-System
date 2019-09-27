@@ -15,15 +15,15 @@
             <div class="row m-0 p-4">
                 @if (Model.FormSubmit)
                 {
-                    <button type="submit" class="btn @Model.ButtonClass mt-1 xs300px_JustifyContentCenter">@Model.ButtonText</button>
+                    <button type="submit" class="btn @Model.ButtonClass mt-1 hide-modal xs300px_JustifyContentCenter">@Model.ButtonText</button>
                 }
                 else if (Model.Arguments != null)
                 {
-                    <a asp-action="@Model.Action" asp-controller="@Model.Controller" asp-all-route-data="@Model.Arguments" class="btn @Model.ButtonClass mt-1 xs300px_JustifyContentCenter">@Model.ButtonText</a>
+                    <a asp-action="@Model.Action" asp-controller="@Model.Controller" asp-all-route-data="@Model.Arguments" class="btn @Model.ButtonClass hide-modal mt-1 xs300px_JustifyContentCenter">@Model.ButtonText</a>
                 }
                 else
                 {
-                    <a asp-action="@Model.Action" asp-controller="@Model.Controller" class="btn @Model.ButtonClass mt-1 xs300px_JustifyContentCenter">@Model.ButtonText</a>
+                    <a asp-action="@Model.Action" asp-controller="@Model.Controller" class="btn @Model.ButtonClass hide-modal mt-1 xs300px_JustifyContentCenter">@Model.ButtonText</a>
                 }
                 <button type="button" class="btn btn-secondary mt-1 xs300px_FloatRight" data-dismiss="modal">Anuluj</button>
             </div>
