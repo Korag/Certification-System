@@ -13,7 +13,7 @@
 
         <div class="col-md-8 col-xl-6 col-lg-6 col-sm-12 col-xs-10 m-auto p-3 shadow p-3 mb-5 bg-light rounded border border-primary rounded-bottom" style="opacity:0.90">
 
-            <input asp-for="MeetingIdentificator" class="form-control col-12" hidden />
+            <input asp-for="MeetingIdentificator" class="form-control col-12" hidden readonly/>
 
             <div class="form-group">
                 <label asp-for="Description" class="control-label"></label>
@@ -29,7 +29,7 @@
                 <label asp-for="DateOfStart" class="control-label"></label>
                 <div>
                     <div class='input-group date' id='DateOfStart'>
-                        <input type='text' class="form-control col-12" name="DateOfStart" value="@Model.DateOfStart" />
+                        <input asp-for="DateOfStart" type='text' class="form-control col-12" name="DateOfStart" value="@Model.DateOfStart" />
                         <span class="input-group-addon">
                             <span class="fa fa-calendar pl-1 pt-0.5" style="font-size:34px"></span>
                         </span>
@@ -44,7 +44,7 @@
                 <label asp-for="DateOfEnd" class="control-label"></label>
                 <div>
                     <div class='input-group date' id='DateOfEnd'>
-                        <input type='text' class="form-control col-12" name="DateOfEnd" value="@Model.DateOfEnd" />
+                        <input asp-for="DateOfEnd" type='text' class="form-control col-12" name="DateOfEnd" value="@Model.DateOfEnd" />
                         <span class="input-group-addon">
                             <span class="fa fa-calendar pl-1 pt-0.5" style="font-size:34px"></span>
                         </span>

@@ -14,8 +14,8 @@
 
         <div class="col-md-8 col-xl-6 col-lg-6 col-sm-12 col-xs-10 m-auto p-3 shadow p-3 mb-5 bg-light rounded border border-primary rounded-bottom" style="opacity:0.90">
 
-            <input asp-for="ExamIdentificator" class="form-control col-12" hidden />
-            <input asp-for="SelectedCourse" class="form-control col-12" hidden />
+            <input asp-for="ExamIdentificator" class="form-control col-12" hidden readonly/>
+            <input asp-for="SelectedCourse" class="form-control col-12" hidden readonly/>
 
             <div class="form-group">
                 <label asp-for="SelectedCourse" class="control-label"></label>
@@ -121,7 +121,7 @@
             {
                 <div class="col-12 bg-light rounded border border-secondary rounded-bottom">
 
-                    <input asp-for="ExamTerms[i].ExamTermIdentificator" class="form-control col-6" hidden />
+                    <input asp-for="ExamTerms[i].ExamTermIdentificator" class="form-control col-6" hidden readonly/>
 
                     <div class="form-group">
                         <label asp-for="ExamTerms[i].UsersLimit" class="control-label"></label>

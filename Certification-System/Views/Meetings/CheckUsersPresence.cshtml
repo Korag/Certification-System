@@ -70,7 +70,7 @@
 
 <form asp-action="CheckUsersPresence">
 
-    <input asp-for="MeetingIdentificator" class="form-control col-12" hidden />
+    <input asp-for="MeetingIdentificator" class="form-control col-12" hidden readonly/>
 
     @if (Model.AllCourseParticipants.Count != 0)
     {
