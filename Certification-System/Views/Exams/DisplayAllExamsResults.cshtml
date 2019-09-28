@@ -3,7 +3,7 @@
 @{
     ViewData["Title"] = "DisplayAllExamsResults";
     Layout = "~/Views/Shared/_Layout.cshtml";
-}
+};
 
 <h1>Lista wyników z egzaminów</h1>
 <hr />
@@ -13,7 +13,7 @@
     <h2 class="alert alert-info" role="alert">@ViewBag.message</h2>
 }
 
-@await Component.InvokeAsync("DisplayExamResultDataTable", new { examResultViewModel = Model, tableIdentificator = "listExamsResults" })
+@await Component.InvokeAsync("DisplayExamResultDataTable", new { examResultViewModel = Model, tableIdentificator = "listExamsResults", operationSet = 1 })
 
 @section Scripts{
     @{await Html.RenderPartialAsync("_DataTableBasicScript", "listExamsResults");}

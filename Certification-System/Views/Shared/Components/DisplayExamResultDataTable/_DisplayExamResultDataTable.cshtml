@@ -1,5 +1,9 @@
 ﻿@model Certification_System.DTOViewModels.DisplayExamResultDataTableViewModel
 
+@{ 
+    var i = 0;
+}
+
 <div class="col-12 table-responsive">
     <table id="@Model.Options.TableIdentificator" class="table table-striped table-bordered display" style="width: 100%;" role="grid">
         <thead>
@@ -98,20 +102,36 @@
                     @Html.DisplayFor(modelItem => examResult.PercentageOfResult)
                 </td>
                 <td>
-                    @Html.DisplayFor(modelItem => examResult.ExamPassed)
+                    <input type="checkbox" asp-for="@examResult.ExamPassed" data-toggle="toggle" data-on="Tak" data-off="Nie" data-size="sm" disabled />
                 </td>
                 @if (Model.Options.OperationSet != 0)
                 {
-                    <td>
+                <td>
+                    @{var deleteParams = new Dictionary<string, string>
+                       {
+                       { "examResultIdentificator", examResult.ExamResultIdentificator },
+                       { "returnUrl", ($"{Context.Request.Scheme}://{Context.Request.Host}{Context.Request.Path}{Context.Request.QueryString}")}
+                       };
+
+                        var modalDataTarget = "modal" + i;
+                     }
+
                         <div class="dropdown p-0">
                             <button class="btn btn-success dropdown-toggle" type="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">Operacje</button>
                             <div class="dropdown-menu nohover">
+                                <a asp-action="MarkExamOrExamTermHub" asp-route-examIdentificator="@examResult.Exam.ExamIdentificator" asp-route-userIdentificator="@examResult.User.UserIdentificator" asp-controller="Users" class="btn btn-success w-100 mb-1">Edytuj rezultat</a>
+                                <a asp-action="DeleteExamResultHub" asp-route-examResultIdentificator="@examResult.ExamResultIdentificator" asp-controller="Exams" data-toggle="modal" data-target="#@modalDataTarget" class="btn btn-danger w-100 mb-1">Usuń rezultat</a>
+
                                 <a asp-action="UserDetails" asp-route-userIdentificator="@examResult.User.UserIdentificator" asp-controller="Users" class="btn btn-primary w-100 mb-1">Szczegóły użytkownika</a>
                                 <a asp-action="CourseDetails" asp-route-courseIdentificator="@examResult.Course.CourseIdentificator" asp-controller="Courses" class="btn btn-info w-100 mb-1">Szczegóły kursu</a>
                                 <a asp-action="ExamDetails" asp-route-examIdentificator="@examResult.Exam.ExamIdentificator" asp-controller="Exams" class="btn btn-secondary  w-100">Szczegóły egzaminu</a>
                             </div>
                         </div>
-                    </td>
+                        @await Component.InvokeAsync("Modal", new {
+                        DataTarget = modalDataTarget, Title = "Usuwanie egzaminu", Body = "Czy na pewno chcesz usunąć ten egzamin wraz ze wszystkimi jego zależnościami ?", Action = "DeleteExamResultHub", Controller = "Exams", Arguments = deleteParams, ButtonText = "Usuń", ButtonClass = "btn-danger" })
+               
+                    @{ i++; }
+                </td>
                 }
             </tr>
             }
