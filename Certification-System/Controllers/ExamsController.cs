@@ -971,7 +971,6 @@ namespace Certification_System.Controllers
                 {
                     for (int i = 0; i < usersEnrolledInExam.Count(); i++)
                     {
-
                         var singleUser = _mapper.Map<MarkUserViewModel>(usersEnrolledInExam[i]);
 
                         var userExamResult = examResults.Where(z => z.User == usersEnrolledInExam[i].Id && exam.ExamResults.Contains(z.ExamResultIdentificator));
@@ -998,6 +997,29 @@ namespace Certification_System.Controllers
             return RedirectToAction("ExamDetails", new { examIdentificator = examIdentificator });
         }
 
+        // GET: MarkExamOrExamTermHub
+        [Authorize(Roles = "Admin, Examiner")]
+        public ActionResult MarkExamOrExamTermHub(string userIdentificator, string examIdentificator)
+        {
+            var exam = _context.examRepository.GetExamById(examIdentificator);
+
+            if (exam != null)
+            {
+                if (exam.ExamDividedToTerms)
+                {
+                    var examTerm = _context.examTermRepository.GetExamsTermsById(exam.ExamTerms).Where(z => z.EnrolledUsers.Contains(userIdentificator)).FirstOrDefault();
+
+                    return RedirectToAction("MarkExamTerm", "ExamsTerms", new { examTermIdentificator = examTerm.ExamTermIdentificator });
+                }
+                else
+                {
+                    return RedirectToAction("MarkExam", "Exams", new { examIdentificator = exam.ExamIdentificator });
+                }
+            }
+
+            return RedirectToAction("BlankMenu", "Certificates");
+        }
+
         // POST: MarkExam
         [HttpPost]
         [Authorize(Roles = "Admin, Examiner")]
@@ -1007,7 +1029,8 @@ namespace Certification_System.Controllers
             {
                 if (markedExamViewModel.DateOfStart > DateTime.Now)
                 {
-                    List<ExamResult> usersExamsResults = new List<ExamResult>();
+                    List<ExamResult> usersExamsResultsToAdd = new List<ExamResult>();
+                    List<ExamResult> usersExamsResultsToUpdate = new List<ExamResult>();
 
                     var exam = _context.examRepository.GetExamById(markedExamViewModel.ExamIdentificator);
                     var examResults = _context.examResultRepository.GetExamsResultsById(exam.ExamResults);
@@ -1022,35 +1045,51 @@ namespace Certification_System.Controllers
                         {
                             singleUserExamResult = _mapper.Map<ExamResult>(userExamResult.FirstOrDefault());
                             singleUserExamResult = _mapper.Map<MarkUserViewModel, ExamResult>(user, singleUserExamResult);
+
+                            if (userExamResult.FirstOrDefault() == singleUserExamResult)
+                            {
+                                continue;
+                            }
+
+                            usersExamsResultsToAdd.Add(singleUserExamResult);
                         }
                         else
                         {
                             singleUserExamResult = _mapper.Map<ExamResult>(user);
                             singleUserExamResult.ExamResultIdentificator = _keyGenerator.GenerateNewId();
                             singleUserExamResult.ExamResultIndexer = _keyGenerator.GenerateExamResultEntityIndexer(exam.ExamIndexer);
-                        }
 
-                        usersExamsResults.Add(singleUserExamResult);
+                            usersExamsResultsToUpdate.Add(singleUserExamResult);
+                        }
                     }
 
                     var logInfo = _logger.GenerateLogInformation(this.User.Identity.Name, this.ControllerContext.RouteData.Values["action"].ToString(), LogTypeOfAction.TypesOfActions[1]);
                     var logAdd = _logger.GenerateLogInformation(this.User.Identity.Name, this.ControllerContext.RouteData.Values["action"].ToString(), LogTypeOfAction.TypesOfActions[0]);
 
-                    if (usersExamsResults.Count() != 0)
+                    if (usersExamsResultsToAdd.Count() != 0 && usersExamsResultsToUpdate.Count() != 0 && exam.MaxAmountOfPointsToEarn == markedExamViewModel.MaxAmountOfPointsToEarn)
                     {
-                        _context.examResultRepository.UpdatedExamsResults(usersExamsResults);
-                        _logger.AddExamsResultsLogs(usersExamsResults, logInfo);
+                        return RedirectToAction("ExamDetails", new { examIdentificator = markedExamViewModel.ExamIdentificator, message = "Nie zmieniono żadnej oceny egzaminu" });
                     }
-                    else
-                    {
-                        _context.examResultRepository.AddExamsResults(usersExamsResults);
-                        _context.examRepository.AddExamsResultsToExam(exam.ExamIdentificator, usersExamsResults.Select(z=> z.ExamResultIdentificator).ToList());
 
-                        _logger.AddExamsResultsLogs(usersExamsResults, logAdd);
+                    if (exam.MaxAmountOfPointsToEarn != markedExamViewModel.MaxAmountOfPointsToEarn)
+                    {
+                        exam.MaxAmountOfPointsToEarn = markedExamViewModel.MaxAmountOfPointsToEarn;
+                        _context.examRepository.SetMaxAmountOfPointsToEarn(markedExamViewModel.ExamIdentificator, markedExamViewModel.MaxAmountOfPointsToEarn);
+                    }
+
+                    if (usersExamsResultsToAdd.Count() != 0)
+                    {
+                        _context.examResultRepository.UpdateExamsResults(usersExamsResultsToAdd);
+                        _logger.AddExamsResultsLogs(usersExamsResultsToAdd, logInfo);
+                    }
+                    if (usersExamsResultsToUpdate.Count() != 0)
+                    {
+                        _context.examResultRepository.AddExamsResults(usersExamsResultsToUpdate);
+                        _context.examRepository.AddExamsResultsToExam(exam.ExamIdentificator, usersExamsResultsToUpdate.Select(z => z.ExamResultIdentificator).ToList());
+
+                        _logger.AddExamsResultsLogs(usersExamsResultsToUpdate, logAdd);
                         _logger.AddExamLog(exam, logInfo);
                     }
-
-                    _context.examRepository.SetMaxAmountOfPointsToEarn(markedExamViewModel.ExamIdentificator, markedExamViewModel.MaxAmountOfPointsToEarn);
                 }
 
                 return RedirectToAction("ExamDetails", new { examIdentificator = markedExamViewModel.ExamIdentificator, message = "Dokonano oceny egzaminu" });
