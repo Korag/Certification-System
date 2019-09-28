@@ -19,6 +19,12 @@ namespace Certification_System.DTOViewModels
         [Required(ErrorMessage = "Pole \"{0}\" jest wymagane.")]
         public string SelectedExam{ get; set; }
 
+        [Display(Name = "Nazwa egzaminu")]
+        public string Name { get; set; }
+
+        [Display(Name = "Opis egzaminu")]
+        public string Description { get; set; }
+
         [Required(ErrorMessage = "Pole \"{0}\" jest wymagane.")]
         [DataType(DataType.Date)]
         [DisplayFormat(DataFormatString = "{0:DD/MM/YYYY}")]

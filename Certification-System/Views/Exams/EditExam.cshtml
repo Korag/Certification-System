@@ -14,8 +14,8 @@
 
         <div class="col-md-8 col-xl-6 col-lg-6 col-sm-12 col-xs-10 m-auto p-3 shadow p-3 mb-5 bg-light rounded border border-primary rounded-bottom" style="opacity:0.90">
 
-            <input asp-for="ExamIdentificator" class="form-control col-12" hidden readonly/>
-            <input asp-for="SelectedCourse" class="form-control col-12" hidden readonly/>
+            <input asp-for="ExamIdentificator" class="form-control col-12" hidden readonly />
+            <input asp-for="SelectedCourse" class="form-control col-12" hidden readonly />
 
             <div class="form-group">
                 <label asp-for="SelectedCourse" class="control-label"></label>
@@ -184,12 +184,5 @@
 @section Scripts {
     @{await Html.RenderPartialAsync("_ValidationScriptsPartial");}
     @{await Html.RenderPartialAsync("_RelatedCalendarsInputScript", new RelatedCalendarsInputScriptViewModel { StartDate = "DateOfStart", EndDate = "DateOfEnd" });}
-
-<script>
-    $(document).ready(function () {
-        $(".hide-modal").click(function () {
-            $('#modal').modal('hide');
-        });
-    });
-</script>
+    @{await Html.RenderPartialAsync("_ModalHideOnActionScript");}
 }

@@ -107,7 +107,7 @@ namespace Certification_System.Repository
             return indexersNumber.ToString();
         }
 
-        public void UpdatedExamsResults(ICollection<ExamResult> examsResults)
+        public void UpdateExamsResults(ICollection<ExamResult> examsResults)
         {
             foreach (var examResult in examsResults)
             {

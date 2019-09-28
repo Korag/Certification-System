@@ -197,6 +197,7 @@ namespace Certification_System.Services
                     .ForMember(dest => dest.Users, opts => opts.Ignore());
 
             CreateMap<Exam, DisplayExamWithoutCourseViewModel>()
+                     .ForMember(dest => dest.UsersQuantitiy, opts => opts.MapFrom(src => src.EnrolledUsers.Count()))
                      .ForMember(dest => dest.Examiners, opts => opts.Ignore());
 
             CreateMap<Exam, DisplayExamWithoutExaminerViewModel>();
