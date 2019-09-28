@@ -6,7 +6,7 @@ namespace Certification_System.Components
 {
     public class MarkExamDataTableViewComponent : ViewComponent
     {
-        public IViewComponentResult Invoke(ICollection<MarkUserViewModel> userViewModel, string tableIdentificator, int operationSet = 0)
+        public IViewComponentResult Invoke(MarkUserViewModel[] userViewModel, string tableIdentificator, int operationSet = 0)
         {
             MarkExamDataTableViewModel userDataTableViewModel = new MarkExamDataTableViewModel
             {

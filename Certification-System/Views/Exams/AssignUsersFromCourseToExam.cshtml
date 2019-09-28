@@ -12,9 +12,15 @@
     <div>
         <h2>Informacje o egzaminie</h2>
 
+        <div class="row m-0 mt-3 mb-3">
+            <a asp-action="ExamDetails" asp-route-examIdentificator="@Model.ExamIdentificator" asp-controller="Exams" class="btn btn-outline-info mt-1 xs450px_FloatRight">Powrót do szczegółów egzaminu</a>
+        </div>
+
         <div class="col-md-8 col-xl-6 col-lg-6 col-sm-12 col-xs-10 m-auto p-3 shadow p-3 mb-5 bg-light rounded border border-primary rounded-bottom" style="opacity:0.90">
 
             <input asp-for="ExamIdentificator" class="form-control col-12" hidden />
+            <input asp-for="DateOfStart" class="form-control col-12" hidden />
+            <input asp-for="VacantSeats" class="form-control col-12" hidden />
 
             <div class="form-group">
                 <label asp-for="ExamIndexer" class="control-label"></label>
@@ -119,7 +125,7 @@
 
         <div>
             <div class="row justify-content-center">
-                <input type="submit" value="Usuń użytkowników z egzaminu" class="btn btn-danger" />
+                <input type="submit" value="Dodaj użytkowników" class="btn btn-primary" />
             </div>
         </div>
     }

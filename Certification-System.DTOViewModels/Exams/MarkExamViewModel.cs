@@ -47,9 +47,8 @@ namespace Certification_System.DTOViewModels
         [Display(Name = "Maks. liczba punktów")]
         public double MaxAmountOfPointsToEarn { get; set; }
 
-        [Display(Name = "Oceniani uczestnicy")]
-        [Required(ErrorMessage = "Pole \"{0}\" jest wymagane.")]
-        public ICollection<MarkUserViewModel> Users { get; set; }
+        [Display(Name = "Użytkownicy")]
+        public MarkUserViewModel[] Users { get; set; }
 
         [Display(Name = "Kraj")]
         public string Country { get; set; }

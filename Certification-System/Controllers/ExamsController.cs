@@ -227,7 +227,7 @@ namespace Certification_System.Controllers
 
                 course.Exams.Add(exam.ExamIdentificator);
 
-                exam.OrdinalNumber = examsInCourse.Where(z => z.ExamIndexer == exam.ExamIndexer).Count()+1;
+                exam.OrdinalNumber = examsInCourse.Where(z => z.ExamIndexer == exam.ExamIndexer).Count() + 1;
 
                 _context.courseRepository.UpdateCourse(course);
                 _context.examRepository.AddExam(exam);
@@ -896,8 +896,8 @@ namespace Certification_System.Controllers
                     addUsersToExamViewModel.CourseParticipants = listOfUsers;
                     addUsersToExamViewModel.VacantSeats = vacantSeats;
 
-                    addUsersToExamViewModel.DurationDays = (int)exam.DateOfEnd.Subtract(exam.DateOfStart).Days;
-                    addUsersToExamViewModel.DurationMinutes = (int)exam.DateOfEnd.Subtract(exam.DateOfStart).Minutes;
+                    addUsersToExamViewModel.DurationDays = (int)exam.DateOfEnd.Subtract(exam.DateOfStart).TotalDays;
+                    addUsersToExamViewModel.DurationMinutes = (int)exam.DateOfEnd.Subtract(exam.DateOfStart).TotalMinutes;
 
                     addUsersToExamViewModel.UsersToAssignToExam = _mapper.Map<AddUsersFromCheckBoxViewModel[]>(listOfUsers);
 
@@ -926,7 +926,11 @@ namespace Certification_System.Controllers
 
                         _context.examRepository.AddUsersToExam(addUsersToExamViewModel.ExamIdentificator, usersToAddToExamIdentificators);
 
-                        exam.EnrolledUsers.ToList().AddRange(usersToAddToExamIdentificators);
+                        foreach (var user in usersToAddToExamIdentificators)
+                        {
+                            exam.EnrolledUsers.Add(user);
+                        }
+
                         var logInfo = _logger.GenerateLogInformation(this.User.Identity.Name, this.ControllerContext.RouteData.Values["action"].ToString(), LogTypeOfAction.TypesOfActions[1]);
                         _logger.AddExamLog(exam, logInfo);
 
@@ -935,6 +939,8 @@ namespace Certification_System.Controllers
 
                     ModelState.AddModelError("", "Brak wystarczającej ilości wolnych miejsc");
                     ModelState.AddModelError("", $"Do egzaminu można dodać maksymalnie {addUsersToExamViewModel.VacantSeats} użytkowników");
+
+                    return View(addUsersToExamViewModel);
                 }
 
                 return RedirectToAction("ExamDetails", new { examIdentificator = addUsersToExamViewModel.ExamIdentificator });
@@ -947,42 +953,42 @@ namespace Certification_System.Controllers
         [Authorize(Roles = "Admin, Examiner")]
         public ActionResult MarkExam(string examIdentificator)
         {
-            if (!string.IsNullOrWhiteSpace(examIdentificator))
+            if (string.IsNullOrWhiteSpace(examIdentificator))
             {
                 return RedirectToAction("BlankMenu", "Certificates");
             }
 
             var exam = _context.examRepository.GetExamById(examIdentificator);
 
-            if (exam.DateOfStart < DateTime.Now)
+            if (exam.DateOfStart > DateTime.Now)
             {
-                var usersEnrolledInExam = _context.userRepository.GetUsersById(exam.EnrolledUsers);
+                var usersEnrolledInExam = _context.userRepository.GetUsersById(exam.EnrolledUsers).ToList();
                 var examResults = _context.examResultRepository.GetExamsResultsById(exam.ExamResults);
 
-                List<MarkUserViewModel> listOfUsers = new List<MarkUserViewModel>();
+                MarkUserViewModel[] listOfUsers = new MarkUserViewModel[usersEnrolledInExam.Count()];
 
                 if (usersEnrolledInExam.Count != 0)
                 {
-                    foreach (var user in usersEnrolledInExam)
+                    for (int i = 0; i < usersEnrolledInExam.Count(); i++)
                     {
-                        var singleUser = _mapper.Map<MarkUserViewModel>(user);
 
-                        var userExamResult = examResults.Where(z => z.User == user.Id);
+                        var singleUser = _mapper.Map<MarkUserViewModel>(usersEnrolledInExam[i]);
 
-                        if (userExamResult != null)
+                        var userExamResult = examResults.Where(z => z.User == usersEnrolledInExam[i].Id && exam.ExamResults.Contains(z.ExamResultIdentificator));
+
+                        if (userExamResult.Count() != 0)
                         {
-                            singleUser = _mapper.Map<MarkUserViewModel>(userExamResult);
+                            singleUser = _mapper.Map<ExamResult, MarkUserViewModel>(userExamResult.FirstOrDefault(), singleUser);
                         }
 
-                        listOfUsers.Add(singleUser);
+                        listOfUsers[i] = singleUser;
                     }
-                    listOfUsers = _mapper.Map<List<MarkUserViewModel>>(usersEnrolledInExam);
                 }
 
                 MarkExamViewModel markExamViewModel = _mapper.Map<MarkExamViewModel>(exam);
 
-                markExamViewModel.DurationDays = (int)exam.DateOfEnd.Subtract(exam.DateOfStart).Days;
-                markExamViewModel.DurationMinutes = (int)exam.DateOfEnd.Subtract(exam.DateOfStart).Minutes;
+                markExamViewModel.DurationDays = (int)exam.DateOfEnd.Subtract(exam.DateOfStart).TotalDays;
+                markExamViewModel.DurationMinutes = (int)exam.DateOfEnd.Subtract(exam.DateOfStart).TotalMinutes;
 
                 markExamViewModel.Users = listOfUsers;
 
@@ -999,27 +1005,52 @@ namespace Certification_System.Controllers
         {
             if (ModelState.IsValid)
             {
-                if (markedExamViewModel.DateOfStart < DateTime.Now)
+                if (markedExamViewModel.DateOfStart > DateTime.Now)
                 {
                     List<ExamResult> usersExamsResults = new List<ExamResult>();
 
                     var exam = _context.examRepository.GetExamById(markedExamViewModel.ExamIdentificator);
+                    var examResults = _context.examResultRepository.GetExamsResultsById(exam.ExamResults);
 
                     foreach (var user in markedExamViewModel.Users)
                     {
-                        ExamResult sinlgeUserExamResult = _mapper.Map<ExamResult>(user);
-                        sinlgeUserExamResult.ExamResultIdentificator = _keyGenerator.GenerateNewId();
-                        sinlgeUserExamResult.ExamResultIndexer = _keyGenerator.GenerateExamResultEntityIndexer(exam.ExamIndexer);
+                        ExamResult singleUserExamResult = new ExamResult();
 
-                        usersExamsResults.Add(sinlgeUserExamResult);
-                        _context.examResultRepository.AddExamResult(sinlgeUserExamResult);
+                        var userExamResult = examResults.Where(z => z.User == user.UserIdentificator && exam.ExamResults.Contains(z.ExamResultIdentificator));
+
+                        if (userExamResult.Count() != 0)
+                        {
+                            singleUserExamResult = _mapper.Map<ExamResult>(userExamResult.FirstOrDefault());
+                            singleUserExamResult = _mapper.Map<MarkUserViewModel, ExamResult>(user, singleUserExamResult);
+                        }
+                        else
+                        {
+                            singleUserExamResult = _mapper.Map<ExamResult>(user);
+                            singleUserExamResult.ExamResultIdentificator = _keyGenerator.GenerateNewId();
+                            singleUserExamResult.ExamResultIndexer = _keyGenerator.GenerateExamResultEntityIndexer(exam.ExamIndexer);
+                        }
+
+                        usersExamsResults.Add(singleUserExamResult);
+                    }
+
+                    var logInfo = _logger.GenerateLogInformation(this.User.Identity.Name, this.ControllerContext.RouteData.Values["action"].ToString(), LogTypeOfAction.TypesOfActions[1]);
+                    var logAdd = _logger.GenerateLogInformation(this.User.Identity.Name, this.ControllerContext.RouteData.Values["action"].ToString(), LogTypeOfAction.TypesOfActions[0]);
+
+                    if (usersExamsResults.Count() != 0)
+                    {
+                        _context.examResultRepository.UpdatedExamsResults(usersExamsResults);
+                        _logger.AddExamsResultsLogs(usersExamsResults, logInfo);
+                    }
+                    else
+                    {
+                        _context.examResultRepository.AddExamsResults(usersExamsResults);
+                        _context.examRepository.AddExamsResultsToExam(exam.ExamIdentificator, usersExamsResults.Select(z=> z.ExamResultIdentificator).ToList());
+
+                        _logger.AddExamsResultsLogs(usersExamsResults, logAdd);
+                        _logger.AddExamLog(exam, logInfo);
                     }
 
                     _context.examRepository.SetMaxAmountOfPointsToEarn(markedExamViewModel.ExamIdentificator, markedExamViewModel.MaxAmountOfPointsToEarn);
-
-                    var logInfo = _logger.GenerateLogInformation(this.User.Identity.Name, this.ControllerContext.RouteData.Values["action"].ToString(), LogTypeOfAction.TypesOfActions[1]);
-                    _logger.AddExamLog(exam, logInfo);
-                    _logger.AddExamsResultsLogs(usersExamsResults, logInfo);
                 }
 
                 return RedirectToAction("ExamDetails", new { examIdentificator = markedExamViewModel.ExamIdentificator, message = "Dokonano oceny egzaminu" });
@@ -1228,11 +1259,11 @@ namespace Certification_System.Controllers
 
                 var deletedExamsTerms = _context.examTermRepository.DeleteExamsTerms(exam.ExamTerms);
                 _logger.AddExamsTermsLogs(deletedExamsTerms, logInfoDelete);
-                
+
                 var deletedExamsResults = _context.examResultRepository.DeleteExamsResults(exam.ExamResults);
                 _logger.AddExamsResultsLogs(deletedExamsResults, logInfoDelete);
 
-                var updatedCourse= _context.courseRepository.DeleteExamFromCourse(examToDelete.EntityIdentificator);
+                var updatedCourse = _context.courseRepository.DeleteExamFromCourse(examToDelete.EntityIdentificator);
                 _logger.AddCourseLog(updatedCourse, logInfoUpdate);
 
                 return RedirectToAction("DisplayAllExams", "Exams", new { message = "Usunięto wskazany egzamin" });

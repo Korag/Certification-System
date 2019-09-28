@@ -223,7 +223,7 @@ namespace Certification_System.Controllers
 
             CheckMeetingPresenceViewModel MeetingPresence = _mapper.Map<CheckMeetingPresenceViewModel>(meeting);
 
-            MeetingPresence.AttendanceList = _mapper.Map<PresenceCheckBoxViewModel[]>(enrolledUsersList);
+            MeetingPresence.AttendanceList = _mapper.Map<PresenceCheckBoxViewModel[]>(listOfUsers);
             MeetingPresence.AttendanceList.ToList().ForEach(z => z.IsPresent = meeting.AttendanceList.Contains(z.UserIdentificator));
 
             MeetingPresence.AllCourseParticipants = listOfUsers;

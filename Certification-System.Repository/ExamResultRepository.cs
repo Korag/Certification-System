@@ -106,5 +106,14 @@ namespace Certification_System.Repository
 
             return indexersNumber.ToString();
         }
+
+        public void UpdatedExamsResults(ICollection<ExamResult> examsResults)
+        {
+            foreach (var examResult in examsResults)
+            {
+                var filter = Builders<ExamResult>.Filter.Where(x => x.ExamResultIdentificator == examResult.ExamResultIdentificator);
+                var result = GetExamsResults().ReplaceOne(filter, examResult);
+            }
+        }
     }
 }

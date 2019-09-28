@@ -26,7 +26,7 @@
     <a asp-action="EditExamHub" asp-route-examIdentificator="@Model.ExamIdentificator" asp-controller="Exams" class="btn btn-warning mt-1 mr-1 xs450px_FloatLeft">Edytuj</a>
     @if (Model.ExamDividedToTerms == false)
     {
-        <a asp-action="MarkExam" asp-controller="Exams" class="btn btn-success mt-1 mr-1 xs450px_FloatLeft">Oceń egzamin</a>
+        <a asp-action="MarkExam" asp-route-examIdentificator="@Model.ExamIdentificator" asp-controller="Exams" class="btn btn-success mt-1 mr-1 xs450px_FloatLeft">Oceń egzamin</a>
     }
     <a asp-action="DisplayExamSummary" asp-route-examIdentificator="@Model.ExamIdentificator" asp-controller="Exams" class="btn btn-success mt-1 mr-1 xs450px_FloatLeft">Podsumowanie</a>
     @if (!Model.Course.CourseEnded)

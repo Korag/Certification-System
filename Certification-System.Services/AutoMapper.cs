@@ -187,6 +187,7 @@ namespace Certification_System.Services
                     .ForMember(dest => dest.EnrolledUsers, opts => opts.MapFrom(src => new List<string>()));
 
             CreateMap<Exam, DisplayExamViewModel>()
+                     .ForMember(dest => dest.UsersQuantitiy, opts => opts.MapFrom(src => src.EnrolledUsers.Count()))
                      .ForMember(dest => dest.Examiners, opts => opts.Ignore());
 
             CreateMap<Exam, DisplayExamWithLocationViewModel>()
@@ -206,9 +207,9 @@ namespace Certification_System.Services
                      .ForMember(dest => dest.Course, opts => opts.Ignore())
                      .ForMember(dest => dest.ExamTerms, opts => opts.Ignore())
                      .ForMember(dest => dest.Examiners, opts => opts.Ignore())
-                     .ForMember(dest => dest.EnrolledUsers, opts => opts.Ignore())
-                     .ForMember(dest => dest.UsersQuantitiy, opts => opts.MapFrom(src=> src.EnrolledUsers.Count()));
-
+                     .ForMember(dest => dest.UsersQuantitiy, opts => opts.MapFrom(src => src.EnrolledUsers.Count()))
+                     .ForMember(dest => dest.EnrolledUsers, opts => opts.Ignore());
+ 
             CreateMap<Exam, EditExamWithExamTermsViewModel>();
 
             CreateMap<EditExamWithExamTermsViewModel, Exam>()
@@ -307,6 +308,9 @@ namespace Certification_System.Services
             CreateMap<ExamResult, DisplayExamResultWithExamNumber>();
 
             CreateMap<ExamResult, MarkUserViewModel>();
+
+            CreateMap<MarkUserViewModel, ExamResult>()
+                     .ForMember(dest => dest.User, opts => opts.MapFrom(src => src.UserIdentificator));
             #endregion
 
             #region GivenCertificates

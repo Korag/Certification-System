@@ -245,6 +245,14 @@ namespace Certification_System.Repository
             var result = GetExams().UpdateOne(filter, update);
         }
 
+        public void AddExamsResultsToExam(string examIdentificator, ICollection<string> examsResultsIdentificators)
+        {
+            var filter = Builders<Exam>.Filter.Where(z => z.ExamIdentificator == examIdentificator);
+            var update = Builders<Exam>.Update.AddToSetEach(x => x.ExamResults, examsResultsIdentificators);
+
+            var result = GetExams().UpdateOne(filter, update);
+        }
+
         public void SetMaxAmountOfPointsToEarn(string examIdentificator, double maxAmountOfPointsToEarn)
         {
             var filter = Builders<Exam>.Filter.Where(z => z.ExamIdentificator == examIdentificator);
