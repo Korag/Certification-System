@@ -188,13 +188,19 @@ namespace Certification_System.Services
 
             CreateMap<Exam, DisplayExamViewModel>()
                      .ForMember(dest => dest.UsersQuantitiy, opts => opts.MapFrom(src => src.EnrolledUsers.Count()))
-                     .ForMember(dest => dest.Examiners, opts => opts.Ignore());
+                     .ForMember(dest => dest.Examiners, opts => opts.Ignore())
+                     .ForMember(dest => dest.DurationDays, opts => opts.MapFrom(src => (int)src.DateOfEnd.Subtract(src.DateOfStart).TotalDays))
+                     .ForMember(dest => dest.DurationMinutes, opts => opts.MapFrom(src => (int)src.DateOfEnd.Subtract(src.DateOfStart).TotalMinutes));
 
             CreateMap<Exam, DisplayExamWithLocationViewModel>()
-                     .ForMember(dest => dest.Examiners, opts => opts.Ignore());
+                     .ForMember(dest => dest.Examiners, opts => opts.Ignore())
+                     .ForMember(dest => dest.DurationDays, opts => opts.MapFrom(src => (int)src.DateOfEnd.Subtract(src.DateOfStart).TotalDays))
+                     .ForMember(dest => dest.DurationMinutes, opts => opts.MapFrom(src => (int)src.DateOfEnd.Subtract(src.DateOfStart).TotalMinutes));
 
             CreateMap<Exam, MarkExamViewModel>()
-                    .ForMember(dest => dest.Users, opts => opts.Ignore());
+                    .ForMember(dest => dest.Users, opts => opts.Ignore())
+                    .ForMember(dest => dest.DurationDays, opts => opts.MapFrom(src => (int)src.DateOfEnd.Subtract(src.DateOfStart).TotalDays))
+                    .ForMember(dest => dest.DurationMinutes, opts => opts.MapFrom(src => (int)src.DateOfEnd.Subtract(src.DateOfStart).TotalMinutes));
 
             CreateMap<Exam, DisplayExamWithoutCourseViewModel>()
                      .ForMember(dest => dest.UsersQuantitiy, opts => opts.MapFrom(src => src.EnrolledUsers.Count()))
@@ -209,8 +215,10 @@ namespace Certification_System.Services
                      .ForMember(dest => dest.ExamTerms, opts => opts.Ignore())
                      .ForMember(dest => dest.Examiners, opts => opts.Ignore())
                      .ForMember(dest => dest.UsersQuantitiy, opts => opts.MapFrom(src => src.EnrolledUsers.Count()))
-                     .ForMember(dest => dest.EnrolledUsers, opts => opts.Ignore());
- 
+                     .ForMember(dest => dest.EnrolledUsers, opts => opts.Ignore())
+                     .ForMember(dest => dest.DurationDays, opts => opts.MapFrom(src => (int)src.DateOfEnd.Subtract(src.DateOfStart).TotalDays))
+                     .ForMember(dest => dest.DurationMinutes, opts => opts.MapFrom(src => (int)src.DateOfEnd.Subtract(src.DateOfStart).TotalMinutes));
+
             CreateMap<Exam, EditExamWithExamTermsViewModel>();
 
             CreateMap<EditExamWithExamTermsViewModel, Exam>()
@@ -235,11 +243,15 @@ namespace Certification_System.Services
 
             CreateMap<Exam, DeleteUsersFromExamViewModel>()
                      .ForMember(dest => dest.UsersToDeleteFromExam, opts => opts.Ignore())
-                     .ForMember(dest => dest.AllExamParticipants, opts => opts.Ignore());
+                     .ForMember(dest => dest.AllExamParticipants, opts => opts.Ignore())
+                     .ForMember(dest => dest.DurationDays, opts => opts.MapFrom(src => (int)src.DateOfEnd.Subtract(src.DateOfStart).TotalDays))
+                     .ForMember(dest => dest.DurationMinutes, opts => opts.MapFrom(src => (int)src.DateOfEnd.Subtract(src.DateOfStart).TotalMinutes));
 
             CreateMap<Exam, AssignUsersFromCourseToExamViewModel>()
                     .ForMember(dest => dest.UsersToAssignToExam, opts => opts.Ignore())
-                    .ForMember(dest => dest.CourseParticipants, opts => opts.Ignore());
+                    .ForMember(dest => dest.CourseParticipants, opts => opts.Ignore())
+                    .ForMember(dest => dest.DurationDays, opts => opts.MapFrom(src => (int)src.DateOfEnd.Subtract(src.DateOfStart).TotalDays))
+                    .ForMember(dest => dest.DurationMinutes, opts => opts.MapFrom(src => (int)src.DateOfEnd.Subtract(src.DateOfStart).TotalMinutes));
 
             CreateMap<Exam, DisplayExamNameTypeViewModel>();
 
@@ -258,7 +270,9 @@ namespace Certification_System.Services
                     .ForMember(dest => dest.EnrolledUsers, opts => opts.MapFrom(src => new List<string>()));
 
             CreateMap<ExamTerm, DisplayExamTermWithoutExaminerViewModel>()
-                     .ForMember(dest => dest.UsersQuantitiy, opts => opts.MapFrom(src => src.EnrolledUsers.Count()));
+                     .ForMember(dest => dest.UsersQuantity, opts => opts.MapFrom(src => src.EnrolledUsers.Count()))
+                     .ForMember(dest => dest.DurationDays, opts => opts.MapFrom(src => (int)src.DateOfEnd.Subtract(src.DateOfStart).TotalDays))
+                     .ForMember(dest => dest.DurationMinutes, opts => opts.MapFrom(src => (int)src.DateOfEnd.Subtract(src.DateOfStart).TotalMinutes));
 
             CreateMap<ExamTerm, DisplayExamTermViewModel>()
                     .ForMember(dest => dest.Examiners, opts => opts.Ignore())
@@ -273,8 +287,10 @@ namespace Certification_System.Services
                     .ForMember(dest => dest.UsersQuantitiy, opts => opts.MapFrom(src => src.EnrolledUsers.Count()));
 
             CreateMap<ExamTerm, DisplayExamTermWithoutExamWithLocationViewModel>()
-                 .ForMember(dest => dest.Examiners, opts => opts.Ignore())
-                 .ForMember(dest => dest.UsersQuantity, opts => opts.MapFrom(src => src.EnrolledUsers.Count()));
+                    .ForMember(dest => dest.Examiners, opts => opts.Ignore())
+                    .ForMember(dest => dest.UsersQuantity, opts => opts.MapFrom(src => src.EnrolledUsers.Count()))
+                    .ForMember(dest => dest.DurationDays, opts => opts.MapFrom(src => (int)src.DateOfEnd.Subtract(src.DateOfStart).TotalDays))
+                    .ForMember(dest => dest.DurationMinutes, opts => opts.MapFrom(src => (int)src.DateOfEnd.Subtract(src.DateOfStart).TotalMinutes));
 
             CreateMap<EditExamTermViewModel, ExamTerm>()
                     .ForMember(dest => dest.Examiners, opts => opts.MapFrom(src => src.SelectedExaminers));

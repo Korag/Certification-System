@@ -19,7 +19,7 @@
 
         <div class="col-md-8 col-xl-6 col-lg-6 col-sm-12 col-xs-10 m-auto p-3 shadow p-3 mb-5 bg-light rounded border border-primary rounded-bottom" style="opacity:0.90">
 
-            <input asp-for="CourseIdentificator" class="form-control col-12" hidden readonly/>
+            <input asp-for="CourseIdentificator" class="form-control col-12" hidden readonly />
 
             <div class="form-group">
                 <label asp-for="CourseIndexer" class="control-label"></label>
@@ -69,18 +69,12 @@
             </div>
 
             <div class="form-group mb-0">
-                <label asp-for="Branches" class="control-label col-12 p-0"></label>
-                <div>
-                    <div class="btn-group btn-group-toggle row" data-toggle="buttons">
+                <label asp-for="Branches" class="control-label"></label>
+                <div class="row ml-0 mr-0">
+                    <div>
                         @foreach (var branch in Model.Branches)
                         {
-                            <label class="btn btn-outline-secondary m-2 active">
-                                <input type="checkbox"
-                                       name="SelectedBranches"
-                                       value="@branch"
-                                       autocomplete="off"
-                                       disabled
-                                       checked />
+                            <label class="btn btn-secondary align-content-center">
                                 <span>@branch</span>
                             </label>
                         }

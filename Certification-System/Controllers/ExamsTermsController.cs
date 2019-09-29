@@ -276,7 +276,7 @@ namespace Certification_System.Controllers
                 var examTerm = _context.examTermRepository.GetExamTermById(userAssignedToExamTerm.SelectedExamTerm);
                 var user = _context.userRepository.GetUserById(userAssignedToExamTerm.UserIdentificator);
 
-                if (!examTerm.EnrolledUsers.Contains(userAssignedToExamTerm.UserIdentificator))
+                if (!exam.EnrolledUsers.Contains(userAssignedToExamTerm.UserIdentificator))
                 {
                     var vacantSeats = examTerm.UsersLimit - examTerm.EnrolledUsers.Count();
 

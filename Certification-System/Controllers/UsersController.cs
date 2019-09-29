@@ -383,7 +383,7 @@ namespace Certification_System.Controllers
         [Authorize(Roles = "Admin")]
         public ActionResult InstructorDetails(string userIdentificator)
         {
-            //var user = _context.userRepository.GetUserById(userIdentificator);
+            var user = _context.userRepository.GetUserById(userIdentificator);
 
             var meetings = _context.meetingRepository.GetMeetingsByInstructorId(userIdentificator);
             var courses = _context.courseRepository.GetCoursesByMeetingsId(meetings.Select(z => z.MeetingIdentificator).ToList());
@@ -414,7 +414,7 @@ namespace Certification_System.Controllers
                 }
             }
 
-            InstructorDetailsViewModel instructorDetails = _mapper.Map<InstructorDetailsViewModel>(User);
+            InstructorDetailsViewModel instructorDetails = _mapper.Map<InstructorDetailsViewModel>(user);
             instructorDetails.Roles = _context.userRepository.TranslateRoles(instructorDetails.Roles);
 
             instructorDetails.Courses = listOfCourses;
@@ -465,7 +465,7 @@ namespace Certification_System.Controllers
 
             CompanyWithAccountDetailsViewModel companyWithAccountDetails = _mapper.Map<CompanyWithAccountDetailsViewModel>(company);
             companyWithAccountDetails.UsersConnectedToCompany = listOfUsers;
-            companyWithAccountDetails.UserAccount = _mapper.Map<AccountDetailsViewModel>(User);
+            companyWithAccountDetails.UserAccount = _mapper.Map<AccountDetailsViewModel>(user);
 
             return View(companyWithAccountDetails);
         }
@@ -511,7 +511,7 @@ namespace Certification_System.Controllers
         [Authorize(Roles = "Admin")]
         public ActionResult ExaminerDetails(string userIdentificator)
         {
-            //var user = _context.userRepository.GetUserById(userIdentificator);
+            var user = _context.userRepository.GetUserById(userIdentificator);
 
             var exams = _context.examRepository.GetExamsByExaminerId(userIdentificator);
             var examsTerms = _context.examTermRepository.GetExamTermsByExaminerId(userIdentificator);
@@ -553,14 +553,14 @@ namespace Certification_System.Controllers
                 foreach (var examTerm in examsTerms)
                 {
                     DisplayExamTermWithoutExaminerViewModel singleExamTerm = _mapper.Map<DisplayExamTermWithoutExaminerViewModel>(examTerm);
-                    singleExamTerm.UsersQuantitiy = examTerm.EnrolledUsers.Count();
+                    singleExamTerm.UsersQuantity = examTerm.EnrolledUsers.Count();
                     singleExamTerm.Exam = _mapper.Map<DisplayCrucialDataExamViewModel>(exams.Where(z => z.ExamDividedToTerms == true && z.ExamTerms.Contains(examTerm.ExamTermIdentificator)).FirstOrDefault());
 
                     listOfExamsTerms.Add(singleExamTerm);
                 }
             }
 
-            ExaminerDetailsViewModel examinerDetails = _mapper.Map<ExaminerDetailsViewModel>(User);
+            ExaminerDetailsViewModel examinerDetails = _mapper.Map<ExaminerDetailsViewModel>(user);
             examinerDetails.Roles = _context.userRepository.TranslateRoles(examinerDetails.Roles);
 
             examinerDetails.Courses = listOfCourses;
@@ -576,7 +576,7 @@ namespace Certification_System.Controllers
         {
             ViewBag.AvailableRoleFilters = _context.userRepository.GetAvailableCourseRoleFiltersAsSelectList();
 
-            //var user = _context.userRepository.GetUserById(userIdentificator);
+            var user = _context.userRepository.GetUserById(userIdentificator);
 
             var exams = _context.examRepository.GetExamsByExaminerId(userIdentificator);
             var examsTerms = _context.examTermRepository.GetExamTermsByExaminerId(userIdentificator);
@@ -662,13 +662,14 @@ namespace Certification_System.Controllers
                 foreach (var examTerm in examsTerms)
                 {
                     DisplayExamTermWithoutExaminerViewModel singleExamTerm = _mapper.Map<DisplayExamTermWithoutExaminerViewModel>(examTerm);
-                    singleExamTerm.UsersQuantitiy = examTerm.EnrolledUsers.Count();
+                    var examRelatedWithExamTerm = exams.Where(z => z.ExamTerms.Contains(examTerm.ExamTermIdentificator)).FirstOrDefault();
+                    singleExamTerm.Exam = _mapper.Map<DisplayCrucialDataExamViewModel>(examRelatedWithExamTerm);
 
                     listOfExamsTerms.Add(singleExamTerm);
                 }
             }
 
-            InstructorExaminerDetailsViewModel instructorExaminerDetails = _mapper.Map<InstructorExaminerDetailsViewModel>(User);
+            InstructorExaminerDetailsViewModel instructorExaminerDetails = _mapper.Map<InstructorExaminerDetailsViewModel>(user);
             instructorExaminerDetails.Roles = _context.userRepository.TranslateRoles(instructorExaminerDetails.Roles);
 
             instructorExaminerDetails.Courses = listOfCourses;

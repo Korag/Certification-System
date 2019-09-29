@@ -170,7 +170,7 @@ else
 
 @if (Model.ExamsTerms.Count != 0)
 {
-    @await Component.InvokeAsync("DisplayExamTermDataTable", new { examTermViewModel = Model.ExamsTerms, tableIdentificator = "listExamsTerms", operationSet = 1 })
+    @await Component.InvokeAsync("DisplayExamTermWtExaminerDataTable", new { examTermViewModel = Model.ExamsTerms, tableIdentificator = "listExamsTerms", operationSet = 1 })
 }
 else
 {
