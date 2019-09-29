@@ -41,6 +41,9 @@ namespace Certification_System.DTOViewModels
         [Display(Name = "Obszary certyfikacji")]
         public ICollection<string> Branches { get; set; }
 
+        [Display(Name = "Egzaminy")]
+        public ICollection<DisplayExamIndexerWithOrdinalNumberViewModel> AllCourseExams { get; set; }
+
         [Display(Name = "Uczestnicy kursu")]
         public ICollection<DisplayUserWithCourseResultsViewModel> AllCourseParticipants { get; set; }
     }

@@ -242,6 +242,8 @@ namespace Certification_System.Services
                     .ForMember(dest => dest.CourseParticipants, opts => opts.Ignore());
 
             CreateMap<Exam, DisplayExamNameTypeViewModel>();
+
+            CreateMap<Exam, DisplayExamIndexerWithOrdinalNumberViewModel>();
             #endregion
 
             #region ExamTerms
@@ -306,7 +308,7 @@ namespace Certification_System.Services
             CreateMap<ExamResult, DisplayExamResultViewModel>()
                      .ForMember(dest => dest.User, opts => opts.Ignore());
 
-            CreateMap<ExamResult, DisplayExamResultWithExamNumber>();
+            CreateMap<ExamResult, DisplayExamResultWithExamIdentificator>();
 
             CreateMap<ExamResult, MarkUserViewModel>();
 
@@ -472,6 +474,7 @@ namespace Certification_System.Services
                      .ForMember(dest => dest.GivenDegrees, opts => opts.Ignore());
 
             CreateMap<CertificationPlatformUser, DisplayUserWithCourseResultsViewModel>()
+                     .ForMember(dest => dest.ExamsResults, opts => opts.MapFrom(src => new List<ExamResult>()))
                      .ForMember(dest => dest.UserIdentificator, opts => opts.MapFrom(src => src.Id));
 
             CreateMap<CertificationPlatformUser, EditAccountViewModel>()

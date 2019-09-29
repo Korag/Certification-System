@@ -3,7 +3,7 @@ using System.ComponentModel.DataAnnotations;
 
 namespace Certification_System.DTOViewModels
 {
-    public class DisplayExamResultWithExamNumber
+    public class DisplayExamResultWithExamIdentificator
     {
         [Display(Name = "Identyfikator wyniku")]
         public string ExamResultIndexer { get; set; }
@@ -19,6 +19,9 @@ namespace Certification_System.DTOViewModels
 
         [Display(Name = "Egzamin zaliczony")]
         public bool ExamPassed { get; set; }
+
+        [Display(Name = "Identyfikator egzaminu")]
+        public string ExamIdentificator { get; set; }
 
         [Display(Name = "Termin egzaminu")]
         public int ExamOrdinalNumber { get; set; }

@@ -8,11 +8,15 @@
 <h2>Podsumowanie wyników uczestników kursu</h2>
 <hr />
 
+<h2>Informacje o kursie</h2>
+
+<div class="row m-0 mt-3 mb-3">
+    <a asp-action="CourseDetails" asp-route-courseIdentificator="@Model.CourseIdentificator" asp-controller="Courses" class="btn btn-outline-info mt-1 xs450px_FloatRight">Powrót do szczegółów kursu</a>
+</div>
+
 <div class="col-md-8 col-xl-6 col-lg-6 col-sm-12 col-xs-10 m-auto p-3 shadow p-3 mb-5 bg-light rounded border border-primary rounded-bottom" style="opacity:0.90">
 
-    <h2>Informacje o kursie</h2>
-
-    <input asp-for="CourseIdentificator" class="form-control col-12" hidden readonly/>
+    <input asp-for="CourseIdentificator" class="form-control col-12" hidden readonly />
 
     <div class="form-group">
         <label asp-for="CourseIndexer" class="control-label"></label>
@@ -81,7 +85,7 @@
 
 @if (Model.AllCourseParticipants.Count != 0)
 {
-    @await Component.InvokeAsync("DisplayUserWithCourseResultsDataTable", new { userViewModel = Model.AllCourseParticipants, examsQuantity = Model.ExamsQuantity, tableIdentificator = "listUsers" })
+    @await Component.InvokeAsync("DisplayUserWithCourseResultsDataTable", new { userViewModel = Model.AllCourseParticipants, examViewModel = Model.AllCourseExams, tableIdentificator = "listUsers" })
 }
 else
 {

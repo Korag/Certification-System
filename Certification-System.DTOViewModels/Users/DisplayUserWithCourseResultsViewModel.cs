@@ -17,7 +17,7 @@ namespace Certification_System.DTOViewModels
         public string LastName { get; set; }
 
         [Display(Name = "Wyniki egzaminów")]
-        public ICollection<DisplayExamResultWithExamNumber> ExamsResults { get; set; }
+        public ICollection<DisplayExamResultWithExamIdentificator> ExamsResults { get; set; }
 
         [Display(Name = "Ilość obecności")]
         public int QuantityOfPresenceOnMeetings { get; set; }

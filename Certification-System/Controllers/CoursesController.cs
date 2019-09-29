@@ -653,7 +653,7 @@ namespace Certification_System.Controllers
             courseSummaryViewModel.AllCourseParticipants = listOfUsers;
             courseSummaryViewModel.Branches = _context.branchRepository.GetBranchesById(course.Branches);
 
-            courseSummaryViewModel.ExamsQuantity = course.Exams.Count();
+            courseSummaryViewModel.AllCourseExams = _mapper.Map<List<DisplayExamIndexerWithOrdinalNumberViewModel>>(exams.OrderBy(z=> z.ExamIndexer));
             courseSummaryViewModel.CourseLength = courseSummaryViewModel.DateOfEnd.Subtract(courseSummaryViewModel.DateOfStart).Days;
             courseSummaryViewModel.EnrolledUsersQuantity = course.EnrolledUsers.Count;
 
@@ -1009,8 +1009,9 @@ namespace Certification_System.Controllers
 
                     if (lastUserResult != null)
                     {
-                        var singleExamResult = _mapper.Map<DisplayExamResultWithExamNumber>(lastUserResult);
+                        var singleExamResult = _mapper.Map<DisplayExamResultWithExamIdentificator>(lastUserResult);
                         singleExamResult.MaxAmountOfPointsToEarn = lastExamPeriod.MaxAmountOfPointsToEarn;
+                        singleExamResult.ExamIdentificator = lastExamPeriod.ExamIdentificator;
                         singleExamResult.ExamOrdinalNumber = lastExamPeriod.OrdinalNumber;
 
                         singleUser.ExamsResults.Add(singleExamResult);
@@ -1051,12 +1052,13 @@ namespace Certification_System.Controllers
                 {
                     foreach (var exam in userExams[i])
                     {
-                        var userResult = _context.examResultRepository.GetExamsResultsById(exam.ExamResults).ToList().Where(z => z.User == user.Id).ToList();
+                        var userResult = _context.examResultRepository.GetExamsResultsById(exam.ExamResults).ToList().Where(z => z.User == user.Id).FirstOrDefault();
 
                         if (userResult != null)
                         {
-                            var singleExamResult = _mapper.Map<DisplayExamResultWithExamNumber>(userResult);
+                            var singleExamResult = _mapper.Map<DisplayExamResultWithExamIdentificator>(userResult);
                             singleExamResult.MaxAmountOfPointsToEarn = exam.MaxAmountOfPointsToEarn;
+                            singleExamResult.ExamIdentificator = exam.ExamIdentificator;
                             singleExamResult.ExamOrdinalNumber = exam.OrdinalNumber;
 
                             singleUser.ExamsResults.Add(singleExamResult);
