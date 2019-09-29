@@ -17,13 +17,13 @@ namespace Certification_System.DTOViewModels
         public DateTime DateOfEnd { get; set; }
 
         [Display(Name = "Czas [dni]")]
-        public DateTime DurationDays { get; set; }
+        public int DurationDays { get; set; }
 
         [Display(Name = "Czas [min]")]
-        public DateTime DurationMinutes { get; set; }
+        public int DurationMinutes { get; set; }
 
         [Display(Name = "Liczba uczestników")]
-        public int UsersQuantitiy { get; set; }
+        public int UsersQuantity { get; set; }
 
         [Display(Name = "Limit uczestników")]
         public int UsersLimit { get; set; }
