@@ -101,6 +101,10 @@ textarea {
     margin-bottom: 0px;
 }
 
+.validation-summary-valid {
+    display: none;
+}
+
 .scrollable-menu {
     height: auto;
     max-height: 300px;

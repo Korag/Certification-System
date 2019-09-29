@@ -52,7 +52,7 @@
                 <td>
                     @Html.DisplayFor(modelItem => user.LastName)
                 </td>
-                @if (!user.HasExamResult)
+                @if (user.HasExamResult)
                 {
                     <td>
                         @Html.DisplayFor(modelItem => user.PointsEarned)

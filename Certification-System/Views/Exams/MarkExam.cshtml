@@ -121,6 +121,8 @@
     {
         @await Component.InvokeAsync("MarkExamDataTable", new { userViewModel = Model.Users, tableIdentificator = "listUsers" })
 
+        <div asp-validation-summary="All" class="row justify-content-center alert alert-danger validation-model mt-3"></div>
+
         <div>
             <div class="row justify-content-center">
                 <button type="button" class="btn btn-success mt-1 xs300px_JustifyContentCenter" data-toggle="modal" data-target="#modal">Oceń egzamin</button>

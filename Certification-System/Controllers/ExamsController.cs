@@ -949,6 +949,29 @@ namespace Certification_System.Controllers
             return View(addUsersToExamViewModel);
         }
 
+        // GET: MarkExamOrExamTermHub
+        [Authorize(Roles = "Admin, Examiner")]
+        public ActionResult MarkExamOrExamTermHub(string userIdentificator, string examIdentificator)
+        {
+            var exam = _context.examRepository.GetExamById(examIdentificator);
+
+            if (exam != null)
+            {
+                if (exam.ExamDividedToTerms)
+                {
+                    var examTerm = _context.examTermRepository.GetExamsTermsById(exam.ExamTerms).Where(z => z.EnrolledUsers.Contains(userIdentificator)).FirstOrDefault();
+
+                    return RedirectToAction("MarkExamTerm", "ExamsTerms", new { examTermIdentificator = examTerm.ExamTermIdentificator });
+                }
+                else
+                {
+                    return RedirectToAction("MarkExam", "Exams", new { examIdentificator = exam.ExamIdentificator });
+                }
+            }
+
+            return RedirectToAction("BlankMenu", "Certificates");
+        }
+
         // GET: MarkExam
         [Authorize(Roles = "Admin, Examiner")]
         public ActionResult MarkExam(string examIdentificator)
@@ -979,6 +1002,10 @@ namespace Certification_System.Controllers
                         {
                             singleUser = _mapper.Map<ExamResult, MarkUserViewModel>(userExamResult.FirstOrDefault(), singleUser);
                         }
+                        else
+                        {
+                            singleUser.PointsEarned = null;
+                        }
 
                         listOfUsers[i] = singleUser;
                     }
@@ -995,29 +1022,6 @@ namespace Certification_System.Controllers
             }
 
             return RedirectToAction("ExamDetails", new { examIdentificator = examIdentificator });
-        }
-
-        // GET: MarkExamOrExamTermHub
-        [Authorize(Roles = "Admin, Examiner")]
-        public ActionResult MarkExamOrExamTermHub(string userIdentificator, string examIdentificator)
-        {
-            var exam = _context.examRepository.GetExamById(examIdentificator);
-
-            if (exam != null)
-            {
-                if (exam.ExamDividedToTerms)
-                {
-                    var examTerm = _context.examTermRepository.GetExamsTermsById(exam.ExamTerms).Where(z => z.EnrolledUsers.Contains(userIdentificator)).FirstOrDefault();
-
-                    return RedirectToAction("MarkExamTerm", "ExamsTerms", new { examTermIdentificator = examTerm.ExamTermIdentificator });
-                }
-                else
-                {
-                    return RedirectToAction("MarkExam", "Exams", new { examIdentificator = exam.ExamIdentificator });
-                }
-            }
-
-            return RedirectToAction("BlankMenu", "Certificates");
         }
 
         // POST: MarkExam
@@ -1045,7 +1049,7 @@ namespace Certification_System.Controllers
                         {
                             newUserExamResult = previousUserExamResult.Clone();
 
-                            newUserExamResult.PointsEarned = user.PointsEarned;
+                            newUserExamResult.PointsEarned = (double)user.PointsEarned;
                             newUserExamResult.PercentageOfResult = user.PercentageOfResult;
                             newUserExamResult.ExamPassed = user.ExamPassed;
 
@@ -1058,11 +1062,14 @@ namespace Certification_System.Controllers
                         }
                         else
                         {
-                            newUserExamResult = _mapper.Map<ExamResult>(user);
-                            newUserExamResult.ExamResultIdentificator = _keyGenerator.GenerateNewId();
-                            newUserExamResult.ExamResultIndexer = _keyGenerator.GenerateExamResultEntityIndexer(exam.ExamIndexer);
+                            if (user.PointsEarned != null)
+                            {
+                                newUserExamResult = _mapper.Map<ExamResult>(user);
+                                newUserExamResult.ExamResultIdentificator = _keyGenerator.GenerateNewId();
+                                newUserExamResult.ExamResultIndexer = _keyGenerator.GenerateExamResultEntityIndexer(exam.ExamIndexer);
 
-                            usersExamsResultsToAdd.Add(newUserExamResult);
+                                usersExamsResultsToAdd.Add(newUserExamResult);
+                            }
                         }
                     }
 
@@ -1119,11 +1126,13 @@ namespace Certification_System.Controllers
                 var userExamResult = examResults.Where(z => z.User == user.Id).FirstOrDefault();
                 DisplayUserWithExamResults userWithExamResult = new DisplayUserWithExamResults();
 
+                userWithExamResult = _mapper.Map<DisplayUserWithExamResults>(user);
+                userWithExamResult.MaxAmountOfPointsToEarn = exam.MaxAmountOfPointsToEarn;
+
                 if (userExamResult != null)
                 {
-                    userWithExamResult = Mapper.Map<DisplayUserWithExamResults>(user);
-                    userWithExamResult = _mapper.Map<DisplayUserWithExamResults>(userExamResult);
-                    userWithExamResult.MaxAmountOfPointsToEarn = exam.MaxAmountOfPointsToEarn;
+                    userWithExamResult = _mapper.Map<ExamResult, DisplayUserWithExamResults>(userExamResult, userWithExamResult);
+                    userWithExamResult.HasExamResult = true;
                 }
                 else
                 {
