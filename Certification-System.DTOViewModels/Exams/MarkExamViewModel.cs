@@ -45,6 +45,7 @@ namespace Certification_System.DTOViewModels
         public int UsersLimit { get; set; }
 
         [Display(Name = "Maks. liczba punktów")]
+        [Range(0, Int32.MaxValue, ErrorMessage = "Pole \"{0}\" musi mieć minimalną wartość \"{1}\" lub więcej.")]
         public double MaxAmountOfPointsToEarn { get; set; }
 
         [Display(Name = "Użytkownicy")]

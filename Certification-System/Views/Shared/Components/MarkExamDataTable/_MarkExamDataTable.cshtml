@@ -42,7 +42,7 @@
                         <input asp-for="Users[i].LastName" class="form-control col-12" readonly hidden/>
                     </td>
                     <td>
-                        <input asp-for="Users[i].PointsEarned" class="form-control col-12"/>
+                        <input asp-for="Users[i].PointsEarned" type="number" class="form-control col-12" min="0"/>
                     </td>
                     <td>
                         @Html.DisplayFor(model => model.Users[i].PercentageOfResult)

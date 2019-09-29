@@ -5,6 +5,11 @@ namespace Certification_System.Entities
 {
     public class ExamResult
     {
+        public ExamResult Clone()
+        {
+            return (ExamResult)MemberwiseClone();
+        }
+
         [BsonId]
         [BsonRepresentation(BsonType.ObjectId)]
         public string ExamResultIdentificator { get; set; }

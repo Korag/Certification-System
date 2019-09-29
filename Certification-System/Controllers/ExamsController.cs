@@ -1037,36 +1037,39 @@ namespace Certification_System.Controllers
 
                     foreach (var user in markedExamViewModel.Users)
                     {
-                        ExamResult singleUserExamResult = new ExamResult();
+                        ExamResult newUserExamResult = new ExamResult();
 
-                        var userExamResult = examResults.Where(z => z.User == user.UserIdentificator && exam.ExamResults.Contains(z.ExamResultIdentificator));
+                        var previousUserExamResult = examResults.Where(z => z.User == user.UserIdentificator && exam.ExamResults.Contains(z.ExamResultIdentificator)).FirstOrDefault();
 
-                        if (userExamResult.Count() != 0)
+                        if (previousUserExamResult !=  null)
                         {
-                            singleUserExamResult = _mapper.Map<ExamResult>(userExamResult.FirstOrDefault());
-                            singleUserExamResult = _mapper.Map<MarkUserViewModel, ExamResult>(user, singleUserExamResult);
+                            newUserExamResult = previousUserExamResult.Clone();
 
-                            if (userExamResult.FirstOrDefault() == singleUserExamResult)
+                            newUserExamResult.PointsEarned = user.PointsEarned;
+                            newUserExamResult.PercentageOfResult = user.PercentageOfResult;
+                            newUserExamResult.ExamPassed = user.ExamPassed;
+
+                            if (previousUserExamResult.ExamPassed == newUserExamResult.ExamPassed && previousUserExamResult.PointsEarned == newUserExamResult.PointsEarned)
                             {
                                 continue;
                             }
 
-                            usersExamsResultsToAdd.Add(singleUserExamResult);
+                            usersExamsResultsToUpdate.Add(newUserExamResult);
                         }
                         else
                         {
-                            singleUserExamResult = _mapper.Map<ExamResult>(user);
-                            singleUserExamResult.ExamResultIdentificator = _keyGenerator.GenerateNewId();
-                            singleUserExamResult.ExamResultIndexer = _keyGenerator.GenerateExamResultEntityIndexer(exam.ExamIndexer);
+                            newUserExamResult = _mapper.Map<ExamResult>(user);
+                            newUserExamResult.ExamResultIdentificator = _keyGenerator.GenerateNewId();
+                            newUserExamResult.ExamResultIndexer = _keyGenerator.GenerateExamResultEntityIndexer(exam.ExamIndexer);
 
-                            usersExamsResultsToUpdate.Add(singleUserExamResult);
+                            usersExamsResultsToAdd.Add(newUserExamResult);
                         }
                     }
 
                     var logInfo = _logger.GenerateLogInformation(this.User.Identity.Name, this.ControllerContext.RouteData.Values["action"].ToString(), LogTypeOfAction.TypesOfActions[1]);
                     var logAdd = _logger.GenerateLogInformation(this.User.Identity.Name, this.ControllerContext.RouteData.Values["action"].ToString(), LogTypeOfAction.TypesOfActions[0]);
 
-                    if (usersExamsResultsToAdd.Count() != 0 && usersExamsResultsToUpdate.Count() != 0 && exam.MaxAmountOfPointsToEarn == markedExamViewModel.MaxAmountOfPointsToEarn)
+                    if (usersExamsResultsToAdd.Count() == 0 && usersExamsResultsToUpdate.Count() == 0 && exam.MaxAmountOfPointsToEarn == markedExamViewModel.MaxAmountOfPointsToEarn)
                     {
                         return RedirectToAction("ExamDetails", new { examIdentificator = markedExamViewModel.ExamIdentificator, message = "Nie zmieniono żadnej oceny egzaminu" });
                     }
@@ -1075,23 +1078,26 @@ namespace Certification_System.Controllers
                     {
                         exam.MaxAmountOfPointsToEarn = markedExamViewModel.MaxAmountOfPointsToEarn;
                         _context.examRepository.SetMaxAmountOfPointsToEarn(markedExamViewModel.ExamIdentificator, markedExamViewModel.MaxAmountOfPointsToEarn);
-                    }
 
-                    if (usersExamsResultsToAdd.Count() != 0)
-                    {
-                        _context.examResultRepository.UpdateExamsResults(usersExamsResultsToAdd);
-                        _logger.AddExamsResultsLogs(usersExamsResultsToAdd, logInfo);
-                    }
-                    if (usersExamsResultsToUpdate.Count() != 0)
-                    {
-                        _context.examResultRepository.AddExamsResults(usersExamsResultsToUpdate);
-                        _context.examRepository.AddExamsResultsToExam(exam.ExamIdentificator, usersExamsResultsToUpdate.Select(z => z.ExamResultIdentificator).ToList());
-
-                        _logger.AddExamsResultsLogs(usersExamsResultsToUpdate, logAdd);
                         _logger.AddExamLog(exam, logInfo);
                     }
-                }
 
+                    if (usersExamsResultsToUpdate.Count() != 0)
+                    {
+                        _context.examResultRepository.UpdateExamsResults(usersExamsResultsToUpdate);
+                        _logger.AddExamsResultsLogs(usersExamsResultsToUpdate, logInfo);
+
+                        _logger.AddExamLog(exam, logInfo);
+                    }
+                    if (usersExamsResultsToAdd.Count() != 0)
+                    {
+                        _context.examResultRepository.AddExamsResults(usersExamsResultsToAdd);
+                        _context.examRepository.AddExamsResultsToExam(exam.ExamIdentificator, usersExamsResultsToAdd.Select(z => z.ExamResultIdentificator).ToList());
+
+                        _logger.AddExamsResultsLogs(usersExamsResultsToAdd, logAdd);
+                    }
+                }
+               
                 return RedirectToAction("ExamDetails", new { examIdentificator = markedExamViewModel.ExamIdentificator, message = "Dokonano oceny egzaminu" });
             }
 

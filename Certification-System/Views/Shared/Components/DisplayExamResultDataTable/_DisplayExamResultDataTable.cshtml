@@ -119,7 +119,7 @@
                         <div class="dropdown p-0">
                             <button class="btn btn-success dropdown-toggle" type="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">Operacje</button>
                             <div class="dropdown-menu nohover">
-                                <a asp-action="MarkExamOrExamTermHub" asp-route-examIdentificator="@examResult.Exam.ExamIdentificator" asp-route-userIdentificator="@examResult.User.UserIdentificator" asp-controller="Users" class="btn btn-success w-100 mb-1">Edytuj rezultat</a>
+                                <a asp-action="MarkExamOrExamTermHub" asp-route-examIdentificator="@examResult.Exam.ExamIdentificator" asp-route-userIdentificator="@examResult.User.UserIdentificator" asp-controller="Exams" class="btn btn-success w-100 mb-1">Edytuj rezultat</a>
                                 <a asp-action="DeleteExamResultHub" asp-route-examResultIdentificator="@examResult.ExamResultIdentificator" asp-controller="Exams" data-toggle="modal" data-target="#@modalDataTarget" class="btn btn-danger w-100 mb-1">Usuń rezultat</a>
 
                                 <a asp-action="UserDetails" asp-route-userIdentificator="@examResult.User.UserIdentificator" asp-controller="Users" class="btn btn-primary w-100 mb-1">Szczegóły użytkownika</a>

@@ -1,4 +1,5 @@
-﻿using System.ComponentModel.DataAnnotations;
+﻿using System;
+using System.ComponentModel.DataAnnotations;
 
 namespace Certification_System.DTOViewModels
 {
@@ -16,6 +17,7 @@ namespace Certification_System.DTOViewModels
         public string LastName { get; set; }
 
         [Required(ErrorMessage = "Pole \"{0}\" jest wymagane.")]
+        [Range(0, Int32.MaxValue, ErrorMessage = "Pole \"{0}\" musi mieć minimalną wartość \"{1}\" lub więcej.")]
         [Display(Name = "Liczba uzyskanych punktów")]
         public double PointsEarned { get; set; }
 
