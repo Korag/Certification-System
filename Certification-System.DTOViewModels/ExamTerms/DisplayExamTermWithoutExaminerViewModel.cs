@@ -7,7 +7,7 @@ namespace Certification_System.DTOViewModels
     {
         public string ExamTermIdentificator { get; set; }
 
-        [Display(Name = "Identyfikator egzaminu")]
+        [Display(Name = "Identyfikator tury egzaminu")]
         public string ExamTermIndexer { get; set; }
 
         [Display(Name = "Data rozpoczęcia")]

@@ -467,6 +467,8 @@ namespace Certification_System.Controllers
             companyWithAccountDetails.UsersConnectedToCompany = listOfUsers;
             companyWithAccountDetails.UserAccount = _mapper.Map<AccountDetailsViewModel>(user);
 
+            companyWithAccountDetails.UserAccount.Roles = _context.userRepository.TranslateRoles(companyWithAccountDetails.UserAccount.Roles);
+
             return View(companyWithAccountDetails);
         }
 
@@ -539,8 +541,7 @@ namespace Certification_System.Controllers
                 {
                     DisplayExamWithoutExaminerViewModel singleExam = _mapper.Map<DisplayExamWithoutExaminerViewModel>(exam);
                     singleExam.UsersQuantitiy = exam.EnrolledUsers.Count();
-                    singleExam.Course = _mapper.Map<DisplayCrucialDataCourseViewModel>(courses.ToList().Where(z => z.Exams.Contains(exam.ExamIdentificator)));
-
+                    singleExam.Course = _mapper.Map<DisplayCrucialDataCourseViewModel>(courses.ToList().Where(z => z.Exams.Contains(exam.ExamIdentificator)).FirstOrDefault());
 
                     listOfExams.Add(singleExam);
                 }
@@ -553,7 +554,6 @@ namespace Certification_System.Controllers
                 foreach (var examTerm in examsTerms)
                 {
                     DisplayExamTermWithoutExaminerViewModel singleExamTerm = _mapper.Map<DisplayExamTermWithoutExaminerViewModel>(examTerm);
-                    singleExamTerm.UsersQuantity = examTerm.EnrolledUsers.Count();
                     singleExamTerm.Exam = _mapper.Map<DisplayCrucialDataExamViewModel>(exams.Where(z => z.ExamDividedToTerms == true && z.ExamTerms.Contains(examTerm.ExamTermIdentificator)).FirstOrDefault());
 
                     listOfExamsTerms.Add(singleExamTerm);
