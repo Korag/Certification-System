@@ -1136,7 +1136,14 @@ namespace Certification_System.Controllers
                 listOfUsers.Add(userWithExamResult);
             }
 
-            return View(listOfUsers);
+            DisplayUserListWithExamResultsAndExamIdentificator examSummary = new DisplayUserListWithExamResultsAndExamIdentificator
+            {
+                ExamIdentificator = exam.ExamIdentificator,
+
+                ResultsList = listOfUsers
+            };
+
+            return View(examSummary);
         }
 
         // GET: ExaminerExams

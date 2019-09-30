@@ -701,7 +701,15 @@ namespace Certification_System.Controllers
                 listOfUsers.Add(userWithExamResult);
             }
 
-            return View(listOfUsers);
+            DisplayUserListWithExamResultsAndExamIdentificator examTermSummary = new DisplayUserListWithExamResultsAndExamIdentificator
+            {
+                ExamIdentificator = exam.ExamIdentificator,
+                ExamTermIdentificator = examTerm.ExamTermIdentificator,
+
+                ResultsList = listOfUsers
+            };
+
+            return View(examTermSummary);
         }
 
         // GET: DeleteExamTermHub
