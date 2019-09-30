@@ -34,7 +34,7 @@ namespace Certification_System.RepositoryInterfaces
         string CountExamsWithIndexerNamePart(string namePartOfIndexer);
         IList<SelectListItem> GetExamsByIdAsSelectList(ICollection<string> examsIdentificators);
         IList<SelectListItem> GetFirstPeriodExamsAsSelectList();
-        ICollection<Exam> GetOnlyActiveExamsById(ICollection<string> examsIdentificators);
+        ICollection<Exam> GetOnlyActiveExamsDividedToTermsById(ICollection<string> examsIdentificators);
         void AddExamsResultsToExam(string examIdentificator, ICollection<string> examsResultsIdentificators);
     }
 }

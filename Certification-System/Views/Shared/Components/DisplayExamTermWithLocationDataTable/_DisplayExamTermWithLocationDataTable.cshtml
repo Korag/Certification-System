@@ -72,82 +72,85 @@
         <tbody>
             @foreach (var examTerm in Model.ExamsTerms)
             {
-                <tr>
+            <tr>
+                <td>
+                    @Html.DisplayFor(modelItem => examTerm.Exam.ExamIndexer)
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => examTerm.Exam.Name)
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => examTerm.Exam.Description)
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => examTerm.Exam.OrdinalNumber)
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => examTerm.Exam.TypeOfExam)
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => examTerm.ExamTermIndexer)
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => examTerm.DateOfStart)
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => examTerm.DateOfEnd)
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => examTerm.DurationDays)
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => examTerm.DurationMinutes)
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => examTerm.UsersQuantity)
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => examTerm.UsersLimit)
+                </td>
+                @if (!string.IsNullOrWhiteSpace(Model.ExamsTerms.FirstOrDefault().Country))
+                {
                     <td>
-                        @Html.DisplayFor(modelItem => examTerm.Exam.ExamIndexer)
+                        @Html.DisplayFor(modelItem => examTerm.Country)
                     </td>
                     <td>
-                        @Html.DisplayFor(modelItem => examTerm.Exam.Name)
+                        @Html.DisplayFor(modelItem => examTerm.City)
                     </td>
                     <td>
-                        @Html.DisplayFor(modelItem => examTerm.Exam.Description)
+                        @Html.DisplayFor(modelItem => examTerm.PostCode)
                     </td>
                     <td>
-                        @Html.DisplayFor(modelItem => examTerm.Exam.OrdinalNumber)
+                        @Html.DisplayFor(modelItem => examTerm.Address)
                     </td>
                     <td>
-                        @Html.DisplayFor(modelItem => examTerm.Exam.TypeOfExam)
+                        @Html.DisplayFor(modelItem => examTerm.NumberOfApartment)
                     </td>
+                }
+                <td>
+                    <ul>
+                        @foreach (var examiner in examTerm.Examiners)
+                        {
+                            <li>@examiner.FirstName @examiner.LastName</li>
+                        }
+                    </ul>
+                </td>
+                @if (Model.Options.OperationSet != 0)
+                {
                     <td>
-                        @Html.DisplayFor(modelItem => examTerm.ExamTermIndexer)
-                    </td>
-                    <td>
-                        @Html.DisplayFor(modelItem => examTerm.DateOfStart)
-                    </td>
-                    <td>
-                        @Html.DisplayFor(modelItem => examTerm.DurationDays)
-                    </td>
-                    <td>
-                        @Html.DisplayFor(modelItem => examTerm.DurationMinutes)
-                    </td>
-                    <td>
-                        @Html.DisplayFor(modelItem => examTerm.UsersQuantity)
-                    </td>
-                    <td>
-                        @Html.DisplayFor(modelItem => examTerm.UsersLimit)
-                    </td>
-                    @if (!string.IsNullOrWhiteSpace(Model.ExamsTerms.FirstOrDefault().Country))
-                    {
-                        <td>
-                            @Html.DisplayFor(modelItem => examTerm.Country)
-                        </td>
-                        <td>
-                            @Html.DisplayFor(modelItem => examTerm.City)
-                        </td>
-                        <td>
-                            @Html.DisplayFor(modelItem => examTerm.PostCode)
-                        </td>
-                        <td>
-                            @Html.DisplayFor(modelItem => examTerm.Address)
-                        </td>
-                        <td>
-                            @Html.DisplayFor(modelItem => examTerm.NumberOfApartment)
-                        </td>
-                    }
-                    <td>
-                        <ul>
-                            @foreach (var examiner in examTerm.Examiners)
-                            {
-                                <li>@examiner.FirstName @examiner.LastName</li>
-                            }
-                        </ul>
-                    </td>
-                    @if (Model.Options.OperationSet != 0)
-                    {
-                        <td>
-                            <div class="dropdown p-0">
-                                <button class="btn btn-success dropdown-toggle" type="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">Operacje</button>
-                                <div class="dropdown-menu nohover">
-                                    <a asp-action="EditExamTerm" asp-route-examTermIdentificator="@examTerm.ExamTermIdentificator" asp-controller="ExamsTerms" class="btn btn-warning w-100 mb-1">Edytuj</a>
-                                    <a asp-action="ExamTermDetails" asp-route-examTermIdentificator="@examTerm.ExamTermIdentificator" asp-controller="ExamsTerms" class="btn btn-info w-100 mb-1">Szczegóły</a>
-                                    <a asp-action="AddUsersFromCourseToExamTerm" asp-route-examTermIdentificator="@examTerm.ExamTermIdentificator" asp-controller="ExamsTerms" class="btn btn-primary w-100 mb-1">Dodaj użytkowników do tury</a>
-                                    <a asp-action="MarkExamTerm" asp-route-examTermIdentificator="@examTerm.ExamTermIdentificator" asp-controller="ExamsTerms" class="btn btn-success w-100 mb-1">Oceń turę egzaminu</a>
-                                    <a asp-action="DeleteUsersFromExamTerm" asp-route-examTermIdentificator="@examTerm.ExamTermIdentificator" asp-controller="ExamsTerms" class="btn btn-light w-100">Usuń użytkowników z tury</a>
-                                </div>
+                        <div class="dropdown p-0">
+                            <button class="btn btn-success dropdown-toggle" type="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">Operacje</button>
+                            <div class="dropdown-menu nohover">
+                                <a asp-action="EditExamTerm" asp-route-examTermIdentificator="@examTerm.ExamTermIdentificator" asp-controller="ExamsTerms" class="btn btn-warning w-100 mb-1">Edytuj</a>
+                                <a asp-action="ExamTermDetails" asp-route-examTermIdentificator="@examTerm.ExamTermIdentificator" asp-controller="ExamsTerms" class="btn btn-info w-100 mb-1">Szczegóły</a>
+                                <a asp-action="AddUsersFromCourseToExamTerm" asp-route-examTermIdentificator="@examTerm.ExamTermIdentificator" asp-controller="ExamsTerms" class="btn btn-primary w-100 mb-1">Dodaj użytkowników do tury</a>
+                                <a asp-action="MarkExamTerm" asp-route-examTermIdentificator="@examTerm.ExamTermIdentificator" asp-controller="ExamsTerms" class="btn btn-success w-100 mb-1">Oceń turę egzaminu</a>
+                                <a asp-action="DeleteUsersFromExamTerm" asp-route-examTermIdentificator="@examTerm.ExamTermIdentificator" asp-controller="ExamsTerms" class="btn btn-light w-100">Usuń użytkowników z tury</a>
                             </div>
-                        </td>
-                    }
-                </tr>
+                        </div>
+                    </td>
+                }
+            </tr>
             }
         </tbody>
     </table>

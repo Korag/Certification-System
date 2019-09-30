@@ -22,7 +22,7 @@ namespace Certification_System.Controllers
         private readonly IEmailSender _emailSender;
 
         public ExamsTermsController(
-            MongoOperations context, 
+            MongoOperations context,
             IMapper mapper,
             IKeyGenerator keyGenerator,
             ILogService logger,
@@ -67,6 +67,21 @@ namespace Certification_System.Controllers
                 examTerm.ExamTermIndexer = _keyGenerator.GenerateExamTermEntityIndexer(exam.ExamIndexer);
 
                 exam.ExamTerms.Add(examTerm.ExamTermIdentificator);
+
+                var examTermsFromParentExam = _context.examTermRepository.GetExamsTermsById(exam.ExamTerms);
+
+                exam.UsersLimit = examTermsFromParentExam.Select(z => z.UsersLimit).Sum() + newExamTerm.UsersLimit;
+
+                foreach (var examiner in newExamTerm.SelectedExaminers)
+                {
+                    if (!exam.Examiners.Contains(examiner))
+                    {
+                        exam.Examiners.Add(examiner);
+                    }
+                }
+
+                exam.Examiners.Distinct();
+
                 _context.examRepository.UpdateExam(exam);
 
                 var logInfoExam = _logger.GenerateLogInformation(this.User.Identity.Name, this.ControllerContext.RouteData.Values["action"].ToString(), LogTypeOfAction.TypesOfActions[1]);
@@ -101,11 +116,8 @@ namespace Certification_System.Controllers
             {
                 DisplayExamTermViewModel singleExamTerm = _mapper.Map<DisplayExamTermViewModel>(examTerm);
 
-                singleExamTerm.DurationDays = (int)examTerm.DateOfEnd.Subtract(examTerm.DateOfStart).Days;
-                singleExamTerm.DurationMinutes = (int)examTerm.DateOfEnd.Subtract(examTerm.DateOfStart).Minutes;
-
                 singleExamTerm.Examiners = _mapper.Map<List<DisplayCrucialDataUserViewModel>>(_context.userRepository.GetUsersById(examTerm.Examiners));
-                singleExamTerm.Exam = _mapper.Map<DisplayCrucialDataExamViewModel>(exams.Where(z => z.ExamTerms.Contains(examTerm.ExamTermIdentificator)).Select(z => z.ExamIdentificator).FirstOrDefault());
+                singleExamTerm.Exam = _mapper.Map<DisplayCrucialDataExamViewModel>(exams.Where(z => z.ExamTerms.Contains(examTerm.ExamTermIdentificator)).FirstOrDefault());
 
                 listOfExams.Add(singleExamTerm);
             }
@@ -138,19 +150,29 @@ namespace Certification_System.Controllers
 
             if (ModelState.IsValid)
             {
-                if (editedExamTerm.SelectedExam != originExam.ExamIdentificator)
+                originExam.ExamTerms.Remove(editedExamTerm.ExamTermIdentificator);
+                _context.examRepository.UpdateExam(originExam);
+
+                var exam = _context.examRepository.GetExamById(editedExamTerm.SelectedExam);
+                exam.ExamTerms.Add(editedExamTerm.ExamTermIdentificator);
+
+                var examTermsFromParentExam = _context.examTermRepository.GetExamsTermsById(exam.ExamTerms);
+                exam.UsersLimit = examTermsFromParentExam.Select(z => z.UsersLimit).Sum() + editedExamTerm.UsersLimit;
+
+                foreach (var examiner in editedExamTerm.SelectedExaminers)
                 {
-                    originExam.ExamTerms.Remove(editedExamTerm.ExamTermIdentificator);
-                    _context.examRepository.UpdateExam(originExam);
-
-                    var exam = _context.examRepository.GetExamById(editedExamTerm.SelectedExam);
-                    exam.ExamTerms.Add(editedExamTerm.ExamTermIdentificator);
-
-                    _context.examRepository.UpdateExam(exam);
-
-                    var logInfoExam = _logger.GenerateLogInformation(this.User.Identity.Name, this.ControllerContext.RouteData.Values["action"].ToString(), LogTypeOfAction.TypesOfActions[1]);
-                    _logger.AddExamLog(exam, logInfoExam);
+                    if (!exam.Examiners.Contains(examiner))
+                    {
+                        exam.Examiners.Add(examiner);
+                    }
                 }
+
+                exam.Examiners.Distinct();
+
+                _context.examRepository.UpdateExam(exam);
+
+                var logInfoExam = _logger.GenerateLogInformation(this.User.Identity.Name, this.ControllerContext.RouteData.Values["action"].ToString(), LogTypeOfAction.TypesOfActions[1]);
+                _logger.AddExamLog(exam, logInfoExam);
 
                 originExamTerm = _mapper.Map<EditExamTermViewModel, ExamTerm>(editedExamTerm, originExamTerm);
 
@@ -181,11 +203,8 @@ namespace Certification_System.Controllers
 
                 DisplayExamTermWithLocationViewModel modifiedExamTerm = _mapper.Map<DisplayExamTermWithLocationViewModel>(examTerm);
 
-                modifiedExamTerm.DurationDays = (int)examTerm.DateOfEnd.Subtract(examTerm.DateOfStart).Days;
-                modifiedExamTerm.DurationMinutes = (int)examTerm.DateOfEnd.Subtract(examTerm.DateOfStart).Minutes;
-
                 modifiedExamTerm.Exam = _mapper.Map<DisplayCrucialDataExamViewModel>(exam);
-                modifiedExamTerm.Examiners = _mapper.Map<List<DisplayCrucialDataUserViewModel>>(_context.userRepository.GetUsersById(examTerm.Examiners).Select(z => z.Id).ToList());
+                modifiedExamTerm.Examiners = _mapper.Map<List<DisplayCrucialDataUserViewModel>>(_context.userRepository.GetUsersById(examTerm.Examiners).ToList());
 
                 return View(modifiedExamTerm);
             }
@@ -209,10 +228,7 @@ namespace Certification_System.Controllers
             var course = _context.courseRepository.GetCourseByExamId(exam.ExamIdentificator);
 
             DisplayExamWithoutCourseViewModel examViewModel = _mapper.Map<DisplayExamWithoutCourseViewModel>(exam);
-            examViewModel.Examiners = _mapper.Map<List<DisplayCrucialDataUserViewModel>>(_context.userRepository.GetUsersById(exam.Examiners).Select(z => z.Id).ToList());
-
-            examViewModel.DurationDays = (int)exam.DateOfEnd.Subtract(exam.DateOfStart).Days;
-            examViewModel.DurationMinutes = (int)exam.DateOfEnd.Subtract(exam.DateOfStart).Minutes;
+            examViewModel.Examiners = _mapper.Map<List<DisplayCrucialDataUserViewModel>>(_context.userRepository.GetUsersById(exam.Examiners).ToList());
 
             List<DisplayCrucialDataWithContactUserViewModel> examinersViewModel = _mapper.Map<List<DisplayCrucialDataWithContactUserViewModel>>(examiners);
 
@@ -222,9 +238,6 @@ namespace Certification_System.Controllers
             List<DisplayCrucialDataWithContactUserViewModel> usersViewModel = _mapper.Map<List<DisplayCrucialDataWithContactUserViewModel>>(enrolledUsers);
 
             ExamTermDetailsViewModel examTermDetails = _mapper.Map<ExamTermDetailsViewModel>(examTerm);
-
-            examTermDetails.DurationDays = (int)examTerm.DateOfEnd.Subtract(examTerm.DateOfStart).Days;
-            examTermDetails.DurationMinutes = (int)examTerm.DateOfEnd.Subtract(examTerm.DateOfStart).Minutes;
 
             examTermDetails.Exam = examViewModel;
             examTermDetails.Examiners = examinersViewModel;
@@ -252,13 +265,12 @@ namespace Certification_System.Controllers
                 AvailableExams = _context.examRepository.GetActiveExamsAsSelectList().ToList(),
                 AvailableExamTerms = _context.examTermRepository.GetActiveExamTermsWithVacantSeatsAsSelectList().ToList(),
 
-                UserIdentificator = userIdentificator,
+                SelectedUser = userIdentificator,
             };
 
             if (!string.IsNullOrWhiteSpace(examIdentificator))
             {
-                userToAssignToExamTerm.ExamIdentificator = examIdentificator;
-                userToAssignToExamTerm.SelectedExams = examIdentificator;
+                userToAssignToExamTerm.SelectedExam = examIdentificator;
                 userToAssignToExamTerm.AvailableExamTerms = _context.examTermRepository.GetActiveExamTermsWithVacantSeatsAsSelectList(exam).ToList();
             }
 
@@ -270,13 +282,14 @@ namespace Certification_System.Controllers
         [HttpPost]
         public ActionResult AssignUserToExamTerm(AssignUserToExamTermViewModel userAssignedToExamTerm)
         {
+            var exam = _context.examRepository.GetExamById(userAssignedToExamTerm.SelectedExam);
+
             if (ModelState.IsValid)
             {
-                var exam = _context.examRepository.GetExamById(userAssignedToExamTerm.ExamIdentificator);
                 var examTerm = _context.examTermRepository.GetExamTermById(userAssignedToExamTerm.SelectedExamTerm);
-                var user = _context.userRepository.GetUserById(userAssignedToExamTerm.UserIdentificator);
+                var user = _context.userRepository.GetUserById(userAssignedToExamTerm.SelectedUser);
 
-                if (!exam.EnrolledUsers.Contains(userAssignedToExamTerm.UserIdentificator))
+                if (!exam.EnrolledUsers.Contains(userAssignedToExamTerm.SelectedUser))
                 {
                     var vacantSeats = examTerm.UsersLimit - examTerm.EnrolledUsers.Count();
 
@@ -286,11 +299,11 @@ namespace Certification_System.Controllers
                     }
                     else
                     {
-                        _context.examRepository.AddUserToExam(userAssignedToExamTerm.ExamIdentificator, userAssignedToExamTerm.UserIdentificator);
-                        _context.examTermRepository.AddUserToExamTerm(userAssignedToExamTerm.SelectedExamTerm, userAssignedToExamTerm.UserIdentificator);
+                        _context.examRepository.AddUserToExam(userAssignedToExamTerm.SelectedExam, userAssignedToExamTerm.SelectedUser);
+                        _context.examTermRepository.AddUserToExamTerm(userAssignedToExamTerm.SelectedExamTerm, userAssignedToExamTerm.SelectedUser);
 
-                        exam.EnrolledUsers.Add(userAssignedToExamTerm.UserIdentificator);
-                        examTerm.EnrolledUsers.Add(userAssignedToExamTerm.UserIdentificator);
+                        exam.EnrolledUsers.Add(userAssignedToExamTerm.SelectedUser);
+                        examTerm.EnrolledUsers.Add(userAssignedToExamTerm.SelectedUser);
 
                         var logInfo = _logger.GenerateLogInformation(this.User.Identity.Name, this.ControllerContext.RouteData.Values["action"].ToString(), LogTypeOfAction.TypesOfActions[1]);
                         _logger.AddExamLog(exam, logInfo);
@@ -305,10 +318,17 @@ namespace Certification_System.Controllers
                 }
             }
 
-            if (string.IsNullOrWhiteSpace(userAssignedToExamTerm.ExamIdentificator))
+            if (string.IsNullOrWhiteSpace(userAssignedToExamTerm.SelectedExam))
             {
-                var exam = _context.examRepository.GetExamById(userAssignedToExamTerm.ExamIdentificator);
-                userAssignedToExamTerm.AvailableExamTerms = _context.examTermRepository.GetActiveExamTermsWithVacantSeatsAsSelectList(exam).ToList();
+                if (exam != null)
+                {
+                    userAssignedToExamTerm.AvailableExamTerms = _context.examTermRepository.GetActiveExamTermsWithVacantSeatsAsSelectList(exam).ToList();
+                }
+                else
+                {
+                    userAssignedToExamTerm.AvailableExamTerms = _context.examTermRepository.GetActiveExamTermsWithVacantSeatsAsSelectList().ToList();
+                }
+
                 userAssignedToExamTerm.AvailableExams = _context.examRepository.GetActiveExamsAsSelectList().ToList();
                 userAssignedToExamTerm.AvailableUsers = _context.userRepository.GetWorkersAsSelectList().ToList();
 
@@ -410,7 +430,7 @@ namespace Certification_System.Controllers
             if (examTerm.DateOfStart > DateTime.Now)
             {
                 var exam = _context.examRepository.GetExamByExamTermId(examTermIdentificator);
-     
+
                 var course = _context.courseRepository.GetCourseByExamId(exam.ExamIdentificator);
 
                 var usersNotEnrolledInExamIdentificators = course.EnrolledUsers.Where(z => !exam.EnrolledUsers.Contains(z)).ToList();
@@ -709,7 +729,7 @@ namespace Certification_System.Controllers
 
         #region AjaxQuery
         // GET: GetUserAvailableToEnrollExamsTermsByExamId
-        [Authorize(Roles = "Examiner")]
+        [Authorize(Roles = "Admin, Examiner")]
         public string[][] GetUserAvailableToEnrollExamsTermsByExamId(string examIdentificator)
         {
             var exam = _context.examRepository.GetExamById(examIdentificator);
@@ -719,10 +739,13 @@ namespace Certification_System.Controllers
 
             for (int i = 0; i < examsTerms.Count(); i++)
             {
+                var vacantSeats = examsTerms[i].UsersLimit - examsTerms[i].EnrolledUsers.Count();
+
                 examsTermsArray[i] = new string[2];
 
                 examsTermsArray[i][0] = examsTerms[i].ExamTermIdentificator;
-                examsTermsArray[i][1] = examsTerms[i].DateOfStart + " - " + examsTerms[i].DateOfEnd;
+
+                examsTermsArray[i][1] = examsTerms[i].ExamTermIndexer + " | " + examsTerms[i].DateOfStart + " - " + examsTerms[i].DateOfEnd + " |wm.: " + vacantSeats;
             }
 
             return examsTermsArray;

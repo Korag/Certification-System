@@ -553,6 +553,13 @@ namespace Certification_System.Controllers
                 }
 
                 originExam = _mapper.Map<EditExamViewModel, Exam>(editedExam, originExam);
+
+                if (editedExam.ExamDividedToTerms)
+                {
+                    originExam.UsersLimit = 0;
+                    originExam.Examiners.Clear();
+                }
+
                 _context.examRepository.UpdateExam(originExam);
 
                 var logInfo = _logger.GenerateLogInformation(this.User.Identity.Name, this.ControllerContext.RouteData.Values["action"].ToString(), LogTypeOfAction.TypesOfActions[1]);
@@ -1310,7 +1317,7 @@ namespace Certification_System.Controllers
             var user = _context.userRepository.GetUserById(userIdentificator);
 
             var examsIdentificators = _context.courseRepository.GetCoursesById(user.Courses).SelectMany(z => z.Exams).ToList();
-            var exams = _context.examRepository.GetOnlyActiveExamsById(examsIdentificators).ToList();
+            var exams = _context.examRepository.GetOnlyActiveExamsDividedToTermsById(examsIdentificators).Where(z=> !z.EnrolledUsers.Contains(userIdentificator)).ToList();
 
             string[][] examsArray = new string[exams.Count()][];
 
@@ -1343,7 +1350,6 @@ namespace Certification_System.Controllers
                 examsArray[i][0] = exams[i].ExamIdentificator;
                 examsArray[i][1] = exams[i].ExamIndexer + " | " + exams[i].Name;
             }
-
 
             return examsArray;
         }

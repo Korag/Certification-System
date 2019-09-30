@@ -6,9 +6,6 @@ namespace Certification_System.DTOViewModels
 {
     public class AssignUserToExamTermViewModel
     {
-        public string UserIdentificator { get; set; }
-        public string ExamIdentificator { get; set; }
-
         public IList<SelectListItem> AvailableExamTerms { get; set; }
 
         [Required(ErrorMessage = "Pole \"{0}\" jest wymagane.")]
@@ -19,7 +16,7 @@ namespace Certification_System.DTOViewModels
 
         [Required(ErrorMessage = "Pole \"{0}\" jest wymagane.")]
         [Display(Name = "Egzamin")]
-        public string SelectedExams { get; set; }
+        public string SelectedExam { get; set; }
 
         public IList<SelectListItem> AvailableUsers { get; set; }
 

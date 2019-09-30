@@ -1,4 +1,4 @@
-﻿@model Certification_System.DTOViewModels.DisplayExamTermViewModel
+﻿@model Certification_System.DTOViewModels.DisplayExamTermWithLocationViewModel
 @using Certification_System.DTOViewModels
 
 @{
@@ -16,11 +16,11 @@ else
 }
 
 <div class="row m-0 mt-3 mb-3">
-    <a asp-action="AddNewExamTerm" asp-controller="ExamsTerms" class="btn btn-primary mt-1 xs450px_FloatLeft">Dodaj nową turę do egzaminu</a>
+    <a asp-action="AddNewExamTerm" asp-route-examIdentificator="@Model.Exam.ExamIdentificator" asp-controller="ExamsTerms" class="btn btn-primary mt-1 xs450px_FloatLeft">Dodaj nową turę do egzaminu</a>
     <a asp-action="DisplayAllExamsTerms" asp-controller="ExamsTerms" class="btn btn-outline-info mt-1 xs450px_FloatRight">Powrót do listy tur</a>
 </div>
 
-@{List<DisplayExamTermViewModel> examTermList = new List<DisplayExamTermViewModel>();
+@{List<DisplayExamTermWithLocationViewModel> examTermList = new List<DisplayExamTermWithLocationViewModel>();
     examTermList.Add(Model);}
 
 @await Component.InvokeAsync("DisplayExamTermWithLocationDataTable", new { examTermViewModel = examTermList, tableIdentificator = "examTermConfirmation" })

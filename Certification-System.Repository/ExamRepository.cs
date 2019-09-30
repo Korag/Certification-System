@@ -67,9 +67,9 @@ namespace Certification_System.Repository
             return resultListOfExams;
         }
 
-        public ICollection<Exam> GetOnlyActiveExamsById(ICollection<string> examsIdentificators)
+        public ICollection<Exam> GetOnlyActiveExamsDividedToTermsById(ICollection<string> examsIdentificators)
         {
-            return GetActiveExams().Where(z => examsIdentificators.Contains(z.ExamIdentificator)).ToList();
+            return GetActiveExams().Where(z => examsIdentificators.Contains(z.ExamIdentificator) && z.ExamDividedToTerms).ToList();
         }
 
         public ICollection<Exam> GetExamsByExaminerId(string userIdentificator)
