@@ -12,10 +12,14 @@
     <div>
         <h2>Informacje o turze egzaminu</h2>
 
+        <div class="row m-0 mt-3 mb-3">
+            <a asp-action="ExamTermDetails" asp-route-examTermIdentificator="@Model.ExamTerm.ExamTermIdentificator" asp-controller="ExamsTerms" class="btn btn-outline-info mt-1 xs450px_FloatRight">Powrót do szczegółów tury egzaminu</a>
+        </div>
+
         <div class="col-md-8 col-xl-6 col-lg-6 col-sm-12 col-xs-10 m-auto p-3 shadow p-3 mb-5 bg-light rounded border border-primary rounded-bottom" style="opacity:0.90">
 
-            <input asp-for="ExamTerm.ExamTermIdentificator" class="form-control col-12" hidden readonly/>
-            <input asp-for="ExamTerm.Exam.ExamIdentificator" class="form-control col-12" hidden readonly/>
+            <input asp-for="ExamTerm.ExamTermIdentificator" class="form-control col-12" hidden readonly />
+            <input asp-for="ExamTerm.Exam.ExamIdentificator" class="form-control col-12" hidden readonly />
 
             <div class="form-group">
                 <label asp-for="ExamTerm.Exam.ExamIndexer" class="control-label"></label>
@@ -24,13 +28,27 @@
 
             <div class="form-group">
                 <label asp-for="ExamTerm.Exam.Name" class="control-label"></label>
-                <input asp-for="ExamTerm.Exam.Name" class="form-control col-12" readonly />
+                <textarea asp-for="ExamTerm.Exam.Name" class="form-control col-12" readonly></textarea>
             </div>
 
             <div class="form-group">
                 <label asp-for="ExamTerm.Exam.OrdinalNumber" class="control-label"></label>
                 <input asp-for="ExamTerm.Exam.OrdinalNumber" class="form-control col-12" readonly />
             </div>
+
+            <div class="form-group">
+                <label asp-for="ExamTerm.Exam.Description" class="control-label"></label>
+                <textarea asp-for="ExamTerm.Exam.Description" class="form-control col-12" readonly></textarea>
+            </div>
+
+            <div class="form-group">
+                <label asp-for="ExamTerm.Exam.TypeOfExam" class="control-label"></label>
+                <input asp-for="ExamTerm.Exam.TypeOfExam" class="form-control col-12" style="width:100%; min-width:100%;" readonly />
+            </div>
+
+            <hr />
+            <h4 class="mt-3 mb-3 text-center">Informacje o turze egzaminu</h4>
+            <hr />
 
             <div class="form-group">
                 <label asp-for="ExamTerm.ExamTermIndexer" class="control-label"></label>
@@ -83,7 +101,7 @@
                     <ul>
                         @foreach (var examiner in Model.ExamTerm.Examiners)
                         {
-                            <li>examiner.FirstName examiner.LastName</li>
+                            <li>@examiner.FirstName @examiner.LastName</li>
                         }
                     </ul>
                 </div>
@@ -119,13 +137,15 @@
     <h2 class="mt-4 mb-4">Formularz oceny</h2>
 
     <div class="form-group">
-        <label asp-for="MaxAmountOfPointsToEarn" class="control-label"></label>
-        <input asp-for="MaxAmountOfPointsToEarn" class="form-control col-12" />
+        <label asp-for="MaxAmountOfPointsToEarn" class="control-label" min="0"></label>
+        <input type="number" asp-for="MaxAmountOfPointsToEarn" class="form-control col-12" />
     </div>
 
-    @if (Model.Users.Count != 0)
+    @if (Model.Users.Count() != 0)
     {
-        @await Component.InvokeAsync("MarkExamTermDataTable", new { userViewModel = Model.Users, tableIdentificator = "listUsers" })
+        @await Component.InvokeAsync("MarkExamDataTable", new { userViewModel = Model.Users, tableIdentificator = "listUsers" })
+
+        <div asp-validation-summary="All" class="row justify-content-center alert alert-danger validation-model mt-3"></div>
 
         <div>
             <div class="row justify-content-center">

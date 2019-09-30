@@ -18,6 +18,8 @@
 
         <div class="col-md-8 col-xl-6 col-lg-6 col-sm-12 col-xs-10 m-auto p-3 shadow p-3 mb-5 bg-light rounded border border-primary rounded-bottom" style="opacity:0.90">
 
+            <input asp-for="ExamIdentificator" class="form-control col-12" hidden readonly />
+
             <div class="form-group">
                 <label asp-for="ExamIndexer" class="control-label"></label>
                 <input asp-for="ExamIndexer" class="form-control col-12" readonly />
@@ -71,8 +73,8 @@
             </div>
 
             <div class="form-group">
-                <label asp-for="UsersQuantitiy" class="control-label"></label>
-                <input asp-for="UsersQuantitiy" class="form-control col-12" readonly />
+                <label asp-for="UsersQuantity" class="control-label"></label>
+                <input asp-for="UsersQuantity" class="form-control col-12" readonly />
             </div>
 
             <div class="form-group">
@@ -107,8 +109,6 @@
 
         </div>
     </div>
-
-    <input asp-for="ExamIdentificator" class="form-control col-12" hidden readonly />
 
     <h2 class="mt-4 mb-4">Formularz oceny</h2>
 

@@ -1,6 +1,4 @@
-﻿using Microsoft.AspNetCore.Mvc.Rendering;
-using System;
-using System.Collections.Generic;
+﻿using System;
 using System.ComponentModel.DataAnnotations;
 
 namespace Certification_System.DTOViewModels
@@ -11,10 +9,10 @@ namespace Certification_System.DTOViewModels
         public DisplayExamTermWithLocationViewModel ExamTerm { get; set; }
 
         [Display(Name = "Maks. liczba punktów")]
+        [Range(0, Int32.MaxValue, ErrorMessage = "Pole \"{0}\" musi mieć minimalną wartość \"{1}\" lub więcej.")]
         public double MaxAmountOfPointsToEarn { get; set; }
 
-        [Display(Name = "Oceniani uczestnicy")]
-        [Required(ErrorMessage = "Pole \"{0}\" jest wymagane.")]
-        public ICollection<MarkUserViewModel> Users { get; set; }
+        [Display(Name = "Użytkownicy")]
+        public MarkUserViewModel[] Users { get; set; }
     }
 }

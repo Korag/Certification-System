@@ -12,10 +12,14 @@
     <div>
         <h2>Informacje o turze egzaminu</h2>
 
+        <div class="row m-0 mt-3 mb-3">
+            <a asp-action="ExamTermDetails" asp-route-examTermIdentificator="@Model.ExamTermIdentificator" asp-controller="ExamsTerms" class="btn btn-outline-info mt-1 xs450px_FloatRight">Powrót do szczegółów tury egzaminu</a>
+        </div>
+
         <div class="col-md-8 col-xl-6 col-lg-6 col-sm-12 col-xs-10 m-auto p-3 shadow p-3 mb-5 bg-light rounded border border-primary rounded-bottom" style="opacity:0.90">
 
-            <input asp-for="ExamTermIdentificator" class="form-control col-12" hidden readonly/>
-            <input asp-for="Exam.ExamIdentificator" class="form-control col-12" hidden readonly/>
+            <input asp-for="ExamTermIdentificator" class="form-control col-12" hidden readonly />
+            <input asp-for="Exam.ExamIdentificator" class="form-control col-12" hidden readonly />
 
             <div class="form-group">
                 <label asp-for="Exam.ExamIndexer" class="control-label"></label>

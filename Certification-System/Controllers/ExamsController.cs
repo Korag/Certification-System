@@ -917,7 +917,7 @@ namespace Certification_System.Controllers
                 {
                     var exam = _context.examRepository.GetExamById(addUsersToExamViewModel.ExamIdentificator);
 
-                    if (addUsersToExamViewModel.UsersToAssignToExam.Count() <= addUsersToExamViewModel.VacantSeats)
+                    if (addUsersToExamViewModel.UsersToAssignToExam.Where(z => z.IsToAssign == true).Count() <= addUsersToExamViewModel.VacantSeats)
                     {
                         var usersToAddToExamIdentificators = addUsersToExamViewModel.UsersToAssignToExam.ToList().Where(z => z.IsToAssign == true).Select(z => z.UserIdentificator).ToList();
 
