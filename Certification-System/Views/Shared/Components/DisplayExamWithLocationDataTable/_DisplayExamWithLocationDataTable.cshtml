@@ -44,7 +44,7 @@
                     @Html.DisplayNameFor(model => model.Exams.FirstOrDefault().ExamDividedToTerms)
                 </th>
                 <th>
-                    @Html.DisplayNameFor(model => model.Exams.FirstOrDefault().UsersQuantitiy)
+                    @Html.DisplayNameFor(model => model.Exams.FirstOrDefault().UsersQuantity)
                 </th>
                 <th>
                     @Html.DisplayNameFor(model => model.Exams.FirstOrDefault().UsersLimit)
@@ -122,7 +122,7 @@
                         <input type="checkbox" asp-for="@exam.ExamDividedToTerms" data-toggle="toggle" data-on="Tak" data-off="Nie" data-size="sm" disabled />
                     </td>
                     <td>
-                        @Html.DisplayFor(modelItem => exam.UsersQuantitiy)
+                        @Html.DisplayFor(modelItem => exam.UsersQuantity)
                     </td>
                     <td>
                         @Html.DisplayFor(modelItem => exam.UsersLimit)

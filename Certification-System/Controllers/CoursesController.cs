@@ -266,13 +266,9 @@ namespace Certification_System.Controllers
                 DisplayExamWithoutCourseViewModel singleExam = _mapper.Map<DisplayExamWithoutCourseViewModel>(exam);
                 singleExam.Examiners = _mapper.Map<List<DisplayCrucialDataUserViewModel>>(_context.userRepository.GetUsersById(exam.Examiners));
 
-                singleExam.DurationDays = (int)exam.DateOfEnd.Subtract(exam.DateOfStart).Days;
-                singleExam.DurationMinutes = (int)exam.DateOfEnd.Subtract(exam.DateOfStart).Minutes;
-
-                var examTerms= _context.examTermRepository.GetExamsTermsById(exam.ExamTerms);
-                examTerms.ToList().ForEach(z => listOfExaminatorsIdentificators.AddRange(z.Examiners));
-
-                listOfExaminatorsIdentificators.AddRange(exam.Examiners);
+                //var examTerms= _context.examTermRepository.GetExamsTermsById(exam.ExamTerms);
+                //examTerms.ToList().ForEach(z => listOfExaminatorsIdentificators.AddRange(z.Examiners));
+                //listOfExaminatorsIdentificators.AddRange(exam.Examiners);
 
                 examsViewModel.Add(singleExam);
             }

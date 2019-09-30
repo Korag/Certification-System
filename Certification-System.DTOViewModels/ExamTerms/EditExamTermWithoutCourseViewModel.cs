@@ -1,60 +1,35 @@
-﻿using System;
+﻿using Microsoft.AspNetCore.Mvc.Rendering;
+using System;
 using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
 
 namespace Certification_System.DTOViewModels
 {
-    public class ExamDetailsViewModel
+    public class EditExamTermWithoutCourseViewModel
     {
-        public string ExamIdentificator { get; set; }
+        public string ExamTermIdentificator { get; set; }
 
-        [Display(Name = "Identyfikator egzaminu")]
-        public string ExamIndexer { get; set; }
-
-        [Display(Name = "Termin")]
-        public string OrdinalNumber { get; set; }
-
-        [Display(Name = "Nazwa egzaminu")]
-        public string Name { get; set; }
-
-        [Display(Name = "Opis egzaminu")]
-        public string Description { get; set; }
-
-        [Display(Name = "Typ egzaminu")]
-        public string TypeOfExam { get; set; }
-
+        [Required(ErrorMessage = "Pole \"{0}\" jest wymagane.")]
+        [DataType(DataType.Date)]
+        [DisplayFormat(DataFormatString = "{0:DD/MM/YYYY}")]
         [Display(Name = "Data rozpoczęcia")]
         public DateTime DateOfStart { get; set; }
 
+        [DataType(DataType.Date)]
+        [DisplayFormat(DataFormatString = "{0:DD/MM/YYYY}")]
         [Display(Name = "Data zakończenia")]
         public DateTime DateOfEnd { get; set; }
 
-        [Display(Name = "Czas [dni]")]
-        public int DurationDays { get; set; }
-
-        [Display(Name = "Czas [min]")]
-        public int DurationMinutes { get; set; }
-
-        [Display(Name = "Egzamin podzielony na tury ?")]
-        public bool ExamDividedToTerms { get; set; }
-
-        [Display(Name = "Liczba uczestników")]
-        public int UsersQuantity { get; set; }
-
+        [Required(ErrorMessage = "Pole \"{0}\" jest wymagane.")]
+        [Range(1, Int32.MaxValue, ErrorMessage = "Pole \"{0}\" musi mieć minimalną wartość \"{1}\" lub więcej.")]
         [Display(Name = "Limit uczestników")]
         public int UsersLimit { get; set; }
 
-        [Display(Name = "Kurs")]
-        public DisplayCourseViewModel Course { get; set; }
-
-        [Display(Name = "Tury egzaminu")]
-        public ICollection<DisplayExamTermWithoutExamViewModel> ExamTerms { get; set; }
+        public IList<SelectListItem> AvailableExaminers { get; set; }
 
         [Display(Name = "Egzaminatorzy")]
-        public ICollection<DisplayCrucialDataWithContactUserViewModel> Examiners { get; set; }
-
-        [Display(Name = "Użytkownicy")]
-        public ICollection<DisplayCrucialDataWithContactUserViewModel> EnrolledUsers { get; set; }
+        [Required(ErrorMessage = "Pole \"{0}\" jest wymagane.")]
+        public ICollection<string> SelectedExaminers { get; set; }
 
         [Required(ErrorMessage = "Pole \"{0}\" jest wymagane.")]
         [DataType(DataType.Text)]

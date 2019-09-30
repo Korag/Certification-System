@@ -592,7 +592,7 @@ namespace Certification_System.Controllers
             var course = _context.courseRepository.GetCourseByExamId(exam.ExamIdentificator);
 
             EditExamWithExamTermsViewModel examToUpdate = _mapper.Map<EditExamWithExamTermsViewModel>(exam);
-            examToUpdate.ExamTerms = _mapper.Map<List<EditExamTermViewModel>>(examTerms);
+            examToUpdate.ExamTerms = _mapper.Map<List<EditExamTermWithoutCourseViewModel>>(examTerms);
 
             examToUpdate.AvailableExaminers = _context.userRepository.GetExaminersAsSelectList().ToList();
             examToUpdate.AvailableCourses = _context.courseRepository.GetActiveCoursesAsSelectList().ToList();
@@ -609,7 +609,7 @@ namespace Certification_System.Controllers
         public ActionResult EditExamWithExamTerms(EditExamWithExamTermsViewModel editedExam)
         {
             var originExam = _context.examRepository.GetExamById(editedExam.ExamIdentificator);
-            var originExamTerms = _context.examTermRepository.GetExamsTermsById(originExam.ExamTerms);
+            var originExamTerms = _context.examTermRepository.GetExamsTermsById(originExam.ExamTerms).ToList();
 
             if (ModelState.IsValid)
             {
@@ -626,7 +626,10 @@ namespace Certification_System.Controllers
                 }
                 else if (editedExam.ExamDividedToTerms)
                 {
-                    originExamTerms = _mapper.Map<List<EditExamTermViewModel>, List<ExamTerm>>(editedExam.ExamTerms.ToList(), originExamTerms.ToList());
+                    for (int i = 0; i < originExamTerms.Count(); i++)
+                    {
+                        originExamTerms[i] = _mapper.Map<EditExamTermWithoutCourseViewModel, ExamTerm>(editedExam.ExamTerms[i], originExamTerms[i]);
+                    }
 
                     originExam.UsersLimit = editedExam.ExamTerms.Select(z => z.UsersLimit).Sum();
                     originExam.ExamDividedToTerms = true;
@@ -638,22 +641,6 @@ namespace Certification_System.Controllers
 
                     var logInfoUpdate = _logger.GenerateLogInformation(this.User.Identity.Name, this.ControllerContext.RouteData.Values["action"].ToString(), LogTypeOfAction.TypesOfActions[1]);
                     _logger.AddExamsTermsLogs(originExamTerms, logInfoUpdate);
-
-                    //List<string> NewExamTermsIdentificators = new List<string>();
-
-                    //if (editedExam.ExamTerms.Count() != OriginExamTerms.Count())
-                    //{
-                    //    for (int i = OriginExamTerms.Count(); i < editedExam.ExamTerms.Count(); i++)
-                    //    {
-                    //        ExamTerm singleExamTerm = _mapper.Map<ExamTerm>(editedExam.ExamTerms.ElementAt(i));
-                    //        singleExamTerm.ExamTermIdentificator = _keyGenerator.GenerateNewId();
-
-                    //        NewExamTermsIdentificators.Add(singleExamTerm.ExamTermIdentificator);
-
-                    //        _context.examTermRepository.AddExamTerm(singleExamTerm);
-                    //    }
-                    //}
-                    //OriginExam.ExamTerms.ToList().AddRange(NewExamTermsIdentificators);
                 }
 
                 _context.examRepository.UpdateExam(originExam);

@@ -41,8 +41,8 @@ namespace Certification_System.DTOViewModels
 
         public IList<SelectListItem> AvailableExaminers { get; set; }
 
-        [Display(Name = "Tury")]
-        public IList<EditExamTermViewModel> ExamTerms { get; set; }
+        [Display(Name = "Tury egzaminu")]
+        public IList<EditExamTermWithoutCourseViewModel> ExamTerms { get; set; }
 
         public IList<SelectListItem> AvailableExamTypes { get; set; }
 
