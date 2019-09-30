@@ -391,7 +391,15 @@ namespace Certification_System.Controllers
             var exam = _context.examRepository.GetExamById(examIdentificator);
             var examTerms = _context.examTermRepository.GetExamsTermsById(exam.ExamTerms);
 
-            List<DisplayExamTermViewModel> listOfExamTerms = _mapper.Map<List<DisplayExamTermViewModel>>(examTerms);
+            List<DisplayExamTermWithoutExamViewModel> listOfExamTerms = new List<DisplayExamTermWithoutExamViewModel>();
+
+            foreach (var examTerm in examTerms)
+            {
+                DisplayExamTermWithoutExamViewModel singleExamTerm = _mapper.Map<DisplayExamTermWithoutExamViewModel>(examTerm);
+                singleExamTerm.Examiners = _mapper.Map<List<DisplayCrucialDataUserViewModel>>(_context.userRepository.GetUsersById(examTerm.Examiners));
+
+                listOfExamTerms.Add(singleExamTerm);
+            }
 
             var examiners = _context.userRepository.GetUsersById(exam.Examiners);
             List<DisplayCrucialDataWithContactUserViewModel> listOfExaminers = _mapper.Map<List<DisplayCrucialDataWithContactUserViewModel>>(examiners);

@@ -420,14 +420,14 @@ namespace Certification_System.Controllers
         [Authorize(Roles = "Admin")]
         public ActionResult AssignUsersFromCourseToExamTerm(string examTermIdentificator)
         {
-            if (!string.IsNullOrWhiteSpace(examTermIdentificator))
+            if (string.IsNullOrWhiteSpace(examTermIdentificator))
             {
                 return RedirectToAction("BlankMenu", "Certificates");
             }
 
             var examTerm = _context.examTermRepository.GetExamTermById(examTermIdentificator);
 
-            if (examTerm.DateOfStart > DateTime.Now)
+            if (examTerm.DateOfStart < DateTime.Now)
             {
                 var exam = _context.examRepository.GetExamByExamTermId(examTermIdentificator);
 
@@ -465,19 +465,18 @@ namespace Certification_System.Controllers
 
                     var vacantSeats = examTerm.UsersLimit - examTerm.EnrolledUsers.Count();
 
-                    AssignUsersFromCourseToExamTermViewModel addUsersToExamTermViewModel = _mapper.Map<AssignUsersFromCourseToExamTermViewModel>(exam);
+                    AssignUsersFromCourseToExamTermViewModel addUsersToExamTermViewModel = _mapper.Map<AssignUsersFromCourseToExamTermViewModel>(examTerm);
+                    addUsersToExamTermViewModel.Exam = _mapper.Map<DisplayCrucialDataExamViewModel>(exam);
+
                     addUsersToExamTermViewModel.CourseParticipants = listOfUsers;
                     addUsersToExamTermViewModel.VacantSeats = vacantSeats;
-
-                    addUsersToExamTermViewModel.DurationDays = (int)examTerm.DateOfEnd.Subtract(examTerm.DateOfStart).Days;
-                    addUsersToExamTermViewModel.DurationMinutes = (int)examTerm.DateOfEnd.Subtract(examTerm.DateOfStart).Minutes;
 
                     addUsersToExamTermViewModel.UsersToAssignToExamTerm = _mapper.Map<AddUsersFromCheckBoxViewModel[]>(listOfUsers);
 
                     return View(addUsersToExamTermViewModel);
                 }
 
-                return RedirectToAction("ExamTermDetails", new { examTermIdentificator = examTermIdentificator, message = "Wszyscy nieposiadający zaliczonego egzaminu zostali już na niego zapisani" });
+                return RedirectToAction("ExamTermDetails", new { examTermIdentificator = examTermIdentificator, message = "Wszyscy uczestnicy kursu nieposiadający zaliczonego egzaminu zostali już na niego zapisani" });
             }
 
             return RedirectToAction("ExamTermDetails", new { examTermIdentificator = examTermIdentificator });
@@ -490,7 +489,7 @@ namespace Certification_System.Controllers
         {
             if (ModelState.IsValid)
             {
-                if (addUsersToExamTermViewModel.DateOfStart > DateTime.Now)
+                if (addUsersToExamTermViewModel.DateOfStart < DateTime.Now)
                 {
                     var exam = _context.examRepository.GetExamByExamTermId(addUsersToExamTermViewModel.ExamTermIdentificator);
 
@@ -503,8 +502,11 @@ namespace Certification_System.Controllers
 
                         var examTerm = _context.examTermRepository.GetExamTermById(addUsersToExamTermViewModel.ExamTermIdentificator);
 
-                        exam.EnrolledUsers.ToList().AddRange(usersToAddToExamIdentificators);
-                        examTerm.EnrolledUsers.ToList().AddRange(usersToAddToExamIdentificators);
+                        foreach (var user in usersToAddToExamIdentificators)
+                        {
+                            exam.EnrolledUsers.Add(user);
+                            examTerm.EnrolledUsers.Add(user);
+                        }
 
                         var logInfo = _logger.GenerateLogInformation(this.User.Identity.Name, this.ControllerContext.RouteData.Values["action"].ToString(), LogTypeOfAction.TypesOfActions[1]);
                         _logger.AddExamLog(exam, logInfo);
@@ -514,7 +516,7 @@ namespace Certification_System.Controllers
                     }
 
                     ModelState.AddModelError("", "Brak wystarczającej ilości wolnych miejsc");
-                    ModelState.AddModelError("", $"Do egzaminu można dodać maksymalnie {addUsersToExamTermViewModel.VacantSeats} użytkowników");
+                    ModelState.AddModelError("", $"Do tury egzaminu można dodać maksymalnie {addUsersToExamTermViewModel.VacantSeats} użytkowników");
                 }
 
                 return RedirectToAction("ExamTermDetails", new { examTermIdentificator = addUsersToExamTermViewModel.ExamTermIdentificator });

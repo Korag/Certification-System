@@ -150,14 +150,10 @@
 {
     <h2 class="mt-4 mb-4">Tury egzaminu</h2>
 
-    <div class="mt-4 mb-4">
-        <a asp-action="AddNewExamTerm" asp-route-examIdentificator="@Model.ExamIdentificator" asp-controller="ExamsTerms" class="btn btn-primary">Dodaj turę</a>
-    </div>
-
     if (Model.ExamTerms.Count() != 0)
     {
         <div class="mt-3 mb-3">
-            <a asp-action="AddNewExamTerm" asp-route-examIdentificator="@Model.ExamIdentificator" asp-controller="Courses" class="btn btn-primary">Dodaj nową turę do egzaminu</a>
+            <a asp-action="AddNewExamTerm" asp-route-examIdentificator="@Model.ExamIdentificator" asp-controller="ExamsTerms" class="btn btn-primary">Dodaj turę</a>
         </div>
 
         @await Component.InvokeAsync("DisplayExamTermWithoutExamDataTable", new { examTermViewModel = Model.ExamTerms, tableIdentificator = "listExamTerms", operationSet = 1 })

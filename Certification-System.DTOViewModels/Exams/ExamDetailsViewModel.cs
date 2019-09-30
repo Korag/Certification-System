@@ -48,7 +48,7 @@ namespace Certification_System.DTOViewModels
         public DisplayCourseViewModel Course { get; set; }
 
         [Display(Name = "Tury egzaminu")]
-        public ICollection<DisplayExamTermViewModel> ExamTerms { get; set; }
+        public ICollection<DisplayExamTermWithoutExamViewModel> ExamTerms { get; set; }
 
         [Display(Name = "Egzaminatorzy")]
         public ICollection<DisplayCrucialDataWithContactUserViewModel> Examiners { get; set; }
