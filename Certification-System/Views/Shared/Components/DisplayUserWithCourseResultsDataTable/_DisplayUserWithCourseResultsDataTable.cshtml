@@ -25,6 +25,9 @@
                 @foreach (var exam in Model.Exams)
                 {
                     <th>
+                        @exam.ExamIndexer - @Html.DisplayNameFor(model => model.Users.FirstOrDefault().ExamsResults.FirstOrDefault().ExamResultIndexer)
+                    </th>
+                    <th>
                         @exam.ExamIndexer @exam.OrdinalNumber - @Html.DisplayNameFor(model => model.Users.FirstOrDefault().ExamsResults.FirstOrDefault().PointsEarned)
                     </th>
                     <th>
@@ -42,58 +45,58 @@
         <tbody>
             @foreach (var user in Model.Users)
             {
-            <tr>
-                <td>
-                    @Html.DisplayFor(model => user.Email)
-                </td>
-                <td>
-                    @Html.DisplayFor(model => user.FirstName)
-                </td>
-                <td>
-                    @Html.DisplayFor(model => user.LastName)
-                </td>
-                <td>
-                    @Html.DisplayFor(model => user.QuantityOfPresenceOnMeetings)
-                </td>
-                <td>
-                    @Html.DisplayFor(model => user.QuantityOfMeetings)
-                </td>
-                <td>
-                    @Html.DisplayFor(model => user.PercentageOfUserPresenceOnMeetings) %
-                </td>
+                <tr>
+                    <td>
+                        @Html.DisplayFor(model => user.Email)
+                    </td>
+                    <td>
+                        @Html.DisplayFor(model => user.FirstName)
+                    </td>
+                    <td>
+                        @Html.DisplayFor(model => user.LastName)
+                    </td>
+                    <td>
+                        @Html.DisplayFor(model => user.QuantityOfPresenceOnMeetings)
+                    </td>
+                    <td>
+                        @Html.DisplayFor(model => user.QuantityOfMeetings)
+                    </td>
+                    <td>
+                        @Html.DisplayFor(model => user.PercentageOfUserPresenceOnMeetings) %
+                    </td>
 
-                @foreach (var exam in Model.Exams)
-                {
-                    var examResult = user.ExamsResults.Where(z => z.ExamIdentificator == exam.ExamIdentificator).FirstOrDefault();
+                    @foreach (var exam in Model.Exams)
+                    {
+                        var examResult = user.ExamsResults.Where(z => z.ExamIdentificator == exam.ExamIdentificator).FirstOrDefault();
 
-                    if (examResult != null)
-                    {
-                        <td>
-                            @Html.DisplayFor(model => examResult.ExamResultIndexer)
-                        </td>
-                        <td>
-                            @Html.DisplayFor(model => examResult.PointsEarned)
-                        </td>
-                        <td>
-                            @Html.DisplayFor(model => examResult.MaxAmountOfPointsToEarn)
-                        </td>
-                        <td>
-                            @Html.DisplayFor(model => examResult.PercentageOfResult) %
-                        </td>
-                        <td>
-                            <input type="checkbox" asp-for="@examResult.ExamPassed" data-toggle="toggle" data-on="Tak" data-off="Nie" data-size="sm" disabled />
-                        </td>
+                        if (examResult != null)
+                        {
+                            <td>
+                                @Html.DisplayFor(model => examResult.ExamResultIndexer)
+                            </td>
+                            <td>
+                                @Html.DisplayFor(model => examResult.PointsEarned)
+                            </td>
+                            <td>
+                                @Html.DisplayFor(model => examResult.MaxAmountOfPointsToEarn)
+                            </td>
+                            <td>
+                                @Html.DisplayFor(model => examResult.PercentageOfResult) %
+                            </td>
+                            <td>
+                                <input type="checkbox" asp-for="@examResult.ExamPassed" data-toggle="toggle" data-on="Tak" data-off="Nie" data-size="sm" disabled />
+                            </td>
+                        }
+                        else
+                        {
+                            <td></td>
+                            <td></td>
+                            <td></td>
+                            <td></td>
+                            <td></td>
+                        }
                     }
-                    else
-                    {
-                        <td></td>
-                        <td></td>
-                        <td></td>
-                        <td></td>
-                        <td></td>
-                    }
-                }
-            </tr>
+                </tr>
             }
         </tbody>
     </table>

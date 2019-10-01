@@ -25,7 +25,7 @@
                 @foreach (var exam in Model.LastExamsPeriods)
                 {
                     <th>
-                        @Html.DisplayNameFor(model => model.Users.FirstOrDefault().ExamsResults.FirstOrDefault().ExamResultIndexer)
+                        @exam.ExamIndexer - @Html.DisplayNameFor(model => model.Users.FirstOrDefault().ExamsResults.FirstOrDefault().ExamResultIndexer)
                     </th>
                     <th>
                         @exam.ExamIndexer - @Html.DisplayNameFor(model => model.Users.FirstOrDefault().ExamsResults.FirstOrDefault().ExamOrdinalNumber)
@@ -52,66 +52,66 @@
             @{var UsersQuantitity = Model.Users.Count();}
             @for (int i = 0; i < UsersQuantitity; i++)
             {
-            <tr>
-                <td>
-                    @Html.DisplayFor(model => model.Users.ElementAt(i).Email)
-                </td>
-                <td>
-                    @Html.DisplayFor(model => model.Users.ElementAt(i).FirstName)
-                </td>
-                <td>
-                    @Html.DisplayFor(model => model.Users.ElementAt(i).LastName)
-                </td>
-                <td>
-                    @Html.DisplayFor(model => model.Users.ElementAt(i).QuantityOfPresenceOnMeetings)
-                </td>
-                <td>
-                    @Html.DisplayFor(model => model.Users.ElementAt(i).QuantityOfMeetings)
-                </td>
-                <td>
-                    @Html.DisplayFor(model => model.Users.ElementAt(i).PercentageOfUserPresenceOnMeetings) %
-                </td>
+                <tr>
+                    <td>
+                        @Html.DisplayFor(model => model.Users.ElementAt(i).Email)
+                    </td>
+                    <td>
+                        @Html.DisplayFor(model => model.Users.ElementAt(i).FirstName)
+                    </td>
+                    <td>
+                        @Html.DisplayFor(model => model.Users.ElementAt(i).LastName)
+                    </td>
+                    <td>
+                        @Html.DisplayFor(model => model.Users.ElementAt(i).QuantityOfPresenceOnMeetings)
+                    </td>
+                    <td>
+                        @Html.DisplayFor(model => model.Users.ElementAt(i).QuantityOfMeetings)
+                    </td>
+                    <td>
+                        @Html.DisplayFor(model => model.Users.ElementAt(i).PercentageOfUserPresenceOnMeetings) %
+                    </td>
 
-                @foreach (var exam in Model.LastExamsPeriods)
-                {
-                    var examResult = Model.Users.ElementAt(i).ExamsResults.Where(z => z.ExamIndexer == exam.ExamIndexer).FirstOrDefault();
+                    @foreach (var exam in Model.LastExamsPeriods)
+                    {
+                        var examResult = Model.Users.ElementAt(i).ExamsResults.Where(z => z.ExamIndexer == exam.ExamIndexer).FirstOrDefault();
 
-                    if (examResult != null)
-                    {
-                        <td>
-                            @Html.DisplayFor(model => examResult.ExamResultIndexer)
-                        </td>
-                        <td>
-                            @Html.DisplayFor(model => examResult.ExamOrdinalNumber)
-                        </td>
-                        <td>
-                            @Html.DisplayFor(model => examResult.PointsEarned)
-                        </td>
-                        <td>
-                            @Html.DisplayFor(model => examResult.MaxAmountOfPointsToEarn)
-                        </td>
-                        <td>
-                            @Html.DisplayFor(model => examResult.PercentageOfResult) %
-                        </td>
-                        <td>
-                            <input type="checkbox" asp-for="@examResult.ExamPassed" data-toggle="toggle" data-on="Tak" data-off="Nie" data-size="sm" disabled />
-                        </td>
+                        if (examResult != null)
+                        {
+                            <td>
+                                @Html.DisplayFor(model => examResult.ExamResultIndexer)
+                            </td>
+                            <td>
+                                @Html.DisplayFor(model => examResult.ExamOrdinalNumber)
+                            </td>
+                            <td>
+                                @Html.DisplayFor(model => examResult.PointsEarned)
+                            </td>
+                            <td>
+                                @Html.DisplayFor(model => examResult.MaxAmountOfPointsToEarn)
+                            </td>
+                            <td>
+                                @Html.DisplayFor(model => examResult.PercentageOfResult) %
+                            </td>
+                            <td>
+                                <input type="checkbox" asp-for="@examResult.ExamPassed" data-toggle="toggle" data-on="Tak" data-off="Nie" data-size="sm" disabled />
+                            </td>
+                        }
+                        else
+                        {
+                            <td>Brak oceny</td>
+                            <td>Brak oceny</td>
+                            <td>Brak oceny</td>
+                            <td>Brak oceny</td>
+                            <td>Brak oceny</td>
+                            <td>Brak oceny</td>
+                        }
                     }
-                    else
-                    {
-                        <td>Brak oceny</td>
-                        <td>Brak oceny</td>
-                        <td>Brak oceny</td>
-                        <td>Brak oceny</td>
-                        <td>Brak oceny</td>
-                        <td>Brak oceny</td>
-                    }
-                }
-                <td>
-                    <input type="checkbox" asp-for="@Model.DispensedGivenCertificates[i].GivenCertificateIsEarned" data-toggle="toggle" data-on="Przyznano" data-off="Nie przyznano" data-size="sm" />
-                    <input type="hidden" asp-for="@Model.DispensedGivenCertificates[i].UserIdentificator" />
-                </td>
-            </tr>
+                    <td>
+                        <input type="checkbox" asp-for="@Model.DispensedGivenCertificates[i].GivenCertificateIsEarned" data-toggle="toggle" data-on="Przyznano" data-off="Nie przyznano" data-size="sm" />
+                        <input type="hidden" asp-for="@Model.DispensedGivenCertificates[i].UserIdentificator" />
+                    </td>
+                </tr>
             }
         </tbody>
     </table>
