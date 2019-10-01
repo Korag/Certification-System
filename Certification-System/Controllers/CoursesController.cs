@@ -405,11 +405,14 @@ namespace Certification_System.Controllers
         public ActionResult EditCourseWithMeetings(EditCourseWithMeetingsViewModel editedCourse)
         {
             var originCourse = _context.courseRepository.GetCourseById(editedCourse.CourseIdentificator);
-            var originMeetings = _context.meetingRepository.GetMeetingsById(editedCourse.Meetings.Select(z => z.MeetingIdentificator).ToList());
+            var originMeetings = _context.meetingRepository.GetMeetingsById(editedCourse.Meetings.Select(z => z.MeetingIdentificator).ToList()).ToList();
 
             if (ModelState.IsValid)
             {
-                originMeetings = _mapper.Map<IList<EditMeetingViewModel>, ICollection<Meeting>>(editedCourse.Meetings, originMeetings);
+                for (int i = 0; i < originMeetings.Count(); i++)
+                {
+                    originMeetings[i] = _mapper.Map<EditMeetingViewModel, Meeting>(editedCourse.Meetings[i], originMeetings[i]);
+                }
 
                 _context.meetingRepository.UpdateMeetings(originMeetings);
 

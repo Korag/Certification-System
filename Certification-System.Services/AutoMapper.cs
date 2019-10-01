@@ -103,10 +103,11 @@ namespace Certification_System.Services
 
             CreateMap<EditCourseWithMeetingsViewModel, Course>()
                    .ForMember(dest => dest.CourseIdentificator, opts => opts.Ignore())
+                   .ForMember(dest => dest.CourseIndexer, opts => opts.Ignore())
                    .ForMember(dest => dest.Meetings, opts => opts.Ignore())
                    .ForMember(dest => dest.EnrolledUsers, opts => opts.Ignore())
                    .ForMember(dest => dest.Branches, opts => opts.MapFrom(src => src.SelectedBranches));
-
+                      
             CreateMap<EditCourseViewModel, Course>()
                      .ForMember(dest => dest.CourseIdentificator, opts => opts.Ignore())
                      .ForMember(dest => dest.Meetings, opts => opts.Ignore())
