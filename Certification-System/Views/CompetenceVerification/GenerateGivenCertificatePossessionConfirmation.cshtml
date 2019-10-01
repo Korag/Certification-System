@@ -64,7 +64,7 @@
                     {
                         <p align="center" class="mt-2">W ramach kursu Pan/Pani <span class="crucialInformation">@Model.FirstName @Model.LastName</span> otrzymał/a pozytywny wynik z następujących egzaminów:</p>
 
-                        <uL>
+                        <uL class="ml-5">
                             @foreach (var exam in Model.Exams)
                             {
                                 <li><span class="additionalInformation">@exam.Name - @exam.TypeOfExam</span></li>
@@ -146,7 +146,7 @@
                 {
                     <p align="center" class="mt-2">W ramach kursu Pan/Pani <span class="crucialInformation">@Model.FirstName @Model.LastName</span> otrzymał/a pozytywny wynik z następujących egzaminów:</p>
 
-                    <uL>
+                    <uL class="ml-5">
                         @foreach (var exam in Model.Exams)
                         {
                             <li><span class="additionalInformation">@exam.Name - @exam.TypeOfExam</span></li>

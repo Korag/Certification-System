@@ -43,9 +43,18 @@
                         @exam.ExamIndexer - @Html.DisplayNameFor(model => model.Users.FirstOrDefault().ExamsResults.FirstOrDefault().ExamPassed)
                     </th>
                 }
-                <th>
-                    Przyznać certyfikat za odbyty kurs ?
-                </th>
+                @if (Model.CourseEnded)
+                {
+                    <th>
+                        Przyznano certyfikat
+                    </th>
+                }
+                else
+                {
+                    <th>
+                        Przyznać certyfikat za odbyty kurs ?
+                    </th>
+                }
             </tr>
         </thead>
         <tbody>

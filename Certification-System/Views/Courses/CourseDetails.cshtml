@@ -5,10 +5,10 @@
     Layout = "~/Views/Shared/_Layout.cshtml";
 
     var deleteParams = new Dictionary<string, string>
-    {
-        { "courseIdentificator", Model.Course.CourseIdentificator },
-        { "returnUrl", ($"{Context.Request.Scheme}://{Context.Request.Host}{Context.Request.Path}{Context.Request.QueryString}")}
-    };
+{
+{ "courseIdentificator", Model.Course.CourseIdentificator },
+{ "returnUrl", ($"{Context.Request.Scheme}://{Context.Request.Host}{Context.Request.Path}{Context.Request.QueryString}")}
+};
 }
 
 <h1>Szczegóły szkolenia</h1>
@@ -23,12 +23,17 @@
 
 <div class="row m-0 mt-3 mb-3">
     <a asp-action="EditCourseHub" asp-route-courseIdentificator="@Model.Course.CourseIdentificator" asp-controller="Courses" class="btn btn-warning mt-1 mr-1 xs450px_FloatLeft">Edytuj</a>
-
-    @if (Model.Course.CourseEnded == false)
-    {
-        <a asp-action="EndCourseAndDispenseGivenCertificates" asp-route-courseIdentificator="@Model.Course.CourseIdentificator" asp-controller="Courses" class="btn btn-secondary mt-1 mr-1 xs450px_FloatLeft">Zakończ kurs</a>
-    }
-    <a asp-action="DisplayCourseSummary" asp-route-courseIdentificator="@Model.Course.CourseIdentificator" asp-controller="Courses" class="btn btn-success mt-1 mr-1 xs450px_FloatLeft">Podsumowanie</a>
+    <a asp-action="EndCourseAndDispenseGivenCertificates" asp-route-courseIdentificator="@Model.Course.CourseIdentificator" asp-controller="Courses" class="btn btn-secondary mt-1 mr-1 xs450px_FloatLeft">
+        @if (Model.Course.CourseEnded == false)
+        {
+            <text>Zakończ kurs</text>
+        }
+        else
+        {
+            <text>Podsumowanie</text>
+        }
+    </a>
+    <a asp-action="DisplayCourseSummary" asp-route-courseIdentificator="@Model.Course.CourseIdentificator" asp-controller="Courses" class="btn btn-success mt-1 mr-1 xs450px_FloatLeft">Osiągane rezultaty</a>
 
     <i class="fas fa-times mt-1 mr-1 icon-hover xs450px_FloatLeft" data-toggle="modal" data-target="#modal"></i>
     @await Component.InvokeAsync("Modal", new { Title = "Usuwanie kursu", Body = "Czy na pewno chcesz usunąć ten kurs wraz ze wszystkimi jego zależnościami ?", Action = "DeleteCourseHub", Controller = "Courses", Arguments = deleteParams, ButtonText = "Usuń", ButtonClass = "btn-danger" })

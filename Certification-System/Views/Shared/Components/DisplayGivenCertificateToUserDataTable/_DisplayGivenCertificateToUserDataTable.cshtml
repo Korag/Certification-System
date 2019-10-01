@@ -67,7 +67,7 @@
                             <div class="dropdown-menu nohover">
                                 <a asp-action="EditGivenCertificate" asp-route-givenCertificateIdentificator="@givenCertificate.GivenCertificateIdentificator" asp-controller="GivenCertificates" class="btn btn-warning w-100 mb-1">Edytuj nadany certyfikat</a>
                                 <a asp-action="CertificateDetails" asp-route-certificateIdentificator="@givenCertificate.Certificate.CertificateIdentificator" asp-controller="Certificates" class="btn btn-info w-100 mb-1">Szczegóły certyfikatu</a>
-                                <a asp-action="GivenCertificateDetails" asp-route-certificateIdentificator="@givenCertificate.GivenCertificateIdentificator" asp-controller="GivenCertificates" class="btn btn-secondary w-100">Szczegóły przyznanego certyfikatu</a>
+                                <a asp-action="GivenCertificateDetails" asp-route-givenCertificateIdentificator="@givenCertificate.GivenCertificateIdentificator" asp-controller="GivenCertificates" class="btn btn-secondary w-100">Szczegóły przyznanego certyfikatu</a>
                             </div>
                         </div>
                     </td>

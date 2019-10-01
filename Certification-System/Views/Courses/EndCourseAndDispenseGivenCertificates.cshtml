@@ -56,6 +56,11 @@
         </div>
 
         <div class="form-group">
+            <label asp-for="CourseLength" class="control-label"></label>
+            <input asp-for="CourseLength" class="form-control col-12" readonly />
+        </div>
+
+        <div class="form-group">
             <label asp-for="ExamIsRequired" class="control-label"></label>
             <div class="row pl-3">
                 <input type="checkbox" asp-for="ExamIsRequired" class="form-control col-12" data-toggle="toggle" data-on="Tak" data-off="Nie" data-size="sm" disabled />
@@ -63,8 +68,10 @@
         </div>
 
         <div class="form-group">
-            <label asp-for="CourseLength" class="control-label"></label>
-            <input asp-for="CourseLength" class="form-control col-12" readonly />
+            <label asp-for="CourseEnded" class="control-label"></label>
+            <div class="row pl-3">
+                <input type="checkbox" asp-for="CourseEnded" class="form-control col-12" data-toggle="toggle" data-on="Tak" data-off="Nie" data-size="sm" disabled />
+            </div>
         </div>
 
         <div class="form-group mb-0">
@@ -85,69 +92,77 @@
 
     @if (Model.AllCourseParticipants.Count != 0)
     {
+        @if (!Model.CourseEnded)
+        {
+            <div class="col-md-6 col-xl-6 col-sm-8 col-xs-10 m p-3 mr-auto ml-auto shadow p-3 bg-light rounded border border-primary rounded-bottom mt-4 mb-2" style="opacity:0.80">
+
+                <div class="form-group">
+                    <label asp-for="AvailableCertificates" class="control-label"></label>
+                    <div>
+                        <select asp-for="SelectedCertificate" asp-items="@Model.AvailableCertificates" data-style="btn-white" data-container="body" data-width="100%" data-size="auto" data-header="Wybierz instruktora" data-live-search="true" title="Nie wybrano żadnego elementu" data-none-results-text="Nie znaleziono szukanej frazy" class="form-control selectpicker show-tick"> </select>
+                        <div class="row justify-content-center">
+                            <span asp-validation-for="SelectedCertificate" class="text-danger"></span>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="form-group">
+                    <label asp-for="ReceiptDate" class="control-label"></label>
+                    <div>
+                        <div class='input-group date' id='ReceiptDate'>
+                            <input asp-for="ReceiptDate" type='text' class="form-control col-12" name="ReceiptDate" value="@DateTime.Now.ToShortDateString() @DateTime.Now.ToShortTimeString()" />
+                            <span class="input-group-addon">
+                                <span class="fa fa-calendar pl-1 pt-0.5" style="font-size:34px"></span>
+                            </span>
+                        </div>
+                        <div class="row justify-content-center">
+                            <span asp-validation-for="ReceiptDate" class="text-danger"></span>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="form-group">
+                    <label asp-for="ExpirationDate" class="control-label"></label>
+                    <div>
+                        <div class='input-group date' id='ExpirationDate'>
+                            <input asp-for="ExpirationDate" type='text' class="form-control col-12" name="ExpirationDate" value="@DateTime.Now.AddYears(1).ToShortDateString() @DateTime.Now.ToShortTimeString()" />
+                            <span class="input-group-addon">
+                                <span class="fa fa-calendar pl-1 pt-0.5" style="font-size:34px"></span>
+                            </span>
+                        </div>
+                        <div class="row justify-content-center">
+                            <span asp-validation-for="ExpirationDate" class="text-danger"></span>
+                        </div>
+                    </div>
+                </div>
+
+                <div asp-validation-summary="ModelOnly" class="row justify-content-center alert alert-danger validation-model"></div>
+
+            </div>
+
+            @await Component.InvokeAsync("Modal", new { Title = "Zamykanie kursu i rozdawanie certyfikatów", Body = "Czy na pewno chcesz zakończyć kurs i wystawić zaznaczonym użytkownikom stosowne certyfikaty ?", FormSubmit = true, ButtonText = "Zakończ kurs", ButtonClass = "btn-success" })
+        }
+
         <h2 class="mt-4 mb-4">Uczestnicy kursu</h2>
 
-        @await Component.InvokeAsync("DispenseGivenCertificatesDataTable", new { userViewModel = Model.AllCourseParticipants, givenCertificateViewModel = Model.DispensedGivenCertificates, examViewModel = Model.LastExamsPeriods, tableIdentificator = "listUsers" })
+        @await Component.InvokeAsync("DispenseGivenCertificatesDataTable", new { userViewModel = Model.AllCourseParticipants, givenCertificateViewModel = Model.DispensedGivenCertificates, examViewModel = Model.LastExamsPeriods, courseEnded = Model.CourseEnded, tableIdentificator = "listUsers" })
 
-        <div class="col-md-6 col-xl-6 col-sm-8 col-xs-10 m p-3 mr-auto ml-auto shadow p-3 bg-light rounded border border-primary rounded-bottom mt-4 mb-2" style="opacity:0.80">
+        @*@if (GivenCertificates any exists)
+            {
+                display table with email, firstName, lastName, Certificate Name, GivenCertificate Indexer
+            }*@
 
-            <div class="form-group">
-                <label asp-for="AvailableCertificates" class="control-label"></label>
-                <div>
-                    <select asp-for="SelectedCertificate" asp-items="@Model.AvailableCertificates" data-style="btn-white" data-container="body" data-width="100%" data-size="auto" data-header="Wybierz instruktora" data-live-search="true" title="Nie wybrano żadnego elementu" data-none-results-text="Nie znaleziono szukanej frazy" class="form-control selectpicker show-tick"> </select>
-                    <div class="row justify-content-center">
-                        <span asp-validation-for="SelectedCertificate" class="text-danger"></span>
-                    </div>
-                </div>
-            </div>
-
-            <div class="form-group">
-                <label asp-for="ReceiptDate" class="control-label"></label>
-                <div>
-                    <div class='input-group date' id='ReceiptDate'>
-                        <input asp-for="ReceiptDate" type='text' class="form-control col-12" name="ReceiptDate" value="@DateTime.Now.ToShortDateString() @DateTime.Now.ToShortTimeString()" />
-                        <span class="input-group-addon">
-                            <span class="fa fa-calendar pl-1 pt-0.5" style="font-size:34px"></span>
-                        </span>
-                    </div>
-                    <div class="row justify-content-center">
-                        <span asp-validation-for="ReceiptDate" class="text-danger"></span>
-                    </div>
-                </div>
-            </div>
-
-            <div class="form-group">
-                <label asp-for="ExpirationDate" class="control-label"></label>
-                <div>
-                    <div class='input-group date' id='ExpirationDate'>
-                        <input asp-for="ExpirationDate" type='text' class="form-control col-12" name="ExpirationDate" value="@DateTime.Now.AddYears(1).ToShortDateString() @DateTime.Now.ToShortTimeString()" />
-                        <span class="input-group-addon">
-                            <span class="fa fa-calendar pl-1 pt-0.5" style="font-size:34px"></span>
-                        </span>
-                    </div>
-                    <div class="row justify-content-center">
-                        <span asp-validation-for="ExpirationDate" class="text-danger"></span>
-                    </div>
-                </div>
-            </div>
-
-            <div asp-validation-summary="ModelOnly" class="row justify-content-center alert alert-danger validation-model"></div>
-
-
-            <div>
-                <div class="row justify-content-center mt-3">
-                    <button type="button" class="btn btn-success mt-1 xs300px_JustifyContentCenter" data-toggle="modal" data-target="#modal">Zakończ kurs</button>
-                </div>
-            </div>
-
-        </div>
     }
     else
     {
         <div class="mt-4 mb-4 alert alert-warning">Brak zapisanych użytkowników</div>
     }
 
-    @await Component.InvokeAsync("Modal", new { Title = "Zamykanie kursu i rozdawanie certyfikatów", Body = "Czy na pewno chcesz zakończyć kurs i wystawić zaznaczonym użytkownikom stosowne certyfikaty ?", FormSubmit = true, ButtonText = "Zakończ kurs", ButtonClass = "btn-success" })
+    <div>
+        <div class="row justify-content-center mt-3">
+            <button type="button" class="btn btn-success mt-1 xs300px_JustifyContentCenter" data-toggle="modal" data-target="#modal">Zakończ kurs</button>
+        </div>
+    </div>
 
 </form>
 

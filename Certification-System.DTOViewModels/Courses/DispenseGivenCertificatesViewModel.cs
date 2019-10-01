@@ -36,6 +36,9 @@ namespace Certification_System.DTOViewModels
         [Display(Name = "Długość kursu [dni]")]
         public int CourseLength { get; set; }
 
+        [Display(Name = "Kurs zakończony")]
+        public bool CourseEnded { get; set; }
+
         [Required(ErrorMessage = "Pole \"{0}\" jest wymagane.")]
         [DataType(DataType.Date)]
         [DisplayFormat(DataFormatString = "{0:DD/MM/YYYY}")]
