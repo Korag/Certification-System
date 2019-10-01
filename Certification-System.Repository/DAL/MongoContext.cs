@@ -25,7 +25,7 @@ namespace Certification_System.Repository.Context
             //"../wwwroot/DAL/dbCredentials.json"
             //"../Certification-System.Repository/DAL/dbCredentials.json"
 
-            using (StreamReader sr = new StreamReader("../Certification-System.Repository/DAL/dbCredentials.json"))
+            using (StreamReader sr = new StreamReader("../Certification-System/wwwroot/DAL/dbCredentials.json"))
             {
                 var json = sr.ReadToEnd();
                 try

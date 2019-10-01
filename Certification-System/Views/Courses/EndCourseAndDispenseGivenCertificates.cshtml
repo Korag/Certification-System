@@ -9,10 +9,14 @@
 <h2>Zamykanie kursu</h2>
 <hr />
 
+<h2>Informacje o kursie</h2>
+
+<div class="row m-0 mt-3 mb-3">
+    <a asp-action="CourseDetails" asp-route-courseIdentificator="@Model.CourseIdentificator" asp-controller="Courses" class="btn btn-outline-info mt-1 xs450px_FloatRight">Powrót do szczegółów kursu</a>
+</div>
+
 <form asp-action="EndCourseAndDispenseGivenCertificates">
     <div class="col-md-8 col-xl-6 col-lg-6 col-sm-12 col-xs-10 m-auto p-3 shadow p-3 mb-5 bg-light rounded border border-primary rounded-bottom" style="opacity:0.90">
-
-        <h2>Informacje o kursie</h2>
 
         <input asp-for="CourseIdentificator" class="form-control col-12" hidden readonly />
 
@@ -23,7 +27,7 @@
 
         <div class="form-group">
             <label asp-for="Name" class="control-label"></label>
-            <input asp-for="Name" class="form-control col-12" readonly />
+            <textarea asp-for="Name" class="form-control col-12" readonly></textarea>
         </div>
 
         <div class="form-group">
@@ -42,13 +46,13 @@
         </div>
 
         <div class="form-group">
-            <label asp-for="EnrolledUsersLimit" class="control-label"></label>
-            <input asp-for="EnrolledUsersLimit" class="form-control col-12" readonly />
+            <label asp-for="UsersQuantity" class="control-label"></label>
+            <input asp-for="UsersQuantity" class="form-control col-12" readonly />
         </div>
 
         <div class="form-group">
-            <label asp-for="EnrolledUsersQuantity" class="control-label"></label>
-            <input asp-for="EnrolledUsersQuantity" class="form-control col-12" readonly />
+            <label asp-for="EnrolledUsersLimit" class="control-label"></label>
+            <input asp-for="EnrolledUsersLimit" class="form-control col-12" readonly />
         </div>
 
         <div class="form-group">
@@ -79,13 +83,13 @@
 
     </div>
 
-    <h2 class="mt-4 mb-4">Uczestnicy kursu</h2>
-
     @if (Model.AllCourseParticipants.Count != 0)
     {
-        @await Component.InvokeAsync("DispenseGivenCertificatesDataTable", new { userViewModel = Model.AllCourseParticipants, givenCertificateViewModel = Model.DispensedGivenCertificates, tableIdentificator = "listUsers" })
+        <h2 class="mt-4 mb-4">Uczestnicy kursu</h2>
 
-        <div class="col-md-6 col-xl-6 col-sm-8 col-xs-10 m-auto p-3 shadow p-3 mb-5 bg-light rounded border border-primary rounded-bottom mt-4 mb-4" style="opacity:0.80">
+        @await Component.InvokeAsync("DispenseGivenCertificatesDataTable", new { userViewModel = Model.AllCourseParticipants, givenCertificateViewModel = Model.DispensedGivenCertificates, examViewModel = Model.LastExamsPeriods, tableIdentificator = "listUsers" })
+
+        <div class="col-md-6 col-xl-6 col-sm-8 col-xs-10 m p-3 mr-auto ml-auto shadow p-3 bg-light rounded border border-primary rounded-bottom mt-4 mb-2" style="opacity:0.80">
 
             <div class="form-group">
                 <label asp-for="AvailableCertificates" class="control-label"></label>
@@ -129,14 +133,15 @@
 
             <div asp-validation-summary="ModelOnly" class="row justify-content-center alert alert-danger validation-model"></div>
 
-            <div class="row m-0 mt-3">
-                <button type="button" class="btn btn-success mt-1 xs300px_JustifyContentCenter" data-toggle="modal" data-target="#modal">Zakończ kurs</button>
-                <a asp-action="CourseDetails" asp-route-courseIdentificator="@Model.CourseIdentificator" asp-controller="Courses" class="btn btn-outline-info mt-1 mr-1 xs300px_FloatRight">Powrót do szczegółów</a>
+
+            <div>
+                <div class="row justify-content-center mt-3">
+                    <button type="button" class="btn btn-success mt-1 xs300px_JustifyContentCenter" data-toggle="modal" data-target="#modal">Zakończ kurs</button>
+                </div>
             </div>
 
         </div>
     }
-
     else
     {
         <div class="mt-4 mb-4 alert alert-warning">Brak zapisanych użytkowników</div>

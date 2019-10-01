@@ -28,7 +28,7 @@ namespace Certification_System.DTOViewModels
         public int EnrolledUsersLimit { get; set; }
 
         [Display(Name = "Liczba uczestników")]
-        public int EnrolledUsersQuantity { get; set; }
+        public int UsersQuantity { get; set; }
 
         [Display(Name = "Kończy się egzaminem")]
         public bool ExamIsRequired { get; set; }
@@ -62,5 +62,8 @@ namespace Certification_System.DTOViewModels
 
         [Display(Name = "Uczestnicy kursu")]
         public ICollection<DisplayUserWithCourseResultsViewModel> AllCourseParticipants { get; set; }
+
+        [Display(Name = "Egzaminy")]
+        public ICollection<DisplayExamIndexerWithOrdinalNumberViewModel> LastExamsPeriods { get; set; }
     }
 }

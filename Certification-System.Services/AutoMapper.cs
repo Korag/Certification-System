@@ -117,6 +117,7 @@ namespace Certification_System.Services
             CreateMap<Course, DispenseGivenCertificatesViewModel>()
                     .ForMember(dest => dest.DispensedGivenCertificates, opts => opts.Ignore())
                     .ForMember(dest => dest.AvailableCertificates, opts => opts.Ignore())
+                    .ForMember(dest => dest.UsersQuantity, opts => opts.MapFrom(src => src.EnrolledUsers.Count()))
                     .ForMember(dest => dest.AllCourseParticipants, opts => opts.Ignore());
 
             CreateMap<Course, DisplayCourseSummaryViewModel>();
@@ -261,6 +262,9 @@ namespace Certification_System.Services
             CreateMap<Exam, DisplayExamNameTypeViewModel>();
 
             CreateMap<Exam, DisplayExamIndexerWithOrdinalNumberViewModel>();
+
+            CreateMap<Exam, DisplayExamResultWithExamIdentificator>()
+                     .ForMember(dest => dest.ExamOrdinalNumber, opts => opts.MapFrom(src => src.OrdinalNumber));
             #endregion
 
             #region ExamTerms

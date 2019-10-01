@@ -147,6 +147,27 @@ namespace Certification_System.Repository
             return result;
         }
 
+        public List<SelectListItem> GenerateSelectList(ICollection<string> usersIdentificators)
+        {
+            var users = GetUsersById(usersIdentificators);
+
+            List<SelectListItem> selectList = new List<SelectListItem>();
+
+            foreach (var user in users)
+            {
+                selectList.Add
+                    (
+                        new SelectListItem()
+                        {
+                            Text = user.FirstName + " " + user.LastName + " | " + user.Email,
+                            Value = user.Id
+                        }
+                    );
+            };
+
+            return selectList;
+        }
+
         public ICollection<SelectListItem> GetInstructorsAsSelectList()
         {
             var instructors = GetListOfInstructors();

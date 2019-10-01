@@ -253,7 +253,7 @@ namespace Certification_System.Controllers
 
             List<DisplayCompanyViewModel> companiesViewModel = _mapper.Map<List<DisplayCompanyViewModel>>(companies);
 
-            DisplayAllUserInformationViewModel userViewModel = _mapper.Map<DisplayAllUserInformationViewModel>(User);
+            DisplayAllUserInformationViewModel userViewModel = _mapper.Map<DisplayAllUserInformationViewModel>(user);
             List<DisplayCrucialDataWithContactUserViewModel> instructorsViewModel = _mapper.Map<List<DisplayCrucialDataWithContactUserViewModel>>(instructors);
 
             DisplayCertificateViewModel certificateViewModel = _mapper.Map<DisplayCertificateViewModel>(certificate);

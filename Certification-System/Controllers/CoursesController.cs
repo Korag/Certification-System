@@ -9,6 +9,7 @@ using AutoMapper;
 using Certification_System.ServicesInterfaces;
 using System;
 using Certification_System.Extensions;
+using Microsoft.AspNetCore.Mvc.Rendering;
 
 namespace Certification_System.Controllers
 {
@@ -22,8 +23,8 @@ namespace Certification_System.Controllers
         private readonly IEmailSender _emailSender;
 
         public CoursesController(
-            MongoOperations context, 
-            IMapper mapper, 
+            MongoOperations context,
+            IMapper mapper,
             IKeyGenerator keyGenerator,
             ILogService logger,
             IEmailSender emailSender)
@@ -452,11 +453,20 @@ namespace Certification_System.Controllers
             else
                 chosenUsers = new List<string>();
 
+            var availableUsers = new List<SelectListItem>();
+            var availableCourses = _context.courseRepository.GetActiveCoursesWithVacantSeatsAsSelectList().ToList();
+
             if (courseIdentificator != null)
+            {
                 chosenCourse = _context.courseRepository.GetCourseById(courseIdentificator).CourseIdentificator;
 
-            var availableUsers = _context.userRepository.GetWorkersAsSelectList().ToList();
-            var availableCourses = _context.courseRepository.GetActiveCoursesWithVacantSeatsAsSelectList().ToList();
+                var usersNotEnrolledInCourse = _context.userRepository.GetListOfWorkers().Where(z => !z.Courses.Contains(courseIdentificator)).Select(z=> z.Id).ToList();
+                availableUsers = _context.userRepository.GenerateSelectList(usersNotEnrolledInCourse);
+            }
+            else
+            {
+                availableUsers = _context.userRepository.GetWorkersAsSelectList().ToList();
+            }
 
             AssignUserToCourseViewModel usersToAssignToCourse = new AssignUserToCourseViewModel
             {
@@ -498,7 +508,7 @@ namespace Certification_System.Controllers
                         var logInfo = _logger.GenerateLogInformation(this.User.Identity.Name, this.ControllerContext.RouteData.Values["action"].ToString(), LogTypeOfAction.TypesOfActions[1]);
                         _logger.AddCourseLog(updatedCourse, logInfo);
 
-                        var updatedUsers= _context.userRepository.GetUsersById(usersAssignedToCourse.SelectedUsers);
+                        var updatedUsers = _context.userRepository.GetUsersById(usersAssignedToCourse.SelectedUsers);
                         _logger.AddUsersLogs(updatedUsers, logInfo);
 
                         return RedirectToAction("CourseDetails", new { courseIdentificator = usersAssignedToCourse.SelectedCourse, message = "Zapisano nowych użytkowników na kurs" });
@@ -527,6 +537,7 @@ namespace Certification_System.Controllers
             var meetings = _context.meetingRepository.GetMeetingsById(course.Meetings);
 
             var exams = _context.examRepository.GetExamsById(course.Exams);
+            var lastExamsPeriods = exams.GroupBy(z => z.ExamIndexer).Select(z => z.OrderByDescending(s => s.OrdinalNumber).FirstOrDefault()).ToList();
 
             if (course.CourseEnded != true)
             {
@@ -545,8 +556,8 @@ namespace Certification_System.Controllers
 
                 courseToEndViewModel.CourseLength = courseToEndViewModel.DateOfEnd.Subtract(courseToEndViewModel.DateOfStart).Days;
                 courseToEndViewModel.Branches = _context.branchRepository.GetBranchesById(course.Branches);
-                courseToEndViewModel.EnrolledUsersQuantity = course.EnrolledUsers.Count;
 
+                courseToEndViewModel.LastExamsPeriods = _mapper.Map<List<DisplayExamIndexerWithOrdinalNumberViewModel>>(lastExamsPeriods.OrderBy(z => z.ExamIndexer));
                 courseToEndViewModel.DispensedGivenCertificates = _mapper.Map<DispenseGivenCertificateCheckBoxViewModel[]>(listOfUsers);
 
                 return View(courseToEndViewModel);
@@ -578,6 +589,14 @@ namespace Certification_System.Controllers
                 {
                     if (courseToEndViewModel.DispensedGivenCertificates[i].GivenCertificateIsEarned == true)
                     {
+                        var user = _context.userRepository.GetUserById(courseToEndViewModel.DispensedGivenCertificates[i].UserIdentificator);
+                        var usersGivenCertificate = _context.givenCertificateRepository.GetGivenCertificatesById(user.GivenCertificates).Where(z=> z.Course.Contains(courseToEndViewModel.CourseIdentificator));
+
+                        if (user == null)
+                        {
+                            continue;
+                        }
+
                         GivenCertificate singleGivenCertificate = new GivenCertificate
                         {
                             GivenCertificateIdentificator = _keyGenerator.GenerateNewId(),
@@ -586,7 +605,6 @@ namespace Certification_System.Controllers
                             ReceiptDate = courseToEndViewModel.ReceiptDate,
                             ExpirationDate = courseToEndViewModel.ExpirationDate,
 
-                            Depreciated = false,
                             Course = courseToEndViewModel.CourseIdentificator,
                             Certificate = courseToEndViewModel.SelectedCertificate
                         };
@@ -594,7 +612,6 @@ namespace Certification_System.Controllers
                         disposedGivenCertificates.Add(singleGivenCertificate);
                         _context.givenCertificateRepository.AddGivenCertificate(singleGivenCertificate);
 
-                        var user = _context.userRepository.GetUserById(courseToEndViewModel.DispensedGivenCertificates[i].UserIdentificator);
                         user.GivenCertificates.Add(singleGivenCertificate.GivenCertificateIdentificator);
 
                         updatedUsers.Add(user);
@@ -606,7 +623,7 @@ namespace Certification_System.Controllers
                 _logger.AddUsersLogs(updatedUsers, logInfo);
                 _logger.AddGivenCertificatesLogs(disposedGivenCertificates, logInfo);
 
-                return RedirectToAction("CourseDetails", new { courseIdentificator = courseToEndViewModel.CourseIdentificator, message = "Zaknięto kurs i rozdano certyfikaty." });
+                return RedirectToAction("CourseDetails", new { courseIdentificator = courseToEndViewModel.CourseIdentificator, message = "Zamknięto kurs i rozdano certyfikaty." });
             }
 
             var enrolledUsersList = _context.userRepository.GetUsersById(course.EnrolledUsers);
@@ -652,7 +669,7 @@ namespace Certification_System.Controllers
             courseSummaryViewModel.AllCourseParticipants = listOfUsers;
             courseSummaryViewModel.Branches = _context.branchRepository.GetBranchesById(course.Branches);
 
-            courseSummaryViewModel.AllCourseExams = _mapper.Map<List<DisplayExamIndexerWithOrdinalNumberViewModel>>(exams.OrderBy(z=> z.ExamIndexer));
+            courseSummaryViewModel.AllCourseExams = _mapper.Map<List<DisplayExamIndexerWithOrdinalNumberViewModel>>(exams.OrderBy(z => z.ExamIndexer));
             courseSummaryViewModel.CourseLength = courseSummaryViewModel.DateOfEnd.Subtract(courseSummaryViewModel.DateOfStart).Days;
             courseSummaryViewModel.EnrolledUsersQuantity = course.EnrolledUsers.Count;
 
@@ -913,7 +930,7 @@ namespace Certification_System.Controllers
                 var deletedExams = _context.examRepository.DeleteExams(course.Exams);
                 _logger.AddExamsLogs(deletedExams, logInfoDelete);
 
-                var deletedExamsTerms = _context.examTermRepository.DeleteExamsTerms(deletedExams.SelectMany(z=> z.ExamTerms).ToList());
+                var deletedExamsTerms = _context.examTermRepository.DeleteExamsTerms(deletedExams.SelectMany(z => z.ExamTerms).ToList());
                 _logger.AddExamsTermsLogs(deletedExamsTerms, logInfoDelete);
 
                 var deletedExamsResults = _context.examResultRepository.DeleteExamsResults(deletedExams.SelectMany(z => z.ExamResults).ToList());
@@ -983,14 +1000,14 @@ namespace Certification_System.Controllers
                 for (int i = 0; i < userExams.Count; i++)
                 {
                     var lastExamPeriod = userExams[i].ToList().OrderByDescending(z => z.OrdinalNumber).FirstOrDefault();
-                    var lastUserResult = _context.examResultRepository.GetExamsResultsById(lastExamPeriod.ExamResults).ToList().Where(z => z.User == user.Id).ToList();
+                    var lastUserResult = _context.examResultRepository.GetExamsResultsById(lastExamPeriod.ExamResults).ToList().Where(z => z.User == user.Id).FirstOrDefault();
 
                     if (lastUserResult != null)
                     {
                         var singleExamResult = _mapper.Map<DisplayExamResultWithExamIdentificator>(lastUserResult);
                         singleExamResult.MaxAmountOfPointsToEarn = lastExamPeriod.MaxAmountOfPointsToEarn;
-                        singleExamResult.ExamIdentificator = lastExamPeriod.ExamIdentificator;
-                        singleExamResult.ExamOrdinalNumber = lastExamPeriod.OrdinalNumber;
+
+                        singleExamResult = _mapper.Map<Exam, DisplayExamResultWithExamIdentificator>(lastExamPeriod, singleExamResult);
 
                         singleUser.ExamsResults.Add(singleExamResult);
                     }
@@ -1036,8 +1053,8 @@ namespace Certification_System.Controllers
                         {
                             var singleExamResult = _mapper.Map<DisplayExamResultWithExamIdentificator>(userResult);
                             singleExamResult.MaxAmountOfPointsToEarn = exam.MaxAmountOfPointsToEarn;
-                            singleExamResult.ExamIdentificator = exam.ExamIdentificator;
-                            singleExamResult.ExamOrdinalNumber = exam.OrdinalNumber;
+
+                            singleExamResult = _mapper.Map<Exam, DisplayExamResultWithExamIdentificator>(exam, singleExamResult);
 
                             singleUser.ExamsResults.Add(singleExamResult);
                         }
