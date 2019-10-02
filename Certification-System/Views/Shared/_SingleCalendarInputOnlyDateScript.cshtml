@@ -1,0 +1,12 @@
+@model string
+
+<script>
+    $(function () {
+        $('#@Model').datetimepicker({
+            format: 'DD.MM.YYYY',
+            locale: moment.locale('pl', {
+                week: { dow: 1 }
+            })
+        });
+    });
+</script>
