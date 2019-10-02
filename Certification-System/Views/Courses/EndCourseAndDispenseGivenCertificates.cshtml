@@ -147,11 +147,16 @@
 
         @await Component.InvokeAsync("DispenseGivenCertificatesDataTable", new { userViewModel = Model.AllCourseParticipants, givenCertificateViewModel = Model.DispensedGivenCertificates, examViewModel = Model.LastExamsPeriods, courseEnded = Model.CourseEnded, tableIdentificator = "listUsers" })
 
-        @*@if (GivenCertificates any exists)
-            {
-                display table with email, firstName, lastName, Certificate Name, GivenCertificate Indexer
-            }*@
+        <h2 class="mt-4 mb-4">Lista nadanych certyfikatów</h2>
 
+        @if (Model.GivenCertificates.Count() != 0)
+        {
+            @await Component.InvokeAsync("DisplayGivenCertificateWithoutCourseDataTable", new { givenCertificateViewModel = Model.GivenCertificates, tableIdentificator = "listGivenCertificates", operationSet = 1 })
+        }
+        else
+        {
+            <div class="mt-4 mb-4 alert alert-warning">Nie nadano żadnych certyfikatów</div>
+        }
     }
     else
     {
@@ -169,5 +174,6 @@
 @section Scripts {
     @{await Html.RenderPartialAsync("_ValidationScriptsPartial");}
     @{await Html.RenderPartialAsync("_DataTableBasicScript", "listUsers");}
+    @{await Html.RenderPartialAsync("_DataTableBasicScript", "listGivenCertificates");}
     @{await Html.RenderPartialAsync("_RelatedCalendarsInputScript", new RelatedCalendarsInputScriptViewModel { StartDate = "ReceiptDate", EndDate = "ExpirationDate" });}
 }

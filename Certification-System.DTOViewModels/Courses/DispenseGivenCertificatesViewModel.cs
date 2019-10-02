@@ -68,5 +68,8 @@ namespace Certification_System.DTOViewModels
 
         [Display(Name = "Egzaminy")]
         public ICollection<DisplayExamIndexerWithOrdinalNumberViewModel> LastExamsPeriods { get; set; }
+
+        [Display(Name = "Nadane certyfikaty")]
+        public ICollection<DisplayGivenCertificateWithoutCourseViewModel> GivenCertificates { get; set; }
     }
 }

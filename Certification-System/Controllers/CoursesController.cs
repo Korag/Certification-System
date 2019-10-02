@@ -541,6 +541,8 @@ namespace Certification_System.Controllers
 
             var enrolledUsersList = _context.userRepository.GetUsersById(course.EnrolledUsers);
 
+            var givenCertificates = _context.givenCertificateRepository.GetGivenCertificatesByCourseId(course.CourseIdentificator);
+
             List<DisplayUserWithCourseResultsViewModel> listOfUsers = new List<DisplayUserWithCourseResultsViewModel>();
 
             if (enrolledUsersList.Count != 0)
@@ -558,15 +560,22 @@ namespace Certification_System.Controllers
             courseToEndViewModel.LastExamsPeriods = _mapper.Map<List<DisplayExamIndexerWithOrdinalNumberViewModel>>(lastExamsPeriods.OrderBy(z => z.ExamIndexer));
             courseToEndViewModel.DispensedGivenCertificates = _mapper.Map<DispenseGivenCertificateCheckBoxViewModel[]>(listOfUsers);
 
-            // build list of GivenCertificates and display in standalone table
-            // if course not ended display only if list contains any element
-            // if course ended display proper message when there is no element in list
-            // keep what was made
+            courseToEndViewModel.GivenCertificates = _mapper.Map<List<DisplayGivenCertificateWithoutCourseViewModel>>(givenCertificates);
 
-            for (int i = 0; i < courseToEndViewModel.DispensedGivenCertificates.Count(); i++)
+            for (int i = 0; i < givenCertificates.Count(); i++)
             {
-                var user = _context.userRepository.GetUserById(courseToEndViewModel.DispensedGivenCertificates[i].UserIdentificator);
-                var userGivenCertificate = _context.givenCertificateRepository.GetGivenCertificatesById(user.GivenCertificates).Where(z => z.Course == courseToEndViewModel.CourseIdentificator /*&& z.Certificate == courseToEndViewModel.SelectedCertificate*/).FirstOrDefault();
+                var certificate = _context.certificateRepository.GetCertificateById(givenCertificates.ElementAt(i).Certificate);
+
+                courseToEndViewModel.GivenCertificates.ElementAt(i).Certificate = _mapper.Map<DisplayCrucialDataCertificateViewModel>(certificate);
+
+                var user = enrolledUsersList.Where(z => z.GivenCertificates.Contains(courseToEndViewModel.GivenCertificates.ElementAt(i).GivenCertificateIdentificator)).FirstOrDefault();
+
+                courseToEndViewModel.GivenCertificates.ElementAt(i).User = _mapper.Map<DisplayCrucialDataUserViewModel>(user);
+            }
+
+            for (int i = 0; i < enrolledUsersList.Count(); i++)
+            {
+                var userGivenCertificate = _context.givenCertificateRepository.GetGivenCertificatesById(enrolledUsersList.ElementAt(i).GivenCertificates).Where(z => z.Course == courseToEndViewModel.CourseIdentificator /*&& z.Certificate == courseToEndViewModel.SelectedCertificate*/).FirstOrDefault();
 
                 if (userGivenCertificate != null)
                 {
@@ -648,6 +657,26 @@ namespace Certification_System.Controllers
             }
 
             var lastExamsPeriods = exams.GroupBy(z => z.ExamIndexer).Select(z => z.OrderByDescending(s => s.OrdinalNumber).FirstOrDefault()).ToList();
+            var givenCertificates = _context.givenCertificateRepository.GetGivenCertificatesByCourseId(course.CourseIdentificator);
+
+            for (int i = 0; i < enrolledUsersList.Count(); i++)
+            {
+                var certificate = _context.certificateRepository.GetCertificateById(givenCertificates.ElementAt(i).Certificate);
+
+                courseToEndViewModel.GivenCertificates.ElementAt(i).Certificate = _mapper.Map<DisplayCrucialDataCertificateViewModel>(certificate);
+                courseToEndViewModel.GivenCertificates.ElementAt(i).User = _mapper.Map<DisplayCrucialDataUserViewModel>(enrolledUsersList.ElementAt(i));
+            }
+
+            for (int i = 0; i < givenCertificates.Count(); i++)
+            {
+                var certificate = _context.certificateRepository.GetCertificateById(givenCertificates.ElementAt(i).Certificate);
+
+                courseToEndViewModel.GivenCertificates.ElementAt(i).Certificate = _mapper.Map<DisplayCrucialDataCertificateViewModel>(certificate);
+
+                var user = enrolledUsersList.Where(z => z.GivenCertificates.Contains(courseToEndViewModel.GivenCertificates.ElementAt(i).GivenCertificateIdentificator)).FirstOrDefault();
+
+                courseToEndViewModel.GivenCertificates.ElementAt(i).User = _mapper.Map<DisplayCrucialDataUserViewModel>(user);
+            }
 
             courseToEndViewModel.AllCourseParticipants = listOfUsers;
             courseToEndViewModel.AvailableCertificates = _context.certificateRepository.GetCertificatesAsSelectList().ToList();
@@ -655,7 +684,7 @@ namespace Certification_System.Controllers
             courseToEndViewModel.Branches = _context.branchRepository.GetBranchesById(course.Branches);
             courseToEndViewModel.LastExamsPeriods = _mapper.Map<List<DisplayExamIndexerWithOrdinalNumberViewModel>>(lastExamsPeriods.OrderBy(z => z.ExamIndexer));
 
-            // reinitizalize GivenCertificates list
+            courseToEndViewModel.GivenCertificates = _mapper.Map<List<DisplayGivenCertificateWithoutCourseViewModel>>(givenCertificates);
 
             return View(courseToEndViewModel);
         }

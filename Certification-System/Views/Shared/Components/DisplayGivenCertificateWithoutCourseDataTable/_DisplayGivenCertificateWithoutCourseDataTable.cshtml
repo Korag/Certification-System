@@ -1,4 +1,4 @@
-﻿@model Certification_System.DTOViewModels.DisplayGivenCertificateDataTableViewModel
+﻿@model Certification_System.DTOViewModels.DisplayGivenCertificateWithoutCourseDataTableViewModel
 
 <div class="col-12 table-responsive">
     <table id="@Model.Options.TableIdentificator" class="table table-striped table-bordered display" style="width: 100%;" role="grid">
@@ -54,7 +54,6 @@
                                 <div class="dropdown-menu nohover">
                                     <a asp-action="GivenCertificateDetails" asp-route-givenCertificateIdentificator="@givenCertificate.GivenCertificateIdentificator" asp-controller="GivenCertificates" class="btn btn-primary w-100 mb-1">Szczegóły nadanego certyfikatu</a>
                                     <a asp-action="UserDetails" asp-route-userIdentificator="@givenCertificate.User.UserIdentificator" asp-controller="Users" class="btn btn-info w-100 mb-1">Szczegóły użytkownika</a>
-                                    <a asp-action="CourseDetails" asp-route-courseIdentificator="@givenCertificate.Course.CourseIdentificator" asp-controller="Courses" class="btn btn-secondary w-100 mb-1">Szczegóły kursu</a>
                                     <a asp-action="EditGivenCertificate" asp-route-givenCertificateIdentificator="@givenCertificate.GivenCertificateIdentificator" asp-controller="GivenCertificates" class="btn btn-warning  w-100">Edytuj certyfikat</a>
                                 </div>
                             </div>
