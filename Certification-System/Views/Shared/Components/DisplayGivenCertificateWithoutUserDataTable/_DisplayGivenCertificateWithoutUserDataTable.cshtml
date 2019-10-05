@@ -53,7 +53,7 @@
                             <span class="fas fa-check-circle" style="font-size:34px"></span>
                         }
                     </td>
-                    @if (Model.Options.OperationSet != 0)
+                    @if (Model.Options.OperationSet == 1)
                     {
                         <td>
                             <div class="dropdown p-0">
@@ -64,6 +64,12 @@
                                     <a asp-action="GivenCertificateDetails" asp-route-givenCertificateIdentificator="@givenCertificate.GivenCertificateIdentificator" asp-controller="GivenCertificate" class="btn btn-secondary w-100">Szczegóły przyznanego certyfikatu</a>
                                 </div>
                             </div>
+                        </td>
+                    }
+                    @if (Model.Options.OperationSet == 2)
+                    {
+                        <td>
+                            <a asp-action="WorkerGivenCertificateDetails" asp-route-givenCertificateIdentificator="@givenCertificate.GivenCertificateIdentificator" asp-controller="GivenCertificates" class="btn btn-primary m-1">Szczegóły</a>
                         </td>
                     }
                 </tr>
