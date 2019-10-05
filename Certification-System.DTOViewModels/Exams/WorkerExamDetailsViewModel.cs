@@ -4,7 +4,7 @@ using System.ComponentModel.DataAnnotations;
 
 namespace Certification_System.DTOViewModels
 {
-    public class ExamDetailsViewModel
+    public class WorkerExamDetailsViewModel
     {
         public string ExamIdentificator { get; set; }
 
@@ -49,12 +49,6 @@ namespace Certification_System.DTOViewModels
 
         [Display(Name = "Tury egzaminu")]
         public ICollection<DisplayExamTermWithoutExamViewModel> ExamTerms { get; set; }
-
-        [Display(Name = "Egzaminatorzy")]
-        public ICollection<DisplayCrucialDataWithContactUserViewModel> Examiners { get; set; }
-
-        [Display(Name = "Użytkownicy")]
-        public ICollection<DisplayCrucialDataWithContactUserViewModel> EnrolledUsers { get; set; }
 
         [Display(Name = "Kraj")]
         public string Country { get; set; }
