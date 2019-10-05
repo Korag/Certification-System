@@ -213,6 +213,20 @@ namespace Certification_System.Controllers
 
             return View("DeleteEntity", companyToDelete);
         }
+
+
+        // GET: DeleteCompany
+        [Authorize(Roles = "Worker")]
+        [HttpGet]
+        public ActionResult WorkerCompanies()
+        {
+            var user = _context.userRepository.GetUserByEmail(this.User.Identity.Name);
+            var companies = _context.companyRepository.GetCompaniesById(user.CompanyRoleWorker);
+
+            List<DisplayCompanyViewModel> companiesList = _mapper.Map<List<DisplayCompanyViewModel>>(companies); 
+
+            return View(companiesList);
+        }
     }
 }
 

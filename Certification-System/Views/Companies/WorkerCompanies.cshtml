@@ -1,0 +1,80 @@
+﻿@model IEnumerable<Certification_System.DTOViewModels.DisplayCompanyViewModel>
+
+@{
+    ViewData["Title"] = "WorkerCompanies";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+<h2>Lista przedsiębiorstw użytkownika</h2>
+<hr />
+
+@if (Model.Count() != 0)
+{
+    <div>
+        <h2>Informacje o obecnie zrzeszającym przedsiębiorstwie</h2>
+
+        <form asp-action="CompanyDetails">
+
+            <div class="col-md-6 col-xl-6 col-sm-8 col-xs-10 m-auto p-3 shadow p-3 mb-5 bg-light rounded border border-primary rounded-bottom" style="opacity:0.80">
+
+                <div class="form-group">
+                    <label asp-for="@Model.ElementAt(0).CompanyName" class="control-label"></label>
+                    <input asp-for="@Model.ElementAt(0).CompanyName" class="form-control col-12" readonly />
+                </div>
+
+                <div class="form-group">
+                    <label asp-for="@Model.ElementAt(0).Email" class="control-label"></label>
+                    <input asp-for="@Model.ElementAt(0).Email" class="form-control col-12" readonly />
+                </div>
+
+                <div class="form-group">
+                    <label asp-for="@Model.ElementAt(0).Phone" class="control-label"></label>
+                    <input asp-for="@Model.ElementAt(0).Phone" class="form-control col-12" readonly />
+                </div>
+
+                <div class="form-group">
+                    <label asp-for="@Model.ElementAt(0).Country" class="control-label"></label>
+                    <input asp-for="@Model.ElementAt(0).Country" class="form-control col-12" readonly />
+                </div>
+
+                <div class="form-group">
+                    <label asp-for="@Model.ElementAt(0).City" class="control-label"></label>
+                    <input asp-for="@Model.ElementAt(0).City" class="form-control col-12" readonly />
+                </div>
+
+                <div class="form-group">
+                    <label asp-for="@Model.ElementAt(0).PostCode" class="control-label"></label>
+                    <input asp-for="@Model.ElementAt(0).PostCode" class="form-control col-12" readonly />
+                </div>
+
+                <div class="form-group">
+                    <label asp-for="@Model.ElementAt(0).Address" class="control-label"></label>
+                    <input asp-for="@Model.ElementAt(0).Address" class="form-control col-12" readonly />
+                </div>
+
+                <div class="form-group">
+                    <label asp-for="@Model.ElementAt(0).NumberOfApartment" class="control-label"></label>
+                    <input asp-for="@Model.ElementAt(0).NumberOfApartment" class="form-control col-12" readonly />
+                </div>
+
+            </div>
+        </form>
+    </div>
+
+    @if (Model.Count() > 1)
+    {
+
+        <h2 class="mt-4 mb-4">Przedsiębiorstwa zrzeszające użytkownika w przeszłości</h2>
+
+        var companiesList = Model.Skip(1);
+        @await Component.InvokeAsync("DisplayCompanyDataTable", new { companyViewModel = companiesList, tableIdentificator = "listCompanies"})
+    }
+}
+else
+{
+    <div style="padding-top:8vw; padding-bottom:10vw">
+        <div class="col-md-8 col-xl-6 col-lg-6 col-sm-12 col-xs-10 m-auto p-3 shadow p-3 mb-5 rounded alert alert-warning rounded-bottom mt-5" style="opacity:0.90">
+            <p>Twoje konto nie jest powiązane z żadnym pracodawcą.</p>
+        </div>
+    </div>
+}

@@ -274,7 +274,7 @@ namespace Certification_System.Controllers
                 if (result.Succeeded)
                 {
                     var updatedUser = _context.userRepository.GetUserById(user.Id);
-                    var logInfo = _logger.GenerateLogInformation(this.User.Identity.Name, this.ControllerContext.RouteData.Values["action"].ToString(), LogTypeOfAction.TypesOfActions[1]);
+                    var logInfo = _logger.GenerateLogInformation(user.Email, this.ControllerContext.RouteData.Values["action"].ToString(), LogTypeOfAction.TypesOfActions[1]);
                     _logger.AddUserLog(updatedUser, logInfo);
 
                     return RedirectToAction("Login", "Account", new { message = "Adres email został potwierdzony." });
