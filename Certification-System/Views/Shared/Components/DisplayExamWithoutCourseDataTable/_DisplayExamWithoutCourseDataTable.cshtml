@@ -139,6 +139,12 @@
                         }
                     </td>
                 }
+                @if (Model.Options.OperationSet == 3)
+                {
+                    <td>
+                        <a asp-action="WorkerExamDetails" asp-route-examIdentificator="@exam.ExamIdentificator" asp-controller="Exams" class="btn btn-info m-1">Szczegóły</a>
+                    </td>
+                }
             </tr>
             }
         </tbody>

@@ -990,6 +990,51 @@ namespace Certification_System.Controllers
             return View("DeleteEntity", courseToDelete);
         }
 
+
+        // GET: WorkerCourseDetails
+        [Authorize(Roles = "Admin, Instructor, Examiner")]
+        public ActionResult WorkerCourseDetails(string courseIdentificator)
+        {
+            var course = _context.courseRepository.GetCourseById(courseIdentificator);
+            var meetings = _context.meetingRepository.GetMeetingsById(course.Meetings);
+
+            List<DisplayMeetingWithoutCourseViewModel> meetingsViewModel = new List<DisplayMeetingWithoutCourseViewModel>();
+
+            foreach (var meeting in meetings)
+            {
+                var meetingInstructors = _context.userRepository.GetInstructorsById(meeting.Instructors).ToList();
+
+                DisplayMeetingWithoutCourseViewModel singleMeeting = _mapper.Map<DisplayMeetingWithoutCourseViewModel>(meeting);
+                singleMeeting.Instructors = _mapper.Map<List<DisplayCrucialDataUserViewModel>>(meetingInstructors);
+
+                meetingsViewModel.Add(singleMeeting);
+            }
+
+            var exams = _context.examRepository.GetExamsById(course.Exams);
+            List<DisplayExamWithoutCourseViewModel> examsViewModel = new List<DisplayExamWithoutCourseViewModel>();
+
+            List<string> listOfExaminatorsIdentificators = new List<string>();
+
+            foreach (var exam in exams)
+            {
+                DisplayExamWithoutCourseViewModel singleExam = _mapper.Map<DisplayExamWithoutCourseViewModel>(exam);
+                singleExam.Examiners = _mapper.Map<List<DisplayCrucialDataUserViewModel>>(_context.userRepository.GetUsersById(exam.Examiners));
+
+                examsViewModel.Add(singleExam);
+            }
+
+            WorkerCourseDetailsViewModel courseDetails = new WorkerCourseDetailsViewModel();
+            courseDetails.Course = _mapper.Map<DisplayCourseViewModel>(course);
+            courseDetails.Course.Branches = _context.branchRepository.GetBranchesById(course.Branches);
+
+            courseDetails.Meetings = meetingsViewModel;
+            courseDetails.Exams = examsViewModel;
+
+            courseDetails.Course.EnrolledUsersQuantity = course.EnrolledUsers.Count;
+
+            return View(courseDetails);
+        }
+
         #region AjaxQuery
         // GET: GetCoursesByUserId
         [Authorize(Roles = "Admin")]
