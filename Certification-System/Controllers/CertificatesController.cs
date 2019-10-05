@@ -139,11 +139,13 @@ namespace Certification_System.Controllers
         {
             if (ModelState.IsValid)
             {
-                Certificate certificate = _mapper.Map<Certificate>(editedCertificate);
-                _context.certificateRepository.UpdateCertificate(certificate);
+                var originCertificate = _context.certificateRepository.GetCertificateById(editedCertificate.CertificateIdentificator);
+                originCertificate = _mapper.Map<EditCertificateViewModel, Certificate>(editedCertificate, originCertificate);
+
+                _context.certificateRepository.UpdateCertificate(originCertificate);
 
                 var logInfo = _logger.GenerateLogInformation(this.User.Identity.Name, this.ControllerContext.RouteData.Values["action"].ToString(), LogTypeOfAction.TypesOfActions[1]);
-                _logger.AddCertificateLog(certificate, logInfo);
+                _logger.AddCertificateLog(originCertificate, logInfo);
 
                 return RedirectToAction("ConfirmationOfActionOnCertificate", "Certificates", new { certificateIdentificator = editedCertificate.CertificateIdentificator, TypeOfAction = "Update" });
             }
