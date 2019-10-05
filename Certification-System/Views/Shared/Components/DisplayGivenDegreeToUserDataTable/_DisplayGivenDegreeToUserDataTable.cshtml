@@ -53,13 +53,13 @@
                         <span class="fas fa-check-circle" style="font-size:34px"></span>
                     }
                 </td>
-                @if (Model.Options.OperationSet != 0)
+                @if (Model.Options.OperationSet == 1)
                 {
                     <td>
                         <a asp-action="EditGivenDegree" asp-route-givenDegreeIdentificator="@givenDegree.GivenDegreeIdentificator" asp-controller="GivenDegrees" class="btn btn-warning m-1">Edytuj naadany stopień zawodowy</a>
                     </td>
                 }
-                @if (Model.Options.OperationSet != 0)
+                @if (Model.Options.OperationSet == 2)
                 {
                     <td>
                         <div class="dropdown p-0">
@@ -72,7 +72,13 @@
                         </div>
                     </td>
                 }
-                </tr>
+                @if (Model.Options.OperationSet == 3)
+                {
+                    <td>
+                        <a asp-action="WorkerGivenDegreeDetails" asp-route-givenDegreeIdentificator="@givenDegree.GivenDegreeIdentificator" asp-controller="GivenDegrees" class="btn btn-primary m-1">Szczegóły</a>
+                    </td>
+                }
+            </tr>
             }
         </tbody>
     </table>

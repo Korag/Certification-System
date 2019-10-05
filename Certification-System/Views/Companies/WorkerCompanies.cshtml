@@ -67,7 +67,7 @@
         <h2 class="mt-4 mb-4">Przedsiębiorstwa zrzeszające użytkownika w przeszłości</h2>
 
         var companiesList = Model.Skip(1);
-        @await Component.InvokeAsync("DisplayCompanyDataTable", new { companyViewModel = companiesList, tableIdentificator = "listCompanies"})
+        @await Component.InvokeAsync("DisplayCompanyDataTable", new { companyViewModel = companiesList, tableIdentificator = "listCompanies" })
     }
 }
 else
@@ -77,4 +77,8 @@ else
             <p>Twoje konto nie jest powiązane z żadnym pracodawcą.</p>
         </div>
     </div>
+}
+
+@section Scripts{
+    @{await Html.RenderPartialAsync("_DataTableBasicScript", "listCompanies");}
 }

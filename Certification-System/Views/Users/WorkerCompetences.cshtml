@@ -1,0 +1,40 @@
+﻿@model Certification_System.DTOViewModels.WorkerCompetencesViewModel
+
+@{
+    ViewData["Title"] = "WorkerCompetences";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+<h1>Moje kompetencje zawodowe</h1>
+<hr />
+
+<div class="mt-4 mb-4">
+    <a asp-action="GenerateUserPhysicalIdentificator" asp-controller="CompetenceVerification" asp-route-userIdentificator="@Model.UserIdentificator" class="btn btn-success">Generuj identyfikator użytkownika</a>
+</div>
+
+<h2 class="mt-4 mb-4">Moje otrzymane certyfikaty</h2>
+
+@if (Model.GivenCertificates.Count != 0)
+{
+    @await Component.InvokeAsync("DisplayGivenCertificateToUserDataTable", new { givenCertificateViewModel = Model.GivenCertificates, tableIdentificator = "listGivenCertificates", operationSet = 2 })
+}
+else
+{
+    <div class="mt-4 mb-4 alert alert-warning">Nie posiadasz jeszcze żadnego nadanego certyfikatu</div>
+}
+
+<h2 class="mt-4 mb-4">Moje otrzymane stopnie zawodowe</h2>
+
+@if (Model.GivenDegrees.Count != 0)
+{
+    @await Component.InvokeAsync("DisplayGivenDegreeToUserDataTable", new { givenDegreeViewModel = Model.GivenDegrees, tableIdentificator = "listGivenDegrees", operationSet = 3 })
+}
+else
+{
+    <div class="mt-4 mb-4 alert alert-warning">Nie posiadasz jeszcze żadnego nadanego stonia zawodowego</div>
+}
+
+@section Scripts{
+    @{await Html.RenderPartialAsync("_DataTableBasicScript", "listGivenCertificates");}
+    @{await Html.RenderPartialAsync("_DataTableBasicScript", "listGivenDegrees");}
+}
