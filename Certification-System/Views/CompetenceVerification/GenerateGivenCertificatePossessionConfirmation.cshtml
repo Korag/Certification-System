@@ -16,11 +16,11 @@
     @if (this.User.IsInRole("Admin"))
     {
         <a asp-action="DisplayAllGivenCertificates" asp-controller="GivenCertificates" asp-route-givenCertificateIdentificator="@Model.GivenCertificateIdentificator" class="btn btn-outline-info mt-1 mr-1 xs450px_FloatRight">Powrót do listy nadanych certyfikatów</a>
-        <a asp-action="UserDetails" asp-controller="Users" asp-route-userIdentificator="@Model.UserIdentificator" class="btn btn-outline-info mt-1">Powrót do szczegółów użytkownika</a>
+        <a asp-action="UserDetails" asp-controller="Users" asp-route-userIdentificator="@Model.UserIdentificator" class="btn btn-outline-info mt-1 xs450px_FloatRight">Powrót do szczegółów użytkownika</a>
     }
     else
     {
-        <a asp-action="" asp-controller="" class="btn btn-outline-info m-auto mt-1 xs350px_FloatRight">Powrót do moich osiągnieć</a>
+        <a asp-action="WorkerCompetences" asp-controller="Users" class="btn btn-outline-info mt-1 xs450px_FloatRight">Powrót do moich kompetencji</a>
     }
 </div>
 

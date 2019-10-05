@@ -27,7 +27,7 @@
                     <p class="dropdown-header mt-1">Przyznane stopnie zawodowe</p>
                     <div class="dropdown-divider"></div>
                     <a asp-controller="GivenDegrees" asp-action="AddNewGivenDegree" class="dropdown-item">Przyznaj pracownikowi stopień zawodowy *</a>
-                    <a asp-controller="GivenDegrees" asp-action="DisplayAllGivenDegrees" class="dropdown-item">Wyświetl wszystkie nadane stopnie zawodowe *</a>
+                    <a asp-controller="GivenDegrees" asp-action="DisplayAllGivenDegrees" class="dropdown-item mb-2">Wyświetl wszystkie nadane stopnie zawodowe *</a>
                 </div>
             </li>
             <li class="nav-item dropdown">
@@ -58,7 +58,7 @@
                     <div class="dropdown-divider"></div>
                     <a asp-controller="Exams" asp-action="DisplayAllExamsResults" class="dropdown-item">Wyświetl wszystkie wyniki egzaminowania *</a>
                     <a asp-controller="Exams" asp-action="AssignUserToExam" class="dropdown-item">Przypisz użytkownika do egzaminu *</a>
-                    <a asp-controller="ExamsTerms" asp-action="AssignUserToExamTerm" class="dropdown-item">Przypisz użytkownika do tury egzaminu*</a>
+                    <a asp-controller="ExamsTerms" asp-action="AssignUserToExamTerm" class="dropdown-item mb-2">Przypisz użytkownika do tury egzaminu*</a>
                 </div>
             </li>
             <li class="nav-item dropdown">
@@ -67,7 +67,7 @@
                     <p class="dropdown-header">Użytkownicy systemu</p>
                     <div class="dropdown-divider"></div>
                     <a asp-controller="Users" asp-action="AddNewUser" class="dropdown-item">Dodaj nowego użytkownika *</a>
-                    <a asp-controller="Users" asp-action="DisplayAllUsers" class="dropdown-item">Wyświetl wszystkich użytkowników *</a>
+                    <a asp-controller="Users" asp-action="DisplayAllUsers" class="dropdown-item mb-2">Wyświetl wszystkich użytkowników *</a>
                 </div>
             </li>
             <li class="nav-item dropdown">
@@ -86,7 +86,7 @@
                     <p class="dropdown-header mt-1">Aktualności</p>
                     <div class="dropdown-divider"></div>
                     <a asp-controller="" asp-action="" class="dropdown-item">Kalendarz</a>
-                    <a asp-controller="" asp-action="" class="dropdown-item">Centrum powiadomień</a>
+                    <a asp-controller="" asp-action="" class="dropdown-item mb-2">Centrum powiadomień</a>
                 </div>
             </li>
             @*<li class="nav-item">
@@ -100,7 +100,7 @@
                     <a asp-controller="CompetenceVerification" asp-action="VerifyCompetenceManual" class="dropdown-item">Instrukcja z menu weryfikacji *</a>
                     <a asp-controller="CompetenceVerification" asp-action="VerifyUser" class="dropdown-item">Weryfikacja użytkownika *</a>
                     <a asp-controller="CompetenceVerification" asp-action="VerifyGivenCertificate" class="dropdown-item">Weryfikacja certyfikatu *</a>
-                    <a asp-controller="CompetenceVerification" asp-action="VerifyGivenDegree" class="dropdown-item">Weryfikacja stopnia zawodowego *</a>
+                    <a asp-controller="CompetenceVerification" asp-action="VerifyGivenDegree" class="dropdown-item mb-2">Weryfikacja stopnia zawodowego *</a>
                 </div>
             </li>
         </ul>

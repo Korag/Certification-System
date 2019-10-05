@@ -28,57 +28,61 @@
                 <th>
                     Certyfikat jest ważny ?
                 </th>
+                @if (Model.Options.OperationSet != 0)
+                {
+                    <th>Operacje</th>
+                }
             </tr>
         </thead>
         <tbody>
             @foreach (var givenCertificate in Model.GivenCertificates)
             {
-                <tr class="alert @if (givenCertificate.ExpirationDate < DateTime.Now) { <text> table-danger </text>} else { <text> table-success </text> }">
-                    <td>
-                        @Html.DisplayFor(model => givenCertificate.GivenCertificateIndexer)
-                    </td>
-                    <td>
-                        @Html.DisplayFor(model => givenCertificate.ReceiptDate)
-                    </td>
-                    <td>
-                        @Html.DisplayFor(model => givenCertificate.ExpirationDate)
-                    </td>
-                    <td>
-                        @Html.DisplayFor(model => givenCertificate.Certificate.CertificateIndexer)
-                    </td>
-                    <td>
-                        @Html.DisplayFor(model => givenCertificate.Certificate.Name)
-                    </td>
-                    <td>
-                        @Html.DisplayFor(model => givenCertificate.Certificate.Description)
-                    </td>
-                    <td>
-                        <div class="btn-group btn-group-toggle row" data-toggle="buttons">
-                            @foreach (var branch in givenCertificate.Certificate.Branches)
-                            {
-                                <label class="btn btn-outline-secondary m-2 active">
-                                    <input type="checkbox"
-                                           name="SelectedBranches"
-                                           value="@branch"
-                                           autocomplete="off"
-                                           disabled
-                                           checked />
-                                    <span>@branch</span>
-                                </label>
-                            }
-                        </div>
-                    </td>
-                    <td style="text-align:center">
-                        @if (givenCertificate.ExpirationDate < DateTime.Now)
+            <tr class="alert @if (givenCertificate.ExpirationDate < DateTime.Now) { <text> table-danger </text>} else { <text> table-success </text> }">
+                <td>
+                    @Html.DisplayFor(model => givenCertificate.GivenCertificateIndexer)
+                </td>
+                <td>
+                    @Html.DisplayFor(model => givenCertificate.ReceiptDate)
+                </td>
+                <td>
+                    @Html.DisplayFor(model => givenCertificate.ExpirationDate)
+                </td>
+                <td>
+                    @Html.DisplayFor(model => givenCertificate.Certificate.CertificateIndexer)
+                </td>
+                <td>
+                    @Html.DisplayFor(model => givenCertificate.Certificate.Name)
+                </td>
+                <td>
+                    @Html.DisplayFor(model => givenCertificate.Certificate.Description)
+                </td>
+                <td>
+                    <div class="btn-group btn-group-toggle row" data-toggle="buttons">
+                        @foreach (var branch in givenCertificate.Certificate.Branches)
                         {
-                            <span class="fas fa-times" style="font-size:34px"></span>
+                            <label class="btn btn-outline-secondary m-2 active">
+                                <input type="checkbox"
+                                       name="SelectedBranches"
+                                       value="@branch"
+                                       autocomplete="off"
+                                       disabled
+                                       checked />
+                                <span>@branch</span>
+                            </label>
                         }
-                        else
-                        {
-                            <span class="fas fa-check-circle" style="font-size:34px"></span>
-                        }
-                    </td>
-                </tr>
+                    </div>
+                </td>
+                <td style="text-align:center">
+                    @if (givenCertificate.ExpirationDate < DateTime.Now)
+                    {
+                        <span class="fas fa-times" style="font-size:34px"></span>
+                    }
+                    else
+                    {
+                        <span class="fas fa-check-circle" style="font-size:34px"></span>
+                    }
+                </td>
+            </tr>
             }
         </tbody>
     </table>

@@ -346,5 +346,48 @@ namespace Certification_System.Controllers
 
             return View("DeleteEntity", givenCertificateToDelete);
         }
+
+        // GET: WorkerGivenCertificateDetails
+        [Authorize(Roles = "Worker")]
+        public ActionResult WorkerGivenCertificateDetails(string givenCertificateIdentificator)
+        {
+            var givenCertificate = _context.givenCertificateRepository.GetGivenCertificateById(givenCertificateIdentificator);
+            var certificate = _context.certificateRepository.GetCertificateById(givenCertificate.Certificate);
+
+            var course = _context.courseRepository.GetCourseById(givenCertificate.Course);
+            var meetings = _context.meetingRepository.GetMeetingsById(course.Meetings);
+
+            List<string> instructorsIdentificators = new List<string>();
+
+            meetings.ToList().ForEach(z => z.Instructors.ToList().ForEach(s => instructorsIdentificators.Add(s)));
+            instructorsIdentificators.Distinct();
+
+            var instructors = _context.userRepository.GetInstructorsById(instructorsIdentificators);
+
+            DisplayCourseViewModel courseViewModel = _mapper.Map<DisplayCourseViewModel>(course);
+            courseViewModel.Branches = _context.branchRepository.GetBranchesById(courseViewModel.Branches);
+
+            List<DisplayMeetingWithoutCourseViewModel> meetingsViewModel = new List<DisplayMeetingWithoutCourseViewModel>();
+
+            foreach (var meeting in meetings)
+            {
+                DisplayMeetingWithoutCourseViewModel singleMeeting = _mapper.Map<DisplayMeetingWithoutCourseViewModel>(meeting);
+                singleMeeting.Instructors = _mapper.Map<List<DisplayCrucialDataUserViewModel>>(instructors.Where(z => meeting.Instructors.Contains(z.Id)).ToList());
+
+                meetingsViewModel.Add(singleMeeting);
+            }
+
+            DisplayCertificateViewModel certificateViewModel = _mapper.Map<DisplayCertificateViewModel>(certificate);
+            certificateViewModel.Branches = _context.branchRepository.GetBranchesById(certificateViewModel.Branches);
+
+            WorkerGivenCertificateDetailsViewModel givenCertificateDetails = new WorkerGivenCertificateDetailsViewModel();
+            givenCertificateDetails.GivenCertificate = _mapper.Map<DisplayGivenCertificateToUserWithoutCourseExtendedViewModel>(givenCertificate);
+            givenCertificateDetails.GivenCertificate.Certificate = certificateViewModel;
+
+            givenCertificateDetails.Course = courseViewModel;
+            givenCertificateDetails.Meetings = meetingsViewModel;
+
+            return View(givenCertificateDetails);
+        }
     }
 }
