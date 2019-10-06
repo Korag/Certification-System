@@ -787,6 +787,34 @@ namespace Certification_System.Controllers
             return View("DeleteEntity", examTermToDelete);
         }
 
+
+        // GET: WorkerExamTermDetails
+        [Authorize(Roles = "Worker")]
+        public ActionResult WorkerExamTermDetails(string examTermIdentificator)
+        {
+            var user = _context.userRepository.GetUserByEmail(this.User.Identity.Name);
+
+            var examTerm = _context.examTermRepository.GetExamTermById(examTermIdentificator);
+            var exam = _context.examRepository.GetExamByExamTermId(examTermIdentificator);
+
+            var examiners = _context.userRepository.GetUsersById(examTerm.Examiners);
+
+            var course = _context.courseRepository.GetCourseByExamId(exam.ExamIdentificator);
+
+            DisplayExamWithoutCourseViewModel examViewModel = _mapper.Map<DisplayExamWithoutCourseViewModel>(exam);
+            examViewModel.Examiners = _mapper.Map<List<DisplayCrucialDataUserViewModel>>(_context.userRepository.GetUsersById(exam.Examiners).ToList());
+
+            DisplayCourseViewModel courseViewModel = _mapper.Map<DisplayCourseViewModel>(course);
+            courseViewModel.Branches = _context.branchRepository.GetBranchesById(course.Branches);
+
+            WorkerExamTermDetailsViewModel examTermDetails = _mapper.Map<WorkerExamTermDetailsViewModel>(examTerm);
+
+            examTermDetails.Exam = examViewModel;
+            examTermDetails.Course = courseViewModel;
+
+            return View(examTermDetails);
+        }
+
         #region AjaxQuery
         // GET: GetUserAvailableToEnrollExamsTermsByExamId
         [Authorize(Roles = "Admin, Examiner")]

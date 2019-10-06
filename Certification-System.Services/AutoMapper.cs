@@ -337,6 +337,14 @@ namespace Certification_System.Services
                     .ForMember(dest => dest.DurationDays, opts => opts.MapFrom(src => (int)src.DateOfEnd.Subtract(src.DateOfStart).TotalDays))
                     .ForMember(dest => dest.DurationMinutes, opts => opts.MapFrom(src => (int)src.DateOfEnd.Subtract(src.DateOfStart).TotalMinutes));
 
+
+            CreateMap<ExamTerm, WorkerExamTermDetailsViewModel>()
+                    .ForMember(dest => dest.UsersQuantity, opts => opts.MapFrom(src => src.EnrolledUsers.Count()))
+                    .ForMember(dest => dest.Exam, opts => opts.Ignore())
+                    .ForMember(dest => dest.Course, opts => opts.Ignore())
+                    .ForMember(dest => dest.DurationDays, opts => opts.MapFrom(src => (int)src.DateOfEnd.Subtract(src.DateOfStart).TotalDays))
+                    .ForMember(dest => dest.DurationMinutes, opts => opts.MapFrom(src => (int)src.DateOfEnd.Subtract(src.DateOfStart).TotalMinutes));
+
             CreateMap<ExamTerm, DeleteUsersFromExamTermViewModel>()
                     .ForMember(dest => dest.Exam, opts => opts.Ignore())
                     .ForMember(dest => dest.UsersToDeleteFromExamTerm, opts => opts.Ignore())

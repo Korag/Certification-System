@@ -1,48 +1,33 @@
-﻿@model Certification_System.DTOViewModels.WorkerExamDetailsViewModel
+﻿@model Certification_System.DTOViewModels.WorkerExamTermDetailsViewModel
 @using Certification_System.DTOViewModels
 
 @{
-    ViewData["Title"] = "WorkerExamDetails";
+    ViewData["Title"] = "WorkerExamTermDetails";
     Layout = "~/Views/Shared/_Layout.cshtml";
 }
 
-<h1>Szczegóły egzaminu</h1>
+<h1>Szczegóły tury egzaminu</h1>
 <hr />
 
-<h2>Informacje o egzaminie</h2>
-
-<div class="row m-0 mt-3 mb-3">
-    <a asp-action="WorkerCourseDetails" asp-controller="Courses" class="btn btn-outline-info mt-1 xs450px_FloatRight">Powrót do szczegółów kursu</a>
-</div>
+@if (!string.IsNullOrWhiteSpace(ViewBag.message))
+{
+    <h2 class="alert alert-info" role="alert">@ViewBag.message</h2>
+}
 
 <div>
-    <form asp-action="ExamDetails">
+    <h2>Informacje o turze</h2>
+
+    <div class="row m-0 mt-3 mb-3">
+        <a asp-action="WorkerExamDetails" asp-controller="Exams" asp-route-examIdentificator="@Model.Exam.ExamIdentificator" class="btn btn-outline-info mt-1 xs450px_FloatRight">Powrót do szczegółów egzaminu</a>
+    </div>
+
+    <form>
 
         <div class="col-md-8 col-xl-6 col-lg-6 col-sm-12 col-xs-10 m-auto p-3 shadow p-3 mb-5 bg-light rounded border border-primary rounded-bottom" style="opacity:0.90">
 
             <div class="form-group">
-                <label asp-for="ExamIndexer" class="control-label"></label>
-                <input asp-for="ExamIndexer" class="form-control col-12" readonly />
-            </div>
-
-            <div class="form-group">
-                <label asp-for="OrdinalNumber" class="control-label"></label>
-                <input asp-for="OrdinalNumber" class="form-control col-12" readonly />
-            </div>
-
-            <div class="form-group">
-                <label asp-for="Name" class="control-label"></label>
-                <textarea asp-for="Name" class="form-control col-12" style="width:100%; min-width:100%;" readonly></textarea>
-            </div>
-
-            <div class="form-group">
-                <label asp-for="Description" class="control-label"></label>
-                <textarea asp-for="Description" class="form-control col-12" style="width:100%; min-width:100%;" readonly></textarea>
-            </div>
-
-            <div class="form-group">
-                <label asp-for="TypeOfExam" class="control-label"></label>
-                <input asp-for="TypeOfExam" class="form-control col-12" style="width:100%; min-width:100%;" readonly />
+                <label asp-for="ExamTermIndexer" class="control-label"></label>
+                <input asp-for="ExamTermIndexer" class="form-control col-12" readonly />
             </div>
 
             <div class="form-group">
@@ -65,12 +50,6 @@
                 <input asp-for="DurationMinutes" class="form-control col-12" readonly />
             </div>
 
-            <div class="form-group">
-                <label asp-for="ExamDividedToTerms" class="control-label"></label>
-                <div class="row pl-3">
-                    <input type="checkbox" asp-for="ExamDividedToTerms" class="form-control col-12" data-toggle="toggle" data-on="Tak" data-off="Nie" data-size="sm" disabled />
-                </div>
-            </div>
 
             <div class="form-group">
                 <label asp-for="UsersQuantity" class="control-label"></label>
@@ -111,29 +90,22 @@
     </form>
 </div>
 
-<h2 class="mt-4 mb-4">Kurs w ramach którego odbywa się egzamin</h2>
+<h2 class="mt-4 mb-4">Informacje dotyczące egzaminu</h2>
+
+@{List<DisplayExamWithoutCourseViewModel> examList = new List<DisplayExamWithoutCourseViewModel>();
+    examList.Add(Model.Exam);}
+
+@await Component.InvokeAsync("DisplayExamWithoutCourseDataTable", new { examViewModel = examList, tableIdentificator = "listExams", operationSet = 3 })
+
+<h2 class="mt-4 mb-4">Informacje dotyczące kursu</h2>
 
 @{List<DisplayCourseViewModel> courseList = new List<DisplayCourseViewModel>();
     courseList.Add(Model.Course);}
 
 @await Component.InvokeAsync("DisplayCourseDataTable", new { courseViewModel = courseList, tableIdentificator = "listCourses", operationSet = 3 })
 
-@if (Model.ExamDividedToTerms)
-{
-    <h2 class="mt-4 mb-4">Tury egzaminu</h2>
-
-    if (Model.ExamTerms.Count() != 0)
-    {
-        @await Component.InvokeAsync("DisplayExamTermWithoutExamDataTable", new { examTermViewModel = Model.ExamTerms, tableIdentificator = "listExamTerms", operationSet = 3 })
-    }
-    else
-    {
-        <div class="mt-4 mb-4 alert alert-warning">Brak dodanych tur egzaminu</div>
-    }
-}
-
-
 @section Scripts {
+    @{await Html.RenderPartialAsync("_DataTableBasicScript", "listExams");}
     @{await Html.RenderPartialAsync("_DataTableBasicScript", "listCourses");}
-    @{await Html.RenderPartialAsync("_DataTableBasicScript", "listExamTerms");}
 }
+
