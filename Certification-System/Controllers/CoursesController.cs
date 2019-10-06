@@ -1046,7 +1046,7 @@ namespace Certification_System.Controllers
                 DisplayExamResultToUserViewModel singleExamResult = _mapper.Map<DisplayExamResultToUserViewModel>(examResult);
 
                 var examRelatedWithExamResult = userExams.Where(z => z.ExamResults.Contains(examResult.ExamResultIdentificator)).FirstOrDefault();
-
+              
                 singleExamResult.Exam = _mapper.Map<DisplayCrucialDataExamViewModel>(examRelatedWithExamResult);
                 singleExamResult.MaxAmountOfPointsToEarn = examRelatedWithExamResult.MaxAmountOfPointsToEarn;
 
@@ -1060,6 +1060,24 @@ namespace Certification_System.Controllers
                 usersExamsWithResultsViewModel.Add(singleExamResult);
             }
 
+            var examsWithoutPeriods = exams.GroupBy(z => z.ExamIndexer).Select(z => z.OrderBy(s => s.OrdinalNumber).FirstOrDefault()).ToList();
+
+            var notPassedExamsIdentificators = usersExamsWithResultsViewModel.Where(z => z.ExamPassed == false).Select(z => z.Exam.ExamIdentificator).ToList();
+            var examsWithoutExamResult = examsWithoutPeriods.Where(z => !z.EnrolledUsers.Contains(user.Id)).ToList();
+
+            foreach (var exam in notPassedExamsIdentificators)
+            {
+                DisplayExamResultToUserViewModel singleExamResult = new DisplayExamResultToUserViewModel();
+                singleExamResult.Exam = _mapper.Map<DisplayCrucialDataExamViewModel>(exam);
+
+                usersExamsWithResultsViewModel.Add(singleExamResult);
+            }
+
+            notPassedExamsIdentificators.AddRange(examsWithoutExamResult.Select(z => z.ExamIdentificator).ToList());
+
+            var notPassedExams = exams.Where(z => notPassedExamsIdentificators.Contains(z.ExamIdentificator)).ToList();
+            var notPassedExamsViewModel = _mapper.Map<List<DisplayCrucialDataExamViewModel>>(notPassedExams);
+
             WorkerCourseDetailsViewModel courseDetails = new WorkerCourseDetailsViewModel();
             courseDetails.Course = _mapper.Map<DisplayCourseViewModel>(course);
             courseDetails.Course.Branches = _context.branchRepository.GetBranchesById(course.Branches);
@@ -1068,7 +1086,8 @@ namespace Certification_System.Controllers
             courseDetails.MeetingsPresence = meetingsPresenceViewModel;
 
             courseDetails.Exams = examsViewModel;
-            courseDetails.UsersExamWithExamResults = usersExamsWithResultsViewModel;
+            courseDetails.UserExamWithExamResults = usersExamsWithResultsViewModel;
+            courseDetails.UserNotPassedExams = notPassedExamsViewModel;
 
             courseDetails.Course.EnrolledUsersQuantity = course.EnrolledUsers.Count;
 
