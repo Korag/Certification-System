@@ -351,6 +351,8 @@ namespace Certification_System.Services
                     .ForMember(dest => dest.CourseParticipants, opts => opts.Ignore())
                     .ForMember(dest => dest.DurationDays, opts => opts.MapFrom(src => (int)src.DateOfEnd.Subtract(src.DateOfStart).TotalDays))
                     .ForMember(dest => dest.DurationMinutes, opts => opts.MapFrom(src => (int)src.DateOfEnd.Subtract(src.DateOfStart).TotalMinutes));
+
+            CreateMap<ExamTerm, DisplayExamTermIndexerViewModel>();
             #endregion
 
             #region ExamResults
@@ -361,6 +363,9 @@ namespace Certification_System.Services
             CreateMap<ExamResult, DisplayExamResultViewModel>()
                      .ForMember(dest => dest.User, opts => opts.Ignore());
 
+            CreateMap<ExamResult, DisplayExamResultToUserViewModel>()
+                     .ForMember(dest => dest.Exam, opts => opts.Ignore());
+ 
             CreateMap<ExamResult, DisplayExamResultWithExamIdentificator>();
 
             CreateMap<ExamResult, MarkUserViewModel>();

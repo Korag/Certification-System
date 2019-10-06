@@ -996,8 +996,15 @@ namespace Certification_System.Controllers
         public ActionResult WorkerCourseDetails(string courseIdentificator)
         {
             var user = _context.userRepository.GetUserByEmail(this.User.Identity.Name);
+
             var course = _context.courseRepository.GetCourseById(courseIdentificator);
             var meetings = _context.meetingRepository.GetMeetingsById(course.Meetings);
+
+            var exams = _context.examRepository.GetExamsById(course.Exams);
+            var userExams = exams.Where(z => z.EnrolledUsers.Contains(user.Id)).ToList();
+
+            var examsResults = _context.examResultRepository.GetExamsResultsById(userExams.SelectMany(z => z.ExamResults).ToList());
+            var userExamsResults = examsResults.Where(z => z.User == user.Id).ToList();
 
             List<DisplayMeetingWithoutCourseViewModel> meetingsViewModel = new List<DisplayMeetingWithoutCourseViewModel>();
             List<DisplayMeetingWithUserPresenceInformation> meetingsPresenceViewModel = new List<DisplayMeetingWithUserPresenceInformation>();
@@ -1020,7 +1027,6 @@ namespace Certification_System.Controllers
                 meetingsViewModel.Add(singleMeeting);
             }
 
-            var exams = _context.examRepository.GetExamsById(course.Exams);
             List<DisplayExamWithoutCourseViewModel> examsViewModel = new List<DisplayExamWithoutCourseViewModel>();
 
             List<string> listOfExaminatorsIdentificators = new List<string>();
@@ -1033,6 +1039,27 @@ namespace Certification_System.Controllers
                 examsViewModel.Add(singleExam);
             }
 
+            List<DisplayExamResultToUserViewModel> usersExamsWithResultsViewModel = new List<DisplayExamResultToUserViewModel>();
+
+            foreach (var examResult in userExamsResults)
+            {
+                DisplayExamResultToUserViewModel singleExamResult = _mapper.Map<DisplayExamResultToUserViewModel>(examResult);
+
+                var examRelatedWithExamResult = userExams.Where(z => z.ExamResults.Contains(examResult.ExamResultIdentificator)).FirstOrDefault();
+
+                singleExamResult.Exam = _mapper.Map<DisplayCrucialDataExamViewModel>(examRelatedWithExamResult);
+                singleExamResult.MaxAmountOfPointsToEarn = examRelatedWithExamResult.MaxAmountOfPointsToEarn;
+
+                if (!string.IsNullOrWhiteSpace(examResult.ExamTerm))
+                {
+                    var examTerm = _context.examTermRepository.GetExamTermById(examResult.ExamTerm);
+
+                    singleExamResult.ExamTerm = _mapper.Map<DisplayExamTermIndexerViewModel>(examTerm);
+                }
+
+                usersExamsWithResultsViewModel.Add(singleExamResult);
+            }
+
             WorkerCourseDetailsViewModel courseDetails = new WorkerCourseDetailsViewModel();
             courseDetails.Course = _mapper.Map<DisplayCourseViewModel>(course);
             courseDetails.Course.Branches = _context.branchRepository.GetBranchesById(course.Branches);
@@ -1041,6 +1068,7 @@ namespace Certification_System.Controllers
             courseDetails.MeetingsPresence = meetingsPresenceViewModel;
 
             courseDetails.Exams = examsViewModel;
+            courseDetails.UsersExamWithExamResults = usersExamsWithResultsViewModel;
 
             courseDetails.Course.EnrolledUsersQuantity = course.EnrolledUsers.Count;
 

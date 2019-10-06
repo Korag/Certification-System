@@ -105,7 +105,7 @@
 
 @if (Model.MeetingsPresence.Count != 0)
 {
-    @await Component.InvokeAsync("DisplayMeetingPresenceToUserDataTable", new { meetingViewModel = Model.MeetingsPresence, tableIdentificator = "listMeetings" })
+    @await Component.InvokeAsync("DisplayMeetingPresenceToUserDataTable", new { meetingViewModel = Model.MeetingsPresence, tableIdentificator = "listMeetingsPresence" })
 }
 
 <h2 class="mt-4 mb-4">Spotkania w ramach kursu</h2>
@@ -131,9 +131,22 @@ else
     {
         <div class="mt-4 mb-4 alert alert-warning">Kurs nie posiada zdefiniowanych egzaminów</div>
     }
+
+    <h2 class="mt-4 mb-4">Moje egzaminy</h2>
+
+    @if (Model.UsersExamWithExamResults.Count() != 0)
+    {
+        @await Component.InvokeAsync("DisplayExamResultToUserDataTable", new { examResultViewModel = Model.UsersExamWithExamResults, tableIdentificator = "listExamsWithExamsResults", operationSet = 2 })
+    }
+    else
+    {
+        <div class="mt-4 mb-4 alert alert-warning">Nie zapisałeś się jeszcze na żaden egzamin</div>
+    }
 }
 
 @section Scripts {
     @{await Html.RenderPartialAsync("_DataTableBasicScript", "listMeetings");}
+    @{await Html.RenderPartialAsync("_DataTableBasicScript", "listMeetingsPresence");}
     @{await Html.RenderPartialAsync("_DataTableBasicScript", "listExams");}
+    @{await Html.RenderPartialAsync("_DataTableBasicScript", "listExamsWithExamsResults");}
 }
