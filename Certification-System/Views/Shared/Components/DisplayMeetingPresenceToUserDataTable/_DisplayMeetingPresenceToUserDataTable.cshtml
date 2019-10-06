@@ -1,0 +1,68 @@
+﻿@model Certification_System.DTOViewModels.DisplayMeetingWithUserPresenceInformationDataTableViewModel
+
+<div class="col-12 table-responsive">
+    <table id="@Model.Options.TableIdentificator" class="table table-striped table-bordered display" style="width: 100%;" role="grid">
+        <thead>
+            <tr>
+                <th>
+                    @Html.DisplayNameFor(model => model.Meetings.FirstOrDefault().MeetingIndexer)
+                </th>
+                <th>
+                    @Html.DisplayNameFor(model => model.Meetings.FirstOrDefault().Description)
+                </th>
+                <th>
+                    @Html.DisplayNameFor(model => model.Meetings.FirstOrDefault().DateOfStart)
+                </th>
+                <th>
+                    @Html.DisplayNameFor(model => model.Meetings.FirstOrDefault().DateOfEnd)
+                </th>
+                <th>
+                    @Html.DisplayNameFor(model => model.Meetings.FirstOrDefault().IsUserPresent)
+                </th>
+                @if (Model.Options.OperationSet != 0)
+                {
+                    <th>
+                        Operacje
+                    </th>
+                }
+            </tr>
+        </thead>
+        <tbody>
+            @foreach (var meeting in Model.Meetings)
+            {
+                <tr>
+                    <td>
+                        @Html.DisplayFor(modelItem => meeting.MeetingIndexer)
+                    </td>
+                    <td>
+                        @Html.DisplayFor(modelItem => meeting.Description)
+                    </td>
+                    <td>
+                        @Html.DisplayFor(modelItem => meeting.DateOfStart)
+                    </td>
+                    <td>
+                        @Html.DisplayFor(modelItem => meeting.DateOfEnd)
+                    </td>
+                    <td>
+                        @if (meeting.IsUserPresent)
+                        {
+                            <input type="checkbox" checked data-toggle="toggle" data-on="<i class='fas fa-clipboard-check'></i> <br/>Obecny" data-off="<i class='fas fa-times'></i> <br/>Nieobecny" data-size="sm" disabled />
+                        }
+                        else if (DateTime.Now < meeting.DateOfStart)
+                        {
+                            <input type="checkbox" data-toggle="toggle" data-on="<i class='fas fa-clipboard-check'></i> <br/>Obecny" data-off="<i class='fas fa-times'></i> <br/>Spotkanie jeszcze się nie zaczęło" data-size="sm" disabled />
+                        }
+                        else
+                        {
+                            <input type="checkbox" data-toggle="toggle" data-on="<i class='fas fa-clipboard-check'></i> <br/>Obecny" data-off="<i class='fas fa-times'></i> <br/>Nieobecny" data-size="sm" disabled />
+                        }
+                    </td>
+                    @if (Model.Options.OperationSet != 0)
+                    {
+                        <td></td>
+                    }
+                </tr>
+            }
+        </tbody>
+    </table>
+</div>

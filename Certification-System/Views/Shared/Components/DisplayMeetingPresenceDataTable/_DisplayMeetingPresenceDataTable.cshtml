@@ -42,7 +42,7 @@
                         {
                             <input type="checkbox" checked data-toggle="toggle" data-on="<i class='fas fa-clipboard-check'></i> <br/>Obecny" data-off="<i class='fas fa-times'></i> <br/>Nieobecny" data-size="sm" disabled />
                         }
-                        else if (DateTime.Now > Model.MeetingStartDate)
+                        else if (DateTime.Now < Model.MeetingStartDate)
                         {
                             <input type="checkbox" data-toggle="toggle" data-on="<i class='fas fa-clipboard-check'></i> <br/>Obecny" data-off="<i class='fas fa-times'></i> <br/>Spotkanie jeszcze się nie zaczęło" data-size="sm" disabled />
                         }
