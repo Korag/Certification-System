@@ -992,13 +992,15 @@ namespace Certification_System.Controllers
 
 
         // GET: WorkerCourseDetails
-        [Authorize(Roles = "Admin, Instructor, Examiner")]
+        [Authorize(Roles = "Worker")]
         public ActionResult WorkerCourseDetails(string courseIdentificator)
         {
+            var user = _context.userRepository.GetUserByEmail(this.User.Identity.Name);
             var course = _context.courseRepository.GetCourseById(courseIdentificator);
             var meetings = _context.meetingRepository.GetMeetingsById(course.Meetings);
 
             List<DisplayMeetingWithoutCourseViewModel> meetingsViewModel = new List<DisplayMeetingWithoutCourseViewModel>();
+            List<DisplayMeetingWithUserPresenceInformation> meetingsPresenceViewModel = new List<DisplayMeetingWithUserPresenceInformation>();
 
             foreach (var meeting in meetings)
             {
@@ -1007,6 +1009,14 @@ namespace Certification_System.Controllers
                 DisplayMeetingWithoutCourseViewModel singleMeeting = _mapper.Map<DisplayMeetingWithoutCourseViewModel>(meeting);
                 singleMeeting.Instructors = _mapper.Map<List<DisplayCrucialDataUserViewModel>>(meetingInstructors);
 
+                DisplayMeetingWithUserPresenceInformation singlePresence = _mapper.Map<DisplayMeetingWithUserPresenceInformation>(meeting);
+
+                if (meeting.AttendanceList.Contains(user.Id))
+                {
+                    singlePresence.IsUserPresent = true;
+                }
+
+                meetingsPresenceViewModel.Add(singlePresence);
                 meetingsViewModel.Add(singleMeeting);
             }
 
@@ -1028,6 +1038,8 @@ namespace Certification_System.Controllers
             courseDetails.Course.Branches = _context.branchRepository.GetBranchesById(course.Branches);
 
             courseDetails.Meetings = meetingsViewModel;
+            courseDetails.MeetingsPresence = meetingsPresenceViewModel;
+
             courseDetails.Exams = examsViewModel;
 
             courseDetails.Course.EnrolledUsersQuantity = course.EnrolledUsers.Count;

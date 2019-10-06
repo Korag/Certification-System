@@ -462,6 +462,9 @@ namespace Certification_System.Services
 
             CreateMap<Meeting, DisplayMeetingWithoutCourseViewModel>()
                     .ForMember(dest => dest.Instructors, opts => opts.Ignore());
+
+            CreateMap<Meeting, DisplayMeetingWithUserPresenceInformation>()
+                    .ForMember(dest => dest.IsUserPresent, opts => opts.Ignore());
             #endregion
 
             #region Users

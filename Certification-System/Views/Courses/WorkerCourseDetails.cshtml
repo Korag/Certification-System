@@ -91,6 +91,23 @@
     </form>
 </div>
 
+<h2 class="mt-4 mb-4">Zestawienie obecności</h2>
+
+<div class="row form-group" style="padding-left:2vh">
+    <label class="control-label col-6" style="text-align:center;">Ilość obecności</label>
+    <label class="control-label col-6" style="text-align:center;">Ilość wszystkich zakończonych spotkań</label>
+</div>
+
+<div class="row form-group" style="padding-left:2vh">
+    <input value="@Model.MeetingsPresence.Where(z=> z.IsUserPresent == true).Count()" class="form-control col-6" style="text-align:center;" readonly />
+    <input value="@Model.MeetingsPresence.Where(z=> DateTime.Now > z.DateOfStart).Count()" class="form-control col-6" style="text-align:center;" readonly />
+</div>
+
+@if (Model.MeetingsPresence.Count != 0)
+{
+    @await Component.InvokeAsync("DisplayMeetingPresenceToUserDataTable", new { meetingViewModel = Model.MeetingsPresence, tableIdentificator = "listMeetings" })
+}
+
 <h2 class="mt-4 mb-4">Spotkania w ramach kursu</h2>
 
 @if (Model.Meetings.Count != 0)

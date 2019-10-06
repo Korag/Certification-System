@@ -13,5 +13,10 @@ namespace Certification_System.DTOViewModels
 
         [Display(Name = "Egzaminy")]
         public ICollection<DisplayExamWithoutCourseViewModel> Exams { get; set; }
+
+        [Display(Name = "Zestawienie obecności na spotkaniach")]
+        public ICollection<DisplayMeetingWithUserPresenceInformation> MeetingsPresence { get; set; }
+
+        // ExamResulty z examów i examTermóna które jest zapisany users + indekser + nazwa + termin + data + wynik dokładny + czy zdane 
     }
 }
