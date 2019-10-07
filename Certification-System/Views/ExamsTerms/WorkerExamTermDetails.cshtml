@@ -9,15 +9,20 @@
 <h1>Szczegóły tury egzaminu</h1>
 <hr />
 
-@if (!string.IsNullOrWhiteSpace(ViewBag.message))
-{
-    <h2 class="alert alert-info" role="alert">@ViewBag.message</h2>
-}
-
 <div>
     <h2>Informacje o turze</h2>
 
     <div class="row m-0 mt-3 mb-3">
+        @if (Model.CanUserAssignToExam)
+        {
+            <a asp-action="AssignUserToExamHub" asp-route-examIdentificator="@Model.Exam.ExamIdentificator" asp-route-examTermIdentificator="@Model.ExamTermIdentificator" asp-controller="Exams" class="btn btn-outline-info mt-1 xs450px_FloatLeft">Zapisz się</a>
+        }
+        else if (Model.CanUserResignFromExam)
+        {
+            <a asp-action="ResignFromExamTerm" asp-route-examTermIdentificator="@Model.ExamTermIdentificator" asp-controller="ExamsTerms" class="btn btn-outline-info mt-1 xs450px_FloatLeft">Zrezygnuj</a>
+
+        }
+
         <a asp-action="WorkerExamDetails" asp-controller="Exams" asp-route-examIdentificator="@Model.Exam.ExamIdentificator" class="btn btn-outline-info mt-1 xs450px_FloatRight">Powrót do szczegółów egzaminu</a>
     </div>
 

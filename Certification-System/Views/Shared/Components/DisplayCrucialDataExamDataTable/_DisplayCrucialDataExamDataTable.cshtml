@@ -19,7 +19,7 @@
                 <th>
                     @Html.DisplayNameFor(model => model.Exams.FirstOrDefault().TypeOfExam)
                 </th>
-                @if (Model.Options.OperationSet != 0)
+                @if (Model.Options.OperationSet != 0 && !Model.CourseEnded)
                 {
                     <th>
                         Operacje
@@ -30,27 +30,29 @@
         <tbody>
             @foreach (var exam in Model.Exams)
             {
-                <tr>
+            <tr>
+                <td>
+                    @Html.DisplayFor(modelItem => exam.ExamIndexer)
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => exam.OrdinalNumber)
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => exam.Name)
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => exam.Description)
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => exam.TypeOfExam)
+                </td>
+                @if (Model.Options.OperationSet == 1 && !Model.CourseEnded)
+                {
                     <td>
-                        @Html.DisplayFor(modelItem => exam.ExamIndexer)
+                        <a asp-action="AssignUserToExamHub" asp-route-examIdentificator="@exam.ExamIdentificator" asp-controller="Exams" class="btn btn-primary m-1">Zapisz się</a>
                     </td>
-                    <td>
-                        @Html.DisplayFor(modelItem => exam.OrdinalNumber)
-                    </td>
-                    <td>
-                        @Html.DisplayFor(modelItem => exam.Name)
-                    </td>
-                    <td>
-                        @Html.DisplayFor(modelItem => exam.Description)
-                    </td>
-                    <td>
-                        @Html.DisplayFor(modelItem => exam.TypeOfExam)
-                    </td>
-                    @if (Model.Options.OperationSet == 1)
-                    {
-                        <td></td>
-                    }
-                </tr>
+                }
+            </tr>
             }
         </tbody>
     </table>

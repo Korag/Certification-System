@@ -12,6 +12,16 @@
 <h2>Informacje o egzaminie</h2>
 
 <div class="row m-0 mt-3 mb-3">
+    @if (Model.CanUserAssignToExam)
+    {
+        <a asp-action="AssignUserToExamHub" asp-route-examIdentificator="@Model.ExamIdentificator" asp-controller="Exams" class="btn btn-outline-info mt-1 xs450px_FloatLeft">Zapisz się</a>
+    }
+    else if (Model.CanUserResignFromExam)
+    {
+        <a asp-action="ResignFromExam" asp-route-examIdentificator="@Model.ExamIdentificator" asp-controller="Exams" class="btn btn-outline-info mt-1 xs450px_FloatLeft">Zrezygnuj</a>
+
+    }
+
     <a asp-action="WorkerCourseDetails" asp-controller="Courses" class="btn btn-outline-info mt-1 xs450px_FloatRight">Powrót do szczegółów kursu</a>
 </div>
 
@@ -139,10 +149,11 @@
     List<DisplayExamResultToUserViewModel> examResultList = new List<DisplayExamResultToUserViewModel>();
     examResultList.Add(Model.ExamResult);
 
-    @await Component.InvokeAsync("DisplayExamResultToUserDataTable", new { examResultViewModel = examResultList, tableIdentificator = "listExamsWithExamsResults"})
+    @await Component.InvokeAsync("DisplayExamResultToUserDataTable", new { examResultViewModel = examResultList, tableIdentificator = "listExamsWithExamsResults" })
 }
 
 @section Scripts {
     @{await Html.RenderPartialAsync("_DataTableBasicScript", "listCourses");}
     @{await Html.RenderPartialAsync("_DataTableBasicScript", "listExamTerms");}
+    @{await Html.RenderPartialAsync("_DataTableBasicScript", "listExamsWithExamsResults");}
 }

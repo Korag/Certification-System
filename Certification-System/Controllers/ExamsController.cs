@@ -1026,7 +1026,7 @@ namespace Certification_System.Controllers
 
                         var previousUserExamResult = examResults.Where(z => z.User == user.UserIdentificator && exam.ExamResults.Contains(z.ExamResultIdentificator)).FirstOrDefault();
 
-                        if (previousUserExamResult !=  null)
+                        if (previousUserExamResult != null)
                         {
                             newUserExamResult = previousUserExamResult.Clone();
 
@@ -1085,7 +1085,7 @@ namespace Certification_System.Controllers
                         _logger.AddExamsResultsLogs(usersExamsResultsToAdd, logAdd);
                     }
                 }
-               
+
                 return RedirectToAction("ExamDetails", new { examIdentificator = markedExamViewModel.ExamIdentificator, message = "Dokonano oceny egzaminu" });
             }
 
@@ -1333,6 +1333,7 @@ namespace Certification_System.Controllers
             }
 
             var course = _context.courseRepository.GetCourseByExamId(examIdentificator);
+            var courseExams = _context.examRepository.GetExamsById(course.Exams);
 
             DisplayCourseViewModel courseViewModel = _mapper.Map<DisplayCourseViewModel>(course);
             courseViewModel.Branches = _context.branchRepository.GetBranchesById(course.Branches);
@@ -1347,12 +1348,32 @@ namespace Certification_System.Controllers
                 examResultViewModel.MaxAmountOfPointsToEarn = exam.MaxAmountOfPointsToEarn;
             }
 
+            bool canUserAssignToExam = false;
+            bool canUserResignFromExam = false;
+
+            if (exam.EnrolledUsers.Contains(user.Id))
+            {
+                canUserAssignToExam = false;
+
+                if (DateTime.Now < exam.DateOfStart)
+                {
+                    canUserResignFromExam = true;
+                }
+            }
+            else if (courseExams.Where(z => z.EnrolledUsers.Contains(user.Id) && z.ExamIndexer == exam.ExamIndexer).Count() == 0)
+            {
+                canUserAssignToExam = true;
+            }
+
             WorkerExamDetailsViewModel examDetails = _mapper.Map<WorkerExamDetailsViewModel>(exam);
 
             examDetails.ExamResult = examResultViewModel;
             examDetails.ExamTerms = listOfExamTerms;
 
             examDetails.Course = courseViewModel;
+
+            examDetails.CanUserAssignToExam = canUserAssignToExam;
+            examDetails.CanUserResignFromExam = canUserResignFromExam;
 
             return View(examDetails);
         }
@@ -1365,7 +1386,7 @@ namespace Certification_System.Controllers
             var user = _context.userRepository.GetUserById(userIdentificator);
 
             var examsIdentificators = _context.courseRepository.GetCoursesById(user.Courses).SelectMany(z => z.Exams).ToList();
-            var exams = _context.examRepository.GetOnlyActiveExamsDividedToTermsById(examsIdentificators).Where(z=> !z.EnrolledUsers.Contains(userIdentificator)).ToList();
+            var exams = _context.examRepository.GetOnlyActiveExamsDividedToTermsById(examsIdentificators).Where(z => !z.EnrolledUsers.Contains(userIdentificator)).ToList();
 
             string[][] examsArray = new string[exams.Count()][];
 

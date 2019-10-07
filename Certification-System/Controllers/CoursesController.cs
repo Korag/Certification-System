@@ -1057,7 +1057,19 @@ namespace Certification_System.Controllers
                     var examTerm = _context.examTermRepository.GetExamTermById(examResult.ExamTerm);
 
                     singleExamResult.ExamTerm = _mapper.Map<DisplayExamTermIndexerViewModel>(examTerm);
+
+                    if (DateTime.Now > examTerm.DateOfStart)
+                    {
+                        singleExamResult.CanUserResignFromExam = false;
+                    }
                 }
+
+                if (DateTime.Now > examRelatedWithExamResult.DateOfStart)
+                {
+                    singleExamResult.CanUserResignFromExam = false;
+                }
+
+                singleExamResult.CanUserResignFromExam = true;
 
                 usersExamsWithResultsViewModel.Add(singleExamResult);
             }

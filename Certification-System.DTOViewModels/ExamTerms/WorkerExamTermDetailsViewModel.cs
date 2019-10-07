@@ -54,5 +54,8 @@ namespace Certification_System.DTOViewModels
 
         [Display(Name = "Numer domu/mieszkania")]
         public string NumberOfApartment { get; set; }
+
+        public bool CanUserAssignToExam { get; set; }
+        public bool CanUserResignFromExam { get; set; }
     }
 }

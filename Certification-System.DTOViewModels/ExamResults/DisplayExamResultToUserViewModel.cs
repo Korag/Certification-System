@@ -21,6 +21,8 @@ namespace Certification_System.DTOViewModels
         [Display(Name = "Egzamin zaliczony")]
         public bool ExamPassed { get; set; }
 
+        public bool CanUserResignFromExam { get; set; }
+
         [Display(Name = "Egzamin")]
         public DisplayCrucialDataExamViewModel Exam { get; set; }
 

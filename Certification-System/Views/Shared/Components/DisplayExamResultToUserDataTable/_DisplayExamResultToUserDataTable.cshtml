@@ -45,64 +45,89 @@
         <tbody>
             @foreach (var examResult in Model.ExamsResults)
             {
-            <tr>
-                <td>
-                    @Html.DisplayFor(modelItem => examResult.Exam.ExamIndexer)
-                </td>
-                <td>
-                    @Html.DisplayFor(modelItem => examResult.Exam.Name)
-                </td>
-                <td>
-                    @Html.DisplayFor(modelItem => examResult.Exam.OrdinalNumber)
-                </td>
-                <td>
-                    @Html.DisplayFor(modelItem => examResult.Exam.TypeOfExam)
-                </td>
-                <td>
-                    @Html.DisplayFor(modelItem => examResult.ExamTerm.ExamTermIndexer)
-                </td>
-                <td>
-                    @Html.DisplayFor(modelItem => examResult.ExamResultIndexer)
-                </td>
-                <td>
-                    @Html.DisplayFor(modelItem => examResult.PointsEarned)
-                </td>
-                <td>
-                    @Html.DisplayFor(modelItem => examResult.MaxAmountOfPointsToEarn)
-                </td>
-                <td>
-                    @Html.DisplayFor(modelItem => examResult.PercentageOfResult)
-                </td>
-                <td>
-                    <input type="checkbox" asp-for="@examResult.ExamPassed" data-toggle="toggle" data-on="Tak" data-off="Nie" data-size="sm" disabled />
-                </td>
-                @if (Model.Options.OperationSet == 1)
-                {
+                <tr>
                     <td>
-                        @if (examResult.ExamTerm == null)
-                        {
-                            <a asp-action="ExamDetails" asp-route-examIdentificator="@examResult.Exam.ExamIdentificator" asp-controller="Exams" class="btn btn-info m-1">Szczegóły egzaminu</a>
-                        }
-                        else
-                        {
-                            <a asp-action="ExamTermDetails" asp-route-examTermIdentificator="@examResult.ExamTerm.ExamTermIdentificator" asp-controller="ExamsTerms" class="btn btn-info m-1">Szczegóły tury egzaminu</a>
-                        }
+                        @Html.DisplayFor(modelItem => examResult.Exam.ExamIndexer)
                     </td>
-                }
-                @if (Model.Options.OperationSet == 2)
-                {
                     <td>
-                        @if (examResult.ExamTerm == null)
-                        {
-                            <a asp-action="WorkerExamDetails" asp-route-examIdentificator="@examResult.Exam.ExamIdentificator" asp-controller="Exams" class="btn btn-info m-1">Szczegóły egzaminu</a>
-                        }
-                        else
-                        {
-                            <a asp-action="WorkerExamTermDetails" asp-route-examTermIdentificator="@examResult.ExamTerm.ExamTermIdentificator" asp-controller="ExamsTerms" class="btn btn-info m-1">Szczegóły tury egzaminu</a>
-                        }
+                        @Html.DisplayFor(modelItem => examResult.Exam.Name)
                     </td>
-                }
-            </tr>
+                    <td>
+                        @Html.DisplayFor(modelItem => examResult.Exam.OrdinalNumber)
+                    </td>
+                    <td>
+                        @Html.DisplayFor(modelItem => examResult.Exam.TypeOfExam)
+                    </td>
+                    <td>
+                        @Html.DisplayFor(modelItem => examResult.ExamTerm.ExamTermIndexer)
+                    </td>
+                    <td>
+                        @Html.DisplayFor(modelItem => examResult.ExamResultIndexer)
+                    </td>
+                    <td>
+                        @Html.DisplayFor(modelItem => examResult.PointsEarned)
+                    </td>
+                    <td>
+                        @Html.DisplayFor(modelItem => examResult.MaxAmountOfPointsToEarn)
+                    </td>
+                    <td>
+                        @Html.DisplayFor(modelItem => examResult.PercentageOfResult)
+                    </td>
+                    <td>
+                        <input type="checkbox" asp-for="@examResult.ExamPassed" data-toggle="toggle" data-on="Tak" data-off="Nie" data-size="sm" disabled />
+                    </td>
+                    @if (Model.Options.OperationSet == 1)
+                    {
+                        <td>
+                            @if (examResult.ExamTerm == null)
+                            {
+                                <a asp-action="ExamDetails" asp-route-examIdentificator="@examResult.Exam.ExamIdentificator" asp-controller="Exams" class="btn btn-info m-1">Szczegóły egzaminu</a>
+                            }
+                            else
+                            {
+                                <a asp-action="ExamTermDetails" asp-route-examTermIdentificator="@examResult.ExamTerm.ExamTermIdentificator" asp-controller="ExamsTerms" class="btn btn-info m-1">Szczegóły tury egzaminu</a>
+                            }
+                        </td>
+                    }
+                    @if (Model.Options.OperationSet == 2 && examResult.CanUserResignFromExam)
+                    {
+                        <td>
+                            @if (examResult.ExamTerm == null)
+                            {
+                                <div class="dropdown p-0">
+                                    <button class="btn btn-success dropdown-toggle" type="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">Operacje</button>
+                                    <div class="dropdown-menu nohover">
+                                        <a asp-action="WorkerExamDetails" asp-route-examIdentificator="@examResult.Exam.ExamIdentificator" asp-controller="Exams" class="btn btn-info w-100 mb-1">Szczegóły egzaminu</a>
+                                        <a asp-action="ResignFromExam" asp-route-examIdentificator="@examResult.Exam.ExamIdentificator" asp-controller="Exams" class="btn btn-danger w-100">Zrezygnuj</a>
+                                    </div>
+                                </div>
+                            }
+                            else
+                            {
+                                <div class="dropdown p-0">
+                                    <button class="btn btn-success dropdown-toggle" type="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">Operacje</button>
+                                    <div class="dropdown-menu nohover">
+                                        <a asp-action="WorkerExamTermDetails" asp-route-examTermIdentificator="@examResult.ExamTerm.ExamTermIdentificator" asp-controller="ExamsTerms" class="btn btn-info w-100 mb-1">Szczegóły tury egzaminu</a>
+                                        <a asp-action="ResignFromExamTerm" asp-route-examTermIdentificator="@examResult.ExamTerm.ExamTermIdentificator" asp-controller="Exams" class="btn btn-danger w-100">Zrezygnuj</a>
+                                    </div>
+                                </div>
+                            }
+                        </td>
+                    }
+                    else if (Model.Options.OperationSet == 2)
+                    {
+                        <td>
+                            @if (examResult.ExamTerm == null)
+                            {
+                                <a asp-action="WorkerExamDetails" asp-route-examIdentificator="@examResult.Exam.ExamIdentificator" asp-controller="Exams" class="btn btn-info m-1">Szczegóły egzaminu</a>
+                            }
+                            else
+                            {
+                                <a asp-action="WorkerExamTermDetails" asp-route-examTermIdentificator="@examResult.ExamTerm.ExamTermIdentificator" asp-controller="ExamsTerms" class="btn btn-info m-1">Szczegóły tury egzaminu</a>
+                            }
+                        </td>
+                    }
+                </tr>
             }
         </tbody>
     </table>

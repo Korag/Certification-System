@@ -801,6 +801,7 @@ namespace Certification_System.Controllers
             var examiners = _context.userRepository.GetUsersById(examTerm.Examiners);
 
             var course = _context.courseRepository.GetCourseByExamId(exam.ExamIdentificator);
+            var courseExams = _context.examRepository.GetExamsById(course.Exams);
 
             DisplayExamWithoutCourseViewModel examViewModel = _mapper.Map<DisplayExamWithoutCourseViewModel>(exam);
             examViewModel.Examiners = _mapper.Map<List<DisplayCrucialDataUserViewModel>>(_context.userRepository.GetUsersById(exam.Examiners).ToList());
@@ -818,12 +819,32 @@ namespace Certification_System.Controllers
                 examResultViewModel.MaxAmountOfPointsToEarn = exam.MaxAmountOfPointsToEarn;
             }
 
+            bool canUserAssignToExam = false;
+            bool canUserResignFromExam = false;
+
+            if (exam.EnrolledUsers.Contains(user.Id))
+            {
+                canUserAssignToExam = false;
+
+                if (DateTime.Now < exam.DateOfStart)
+                {
+                    canUserResignFromExam = true;
+                }
+            }
+            else if (courseExams.Where(z => z.EnrolledUsers.Contains(user.Id) && z.ExamIndexer == exam.ExamIndexer).Count() == 0)
+            {
+                canUserAssignToExam = true;
+            }
+
             WorkerExamTermDetailsViewModel examTermDetails = _mapper.Map<WorkerExamTermDetailsViewModel>(examTerm);
 
             examTermDetails.Exam = examViewModel;
             examTermDetails.ExamResult = examResultViewModel;
 
             examTermDetails.Course = courseViewModel;
+
+            examTermDetails.CanUserAssignToExam = canUserAssignToExam;
+            examTermDetails.CanUserResignFromExam = canUserResignFromExam;
 
             return View(examTermDetails);
         }
