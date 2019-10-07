@@ -22,5 +22,8 @@ namespace Certification_System.DTOViewModels
 
         [Display(Name = "Egzaminy, które użytkownik musi zdać")]
         public ICollection<DisplayCrucialDataExamViewModel> UserNotPassedExams { get; set; }
+
+        [Display(Name = "Nadane certyfikaty za wybrany kurs")]
+        public ICollection<DisplayGivenCertificateToUserViewModel> GivenCertificates { get; set; }
     }
 }

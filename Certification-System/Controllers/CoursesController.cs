@@ -1006,6 +1006,8 @@ namespace Certification_System.Controllers
             var examsResults = _context.examResultRepository.GetExamsResultsById(userExams.SelectMany(z => z.ExamResults).ToList());
             var userExamsResults = examsResults.Where(z => z.User == user.Id).ToList();
 
+            var givenCertificates = _context.givenCertificateRepository.GetGivenCertificatesById(user.GivenCertificates).Where(z=> z.Course == courseIdentificator);
+
             List<DisplayMeetingWithoutCourseViewModel> meetingsViewModel = new List<DisplayMeetingWithoutCourseViewModel>();
             List<DisplayMeetingWithUserPresenceInformation> meetingsPresenceViewModel = new List<DisplayMeetingWithUserPresenceInformation>();
 
@@ -1078,6 +1080,20 @@ namespace Certification_System.Controllers
             var notPassedExams = exams.Where(z => notPassedExamsIdentificators.Contains(z.ExamIdentificator)).ToList();
             var notPassedExamsViewModel = _mapper.Map<List<DisplayCrucialDataExamViewModel>>(notPassedExams);
 
+            List<DisplayGivenCertificateToUserViewModel> givenCertificatesViewModel = new List<DisplayGivenCertificateToUserViewModel>();
+
+            foreach (var givenCertificate in givenCertificates)
+            {
+                DisplayGivenCertificateToUserViewModel singleGivenCertificate = _mapper.Map<DisplayGivenCertificateToUserViewModel>(givenCertificate);
+
+                var certificate = _context.certificateRepository.GetCertificateById(givenCertificate.Certificate);
+                singleGivenCertificate.Certificate = _mapper.Map<DisplayCrucialDataCertificateViewModel>(certificate);
+
+                singleGivenCertificate.Course = _mapper.Map<DisplayCrucialDataCourseViewModel>(course);
+
+                givenCertificatesViewModel.Add(singleGivenCertificate);
+            }
+
             WorkerCourseDetailsViewModel courseDetails = new WorkerCourseDetailsViewModel();
             courseDetails.Course = _mapper.Map<DisplayCourseViewModel>(course);
             courseDetails.Course.Branches = _context.branchRepository.GetBranchesById(course.Branches);
@@ -1090,6 +1106,8 @@ namespace Certification_System.Controllers
             courseDetails.UserNotPassedExams = notPassedExamsViewModel;
 
             courseDetails.Course.EnrolledUsersQuantity = course.EnrolledUsers.Count;
+
+            courseDetails.GivenCertificates = givenCertificatesViewModel;
 
             return View(courseDetails);
         }

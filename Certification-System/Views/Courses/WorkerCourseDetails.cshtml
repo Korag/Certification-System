@@ -153,6 +153,17 @@ else
     {
         <div class="mt-4 mb-4 alert alert-success">Zaliczyłeś wszystkie egzaminy!</div>
     }
+
+    <h2 class="mt-4 mb-4">Moje otrzymane certyfikaty</h2>
+
+    @if (Model.GivenCertificates.Count() != 0)
+    {
+        @await Component.InvokeAsync("DisplayGivenCertificateToUserDataTable", new { givenCertificateViewModel = Model.GivenCertificates, tableIdentificator = "listGivenCertificates"})
+    }
+    else if (Model.Course.CourseEnded)
+    {
+        <div class="mt-4 mb-4 alert alert-danger">Nie otrzymałeś certyfikatu</div>
+    }
 }
 
 @section Scripts {
@@ -160,4 +171,5 @@ else
     @{await Html.RenderPartialAsync("_DataTableBasicScript", "listMeetingsPresence");}
     @{await Html.RenderPartialAsync("_DataTableBasicScript", "listExams");}
     @{await Html.RenderPartialAsync("_DataTableBasicScript", "listExamsWithExamsResults");}
+    @{await Html.RenderPartialAsync("_DataTableBasicScript", "listGivenCertificates");}
 }
