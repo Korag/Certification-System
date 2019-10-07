@@ -132,6 +132,15 @@
     }
 }
 
+@if (Model.ExamResult != null)
+{
+    <h2 class="mt-4 mb-4">Mój wynik</h2>
+
+    List<DisplayExamResultToUserViewModel> examResultList = new List<DisplayExamResultToUserViewModel>();
+    examResultList.Add(Model.ExamResult);
+
+    @await Component.InvokeAsync("DisplayExamResultToUserDataTable", new { examResultViewModel = examResultList, tableIdentificator = "listExamsWithExamsResults"})
+}
 
 @section Scripts {
     @{await Html.RenderPartialAsync("_DataTableBasicScript", "listCourses");}

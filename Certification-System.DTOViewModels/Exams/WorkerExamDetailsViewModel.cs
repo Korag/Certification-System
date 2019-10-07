@@ -50,6 +50,9 @@ namespace Certification_System.DTOViewModels
         [Display(Name = "Tury egzaminu")]
         public ICollection<DisplayExamTermWithoutExamViewModel> ExamTerms { get; set; }
 
+        [Display(Name = "Wynik tury egzaminu")]
+        public DisplayExamResultToUserViewModel ExamResult { get; set; }
+
         [Display(Name = "Kraj")]
         public string Country { get; set; }
 

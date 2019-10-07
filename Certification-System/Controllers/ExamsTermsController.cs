@@ -796,6 +796,7 @@ namespace Certification_System.Controllers
 
             var examTerm = _context.examTermRepository.GetExamTermById(examTermIdentificator);
             var exam = _context.examRepository.GetExamByExamTermId(examTermIdentificator);
+            var userExamResult = _context.examResultRepository.GetExamsResultsById(exam.ExamResults).Where(z=> z.User == user.Id && z.ExamTerm == examTermIdentificator).FirstOrDefault();
 
             var examiners = _context.userRepository.GetUsersById(examTerm.Examiners);
 
@@ -807,9 +808,21 @@ namespace Certification_System.Controllers
             DisplayCourseViewModel courseViewModel = _mapper.Map<DisplayCourseViewModel>(course);
             courseViewModel.Branches = _context.branchRepository.GetBranchesById(course.Branches);
 
+            DisplayExamResultToUserViewModel examResultViewModel = new DisplayExamResultToUserViewModel();
+
+            if (userExamResult != null)
+            {
+                examResultViewModel = _mapper.Map<DisplayExamResultToUserViewModel>(userExamResult);
+
+                examResultViewModel.Exam = _mapper.Map<DisplayCrucialDataExamViewModel>(exam);
+                examResultViewModel.MaxAmountOfPointsToEarn = exam.MaxAmountOfPointsToEarn;
+            }
+
             WorkerExamTermDetailsViewModel examTermDetails = _mapper.Map<WorkerExamTermDetailsViewModel>(examTerm);
 
             examTermDetails.Exam = examViewModel;
+            examTermDetails.ExamResult = examResultViewModel;
+
             examTermDetails.Course = courseViewModel;
 
             return View(examTermDetails);

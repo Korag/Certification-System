@@ -104,6 +104,16 @@
 
 @await Component.InvokeAsync("DisplayCourseDataTable", new { courseViewModel = courseList, tableIdentificator = "listCourses", operationSet = 3 })
 
+@if (Model.ExamResult != null)
+{
+    <h2 class="mt-4 mb-4">Mój wynik</h2>
+
+    List<DisplayExamResultToUserViewModel> examResultList = new List<DisplayExamResultToUserViewModel>();
+    examResultList.Add(Model.ExamResult);
+
+    @await Component.InvokeAsync("DisplayExamResultToUserDataTable", new { examResultViewModel = examResultList, tableIdentificator = "listExamsWithExamsResults", operationSet = 2 })
+}
+
 @section Scripts {
     @{await Html.RenderPartialAsync("_DataTableBasicScript", "listExams");}
     @{await Html.RenderPartialAsync("_DataTableBasicScript", "listCourses");}

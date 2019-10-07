@@ -1315,7 +1315,11 @@ namespace Certification_System.Controllers
         [Authorize(Roles = "Worker")]
         public ActionResult WorkerExamDetails(string examIdentificator)
         {
+            var user = _context.userRepository.GetUserByEmail(this.User.Identity.Name);
+
             var exam = _context.examRepository.GetExamById(examIdentificator);
+            var userExamResult = _context.examResultRepository.GetExamsResultsById(exam.ExamResults).Where(z => z.User == user.Id).FirstOrDefault();
+
             var examTerms = _context.examTermRepository.GetExamsTermsById(exam.ExamTerms);
 
             List<DisplayExamTermWithoutExamViewModel> listOfExamTerms = new List<DisplayExamTermWithoutExamViewModel>();
@@ -1329,11 +1333,25 @@ namespace Certification_System.Controllers
             }
 
             var course = _context.courseRepository.GetCourseByExamId(examIdentificator);
+
             DisplayCourseViewModel courseViewModel = _mapper.Map<DisplayCourseViewModel>(course);
             courseViewModel.Branches = _context.branchRepository.GetBranchesById(course.Branches);
 
+            DisplayExamResultToUserViewModel examResultViewModel = new DisplayExamResultToUserViewModel();
+
+            if (userExamResult != null)
+            {
+                examResultViewModel = _mapper.Map<DisplayExamResultToUserViewModel>(userExamResult);
+
+                examResultViewModel.Exam = _mapper.Map<DisplayCrucialDataExamViewModel>(exam);
+                examResultViewModel.MaxAmountOfPointsToEarn = exam.MaxAmountOfPointsToEarn;
+            }
+
             WorkerExamDetailsViewModel examDetails = _mapper.Map<WorkerExamDetailsViewModel>(exam);
+
+            examDetails.ExamResult = examResultViewModel;
             examDetails.ExamTerms = listOfExamTerms;
+
             examDetails.Course = courseViewModel;
 
             return View(examDetails);

@@ -1,5 +1,4 @@
 ﻿using System;
-using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
 
 namespace Certification_System.DTOViewModels
@@ -38,6 +37,9 @@ namespace Certification_System.DTOViewModels
         [Display(Name = "Kurs")]
         public DisplayCourseViewModel Course { get; set; }
 
+        [Display(Name = "Wynik tury egzaminu")]
+        public DisplayExamResultToUserViewModel ExamResult { get; set; }
+        
         [Display(Name = "Kraj")]
         public string Country { get; set; }
 
