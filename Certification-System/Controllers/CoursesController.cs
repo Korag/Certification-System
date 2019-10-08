@@ -1006,7 +1006,7 @@ namespace Certification_System.Controllers
             var examsResults = _context.examResultRepository.GetExamsResultsById(userExams.SelectMany(z => z.ExamResults).ToList());
             var userExamsResults = examsResults.Where(z => z.User == user.Id).ToList();
 
-            var givenCertificates = _context.givenCertificateRepository.GetGivenCertificatesById(user.GivenCertificates).Where(z=> z.Course == courseIdentificator);
+            var givenCertificates = _context.givenCertificateRepository.GetGivenCertificatesById(user.GivenCertificates).Where(z => z.Course == courseIdentificator);
 
             List<DisplayMeetingWithoutCourseViewModel> meetingsViewModel = new List<DisplayMeetingWithoutCourseViewModel>();
             List<DisplayMeetingWithUserPresenceInformation> meetingsPresenceViewModel = new List<DisplayMeetingWithUserPresenceInformation>();
@@ -1031,8 +1031,6 @@ namespace Certification_System.Controllers
 
             List<DisplayExamWithoutCourseViewModel> examsViewModel = new List<DisplayExamWithoutCourseViewModel>();
 
-            List<string> listOfExaminatorsIdentificators = new List<string>();
-
             foreach (var exam in exams)
             {
                 DisplayExamWithoutCourseViewModel singleExam = _mapper.Map<DisplayExamWithoutCourseViewModel>(exam);
@@ -1048,49 +1046,104 @@ namespace Certification_System.Controllers
                 DisplayExamResultToUserViewModel singleExamResult = _mapper.Map<DisplayExamResultToUserViewModel>(examResult);
 
                 var examRelatedWithExamResult = userExams.Where(z => z.ExamResults.Contains(examResult.ExamResultIdentificator)).FirstOrDefault();
-              
-                singleExamResult.Exam = _mapper.Map<DisplayCrucialDataExamViewModel>(examRelatedWithExamResult);
+
+                singleExamResult.Exam = _mapper.Map<DisplayCrucialDataExamWithDatesViewModel>(examRelatedWithExamResult);
                 singleExamResult.MaxAmountOfPointsToEarn = examRelatedWithExamResult.MaxAmountOfPointsToEarn;
+
+                singleExamResult.CanUserResignFromExam = false;
 
                 if (!string.IsNullOrWhiteSpace(examResult.ExamTerm))
                 {
                     var examTerm = _context.examTermRepository.GetExamTermById(examResult.ExamTerm);
 
-                    singleExamResult.ExamTerm = _mapper.Map<DisplayExamTermIndexerViewModel>(examTerm);
+                    singleExamResult.ExamTerm = _mapper.Map<DisplayCrucialDataExamTermViewModel>(examTerm);
+                }
 
-                    if (DateTime.Now > examTerm.DateOfStart)
+                usersExamsWithResultsViewModel.Add(singleExamResult);
+            }
+
+            List<Exam> userExamsWithoutResult = new List<Exam>();
+
+            foreach (var exam in userExams)
+            {
+                bool userHasExamResult = false;
+
+                foreach (var userExamResult in userExamsResults)
+                {
+                    if (exam.ExamResults.Contains(userExamResult.ExamResultIdentificator))
+                    {
+                        userHasExamResult = true;
+                    }
+                }
+
+                if (userHasExamResult == false)
+                {
+                    userExamsWithoutResult.Add(exam);
+                }
+            }
+
+            foreach (var exam in userExamsWithoutResult)
+            {
+                DisplayExamResultToUserViewModel singleExamResult = new DisplayExamResultToUserViewModel();
+
+                singleExamResult.Exam = _mapper.Map<DisplayCrucialDataExamWithDatesViewModel>(exam);
+                singleExamResult.MaxAmountOfPointsToEarn = exam.MaxAmountOfPointsToEarn;
+
+                singleExamResult.CanUserResignFromExam = true;
+
+                if (DateTime.Now > exam.DateOfStart)
+                {
+                    singleExamResult.CanUserResignFromExam = false;
+                }
+
+                if (exam.ExamDividedToTerms)
+                {
+                    var examTerms = _context.examTermRepository.GetExamsTermsById(exam.ExamTerms);
+                    var userExamTerm = examTerms.Where(z => z.EnrolledUsers.Contains(user.Id)).FirstOrDefault();
+
+                    singleExamResult.ExamTerm = _mapper.Map<DisplayCrucialDataExamTermViewModel>(userExamTerm);
+
+                    if (DateTime.Now > userExamTerm.DateOfStart)
                     {
                         singleExamResult.CanUserResignFromExam = false;
                     }
                 }
 
-                if (DateTime.Now > examRelatedWithExamResult.DateOfStart)
-                {
-                    singleExamResult.CanUserResignFromExam = false;
-                }
-
-                singleExamResult.CanUserResignFromExam = true;
-
                 usersExamsWithResultsViewModel.Add(singleExamResult);
             }
 
-            var examsWithoutPeriods = exams.GroupBy(z => z.ExamIndexer).Select(z => z.OrderBy(s => s.OrdinalNumber).FirstOrDefault()).ToList();
+            var examsWithoutPeriodsIndexers = exams.GroupBy(z => z.ExamIndexer).Select(z => z.OrderBy(s => s.OrdinalNumber).FirstOrDefault()).Select(z => z.ExamIndexer).ToList();
 
-            var notPassedExamsIdentificators = usersExamsWithResultsViewModel.Where(z => z.ExamPassed == false).Select(z => z.Exam.ExamIdentificator).ToList();
-            var examsWithoutExamResult = examsWithoutPeriods.Where(z => !z.EnrolledUsers.Contains(user.Id)).ToList();
+            var passedExamsIndexers = usersExamsWithResultsViewModel.Where(z => z.ExamPassed == true && z.ExamResultIdentificator != null).Select(z => z.Exam.ExamIndexer).Distinct().ToList();
 
-            foreach (var exam in notPassedExamsIdentificators)
+            //var failedExamsIndexers = usersExamsWithResultsViewModel.Where(z => z.ExamPassed == false && z.ExamResultIdentificator != null).Select(z => z.Exam.ExamIndexer).Distinct().ToList();
+
+            var userExamsIndexersNotStartedOrNotMarkedYet = usersExamsWithResultsViewModel.Where(z => z.ExamPassed == false && z.ExamResultIdentificator == null).Select(z => z.Exam.ExamIndexer).ToList();
+
+            //var allExamsWhichAreNotPassed = examsWithoutPeriods.Where(z => !z.EnrolledUsers.Contains(user.Id)).ToList();
+
+            List<DisplayCrucialDataExamViewModel> notPassedExamsViewModel = new List<DisplayCrucialDataExamViewModel>();
+
+            foreach (var examIndexer in examsWithoutPeriodsIndexers)
             {
-                DisplayExamResultToUserViewModel singleExamResult = new DisplayExamResultToUserViewModel();
-                singleExamResult.Exam = _mapper.Map<DisplayCrucialDataExamViewModel>(exam);
+                if (!passedExamsIndexers.Contains(examIndexer))
+                {
+                    var exam = _context.examRepository.GetExamByIndexer(examIndexer);
+                    DisplayCrucialDataExamViewModel singleExam = _mapper.Map<DisplayCrucialDataExamViewModel>(exam);
 
-                usersExamsWithResultsViewModel.Add(singleExamResult);
+                    notPassedExamsViewModel.Add(singleExam);
+                }
             }
 
-            notPassedExamsIdentificators.AddRange(examsWithoutExamResult.Select(z => z.ExamIdentificator).ToList());
+            //List<DisplayCrucialDataExamViewModel> userExamsWhichAreNotCompletedYet = new List<DisplayCrucialDataExamViewModel>();
 
-            var notPassedExams = exams.Where(z => notPassedExamsIdentificators.Contains(z.ExamIdentificator)).ToList();
-            var notPassedExamsViewModel = _mapper.Map<List<DisplayCrucialDataExamViewModel>>(notPassedExams);
+            //foreach (var examIndexer in userExamsIndexersNotStartedOrNotMarkedYet)
+            //{
+            //    var exam = _context.examRepository.GetExamByIndexer(examIndexer);
+            //    DisplayCrucialDataExamViewModel singleExam = _mapper.Map<DisplayCrucialDataExamViewModel>(exam);
+
+            //    userExamsWhichAreNotCompletedYet.Add(singleExam);
+            //}
 
             List<DisplayGivenCertificateToUserViewModel> givenCertificatesViewModel = new List<DisplayGivenCertificateToUserViewModel>();
 
@@ -1115,7 +1168,9 @@ namespace Certification_System.Controllers
 
             courseDetails.Exams = examsViewModel;
             courseDetails.UserExamWithExamResults = usersExamsWithResultsViewModel;
+
             courseDetails.UserNotPassedExams = notPassedExamsViewModel;
+            courseDetails.UserLastingExamsIndexers = userExamsIndexersNotStartedOrNotMarkedYet;
 
             courseDetails.Course.EnrolledUsersQuantity = course.EnrolledUsers.Count;
 

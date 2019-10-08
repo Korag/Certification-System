@@ -14,15 +14,15 @@
 <div class="row m-0 mt-3 mb-3">
     @if (Model.CanUserAssignToExam)
     {
-        <a asp-action="AssignUserToExamHub" asp-route-examIdentificator="@Model.ExamIdentificator" asp-controller="Exams" class="btn btn-outline-info mt-1 xs450px_FloatLeft">Zapisz się</a>
+        <a asp-action="AssignUserToExamHub" asp-route-examIdentificator="@Model.ExamIdentificator" asp-controller="Exams" class="btn btn-primary mt-1 xs450px_FloatLeft">Zapisz się</a>
     }
     else if (Model.CanUserResignFromExam)
     {
-        <a asp-action="ResignFromExam" asp-route-examIdentificator="@Model.ExamIdentificator" asp-controller="Exams" class="btn btn-outline-info mt-1 xs450px_FloatLeft">Zrezygnuj</a>
+        <a asp-action="ResignFromExam" asp-route-examIdentificator="@Model.ExamIdentificator" asp-controller="Exams" class="btn btn-danger mt-1 xs450px_FloatLeft">Zrezygnuj</a>
 
     }
 
-    <a asp-action="WorkerCourseDetails" asp-controller="Courses" class="btn btn-outline-info mt-1 xs450px_FloatRight">Powrót do szczegółów kursu</a>
+    <a asp-action="WorkerCourseDetails" asp-route-courseIdentificator="@Model.Course.CourseIdentificator" asp-controller="Courses" class="btn btn-outline-info mt-1 xs450px_FloatRight">Powrót do szczegółów kursu</a>
 </div>
 
 <div>

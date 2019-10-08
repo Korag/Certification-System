@@ -809,13 +809,13 @@ namespace Certification_System.Controllers
             DisplayCourseViewModel courseViewModel = _mapper.Map<DisplayCourseViewModel>(course);
             courseViewModel.Branches = _context.branchRepository.GetBranchesById(course.Branches);
 
-            DisplayExamResultToUserViewModel examResultViewModel = new DisplayExamResultToUserViewModel();
+            DisplayExamResultToUserViewModel examResultViewModel = null;
 
             if (userExamResult != null)
             {
                 examResultViewModel = _mapper.Map<DisplayExamResultToUserViewModel>(userExamResult);
 
-                examResultViewModel.Exam = _mapper.Map<DisplayCrucialDataExamViewModel>(exam);
+                examResultViewModel.Exam = _mapper.Map<DisplayCrucialDataExamWithDatesViewModel>(exam);
                 examResultViewModel.MaxAmountOfPointsToEarn = exam.MaxAmountOfPointsToEarn;
             }
 

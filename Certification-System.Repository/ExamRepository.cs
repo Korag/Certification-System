@@ -174,6 +174,14 @@ namespace Certification_System.Repository
             return resultExam;
         }
 
+        public Exam GetExamByIndexer(string examIndexer)
+        {
+            var filter = Builders<Exam>.Filter.Where(z => z.ExamIndexer == examIndexer);
+            var resultListofExams = GetExams().Find<Exam>(filter).ToList();
+
+            return resultListofExams.OrderBy(z=> z.OrdinalNumber).FirstOrDefault();
+        }
+
         public ICollection<SelectListItem> GetAddExamMenuOptions()
         {
             List<SelectListItem> selectList = new List<SelectListItem>

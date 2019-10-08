@@ -215,6 +215,8 @@ namespace Certification_System.Services
 
             CreateMap<Exam, DisplayCrucialDataExamViewModel>();
 
+            CreateMap<Exam, DisplayCrucialDataExamWithDatesViewModel>();
+
             CreateMap<Exam, ExamDetailsViewModel>()
                      .ForMember(dest => dest.Course, opts => opts.Ignore())
                      .ForMember(dest => dest.ExamTerms, opts => opts.Ignore())
@@ -295,6 +297,8 @@ namespace Certification_System.Services
                     .ForMember(dest => dest.UsersQuantity, opts => opts.MapFrom(src => src.EnrolledUsers.Count()))
                     .ForMember(dest => dest.DurationDays, opts => opts.MapFrom(src => (int)src.DateOfEnd.Subtract(src.DateOfStart).TotalDays))
                     .ForMember(dest => dest.DurationMinutes, opts => opts.MapFrom(src => (int)src.DateOfEnd.Subtract(src.DateOfStart).TotalMinutes));
+
+            CreateMap<ExamTerm, DisplayCrucialDataExamTermViewModel>();
 
             CreateMap<ExamTerm, DisplayExamTermWithLocationViewModel>()
                     .ForMember(dest => dest.Examiners, opts => opts.Ignore())

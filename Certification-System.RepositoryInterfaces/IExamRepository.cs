@@ -36,5 +36,6 @@ namespace Certification_System.RepositoryInterfaces
         IList<SelectListItem> GetFirstPeriodExamsAsSelectList();
         ICollection<Exam> GetOnlyActiveExamsDividedToTermsById(ICollection<string> examsIdentificators);
         void AddExamsResultsToExam(string examIdentificator, ICollection<string> examsResultsIdentificators);
+        Exam GetExamByIndexer(string examIndexer);
     }
 }

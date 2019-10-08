@@ -17,6 +17,12 @@
                     @Html.DisplayNameFor(model => model.ExamsResults.FirstOrDefault().Exam.TypeOfExam)
                 </th>
                 <th>
+                    @Html.DisplayNameFor(model => model.ExamsResults.FirstOrDefault().Exam.DateOfStart)
+                </th>
+                <th>
+                    @Html.DisplayNameFor(model => model.ExamsResults.FirstOrDefault().Exam.DateOfEnd)
+                </th>
+                <th>
                     @Html.DisplayNameFor(model => model.ExamsResults.FirstOrDefault().ExamTerm)
                 </th>
                 <th>
@@ -58,6 +64,24 @@
                     <td>
                         @Html.DisplayFor(modelItem => examResult.Exam.TypeOfExam)
                     </td>
+                    @if (examResult.ExamTerm == null)
+                    {
+                        <td>
+                            @Html.DisplayFor(modelItem => examResult.Exam.DateOfStart)
+                        </td>
+                        <td>
+                            @Html.DisplayFor(modelItem => examResult.Exam.DateOfEnd)
+                        </td>
+                    }
+                    else
+                    {
+                        <td>
+                            @Html.DisplayFor(modelItem => examResult.ExamTerm.DateOfStart)
+                        </td>
+                        <td>
+                            @Html.DisplayFor(modelItem => examResult.ExamTerm.DateOfEnd)
+                        </td>
+                    }
                     <td>
                         @Html.DisplayFor(modelItem => examResult.ExamTerm.ExamTermIndexer)
                     </td>
@@ -78,16 +102,22 @@
                     </td>
                     @if (Model.Options.OperationSet == 1)
                     {
-                        <td>
-                            @if (examResult.ExamTerm == null)
-                            {
-                                <a asp-action="ExamDetails" asp-route-examIdentificator="@examResult.Exam.ExamIdentificator" asp-controller="Exams" class="btn btn-info m-1">Szczegóły egzaminu</a>
-                            }
-                            else
-                            {
-                                <a asp-action="ExamTermDetails" asp-route-examTermIdentificator="@examResult.ExamTerm.ExamTermIdentificator" asp-controller="ExamsTerms" class="btn btn-info m-1">Szczegóły tury egzaminu</a>
-                            }
-                        </td>
+                    <td>
+                        @if (examResult.ExamTerm == null)
+                        {
+                            <a asp-action="ExamDetails" asp-route-examIdentificator="@examResult.Exam.ExamIdentificator" asp-controller="Exams" class="btn btn-info m-1">Szczegóły egzaminu</a>
+                        }
+                        else
+                        {
+                            <div class="dropdown p-0">
+                                <button class="btn btn-success dropdown-toggle" type="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">Operacje</button>
+                                <div class="dropdown-menu nohover">
+                                    <a asp-action="ExamDetails" asp-route-examIdentificator="@examResult.Exam.ExamIdentificator" asp-controller="Exams" class="btn btn-info w-100 mb-1">Szczegóły egzaminu</a>
+                                    <a asp-action="ExamTermDetails" asp-route-examTermIdentificator="@examResult.ExamTerm.ExamTermIdentificator" asp-controller="ExamsTerms" class="btn btn-secondary w-100">Szczegóły tury egzaminu</a>
+                                </div>
+                            </div>
+                        }
+                    </td>
                     }
                     @if (Model.Options.OperationSet == 2 && examResult.CanUserResignFromExam)
                     {
@@ -107,7 +137,8 @@
                                 <div class="dropdown p-0">
                                     <button class="btn btn-success dropdown-toggle" type="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">Operacje</button>
                                     <div class="dropdown-menu nohover">
-                                        <a asp-action="WorkerExamTermDetails" asp-route-examTermIdentificator="@examResult.ExamTerm.ExamTermIdentificator" asp-controller="ExamsTerms" class="btn btn-info w-100 mb-1">Szczegóły tury egzaminu</a>
+                                        <a asp-action="WorkerExamDetails" asp-route-examIdentificator="@examResult.Exam.ExamIdentificator" asp-controller="Exams" class="btn btn-info w-100 mb-1">Szczegóły egzaminu</a>
+                                        <a asp-action="WorkerExamTermDetails" asp-route-examTermIdentificator="@examResult.ExamTerm.ExamTermIdentificator" asp-controller="ExamsTerms" class="btn btn-secondary w-100 mb-1">Szczegóły tury egzaminu</a>
                                         <a asp-action="ResignFromExamTerm" asp-route-examTermIdentificator="@examResult.ExamTerm.ExamTermIdentificator" asp-controller="Exams" class="btn btn-danger w-100">Zrezygnuj</a>
                                     </div>
                                 </div>
@@ -123,7 +154,8 @@
                             }
                             else
                             {
-                                <a asp-action="WorkerExamTermDetails" asp-route-examTermIdentificator="@examResult.ExamTerm.ExamTermIdentificator" asp-controller="ExamsTerms" class="btn btn-info m-1">Szczegóły tury egzaminu</a>
+                                <a asp-action="WorkerExamDetails" asp-route-examIdentificator="@examResult.Exam.ExamIdentificator" asp-controller="Exams" class="btn btn-info m-1">Szczegóły egzaminu</a>
+                                <a asp-action="WorkerExamTermDetails" asp-route-examTermIdentificator="@examResult.ExamTerm.ExamTermIdentificator" asp-controller="ExamsTerms" class="btn btn-secondary m-1">Szczegóły tury egzaminu</a>
                             }
                         </td>
                     }

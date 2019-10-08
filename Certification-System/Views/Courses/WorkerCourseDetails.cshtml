@@ -147,7 +147,7 @@ else
 
     @if (Model.UserNotPassedExams.Count() != 0)
     {
-        @await Component.InvokeAsync("DisplayCrucialDataExamDataTable", new { examViewModel = Model.UserNotPassedExams, courseEnded = Model.Course.CourseEnded, tableIdentificator = "listNotPassedExams", operationSet = 1 })
+        @await Component.InvokeAsync("DisplayCrucialDataExamDataTable", new { examViewModel = Model.UserNotPassedExams, lastingExamViewModel = Model.UserLastingExamsIndexers, courseEnded = Model.Course.CourseEnded, tableIdentificator = "listNotPassedExams", operationSet = 1 })
     }
     else
     {

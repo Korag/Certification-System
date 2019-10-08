@@ -25,5 +25,8 @@ namespace Certification_System.DTOViewModels
 
         [Display(Name = "Nadane certyfikaty za wybrany kurs")]
         public ICollection<DisplayGivenCertificateToUserViewModel> GivenCertificates { get; set; }
+
+        [Display(Name = "Trwające egzaminy na które zapisany jest użytkownik")]
+        public ICollection<string> UserLastingExamsIndexers { get; set; }
     }
 }

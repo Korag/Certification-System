@@ -24,9 +24,9 @@ namespace Certification_System.DTOViewModels
         public bool CanUserResignFromExam { get; set; }
 
         [Display(Name = "Egzamin")]
-        public DisplayCrucialDataExamViewModel Exam { get; set; }
+        public DisplayCrucialDataExamWithDatesViewModel Exam { get; set; }
 
         [Display(Name = "Tura egzaminu")]
-        public DisplayExamTermIndexerViewModel ExamTerm { get; set; }
+        public DisplayCrucialDataExamTermViewModel ExamTerm { get; set; }
     }
 }
