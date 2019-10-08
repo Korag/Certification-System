@@ -30,6 +30,7 @@ namespace Certification_System.RepositoryInterfaces
         void DeleteExam(string examIdentificator);
         IList<SelectListItem> GetExamsTypesAsSelectList();
         ICollection<Exam> DeleteExams(ICollection<string> examsIdentificators);
+        Exam DeleteUserFromExam(string userIdentificator, string examIdentificator);
         ICollection<Exam> DeleteUserFromExams(string userIdentificator, ICollection<string> examsIdentificators);
         string CountExamsWithIndexerNamePart(string namePartOfIndexer);
         IList<SelectListItem> GetExamsByIdAsSelectList(ICollection<string> examsIdentificators);

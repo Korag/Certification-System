@@ -139,7 +139,7 @@
                                     <div class="dropdown-menu nohover">
                                         <a asp-action="WorkerExamDetails" asp-route-examIdentificator="@examResult.Exam.ExamIdentificator" asp-controller="Exams" class="btn btn-info w-100 mb-1">Szczegóły egzaminu</a>
                                         <a asp-action="WorkerExamTermDetails" asp-route-examTermIdentificator="@examResult.ExamTerm.ExamTermIdentificator" asp-controller="ExamsTerms" class="btn btn-secondary w-100 mb-1">Szczegóły tury egzaminu</a>
-                                        <a asp-action="ResignFromExamTerm" asp-route-examTermIdentificator="@examResult.ExamTerm.ExamTermIdentificator" asp-controller="Exams" class="btn btn-danger w-100">Zrezygnuj</a>
+                                        <a asp-action="ResignFromExam" asp-route-examTermIdentificator="@examResult.ExamTerm.ExamTermIdentificator" asp-controller="Exams" class="btn btn-danger w-100">Zrezygnuj</a>
                                     </div>
                                 </div>
                             }

@@ -154,6 +154,19 @@ namespace Certification_System.Repository
             var result = GetExamsTerms().UpdateOne(filter, update);
         }
 
+        public ExamTerm DeleteUserFromExamTerm(string examTermIdentificator, string userIdentificator)
+        {
+            var filter = Builders<ExamTerm>.Filter.Where(z => z.ExamTermIdentificator == examTermIdentificator && z.EnrolledUsers.Contains(userIdentificator));
+            var update = Builders<ExamTerm>.Update.Pull(x => x.EnrolledUsers, userIdentificator);
+
+            var resultExamTerm = GetExamsTerms().Find<ExamTerm>(filter).FirstOrDefault();
+            resultExamTerm.EnrolledUsers.Remove(userIdentificator);
+
+            var result = _examsTerms.UpdateOne(filter, update);
+
+            return resultExamTerm;
+        }
+
         public void DeleteUsersFromExamTerms(ICollection<string> examTermsIdentificators, ICollection<string> usersIdentificators)
         {
             var filter = Builders<ExamTerm>.Filter.Where(z => examTermsIdentificators.Contains(z.ExamTermIdentificator));

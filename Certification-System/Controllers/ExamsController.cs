@@ -1378,6 +1378,45 @@ namespace Certification_System.Controllers
             return View(examDetails);
         }
 
+        // GET: ResignFromExam
+        [Authorize(Roles = "Worker")]
+        public ActionResult ResignFromExam(string examIdentificator, string examTermIdentificator)
+        {
+            var user = _context.userRepository.GetUserByEmail(this.User.Identity.Name);
+            Exam exam = new Exam();
+
+            if (!string.IsNullOrWhiteSpace(examIdentificator))
+            {
+                exam = _context.examRepository.GetExamById(examIdentificator);
+            }
+            else if (!string.IsNullOrWhiteSpace(examTermIdentificator))
+            {
+                exam = _context.examRepository.GetExamByExamTermId(examTermIdentificator);
+            }
+
+            if (exam.EnrolledUsers.Contains(user.Id))
+            {
+                exam = _context.examRepository.DeleteUserFromExam(user.Id, exam.ExamIdentificator);
+
+                var logInfo = _logger.GenerateLogInformation(this.User.Identity.Name, this.ControllerContext.RouteData.Values["action"].ToString(), LogTypeOfAction.TypesOfActions[1]);
+                _logger.AddExamLog(exam, logInfo);
+
+                if (exam.ExamDividedToTerms)
+                {
+                    var examTerms = _context.examTermRepository.GetExamsTermsById(exam.ExamTerms);
+                    var userExamTerm = examTerms.Where(z => z.EnrolledUsers.Contains(user.Id)).FirstOrDefault();
+
+                    userExamTerm = _context.examTermRepository.DeleteUserFromExamTerm(userExamTerm.ExamTermIdentificator, user.Id);
+
+                    _logger.AddExamTermLog(userExamTerm, logInfo);
+                }
+            }
+
+            var course = _context.courseRepository.GetCourseByExamId(exam.ExamIdentificator);
+
+            return RedirectToAction("WorkerCourseDetails", "Courses", new { courseIdentificator = course.CourseIdentificator, message = "Zrezygnowałeś z wybranego egzaminu" });
+        }
+
         #region AjaxQuery
         // GET: GetUserAvailableToEnrollExamsByUserId
         [Authorize(Roles = "Admin, Examiner")]

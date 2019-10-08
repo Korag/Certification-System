@@ -319,6 +319,19 @@ namespace Certification_System.Repository
             return resultListOfExams;
         }
 
+        public Exam DeleteUserFromExam(string userIdentificator, string examIdentificator)
+        {
+            var filter = Builders<Exam>.Filter.Where(z => z.ExamIdentificator == examIdentificator && z.EnrolledUsers.Contains(userIdentificator));
+            var update = Builders<Exam>.Update.Pull(x => x.EnrolledUsers, userIdentificator);
+
+            var resultExam = GetExams().Find<Exam>(filter).FirstOrDefault();
+            resultExam.EnrolledUsers.Remove(userIdentificator);
+
+            var result = _exams.UpdateOne(filter, update);
+
+            return resultExam;
+        }
+
         public ICollection<Exam> DeleteUserFromExams(string userIdentificator, ICollection<string> examsIdentificators = null)
         {
             var filter = Builders<Exam>.Filter.Where(z => examsIdentificators.Contains(z.ExamIdentificator) && (z.EnrolledUsers.Contains(userIdentificator) || z.Examiners.Contains(userIdentificator)));

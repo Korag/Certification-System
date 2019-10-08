@@ -990,11 +990,12 @@ namespace Certification_System.Controllers
             return View("DeleteEntity", courseToDelete);
         }
 
-
         // GET: WorkerCourseDetails
         [Authorize(Roles = "Worker")]
-        public ActionResult WorkerCourseDetails(string courseIdentificator)
+        public ActionResult WorkerCourseDetails(string courseIdentificator, string message)
         {
+            ViewBag.Message = message;
+
             var user = _context.userRepository.GetUserByEmail(this.User.Identity.Name);
 
             var course = _context.courseRepository.GetCourseById(courseIdentificator);
