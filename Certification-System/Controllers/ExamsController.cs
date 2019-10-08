@@ -1355,7 +1355,7 @@ namespace Certification_System.Controllers
             {
                 canUserAssignToExam = false;
 
-                if (DateTime.Now < exam.DateOfStart)
+                if (DateTime.Now < exam.DateOfStart && userExamResult == null)
                 {
                     canUserResignFromExam = true;
                 }

@@ -149,7 +149,7 @@
     List<DisplayExamResultToUserViewModel> examResultList = new List<DisplayExamResultToUserViewModel>();
     examResultList.Add(Model.ExamResult);
 
-    @await Component.InvokeAsync("DisplayExamResultToUserDataTable", new { examResultViewModel = examResultList, tableIdentificator = "listExamsWithExamsResults" })
+    @await Component.InvokeAsync("DisplayExamResultToUserDataTable", new { examResultViewModel = examResultList, tableIdentificator = "listExamsWithExamsResults", operationSet = 2 })
 }
 
 @section Scripts {

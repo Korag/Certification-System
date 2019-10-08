@@ -819,21 +819,21 @@ namespace Certification_System.Controllers
                 examResultViewModel.MaxAmountOfPointsToEarn = exam.MaxAmountOfPointsToEarn;
             }
 
-            bool canUserAssignToExam = false;
-            bool canUserResignFromExam = false;
+            bool canUserAssignToExamTerm = false;
+            bool canUserResignFromExamTerm = false;
 
             if (exam.EnrolledUsers.Contains(user.Id))
             {
-                canUserAssignToExam = false;
+                canUserAssignToExamTerm = false;
 
-                if (DateTime.Now < exam.DateOfStart)
+                if (DateTime.Now < exam.DateOfStart && userExamResult == null)
                 {
-                    canUserResignFromExam = true;
+                    canUserResignFromExamTerm = true;
                 }
             }
             else if (courseExams.Where(z => z.EnrolledUsers.Contains(user.Id) && z.ExamIndexer == exam.ExamIndexer).Count() == 0)
             {
-                canUserAssignToExam = true;
+                canUserAssignToExamTerm = true;
             }
 
             WorkerExamTermDetailsViewModel examTermDetails = _mapper.Map<WorkerExamTermDetailsViewModel>(examTerm);
@@ -843,8 +843,8 @@ namespace Certification_System.Controllers
 
             examTermDetails.Course = courseViewModel;
 
-            examTermDetails.CanUserAssignToExam = canUserAssignToExam;
-            examTermDetails.CanUserResignFromExam = canUserResignFromExam;
+            examTermDetails.CanUserAssignToExamTerm = canUserAssignToExamTerm;
+            examTermDetails.CanUserResignFromExamTerm = canUserResignFromExamTerm;
 
             return View(examTermDetails);
         }
