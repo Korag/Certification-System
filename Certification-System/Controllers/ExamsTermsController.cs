@@ -851,13 +851,20 @@ namespace Certification_System.Controllers
 
         #region AjaxQuery
         // GET: GetUserAvailableToEnrollExamsTermsByExamId
-        [Authorize(Roles = "Admin, Examiner")]
+        [Authorize(Roles = "Admin, Examiner, Worker")]
         public string[][] GetUserAvailableToEnrollExamsTermsByExamId(string examIdentificator)
         {
             var exam = _context.examRepository.GetExamById(examIdentificator);
             var examsTerms = _context.examTermRepository.GetExamsTermsById(exam.ExamTerms).ToList();
 
             string[][] examsTermsArray = new string[examsTerms.Count()][];
+
+            if (!exam.ExamDividedToTerms)
+            {
+                examsTermsArray[0] = new string[2];
+                examsTermsArray[0][0] = "00000000";
+                examsTermsArray[0][1] = "Tura dla całego egzaminu";
+            }
 
             for (int i = 0; i < examsTerms.Count(); i++)
             {
@@ -867,7 +874,7 @@ namespace Certification_System.Controllers
 
                 examsTermsArray[i][0] = examsTerms[i].ExamTermIdentificator;
 
-                examsTermsArray[i][1] = examsTerms[i].ExamTermIndexer + " | " + examsTerms[i].DateOfStart + " - " + examsTerms[i].DateOfEnd + " |wm.: " + vacantSeats;
+                examsTermsArray[i][1] = examsTerms[i].ExamTermIndexer + " |" + examsTerms[i].DateOfStart + " - " + examsTerms[i].DateOfEnd + " |wm.: " + vacantSeats;
             }
 
             return examsTermsArray;

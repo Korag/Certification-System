@@ -51,7 +51,7 @@
                     if (!Model.LastingExamsIndexers.Contains(exam.ExamIndexer))
                     {
                         <td>
-                            <a asp-action="AssignUserToExamHub" asp-route-examIdentificator="@exam.ExamIdentificator" asp-controller="Exams" class="btn btn-primary m-1">Zapisz się</a>
+                            <a asp-action="SelfAssignUserToExamHub" asp-route-examIndexer="@exam.ExamIndexer" asp-controller="Exams" class="btn btn-primary m-1">Zapisz się</a>
                         </td>
                     }
                     else

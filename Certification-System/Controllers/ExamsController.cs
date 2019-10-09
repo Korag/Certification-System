@@ -1417,45 +1417,105 @@ namespace Certification_System.Controllers
             return RedirectToAction("WorkerCourseDetails", "Courses", new { courseIdentificator = course.CourseIdentificator, message = "Zrezygnowałeś z wybranego egzaminu" });
         }
 
-        // GET: AssignUserToExamHub
+        // GET: SelfAssignUserToExamHub
         [Authorize(Roles = "Worker")]
-        public ActionResult AssignUserToExamHub(string examIdentificator, string examTermIdentificator)
+        public ActionResult SelfAssignUserToExamHub(string examIndexer, string examIdentificator, string examTermIdentificator)
         {
-            var user = _context.userRepository.GetUserByEmail(this.User.Identity.Name);
-            Exam exam = new Exam();
-
-            if (!string.IsNullOrWhiteSpace(examIdentificator))
+            if (!string.IsNullOrWhiteSpace(examIndexer))
             {
-                exam = _context.examRepository.GetExamById(examIdentificator);
+                return RedirectToAction("SelfAssignUserToChosenExamPeriod", "Exams", new { examIndexer });
             }
-            else if (!string.IsNullOrWhiteSpace(examTermIdentificator))
-            {
-                exam = _context.examRepository.GetExamByExamTermId(examTermIdentificator);
-            }
+            //else if (!string.IsNullOrWhiteSpace(examTermIdentificator))
+            //{
+            //    return RedirectToAction("AssignUserToExamTerm", )
+            //}
+            //else if (!string.IsNullOrWhiteSpace(examIdentificator))
+            //{
 
-            if (exam.EnrolledUsers.Contains(user.Id))
-            {
-                exam = _context.examRepository.DeleteUserFromExam(user.Id, exam.ExamIdentificator);
+            //}
 
-                var logInfo = _logger.GenerateLogInformation(this.User.Identity.Name, this.ControllerContext.RouteData.Values["action"].ToString(), LogTypeOfAction.TypesOfActions[1]);
-                _logger.AddExamLog(exam, logInfo);
-
-                if (exam.ExamDividedToTerms)
-                {
-                    var examTerms = _context.examTermRepository.GetExamsTermsById(exam.ExamTerms);
-                    var userExamTerm = examTerms.Where(z => z.EnrolledUsers.Contains(user.Id)).FirstOrDefault();
-
-                    userExamTerm = _context.examTermRepository.DeleteUserFromExamTerm(userExamTerm.ExamTermIdentificator, user.Id);
-
-                    _logger.AddExamTermLog(userExamTerm, logInfo);
-                }
-            }
-
-            var course = _context.courseRepository.GetCourseByExamId(exam.ExamIdentificator);
-
-            return RedirectToAction("WorkerCourseDetails", "Courses", new { courseIdentificator = course.CourseIdentificator, message = "Zrezygnowałeś z wybranego egzaminu" });
+            return RedirectToAction("BlankMenu", "Certificates");
         }
-        
+
+        // GET: SelfAssignUserToExamPeriod
+        [Authorize(Roles = "Worker")]
+        public ActionResult SelfAssignUserToChosenExamPeriod(string examIndexer)
+        {
+            if (!string.IsNullOrWhiteSpace(examIndexer))
+            {
+                var exams = _context.examRepository.GetExamsByIndexer(examIndexer).OrderBy(z=> z.OrdinalNumber).ToList();
+                var firstExamPeriod = exams.FirstOrDefault();
+
+                var course = _context.courseRepository.GetCourseByExamId(firstExamPeriod.ExamIdentificator);
+
+                SelfAssignUserToExamViewModel assignToExamViewModel = new SelfAssignUserToExamViewModel();
+
+                assignToExamViewModel.SelectedExam = firstExamPeriod.ExamIndexer + " " + firstExamPeriod.Name;
+                assignToExamViewModel.ExamIndexer = examIndexer;
+
+                assignToExamViewModel.AvailableExamsPeriods = _context.examRepository.GeneraterateExamsPeriodsSelectListWithVacantSeats(exams.Select(z=> z.ExamIdentificator).ToList()).ToList();
+
+                assignToExamViewModel.CourseIdentificator = course.CourseIdentificator;
+
+                return View(assignToExamViewModel);
+            }
+
+            return RedirectToAction("BlankMenu", "Certificates");
+        }
+
+        // POST: SelfAssignUserToExamPeriod
+        [Authorize(Roles = "Worker")]
+        [HttpPost]
+        public ActionResult SelfAssignUserToChosenExamPeriod(SelfAssignUserToExamViewModel assignToExamViewModel)
+        {
+            if (ModelState.IsValid)
+            {
+                var user = _context.userRepository.GetUserByEmail(this.User.Identity.Name);
+                var course = _context.courseRepository.GetCourseById(assignToExamViewModel.CourseIdentificator);
+
+                var exams = _context.examRepository.GetExamsByIndexer(assignToExamViewModel.ExamIndexer).OrderBy(z => z.OrdinalNumber).ToList();
+                assignToExamViewModel.AvailableExamsPeriods = _context.examRepository.GeneraterateExamsPeriodsSelectListWithVacantSeats(exams.Select(z => z.ExamIdentificator).ToList()).ToList();
+
+                if (!course.EnrolledUsers.Contains(user.Id))
+                {
+                    return RedirectToAction("BlankMenu", "Certificates");
+                }
+
+                var exam = _context.examRepository.GetExamById(assignToExamViewModel.SelectedExamPeriod);
+
+                if (exam.EnrolledUsers.Count() < exam.UsersLimit)
+                {
+                    var logInfo = _logger.GenerateLogInformation(this.User.Identity.Name, this.ControllerContext.RouteData.Values["action"].ToString(), LogTypeOfAction.TypesOfActions[1]);
+
+                    if (assignToExamViewModel.SelectedExamTerm != "00000000" && exam.ExamTerms.Contains(assignToExamViewModel.SelectedExamTerm))
+                    {
+                        var examTerm = _context.examTermRepository.GetExamTermById(assignToExamViewModel.SelectedExamTerm);
+
+                        if (examTerm.EnrolledUsers.Count() < examTerm.UsersLimit)
+                        {
+
+                            examTerm.EnrolledUsers.Add(user.Id);
+                            _context.examTermRepository.AddUserToExamTerm(assignToExamViewModel.SelectedExamTerm, user.Id);
+
+                            _logger.AddExamTermLog(examTerm, logInfo);
+                        }
+
+                        ModelState.AddModelError("", "Brak wolnych miejsc w wybranej turze egzaminu");
+                        return View(assignToExamViewModel);
+                    }
+
+                    exam.EnrolledUsers.Add(user.Id);
+                    _context.examRepository.AddUserToExam(assignToExamViewModel.SelectedExamPeriod, user.Id);
+
+                    _logger.AddExamLog(exam, logInfo);
+                }
+
+                ModelState.AddModelError("", "Brak wolnych miejsc w wybranym egzaminie");
+                return View(assignToExamViewModel);
+            }
+
+            return View(assignToExamViewModel);
+        }
 
         #region AjaxQuery
         // GET: GetUserAvailableToEnrollExamsByUserId

@@ -15,7 +15,7 @@
     <div class="row m-0 mt-3 mb-3">
         @if (Model.CanUserAssignToExamTerm)
         {
-            <a asp-action="AssignUserToExamHub" asp-route-examIdentificator="@Model.Exam.ExamIdentificator" asp-route-examTermIdentificator="@Model.ExamTermIdentificator" asp-controller="Exams" class="btn btn-outline-info mt-1 xs450px_FloatLeft">Zapisz się</a>
+            <a asp-action="SelfAssignUserToExamHub" asp-route-examIdentificator="@Model.Exam.ExamIdentificator" asp-route-examTermIdentificator="@Model.ExamTermIdentificator" asp-controller="Exams" class="btn btn-outline-info mt-1 xs450px_FloatLeft">Zapisz się</a>
         }
         else if (Model.CanUserResignFromExamTerm)
         {
