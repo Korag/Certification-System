@@ -38,5 +38,8 @@ namespace Certification_System.RepositoryInterfaces
         ICollection<Exam> GetOnlyActiveExamsDividedToTermsById(ICollection<string> examsIdentificators);
         void AddExamsResultsToExam(string examIdentificator, ICollection<string> examsResultsIdentificators);
         Exam GetExamByIndexer(string examIndexer);
+        ICollection<Exam> GetExamsByIndexer(string examIndexer);
+        ICollection<SelectListItem> GeneraterateSelectList(ICollection<string> examsIdentificators);
+        ICollection<SelectListItem> GeneraterateExamsPeriodsSelectListWithVacantSeats(ICollection<string> examsIdentificators);
     }
 }

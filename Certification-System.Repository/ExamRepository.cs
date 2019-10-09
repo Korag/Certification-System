@@ -67,6 +67,14 @@ namespace Certification_System.Repository
             return resultListOfExams;
         }
 
+        public ICollection<Exam> GetExamsByIndexer(string examIndexer)
+        {
+            var filter = Builders<Exam>.Filter.Eq(x => x.ExamIndexer, examIndexer);
+            var resultListOfExams = GetExams().Find<Exam>(filter).ToList();
+
+            return resultListOfExams;
+        }
+
         public ICollection<Exam> GetOnlyActiveExamsDividedToTermsById(ICollection<string> examsIdentificators)
         {
             return GetActiveExams().Where(z => examsIdentificators.Contains(z.ExamIdentificator) && z.ExamDividedToTerms).ToList();
@@ -213,6 +221,50 @@ namespace Certification_System.Repository
                         new SelectListItem()
                         {
                             Text = exam.ExamIndexer + " |Term." + exam.OrdinalNumber + " | " + exam.Name + " |wm.: " + vacantSeats,
+                            Value = exam.ExamIdentificator
+                        }
+                    );
+            };
+
+            return selectList;
+        }
+
+        public ICollection<SelectListItem> GeneraterateSelectList(ICollection<string> examsIdentificators)
+        {
+            var exams = GetExamsById(examsIdentificators);
+
+            List<SelectListItem> selectList = new List<SelectListItem>();
+
+            foreach (var exam in exams)
+            {
+                selectList.Add
+                    (
+                        new SelectListItem()
+                        {
+                            Text = exam.ExamIndexer + " |Term." + exam.OrdinalNumber + " | " + exam.Name,
+                            Value = exam.ExamIdentificator
+                        }
+                    );
+            };
+
+            return selectList;
+        }
+
+        public ICollection<SelectListItem> GeneraterateExamsPeriodsSelectListWithVacantSeats(ICollection<string> examsIdentificators)
+        {
+            var exams = GetExamsById(examsIdentificators);
+
+            List<SelectListItem> selectList = new List<SelectListItem>();
+
+            foreach (var exam in exams)
+            {
+                var vacantSeats = exam.UsersLimit - exam.EnrolledUsers.Count();
+
+                selectList.Add
+                    (
+                        new SelectListItem()
+                        {
+                            Text = "|Term." + exam.OrdinalNumber + " |" + exam.Name + " |wm.: " + vacantSeats + " |" + exam.DateOfStart.ToShortDateString() + " " + exam.DateOfStart.ToShortTimeString() + " - " + exam.DateOfEnd.ToShortDateString() + ":" + exam.DateOfEnd.ToShortTimeString(),
                             Value = exam.ExamIdentificator
                         }
                     );
