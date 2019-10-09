@@ -1437,10 +1437,10 @@ namespace Certification_System.Controllers
                 {
                     return RedirectToAction("SelfAssignUserToExamNotDividedToExamTerms", "Exams", new { examIdentificator });
                 }
-                //else
-                //{
-
-                //}
+                else
+                {
+                    return RedirectToAction("SelfAssignUserToExamDividedToExamTerms", "Exams", new { examIdentificator });
+                }
             }
 
             return RedirectToAction("BlankMenu", "Certificates");
@@ -1482,13 +1482,13 @@ namespace Certification_System.Controllers
                 var user = _context.userRepository.GetUserByEmail(this.User.Identity.Name);
                 var course = _context.courseRepository.GetCourseById(assignToExamViewModel.CourseIdentificator);
 
-                var exams = _context.examRepository.GetExamsByIndexer(assignToExamViewModel.ExamIndexer).OrderBy(z => z.OrdinalNumber).ToList();
-                assignToExamViewModel.AvailableExamsPeriods = _context.examRepository.GeneraterateExamsPeriodsSelectListWithVacantSeats(exams.Select(z => z.ExamIdentificator).ToList()).ToList();
-
                 if (!course.EnrolledUsers.Contains(user.Id))
                 {
                     return RedirectToAction("BlankMenu", "Certificates");
                 }
+
+                var exams = _context.examRepository.GetExamsByIndexer(assignToExamViewModel.ExamIndexer).OrderBy(z => z.OrdinalNumber).ToList();
+                assignToExamViewModel.AvailableExamsPeriods = _context.examRepository.GeneraterateExamsPeriodsSelectListWithVacantSeats(exams.Select(z => z.ExamIdentificator).ToList()).ToList();
 
                 var exam = _context.examRepository.GetExamById(assignToExamViewModel.SelectedExamPeriod);
 
@@ -1564,6 +1564,89 @@ namespace Certification_System.Controllers
             }
 
             return RedirectToAction("BlankMenu", "Certificates");
+        }
+
+        // GET: SelfAssignUserToExamDividedToExamTerms
+        [Authorize(Roles = "Worker")]
+        public ActionResult SelfAssignUserToExamDividedToExamTerms(string examIdentificator)
+        {
+            if (!string.IsNullOrWhiteSpace(examIdentificator))
+            {
+                var exam = _context.examRepository.GetExamById(examIdentificator);
+
+                var course = _context.courseRepository.GetCourseByExamId(exam.ExamIdentificator);
+
+                SelfAssignUserToExamDividedToExamTermsViewModel assignToExamViewModel = new SelfAssignUserToExamDividedToExamTermsViewModel();
+
+                assignToExamViewModel.SelectedExam = exam.ExamIndexer + " " + exam.Name;
+
+                var vacantSeats = exam.UsersLimit - exam.EnrolledUsers.Count();
+                assignToExamViewModel.SelectedExamPeriod = "|Term." + exam.OrdinalNumber + " |" + exam.Name + " |wm.: " + vacantSeats + " |" + exam.DateOfStart.ToShortDateString() + " " + exam.DateOfStart.ToShortTimeString() + " - " + exam.DateOfEnd.ToShortDateString() + ":" + exam.DateOfEnd.ToShortTimeString();
+
+                assignToExamViewModel.AvailableExamsTerms = _context.examTermRepository.GeneraterateExamsTermsSelectListWithVacantSeats(exam.ExamTerms);
+
+                assignToExamViewModel.CourseIdentificator = course.CourseIdentificator;
+
+                return View(assignToExamViewModel);
+            }
+
+            return RedirectToAction("BlankMenu", "Certificates");
+        }
+
+        // POST: SelfAssignUserToExamDividedToExamTerms
+        [Authorize(Roles = "Worker")]
+        [HttpPost]
+        public ActionResult SelfAssignUserToExamDividedToExamTerms(SelfAssignUserToExamDividedToExamTermsViewModel assignToExamViewModel)
+        {
+            if (ModelState.IsValid)
+            {
+                var user = _context.userRepository.GetUserByEmail(this.User.Identity.Name);
+                var course = _context.courseRepository.GetCourseById(assignToExamViewModel.CourseIdentificator);
+
+                if (!course.EnrolledUsers.Contains(user.Id))
+                {
+                    return RedirectToAction("BlankMenu", "Certificates");
+                }
+
+                var exam = _context.examRepository.GetExamById(assignToExamViewModel.SelectedExamPeriod);
+                assignToExamViewModel.AvailableExamsTerms = _context.examTermRepository.GeneraterateExamsTermsSelectListWithVacantSeats(exam.ExamTerms);
+
+                if (exam.EnrolledUsers.Count() < exam.UsersLimit)
+                {
+                    var logInfo = _logger.GenerateLogInformation(this.User.Identity.Name, this.ControllerContext.RouteData.Values["action"].ToString(), LogTypeOfAction.TypesOfActions[1]);
+
+                    var examTerm = _context.examTermRepository.GetExamTermById(assignToExamViewModel.SelectedExamTerm);
+
+                    if (examTerm.EnrolledUsers.Count() < examTerm.UsersLimit)
+                    {
+                        examTerm.EnrolledUsers.Add(user.Id);
+                        _context.examTermRepository.AddUserToExamTerm(assignToExamViewModel.SelectedExamTerm, user.Id);
+
+                        _logger.AddExamTermLog(examTerm, logInfo);
+                    }
+                    else
+                    {
+                        ModelState.AddModelError("", "Brak wolnych miejsc w wybranej turze egzaminu");
+
+                        return View(assignToExamViewModel);
+                    }
+
+                    exam.EnrolledUsers.Add(user.Id);
+                    _context.examRepository.AddUserToExam(assignToExamViewModel.SelectedExamPeriod, user.Id);
+
+                    _logger.AddExamLog(exam, logInfo);
+
+                    return RedirectToAction("WorkerCourseDetails", "Courses", new { courseIdentificator = course.CourseIdentificator, message = "Zostałeś zapisany na wybrany egzamin" });
+                }
+                else
+                {
+                    ModelState.AddModelError("", "Brak wolnych miejsc w wybranym egzaminie");
+
+                    return View(assignToExamViewModel);
+                }
+            }
+
+            return View(assignToExamViewModel);
         }
 
         #region AjaxQuery

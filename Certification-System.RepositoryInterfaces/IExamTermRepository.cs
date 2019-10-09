@@ -25,5 +25,6 @@ namespace Certification_System.RepositoryInterfaces
         void DeleteExamTerm(string examTermIdentificator);
         ICollection<ExamTerm> DeleteUserFromExamsTerms(string userIdentificator, ICollection<string> examsTermsIdentificators);
         string CountExamsTermsWithIndexerNamePart(string namePartOfIndexer);
+        IList<SelectListItem> GeneraterateExamsTermsSelectListWithVacantSeats(ICollection<string> examsTermsIdentificators);
     }
 }

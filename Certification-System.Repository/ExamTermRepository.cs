@@ -124,6 +124,28 @@ namespace Certification_System.Repository
             return selectList;
         }
 
+        public IList<SelectListItem> GeneraterateExamsTermsSelectListWithVacantSeats(ICollection<string> examsTermsIdentificators)
+        {
+            var examsTerms = GetExamsTermsById(examsTermsIdentificators).ToList();
+            List<SelectListItem> selectList = new List<SelectListItem>();
+
+            foreach (var examTerm in examsTerms)
+            {
+                var vacantSeats = examTerm.UsersLimit - examTerm.EnrolledUsers.Count();
+
+                selectList.Add
+                    (
+                        new SelectListItem()
+                        {
+                            Text = examTerm.ExamTermIndexer + " |" + examTerm.DateOfStart + " - " + examTerm.DateOfEnd + " |wm.: " + vacantSeats,
+                            Value = examTerm.ExamTermIdentificator
+                        }
+                    );
+            };
+
+            return selectList;
+        }
+
         public IList<SelectListItem> GetActiveExamTermsWithVacantSeatsAsSelectList()
         {
             var examTerms = GetListOfActiveExamsTerms().ToList();
