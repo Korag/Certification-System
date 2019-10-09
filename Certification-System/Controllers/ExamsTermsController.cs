@@ -490,7 +490,7 @@ namespace Certification_System.Controllers
                 {
                     var exam = _context.examRepository.GetExamByExamTermId(addUsersToExamTermViewModel.ExamTermIdentificator);
 
-                    if (addUsersToExamTermViewModel.UsersToAssignToExamTerm.Where(z=> z.IsToAssign == true).Count() <= addUsersToExamTermViewModel.VacantSeats)
+                    if (addUsersToExamTermViewModel.UsersToAssignToExamTerm.Where(z => z.IsToAssign == true).Count() <= addUsersToExamTermViewModel.VacantSeats)
                     {
                         var usersToAddToExamIdentificators = addUsersToExamTermViewModel.UsersToAssignToExamTerm.ToList().Where(z => z.IsToAssign == true).Select(z => z.UserIdentificator).ToList();
 
@@ -796,7 +796,7 @@ namespace Certification_System.Controllers
 
             var examTerm = _context.examTermRepository.GetExamTermById(examTermIdentificator);
             var exam = _context.examRepository.GetExamByExamTermId(examTermIdentificator);
-            var userExamResult = _context.examResultRepository.GetExamsResultsById(exam.ExamResults).Where(z=> z.User == user.Id && z.ExamTerm == examTermIdentificator).FirstOrDefault();
+            var userExamResult = _context.examResultRepository.GetExamsResultsById(exam.ExamResults).Where(z => z.User == user.Id && z.ExamTerm == examTermIdentificator).FirstOrDefault();
 
             var examiners = _context.userRepository.GetUsersById(examTerm.Examiners);
 
@@ -847,6 +847,45 @@ namespace Certification_System.Controllers
             examTermDetails.CanUserResignFromExamTerm = canUserResignFromExamTerm;
 
             return View(examTermDetails);
+        }
+
+        // GET: SelfAssignUserToExamTerm
+        [Authorize(Roles = "Worker")]
+        public ActionResult SelfAssignUserToExamTerm(string examTermIdentificator)
+        {
+            if (!string.IsNullOrWhiteSpace(examTermIdentificator))
+            {
+                var user = _context.userRepository.GetUserByEmail(this.User.Identity.Name);
+
+                var examTerm = _context.examTermRepository.GetExamTermById(examTermIdentificator);
+                var exam = _context.examRepository.GetExamByExamTermId(examTermIdentificator);
+
+                if (examTerm.EnrolledUsers.Contains(user.Id))
+                {
+                    return RedirectToAction("BlankMenu", "Certificates");
+                }
+
+                if (examTerm.EnrolledUsers.Count() < examTerm.UsersLimit && exam.EnrolledUsers.Count() < exam.UsersLimit)
+                {
+                    var logInfo = _logger.GenerateLogInformation(this.User.Identity.Name, this.ControllerContext.RouteData.Values["action"].ToString(), LogTypeOfAction.TypesOfActions[1]);
+
+                    examTerm.EnrolledUsers.Add(user.Id);
+                    _context.examTermRepository.AddUserToExamTerm(examTerm.ExamTermIdentificator, user.Id);
+
+                    _logger.AddExamTermLog(examTerm, logInfo);
+
+                    exam.EnrolledUsers.Add(user.Id);
+                    _context.examRepository.AddUserToExam(exam.ExamIdentificator, user.Id);
+
+                    _logger.AddExamLog(exam, logInfo);
+
+                    var course = _context.courseRepository.GetCourseByExamId(exam.ExamIdentificator);
+
+                    return RedirectToAction("WorkerCourseDetails", "Courses", new { courseIdentificator = course.CourseIdentificator, message = "Zostałeś zapisany na wybraną turę egzaminu" });
+                }
+            }
+
+            return RedirectToAction("BlankMenu", "Certificates");
         }
 
         #region AjaxQuery

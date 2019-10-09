@@ -1425,10 +1425,10 @@ namespace Certification_System.Controllers
             {
                 return RedirectToAction("SelfAssignUserToChosenExamPeriod", "Exams", new { examIndexer });
             }
-            //else if (!string.IsNullOrWhiteSpace(examTermIdentificator))
-            //{
-            //    return RedirectToAction("AssignUserToExamTerm", )
-            //}
+            else if (!string.IsNullOrWhiteSpace(examTermIdentificator))
+            {
+                return RedirectToAction("SelfAssignUserToExamTerm", "ExamsTerms", new { examTermIdentificator });
+            }
             //else if (!string.IsNullOrWhiteSpace(examIdentificator))
             //{
 
@@ -1443,7 +1443,7 @@ namespace Certification_System.Controllers
         {
             if (!string.IsNullOrWhiteSpace(examIndexer))
             {
-                var exams = _context.examRepository.GetExamsByIndexer(examIndexer).OrderBy(z=> z.OrdinalNumber).ToList();
+                var exams = _context.examRepository.GetExamsByIndexer(examIndexer).OrderBy(z => z.OrdinalNumber).ToList();
                 var firstExamPeriod = exams.FirstOrDefault();
 
                 var course = _context.courseRepository.GetCourseByExamId(firstExamPeriod.ExamIdentificator);
@@ -1453,7 +1453,7 @@ namespace Certification_System.Controllers
                 assignToExamViewModel.SelectedExam = firstExamPeriod.ExamIndexer + " " + firstExamPeriod.Name;
                 assignToExamViewModel.ExamIndexer = examIndexer;
 
-                assignToExamViewModel.AvailableExamsPeriods = _context.examRepository.GeneraterateExamsPeriodsSelectListWithVacantSeats(exams.Select(z=> z.ExamIdentificator).ToList()).ToList();
+                assignToExamViewModel.AvailableExamsPeriods = _context.examRepository.GeneraterateExamsPeriodsSelectListWithVacantSeats(exams.Select(z => z.ExamIdentificator).ToList()).ToList();
 
                 assignToExamViewModel.CourseIdentificator = course.CourseIdentificator;
 
@@ -1493,25 +1493,32 @@ namespace Certification_System.Controllers
 
                         if (examTerm.EnrolledUsers.Count() < examTerm.UsersLimit)
                         {
-
                             examTerm.EnrolledUsers.Add(user.Id);
                             _context.examTermRepository.AddUserToExamTerm(assignToExamViewModel.SelectedExamTerm, user.Id);
 
                             _logger.AddExamTermLog(examTerm, logInfo);
                         }
+                        else
+                        {
+                            ModelState.AddModelError("", "Brak wolnych miejsc w wybranej turze egzaminu");
 
-                        ModelState.AddModelError("", "Brak wolnych miejsc w wybranej turze egzaminu");
-                        return View(assignToExamViewModel);
+                            return View(assignToExamViewModel);
+                        }
                     }
 
                     exam.EnrolledUsers.Add(user.Id);
                     _context.examRepository.AddUserToExam(assignToExamViewModel.SelectedExamPeriod, user.Id);
 
                     _logger.AddExamLog(exam, logInfo);
-                }
 
-                ModelState.AddModelError("", "Brak wolnych miejsc w wybranym egzaminie");
-                return View(assignToExamViewModel);
+                    return RedirectToAction("WorkerCourseDetails", "Courses", new { courseIdentificator = course.CourseIdentificator, message = "Zostałeś zapisany na wybrany egzamin" });
+                }
+                else
+                {
+                    ModelState.AddModelError("", "Brak wolnych miejsc w wybranym egzaminie");
+
+                    return View(assignToExamViewModel);
+                }
             }
 
             return View(assignToExamViewModel);
