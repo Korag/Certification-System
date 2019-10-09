@@ -1487,10 +1487,11 @@ namespace Certification_System.Controllers
                     return RedirectToAction("BlankMenu", "Certificates");
                 }
 
+                var exam = _context.examRepository.GetExamById(assignToExamViewModel.SelectedExamPeriod);
+
                 var exams = _context.examRepository.GetExamsByIndexer(assignToExamViewModel.ExamIndexer).OrderBy(z => z.OrdinalNumber).ToList();
                 assignToExamViewModel.AvailableExamsPeriods = _context.examRepository.GeneraterateExamsPeriodsSelectListWithVacantSeats(exams.Select(z => z.ExamIdentificator).ToList()).ToList();
-
-                var exam = _context.examRepository.GetExamById(assignToExamViewModel.SelectedExamPeriod);
+                assignToExamViewModel.AvailableExamsTerms = _context.examTermRepository.GeneraterateExamsTermsSelectListWithVacantSeats(exam.ExamTerms);
 
                 if (exam.EnrolledUsers.Count() < exam.UsersLimit)
                 {
