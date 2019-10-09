@@ -61,11 +61,11 @@ namespace Certification_System
 
             }).AddTokenProvider<DataProtectorTokenProvider<CertificationPlatformUser>>("DeletionOfEntity");
 
-            services.ConfigureApplicationCookie(o => {
-                o.Cookie.Name = "Certification-Cookie";
-                o.ExpireTimeSpan = TimeSpan.FromHours(5);
-                o.SlidingExpiration = true;
-            });
+            //services.ConfigureApplicationCookie(o => {
+            //    o.Cookie.Name = "Certification-Cookie";
+            //    o.ExpireTimeSpan = TimeSpan.FromHours(5);
+            //    o.SlidingExpiration = true;
+            //});
 
             // Auto Mapper Configurations
             var mappingConfig = new MapperConfiguration(mc =>
