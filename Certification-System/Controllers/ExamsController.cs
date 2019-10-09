@@ -1429,10 +1429,19 @@ namespace Certification_System.Controllers
             {
                 return RedirectToAction("SelfAssignUserToExamTerm", "ExamsTerms", new { examTermIdentificator });
             }
-            //else if (!string.IsNullOrWhiteSpace(examIdentificator))
-            //{
+            else if (!string.IsNullOrWhiteSpace(examIdentificator))
+            {
+                var exam = _context.examRepository.GetExamById(examIdentificator);
 
-            //}
+                if (exam.ExamDividedToTerms)
+                {
+                    return RedirectToAction("SelfAssignUserToExamNotDividedToExamTerms", "Exams", new { examIdentificator });
+                }
+                //else
+                //{
+
+                //}
+            }
 
             return RedirectToAction("BlankMenu", "Certificates");
         }
@@ -1522,6 +1531,39 @@ namespace Certification_System.Controllers
             }
 
             return View(assignToExamViewModel);
+        }
+
+        // GET: SelfAssignUserToExamNotDividedToExamTerms
+        [Authorize(Roles = "Worker")]
+        public ActionResult SelfAssignUserToExamNotDividedToExamTerms(string examIdentificator)
+        {
+            if (!string.IsNullOrWhiteSpace(examIdentificator))
+            {
+                var user = _context.userRepository.GetUserByEmail(this.User.Identity.Name);
+
+                var exam = _context.examRepository.GetExamByExamTermId(examIdentificator);
+
+                if (exam.EnrolledUsers.Contains(user.Id))
+                {
+                    return RedirectToAction("BlankMenu", "Certificates");
+                }
+
+                if (exam.EnrolledUsers.Count() < exam.UsersLimit)
+                {
+                    var logInfo = _logger.GenerateLogInformation(this.User.Identity.Name, this.ControllerContext.RouteData.Values["action"].ToString(), LogTypeOfAction.TypesOfActions[1]);
+
+                    exam.EnrolledUsers.Add(user.Id);
+                    _context.examRepository.AddUserToExam(exam.ExamIdentificator, user.Id);
+
+                    _logger.AddExamLog(exam, logInfo);
+
+                    var course = _context.courseRepository.GetCourseByExamId(exam.ExamIdentificator);
+
+                    return RedirectToAction("WorkerCourseDetails", "Courses", new { courseIdentificator = course.CourseIdentificator, message = "Zostałeś zapisany na wybrany egzamin" });
+                }
+            }
+
+            return RedirectToAction("BlankMenu", "Certificates");
         }
 
         #region AjaxQuery
