@@ -1,0 +1,76 @@
+﻿@model Certification_System.DTOViewModels.DisplayCourseOfferDataTableViewModel
+
+<div class="col-12 table-responsive">
+    <table id="@Model.Options.TableIdentificator" class="table table-striped table-bordered display" style="width: 100%;" role="grid">
+        <thead>
+            <tr>
+                <th>
+                    @Html.DisplayNameFor(model => model.Courses.FirstOrDefault().CourseIndexer)
+                </th>
+                <th>
+                    @Html.DisplayNameFor(model => model.Courses.FirstOrDefault().Name)
+                </th>
+                <th>
+                    @Html.DisplayNameFor(model => model.Courses.FirstOrDefault().Description)
+                </th>
+                <th>
+                    @Html.DisplayNameFor(model => model.Courses.FirstOrDefault().DateOfStart)
+                </th>
+                <th>
+                    @Html.DisplayNameFor(model => model.Courses.FirstOrDefault().DateOfEnd)
+                </th>
+                <th>
+                    @Html.DisplayNameFor(model => model.Courses.FirstOrDefault().VacantSeats)
+                </th>
+                <th>
+                    @Html.DisplayNameFor(model => model.Courses.FirstOrDefault().Branches)
+                </th>
+                @if (Model.Options.OperationSet != 0)
+                {
+                    <th>
+                        Operacje
+                    </th>
+                }
+            </tr>
+        </thead>
+        <tbody>
+            @foreach (var course in Model.Courses)
+            {
+            <tr>
+                <td>
+                    @Html.DisplayFor(modelItem => course.CourseIndexer)
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => course.Name)
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => course.Description)
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => course.DateOfStart)
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => course.DateOfEnd)
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => course.VacantSeats)
+                </td>
+                <td>
+                    <ul>
+                        @foreach (var branch in course.Branches)
+                        {
+                            <li>@branch</li>
+                        }
+                    </ul>
+                </td>
+                @if (Model.Options.OperationSet == 1)
+                {
+                    <td>
+                        <a asp-action="CourseOfferDetails" asp-route-courseIdentificator="@course.CourseIdentificator" asp-controller="Courses" class="btn btn-info m-1">Szczegóły</a>
+                    </td>
+                }
+            </tr>
+            }
+        </tbody>
+    </table>
+</div>
