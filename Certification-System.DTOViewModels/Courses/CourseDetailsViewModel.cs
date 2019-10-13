@@ -7,7 +7,7 @@ namespace Certification_System.DTOViewModels
     public class CourseDetailsViewModel
     {
         [Display(Name = "Kurs")]
-        public DisplayCourseViewModel Course { get; set; }
+        public DisplayCourseWithPriceViewModel Course { get; set; }
 
         [Display(Name = "Spotkania w ramach szkolenia")]
         public ICollection<DisplayMeetingWithoutCourseViewModel> Meetings { get; set; }

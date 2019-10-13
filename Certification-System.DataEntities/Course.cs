@@ -28,6 +28,7 @@ namespace Certification_System.Entities
 
         public int CourseLength { get; set; }
         public bool CourseEnded { get; set; }
+        public double Price { get; set; }
 
         public bool ExamIsRequired { get; set; }
         public ICollection<string> Exams { get; set; }

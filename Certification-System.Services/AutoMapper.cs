@@ -68,6 +68,9 @@ namespace Certification_System.Services
             CreateMap<Course, DisplayCourseViewModel>()
                      .ForMember(dest => dest.EnrolledUsersQuantity, opts => opts.MapFrom(src => src.EnrolledUsers.Count()));
 
+            CreateMap<Course, DisplayCourseWithPriceViewModel>()
+              .ForMember(dest => dest.EnrolledUsersQuantity, opts => opts.MapFrom(src => src.EnrolledUsers.Count()));
+
             CreateMap<Course, DisplayCourseWithUserRoleViewModel>()
                      .ForMember(dest => dest.EnrolledUsersQuantity, opts => opts.MapFrom(src => src.EnrolledUsers.Count()))
                      .ForMember(dest => dest.Roles, opts => opts.MapFrom(src => new List<string>()));

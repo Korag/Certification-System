@@ -39,6 +39,11 @@ namespace Certification_System.DTOViewModels
         [Display(Name = "Kurs zakończony")]
         public bool CourseEnded { get; set; }
 
+        [Required(ErrorMessage = "Pole \"{0}\" jest wymagane.")]
+        [GreaterThanZero(ErrorMessage = "Pole \"{0}\" nie może zawierać wartości ujemnych.")]
+        [Display(Name = "Cena kursu [zł]")]
+        public double Price { get; set; }
+
         [Required(ErrorMessage = "Należy zaznaczyć conajmniej jeden Obszar.")]
         public ICollection<string> SelectedBranches { get; set; }
 

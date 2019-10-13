@@ -14,7 +14,7 @@
 
         <div class="col-md-8 col-xl-6 col-lg-6 col-sm-12 col-xs-10 m-auto p-3 shadow p-3 mb-5 bg-light rounded border border-primary rounded-bottom" style="opacity:0.90">
 
-            <input asp-for="CourseIdentificator" class="form-control" hidden readonly/>
+            <input asp-for="CourseIdentificator" class="form-control" hidden readonly />
 
             <div class="form-group">
                 <label asp-for="Name" class="control-label"></label>
@@ -69,9 +69,19 @@
             <div class="form-group">
                 <label asp-for="EnrolledUsersLimit" class="control-label"></label>
                 <div>
-                    <input asp-for="EnrolledUsersLimit" class="form-control col-12" min="1" value="1"/>
+                    <input asp-for="EnrolledUsersLimit" class="form-control col-12" min="1" value="1" />
                     <div class="row justify-content-center">
                         <span asp-validation-for="EnrolledUsersLimit" class="text-danger"></span>
+                    </div>
+                </div>
+            </div>
+
+            <div class="form-group">
+                <label asp-for="Price" class="control-label"></label>
+                <div>
+                    <input type="text" asp-for="Price" class="form-control col-12"/>
+                    <div class="row justify-content-center">
+                        <span asp-validation-for="Price" class="text-danger"></span>
                     </div>
                 </div>
             </div>
@@ -93,22 +103,22 @@
             <div class="form-group">
                 <label asp-for="AvailableBranches" class="control-label"></label>
                 @*<div>
-                <div class="btn-group btn-group-toggle" data-toggle="buttons">
-                    @foreach (var availableBranch in Model.AvailableBranches)
-                    {*@
+            <div class="btn-group btn-group-toggle" data-toggle="buttons">
+                @foreach (var availableBranch in Model.AvailableBranches)
+                {*@
                 @*<div id="checkbox-list">*@
                 @*<label class="btn btn-outline-secondary m-2  @if (Model.SelectedBranches.Contains(availableBranch.Value)) { <text> active </text> }">
-                    <input type="checkbox"
-                           name="SelectedBranches"
-                           value="@availableBranch.Value"
-                           autocomplete="off"
-                           @if (Model.SelectedBranches.Contains(availableBranch.Value)) { <text> checked </text> } />
-                    <span>@availableBranch.Text</span>
-                </label>*@
+                <input type="checkbox"
+                       name="SelectedBranches"
+                       value="@availableBranch.Value"
+                       autocomplete="off"
+                       @if (Model.SelectedBranches.Contains(availableBranch.Value)) { <text> checked </text> } />
+                <span>@availableBranch.Text</span>
+            </label>*@
                 @*}*@
                 @*</div>
-                    @Html.ValidationMessageFor(model => model.SelectedBranches, "", new { @class = "text-danger" })
-                </div>*@
+                @Html.ValidationMessageFor(model => model.SelectedBranches, "", new { @class = "text-danger" })
+            </div>*@
 
                 <div>
                     <select asp-for="SelectedBranches" asp-items="@Model.AvailableBranches" data-style="btn-white" data-container="body" data-width="100%" data-size="auto" data-header="Wybierz obszary certyfikacji" data-live-search="true" title="Nie wybrano żadnego elementu" data-none-results-text="Nie znaleziono szukanej frazy" class="form-control selectpicker show-tick"> </select>
@@ -136,4 +146,16 @@
 @section Scripts {
     @{await Html.RenderPartialAsync("_ValidationScriptsPartial");}
     @{await Html.RenderPartialAsync("_RelatedCalendarsInputScript", new RelatedCalendarsInputScriptViewModel { StartDate = "DateOfStart", EndDate = "DateOfEnd" });}
+
+<script>
+
+    $.validator.methods.range = function (value, element, param) {
+        var globalizedValue = value.replace(".", ",");
+        return this.optional(element) || (globalizedValue >= param[0] && globalizedValue <= param[1]);
+    }
+
+    $.validator.methods.number = function (value, element) {
+        return this.optional(element) || /-?(?:\d+|\d{1,3}(?:[\s\.,]\d{3})+)(?:[\.,]\d+)?$/.test(value);
+    }
+</script>
 }

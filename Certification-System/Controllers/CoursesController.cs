@@ -47,7 +47,7 @@ namespace Certification_System.Controllers
                 var course = _context.courseRepository.GetCourseById(courseIdentificator);
 
                 DisplayCourseWithMeetingsViewModel modifiedCourse = new DisplayCourseWithMeetingsViewModel();
-                modifiedCourse.Course = _mapper.Map<DisplayCourseViewModel>(course);
+                modifiedCourse.Course = _mapper.Map<DisplayCourseWithPriceViewModel>(course);
 
                 if (course.Meetings != null)
                 {
@@ -280,7 +280,7 @@ namespace Certification_System.Controllers
             List<DisplayCrucialDataWithContactUserViewModel> examinersViewModel = _mapper.Map<List<DisplayCrucialDataWithContactUserViewModel>>(examiners);
 
             CourseDetailsViewModel courseDetails = new CourseDetailsViewModel();
-            courseDetails.Course = _mapper.Map<DisplayCourseViewModel>(course);
+            courseDetails.Course = _mapper.Map<DisplayCourseWithPriceViewModel>(course);
             courseDetails.Course.Branches = _context.branchRepository.GetBranchesById(course.Branches);
 
             courseDetails.Meetings = meetingsViewModel;
@@ -290,23 +290,6 @@ namespace Certification_System.Controllers
             courseDetails.EnrolledUsers = usersViewModel;
             courseDetails.Instructors = instructorsViewModel;
             courseDetails.Examiners = examinersViewModel;
-
-            // check and delete
-
-            //courseDetails.DispensedGivenCertificates = _mapper.Map<DispenseGivenCertificateCheckBoxViewModel[]>(usersViewModel);
-
-            //if (Course.CourseEnded)
-            //{
-            //    foreach (var user in Users)
-            //    {
-            //        var UsersGivenCertificates = _context.givenCertificateRepository.GetGivenCertificatesById(user.GivenCertificates);
-
-            //        if (UsersGivenCertificates.Where(z => z.Course == Course.CourseIdentificator).Count() != 0)
-            //        {
-            //            courseDetails.DispensedGivenCertificates.Where(z => z.UserIdentificator == user.Id).Select(z => z.GivenCertificateIsEarned = true);
-            //        }
-            //    }
-            //}
 
             if (this.User.IsInRole("Instructor") && this.User.IsInRole("Examiner"))
             {

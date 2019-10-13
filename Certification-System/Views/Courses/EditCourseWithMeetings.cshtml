@@ -14,7 +14,7 @@
 
         <div class="col-md-8 col-xl-6 col-lg-6 col-sm-12 col-xs-10 m-auto p-3 shadow p-3 mb-5 bg-light rounded border border-primary rounded-bottom" style="opacity:0.90">
 
-            <input asp-for="CourseIdentificator" class="form-control col-12" hidden readonly/>
+            <input asp-for="CourseIdentificator" class="form-control col-12" hidden readonly />
 
             <div class="form-group">
                 <label asp-for="Name" class="control-label"></label>
@@ -77,6 +77,16 @@
             </div>
 
             <div class="form-group">
+                <label asp-for="Price" class="control-label"></label>
+                <div>
+                    <input type="text" asp-for="Price" class="form-control col-12" />
+                    <div class="row justify-content-center">
+                        <span asp-validation-for="Price" class="text-danger"></span>
+                    </div>
+                </div>
+            </div>
+
+            <div class="form-group">
                 <label asp-for="ExamIsRequired" class="control-label"></label>
                 <div class="row pl-3">
                     <input type="checkbox" asp-for="ExamIsRequired" class="form-control col-12" data-toggle="toggle" data-on="Tak" data-off="Nie" data-size="sm" />
@@ -99,113 +109,113 @@
 
             @for (int i = 0; i < Model.Meetings.Count(); i++)
             {
-            <div class="col-12 bg-light rounded border border-primary rounded-bottom mb-2 p-3">
+                <div class="col-12 bg-light rounded border border-primary rounded-bottom mb-2 p-3">
 
-                <input asp-for="Meetings[i].MeetingIdentificator" class="form-control col-12" hidden readonly />
+                    <input asp-for="Meetings[i].MeetingIdentificator" class="form-control col-12" hidden readonly />
 
-                <div class="form-group">
-                    <label asp-for="Meetings[i].Description" class="control-label"></label>
-                    <div>
-                        <textarea asp-for="Meetings[i].Description" class="form-control col-12" style="width:100%; min-width:100%;"></textarea>
-                        <div class="row justify-content-center">
-                            <span asp-validation-for="Meetings[i].Description" class="text-danger"></span>
+                    <div class="form-group">
+                        <label asp-for="Meetings[i].Description" class="control-label"></label>
+                        <div>
+                            <textarea asp-for="Meetings[i].Description" class="form-control col-12" style="width:100%; min-width:100%;"></textarea>
+                            <div class="row justify-content-center">
+                                <span asp-validation-for="Meetings[i].Description" class="text-danger"></span>
+                            </div>
                         </div>
                     </div>
-                </div>
 
-                <div class="form-group">
-                    <label asp-for="Meetings[i].DateOfStart" class="control-label"></label>
-                    <div>
-                        @{string id_DoS = "DateOfStart" + i; }
-                        <div class='input-group date' id='@id_DoS'>
-                            <input asp-for="@Model.Meetings[i].DateOfStart" type='text' class="form-control col-12" value="@DateTime.Now.ToShortDateString() @DateTime.Now.ToShortTimeString()" />
-                            <span class="input-group-addon">
-                                <span class="fa fa-calendar pl-1 pt-0.5" style="font-size:34px"></span>
-                            </span>
-                        </div>
-                        <div class="row justify-content-center">
-                            <span asp-validation-for="Meetings[i].DateOfStart" class="text-danger"></span>
+                    <div class="form-group">
+                        <label asp-for="Meetings[i].DateOfStart" class="control-label"></label>
+                        <div>
+                            @{string id_DoS = "DateOfStart" + i; }
+                            <div class='input-group date' id='@id_DoS'>
+                                <input asp-for="@Model.Meetings[i].DateOfStart" type='text' class="form-control col-12" value="@DateTime.Now.ToShortDateString() @DateTime.Now.ToShortTimeString()" />
+                                <span class="input-group-addon">
+                                    <span class="fa fa-calendar pl-1 pt-0.5" style="font-size:34px"></span>
+                                </span>
+                            </div>
+                            <div class="row justify-content-center">
+                                <span asp-validation-for="Meetings[i].DateOfStart" class="text-danger"></span>
+                            </div>
                         </div>
                     </div>
-                </div>
 
-                <div class="form-group">
-                    <label asp-for="Meetings[i].DateOfEnd" class="control-label"></label>
-                    <div>
-                        @{string id_DoE = "DateOfEnd" + i; }
-                        <div class='input-group date' id='@id_DoE'>
-                            <input asp-for="@Model.Meetings[i].DateOfEnd" type='text' class="form-control col-12" value="@DateTime.Now.ToShortDateString() @DateTime.Now.ToShortTimeString()" />
-                            <span class="input-group-addon">
-                                <span class="fa fa-calendar pl-1 pt-0.5" style="font-size:34px"></span>
-                            </span>
-                        </div>
-                        <div class="row justify-content-center">
-                            <span asp-validation-for="Meetings[i].DateOfEnd" class="text-danger"></span>
-                        </div>
-                    </div>
-                </div>
-
-                <div class="form-group">
-                    <label asp-for="AvailableInstructors" class="control-label"></label>
-                    <div>
-                        <select asp-for="Meetings[i].SelectedInstructors" asp-items="@Model.AvailableInstructors" data-style="btn-white" data-container="body" data-width="100%" data-size="auto" data-header="Wybierz instruktora" data-live-search="true" title="Nie wybrano instruktora" data-none-results-text="Nie znaleziono szukanej frazy" multiple class="form-control selectpicker show-tick"> </select>
-                        <div class="row justify-content-center">
-                            <span asp-validation-for="Meetings[i].SelectedInstructors" class="text-danger"></span>
+                    <div class="form-group">
+                        <label asp-for="Meetings[i].DateOfEnd" class="control-label"></label>
+                        <div>
+                            @{string id_DoE = "DateOfEnd" + i; }
+                            <div class='input-group date' id='@id_DoE'>
+                                <input asp-for="@Model.Meetings[i].DateOfEnd" type='text' class="form-control col-12" value="@DateTime.Now.ToShortDateString() @DateTime.Now.ToShortTimeString()" />
+                                <span class="input-group-addon">
+                                    <span class="fa fa-calendar pl-1 pt-0.5" style="font-size:34px"></span>
+                                </span>
+                            </div>
+                            <div class="row justify-content-center">
+                                <span asp-validation-for="Meetings[i].DateOfEnd" class="text-danger"></span>
+                            </div>
                         </div>
                     </div>
-                </div>
 
-                <div class="form-group">
-                    <label asp-for="Meetings[i].Country" class="control-label"></label>
-                    <div>
-                        <input asp-for="Meetings[i].Country" class="form-control col-12" />
-                        <div class="row justify-content-center">
-                            <span asp-validation-for="Meetings[i].Country" class="text-danger"></span>
+                    <div class="form-group">
+                        <label asp-for="AvailableInstructors" class="control-label"></label>
+                        <div>
+                            <select asp-for="Meetings[i].SelectedInstructors" asp-items="@Model.AvailableInstructors" data-style="btn-white" data-container="body" data-width="100%" data-size="auto" data-header="Wybierz instruktora" data-live-search="true" title="Nie wybrano instruktora" data-none-results-text="Nie znaleziono szukanej frazy" multiple class="form-control selectpicker show-tick"> </select>
+                            <div class="row justify-content-center">
+                                <span asp-validation-for="Meetings[i].SelectedInstructors" class="text-danger"></span>
+                            </div>
                         </div>
                     </div>
-                </div>
 
-                <div class="form-group">
-                    <label asp-for="Meetings[i].City" class="control-label"></label>
-                    <div>
-                        <input asp-for="Meetings[i].City" class="form-control col-12" />
-                        <div class="row justify-content-center">
-                            <span asp-validation-for="Meetings[i].City" class="text-danger"></span>
+                    <div class="form-group">
+                        <label asp-for="Meetings[i].Country" class="control-label"></label>
+                        <div>
+                            <input asp-for="Meetings[i].Country" class="form-control col-12" />
+                            <div class="row justify-content-center">
+                                <span asp-validation-for="Meetings[i].Country" class="text-danger"></span>
+                            </div>
                         </div>
                     </div>
-                </div>
 
-                <div class="form-group">
-                    <label asp-for="Meetings[i].PostCode" class="control-label"></label>
-                    <div>
-                        <input asp-for="Meetings[i].PostCode" class="form-control col-12" />
-                        <div class="row justify-content-center">
-                            <span asp-validation-for="Meetings[i].PostCode" class="text-danger"></span>
+                    <div class="form-group">
+                        <label asp-for="Meetings[i].City" class="control-label"></label>
+                        <div>
+                            <input asp-for="Meetings[i].City" class="form-control col-12" />
+                            <div class="row justify-content-center">
+                                <span asp-validation-for="Meetings[i].City" class="text-danger"></span>
+                            </div>
                         </div>
                     </div>
-                </div>
 
-                <div class="form-group">
-                    <label asp-for="Meetings[i].Address" class="control-label"></label>
-                    <div>
-                        <input asp-for="Meetings[i].Address" class="form-control col-12" />
-                        <div class="row justify-content-center">
-                            <span asp-validation-for="Meetings[i].Address" class="text-danger"></span>
+                    <div class="form-group">
+                        <label asp-for="Meetings[i].PostCode" class="control-label"></label>
+                        <div>
+                            <input asp-for="Meetings[i].PostCode" class="form-control col-12" />
+                            <div class="row justify-content-center">
+                                <span asp-validation-for="Meetings[i].PostCode" class="text-danger"></span>
+                            </div>
                         </div>
                     </div>
-                </div>
 
-                <div class="form-group">
-                    <label asp-for="Meetings[i].NumberOfApartment" class="control-label"></label>
-                    <div>
-                        <input asp-for="Meetings[i].NumberOfApartment" class="form-control col-12" />
-                        <div class="row justify-content-center">
-                            <span asp-validation-for="Meetings[i].NumberOfApartment" class="text-danger"></span>
+                    <div class="form-group">
+                        <label asp-for="Meetings[i].Address" class="control-label"></label>
+                        <div>
+                            <input asp-for="Meetings[i].Address" class="form-control col-12" />
+                            <div class="row justify-content-center">
+                                <span asp-validation-for="Meetings[i].Address" class="text-danger"></span>
+                            </div>
                         </div>
                     </div>
-                </div>
 
-            </div>
+                    <div class="form-group">
+                        <label asp-for="Meetings[i].NumberOfApartment" class="control-label"></label>
+                        <div>
+                            <input asp-for="Meetings[i].NumberOfApartment" class="form-control col-12" />
+                            <div class="row justify-content-center">
+                                <span asp-validation-for="Meetings[i].NumberOfApartment" class="text-danger"></span>
+                            </div>
+                        </div>
+                    </div>
+
+                </div>
             }
 
             <div asp-validation-summary="ModelOnly" class="row justify-content-center alert alert-danger validation-model"></div>
