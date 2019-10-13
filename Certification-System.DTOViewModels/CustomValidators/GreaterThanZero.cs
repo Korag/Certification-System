@@ -7,7 +7,7 @@ namespace Certification_System.DTOViewModels
         public override bool IsValid(object value)
         {
             var x = (double)value;
-            return x > 0;
+            return x >= 0;
         }
     }
 }

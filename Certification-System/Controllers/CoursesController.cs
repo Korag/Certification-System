@@ -1163,6 +1163,22 @@ namespace Certification_System.Controllers
             return View(courseDetails);
         }
 
+        // GET: CourseOffer
+        [Authorize(Roles = "Worker")]
+        public ActionResult CourseOffer()
+        {
+            var courses = _context.courseRepository.GetListOfNotStartedCourses();
+            List<DisplayCourseOfferViewModel> listOfCourses = new List<DisplayCourseOfferViewModel>();
+
+            if (courses.Count != 0)
+            {
+                listOfCourses = _mapper.Map<List<DisplayCourseOfferViewModel>>(courses);
+                listOfCourses.ForEach(z => z.Branches = _context.branchRepository.GetBranchesById(z.Branches));
+            }
+
+            return View(listOfCourses);
+        }
+
         #region AjaxQuery
         // GET: GetCoursesByUserId
         [Authorize(Roles = "Admin")]

@@ -3,6 +3,7 @@ using Certification_System.Repository.Context;
 using Certification_System.RepositoryInterfaces;
 using Microsoft.AspNetCore.Mvc.Rendering;
 using MongoDB.Driver;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 
@@ -28,6 +29,11 @@ namespace Certification_System.Repository
         public ICollection<Course> GetListOfCourses()
         {
             return GetCourses().AsQueryable().ToList();
+        }
+
+        public ICollection<Course> GetListOfNotStartedCourses()
+        {
+            return GetCourses().AsQueryable().Where(z=> z.DateOfStart > DateTime.Now).ToList();
         }
 
         public void AddCourse(Course course)
