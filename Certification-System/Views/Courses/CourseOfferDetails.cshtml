@@ -109,18 +109,32 @@
         </div>
     }
 
-    <div class="row justify-content-center mt-5 mb-2">
+    <div class="row justify-content-center mt-5">
         <div class="mr-3 p-1" style="font-size:30px">
             <label asp-for="Price"></label>:
         </div>
         <div class="alert-primary p-1" style="font-size:30px">@Model.Price PLN</div>
     </div>
 
+    <div class="row justify-content-center  mt-2 mb-5">
+        <div class="mr-3 p-1" style="font-size:30px">
+            <label asp-for="Course.VacantSeats"></label>:
+        </div>
+        <div class="alert-primary p-1" style="font-size:30px">@Model.Course.VacantSeats</div>
+    </div>
+
     <div>
         <div class="row justify-content-center">
             @if (!Model.UserInQueue)
             {
-                <button type="button" class="btn btn-primary mt-1 xs300px_JustifyContentCenter" data-toggle="modal" data-target="#modal">Zapisuje się i zobowiązuję do zapłaty</button>
+                if (Model.Course.VacantSeats != 0)
+                {
+                    <button type="button" class="btn btn-primary mt-1 xs300px_JustifyContentCenter" data-toggle="modal" data-target="#modal">Zapisuje się i zobowiązuję do zapłaty</button>
+                }
+                else
+                {
+                    <div class="mt-4 mb-4 alert alert-danger">Brak wolnych miejsc</div>
+                }
             }
         </div>
     </div>

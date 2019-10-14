@@ -1180,8 +1180,21 @@ namespace Certification_System.Controllers
 
             if (courses.Count != 0)
             {
-                listOfCourses = _mapper.Map<List<DisplayCourseOfferViewModel>>(courses);
-                listOfCourses.ForEach(z => z.Branches = _context.branchRepository.GetBranchesById(z.Branches));
+                foreach (var course in courses)
+                {
+                    DisplayCourseOfferViewModel singleCourse = _mapper.Map<DisplayCourseOfferViewModel>(course);
+                    singleCourse.Branches = _context.branchRepository.GetBranchesById(singleCourse.Branches);
+                    singleCourse.VacantSeats = course.EnrolledUsersLimit - course.EnrolledUsers.Count();
+
+                    var courseQueue = _context.courseRepository.GetCourseQueueById(course.CourseIdentificator);
+
+                    if (courseQueue != null)
+                    {
+                        singleCourse.VacantSeats = singleCourse.VacantSeats - courseQueue.AwaitingUsers.Count();
+                    }
+
+                    listOfCourses.Add(singleCourse);
+                }
             }
 
             return View(listOfCourses);
@@ -1211,19 +1224,24 @@ namespace Certification_System.Controllers
             var courseQueue = _context.courseRepository.GetCourseQueueById(courseIdentificator);
             bool userInQueue = false;
 
-            if (courseQueue.AwaitingUsers.Select(z=> z.UserIdentificator).Contains(user.Id))
-            {
-                userInQueue = true;
-            }
-
             CourseOfferDetailsViewModel courseOfferDetails = new CourseOfferDetailsViewModel();
-
-            courseOfferDetails.UserInQueue = userInQueue;
 
             courseOfferDetails.Course = _mapper.Map<DisplayCourseOfferViewModel>(course);
             courseOfferDetails.Course.Branches = _context.branchRepository.GetBranchesById(course.Branches);
             courseOfferDetails.Price = course.Price;
+            courseOfferDetails.Course.VacantSeats = course.EnrolledUsersLimit - course.EnrolledUsers.Count();
 
+            if (courseQueue != null)
+            {
+                if (courseQueue.AwaitingUsers.Select(z => z.UserIdentificator).Contains(user.Id))
+                {
+                    userInQueue = true;
+                }
+
+                courseOfferDetails.Course.VacantSeats = courseOfferDetails.Course.VacantSeats - courseQueue.AwaitingUsers.Count();
+            }
+
+            courseOfferDetails.UserInQueue = userInQueue;
             courseOfferDetails.Exams = _mapper.Map<List<DisplayCrucialDataExamViewModel>>(exams);
 
             courseOfferDetails.Instructors = _mapper.Map<List<DisplayCrucialDataUserViewModel>>(instructors);
@@ -1245,9 +1263,6 @@ namespace Certification_System.Controllers
 
             var emailMessage = _emailSender.GenerateEmailMessage(user.Email, user.FirstName + " " + user.LastName, "selfAssignToCourse", url, "Kurs", courseOfferDetails.Course.CourseIndexer);
             await _emailSender.SendEmailAsync(emailMessage);
-           
-            // ogarnąć cały panel powiadomień
-            // podpiąć wszędzie gdzie są Vacanty pobieranie tego Queue.
 
             return RedirectToAction("UniversalConfirmationPanel", "Account", new { returnUrl = Url.Action("CourseOfferDetails", "Courses", new { courseIdentificator = courseOfferDetails.Course.CourseIdentificator }), messageNumber = 7 });
         }
