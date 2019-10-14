@@ -1278,19 +1278,69 @@ namespace Certification_System.Controllers
                 if (_keyGenerator.ValidateUserTokenForAssignToCourseQueuePurpouse(user, code))
                 {
                     var courseQueue = _context.courseRepository.GetCourseQueueById(courseIdentificator);
+                    LogInformation logInfo = new LogInformation();
 
                     if (courseQueue == null)
                     {
                         courseQueue = _context.courseRepository.CreateCourseQueue(courseIdentificator);
+
+                        logInfo = _logger.GenerateLogInformation(this.User.Identity.Name, this.ControllerContext.RouteData.Values["action"].ToString(), LogTypeOfAction.TypesOfActions[0]);
+                    }
+                    else
+                    {
+                        courseQueue = _context.courseRepository.AddAwaitingUserToCourseQueue(courseIdentificator, userIdentificator);
+
+                        logInfo = _logger.GenerateLogInformation(this.User.Identity.Name, this.ControllerContext.RouteData.Values["action"].ToString(), LogTypeOfAction.TypesOfActions[1]);
                     }
 
-                    courseQueue = _context.courseRepository.AddAwaitingUserToCourseQueue(courseIdentificator, userIdentificator);
-
-                    var logInfo = _logger.GenerateLogInformation(this.User.Identity.Name, this.ControllerContext.RouteData.Values["action"].ToString(), LogTypeOfAction.TypesOfActions[0]);
                     _logger.AddCourseQueueLog(courseQueue, logInfo);
 
                     return RedirectToAction("CourseOfferDetails", "Courses", new { courseIdentificator, message = "Przyjęto Twoje zgłoszenie o zapisanie na kurs. Po uiszczeniu opłaty otrzymasz do niego dostęp." });
                 }
+            }
+
+            return RedirectToAction("BlankMenu", "Certificates");
+        }
+
+        // GET: DeleteUserFromCourseQueue
+        [Authorize(Roles = "Admin")]
+        public ActionResult DeleteUserFromCourseQueue(string userIdentificator, string courseIdentificator, bool userAssignedToCourse)
+        {
+            var user = _context.userRepository.GetUserById(userIdentificator);
+            var courseQueue = _context.courseRepository.GetCourseQueueById(courseIdentificator);
+
+            if (courseQueue != null && user != null)
+            {
+                if (!courseQueue.AwaitingUsers.Select(z => z.UserIdentificator).Contains(userIdentificator))
+                {
+                    return RedirectToAction("BlankMenu", "Certificates");
+                }
+
+                courseQueue = _context.courseRepository.RemoveAwaitingUserFromCourseQueue(courseIdentificator, userIdentificator);
+
+                LogInformation logInfo = new LogInformation();
+
+                if (courseQueue.AwaitingUsers.Count() == 0)
+                {
+                    _context.courseRepository.DeleteCourseQueue(courseIdentificator);
+
+                    logInfo = _logger.GenerateLogInformation(this.User.Identity.Name, this.ControllerContext.RouteData.Values["action"].ToString(), LogTypeOfAction.TypesOfActions[2]);
+                }
+                else
+                {
+                    logInfo = _logger.GenerateLogInformation(this.User.Identity.Name, this.ControllerContext.RouteData.Values["action"].ToString(), LogTypeOfAction.TypesOfActions[1]);
+                }
+
+                _logger.AddCourseQueueLog(courseQueue, logInfo);
+
+                if (userAssignedToCourse)
+                {
+                    // if true message = you added user to course
+                    // else message = you deleted user from queue due to..
+                }
+
+                // redirectTo NotificationManager
+                return RedirectToAction("CourseOfferDetails", "Courses", new { courseIdentificator, message = "Przyjęto Twoje zgłoszenie o zapisanie na kurs. Po uiszczeniu opłaty otrzymasz do niego dostęp." });
             }
 
             return RedirectToAction("BlankMenu", "Certificates");
@@ -1314,7 +1364,6 @@ namespace Certification_System.Controllers
                 coursesArray[i][0] = courses[i].CourseIdentificator;
                 coursesArray[i][1] = courses[i].CourseIndexer + " | " + courses[i].Name;
             }
-
 
             return coursesArray;
         }

@@ -372,6 +372,12 @@ namespace Certification_System.Repository
             return courseQueue;
         }
 
+        public void DeleteCourseQueue(string courseIdentificator)
+        {
+            var filter = Builders<CourseQueue>.Filter.Where(z => z.CourseIdentificator == courseIdentificator);
+            var result = GetCoursesQueue().DeleteOne(filter);
+        }
+
         public CourseQueue AddAwaitingUserToCourseQueue(string courseIdentificator, string userIdentificator)
         {
             CourseQueueUser user = new CourseQueueUser
@@ -386,6 +392,20 @@ namespace Certification_System.Repository
             resultCourseQueue.AwaitingUsers.Add(new CourseQueueUser { UserIdentificator = userIdentificator });
 
             var result = GetCoursesQueue().FindOneAndUpdate(filter, update);
+
+            return resultCourseQueue;
+        }
+
+        public CourseQueue RemoveAwaitingUserFromCourseQueue(string courseIdentificator, string userIdentificator)
+        {
+            var filter= Builders<CourseQueue>.Filter.Where(z => z.CourseIdentificator == courseIdentificator);
+
+            var resultCourseQueue = GetCoursesQueue().Find<CourseQueue>(filter).FirstOrDefault();
+            var courseQueueUser = resultCourseQueue.AwaitingUsers.Where(z=> z.UserIdentificator == userIdentificator).FirstOrDefault();
+
+            resultCourseQueue.AwaitingUsers.Remove(courseQueueUser);
+
+            _coursesQueue.ReplaceOne(filter, resultCourseQueue);
 
             return resultCourseQueue;
         }
