@@ -138,6 +138,8 @@ namespace Certification_System.Services
                     .ForMember(dest => dest.CourseDateOfStart, opts => opts.MapFrom(src => src.DateOfStart))
                     .ForMember(dest => dest.CourseDateOfEnd, opts => opts.MapFrom(src => src.DateOfEnd))
                     .ForMember(dest => dest.Exams, opts => opts.Ignore());
+
+            CreateMap<Course, CourseOfferDetailsViewModel>();
             #endregion
 
             #region Degrees

@@ -1179,6 +1179,48 @@ namespace Certification_System.Controllers
             return View(listOfCourses);
         }
 
+        // GET: CourseOfferDetails
+        [Authorize(Roles = "Worker")]
+        public ActionResult CourseOfferDetails(string courseIdentificator)
+        {
+            var user = _context.userRepository.GetUserByEmail(this.User.Identity.Name);
+
+            var course = _context.courseRepository.GetCourseById(courseIdentificator);
+            var exams = _context.examRepository.GetExamsById(course.Exams);
+
+            var meetings = _context.meetingRepository.GetMeetingsById(course.Meetings);
+
+            var instructors = _context.userRepository.GetUsersById(meetings.SelectMany(z => z.Instructors).ToList()).ToList();
+            var examiners = _context.userRepository.GetUsersById(exams.SelectMany(z => z.Examiners).ToList()).ToList();
+
+            if (user.Courses.Contains(courseIdentificator))
+            {
+                return RedirectToAction("WorkerCourseDetails", "Courses", new { courseIdentificator });
+            }
+
+            CourseOfferDetailsViewModel courseOfferDetails = new CourseOfferDetailsViewModel();
+
+            courseOfferDetails.Course = _mapper.Map<DisplayCourseOfferViewModel>(course);
+            courseOfferDetails.Course.Branches = _context.branchRepository.GetBranchesById(course.Branches);
+            courseOfferDetails.Price = course.Price;
+
+            courseOfferDetails.Exams = _mapper.Map<List<DisplayCrucialDataExamViewModel>>(exams);
+
+            courseOfferDetails.Instructors = _mapper.Map<List<DisplayCrucialDataUserViewModel>>(instructors);
+            courseOfferDetails.Examiners = _mapper.Map<List<DisplayCrucialDataUserViewModel>>(examiners);
+
+            return View(courseOfferDetails);
+        }
+
+        // POST: CourseOfferDetails
+        [Authorize(Roles = "Worker")]
+        [HttpPost]
+        public ActionResult CourseOfferDetails(CourseOfferDetailsViewModel courseOfferDetails)
+        {
+  
+            return View(courseOfferDetails);
+        }
+
         #region AjaxQuery
         // GET: GetCoursesByUserId
         [Authorize(Roles = "Admin")]
