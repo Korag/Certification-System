@@ -8,6 +8,7 @@ namespace Certification_System.Repository.DAL
         public readonly ICertificateRepository certificateRepository;
         public readonly ICompanyRepository companyRepository;
         public readonly ICourseRepository courseRepository;
+        public readonly ICourseQueueRepository courseQueueRepository;
         public readonly IDegreeRepository degreeRepository;
         public readonly IExamRepository examRepository;
         public readonly IExamTermRepository examTermRepository;
@@ -22,6 +23,7 @@ namespace Certification_System.Repository.DAL
            ICertificateRepository certificateRepository,
            ICompanyRepository companyRepository,
            ICourseRepository courseRepository,
+           ICourseQueueRepository courseQueueRepository,
            IDegreeRepository degreeRepository,
            IExamRepository examRepository,
            IExamTermRepository examTermRepository,
@@ -35,6 +37,7 @@ namespace Certification_System.Repository.DAL
             this.certificateRepository = certificateRepository;
             this.companyRepository = companyRepository;
             this.courseRepository = courseRepository;
+            this.courseQueueRepository = courseQueueRepository;
             this.degreeRepository = degreeRepository;
             this.examRepository = examRepository;
             this.examTermRepository = examTermRepository;

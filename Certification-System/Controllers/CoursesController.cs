@@ -1217,7 +1217,13 @@ namespace Certification_System.Controllers
         [HttpPost]
         public ActionResult CourseOfferDetails(CourseOfferDetailsViewModel courseOfferDetails)
         {
-  
+            // style GET
+            // add to communicate Panel -> comunicatePanel gets information from CourseQueue
+            // update vacantSeats -> how ? --> add to CourseQUeue
+            // add logs
+            // redirectToConfirmation
+            // send email
+
             return View(courseOfferDetails);
         }
 
