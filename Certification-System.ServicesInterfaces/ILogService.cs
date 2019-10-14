@@ -6,6 +6,7 @@ namespace Certification_System.ServicesInterfaces
     public interface ILogService
     {
         LogInformation GenerateLogInformation(string userEmailAddress, string actionName, string typeOfAction);
+        LogInformation GenerateLogInformationByUserId(string userIdentificator, string actionName, string typeOfAction);
         UserLoginLogInformation GenerateUserLoginInformation(string userEmailAddress, string loginActionResult);
         void AddBranchLog(Branch branch, LogInformation logInfo);
         void AddBranchesLogs(ICollection<Branch> branches, LogInformation logInfo);

@@ -39,7 +39,7 @@ namespace Certification_System.RepositoryInterfaces
         CourseQueue GetCourseQueueById(string courseIdentificator);
         ICollection<CourseQueue> GetCoursesQueueById(ICollection<string> coursesIdentificators);
         CourseQueue CreateCourseQueue(string courseIdentificator);
-        CourseQueue AddAwaitingUserToCourseQueue(string courseIdentificator, string userIdentificator);
+        CourseQueue AddAwaitingUserToCourseQueue(string courseIdentificator, string userIdentificator, LogInformation logData);
         void DeleteCourseQueue(string courseIdentificator);
         CourseQueue RemoveAwaitingUserFromCourseQueue(string courseIdentificator, string userIdentificator);
     }

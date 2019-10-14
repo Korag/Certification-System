@@ -1288,10 +1288,11 @@ namespace Certification_System.Controllers
                     }
                     else
                     {
-                        courseQueue = _context.courseRepository.AddAwaitingUserToCourseQueue(courseIdentificator, userIdentificator);
-
                         logInfo = _logger.GenerateLogInformation(this.User.Identity.Name, this.ControllerContext.RouteData.Values["action"].ToString(), LogTypeOfAction.TypesOfActions[1]);
                     }
+
+                    var logInfoAddUserToQueue = _logger.GenerateLogInformation(this.User.Identity.Name, this.ControllerContext.RouteData.Values["action"].ToString(), LogTypeOfAction.TypesOfActions[0]);
+                    courseQueue = _context.courseRepository.AddAwaitingUserToCourseQueue(courseIdentificator, userIdentificator, logInfoAddUserToQueue);
 
                     _logger.AddCourseQueueLog(courseQueue, logInfo);
 

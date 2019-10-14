@@ -396,11 +396,12 @@ namespace Certification_System.Repository
             var result = GetCoursesQueue().DeleteOne(filter);
         }
 
-        public CourseQueue AddAwaitingUserToCourseQueue(string courseIdentificator, string userIdentificator)
+        public CourseQueue AddAwaitingUserToCourseQueue(string courseIdentificator, string userIdentificator, LogInformation logData)
         {
             CourseQueueUser user = new CourseQueueUser
             {
-                UserIdentificator = userIdentificator
+                UserIdentificator = userIdentificator,
+                LogData = logData
             };
 
             var filter = Builders<CourseQueue>.Filter.Where(z => z.CourseIdentificator == courseIdentificator);

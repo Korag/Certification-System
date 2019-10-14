@@ -42,6 +42,25 @@ namespace Certification_System.Services
             };
         }
 
+        public LogInformation GenerateLogInformationByUserId(string userIdentificator, string actionName, string typeOfAction)
+        {
+            var user = _userRepository.GetUserById(userIdentificator);
+
+            return new LogInformation
+            {
+                ChangeAuthorEmail = user.Email,
+                ChangeAuthorFirstName = user.FirstName,
+                ChangeAuthorLastName = user.LastName,
+                ChangeAuthorIdentificator = user.Id,
+
+                DateTime = DateTime.Now,
+                IpAddress = _ipGetter.GetGlobalIPAddress(),
+                TypeOfAction = typeOfAction,
+
+                ActionName = actionName,
+            };
+        }
+
         public UserLoginLogInformation GenerateUserLoginInformation(string userEmailAddress, string loginActionResult)
         {
             var user = _userRepository.GetUserByEmail(userEmailAddress);
