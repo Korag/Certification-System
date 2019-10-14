@@ -17,6 +17,8 @@ namespace Certification_System.ServicesInterfaces
         void AddCompaniesLogs(ICollection<Company> companies, LogInformation logInfo);
         void AddCourseLog(Course course, LogInformation logInfo);
         void AddCoursesLogs(ICollection<Course> courses, LogInformation logInfo);
+        void AddCourseQueueLog(CourseQueue courseQueue, LogInformation logInfo);
+        void AddCoursesQueueLogs(ICollection<CourseQueue> coursesQueue, LogInformation logInfo);
         void AddDegreeLog(Degree degree, LogInformation logInfo);
         void AddDegreesLogs(ICollection<Degree> degrees, LogInformation logInfo);
         void AddExamLog(Exam exam, LogInformation logInfo);

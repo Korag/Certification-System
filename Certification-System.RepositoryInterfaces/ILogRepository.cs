@@ -8,6 +8,7 @@ namespace Certification_System.RepositoryInterfaces
         void AddCertificateLog(CertificateLog certificateLog);
         void AddCompanyLog(CompanyLog companyLog);
         void AddCourseLog(CourseLog courseLog);
+        void AddCourseQueueLog(CourseQueueLog courseQueueLog);
         void AddDegreeLog(DegreeLog degreeLog);
         void AddExamLog(ExamLog examLog);
         void AddExamResultLog(ExamResultLog examResultLog);

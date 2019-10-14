@@ -12,6 +12,7 @@ namespace Certification_System.Repository
         private readonly string _certificatesLogCollectionName = "CertificatesLogs";
         private readonly string _companiesLogCollectionName = "CompaniesLogs";
         private readonly string _coursesLogCollectionName = "CoursesLogs";
+        private readonly string _coursesQueueLogCollectionName = "CoursesQueueLogs";
         private readonly string _degreesLogCollectionName = "DegreesLogs";
         private readonly string _examsLogCollectionName = "ExamsLogs";
         private readonly string _examsResultsLogCollectionName = "ExamsResultsLogs";
@@ -45,6 +46,11 @@ namespace Certification_System.Repository
         public void AddCourseLog(CourseLog courseLog)
         {
             _context.db.GetCollection<CourseLog>(_coursesLogCollectionName).InsertOne(courseLog);
+        }
+
+        public void AddCourseQueueLog(CourseQueueLog courseQueueLog)
+        {
+            _context.db.GetCollection<CourseQueueLog>(_coursesQueueLogCollectionName).InsertOne(courseQueueLog);
         }
 
         public void AddDegreeLog(DegreeLog degreeLog)

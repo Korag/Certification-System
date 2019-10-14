@@ -222,6 +222,33 @@ namespace Certification_System.Services
             }
         }
 
+        public void AddCourseQueueLog(CourseQueue courseQueue, LogInformation logInfo)
+        {
+            var courseQueueLog = new CourseQueueLog
+            {
+                CourseQueueLogIdentificator = _keyGenerator.GenerateNewId(),
+                AlteredEntity = courseQueue,
+                LogData = logInfo
+            };
+
+            _logRepository.AddCourseQueueLog(courseQueueLog);
+        }
+
+        public void AddCoursesQueueLogs(ICollection<CourseQueue> coursesQueue, LogInformation logInfo)
+        {
+            foreach (var courseQueue in coursesQueue)
+            {
+                var courseQueueLog = new CourseQueueLog
+                {
+                    CourseQueueLogIdentificator = _keyGenerator.GenerateNewId(),
+                    AlteredEntity = courseQueue,
+                    LogData = logInfo
+                };
+
+                _logRepository.AddCourseQueueLog(courseQueueLog);
+            }
+        }
+
         public void AddDegreeLog(Degree degree, LogInformation logInfo)
         {
             var degreeLog = new DegreeLog
