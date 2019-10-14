@@ -492,15 +492,15 @@ namespace Certification_System.Controllers
                     }
                     else
                     {
-                        _context.userRepository.AddUsersToCourse(course.CourseIdentificator, usersAssignedToCourse.SelectedUsers);
-                        _context.courseRepository.AddEnrolledUsersToCourse(course.CourseIdentificator, usersAssignedToCourse.SelectedUsers);
+                        var users = _context.userRepository.AddUsersToCourse(course.CourseIdentificator, usersAssignedToCourse.SelectedUsers);
+                        course = _context.courseRepository.AddEnrolledUsersToCourse(course.CourseIdentificator, usersAssignedToCourse.SelectedUsers);
 
-                        var updatedCourse = _context.courseRepository.GetCourseById(course.CourseIdentificator);
+                        //var updatedCourse = _context.courseRepository.GetCourseById(course.CourseIdentificator);
                         var logInfo = _logger.GenerateLogInformation(this.User.Identity.Name, this.ControllerContext.RouteData.Values["action"].ToString(), LogTypeOfAction.TypesOfActions[1]);
-                        _logger.AddCourseLog(updatedCourse, logInfo);
+                        _logger.AddCourseLog(course, logInfo);
 
-                        var updatedUsers = _context.userRepository.GetUsersById(usersAssignedToCourse.SelectedUsers);
-                        _logger.AddUsersLogs(updatedUsers, logInfo);
+                        //var updatedUsers = _context.userRepository.GetUsersById(usersAssignedToCourse.SelectedUsers);
+                        _logger.AddUsersLogs(users, logInfo);
 
                         return RedirectToAction("CourseDetails", new { courseIdentificator = usersAssignedToCourse.SelectedCourse, message = "Zapisano nowych użytkowników na kurs" });
                     }
@@ -1297,6 +1297,42 @@ namespace Certification_System.Controllers
 
                     return RedirectToAction("CourseOfferDetails", "Courses", new { courseIdentificator, message = "Przyjęto Twoje zgłoszenie o zapisanie na kurs. Po uiszczeniu opłaty otrzymasz do niego dostęp." });
                 }
+            }
+
+            return RedirectToAction("BlankMenu", "Certificates");
+        }
+
+        // GET: MoveUserFromCourseQueueToCourse
+        [Authorize(Roles = "Admin")]
+        public ActionResult MoveUserFromCourseQueueToCourse(string userIdentificator, string courseIdentificator)
+        {
+            var user = _context.userRepository.GetUserById(userIdentificator);
+            var courseQueue = _context.courseRepository.GetCourseQueueById(courseIdentificator);
+
+            if (courseQueue != null && user != null)
+            {
+                if (!courseQueue.AwaitingUsers.Select(z => z.UserIdentificator).Contains(userIdentificator))
+                {
+                    return RedirectToAction("BlankMenu", "Certificates");
+                }
+
+                var course = _context.courseRepository.GetCourseById(courseIdentificator);
+
+                if (!course.EnrolledUsers.Contains(userIdentificator) && (course.EnrolledUsersLimit - course.EnrolledUsers.Count) > 0)
+                {
+                    course = _context.courseRepository.AddEnrolledUserToCourse(courseIdentificator, userIdentificator);
+                    user = _context.userRepository.AddUserToCourse(courseIdentificator, userIdentificator);
+
+                    var logInfo = _logger.GenerateLogInformation(this.User.Identity.Name, this.ControllerContext.RouteData.Values["action"].ToString(), LogTypeOfAction.TypesOfActions[1]);
+
+                    _logger.AddCourseLog(course, logInfo);
+                    _logger.AddUserLog(user, logInfo);
+
+                    return RedirectToAction("DeleteUserFromCourseQueue", "Courses", new { userIdentificator, courseIdentificator, userAssignedToCourse = true });
+                }
+
+                return RedirectToAction("BlankMenu", "Certificates");
+
             }
 
             return RedirectToAction("BlankMenu", "Certificates");

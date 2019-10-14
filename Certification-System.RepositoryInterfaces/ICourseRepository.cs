@@ -16,7 +16,8 @@ namespace Certification_System.RepositoryInterfaces
         ICollection<Course> GetActiveCourses();
         Course GetCourseByMeetingId(string meetingIdentificator);
         void AddMeetingToCourse(string meetingIdentificator, string courseIdentificator);
-        void AddEnrolledUsersToCourse(string courseIdentificator, ICollection<string> usersIdentificators);
+        Course AddEnrolledUsersToCourse(string courseIdentificator, ICollection<string> usersIdentificators);
+        Course AddEnrolledUserToCourse(string courseIdentificator, string userIdentificator);
         ICollection<SelectListItem> GetActiveCoursesWithVacantSeatsAsSelectList();
         ICollection<Course> GetCoursesByMeetingsId(ICollection<string> meetingsIdentificators);
         void DeleteUsersFromCourse(string courseIdentificator, ICollection<string> usersIdentificators);

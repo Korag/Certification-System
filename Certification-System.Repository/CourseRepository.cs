@@ -176,12 +176,30 @@ namespace Certification_System.Repository
             return selectList;
         }
 
-        public void AddEnrolledUsersToCourse(string courseIdentificator, ICollection<string> usersIdentificators)
+        public Course AddEnrolledUserToCourse(string courseIdentificator, string userIdentificator)
+        {
+            var filter = Builders<Course>.Filter.Where(z => z.CourseIdentificator == courseIdentificator);
+            var update = Builders<Course>.Update.AddToSet(x => x.EnrolledUsers, userIdentificator);
+
+            var resultCourse = GetCourses().Find<Course>(filter).FirstOrDefault();
+            resultCourse.EnrolledUsers.Add(userIdentificator);
+
+            var result = _courses.UpdateOne(filter, update);
+
+            return resultCourse;
+        }
+
+        public Course AddEnrolledUsersToCourse(string courseIdentificator, ICollection<string> usersIdentificators)
         {
             var filter = Builders<Course>.Filter.Where(z => z.CourseIdentificator == courseIdentificator);
             var update = Builders<Course>.Update.AddToSetEach(x => x.EnrolledUsers, usersIdentificators);
 
-            var result = GetCourses().UpdateOne(filter, update);
+            var resultCourse = GetCourses().Find<Course>(filter).FirstOrDefault();
+            resultCourse.EnrolledUsers.ToList().AddRange(usersIdentificators);
+
+            var result = _courses.UpdateOne(filter, update);
+
+            return resultCourse;
         }
 
         public Course GetCourseByMeetingId(string meetingIdentificator)

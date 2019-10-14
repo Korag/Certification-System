@@ -27,7 +27,8 @@ namespace Certification_System.RepositoryInterfaces
         ICollection<CertificationPlatformUser> GetInstructorsById(ICollection<string> userIdentificators);
         ICollection<SelectListItem> GetInstructorsAsSelectList();
         ICollection<SelectListItem> GetWorkersAsSelectList();
-        void AddUsersToCourse(string courseIdentificator, ICollection<string> usersIdentificators);
+        ICollection<CertificationPlatformUser> AddUsersToCourse(string courseIdentificator, ICollection<string> usersIdentificators);
+        CertificationPlatformUser AddUserToCourse(string courseIdentificator, string userIdentificator);
         void DeleteCourseFromUsersCollection(string courseIdentificator, ICollection<string> usersIdentificators);
         ICollection<string> TranslateRoles(ICollection<string> userRoles);
         CertificationPlatformUser GetUserByEmail(string emailAddress);

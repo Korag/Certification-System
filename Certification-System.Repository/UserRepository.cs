@@ -281,12 +281,30 @@ namespace Certification_System.Repository
             GetUsers().ReplaceOne(filter, user);
         }
 
-        public void AddUsersToCourse(string courseIdentificator, ICollection<string> usersIdentificators)
+        public CertificationPlatformUser AddUserToCourse(string courseIdentificator, string userIdentificator)
+        {
+            var filter = Builders<CertificationPlatformUser>.Filter.Where(z => userIdentificator == z.Id);
+            var update = Builders<CertificationPlatformUser>.Update.AddToSet(x => x.Courses, courseIdentificator);
+
+            var resultUser = GetUsers().Find<CertificationPlatformUser>(filter).FirstOrDefault();
+            resultUser.Courses.Add(courseIdentificator);
+
+            var result = _users.UpdateOne(filter, update);
+
+            return resultUser;      
+        }
+
+        public ICollection<CertificationPlatformUser> AddUsersToCourse(string courseIdentificator, ICollection<string> usersIdentificators)
         {
             var filter = Builders<CertificationPlatformUser>.Filter.Where(z => usersIdentificators.Contains(z.Id));
             var update = Builders<CertificationPlatformUser>.Update.AddToSet(x => x.Courses, courseIdentificator);
 
-            var result = GetUsers().UpdateOne(filter, update);
+            var resultListOfUsers = GetUsers().Find<CertificationPlatformUser>(filter).ToList();
+            resultListOfUsers.ForEach(z=> z.Courses.Add(courseIdentificator));
+
+            var result = _users.UpdateMany(filter, update);
+
+            return resultListOfUsers;
         }
 
         public CertificationPlatformUser GetUserByGivenCertificateId(string givenCertificateIdentificator)
