@@ -63,6 +63,14 @@ al. Armii Krajowej 220
                                                  .Replace("{LinkButtonValue}", emailMessage.Link)
                                                  .Replace("{LinkButtonText}", emailMessage.LinkText);
             };
+          
+            if (!string.IsNullOrWhiteSpace(emailMessage.ObjectClassifier) && !string.IsNullOrWhiteSpace(emailMessage.Indexer))
+            {
+                builder.HtmlBody = builder.HtmlBody
+                                                 .Replace("  Margin - top: 0; Margin - bottom: 0; display: none;", "  Margin - top: 0; Margin - bottom: 0; display: inline-block")
+                                                 .Replace("{ObjectClassifier}", emailMessage.ObjectClassifier)
+                                                 .Replace("{Indexer}", emailMessage.Indexer);
+            };
 
             //builder.Attachments.Add(@"C:\Users\Joey\Documents\party.ics");
 
@@ -84,7 +92,7 @@ al. Armii Krajowej 220
             return Task.CompletedTask;
         }
 
-        public EmailMessageDto GenerateEmailMessage(string receiverEmailAddress, string receiverName, string messageType, string link = null)
+        public EmailMessageDto GenerateEmailMessage(string receiverEmailAddress, string receiverName, string messageType, string link = null, string objectClassifier = null, string indexer = null)
         {
             EmailMessageDto emailMessage = new EmailMessageDto
             {
@@ -97,6 +105,9 @@ al. Armii Krajowej 220
 
                 Link = link,
                 LinkText = EmailMessageTypesDictionary.EmailMessageLinkText[messageType],
+
+                ObjectClassifier = objectClassifier,
+                Indexer = indexer
             };
 
             return emailMessage;

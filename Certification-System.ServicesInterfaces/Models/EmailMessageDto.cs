@@ -12,5 +12,8 @@
 
         public string Link { get; set; }
         public string LinkText { get; set; }
+
+        public string ObjectClassifier { get; set; }
+        public string Indexer { get; set; }
     }
 }
