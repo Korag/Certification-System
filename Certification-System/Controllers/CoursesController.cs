@@ -10,6 +10,7 @@ using Certification_System.ServicesInterfaces;
 using System;
 using Certification_System.Extensions;
 using Microsoft.AspNetCore.Mvc.Rendering;
+using System.Threading.Tasks;
 
 namespace Certification_System.Controllers
 {
@@ -1181,8 +1182,10 @@ namespace Certification_System.Controllers
 
         // GET: CourseOfferDetails
         [Authorize(Roles = "Worker")]
-        public ActionResult CourseOfferDetails(string courseIdentificator)
+        public ActionResult CourseOfferDetails(string courseIdentificator, string message)
         {
+            ViewBag.message = message;
+
             var user = _context.userRepository.GetUserByEmail(this.User.Identity.Name);
 
             var course = _context.courseRepository.GetCourseById(courseIdentificator);
@@ -1215,18 +1218,49 @@ namespace Certification_System.Controllers
         // POST: CourseOfferDetails
         [Authorize(Roles = "Worker")]
         [HttpPost]
-        public ActionResult CourseOfferDetails(CourseOfferDetailsViewModel courseOfferDetails)
+        public async Task<ActionResult> CourseOfferDetails(CourseOfferDetailsViewModel courseOfferDetails)
         {
-            // style GET
-            // add to communicate Panel -> comunicatePanel gets information from CourseQueue
-            // update vacantSeats -> how ? --> add to CourseQUeue
-            // add logs również do CourseQueue
-            // redirectToConfirmation
-            // send email z linkiem do potwierdzenia
-            // ogarnąć cały panel powiadomień
-            // podpiąć wszędzie gdzie są Vacanty pobieranie tego Queue.
+            var user = _context.userRepository.GetUserByEmail(this.User.Identity.Name);
 
-            return View(courseOfferDetails);
+            var generatedCode = _keyGenerator.GenerateUserTokenForAssignToCourseQueuePurpouse(user);
+
+            var url = Url.AssingUserToCourseVerify(user.Id, courseOfferDetails.Course.CourseIdentificator, generatedCode, Request.Scheme);
+
+            var emailMessage = _emailSender.GenerateEmailMessage(user.Email, user.FirstName + " " + user.LastName, "selfAssignToCourse", url, "Kurs", courseOfferDetails.Course.CourseIndexer);
+            await _emailSender.SendEmailAsync(emailMessage);
+
+      
+
+            return RedirectToAction("UniversalConfirmationPanel", "Account", new { returnUrl = Url.Action("CourseOfferDetails", "Courses", new { courseIdentificator = courseOfferDetails.Course.CourseIdentificator }), messageNumber = 7 });
+        }
+
+        // GET: VerifyUserAssign
+        [Authorize(Roles = "Worker")]
+        public ActionResult VerifyUserAssignToQueue(string userIdentificator, string courseIdentificator, string code)
+        {
+            var user = _context.userRepository.GetUserById(userIdentificator);
+
+            if (user != null)
+            {
+                if (_keyGenerator.ValidateUserTokenForAssignToCourseQueuePurpouse(user, code))
+                {
+                    var courseQueue = _context.courseRepository.GetCourseQueueById(courseIdentificator);
+
+                    if (courseQueue == null)
+                    {
+                        courseQueue = _context.courseRepository.CreateCourseQueue(courseIdentificator);
+                    }
+
+                    courseQueue = _context.courseRepository.AddAwaitingUserToCourseQueue(courseIdentificator, userIdentificator);
+
+                    var logInfo = _logger.GenerateLogInformation(this.User.Identity.Name, this.ControllerContext.RouteData.Values["action"].ToString(), LogTypeOfAction.TypesOfActions[0]);
+                    _logger.AddCourseQueueLog(courseQueue, logInfo);
+
+                    return RedirectToAction("CourseOfferDetails", "Courses", new { courseIdentificator, message = "Przyjęto Twoje zgłoszenie o zapisanie na kurs. Po uiszczeniu opłaty otrzymasz do niego dostęp." });
+                }
+            }
+
+            return RedirectToAction("BlankMenu", "Certificates");
         }
 
         #region AjaxQuery

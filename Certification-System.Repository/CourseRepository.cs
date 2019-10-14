@@ -353,17 +353,19 @@ namespace Certification_System.Repository
             return resultListOfCoursesQueue;
         }
 
-        public void CreateCourseQueue(string coursesIdentificator)
+        public CourseQueue CreateCourseQueue(string courseIdentificator)
         {
             CourseQueue courseQueue = new CourseQueue
             {
-                CourseIdentificator = coursesIdentificator
+                CourseIdentificator = courseIdentificator
             };
 
             GetCoursesQueue().InsertOne(courseQueue);
+
+            return courseQueue;
         }
 
-        public void AddAwaitingUserToCourseQueue(string courseIdentificator, string userIdentificator)
+        public CourseQueue AddAwaitingUserToCourseQueue(string courseIdentificator, string userIdentificator)
         {
             CourseQueueUser user = new CourseQueueUser
             {
@@ -373,7 +375,12 @@ namespace Certification_System.Repository
             var filter = Builders<CourseQueue>.Filter.Where(z => z.CourseIdentificator == courseIdentificator);
             var update = Builders<CourseQueue>.Update.AddToSet(x => x.AwaitingUsers, user);
 
-            var result = GetCoursesQueue().UpdateOne(filter, update);
+            var resultCourseQueue = GetCoursesQueue().Find<CourseQueue>(filter).FirstOrDefault();
+            resultCourseQueue.AwaitingUsers.Add(new CourseQueueUser { UserIdentificator = userIdentificator });
+
+            var result = GetCoursesQueue().FindOneAndUpdate(filter, update);
+
+            return resultCourseQueue;
         }
         #endregion
     }

@@ -67,7 +67,7 @@ al. Armii Krajowej 220
             if (!string.IsNullOrWhiteSpace(emailMessage.ObjectClassifier) && !string.IsNullOrWhiteSpace(emailMessage.Indexer))
             {
                 builder.HtmlBody = builder.HtmlBody
-                                                 .Replace("  Margin - top: 0; Margin - bottom: 0; display: none;", "  Margin - top: 0; Margin - bottom: 0; display: inline-block")
+                                                 .Replace("Margin-top: 0;Margin-bottom: 0;display:none;", "Margin-top: 0;Margin-bottom: 0;display:inline-block;")
                                                  .Replace("{ObjectClassifier}", emailMessage.ObjectClassifier)
                                                  .Replace("{Indexer}", emailMessage.Indexer);
             };

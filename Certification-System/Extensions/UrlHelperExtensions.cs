@@ -175,5 +175,14 @@ namespace Certification_System.Extensions
                 values: new { userIdentificator, code },
                 protocol: scheme);
         }
+
+        public static string AssingUserToCourseVerify(this IUrlHelper urlHelper, string userIdentificator, string courseIdentificator, string code, string scheme)
+        {
+            return urlHelper.Action(
+                action: nameof(CoursesController.VerifyUserAssignToQueue),
+                controller: "Courses",
+                values: new { userIdentificator, courseIdentificator, code },
+                protocol: scheme);
+        }
     }
 }

@@ -59,7 +59,8 @@ namespace Certification_System
             {
                 mongo.ConnectionString = ConnectionString;
 
-            }).AddTokenProvider<DataProtectorTokenProvider<CertificationPlatformUser>>("DeletionOfEntity");
+            }).AddTokenProvider<DataProtectorTokenProvider<CertificationPlatformUser>>("DeletionOfEntity")
+              .AddTokenProvider<DataProtectorTokenProvider<CertificationPlatformUser>>("AssignToCourseQueue");
 
             //services.ConfigureApplicationCookie(o => {
             //    o.Cookie.Name = "Certification-Cookie";

@@ -8,7 +8,10 @@ namespace Certification_System.ServicesInterfaces
         string GenerateNewGuid();
         
         string GenerateUserTokenForEntityDeletion(CertificationPlatformUser user);
+        string GenerateUserTokenForAssignToCourseQueuePurpouse(CertificationPlatformUser user);
+
         bool ValidateUserTokenForEntityDeletion(CertificationPlatformUser user, string code);
+        bool ValidateUserTokenForAssignToCourseQueuePurpouse(CertificationPlatformUser user, string code);
 
         string GenerateCertificateEntityIndexer(string certificateName);
         string GenerateGivenCertificateEntityIndexer(string certificateIndexer);

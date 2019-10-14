@@ -15,6 +15,7 @@ namespace Certification_System.ServicesInterfaces
            {"manuallySendEmailConfirmationMessage", "Administrator systemu prosi o dokonanie potwierdzenia tego adresu email, który jest powiązany z kontem w Certification-System. Prosimy o kliknięcie w link poniżej."},
            {"manuallySendResetPasswordMessage", "Administrator systemu uruchomił procedurę resetu hasła dla Twojego konta użytkownika. W celu dokończenia procesu należy kliknąć w poniższy link."},
            {"authorizeAction", "Administrator systemu z którego kontem powiązany jest ten adres email rozpoczął procedurę nieodwracalnego usunięcia danych z systemu. Jeżeli akcja ta została podjęta celowo należy kliknąć w poniższy przycisk aby dokończyć rozpoczęty proces."},
+           {"selfAssignToCourse", "W celu dołączenia do wskazanego kursu wraz ze zobowiązaniem do opłacenia należności należy kliknąć w poniższy link."},
         };
 
         public static readonly Dictionary<string, string> EmailMessageHeader = new Dictionary<string, string>
@@ -28,6 +29,7 @@ namespace Certification_System.ServicesInterfaces
            {"manuallySendEmailConfirmationMessage", "Wykonano ręczną akcję wywołania procedury potwierdzenia adresu email"},
            {"manuallySendResetPasswordMessage", "Wykonano ręczną akcję wywołania procedury resetu hasła użytkownika"},
            {"authorizeAction", "Zarejestrowano próbę wykonania akcji wysokiego ryzyka"},
+           {"selfAssignToCourse", "Odnotowano chęć dołączenia do kursu"},
         };
 
         public static readonly Dictionary<string, string> EmailMessageSubject = new Dictionary<string, string>
@@ -41,6 +43,7 @@ namespace Certification_System.ServicesInterfaces
            {"manuallySendEmailConfirmationMessage", "Potwierdzenie adresu email w Certification-System"},
            {"manuallySendResetPasswordMessage", "Reset hasła do konta w Certification-System"},
            {"authorizeAction", "Autoryzacja akcji administratora w Certification-System"},
+           {"selfAssignToCourse", "Zapisy do kursu"},
         };
 
         public static readonly Dictionary<string, string> EmailMessageLinkText = new Dictionary<string, string>
@@ -54,6 +57,7 @@ namespace Certification_System.ServicesInterfaces
            {"manuallySendEmailConfirmationMessage", "Potwierdź adres email"},
            {"manuallySendResetPasswordMessage", "Resetuj hasło"},
            {"authorizeAction", "Autoryzacja akcji"},
+           {"selfAssignToCourse", "Zapisz mnie"},
         };
     }
 }

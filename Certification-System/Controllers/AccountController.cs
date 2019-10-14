@@ -63,6 +63,7 @@ namespace Certification_System.Controllers
            {4, "Użytkownik nie może zresetować swojego hasła w przypadku, gdy adres email nie został potwierdzony. Najpierw należy wysłać wiadomość weryfikacyjną adres email, a następnie tą lub po potwierdzeniu adresu użytkownik sam może skorzystać z opcji \"Zapomniałem hasła\" w panelu logowania"},
            {5, "Na Twój adres email została wysłana wiadomość umożliwiająca dokończenie rozpoczętego procesu usuwania instancji."},
            {6, "Element, który chciałeś usunąć nie został odnaleziony."},
+           {7, "Na Twój adres email została wysłana wiadomość w celu potwierdzenia akcji zapisu na kurs."},
         };
 
         [HttpGet]

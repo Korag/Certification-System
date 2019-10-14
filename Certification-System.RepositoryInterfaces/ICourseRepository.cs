@@ -37,7 +37,7 @@ namespace Certification_System.RepositoryInterfaces
         ICollection<CourseQueue> GetListOfCoursesQueue();
         CourseQueue GetCourseQueueById(string courseIdentificator);
         ICollection<CourseQueue> GetCoursesQueueById(ICollection<string> coursesIdentificators);
-        void CreateCourseQueue(string coursesIdentificator);
-        void AddAwaitingUserToCourseQueue(string courseIdentificator, string userIdentificator);
+        CourseQueue CreateCourseQueue(string courseIdentificator);
+        CourseQueue AddAwaitingUserToCourseQueue(string courseIdentificator, string userIdentificator);
     }
 }

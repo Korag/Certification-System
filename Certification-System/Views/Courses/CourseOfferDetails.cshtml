@@ -8,11 +8,17 @@
 <h1>Szczegóły oferty kursu</h1>
 <hr />
 
+@if (!string.IsNullOrWhiteSpace(ViewBag.message))
+{
+    <h2 class="alert alert-info" role="alert">@ViewBag.message</h2>
+}
+
 <form asp-action="CourseOfferDetails">
     <div>
         <div class="col-md-8 col-xl-6 col-lg-6 col-sm-12 col-xs-10 m-auto p-3 shadow p-3 mb-5 bg-light rounded border border-primary rounded-bottom" style="opacity:0.90">
 
             <input asp-for="Course.CourseIdentificator" class="form-control col-12" readonly hidden />
+            <input asp-for="Price" class="form-control col-12" readonly hidden />
 
             <div class="form-group">
                 <label asp-for="Course.CourseIndexer" class="control-label"></label>
@@ -106,7 +112,7 @@
         </div>
     </div>
 
-        @await Component.InvokeAsync("Modal", new { Title = "Zapisy na kurs", Body = "Czy na pewno chcesz zapisać się na wybrany kurs ? Poprzez kliknięcie w przycisk zobowiązuje się Pan/Pani do uiszczenia stosownej opłaty za uczestnictwo w kursie wymienionym powyżej.", FormSubmit = true, ButtonText = "Zapisz się", ButtonClass = "btn-success" })
+    @await Component.InvokeAsync("Modal", new { Title = "Zapisy na kurs", Body = "Czy na pewno chcesz zapisać się na wybrany kurs ? Poprzez kliknięcie w przycisk zobowiązuje się Pan/Pani do uiszczenia stosownej opłaty za uczestnictwo w kursie wymienionym powyżej.", FormSubmit = true, ButtonText = "Zapisz się", ButtonClass = "btn-success" })
 
 </form>
 

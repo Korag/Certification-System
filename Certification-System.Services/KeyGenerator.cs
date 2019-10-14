@@ -14,8 +14,6 @@ namespace Certification_System.Services
         private readonly UserManager<CertificationPlatformUser> _userManager;
         private readonly MongoOperations _context;
 
-        private readonly string chars = "abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ1234567890-_";
-
         public KeyGenerator(UserManager<CertificationPlatformUser> userManager, MongoOperations context)
         {
             _userManager = userManager;
@@ -42,6 +40,16 @@ namespace Certification_System.Services
             return _userManager.VerifyUserTokenAsync(user, "DeletionOfEntity", "DeletionOfEntity", code).Result;
         }
 
+        public string GenerateUserTokenForAssignToCourseQueuePurpouse(CertificationPlatformUser user)
+        {
+            return _userManager.GenerateUserTokenAsync(user, "AssignToCourseQueue", "AssignToCourseQueue").Result;
+        }
+
+        public bool ValidateUserTokenForAssignToCourseQueuePurpouse(CertificationPlatformUser user, string code)
+        {
+            return _userManager.VerifyUserTokenAsync(user, "AssignToCourseQueue", "AssignToCourseQueue", code).Result;
+        }
+
         public string GenerateCertificateEntityIndexer(string certificateName)
         {
             StringBuilder certificateIndexer = new StringBuilder();
@@ -52,7 +60,7 @@ namespace Certification_System.Services
             {
                 certificateIndexer.Append("CTCTCT");
             }
-                if (certificateIndexer.Length > 5)
+            if (certificateIndexer.Length > 5)
             {
                 certificateIndexer.Remove(5, certificateIndexer.Length - 5);
             }

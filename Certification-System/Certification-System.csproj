@@ -81,7 +81,6 @@
   <ItemGroup>
     <Folder Include="Views\Account\Not-used\" />
     <Folder Include="Views\Manage Not-used\" />
-    <Folder Include="wwwroot\resources\rotativa\" />
   </ItemGroup>
 
 </Project>
