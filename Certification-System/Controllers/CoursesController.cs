@@ -1189,7 +1189,7 @@ namespace Certification_System.Controllers
             var user = _context.userRepository.GetUserByEmail(this.User.Identity.Name);
 
             var course = _context.courseRepository.GetCourseById(courseIdentificator);
-            var exams = _context.examRepository.GetExamsById(course.Exams);
+            var exams = _context.examRepository.GetFirstPeriodsExamsById(course.Exams);
 
             var meetings = _context.meetingRepository.GetMeetingsById(course.Meetings);
 
@@ -1201,7 +1201,17 @@ namespace Certification_System.Controllers
                 return RedirectToAction("WorkerCourseDetails", "Courses", new { courseIdentificator });
             }
 
+            var courseQueue = _context.courseRepository.GetCourseQueueById(courseIdentificator);
+            bool userInQueue = false;
+
+            if (courseQueue.AwaitingUsers.Select(z=> z.UserIdentificator).Contains(user.Id))
+            {
+                userInQueue = true;
+            }
+
             CourseOfferDetailsViewModel courseOfferDetails = new CourseOfferDetailsViewModel();
+
+            courseOfferDetails.UserInQueue = userInQueue;
 
             courseOfferDetails.Course = _mapper.Map<DisplayCourseOfferViewModel>(course);
             courseOfferDetails.Course.Branches = _context.branchRepository.GetBranchesById(course.Branches);
@@ -1228,8 +1238,9 @@ namespace Certification_System.Controllers
 
             var emailMessage = _emailSender.GenerateEmailMessage(user.Email, user.FirstName + " " + user.LastName, "selfAssignToCourse", url, "Kurs", courseOfferDetails.Course.CourseIndexer);
             await _emailSender.SendEmailAsync(emailMessage);
-
-      
+            // style GET
+            // ogarnąć cały panel powiadomień
+            // podpiąć wszędzie gdzie są Vacanty pobieranie tego Queue.
 
             return RedirectToAction("UniversalConfirmationPanel", "Account", new { returnUrl = Url.Action("CourseOfferDetails", "Courses", new { courseIdentificator = courseOfferDetails.Course.CourseIdentificator }), messageNumber = 7 });
         }

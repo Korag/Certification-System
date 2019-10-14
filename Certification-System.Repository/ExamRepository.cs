@@ -67,6 +67,13 @@ namespace Certification_System.Repository
             return resultListOfExams;
         }
 
+        public ICollection<Exam> GetFirstPeriodsExamsById(ICollection<string> examsIdentificators)
+        {
+            var resultListOfExams = GetListOfFirstPeriodExams().Where(z => examsIdentificators.Contains(z.ExamIdentificator)).ToList();
+
+            return resultListOfExams;
+        }
+
         public ICollection<Exam> GetExamsByIndexer(string examIndexer)
         {
             var filter = Builders<Exam>.Filter.Eq(x => x.ExamIndexer, examIndexer);

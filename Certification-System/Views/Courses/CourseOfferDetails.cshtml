@@ -12,6 +12,14 @@
 {
     <h2 class="alert alert-info" role="alert">@ViewBag.message</h2>
 }
+@if (Model.UserInQueue)
+{
+    <div class="mt-4 mb-4 alert alert-info">Twoje zgłoszenie o zapis do kursu jest obecnie weryfikowane</div>
+}
+
+<div class="row m-0 mt-3 mb-3">
+    <a asp-action="CourseOffer" asp-controller="Courses" class="btn btn-outline-info mt-1 xs300px_FloatRight">Powrót do listy</a>
+</div>
 
 <form asp-action="CourseOfferDetails">
     <div>
@@ -61,54 +69,59 @@
         </div>
     </div>
 
+    @if (Model.Exams.Count != 0)
+    {
+        <h2 class="mt-4 mb-4">Egzaminy w ramach kursu</h2>
+
+        @await Component.InvokeAsync("DisplayCrucialDataExamDataTable", new { examViewModel = Model.Exams, tableIdentificator = "listExams" })
+    }
 
     @if (Model.Instructors.Count != 0)
     {
         <h2 class="mt-4 mb-4">Instruktorzy</h2>
 
-        <div class="row ml-0 mr-0">
-            <div>
+        <div class="row justify-content-center ml-3 mr-3">
+            <div class="row justify-content-center">
                 @foreach (var instructor in Model.Instructors)
                 {
-                    <label class="btn btn-secondary align-content-center">
-                        <span>@instructor.FirstName + @instructor.LastName</span>
+                    <label class="btn btn-secondary align-content-center ml-3 mr-3" style="min-width:250px;">
+                        <span>@instructor.FirstName @instructor.LastName</span>
                     </label>
                 }
             </div>
         </div>
-    }
-
-    @if (Model.Exams.Count != 0)
-    {
-        <h2 class="mt-4 mb-4">Egzaminy w ramach kursu</h2>
-
-        @await Component.InvokeAsync("DisplayCrucialDataExamDataTable", new { examViewModel = Model.Exams, tableIdentificator = "listExams", operationSet = 1 })
     }
 
     @if (Model.Examiners.Count != 0)
     {
         <h2 class="mt-4 mb-4">Egzaminatorzy</h2>
 
-        <div class="row ml-0 mr-0">
-            <div>
+
+        <div class="row justify-content-center ml-3 mr-3 mb-4">
+            <div class="row justify-content-center">
                 @foreach (var examiner in Model.Examiners)
                 {
-                    <label class="btn btn-secondary align-content-center">
-                        <span>@examiner.FirstName + @examiner.LastName</span>
+                    <label class="btn btn-secondary align-content-center ml-3 mr-3" style="min-width:250px;">
+                        <span>@examiner.FirstName @examiner.LastName</span>
                     </label>
                 }
             </div>
         </div>
     }
 
-    <div class="row m-0 mt-3">
-        <p class="m-auto alert-primary">@Model.Price</p>
+    <div class="row justify-content-center mt-5 mb-2">
+        <div class="mr-3 p-1" style="font-size:30px">
+            <label asp-for="Price"></label>:
+        </div>
+        <div class="alert-primary p-1" style="font-size:30px">@Model.Price PLN</div>
     </div>
 
     <div>
         <div class="row justify-content-center">
-            <button type="button" class="btn btn-primary mt-1 xs300px_JustifyContentCenter" data-toggle="modal" data-target="#modal">Zapisuje się i zobowiązuję do zapłaty</button>
-            <a asp-action="CourseOffer" asp-controller="Courses" class="btn btn-outline-info mt-1 xs300px_FloatRight">Powrót do listy</a>
+            @if (!Model.UserInQueue)
+            {
+                <button type="button" class="btn btn-primary mt-1 xs300px_JustifyContentCenter" data-toggle="modal" data-target="#modal">Zapisuje się i zobowiązuję do zapłaty</button>
+            }
         </div>
     </div>
 

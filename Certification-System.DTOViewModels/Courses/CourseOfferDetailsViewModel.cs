@@ -6,6 +6,8 @@ namespace Certification_System.DTOViewModels
 {
     public class CourseOfferDetailsViewModel
     {
+        public bool UserInQueue { get; set; }
+
         [Display(Name = "Kurs")]
         public DisplayCourseOfferViewModel Course { get; set; }
 

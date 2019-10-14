@@ -9,6 +9,7 @@ namespace Certification_System.RepositoryInterfaces
         ICollection<Exam> GetListOfExams();
         ICollection<Exam> GetListOfActiveExams();
         void AddExam(Exam exam);
+        ICollection<Exam> GetFirstPeriodsExamsById(ICollection<string> examsIdentificators);
         ICollection<Exam> GetExamsById(ICollection<string> examsIdentificators);
         Exam GetExamById(string examIdentificator);
         ICollection<Exam> GetExamsByExaminerId(string userIdentificator);
