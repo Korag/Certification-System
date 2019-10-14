@@ -113,7 +113,14 @@ namespace Certification_System.Repository
 
             foreach (var course in courses)
             {
+                var courseQueue = GetCourseQueueById(course.CourseIdentificator);
+
                 var vacantSeats = course.EnrolledUsersLimit - course.EnrolledUsers.Count();
+
+                if (courseQueue != null)
+                {
+                    vacantSeats = vacantSeats - courseQueue.AwaitingUsers.Count();
+                }
 
                 selectList.Add
                     (

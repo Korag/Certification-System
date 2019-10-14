@@ -476,7 +476,14 @@ namespace Certification_System.Controllers
                 if (usersAlreadyInChosenCourse.Count() == 0)
                 {
                     var course = _context.courseRepository.GetCourseById(usersAssignedToCourse.SelectedCourse);
+                    var courseQueue = _context.courseRepository.GetCourseQueueById(course.CourseIdentificator);
+
                     var vacantSeats = course.EnrolledUsersLimit - course.EnrolledUsers.Count();
+
+                    if (courseQueue != null)
+                    {
+                        vacantSeats = vacantSeats - courseQueue.AwaitingUsers.Count();
+                    }
 
                     if (vacantSeats < usersAssignedToCourse.SelectedUsers.Count())
                     {
@@ -1238,7 +1245,7 @@ namespace Certification_System.Controllers
 
             var emailMessage = _emailSender.GenerateEmailMessage(user.Email, user.FirstName + " " + user.LastName, "selfAssignToCourse", url, "Kurs", courseOfferDetails.Course.CourseIndexer);
             await _emailSender.SendEmailAsync(emailMessage);
-            // style GET
+           
             // ogarnąć cały panel powiadomień
             // podpiąć wszędzie gdzie są Vacanty pobieranie tego Queue.
 
