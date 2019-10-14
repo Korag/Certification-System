@@ -24,11 +24,11 @@ namespace Certification_System.Controllers
         private readonly IEmailSender _emailSender;
 
         public CoursesController(
-            MongoOperations context,
-            IMapper mapper,
-            IKeyGenerator keyGenerator,
-            ILogService logger,
-            IEmailSender emailSender)
+               MongoOperations context,
+               IMapper mapper,
+               IKeyGenerator keyGenerator,
+               ILogService logger,
+               IEmailSender emailSender)
         {
             _context = context;
             _mapper = mapper;
@@ -1376,7 +1376,7 @@ namespace Certification_System.Controllers
                     // else message = you deleted user from queue due to..
                 }
 
-                // redirectTo NotificationManager
+                // redirectTo AdminNotificationManager
                 return RedirectToAction("CourseOfferDetails", "Courses", new { courseIdentificator, message = "Przyjęto Twoje zgłoszenie o zapisanie na kurs. Po uiszczeniu opłaty otrzymasz do niego dostęp." });
             }
 

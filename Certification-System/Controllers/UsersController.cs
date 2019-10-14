@@ -827,62 +827,6 @@ namespace Certification_System.Controllers
             return View(workerCompetences);
         }
 
-        // GET: AdminNotificationManager
-        [Authorize(Roles = "Admin")]
-        public ActionResult AdminNotificationManager()
-        {
-            var user = _context.userRepository.GetUserByEmail(this.User.Identity.Name);
-
-            var givenCertificates = _context.givenCertificateRepository.GetGivenCertificatesById(user.GivenCertificates);
-            var givenDegrees = _context.givenDegreeRepository.GetGivenDegreesById(user.GivenDegrees);
-
-            List<DisplayGivenCertificateToUserViewModel> listOfGivenCertificates = new List<DisplayGivenCertificateToUserViewModel>();
-
-            if (givenCertificates.Count != 0)
-            {
-                foreach (var givenCertificate in givenCertificates)
-                {
-                    var course = _context.courseRepository.GetCourseById(givenCertificate.Course);
-                    var certificate = _context.certificateRepository.GetCertificateById(givenCertificate.Certificate);
-
-                    DisplayCrucialDataCourseViewModel courseViewModel = _mapper.Map<DisplayCrucialDataCourseViewModel>(course);
-
-                    DisplayCrucialDataCertificateViewModel certificateViewModel = _mapper.Map<DisplayCrucialDataCertificateViewModel>(certificate);
-
-                    DisplayGivenCertificateToUserViewModel singleGivenCertificate = _mapper.Map<DisplayGivenCertificateToUserViewModel>(givenCertificate);
-                    singleGivenCertificate.Certificate = certificateViewModel;
-                    singleGivenCertificate.Course = courseViewModel;
-
-                    listOfGivenCertificates.Add(singleGivenCertificate);
-                }
-            }
-
-            List<DisplayGivenDegreeToUserViewModel> listOfGivenDegrees = new List<DisplayGivenDegreeToUserViewModel>();
-
-            if (givenDegrees.Count != 0)
-            {
-                foreach (var givenDegree in givenDegrees)
-                {
-                    var degree = _context.degreeRepository.GetDegreeById(givenDegree.Degree);
-
-                    DisplayCrucialDataDegreeViewModel degreeViewModel = _mapper.Map<DisplayCrucialDataDegreeViewModel>(degree);
-
-                    DisplayGivenDegreeToUserViewModel singleGivenDegree = _mapper.Map<DisplayGivenDegreeToUserViewModel>(givenDegree);
-                    singleGivenDegree.Degree = degreeViewModel;
-
-                    listOfGivenDegrees.Add(singleGivenDegree);
-                }
-            }
-
-            WorkerCompetencesViewModel workerCompetences = new WorkerCompetencesViewModel();
-
-            workerCompetences.UserIdentificator = user.Id;
-            workerCompetences.GivenCertificates = listOfGivenCertificates;
-            workerCompetences.GivenDegrees = listOfGivenDegrees;
-
-            return View(workerCompetences);
-        }
-
         #region AjaxQuery
         // GET: GetUsersNotEnrolledInCourse
         [Authorize(Roles = "Admin, Examiner")]
