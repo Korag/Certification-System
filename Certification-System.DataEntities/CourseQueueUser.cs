@@ -4,7 +4,10 @@ namespace Certification_System.Entities
 {
     public class CourseQueueUser
     {
-        public string CourseQueueUserIdentificator { get; set; }
+        public CourseQueueUser()
+        {
+            DateOfApplication = DateTime.Now;
+        }
 
         public string UserIdentificator { get; set; }
         public DateTime DateOfApplication { get; set; }

@@ -14,7 +14,10 @@ namespace Certification_System.Repository
         private readonly MongoContext _context;
 
         private readonly string _coursesCollectionName = "Courses";
+        private readonly string _coursesQueueCollectionName = "CoursesQueue";
+
         private IMongoCollection<Course> _courses;
+        private IMongoCollection<CourseQueue> _coursesQueue;
 
         public CourseRepository(MongoContext context)
         {
@@ -322,5 +325,56 @@ namespace Certification_System.Repository
 
             return indexersNumber.ToString();
         }
+
+        #region CourseQueue
+        private IMongoCollection<CourseQueue> GetCoursesQueue()
+        {
+            return _coursesQueue = _context.db.GetCollection<CourseQueue>(_coursesQueueCollectionName);
+        }
+
+        public ICollection<CourseQueue> GetListOfCoursesQueue()
+        {
+            return GetCoursesQueue().AsQueryable().ToList();
+        }
+
+        public CourseQueue GetCourseQueueById(string courseIdentificator)
+        {
+            var filter = Builders<CourseQueue>.Filter.Eq(x => x.CourseIdentificator, courseIdentificator);
+            var resultCourseQueue = GetCoursesQueue().Find<CourseQueue>(filter).FirstOrDefault();
+
+            return resultCourseQueue;
+        }
+
+        public ICollection<CourseQueue> GetCoursesQueueById(ICollection<string> coursesIdentificators)
+        {
+            var filter = Builders<CourseQueue>.Filter.Where(z => coursesIdentificators.Contains(z.CourseIdentificator));
+            var resultListOfCoursesQueue = GetCoursesQueue().Find<CourseQueue>(filter).ToList();
+
+            return resultListOfCoursesQueue;
+        }
+
+        public void CreateCourseQueue(string coursesIdentificator)
+        {
+            CourseQueue courseQueue = new CourseQueue
+            {
+                CourseIdentificator = coursesIdentificator
+            };
+
+            GetCoursesQueue().InsertOne(courseQueue);
+        }
+
+        public void AddAwaitingUserToCourseQueue(string courseIdentificator, string userIdentificator)
+        {
+            CourseQueueUser user = new CourseQueueUser
+            {
+                UserIdentificator = userIdentificator
+            };
+
+            var filter = Builders<CourseQueue>.Filter.Where(z => z.CourseIdentificator == courseIdentificator);
+            var update = Builders<CourseQueue>.Update.AddToSet(x => x.AwaitingUsers, user);
+
+            var result = GetCoursesQueue().UpdateOne(filter, update);
+        }
+        #endregion
     }
 }

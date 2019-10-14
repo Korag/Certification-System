@@ -1220,9 +1220,11 @@ namespace Certification_System.Controllers
             // style GET
             // add to communicate Panel -> comunicatePanel gets information from CourseQueue
             // update vacantSeats -> how ? --> add to CourseQUeue
-            // add logs
+            // add logs również do CourseQueue
             // redirectToConfirmation
-            // send email
+            // send email z linkiem do potwierdzenia
+            // ogarnąć cały panel powiadomień
+            // podpiąć wszędzie gdzie są Vacanty pobieranie tego Queue.
 
             return View(courseOfferDetails);
         }

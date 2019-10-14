@@ -32,5 +32,12 @@ namespace Certification_System.RepositoryInterfaces
         ICollection<Course> DeleteUserFromCourses(ICollection<string> usersIdentificators);
         string CountCoursesWithIndexerNamePart(string namePartOfIndexer);
         ICollection<Course> GetListOfNotStartedCourses();
+
+
+        ICollection<CourseQueue> GetListOfCoursesQueue();
+        CourseQueue GetCourseQueueById(string courseIdentificator);
+        ICollection<CourseQueue> GetCoursesQueueById(ICollection<string> coursesIdentificators);
+        void CreateCourseQueue(string coursesIdentificator);
+        void AddAwaitingUserToCourseQueue(string courseIdentificator, string userIdentificator);
     }
 }
