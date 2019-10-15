@@ -1,4 +1,5 @@
 ﻿using Certification_System.Entities;
+using System.Collections.Generic;
 
 namespace Certification_System.RepositoryInterfaces
 {
@@ -18,5 +19,12 @@ namespace Certification_System.RepositoryInterfaces
         void AddMeetingLog(MeetingLog meetingLog);
         void AddUserLog(CertificationPlatformUserLog userLog);
         void AddUserLoginLog(UserLoginLog userLoginLog);
+        void AddLogToPersonalUserLogs(string userIdentificator, LogInformation logInfo);
+
+
+        ICollection<PersonalLog> GetListOfCourses();
+        PersonalLog GetPersonalUserLogById(string userIdentificator);
+        ICollection<PersonalLog> GetPersonalUserLogsById(ICollection<string> usersIdentificators);
+        void CreatePersonalUserLog(CertificationPlatformUser user);
     }
 }

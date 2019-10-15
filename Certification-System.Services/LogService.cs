@@ -456,5 +456,34 @@ namespace Certification_System.Services
                 _logRepository.AddMeetingLog(meetingLog);
             }
         }
+
+        public void AddPersonalUserLog(string userIdentificator, LogInformation logInfo)
+        {
+            var userLog = _logRepository.GetPersonalUserLogById(userIdentificator);
+            var user = _userRepository.GetUserById(userIdentificator);
+
+            if (userLog == null)
+            {
+               _logRepository.CreatePersonalUserLog(user);
+            }
+
+            _logRepository.AddLogToPersonalUserLogs(userIdentificator, logInfo);
+        }
+
+        public void AddPersonalUsersLogs(ICollection<string> usersIdentificators, LogInformation logInfo)
+        {
+            foreach (var userIdentificator in usersIdentificators)
+            {
+                var user = _userRepository.GetUserById(userIdentificator);
+                var userLog = _logRepository.GetPersonalUserLogById(userIdentificator);
+
+                if (userLog == null)
+                {
+                   _logRepository.CreatePersonalUserLog(user);
+                }
+
+                _logRepository.AddLogToPersonalUserLogs(userIdentificator, logInfo);
+            }
+        }
     }
 }
