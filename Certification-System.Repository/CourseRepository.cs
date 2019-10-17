@@ -66,6 +66,14 @@ namespace Certification_System.Repository
             return resultListOfCourses;
         }
 
+        public ICollection<Course> GetCoursesAfterEndDate()
+        {
+            var filter = Builders<Course>.Filter.Where(x => x.CourseEnded == false && x.DateOfEnd < DateTime.Now);
+            var resultListOfCourses = GetCourses().Find<Course>(filter).ToList();
+
+            return resultListOfCourses;
+        }
+
         public ICollection<SelectListItem> GetActiveCoursesAsSelectList()
         {
             List<Course> courses = GetActiveCourses().ToList();

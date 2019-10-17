@@ -1,6 +1,7 @@
 ﻿using AutoMapper;
 using Certification_System.DTOViewModels;
 using Certification_System.Entities;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 
@@ -72,6 +73,9 @@ namespace Certification_System.Services
                      .ForMember(dest => dest.EnrolledUsersQuantity, opts => opts.MapFrom(src => src.EnrolledUsers.Count()));
 
             CreateMap<Course, DisplayCourseOfferViewModel>();
+
+            CreateMap<Course, DisplayCourseNotificationViewModel>()
+                     .ForMember(dest => dest.DaysAfterEndDate, opts => opts.MapFrom(src => DateTime.Now.Subtract(src.DateOfEnd).Days));
 
             CreateMap<Course, DisplayCourseWithUserRoleViewModel>()
                      .ForMember(dest => dest.EnrolledUsersQuantity, opts => opts.MapFrom(src => src.EnrolledUsers.Count()))

@@ -12,6 +12,7 @@ namespace Certification_System.RepositoryInterfaces
         Course GetCourseById(string courseIdentificator);
         ICollection<Course> GetCoursesById(ICollection<string> coursesIdentificators);
         ICollection<SelectListItem> GetActiveCoursesAsSelectList();
+        ICollection<Course> GetCoursesAfterEndDate();
         ICollection<SelectListItem> GetAllCoursesAsSelectList();
         ICollection<Course> GetActiveCourses();
         Course GetCourseByMeetingId(string meetingIdentificator);

@@ -40,6 +40,5 @@ namespace Certification_System.DTOViewModels
 
         [Display(Name = "Obszary certyfikacji")]
         public ICollection<string> Branches { get; set; }
-
     }
 }

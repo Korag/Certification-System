@@ -1,8 +1,11 @@
 ﻿using AutoMapper;
+using Certification_System.DTOViewModels;
 using Certification_System.Repository.DAL;
 using Certification_System.ServicesInterfaces;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
+using System;
+using System.Collections.Generic;
 
 namespace Certification_System.Controllers
 {
@@ -33,12 +36,54 @@ namespace Certification_System.Controllers
         [Authorize(Roles = "Admin")]
         public ActionResult AdminNotificationManager()
         {
-            var user = _context.userRepository.GetUserByEmail(this.User.Identity.Name);
+            var coursesQueue = _context.courseRepository.GetListOfCoursesQueue();
 
-            // get CourseQueue into dataTable with 2 actions: Remove, Assign and checkbox if 2 weeks gone since someone enrolled to course and not paid
-            // list of courses which are old -> they ended but noone do EndCourseAndDispenseGivenCertificates
+            List<CourseQueueNotificationViewModel> notificationsCoursesQueue = new List<CourseQueueNotificationViewModel>();
 
-            return View();
+            foreach (var courseQueue in coursesQueue)
+            {
+                var course = _context.courseRepository.GetCourseById(courseQueue.CourseIdentificator);
+
+                foreach (var awaitingUser in courseQueue.AwaitingUsers)
+                {
+                    var user = _context.userRepository.GetUserById(awaitingUser.UserIdentificator);
+
+                    CourseQueueNotificationViewModel singleNotification = new CourseQueueNotificationViewModel
+                    {
+                        Course = _mapper.Map<DisplayCrucialDataCourseViewModel>(course),
+                        EnrolledUser = _mapper.Map<DisplayCrucialDataUserViewModel>(user),
+
+
+                        EnrollmentDate = awaitingUser.LogData.DateTime,
+                        EnrollmentOlderThan2Weeks = false
+                    };
+
+                    if (DateTime.Now.Subtract(singleNotification.EnrollmentDate).Days > 14)
+                    {
+                        singleNotification.EnrollmentOlderThan2Weeks = true;
+                    }
+
+                    notificationsCoursesQueue.Add(singleNotification);
+                }
+            }
+
+            var notEndedCoursesAfterEndDate = _context.courseRepository.GetCoursesAfterEndDate();
+            List<DisplayCourseNotificationViewModel> notificationsNotEndedCourses = new List<DisplayCourseNotificationViewModel>();
+
+            foreach (var notEndedCourse in notEndedCoursesAfterEndDate)
+            {
+                DisplayCourseNotificationViewModel singleNotification = _mapper.Map<DisplayCourseNotificationViewModel>(notEndedCourse);
+
+                notificationsNotEndedCourses.Add(singleNotification);
+            }
+
+            AdminNotificationViewModel adminNotifications = new AdminNotificationViewModel
+            {
+                CourseQueueNotification = notificationsCoursesQueue,
+                NotEndedCoursesAfterEndDate = notificationsNotEndedCourses
+            };
+
+            return View(adminNotifications);
         }
 
         // GET: InstructorNotificationManager
