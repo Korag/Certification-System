@@ -34,7 +34,7 @@ namespace Certification_System.Services
                 ChangeAuthorLastName = user.LastName,
                 ChangeAuthorIdentificator = user.Id,
 
-                DateTime = DateTime.Now,
+                DateOfLogCreation = DateTime.Now,
                 IpAddress = _ipGetter.GetGlobalIPAddress(),
                 TypeOfAction = typeOfAction,
 
@@ -53,7 +53,7 @@ namespace Certification_System.Services
                 ChangeAuthorLastName = user.LastName,
                 ChangeAuthorIdentificator = user.Id,
 
-                DateTime = DateTime.Now,
+                DateOfLogCreation = DateTime.Now,
                 IpAddress = _ipGetter.GetGlobalIPAddress(),
                 TypeOfAction = typeOfAction,
 

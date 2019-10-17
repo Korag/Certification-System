@@ -146,6 +146,7 @@ namespace Certification_System.Repository
             PersonalLog personalLog = new PersonalLog
             {
                 UserIdentificator = user.Id,
+                Email = user.Email,
                 FirstName = user.FirstName,
                 LastName = user.LastName
             };

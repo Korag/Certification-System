@@ -606,6 +606,8 @@ namespace Certification_System.Services
                      .ForMember(dest => dest.UserIdentificator, opts => opts.MapFrom(src => src.Id));
             #endregion
 
+            CreateMap<LogInformation, DisplayLogInformationViewModel>();
+
             #region ViewModels to ViewModels 
             CreateMap<DisplayCrucialDataUserViewModel, PresenceCheckBoxViewModel>()
                      .ForMember(dest => dest.IsPresent, opts => opts.Ignore());

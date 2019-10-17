@@ -1,0 +1,65 @@
+﻿@model Certification_System.DTOViewModels.DisplayUserPersonalLogDataTableViewModel
+
+<div class="col-12 table-responsive">
+    <table id="@Model.Options.TableIdentificator" class="table table-striped table-bordered display" style="width: 100%;" role="grid">
+        <thead>
+            <tr>
+                <th>
+                    @Html.DisplayNameFor(model => model.Logs.FirstOrDefault().ChangeAuthor.Email)
+                </th>
+                <th>
+                    @Html.DisplayNameFor(model => model.Logs.FirstOrDefault().ChangeAuthor.FirstName)
+                </th>
+                <th>
+                    @Html.DisplayNameFor(model => model.Logs.FirstOrDefault().ChangeAuthor.LastName)
+                </th>
+                <th>
+                    @Html.DisplayNameFor(model => model.Logs.FirstOrDefault().TypeOfAction)
+                </th>
+                <th>
+                    @Html.DisplayNameFor(model => model.Logs.FirstOrDefault().DescriptionOfAction)
+                </th>
+                <th>
+                    @Html.DisplayNameFor(model => model.Logs.FirstOrDefault().DateOfLogCreation)
+                </th>
+                @if (Model.Options.OperationSet != 0)
+                {
+                    <th>
+                        Operacje
+                    </th>
+                }
+            </tr>
+        </thead>
+        <tbody>
+            @foreach (var log in Model.Logs)
+            {
+            <tr>
+                <td>
+                    @Html.DisplayFor(modelItem => log.ChangeAuthor.Email)
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => log.ChangeAuthor.FirstName)
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => log.ChangeAuthor.LastName)
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => log.TypeOfAction)
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => log.DescriptionOfAction)
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => log.DateOfLogCreation)
+                </td>
+                @if (Model.Options.OperationSet == 1)
+                {
+                    <td>
+
+                    </td>
+                }
+            </tr>
+            }
+        </tbody>
+    </table>
+</div>

@@ -88,7 +88,7 @@ namespace Certification_System.Controllers
                         EnrolledUser = _mapper.Map<DisplayCrucialDataUserViewModel>(user),
 
 
-                        EnrollmentDate = awaitingUser.LogData.DateTime,
+                        EnrollmentDate = awaitingUser.LogData.DateOfLogCreation,
                         EnrollmentOlderThan2Weeks = false
                     };
 
