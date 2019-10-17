@@ -23,6 +23,6 @@ namespace Certification_System.DTOViewModels
         public DateTime DateOfEnd { get; set; }
 
         [Display(Name = "Kurs po terminie od: [dni]")]
-        public DateTime DaysAfterEndDate { get; set; }
+        public int DaysAfterEndDate { get; set; }
     }
 }

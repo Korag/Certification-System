@@ -32,10 +32,44 @@ namespace Certification_System.Controllers
             _emailSender = emailSender;
         }
 
+        // GET: NotificationManagerHub
+        [Authorize]
+        public ActionResult NotificationManagerHub()
+        {
+            if (this.User.IsInRole("Admin"))
+            {
+                return RedirectToAction("AdminNotificationManager", "Notifications");
+            }
+            else if (this.User.IsInRole("Worker"))
+            {
+                return RedirectToAction("WorkerNotificationManager", "Notifications");
+            }
+            else if (this.User.IsInRole("Company"))
+            {
+                return RedirectToAction("CompanyNotificationManager", "Notifications");
+            }
+            else if(this.User.IsInRole("Instructor") && this.User.IsInRole("Examiner"))
+            {
+                return RedirectToAction("InstructorExaminerNotificationManager", "Notifications");
+            }
+            else if (this.User.IsInRole("Instructor"))
+            {
+                return RedirectToAction("InstructorNotificationManager", "Notifications");
+            }
+            else if (this.User.IsInRole("Examiner"))
+            {
+                return RedirectToAction("ExaminerNotificationManager", "Notifications");
+            }
+
+            return RedirectToAction("BlankMenu", "Certificates");
+        }
+
         // GET: AdminNotificationManager
         [Authorize(Roles = "Admin")]
-        public ActionResult AdminNotificationManager()
+        public ActionResult AdminNotificationManager(string message = null)
         {
+            ViewBag.message = message;
+
             var coursesQueue = _context.courseRepository.GetListOfCoursesQueue();
 
             List<CourseQueueNotificationViewModel> notificationsCoursesQueue = new List<CourseQueueNotificationViewModel>();

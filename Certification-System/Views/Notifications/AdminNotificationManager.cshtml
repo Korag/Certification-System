@@ -8,13 +8,18 @@
 <h1>Panel powiadomień</h1>
 <hr />
 
+@if (!string.IsNullOrWhiteSpace(ViewBag.message))
+{
+    <h2 class="alert alert-info" role="alert">@ViewBag.message</h2>
+}
+
 <h2 class="mt-4 mb-4">Zgłoszenia użytkowników na kurs</h2>
 
 @await Component.InvokeAsync("DisplayCourseQueueWithDecisionDataTable", new { courseViewModel = Model.CourseQueueNotification, tableIdentificator = "listCourseQueue", operationSet = 2 })
 
 <h2 class="mt-4 mb-4">Niezakończone kursy po terminie</h2>
 
-@await Component.InvokeAsync("DisplayCourseDataTable", new { courseViewModel = Model.NotEndedCoursesAfterEndDate, tableIdentificator = "listNotEndedCourse", operationSet = 1 })
+@await Component.InvokeAsync("DisplayCourseNotificationDataTable", new { courseViewModel = Model.NotEndedCoursesAfterEndDate, tableIdentificator = "listNotEndedCourse", operationSet = 1 })
 
 @section Scripts {
     @{await Html.RenderPartialAsync("_DataTableBasicScript", "listCourseQueue");}

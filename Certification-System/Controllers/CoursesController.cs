@@ -1372,12 +1372,12 @@ namespace Certification_System.Controllers
 
                 if (userAssignedToCourse)
                 {
-                    // if true message = you added user to course
-                    // else message = you deleted user from queue due to..
+                    return RedirectToAction("AdminNotificationManager", "Courses", new { message = "Zgłoszenie pracownika zostało przyjęte." });
                 }
-
-                // redirectTo AdminNotificationManager
-                return RedirectToAction("CourseOfferDetails", "Courses", new { courseIdentificator, message = "Przyjęto Twoje zgłoszenie o zapisanie na kurs. Po uiszczeniu opłaty otrzymasz do niego dostęp." });
+                else
+                {
+                    return RedirectToAction("AdminNotificationManager", "Courses", new { message = "Zgłoszenie pracownika zostało odrzucone." });
+                }
             }
 
             return RedirectToAction("BlankMenu", "Certificates");
