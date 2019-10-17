@@ -1,0 +1,83 @@
+﻿@model Certification_System.DTOViewModels.DisplayCourseQueueWithDecisionDataTableViewModel
+
+<div class="col-12 table-responsive">
+    <table id="@Model.Options.TableIdentificator" class="table table-striped table-bordered display" style="width: 100%;" role="grid">
+        <thead>
+            <tr>
+                <th>
+                    @Html.DisplayNameFor(model => model.CoursesNotifications.FirstOrDefault().Course.CourseIndexer)
+                </th>
+                <th>
+                    @Html.DisplayNameFor(model => model.CoursesNotifications.FirstOrDefault().Course.Name)
+                </th>
+                <th>
+                    @Html.DisplayNameFor(model => model.CoursesNotifications.FirstOrDefault().Course.Description)
+                </th>
+                <th>
+                    @Html.DisplayNameFor(model => model.CoursesNotifications.FirstOrDefault().EnrolledUser.Email)
+                </th>
+                <th>
+                    @Html.DisplayNameFor(model => model.CoursesNotifications.FirstOrDefault().EnrolledUser.FirstName)
+                </th>
+                <th>
+                    @Html.DisplayNameFor(model => model.CoursesNotifications.FirstOrDefault().EnrolledUser.LastName)
+                </th>
+                <th>
+                    @Html.DisplayNameFor(model => model.CoursesNotifications.FirstOrDefault().EnrollmentDate)
+                </th>
+                <th>
+                    @Html.DisplayNameFor(model => model.CoursesNotifications.FirstOrDefault().EnrollmentOlderThan2Weeks)
+                </th>
+                @if (Model.Options.OperationSet != 0)
+                {
+                    <th>
+                        Operacje
+                    </th>
+                }
+            </tr>
+        </thead>
+        <tbody>
+            @foreach (var courseNotification in Model.CoursesNotifications)
+            {
+                <tr>
+                    <td>
+                        @Html.DisplayFor(modelItem => courseNotification.Course.CourseIndexer)
+                    </td>
+                    <td>
+                        @Html.DisplayFor(modelItem => courseNotification.Course.Name)
+                    </td>
+                    <td>
+                        @Html.DisplayFor(modelItem => courseNotification.Course.Description)
+                    </td>
+                    <td>
+                        @Html.DisplayFor(modelItem => courseNotification.EnrolledUser.Email)
+                    </td>
+                    <td>
+                        @Html.DisplayFor(modelItem => courseNotification.EnrolledUser.FirstName)
+                    </td>
+                    <td>
+                        @Html.DisplayFor(modelItem => courseNotification.EnrolledUser.LastName)
+                    </td>
+                    <td>
+                        @Html.DisplayFor(modelItem => courseNotification.EnrollmentDate)
+                    </td>
+                    <td>
+                        <input type="checkbox" asp-for="@courseNotification.EnrollmentDate" class="form-control col-12" data-toggle="toggle" data-on="Tak" data-off="Nie" data-size="sm" disabled />
+                    </td>
+                    @if (Model.Options.OperationSet == 1)
+                    {
+                        <td>
+                            <div class="dropdown p-0">
+                                <button class="btn btn-success dropdown-toggle" type="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">Operacje</button>
+                                <div class="dropdown-menu nohover">
+                                    <a asp-action="MoveUserFromCourseQueueToCourse" asp-route-courseIdentificator="@courseNotification.Course.CourseIdentificator" asp-route-userIdentificator="@courseNotification.EnrolledUser.UserIdentificator" asp-controller="Courses" class="btn btn-success w-100 mb-1">Zaakceptuj zgłoszenie</a>
+                                    <a asp-action="DeleteUserFromCourseQueue" asp-route-courseIdentificator="@courseNotification.Course.CourseIdentificator" asp-route-userIdentificator="@courseNotification.EnrolledUser.UserIdentificator" asp-controller="Courses" class="btn btn-danger w-100">Odrzuć zgłoszenie</a>
+                                </div>
+                            </div>
+                        </td>
+                    }
+                </tr>
+            }
+        </tbody>
+    </table>
+</div>
