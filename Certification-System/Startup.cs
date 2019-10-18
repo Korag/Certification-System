@@ -101,6 +101,7 @@ namespace Certification_System
             services.AddTransient<IExamResultRepository, ExamResultRepository>();
             services.AddTransient<IGivenCertificateRepository, GivenCertificateRepository>();
             services.AddTransient<IGivenDegreeRepository, GivenDegreeRepository>();
+            services.AddTransient<IPersonalLogRepository, PersonalLogRepository>();
             services.AddTransient<IMeetingRepository, MeetingRepository>();
             services.AddTransient<IUserRepository, UserRepository>();
 

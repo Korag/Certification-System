@@ -120,7 +120,7 @@ namespace Certification_System.Repository
             return _personalLogs = _context.db.GetCollection<PersonalLog>(_personalLogCollectionName);
         }
 
-        public ICollection<PersonalLog> GetListOfCourses()
+        public ICollection<PersonalLog> GetListOfPersonalLogs()
         {
             return GetPersonalLogs().AsQueryable().ToList();
         }

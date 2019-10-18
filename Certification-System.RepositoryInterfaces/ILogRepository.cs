@@ -20,11 +20,5 @@ namespace Certification_System.RepositoryInterfaces
         void AddUserLog(CertificationPlatformUserLog userLog);
         void AddUserLoginLog(UserLoginLog userLoginLog);
         void AddLogToPersonalUserLogs(string userIdentificator, LogInformation logInfo);
-
-
-        ICollection<PersonalLog> GetListOfCourses();
-        PersonalLog GetPersonalUserLogById(string userIdentificator);
-        ICollection<PersonalLog> GetPersonalUserLogsById(ICollection<string> usersIdentificators);
-        void CreatePersonalUserLog(CertificationPlatformUser user);
     }
 }

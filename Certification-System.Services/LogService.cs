@@ -10,14 +10,22 @@ namespace Certification_System.Services
     {
         private readonly ILogRepository _logRepository;
         private readonly IUserRepository _userRepository;
+        private readonly IPersonalLogRepository _personalLogRepository;
 
         private readonly IIPGetterService _ipGetter;
         private readonly IKeyGenerator _keyGenerator;
 
-        public LogService(ILogRepository logRepository, IUserRepository userRepository, IKeyGenerator keyGenerator, IIPGetterService ipGetter)
+
+        public LogService(
+            ILogRepository logRepository, 
+            IUserRepository userRepository,
+            IPersonalLogRepository personalLogRepository,
+            IKeyGenerator keyGenerator,
+            IIPGetterService ipGetter)
         {
             _logRepository = logRepository;
             _userRepository = userRepository;
+            _personalLogRepository = personalLogRepository;
 
             _ipGetter = ipGetter;
             _keyGenerator = keyGenerator;
@@ -459,12 +467,12 @@ namespace Certification_System.Services
 
         public void AddPersonalUserLog(string userIdentificator, LogInformation logInfo)
         {
-            var userLog = _logRepository.GetPersonalUserLogById(userIdentificator);
+            var userLog = _personalLogRepository.GetPersonalUserLogById(userIdentificator);
             var user = _userRepository.GetUserById(userIdentificator);
 
             if (userLog == null)
             {
-               _logRepository.CreatePersonalUserLog(user);
+                _personalLogRepository.CreatePersonalUserLog(user);
             }
 
             _logRepository.AddLogToPersonalUserLogs(userIdentificator, logInfo);
@@ -475,11 +483,11 @@ namespace Certification_System.Services
             foreach (var userIdentificator in usersIdentificators)
             {
                 var user = _userRepository.GetUserById(userIdentificator);
-                var userLog = _logRepository.GetPersonalUserLogById(userIdentificator);
+                var userLog = _personalLogRepository.GetPersonalUserLogById(userIdentificator);
 
                 if (userLog == null)
                 {
-                   _logRepository.CreatePersonalUserLog(user);
+                    _personalLogRepository.CreatePersonalUserLog(user);
                 }
 
                 _logRepository.AddLogToPersonalUserLogs(userIdentificator, logInfo);

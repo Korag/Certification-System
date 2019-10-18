@@ -167,6 +167,7 @@ namespace Certification_System.Controllers
         {
             var user = _context.userRepository.GetUserByEmail(this.User.Identity.Name);
 
+
             return View();
         }
     }
