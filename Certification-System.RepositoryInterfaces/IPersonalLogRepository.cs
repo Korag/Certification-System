@@ -7,7 +7,7 @@ namespace Certification_System.RepositoryInterfaces
     {
         ICollection<PersonalLog> GetListOfPersonalLogs();
         PersonalLog GetPersonalUserLogById(string userIdentificator);
-        ICollection<PersonalLog> GetPersonalUserLogsById(ICollection<string> usersIdentificators);
+        ICollection<PersonalLog> GetPersonalUsersLogsById(ICollection<string> usersIdentificators);
         void CreatePersonalUserLog(CertificationPlatformUser user);
     }
 }

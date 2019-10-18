@@ -167,8 +167,21 @@ namespace Certification_System.Controllers
         {
             var user = _context.userRepository.GetUserByEmail(this.User.Identity.Name);
 
+            var userNotifications = _context.personalLogRepository.GetPersonalUserLogById(user.Id);
 
-            return View();
+            List<DisplayLogInformationViewModel> userPersonalLogs = new List<DisplayLogInformationViewModel>();
+
+            foreach (var userNotification in userNotifications.LogData)
+            {
+                DisplayLogInformationViewModel singleNotification = _mapper.Map<DisplayLogInformationViewModel>(userNotification);
+
+                var changeAuthor = _context.userRepository.GetUserById(userNotification.ChangeAuthorIdentificator);
+                singleNotification.ChangeAuthor = _mapper.Map<DisplayCrucialDataUserViewModel>(changeAuthor);
+
+                userPersonalLogs.Add(singleNotification);
+            }
+
+            return View(userPersonalLogs);
         }
     }
 }

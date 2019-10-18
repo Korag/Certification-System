@@ -44,7 +44,7 @@ namespace Certification_System.Repository
             return resultPersonalLog;
         }
 
-        public ICollection<PersonalLog> GetPersonalUserLogsById(ICollection<string> usersIdentificators)
+        public ICollection<PersonalLog> GetPersonalUsersLogsById(ICollection<string> usersIdentificators)
         {
             var filter = Builders<PersonalLog>.Filter.Where(z => usersIdentificators.Contains(z.UserIdentificator));
             var resultListOfPersonalLog = GetPersonalLogs().Find<PersonalLog>(filter).ToList();
