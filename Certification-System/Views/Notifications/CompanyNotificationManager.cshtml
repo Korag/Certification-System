@@ -1,0 +1,15 @@
+﻿@model IEnumerable<Certification_System.DTOViewModels.DisplayLogInformationExtendedViewModel>
+
+@{
+    ViewData["Title"] = "CompanyNotificationManager";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+<h1>Panel powiadomień</h1>
+<hr />
+
+@await Component.InvokeAsync("DisplayCompanyUserPersonalLogDataTable", new { logViewModel = Model, tableIdentificator = "listNotifications" })
+
+@section Scripts {
+    @{await Html.RenderPartialAsync("_DataTableBasicScript", "listNotifications");}
+}

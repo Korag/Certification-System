@@ -6,6 +6,7 @@ using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using System;
 using System.Collections.Generic;
+using System.Linq;
 
 namespace Certification_System.Controllers
 {
@@ -103,26 +104,34 @@ namespace Certification_System.Controllers
         [Authorize(Roles="Company")]
         public ActionResult CompanyNotificationManager()
         {
-            var user = _context.userRepository.GetUserByEmail(this.User.Identity.Name);
+            var companyManager = _context.userRepository.GetUserByEmail(this.User.Identity.Name);
 
-            var userLogs = _context.personalLogRepository.GetPersonalUserLogById(user.Id);
+            var workers = _context.userRepository.GetUsersConnectedToCompany(companyManager.CompanyRoleManager.FirstOrDefault());
 
-            List<DisplayLogInformationViewModel> userPersonalLogs = new List<DisplayLogInformationViewModel>();
+            var usersLogs = _context.personalLogRepository.GetPersonalUsersLogsById(workers.Select(z=> z.Id).ToList());
 
-            if (userLogs != null)
+            List<DisplayLogInformationExtendedViewModel> usersPersonalLogs = new List<DisplayLogInformationExtendedViewModel>();
+
+            if (usersLogs != null)
             {
-                foreach (var userLog in userLogs.LogData)
+                foreach (var userLog in usersLogs)
                 {
-                    DisplayLogInformationViewModel singleLog = _mapper.Map<DisplayLogInformationViewModel>(userLog);
+                    foreach (var log in userLog.LogData)
+                    {
+                        DisplayLogInformationExtendedViewModel singleLog = _mapper.Map<DisplayLogInformationExtendedViewModel>(log);
 
-                    var changeAuthor = _context.userRepository.GetUserById(userLog.ChangeAuthorIdentificator);
-                    singleLog.ChangeAuthor = _mapper.Map<DisplayCrucialDataUserViewModel>(changeAuthor);
+                        var changeAuthor = _context.userRepository.GetUserById(log.ChangeAuthorIdentificator);
+                        singleLog.ChangeAuthor = _mapper.Map<DisplayCrucialDataUserViewModel>(changeAuthor);
 
-                    userPersonalLogs.Add(singleLog);
+                        var subjectUser = workers.Where(z => z.Id == userLog.UserIdentificator).FirstOrDefault();
+                        singleLog.ChangeAuthor = _mapper.Map<DisplayCrucialDataUserViewModel>(subjectUser);
+
+                        usersPersonalLogs.Add(singleLog);
+                    }
                 }
             }
 
-            return View(userPersonalLogs);
+            return View(usersPersonalLogs);
         }
 
         // GET: NotificationManager
