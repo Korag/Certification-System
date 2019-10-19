@@ -69,6 +69,26 @@ namespace Certification_System.Services
             };
         }
 
+        public PersonalLogInformation GeneratePersonalLogInformation(string userEmailAddress, string actionName, string typeOfAction, string urlToActionDetails)
+        {
+            var user = _userRepository.GetUserByEmail(userEmailAddress);
+
+            return new PersonalLogInformation
+            {
+                ChangeAuthorEmail = user.Email,
+                ChangeAuthorFirstName = user.FirstName,
+                ChangeAuthorLastName = user.LastName,
+                ChangeAuthorIdentificator = user.Id,
+
+                DateOfLogCreation = DateTime.Now,
+                IpAddress = _ipGetter.GetGlobalIPAddress(),
+                TypeOfAction = typeOfAction,
+
+                ActionName = actionName,
+                UrlToDetailsOfAction = urlToActionDetails,
+            };
+        }
+
         public UserLoginLogInformation GenerateUserLoginInformation(string userEmailAddress, string loginActionResult)
         {
             var user = _userRepository.GetUserByEmail(userEmailAddress);
@@ -465,7 +485,7 @@ namespace Certification_System.Services
             }
         }
 
-        public void AddPersonalUserLog(string userIdentificator, LogInformation logInfo)
+        public void AddPersonalUserLog(string userIdentificator, PersonalLogInformation logInfo)
         {
             var userLog = _personalLogRepository.GetPersonalUserLogById(userIdentificator);
             var user = _userRepository.GetUserById(userIdentificator);
@@ -478,7 +498,7 @@ namespace Certification_System.Services
             _logRepository.AddLogToPersonalUserLogs(userIdentificator, logInfo);
         }
 
-        public void AddPersonalUsersLogs(ICollection<string> usersIdentificators, LogInformation logInfo)
+        public void AddPersonalUsersLogs(ICollection<string> usersIdentificators, PersonalLogInformation logInfo)
         {
             foreach (var userIdentificator in usersIdentificators)
             {

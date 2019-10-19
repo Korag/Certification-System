@@ -14,13 +14,13 @@
                     @Html.DisplayNameFor(model => model.Logs.FirstOrDefault().ChangeAuthor.LastName)
                 </th>
                 <th>
-                    @Html.DisplayNameFor(model => model.Logs.FirstOrDefault().TypeOfAction)
-                </th>
-                <th>
                     @Html.DisplayNameFor(model => model.Logs.FirstOrDefault().DescriptionOfAction)
                 </th>
                 <th>
                     @Html.DisplayNameFor(model => model.Logs.FirstOrDefault().DateOfLogCreation)
+                </th>
+                <th>
+                    @Html.DisplayNameFor(model => model.Logs.FirstOrDefault().UrlToDetailsOfAction)
                 </th>
                 @if (Model.Options.OperationSet != 0)
                 {
@@ -44,19 +44,17 @@
                     @Html.DisplayFor(modelItem => log.ChangeAuthor.LastName)
                 </td>
                 <td>
-                    @Html.DisplayFor(modelItem => log.TypeOfAction)
-                </td>
-                <td>
                     @Html.DisplayFor(modelItem => log.DescriptionOfAction)
                 </td>
                 <td>
                     @Html.DisplayFor(modelItem => log.DateOfLogCreation)
                 </td>
+                <td>
+                    a href
+                </td>
                 @if (Model.Options.OperationSet == 1)
                 {
-                    <td>
-
-                    </td>
+                    <td></td>
                 }
             </tr>
             }

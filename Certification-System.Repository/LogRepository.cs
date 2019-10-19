@@ -107,7 +107,7 @@ namespace Certification_System.Repository
 
 
         #region PersonalUserLog
-        public void AddLogToPersonalUserLogs(string userIdentificator, LogInformation logInfo)
+        public void AddLogToPersonalUserLogs(string userIdentificator, PersonalLogInformation logInfo)
         {
             var filter = Builders<PersonalLog>.Filter.Where(z => z.UserIdentificator == userIdentificator);
             var update = Builders<PersonalLog>.Update.AddToSet(x => x.LogData, logInfo);
@@ -146,9 +146,6 @@ namespace Certification_System.Repository
             PersonalLog personalLog = new PersonalLog
             {
                 UserIdentificator = user.Id,
-                Email = user.Email,
-                FirstName = user.FirstName,
-                LastName = user.LastName
             };
 
             GetPersonalLogs().InsertOne(personalLog);

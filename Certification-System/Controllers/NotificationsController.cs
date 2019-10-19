@@ -48,7 +48,7 @@ namespace Certification_System.Controllers
             {
                 return RedirectToAction("CompanyNotificationManager", "Notifications");
             }
-            else if(this.User.IsInRole("Instructor") && this.User.IsInRole("Examiner"))
+            else if (this.User.IsInRole("Instructor") && this.User.IsInRole("Examiner"))
             {
                 return RedirectToAction("InstructorExaminerNotificationManager", "Notifications");
             }
@@ -161,24 +161,27 @@ namespace Certification_System.Controllers
             return View();
         }
 
-        // GET: WorkerNotificationManager
+        // GET: NotificationManager
         [Authorize(Roles = "Worker")]
         public ActionResult WorkerExaminerNotificationManager()
         {
             var user = _context.userRepository.GetUserByEmail(this.User.Identity.Name);
 
-            var userNotifications = _context.personalLogRepository.GetPersonalUserLogById(user.Id);
+            var userLogs = _context.personalLogRepository.GetPersonalUserLogById(user.Id);
 
             List<DisplayLogInformationViewModel> userPersonalLogs = new List<DisplayLogInformationViewModel>();
 
-            foreach (var userNotification in userNotifications.LogData)
+            if (userLogs != null)
             {
-                DisplayLogInformationViewModel singleNotification = _mapper.Map<DisplayLogInformationViewModel>(userNotification);
+                foreach (var userLog in userLogs.LogData)
+                {
+                    DisplayLogInformationViewModel singleLog= _mapper.Map<DisplayLogInformationViewModel>(userLog);
 
-                var changeAuthor = _context.userRepository.GetUserById(userNotification.ChangeAuthorIdentificator);
-                singleNotification.ChangeAuthor = _mapper.Map<DisplayCrucialDataUserViewModel>(changeAuthor);
+                    var changeAuthor = _context.userRepository.GetUserById(userLog.ChangeAuthorIdentificator);
+                    singleLog.ChangeAuthor = _mapper.Map<DisplayCrucialDataUserViewModel>(changeAuthor);
 
-                userPersonalLogs.Add(singleNotification);
+                    userPersonalLogs.Add(singleLog);
+                }
             }
 
             return View(userPersonalLogs);

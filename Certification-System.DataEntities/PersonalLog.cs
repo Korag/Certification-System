@@ -8,17 +8,13 @@ namespace Certification_System.Entities
     {
         public PersonalLog()
         {
-            LogData = new List<LogInformation>();
+            LogData = new List<PersonalLogInformation>();
         }
 
         [BsonId]
         [BsonRepresentation(BsonType.ObjectId)]
         public string UserIdentificator { get; set; }
 
-        public string Email { get; set; }
-        public string FirstName { get; set; }
-        public string LastName { get; set; }
-
-        public ICollection<LogInformation> LogData { get; set; }
+        public ICollection<PersonalLogInformation> LogData { get; set; }
     }
 }

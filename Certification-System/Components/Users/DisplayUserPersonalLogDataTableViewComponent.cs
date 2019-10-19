@@ -18,7 +18,7 @@ namespace Certification_System.Components
                 }
             };
 
-            return View("_DisplayUserPersonalLogDataTableViewModel", userDataTableViewModel);
+            return View("_DisplayUserPersonalLogDataTable", userDataTableViewModel);
         }
     }
 }

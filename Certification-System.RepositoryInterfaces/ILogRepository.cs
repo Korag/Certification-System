@@ -19,6 +19,6 @@ namespace Certification_System.RepositoryInterfaces
         void AddMeetingLog(MeetingLog meetingLog);
         void AddUserLog(CertificationPlatformUserLog userLog);
         void AddUserLoginLog(UserLoginLog userLoginLog);
-        void AddLogToPersonalUserLogs(string userIdentificator, LogInformation logInfo);
+        void AddLogToPersonalUserLogs(string userIdentificator, PersonalLogInformation logInfo);
     }
 }
