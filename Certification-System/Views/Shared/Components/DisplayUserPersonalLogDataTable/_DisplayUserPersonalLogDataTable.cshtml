@@ -22,7 +22,10 @@
                 <th>
                     @Html.DisplayNameFor(model => model.Logs.FirstOrDefault().UrlToDetailsOfAction)
                 </th>
-                @if (Model.Options.OperationSet != 0)
+                <th>
+                    Szczegóły:
+                </th>
+                @if (Model.Options.OperationSet == 1)
                 {
                     <th>
                         Operacje
@@ -33,30 +36,30 @@
         <tbody>
             @foreach (var log in Model.Logs)
             {
-            <tr>
-                <td>
-                    @Html.DisplayFor(modelItem => log.ChangeAuthor.Email)
-                </td>
-                <td>
-                    @Html.DisplayFor(modelItem => log.ChangeAuthor.FirstName)
-                </td>
-                <td>
-                    @Html.DisplayFor(modelItem => log.ChangeAuthor.LastName)
-                </td>
-                <td>
-                    @Html.DisplayFor(modelItem => log.DescriptionOfAction)
-                </td>
-                <td>
-                    @Html.DisplayFor(modelItem => log.DateOfLogCreation)
-                </td>
-                <td>
-                    a href
-                </td>
-                @if (Model.Options.OperationSet == 1)
-                {
-                    <td></td>
-                }
-            </tr>
+                <tr>
+                    <td>
+                        @Html.DisplayFor(modelItem => log.ChangeAuthor.Email)
+                    </td>
+                    <td>
+                        @Html.DisplayFor(modelItem => log.ChangeAuthor.FirstName)
+                    </td>
+                    <td>
+                        @Html.DisplayFor(modelItem => log.ChangeAuthor.LastName)
+                    </td>
+                    <td>
+                        @Html.DisplayFor(modelItem => log.DescriptionOfAction)
+                    </td>
+                    <td>
+                        @Html.DisplayFor(modelItem => log.DateOfLogCreation)
+                    </td>
+                    <td>
+                        @Html.Raw(log.UrlToDetailsOfAction);
+                    </td>
+                    @if (Model.Options.OperationSet == 1)
+                    {
+                        <td></td>
+                    }
+                </tr>
             }
         </tbody>
     </table>

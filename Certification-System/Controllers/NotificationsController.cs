@@ -31,6 +31,10 @@ namespace Certification_System.Controllers
             {
                 return RedirectToAction("AdminNotificationManager", "Notifications");
             }
+            else if (this.User.IsInRole("Company"))
+            {
+                return RedirectToAction("CompanyNotificationManager", "Notifications");
+            }
             else if (this.User.Identity.IsAuthenticated)
             {
                 return RedirectToAction("NotificationManager", "Notifications");
@@ -93,6 +97,32 @@ namespace Certification_System.Controllers
             };
 
             return View(adminNotifications);
+        }
+
+        // GET: CompanyNotificationManager
+        [Authorize(Roles="Company")]
+        public ActionResult CompanyNotificationManager()
+        {
+            var user = _context.userRepository.GetUserByEmail(this.User.Identity.Name);
+
+            var userLogs = _context.personalLogRepository.GetPersonalUserLogById(user.Id);
+
+            List<DisplayLogInformationViewModel> userPersonalLogs = new List<DisplayLogInformationViewModel>();
+
+            if (userLogs != null)
+            {
+                foreach (var userLog in userLogs.LogData)
+                {
+                    DisplayLogInformationViewModel singleLog = _mapper.Map<DisplayLogInformationViewModel>(userLog);
+
+                    var changeAuthor = _context.userRepository.GetUserById(userLog.ChangeAuthorIdentificator);
+                    singleLog.ChangeAuthor = _mapper.Map<DisplayCrucialDataUserViewModel>(changeAuthor);
+
+                    userPersonalLogs.Add(singleLog);
+                }
+            }
+
+            return View(userPersonalLogs);
         }
 
         // GET: NotificationManager
