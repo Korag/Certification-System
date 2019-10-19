@@ -14,7 +14,7 @@ namespace Certification_System.RepositoryInterfaces
         void UpdateDegree(Degree degree);
         ICollection<Degree> GetDegreesToDisposeByUserCompetences(ICollection<string> givenCertificates, ICollection<string> givenDegrees);
         ICollection<Degree> DeleteBranchFromDegrees(string branchIdentificator);
-        ICollection<Degree> DeleteCertificateFromDegrees(string certificateIdentificator);
+        ICollection<Degree> DeleteRequiredCertificateFromDegrees(string certificateIdentificator);
         void DeleteDegree(string degreeIdentificator);
         ICollection<Degree> DeleteRequiredDegreeFromDegree(string degreeIdentificator);
         string CountDegreesWithIndexerNamePart(string namePartOfIndexer);

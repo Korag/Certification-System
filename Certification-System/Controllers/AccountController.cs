@@ -182,8 +182,8 @@ namespace Certification_System.Controllers
                     var emailToSend = _emailSender.GenerateEmailMessage(model.Email, user.FirstName + " " + user.LastName, "register", callbackUrl);
                     await _emailSender.SendEmailAsync(emailToSend);
 
-                    var logInfo = _logger.GenerateLogInformation(this.User.Identity.Name, this.ControllerContext.RouteData.Values["action"].ToString(), LogTypeOfAction.TypesOfActions[0]);
-                    _logger.AddUserLog(user, logInfo);
+                    var logInfoRegister = _logger.GenerateLogInformation(this.User.Identity.Name, this.ControllerContext.RouteData.Values["action"].ToString(), LogTypeOfAction.TypesOfActions[0], LogDescriptionOfAction.DescriptionOfActions["registerUser"]);
+                    _logger.AddUserLog(user, logInfoRegister);
 
                     //await _signInManager.SignInAsync(user, isPersistent: false);
                     //_logger.LogInformation("Użytkownik utworzył nowe konto.");
@@ -224,7 +224,7 @@ namespace Certification_System.Controllers
 
                 var updatedUser = _context.userRepository.GetUserById(user.Id);
 
-                var logInfo = _logger.GenerateLogInformation(this.User.Identity.Name, this.ControllerContext.RouteData.Values["action"].ToString(), LogTypeOfAction.TypesOfActions[1]);
+                var logInfo = _logger.GenerateLogInformation(this.User.Identity.Name, this.ControllerContext.RouteData.Values["action"].ToString(), LogTypeOfAction.TypesOfActions[1], LogDescriptionOfAction.DescriptionOfActions["changePasswordUser"]);
                 _logger.AddUserLog(updatedUser, logInfo);
 
                 if (result.Succeeded)
@@ -275,7 +275,7 @@ namespace Certification_System.Controllers
                 if (result.Succeeded)
                 {
                     var updatedUser = _context.userRepository.GetUserById(user.Id);
-                    var logInfo = _logger.GenerateLogInformation(user.Email, this.ControllerContext.RouteData.Values["action"].ToString(), LogTypeOfAction.TypesOfActions[1]);
+                    var logInfo = _logger.GenerateLogInformation(user.Email, this.ControllerContext.RouteData.Values["action"].ToString(), LogTypeOfAction.TypesOfActions[1], LogDescriptionOfAction.DescriptionOfActions["confirmEmail"]);
                     _logger.AddUserLog(updatedUser, logInfo);
 
                     return RedirectToAction("Login", "Account", new { message = "Adres email został potwierdzony." });
@@ -321,7 +321,7 @@ namespace Certification_System.Controllers
                     _signInManager.SignInAsync(user, isPersistent: false).Wait();
 
                     var updatedUser = _context.userRepository.GetUserById(user.Id);
-                    var logInfo = _logger.GenerateLogInformation(this.User.Identity.Name, this.ControllerContext.RouteData.Values["action"].ToString(), LogTypeOfAction.TypesOfActions[1]);
+                    var logInfo = _logger.GenerateLogInformation(this.User.Identity.Name, this.ControllerContext.RouteData.Values["action"].ToString(), LogTypeOfAction.TypesOfActions[1], LogDescriptionOfAction.DescriptionOfActions["setAccountPassword"]);
                     _logger.AddUserLog(updatedUser, logInfo);
 
                     var logInfoUserLogin = _logger.GenerateUserLoginInformation(user.Email, UserLoginActionStatus.UserLoginStatus[0]);
@@ -419,7 +419,7 @@ namespace Certification_System.Controllers
                 if (result.Succeeded)
                 {
                     var updatedUser = _context.userRepository.GetUserById(user.Id);
-                    var logInfo = _logger.GenerateLogInformation(this.User.Identity.Name, this.ControllerContext.RouteData.Values["action"].ToString(), LogTypeOfAction.TypesOfActions[1]);
+                    var logInfo = _logger.GenerateLogInformation(this.User.Identity.Name, this.ControllerContext.RouteData.Values["action"].ToString(), LogTypeOfAction.TypesOfActions[1], LogDescriptionOfAction.DescriptionOfActions["resetPassword"]);
                     _logger.AddUserLog(updatedUser, logInfo);
 
                     return RedirectToAction(nameof(Login), "Account", new { message = "Hasło zostało zmienione" });

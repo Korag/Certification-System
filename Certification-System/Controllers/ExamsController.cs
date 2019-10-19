@@ -74,11 +74,11 @@ namespace Certification_System.Controllers
                 _context.courseRepository.UpdateCourse(course);
                 _context.examRepository.AddExam(exam);
 
-                var logInfoAdd = _logger.GenerateLogInformation(this.User.Identity.Name, this.ControllerContext.RouteData.Values["action"].ToString(), LogTypeOfAction.TypesOfActions[0]);
-                _logger.AddExamLog(exam, logInfoAdd);
+                var logInfoAddExam = _logger.GenerateLogInformation(this.User.Identity.Name, this.ControllerContext.RouteData.Values["action"].ToString(), LogTypeOfAction.TypesOfActions[0], LogDescriptionOfAction.DescriptionOfActions["addExam"]);
+                _logger.AddExamLog(exam, logInfoAddExam);
 
-                var logInfoUpdate = _logger.GenerateLogInformation(this.User.Identity.Name, this.ControllerContext.RouteData.Values["action"].ToString(), LogTypeOfAction.TypesOfActions[1]);
-                _logger.AddCourseLog(course, logInfoUpdate);
+                var logInfoUpdateCourse = _logger.GenerateLogInformation(this.User.Identity.Name, this.ControllerContext.RouteData.Values["action"].ToString(), LogTypeOfAction.TypesOfActions[1], LogDescriptionOfAction.DescriptionOfActions["addExamToCourse"]);
+                _logger.AddCourseLog(course, logInfoUpdateCourse);
 
                 return RedirectToAction("ConfirmationOfActionOnExam", new { examIdentificator = exam.ExamIdentificator, TypeOfAction = "Add" });
             }
@@ -153,8 +153,8 @@ namespace Certification_System.Controllers
 
                     _context.examTermRepository.AddExamsTerms(examsTerms);
 
-                    var logInfo = _logger.GenerateLogInformation(this.User.Identity.Name, this.ControllerContext.RouteData.Values["action"].ToString(), LogTypeOfAction.TypesOfActions[0]);
-                    _logger.AddExamsTermsLogs(examsTerms, logInfo);
+                    var logInfoAddExamsTerms = _logger.GenerateLogInformation(this.User.Identity.Name, this.ControllerContext.RouteData.Values["action"].ToString(), LogTypeOfAction.TypesOfActions[0], LogDescriptionOfAction.DescriptionOfActions["addExamTerm"]);
+                    _logger.AddExamsTermsLogs(examsTerms, logInfoAddExamsTerms);
                 }
 
                 var ExamsTermsIdentificators = examsTerms.Select(z => z.ExamTermIdentificator);
@@ -162,11 +162,11 @@ namespace Certification_System.Controllers
                 _context.courseRepository.UpdateCourse(course);
                 _context.examRepository.AddExam(exam);
 
-                var logInfoAdd = _logger.GenerateLogInformation(this.User.Identity.Name, this.ControllerContext.RouteData.Values["action"].ToString(), LogTypeOfAction.TypesOfActions[0]);
-                _logger.AddExamLog(exam, logInfoAdd);
+                var logInfoAddExam = _logger.GenerateLogInformation(this.User.Identity.Name, this.ControllerContext.RouteData.Values["action"].ToString(), LogTypeOfAction.TypesOfActions[0], LogDescriptionOfAction.DescriptionOfActions["addExam"]);
+                _logger.AddExamLog(exam, logInfoAddExam);
 
-                var logInfoUpdate = _logger.GenerateLogInformation(this.User.Identity.Name, this.ControllerContext.RouteData.Values["action"].ToString(), LogTypeOfAction.TypesOfActions[1]);
-                _logger.AddCourseLog(course, logInfoUpdate);
+                var logInfoUpdateCourse = _logger.GenerateLogInformation(this.User.Identity.Name, this.ControllerContext.RouteData.Values["action"].ToString(), LogTypeOfAction.TypesOfActions[1], LogDescriptionOfAction.DescriptionOfActions["addExamToCourse"]);
+                _logger.AddCourseLog(course, logInfoUpdateCourse);
 
                 return RedirectToAction("ConfirmationOfActionOnExam", new { examIdentificator = exam.ExamIdentificator, TypeOfAction = "Add" });
             }
@@ -232,11 +232,11 @@ namespace Certification_System.Controllers
                 _context.courseRepository.UpdateCourse(course);
                 _context.examRepository.AddExam(exam);
 
-                var logInfoAdd = _logger.GenerateLogInformation(this.User.Identity.Name, this.ControllerContext.RouteData.Values["action"].ToString(), LogTypeOfAction.TypesOfActions[0]);
-                _logger.AddExamLog(exam, logInfoAdd);
+                var logInfoAddExam = _logger.GenerateLogInformation(this.User.Identity.Name, this.ControllerContext.RouteData.Values["action"].ToString(), LogTypeOfAction.TypesOfActions[0], LogDescriptionOfAction.DescriptionOfActions["addExam"]);
+                _logger.AddExamLog(exam, logInfoAddExam);
 
-                var logInfoUpdate = _logger.GenerateLogInformation(this.User.Identity.Name, this.ControllerContext.RouteData.Values["action"].ToString(), LogTypeOfAction.TypesOfActions[1]);
-                _logger.AddCourseLog(course, logInfoUpdate);
+                var logInfoUpdateCourse = _logger.GenerateLogInformation(this.User.Identity.Name, this.ControllerContext.RouteData.Values["action"].ToString(), LogTypeOfAction.TypesOfActions[1], LogDescriptionOfAction.DescriptionOfActions["addExamToCourse"]);
+                _logger.AddCourseLog(course, logInfoUpdateCourse);
 
                 return RedirectToAction("ConfirmationOfActionOnExam", new { examIdentificator = exam.ExamIdentificator, TypeOfAction = "Add" });
             }
@@ -329,18 +329,18 @@ namespace Certification_System.Controllers
 
                     _context.examTermRepository.AddExamsTerms(examsTerms);
 
-                    var logInfo = _logger.GenerateLogInformation(this.User.Identity.Name, this.ControllerContext.RouteData.Values["action"].ToString(), LogTypeOfAction.TypesOfActions[0]);
-                    _logger.AddExamsTermsLogs(examsTerms, logInfo);
+                    var logInfoAddExamsTerms = _logger.GenerateLogInformation(this.User.Identity.Name, this.ControllerContext.RouteData.Values["action"].ToString(), LogTypeOfAction.TypesOfActions[0], LogDescriptionOfAction.DescriptionOfActions["addExamTerm"]);
+                    _logger.AddExamsTermsLogs(examsTerms, logInfoAddExamsTerms);
                 }
 
                 _context.courseRepository.UpdateCourse(course);
                 _context.examRepository.AddExam(exam);
 
-                var logInfoAdd = _logger.GenerateLogInformation(this.User.Identity.Name, this.ControllerContext.RouteData.Values["action"].ToString(), LogTypeOfAction.TypesOfActions[0]);
-                _logger.AddExamLog(exam, logInfoAdd);
+                var logInfoAddExam = _logger.GenerateLogInformation(this.User.Identity.Name, this.ControllerContext.RouteData.Values["action"].ToString(), LogTypeOfAction.TypesOfActions[0], LogDescriptionOfAction.DescriptionOfActions["addExam"]);
+                _logger.AddExamLog(exam, logInfoAddExam);
 
-                var logInfoUpdate = _logger.GenerateLogInformation(this.User.Identity.Name, this.ControllerContext.RouteData.Values["action"].ToString(), LogTypeOfAction.TypesOfActions[1]);
-                _logger.AddCourseLog(course, logInfoUpdate);
+                var logInfoUpdateExam = _logger.GenerateLogInformation(this.User.Identity.Name, this.ControllerContext.RouteData.Values["action"].ToString(), LogTypeOfAction.TypesOfActions[1], LogDescriptionOfAction.DescriptionOfActions["addExamToCourse"]);
+                _logger.AddCourseLog(course, logInfoUpdateExam);
 
                 return RedirectToAction("ConfirmationOfActionOnExam", new { examIdentificator = exam.ExamIdentificator, TypeOfAction = "Add" });
             }
@@ -570,8 +570,8 @@ namespace Certification_System.Controllers
 
                 _context.examRepository.UpdateExam(originExam);
 
-                var logInfo = _logger.GenerateLogInformation(this.User.Identity.Name, this.ControllerContext.RouteData.Values["action"].ToString(), LogTypeOfAction.TypesOfActions[1]);
-                _logger.AddExamLog(originExam, logInfo);
+                var logInfoUpdateExam = _logger.GenerateLogInformation(this.User.Identity.Name, this.ControllerContext.RouteData.Values["action"].ToString(), LogTypeOfAction.TypesOfActions[1], LogDescriptionOfAction.DescriptionOfActions["updateExam"]);
+                _logger.AddExamLog(originExam, logInfoUpdateExam);
 
                 return RedirectToAction("ConfirmationOfActionOnExam", "Exams", new { examIdentificator = editedExam.ExamIdentificator, TypeOfAction = "Update" });
             }
@@ -621,8 +621,8 @@ namespace Certification_System.Controllers
 
                     _context.examTermRepository.DeleteExamsTerms(originExamTerms.Select(z => z.ExamTermIdentificator).ToList());
 
-                    var logInfoDelete = _logger.GenerateLogInformation(this.User.Identity.Name, this.ControllerContext.RouteData.Values["action"].ToString(), LogTypeOfAction.TypesOfActions[2]);
-                    _logger.AddExamsTermsLogs(originExamTerms, logInfoDelete);
+                    var logInfoDeleteExamTerms = _logger.GenerateLogInformation(this.User.Identity.Name, this.ControllerContext.RouteData.Values["action"].ToString(), LogTypeOfAction.TypesOfActions[2], LogDescriptionOfAction.DescriptionOfActions["deleteExamTerm"]);
+                    _logger.AddExamsTermsLogs(originExamTerms, logInfoDeleteExamTerms);
                 }
                 else if (editedExam.ExamDividedToTerms)
                 {
@@ -639,14 +639,14 @@ namespace Certification_System.Controllers
 
                     _context.examTermRepository.UpdateExamsTerms(originExamTerms);
 
-                    var logInfoUpdate = _logger.GenerateLogInformation(this.User.Identity.Name, this.ControllerContext.RouteData.Values["action"].ToString(), LogTypeOfAction.TypesOfActions[1]);
-                    _logger.AddExamsTermsLogs(originExamTerms, logInfoUpdate);
+                    var logInfoUpdateExamTerms = _logger.GenerateLogInformation(this.User.Identity.Name, this.ControllerContext.RouteData.Values["action"].ToString(), LogTypeOfAction.TypesOfActions[1], LogDescriptionOfAction.DescriptionOfActions["updateExamTerm"]);
+                    _logger.AddExamsTermsLogs(originExamTerms, logInfoUpdateExamTerms);
                 }
 
                 _context.examRepository.UpdateExam(originExam);
 
-                var logInfo = _logger.GenerateLogInformation(this.User.Identity.Name, this.ControllerContext.RouteData.Values["action"].ToString(), LogTypeOfAction.TypesOfActions[1]);
-                _logger.AddExamLog(originExam, logInfo);
+                var logInfoUpdateExam = _logger.GenerateLogInformation(this.User.Identity.Name, this.ControllerContext.RouteData.Values["action"].ToString(), LogTypeOfAction.TypesOfActions[1], LogDescriptionOfAction.DescriptionOfActions["updateExam"]);
+                _logger.AddExamLog(originExam, logInfoUpdateExam);
 
                 return RedirectToAction("ConfirmationOfActionOnExam", "Exams", new { examIdentificator = editedExam.ExamIdentificator, TypeOfAction = "Update" });
             }
@@ -738,8 +738,8 @@ namespace Certification_System.Controllers
                     {
                         _context.examRepository.AddUserToExam(userAssignedToExam.SelectedExam, userAssignedToExam.SelectedUser);
 
-                        var logInfo = _logger.GenerateLogInformation(this.User.Identity.Name, this.ControllerContext.RouteData.Values["action"].ToString(), LogTypeOfAction.TypesOfActions[1]);
-                        _logger.AddExamLog(exam, logInfo);
+                        var logInfoAddUsersToExam = _logger.GenerateLogInformation(this.User.Identity.Name, this.ControllerContext.RouteData.Values["action"].ToString(), LogTypeOfAction.TypesOfActions[1], LogDescriptionOfAction.DescriptionOfActions["addUsersToExam"]);
+                        _logger.AddExamLog(exam, logInfoAddUsersToExam);
 
                         return RedirectToAction("ExamDetails", new { examIdentificator = userAssignedToExam.SelectedExam, message = "Zapisano nowego użytkownika na egzamin" });
                     }
@@ -803,8 +803,8 @@ namespace Certification_System.Controllers
                     var exam = _context.examRepository.GetExamById(deleteUsersFromExamViewModel.ExamIdentificator);
                     _context.examRepository.DeleteUsersFromExam(deleteUsersFromExamViewModel.ExamIdentificator, usersToDeleteFromExamIdentificators);
 
-                    var logInfoExam = _logger.GenerateLogInformation(this.User.Identity.Name, this.ControllerContext.RouteData.Values["action"].ToString(), LogTypeOfAction.TypesOfActions[1]);
-                    _logger.AddExamLog(exam, logInfoExam);
+                    var logInfoDeleteUsersFromExam = _logger.GenerateLogInformation(this.User.Identity.Name, this.ControllerContext.RouteData.Values["action"].ToString(), LogTypeOfAction.TypesOfActions[1], LogDescriptionOfAction.DescriptionOfActions["removeUsersFromExam"]);
+                    _logger.AddExamLog(exam, logInfoDeleteUsersFromExam);
 
                     if (deleteUsersFromExamViewModel.ExamDividedToTerms)
                     {
@@ -812,8 +812,8 @@ namespace Certification_System.Controllers
 
                         _context.examTermRepository.DeleteUsersFromExamTerms(exam.ExamTerms, usersToDeleteFromExamIdentificators);
 
-                        var logInfo = _logger.GenerateLogInformation(this.User.Identity.Name, this.ControllerContext.RouteData.Values["action"].ToString(), LogTypeOfAction.TypesOfActions[1]);
-                        _logger.AddExamsTermsLogs(examTerms, logInfo);
+                        var logInfoDeleteUsersFromExamTerms = _logger.GenerateLogInformation(this.User.Identity.Name, this.ControllerContext.RouteData.Values["action"].ToString(), LogTypeOfAction.TypesOfActions[1], LogDescriptionOfAction.DescriptionOfActions["removeUsersFromExamTerm"]);
+                        _logger.AddExamsTermsLogs(examTerms, logInfoDeleteUsersFromExamTerms);
                     }
 
                     if (deleteUsersFromExamViewModel.UsersToDeleteFromExam.Count() == 1)
@@ -915,8 +915,8 @@ namespace Certification_System.Controllers
                             exam.EnrolledUsers.Add(user);
                         }
 
-                        var logInfo = _logger.GenerateLogInformation(this.User.Identity.Name, this.ControllerContext.RouteData.Values["action"].ToString(), LogTypeOfAction.TypesOfActions[1]);
-                        _logger.AddExamLog(exam, logInfo);
+                        var logInfoAssignUsersToExam = _logger.GenerateLogInformation(this.User.Identity.Name, this.ControllerContext.RouteData.Values["action"].ToString(), LogTypeOfAction.TypesOfActions[1], LogDescriptionOfAction.DescriptionOfActions["assignUsersToExam"]);
+                        _logger.AddExamLog(exam, logInfoAssignUsersToExam);
 
                         return RedirectToAction("ExamDetails", new { examIdentificator = addUsersToExamViewModel.ExamIdentificator, message = "Dodano grupę użytkowników do egzaminu" });
                     }
@@ -1054,8 +1054,10 @@ namespace Certification_System.Controllers
                         }
                     }
 
-                    var logInfo = _logger.GenerateLogInformation(this.User.Identity.Name, this.ControllerContext.RouteData.Values["action"].ToString(), LogTypeOfAction.TypesOfActions[1]);
-                    var logAdd = _logger.GenerateLogInformation(this.User.Identity.Name, this.ControllerContext.RouteData.Values["action"].ToString(), LogTypeOfAction.TypesOfActions[0]);
+                    var logInfoUpdateExam = _logger.GenerateLogInformation(this.User.Identity.Name, this.ControllerContext.RouteData.Values["action"].ToString(), LogTypeOfAction.TypesOfActions[1], LogDescriptionOfAction.DescriptionOfActions["updateExam"]);
+                    var logInfoUpdateExamResults = _logger.GenerateLogInformation(this.User.Identity.Name, this.ControllerContext.RouteData.Values["action"].ToString(), LogTypeOfAction.TypesOfActions[1], LogDescriptionOfAction.DescriptionOfActions["updateExamResult"]);
+
+                    var logInfoAddExamResults = _logger.GenerateLogInformation(this.User.Identity.Name, this.ControllerContext.RouteData.Values["action"].ToString(), LogTypeOfAction.TypesOfActions[0], LogDescriptionOfAction.DescriptionOfActions["addExamResult"]);
 
                     if (usersExamsResultsToAdd.Count() == 0 && usersExamsResultsToUpdate.Count() == 0 && exam.MaxAmountOfPointsToEarn == markedExamViewModel.MaxAmountOfPointsToEarn)
                     {
@@ -1067,22 +1069,22 @@ namespace Certification_System.Controllers
                         exam.MaxAmountOfPointsToEarn = markedExamViewModel.MaxAmountOfPointsToEarn;
                         _context.examRepository.SetMaxAmountOfPointsToEarn(markedExamViewModel.ExamIdentificator, markedExamViewModel.MaxAmountOfPointsToEarn);
 
-                        _logger.AddExamLog(exam, logInfo);
+                        _logger.AddExamLog(exam, logInfoUpdateExam);
                     }
 
                     if (usersExamsResultsToUpdate.Count() != 0)
                     {
                         _context.examResultRepository.UpdateExamsResults(usersExamsResultsToUpdate);
-                        _logger.AddExamsResultsLogs(usersExamsResultsToUpdate, logInfo);
+                        _logger.AddExamsResultsLogs(usersExamsResultsToUpdate, logInfoUpdateExamResults);
 
-                        _logger.AddExamLog(exam, logInfo);
+                        //_logger.AddExamLog(exam, logInfoUpdateExamsListOfResults);
                     }
                     if (usersExamsResultsToAdd.Count() != 0)
                     {
                         _context.examResultRepository.AddExamsResults(usersExamsResultsToAdd);
                         _context.examRepository.AddExamsResultsToExam(exam.ExamIdentificator, usersExamsResultsToAdd.Select(z => z.ExamResultIdentificator).ToList());
 
-                        _logger.AddExamsResultsLogs(usersExamsResultsToAdd, logAdd);
+                        _logger.AddExamsResultsLogs(usersExamsResultsToAdd, logInfoAddExamResults);
                     }
                 }
 
@@ -1218,14 +1220,14 @@ namespace Certification_System.Controllers
 
             if (ModelState.IsValid && _keyGenerator.ValidateUserTokenForEntityDeletion(user, examResultToDelete.Code))
             {
-                var logInfoDelete = _logger.GenerateLogInformation(this.User.Identity.Name, this.ControllerContext.RouteData.Values["action"].ToString(), LogTypeOfAction.TypesOfActions[2]);
-                var logInfoUpdate = _logger.GenerateLogInformation(this.User.Identity.Name, this.ControllerContext.RouteData.Values["action"].ToString(), LogTypeOfAction.TypesOfActions[1]);
+                var logInfoDeleteExamResult = _logger.GenerateLogInformation(this.User.Identity.Name, this.ControllerContext.RouteData.Values["action"].ToString(), LogTypeOfAction.TypesOfActions[2], LogDescriptionOfAction.DescriptionOfActions["deleteExamResult"]);
+                var logInfoUpdateExam = _logger.GenerateLogInformation(this.User.Identity.Name, this.ControllerContext.RouteData.Values["action"].ToString(), LogTypeOfAction.TypesOfActions[1], LogDescriptionOfAction.DescriptionOfActions["removeExamResultFromCourse"]);
 
                 _context.examResultRepository.DeleteExamResult(examResultToDelete.EntityIdentificator);
-                _logger.AddExamResultLog(examResult, logInfoDelete);
+                _logger.AddExamResultLog(examResult, logInfoDeleteExamResult);
 
                 var updatedExam = _context.examRepository.DeleteExamResultFromExam(examResultToDelete.EntityIdentificator);
-                _logger.AddExamLog(updatedExam, logInfoUpdate);
+                _logger.AddExamLog(updatedExam, logInfoUpdateExam);
 
                 return RedirectToAction("DisplayAllExamsResults", "Exams", new { message = "Usunięto wskazany wynik z egzaminu" });
             }
@@ -1290,20 +1292,23 @@ namespace Certification_System.Controllers
 
             if (ModelState.IsValid && _keyGenerator.ValidateUserTokenForEntityDeletion(user, examToDelete.Code))
             {
-                var logInfoDelete = _logger.GenerateLogInformation(this.User.Identity.Name, this.ControllerContext.RouteData.Values["action"].ToString(), LogTypeOfAction.TypesOfActions[2]);
-                var logInfoUpdate = _logger.GenerateLogInformation(this.User.Identity.Name, this.ControllerContext.RouteData.Values["action"].ToString(), LogTypeOfAction.TypesOfActions[1]);
+                var logInfoDeleteExam = _logger.GenerateLogInformation(this.User.Identity.Name, this.ControllerContext.RouteData.Values["action"].ToString(), LogTypeOfAction.TypesOfActions[2], LogDescriptionOfAction.DescriptionOfActions["deleteExam"]);
+                var logInfoDeleteExamTerms = _logger.GenerateLogInformation(this.User.Identity.Name, this.ControllerContext.RouteData.Values["action"].ToString(), LogTypeOfAction.TypesOfActions[2], LogDescriptionOfAction.DescriptionOfActions["deleteExamTerm"]);
+                var logInfoDeleteExamResults = _logger.GenerateLogInformation(this.User.Identity.Name, this.ControllerContext.RouteData.Values["action"].ToString(), LogTypeOfAction.TypesOfActions[2], LogDescriptionOfAction.DescriptionOfActions["deleteExamResult"]);
+
+                var logInfoUpdateCourse = _logger.GenerateLogInformation(this.User.Identity.Name, this.ControllerContext.RouteData.Values["action"].ToString(), LogTypeOfAction.TypesOfActions[1], LogDescriptionOfAction.DescriptionOfActions["removeExamFromCourse"]);
 
                 _context.examRepository.DeleteExam(examToDelete.EntityIdentificator);
-                _logger.AddExamLog(exam, logInfoDelete);
+                _logger.AddExamLog(exam, logInfoDeleteExam);
 
                 var deletedExamsTerms = _context.examTermRepository.DeleteExamsTerms(exam.ExamTerms);
-                _logger.AddExamsTermsLogs(deletedExamsTerms, logInfoDelete);
+                _logger.AddExamsTermsLogs(deletedExamsTerms, logInfoDeleteExamTerms);
 
                 var deletedExamsResults = _context.examResultRepository.DeleteExamsResults(exam.ExamResults);
-                _logger.AddExamsResultsLogs(deletedExamsResults, logInfoDelete);
+                _logger.AddExamsResultsLogs(deletedExamsResults, logInfoDeleteExamResults);
 
                 var updatedCourse = _context.courseRepository.DeleteExamFromCourse(examToDelete.EntityIdentificator);
-                _logger.AddCourseLog(updatedCourse, logInfoUpdate);
+                _logger.AddCourseLog(updatedCourse, logInfoUpdateCourse);
 
                 return RedirectToAction("DisplayAllExams", "Exams", new { message = "Usunięto wskazany egzamin" });
             }
@@ -1398,8 +1403,10 @@ namespace Certification_System.Controllers
             {
                 exam = _context.examRepository.DeleteUserFromExam(user.Id, exam.ExamIdentificator);
 
-                var logInfo = _logger.GenerateLogInformation(this.User.Identity.Name, this.ControllerContext.RouteData.Values["action"].ToString(), LogTypeOfAction.TypesOfActions[1]);
-                _logger.AddExamLog(exam, logInfo);
+                var logInfoDeleteUserFromExam = _logger.GenerateLogInformation(this.User.Identity.Name, this.ControllerContext.RouteData.Values["action"].ToString(), LogTypeOfAction.TypesOfActions[1], LogDescriptionOfAction.DescriptionOfActions["removeUserFromExam"]);
+                var logInfoDeleteUserFromExamTerm = _logger.GenerateLogInformation(this.User.Identity.Name, this.ControllerContext.RouteData.Values["action"].ToString(), LogTypeOfAction.TypesOfActions[1], LogDescriptionOfAction.DescriptionOfActions["removeUserFromExamTerm"]);
+
+                _logger.AddExamLog(exam, logInfoDeleteUserFromExam);
 
                 if (exam.ExamDividedToTerms)
                 {
@@ -1408,7 +1415,7 @@ namespace Certification_System.Controllers
 
                     userExamTerm = _context.examTermRepository.DeleteUserFromExamTerm(userExamTerm.ExamTermIdentificator, user.Id);
 
-                    _logger.AddExamTermLog(userExamTerm, logInfo);
+                    _logger.AddExamTermLog(userExamTerm, logInfoDeleteUserFromExamTerm);
                 }
             }
 
@@ -1495,7 +1502,8 @@ namespace Certification_System.Controllers
 
                 if (exam.EnrolledUsers.Count() < exam.UsersLimit)
                 {
-                    var logInfo = _logger.GenerateLogInformation(this.User.Identity.Name, this.ControllerContext.RouteData.Values["action"].ToString(), LogTypeOfAction.TypesOfActions[1]);
+                    var logInfoAssignUserToExam = _logger.GenerateLogInformation(this.User.Identity.Name, this.ControllerContext.RouteData.Values["action"].ToString(), LogTypeOfAction.TypesOfActions[1], LogDescriptionOfAction.DescriptionOfActions["assignUserToExam"]);
+                    var logInfoAssignUserToExamTerm = _logger.GenerateLogInformation(this.User.Identity.Name, this.ControllerContext.RouteData.Values["action"].ToString(), LogTypeOfAction.TypesOfActions[1], LogDescriptionOfAction.DescriptionOfActions["assignUserToExamTerm"]);
 
                     if (assignToExamViewModel.SelectedExamTerm != "00000000" && exam.ExamTerms.Contains(assignToExamViewModel.SelectedExamTerm))
                     {
@@ -1506,7 +1514,7 @@ namespace Certification_System.Controllers
                             examTerm.EnrolledUsers.Add(user.Id);
                             _context.examTermRepository.AddUserToExamTerm(assignToExamViewModel.SelectedExamTerm, user.Id);
 
-                            _logger.AddExamTermLog(examTerm, logInfo);
+                            _logger.AddExamTermLog(examTerm, logInfoAssignUserToExamTerm);
                         }
                         else
                         {
@@ -1519,7 +1527,7 @@ namespace Certification_System.Controllers
                     exam.EnrolledUsers.Add(user.Id);
                     _context.examRepository.AddUserToExam(assignToExamViewModel.SelectedExamPeriod, user.Id);
 
-                    _logger.AddExamLog(exam, logInfo);
+                    _logger.AddExamLog(exam, logInfoAssignUserToExam);
 
                     return RedirectToAction("WorkerCourseDetails", "Courses", new { courseIdentificator = course.CourseIdentificator, message = "Zostałeś zapisany na wybrany egzamin" });
                 }
@@ -1551,12 +1559,12 @@ namespace Certification_System.Controllers
 
                 if (exam.EnrolledUsers.Count() < exam.UsersLimit)
                 {
-                    var logInfo = _logger.GenerateLogInformation(this.User.Identity.Name, this.ControllerContext.RouteData.Values["action"].ToString(), LogTypeOfAction.TypesOfActions[1]);
+                    var logInfoAssignUserToExam = _logger.GenerateLogInformation(this.User.Identity.Name, this.ControllerContext.RouteData.Values["action"].ToString(), LogTypeOfAction.TypesOfActions[1], LogDescriptionOfAction.DescriptionOfActions["assignUserToExam"]);
 
                     exam.EnrolledUsers.Add(user.Id);
                     _context.examRepository.AddUserToExam(exam.ExamIdentificator, user.Id);
 
-                    _logger.AddExamLog(exam, logInfo);
+                    _logger.AddExamLog(exam, logInfoAssignUserToExam);
 
                     var course = _context.courseRepository.GetCourseByExamId(exam.ExamIdentificator);
 
@@ -1614,7 +1622,8 @@ namespace Certification_System.Controllers
 
                 if (exam.EnrolledUsers.Count() < exam.UsersLimit)
                 {
-                    var logInfo = _logger.GenerateLogInformation(this.User.Identity.Name, this.ControllerContext.RouteData.Values["action"].ToString(), LogTypeOfAction.TypesOfActions[1]);
+                    var logInfoAssignUserToExam = _logger.GenerateLogInformation(this.User.Identity.Name, this.ControllerContext.RouteData.Values["action"].ToString(), LogTypeOfAction.TypesOfActions[1], LogDescriptionOfAction.DescriptionOfActions["assignUserToExam"]);
+                    var logInfoAssignUserToExamTerm = _logger.GenerateLogInformation(this.User.Identity.Name, this.ControllerContext.RouteData.Values["action"].ToString(), LogTypeOfAction.TypesOfActions[1], LogDescriptionOfAction.DescriptionOfActions["assignUserToExamTerm"]);
 
                     var examTerm = _context.examTermRepository.GetExamTermById(assignToExamViewModel.SelectedExamTerm);
 
@@ -1623,7 +1632,7 @@ namespace Certification_System.Controllers
                         examTerm.EnrolledUsers.Add(user.Id);
                         _context.examTermRepository.AddUserToExamTerm(assignToExamViewModel.SelectedExamTerm, user.Id);
 
-                        _logger.AddExamTermLog(examTerm, logInfo);
+                        _logger.AddExamTermLog(examTerm, logInfoAssignUserToExamTerm);
                     }
                     else
                     {
@@ -1635,7 +1644,7 @@ namespace Certification_System.Controllers
                     exam.EnrolledUsers.Add(user.Id);
                     _context.examRepository.AddUserToExam(assignToExamViewModel.SelectedExamPeriod, user.Id);
 
-                    _logger.AddExamLog(exam, logInfo);
+                    _logger.AddExamLog(exam, logInfoAssignUserToExam);
 
                     return RedirectToAction("WorkerCourseDetails", "Courses", new { courseIdentificator = course.CourseIdentificator, message = "Zostałeś zapisany na wybrany egzamin" });
                 }

@@ -107,7 +107,7 @@ namespace Certification_System.Repository
             return resultListOfDegrees;
         }
 
-        public ICollection<Degree> DeleteCertificateFromDegrees(string certificateIdentificator)
+        public ICollection<Degree> DeleteRequiredCertificateFromDegrees(string certificateIdentificator)
         {
             var filter = Builders<Degree>.Filter.Where(z => z.RequiredCertificates.Contains(certificateIdentificator));
             var update = Builders<Degree>.Update.Pull(x => x.RequiredCertificates, certificateIdentificator);

@@ -17,7 +17,7 @@ namespace Certification_System.RepositoryInterfaces
         ICollection<SelectListItem> GetUsersAsSelectList();
         void AddUserCertificate(string userIdentificator, string givenCertificateIdentificator);
         CertificationPlatformUser GetUserByGivenCertificateId(string givenCertificateIdentificator);
-        ICollection<CertificationPlatformUser> GetUsersByGivenCertificateId(ICollection<string> givenCertificatesIdentificators);
+        ICollection<CertificationPlatformUser> GetUsersByGivenCertificatesId(ICollection<string> givenCertificatesIdentificators);
         ICollection<SelectListItem> GetExaminersAsSelectList();
         ICollection<CertificationPlatformUser> GetUsersConnectedToCompany(string companyIdentificator);
         ICollection<CertificationPlatformUser> GetUsersByDegreeId(ICollection<string> degreeIdentificators);
@@ -39,5 +39,6 @@ namespace Certification_System.RepositoryInterfaces
         ICollection<CertificationPlatformUser> DeleteCourseFromUsers(string courseIdentificator);
         void DeleteUser(string userIdentificator);
         List<SelectListItem> GenerateSelectList(ICollection<string> usersIdentificators);
+        ICollection<CertificationPlatformUser> GetUsersByGivenDegreesId(ICollection<string> givenDegreesIdentificators);
     }
 }

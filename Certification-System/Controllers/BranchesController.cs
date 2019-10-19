@@ -84,7 +84,7 @@ namespace Certification_System.Controllers
 
                 _context.branchRepository.AddBranch(branch);
 
-                var logInfo = _logger.GenerateLogInformation(this.User.Identity.Name, this.ControllerContext.RouteData.Values["action"].ToString(), LogTypeOfAction.TypesOfActions[0]);
+                var logInfo = _logger.GenerateLogInformation(this.User.Identity.Name, this.ControllerContext.RouteData.Values["action"].ToString(), LogTypeOfAction.TypesOfActions[0], LogDescriptionOfAction.DescriptionOfActions["addBranch"]);
                 _logger.AddBranchLog(branch, logInfo);
 
                 return RedirectToAction("ConfirmationOfActionOnBranch", "Branches", new { branchIdentificator = branch.BranchIdentificator, typeOfAction = "Add" });
@@ -117,7 +117,7 @@ namespace Certification_System.Controllers
 
                 _context.branchRepository.UpdateBranch(originBranch);
 
-                var logInfo = _logger.GenerateLogInformation(this.User.Identity.Name, this.ControllerContext.RouteData.Values["action"].ToString(), LogTypeOfAction.TypesOfActions[1]);
+                var logInfo = _logger.GenerateLogInformation(this.User.Identity.Name, this.ControllerContext.RouteData.Values["action"].ToString(), LogTypeOfAction.TypesOfActions[1], LogDescriptionOfAction.DescriptionOfActions["updateBranch"]);
                 _logger.AddBranchLog(originBranch, logInfo);
 
                 return RedirectToAction("ConfirmationOfActionOnBranch", "Branches", new { branchIdentificator = originBranch.BranchIdentificator, typeOfAction = "Update" });
@@ -185,19 +185,22 @@ namespace Certification_System.Controllers
             {
                 _context.branchRepository.DeleteBranch(branchToDelete.EntityIdentificator);
 
-                var logInfo = _logger.GenerateLogInformation(this.User.Identity.Name, this.ControllerContext.RouteData.Values["action"].ToString(), LogTypeOfAction.TypesOfActions[2]);
-                var logInfoUpdate = _logger.GenerateLogInformation(this.User.Identity.Name, this.ControllerContext.RouteData.Values["action"].ToString(), LogTypeOfAction.TypesOfActions[1]);
+                var logInfoDeleteBranch = _logger.GenerateLogInformation(this.User.Identity.Name, this.ControllerContext.RouteData.Values["action"].ToString(), LogTypeOfAction.TypesOfActions[2], LogDescriptionOfAction.DescriptionOfActions["deleteBranch"]);
 
-                _logger.AddBranchLog(branch, logInfo);
+                var logInfoUpdateCertificate = _logger.GenerateLogInformation(this.User.Identity.Name, this.ControllerContext.RouteData.Values["action"].ToString(), LogTypeOfAction.TypesOfActions[1], LogDescriptionOfAction.DescriptionOfActions["updateCertificate"]);
+                var logInfoUpdateDegree = _logger.GenerateLogInformation(this.User.Identity.Name, this.ControllerContext.RouteData.Values["action"].ToString(), LogTypeOfAction.TypesOfActions[1], LogDescriptionOfAction.DescriptionOfActions["updateDegree"]);
+                var logInfoUpdateCourse = _logger.GenerateLogInformation(this.User.Identity.Name, this.ControllerContext.RouteData.Values["action"].ToString(), LogTypeOfAction.TypesOfActions[1], LogDescriptionOfAction.DescriptionOfActions["updateCourse"]);
+
+                _logger.AddBranchLog(branch, logInfoDeleteBranch);
 
                 var updatedCourses = _context.courseRepository.DeleteBranchFromCourses(branch.BranchIdentificator);
-                _logger.AddCoursesLogs(updatedCourses, logInfoUpdate);
+                _logger.AddCoursesLogs(updatedCourses, logInfoUpdateCourse);
 
                 var updatedCertificates = _context.certificateRepository.DeleteBranchFromCertificates(branch.BranchIdentificator);
-                _logger.AddCertificatesLogs(updatedCertificates, logInfoUpdate);
+                _logger.AddCertificatesLogs(updatedCertificates, logInfoUpdateCertificate);
 
                 var updatedDegrees = _context.degreeRepository.DeleteBranchFromDegrees(branch.BranchIdentificator);
-                _logger.AddDegreesLogs(updatedDegrees, logInfoUpdate);
+                _logger.AddDegreesLogs(updatedDegrees, logInfoUpdateDegree);
 
                 return RedirectToAction("DisplayAllBranches", "Branches", new { message = "Usunięto wskazany obszar certyfikacji" });
             }

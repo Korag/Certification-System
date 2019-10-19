@@ -144,7 +144,7 @@ namespace Certification_System.Controllers
                     var emailToSend = _emailSender.GenerateEmailMessage(user.Email, user.FirstName + " " + user.LastName, "setPassword", callbackUrl);
                     await _emailSender.SendEmailAsync(emailToSend);
 
-                    var logInfo = _logger.GenerateLogInformation(this.User.Identity.Name, this.ControllerContext.RouteData.Values["action"].ToString(), LogTypeOfAction.TypesOfActions[0]);
+                    var logInfo = _logger.GenerateLogInformation(this.User.Identity.Name, this.ControllerContext.RouteData.Values["action"].ToString(), LogTypeOfAction.TypesOfActions[0], LogDescriptionOfAction.DescriptionOfActions["addUser"]);
                     _logger.AddUserLog(user, logInfo);
 
                     return RedirectToAction("ConfirmationOfActionOnUser", "Users", new { userIdentificator = user.Id, TypeOfAction = "Add" });
@@ -213,7 +213,7 @@ namespace Certification_System.Controllers
 
                 var updatedUser = _context.userRepository.GetUserById(originUser.Id);
 
-                var logInfo = _logger.GenerateLogInformation(this.User.Identity.Name, this.ControllerContext.RouteData.Values["action"].ToString(), LogTypeOfAction.TypesOfActions[1]);
+                var logInfo = _logger.GenerateLogInformation(this.User.Identity.Name, this.ControllerContext.RouteData.Values["action"].ToString(), LogTypeOfAction.TypesOfActions[1], LogDescriptionOfAction.DescriptionOfActions["updateUser"]);
                 _logger.AddUserLog(updatedUser, logInfo);
 
                 return RedirectToAction("ConfirmationOfActionOnUser", "Users", new { userIdentificator = originUser.Id, TypeOfAction = "Update" });
@@ -738,32 +738,39 @@ namespace Certification_System.Controllers
 
             if (ModelState.IsValid && _keyGenerator.ValidateUserTokenForEntityDeletion(user, userToDelete.Code))
             {
-                var logInfoDelete = _logger.GenerateLogInformation(this.User.Identity.Name, this.ControllerContext.RouteData.Values["action"].ToString(), LogTypeOfAction.TypesOfActions[2]);
-                var logInfoUpdate = _logger.GenerateLogInformation(this.User.Identity.Name, this.ControllerContext.RouteData.Values["action"].ToString(), LogTypeOfAction.TypesOfActions[1]);
+                var logInfoDeleteUser = _logger.GenerateLogInformation(this.User.Identity.Name, this.ControllerContext.RouteData.Values["action"].ToString(), LogTypeOfAction.TypesOfActions[2], LogDescriptionOfAction.DescriptionOfActions["deleteUser"]);
+                var logInfoDeleteGivenDegrees = _logger.GenerateLogInformation(this.User.Identity.Name, this.ControllerContext.RouteData.Values["action"].ToString(), LogTypeOfAction.TypesOfActions[2], LogDescriptionOfAction.DescriptionOfActions["deleteGivenDegree"]);
+                var logInfoDeleteGivenCertificates = _logger.GenerateLogInformation(this.User.Identity.Name, this.ControllerContext.RouteData.Values["action"].ToString(), LogTypeOfAction.TypesOfActions[2], LogDescriptionOfAction.DescriptionOfActions["deleteGivenCertificate"]);
+                var logInfoDeleteExamsResults = _logger.GenerateLogInformation(this.User.Identity.Name, this.ControllerContext.RouteData.Values["action"].ToString(), LogTypeOfAction.TypesOfActions[2], LogDescriptionOfAction.DescriptionOfActions["deleteExamResult"]);
+
+                var logInfoUpdateCourse = _logger.GenerateLogInformation(this.User.Identity.Name, this.ControllerContext.RouteData.Values["action"].ToString(), LogTypeOfAction.TypesOfActions[1], LogDescriptionOfAction.DescriptionOfActions["removeUserFromCourse"]);
+                var logInfoUpdateMeetings = _logger.GenerateLogInformation(this.User.Identity.Name, this.ControllerContext.RouteData.Values["action"].ToString(), LogTypeOfAction.TypesOfActions[1], LogDescriptionOfAction.DescriptionOfActions["removeUserFromMeeting"]);
+                var logInfoUpdateExams = _logger.GenerateLogInformation(this.User.Identity.Name, this.ControllerContext.RouteData.Values["action"].ToString(), LogTypeOfAction.TypesOfActions[1], LogDescriptionOfAction.DescriptionOfActions["removeUserFromExam"]);
+                var logInfoUpdateExamsTerms = _logger.GenerateLogInformation(this.User.Identity.Name, this.ControllerContext.RouteData.Values["action"].ToString(), LogTypeOfAction.TypesOfActions[1], LogDescriptionOfAction.DescriptionOfActions["removeUserFromExamTerm"]);
 
                 _context.userRepository.DeleteUser(userToDelete.EntityIdentificator);
-                _logger.AddUserLog(userToDeleteModel, logInfoDelete);
+                _logger.AddUserLog(userToDeleteModel, logInfoDeleteUser);
 
                 var deletedGivenCertificates = _context.givenCertificateRepository.DeleteGivenCertificates(userToDeleteModel.GivenCertificates);
-                _logger.AddGivenCertificatesLogs(deletedGivenCertificates, logInfoDelete);
+                _logger.AddGivenCertificatesLogs(deletedGivenCertificates, logInfoDeleteGivenCertificates);
 
                 var deletedGivenDegrees = _context.givenDegreeRepository.DeleteGivenDegrees(userToDeleteModel.GivenDegrees);
-                _logger.AddGivenDegreesLogs(deletedGivenDegrees, logInfoDelete);
+                _logger.AddGivenDegreesLogs(deletedGivenDegrees, logInfoDeleteGivenDegrees);
 
                 var updatedCourses = _context.courseRepository.DeleteUserFromCourses(userToDeleteModel.Courses);
-                _logger.AddCoursesLogs(updatedCourses, logInfoUpdate);
+                _logger.AddCoursesLogs(updatedCourses, logInfoUpdateCourse);
 
                 var updatedMeetings = _context.meetingRepository.DeleteUserFromMeetings(userToDeleteModel.Id, updatedCourses.SelectMany(z => z.Meetings).ToList());
-                _logger.AddMeetingsLogs(updatedMeetings, logInfoUpdate);
+                _logger.AddMeetingsLogs(updatedMeetings, logInfoUpdateMeetings);
 
                 var updatedExams = _context.examRepository.DeleteUserFromExams(userToDeleteModel.Id, updatedCourses.SelectMany(z => z.Exams).ToList());
-                _logger.AddExamsLogs(updatedExams, logInfoUpdate);
+                _logger.AddExamsLogs(updatedExams, logInfoUpdateExams);
 
                 var updatedExamsTerms = _context.examTermRepository.DeleteUserFromExamsTerms(userToDeleteModel.Id, updatedExams.SelectMany(z => z.ExamTerms).ToList());
-                _logger.AddExamsTermsLogs(updatedExamsTerms, logInfoUpdate);
+                _logger.AddExamsTermsLogs(updatedExamsTerms, logInfoUpdateExamsTerms);
 
                 var deletedExamsResults = _context.examResultRepository.DeleteExamsResultsByUserId(userToDelete.EntityIdentificator);
-                _logger.AddExamsResultsLogs(deletedExamsResults, logInfoDelete);
+                _logger.AddExamsResultsLogs(deletedExamsResults, logInfoDeleteExamsResults);
 
                 return RedirectToAction("DisplayAllUsers", "Users", new { message = "Usunięto wskazanego użytkownika systemu" });
             }

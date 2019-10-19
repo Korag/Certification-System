@@ -108,13 +108,13 @@ namespace Certification_System.Controllers
                 _context.givenCertificateRepository.AddGivenCertificate(givenCertificate);
                 _context.userRepository.AddUserCertificate(newGivenCertificate.SelectedUser, givenCertificate.GivenCertificateIdentificator);
 
-                var logInfoAdd = _logger.GenerateLogInformation(this.User.Identity.Name, this.ControllerContext.RouteData.Values["action"].ToString(), LogTypeOfAction.TypesOfActions[0]);
-                _logger.AddGivenCertificateLog(givenCertificate, logInfoAdd);
+                var logInfoAddGivenCertificate = _logger.GenerateLogInformation(this.User.Identity.Name, this.ControllerContext.RouteData.Values["action"].ToString(), LogTypeOfAction.TypesOfActions[0], LogDescriptionOfAction.DescriptionOfActions["addGivenCertificate"]);
+                _logger.AddGivenCertificateLog(givenCertificate, logInfoAddGivenCertificate);
 
                 var user = _context.userRepository.GetUserById(newGivenCertificate.SelectedUser);
 
-                var logInfoUpdate = _logger.GenerateLogInformation(this.User.Identity.Name, this.ControllerContext.RouteData.Values["action"].ToString(), LogTypeOfAction.TypesOfActions[1]);
-                _logger.AddUserLog(user, logInfoUpdate);
+                var logInfoUpdateUser = _logger.GenerateLogInformation(this.User.Identity.Name, this.ControllerContext.RouteData.Values["action"].ToString(), LogTypeOfAction.TypesOfActions[1], LogDescriptionOfAction.DescriptionOfActions["addUserGivenCertificate"]);
+                _logger.AddUserLog(user, logInfoUpdateUser);
 
                 return RedirectToAction("ConfirmationOfActionOnGivenCertificate", new { givenCertificateIdentificator = givenCertificate.GivenCertificateIdentificator, TypeOfAction = "Add" });
             }
@@ -184,8 +184,8 @@ namespace Certification_System.Controllers
                 originGivenCertificate = _mapper.Map<EditGivenCertificateViewModel, GivenCertificate>(editedGivenCertificate, originGivenCertificate);
                 _context.givenCertificateRepository.UpdateGivenCertificate(originGivenCertificate);
 
-                var logInfo = _logger.GenerateLogInformation(this.User.Identity.Name, this.ControllerContext.RouteData.Values["action"].ToString(), LogTypeOfAction.TypesOfActions[0]);
-                _logger.AddGivenCertificateLog(originGivenCertificate, logInfo);
+                var logInfoUpdateGivenCertificate = _logger.GenerateLogInformation(this.User.Identity.Name, this.ControllerContext.RouteData.Values["action"].ToString(), LogTypeOfAction.TypesOfActions[1], LogDescriptionOfAction.DescriptionOfActions["updateGivenCertificate"]);
+                _logger.AddGivenCertificateLog(originGivenCertificate, logInfoUpdateGivenCertificate);
 
                 return RedirectToAction("ConfirmationOfActionOnGivenCertificate", "GivenCertificates", new { givenCertificateIdentificator = originGivenCertificate.GivenCertificateIdentificator, TypeOfAction = "Update" });
             }
@@ -332,14 +332,13 @@ namespace Certification_System.Controllers
 
             if (ModelState.IsValid && _keyGenerator.ValidateUserTokenForEntityDeletion(user, givenCertificateToDelete.Code))
             {
-                var logInfo = _logger.GenerateLogInformation(this.User.Identity.Name, this.ControllerContext.RouteData.Values["action"].ToString(), LogTypeOfAction.TypesOfActions[2]);
-                var logInfoUpdate = _logger.GenerateLogInformation(this.User.Identity.Name, this.ControllerContext.RouteData.Values["action"].ToString(), LogTypeOfAction.TypesOfActions[1]);
-
+                var logInfoDeleteGivenCertificate = _logger.GenerateLogInformation(this.User.Identity.Name, this.ControllerContext.RouteData.Values["action"].ToString(), LogTypeOfAction.TypesOfActions[2], LogDescriptionOfAction.DescriptionOfActions["deleteGivenCertificate"]);
                 _context.givenCertificateRepository.DeleteGivenCertificate(givenCertificateToDelete.EntityIdentificator);
-                _logger.AddGivenCertificateLog(givenCertificate, logInfo);
+                _logger.AddGivenCertificateLog(givenCertificate, logInfoDeleteGivenCertificate);
 
+                var logInfoUpdateUser = _logger.GenerateLogInformation(this.User.Identity.Name, this.ControllerContext.RouteData.Values["action"].ToString(), LogTypeOfAction.TypesOfActions[1], LogDescriptionOfAction.DescriptionOfActions["deleteUserGivenCertificate"]);
                 var updatedUser = _context.userRepository.DeleteUserGivenCertificate(givenCertificateToDelete.EntityIdentificator);
-                _logger.AddUserLog(updatedUser, logInfoUpdate);
+                _logger.AddUserLog(updatedUser, logInfoUpdateUser);
 
                 return RedirectToAction("DisplayAllGivenCertificates", "GivenCertificates", new { message = "Usunięto wskazany nadany certyfikat" });
             }

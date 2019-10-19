@@ -62,8 +62,8 @@ namespace Certification_System.Controllers
                 originGivenDegree = _mapper.Map<EditGivenDegreeViewModel, GivenDegree>(editedGivenDegree, originGivenDegree);
                 _context.givenDegreeRepository.UpdateGivenDegree(originGivenDegree);
 
-                var logInfo = _logger.GenerateLogInformation(this.User.Identity.Name, this.ControllerContext.RouteData.Values["action"].ToString(), LogTypeOfAction.TypesOfActions[1]);
-                _logger.AddGivenDegreeLog(originGivenDegree, logInfo);
+                var logInfoUpdateGivenDegree = _logger.GenerateLogInformation(this.User.Identity.Name, this.ControllerContext.RouteData.Values["action"].ToString(), LogTypeOfAction.TypesOfActions[1], LogDescriptionOfAction.DescriptionOfActions["updateGivenDegree"]);
+                _logger.AddGivenDegreeLog(originGivenDegree, logInfoUpdateGivenDegree);
 
                 return RedirectToAction("ConfirmationOfActionOnGivenDegree", "GivenDegrees", new { givenDegreeIdentificator = originGivenDegree.GivenDegreeIdentificator, TypeOfAction = "Update" });
             }
@@ -158,13 +158,13 @@ namespace Certification_System.Controllers
                 _context.givenDegreeRepository.AddGivenDegree(givenDegree);
                 _context.userRepository.AddUserDegree(newGivenDegree.SelectedUser, givenDegree.GivenDegreeIdentificator);
 
-                var logInfoAdd = _logger.GenerateLogInformation(this.User.Identity.Name, this.ControllerContext.RouteData.Values["action"].ToString(), LogTypeOfAction.TypesOfActions[0]);
-                _logger.AddGivenDegreeLog(givenDegree, logInfoAdd);
+                var logInfoAddGivenDegree = _logger.GenerateLogInformation(this.User.Identity.Name, this.ControllerContext.RouteData.Values["action"].ToString(), LogTypeOfAction.TypesOfActions[0], LogDescriptionOfAction.DescriptionOfActions["addGivenDegree"]);
+                _logger.AddGivenDegreeLog(givenDegree, logInfoAddGivenDegree);
 
                 var user = _context.userRepository.GetUserById(newGivenDegree.SelectedUser);
 
-                var logInfoUpdate = _logger.GenerateLogInformation(this.User.Identity.Name, this.ControllerContext.RouteData.Values["action"].ToString(), LogTypeOfAction.TypesOfActions[0]);
-                _logger.AddUserLog(user, logInfoUpdate);
+                var logInfoUpdateUser = _logger.GenerateLogInformation(this.User.Identity.Name, this.ControllerContext.RouteData.Values["action"].ToString(), LogTypeOfAction.TypesOfActions[1], LogDescriptionOfAction.DescriptionOfActions["addUserGivenDegree"]);
+                _logger.AddUserLog(user, logInfoUpdateUser);
 
                 return RedirectToAction("ConfirmationOfActionOnGivenDegree", new { givenDegreeIdentificator = givenDegree.GivenDegreeIdentificator, TypeOfAction = "Add" });
             }
@@ -329,14 +329,14 @@ namespace Certification_System.Controllers
 
             if (ModelState.IsValid && _keyGenerator.ValidateUserTokenForEntityDeletion(user, givenDegreeToDelete.Code))
             {
-                var logInfo = _logger.GenerateLogInformation(this.User.Identity.Name, this.ControllerContext.RouteData.Values["action"].ToString(), LogTypeOfAction.TypesOfActions[2]);
-                var logInfoUpdate = _logger.GenerateLogInformation(this.User.Identity.Name, this.ControllerContext.RouteData.Values["action"].ToString(), LogTypeOfAction.TypesOfActions[1]);
+                var logInfoDeleteGivenDegree = _logger.GenerateLogInformation(this.User.Identity.Name, this.ControllerContext.RouteData.Values["action"].ToString(), LogTypeOfAction.TypesOfActions[2], LogDescriptionOfAction.DescriptionOfActions["deleteGivenDegree"]);
+                var logInfoUpdateUser = _logger.GenerateLogInformation(this.User.Identity.Name, this.ControllerContext.RouteData.Values["action"].ToString(), LogTypeOfAction.TypesOfActions[1], LogDescriptionOfAction.DescriptionOfActions["deleteUserGivenDegree"]);
 
                 _context.givenDegreeRepository.DeleteGivenDegree(givenDegreeToDelete.EntityIdentificator);
-                _logger.AddGivenDegreeLog(givenDegree, logInfo);
+                _logger.AddGivenDegreeLog(givenDegree, logInfoDeleteGivenDegree);
 
                 var updatedUser = _context.userRepository.DeleteUserGivenDegree(givenDegreeToDelete.EntityIdentificator);
-                _logger.AddUserLog(updatedUser, logInfoUpdate);
+                _logger.AddUserLog(updatedUser, logInfoUpdateUser);
 
                 return RedirectToAction("DisplayAllGivenDegrees", "GivenDegrees", new { message = "Usunięto wskazany nadany stopień zawodowy" });
             }

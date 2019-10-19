@@ -82,7 +82,7 @@ namespace Certification_System.Controllers
 
                 _context.companyRepository.AddCompany(company);
 
-                var logInfo = _logger.GenerateLogInformation(this.User.Identity.Name, this.ControllerContext.RouteData.Values["action"].ToString(), LogTypeOfAction.TypesOfActions[0]);
+                var logInfo = _logger.GenerateLogInformation(this.User.Identity.Name, this.ControllerContext.RouteData.Values["action"].ToString(), LogTypeOfAction.TypesOfActions[0], LogDescriptionOfAction.DescriptionOfActions["addCompany"]);
                 _logger.AddCompanyLog(company, logInfo);
 
                 return RedirectToAction("ConfirmationOfActionOnCompany", new { companyIdentificator = company.CompanyIdentificator, TypeOfAction = "Add" });
@@ -111,7 +111,7 @@ namespace Certification_System.Controllers
                 Company company = _mapper.Map<Company>(editedCompany);
                 _context.companyRepository.UpdateCompany(company);
 
-                var logInfo = _logger.GenerateLogInformation(this.User.Identity.Name, this.ControllerContext.RouteData.Values["action"].ToString(), LogTypeOfAction.TypesOfActions[1]);
+                var logInfo = _logger.GenerateLogInformation(this.User.Identity.Name, this.ControllerContext.RouteData.Values["action"].ToString(), LogTypeOfAction.TypesOfActions[1], LogDescriptionOfAction.DescriptionOfActions["updateCompany"]);
                 _logger.AddCompanyLog(company, logInfo);
 
                 return RedirectToAction("ConfirmationOfActionOnCompany", "Companies", new { companyIdentificator = editedCompany.CompanyIdentificator, TypeOfAction = "Update" });
@@ -199,14 +199,14 @@ namespace Certification_System.Controllers
 
             if (ModelState.IsValid && _keyGenerator.ValidateUserTokenForEntityDeletion(user, companyToDelete.Code))
             {
-                var logInfo = _logger.GenerateLogInformation(this.User.Identity.Name, this.ControllerContext.RouteData.Values["action"].ToString(), LogTypeOfAction.TypesOfActions[2]);
-                var logInfoUpdate = _logger.GenerateLogInformation(this.User.Identity.Name, this.ControllerContext.RouteData.Values["action"].ToString(), LogTypeOfAction.TypesOfActions[1]);
+                var logInfoDeleteCompany = _logger.GenerateLogInformation(this.User.Identity.Name, this.ControllerContext.RouteData.Values["action"].ToString(), LogTypeOfAction.TypesOfActions[2], LogDescriptionOfAction.DescriptionOfActions["deleteCompany"]);
+                var logInfoUpdateUsers = _logger.GenerateLogInformation(this.User.Identity.Name, this.ControllerContext.RouteData.Values["action"].ToString(), LogTypeOfAction.TypesOfActions[1], LogDescriptionOfAction.DescriptionOfActions["updateUsers"]);
 
                 _context.companyRepository.DeleteCompany(companyToDelete.EntityIdentificator);
-                _logger.AddCompanyLog(company, logInfo);
+                _logger.AddCompanyLog(company, logInfoDeleteCompany);
 
                 var updatedUsers = _context.userRepository.DeleteCompanyFromUsers(companyToDelete.EntityIdentificator);
-                _logger.AddUsersLogs(updatedUsers, logInfoUpdate);
+                _logger.AddUsersLogs(updatedUsers, logInfoUpdateUsers);
 
                 return RedirectToAction("DisplayAllCertificates", "Certificates", new { message = "Usunięto wskazane przedsiębiorstwo" });
             }

@@ -418,7 +418,7 @@ namespace Certification_System.Repository
             var resultCourseQueue = GetCoursesQueue().Find<CourseQueue>(filter).FirstOrDefault();
             resultCourseQueue.AwaitingUsers.Add(new CourseQueueUser { UserIdentificator = userIdentificator });
 
-            var result = GetCoursesQueue().FindOneAndUpdate(filter, update);
+            var result = GetCoursesQueue().UpdateOne(filter, update);
 
             return resultCourseQueue;
         }

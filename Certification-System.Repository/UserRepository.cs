@@ -291,7 +291,7 @@ namespace Certification_System.Repository
 
             var result = _users.UpdateOne(filter, update);
 
-            return resultUser;      
+            return resultUser;
         }
 
         public ICollection<CertificationPlatformUser> AddUsersToCourse(string courseIdentificator, ICollection<string> usersIdentificators)
@@ -300,7 +300,7 @@ namespace Certification_System.Repository
             var update = Builders<CertificationPlatformUser>.Update.AddToSet(x => x.Courses, courseIdentificator);
 
             var resultListOfUsers = GetUsers().Find<CertificationPlatformUser>(filter).ToList();
-            resultListOfUsers.ForEach(z=> z.Courses.Add(courseIdentificator));
+            resultListOfUsers.ForEach(z => z.Courses.Add(courseIdentificator));
 
             var result = _users.UpdateMany(filter, update);
 
@@ -315,7 +315,7 @@ namespace Certification_System.Repository
             return resultUser;
         }
 
-        public ICollection<CertificationPlatformUser> GetUsersByGivenCertificateId(ICollection<string> givenCertificatesIdentificators)
+        public ICollection<CertificationPlatformUser> GetUsersByGivenCertificatesId(ICollection<string> givenCertificatesIdentificators)
         {
             GetUsers();
             List<CertificationPlatformUser> resultListOfUsers = new List<CertificationPlatformUser>();
@@ -361,6 +361,21 @@ namespace Certification_System.Repository
             var resultUser = GetUsers().Find<CertificationPlatformUser>(filter).FirstOrDefault();
 
             return resultUser;
+        }
+
+        public ICollection<CertificationPlatformUser> GetUsersByGivenDegreesId(ICollection<string> givenDegreesIdentificators)
+        {
+            GetUsers();
+            List<CertificationPlatformUser> resultListOfUsers = new List<CertificationPlatformUser>();
+
+            foreach (var givenDegreeIdentificator in givenDegreesIdentificators)
+            {
+                var filter = Builders<CertificationPlatformUser>.Filter.Where(x => x.GivenDegrees.Contains(givenDegreeIdentificator));
+                var resultUser = _users.Find<CertificationPlatformUser>(filter).FirstOrDefault();
+                resultListOfUsers.Add(resultUser);
+            }
+
+            return resultListOfUsers;
         }
 
         public void UpdateUser(CertificationPlatformUser user)
