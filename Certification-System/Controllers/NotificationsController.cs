@@ -40,27 +40,11 @@ namespace Certification_System.Controllers
             {
                 return RedirectToAction("AdminNotificationManager", "Notifications");
             }
-            else if (this.User.IsInRole("Worker"))
+            else if (this.User.Identity.IsAuthenticated)
             {
-                return RedirectToAction("WorkerNotificationManager", "Notifications");
+                return RedirectToAction("NotificationManager", "Notifications");
             }
-            else if (this.User.IsInRole("Company"))
-            {
-                return RedirectToAction("CompanyNotificationManager", "Notifications");
-            }
-            else if (this.User.IsInRole("Instructor") && this.User.IsInRole("Examiner"))
-            {
-                return RedirectToAction("InstructorExaminerNotificationManager", "Notifications");
-            }
-            else if (this.User.IsInRole("Instructor"))
-            {
-                return RedirectToAction("InstructorNotificationManager", "Notifications");
-            }
-            else if (this.User.IsInRole("Examiner"))
-            {
-                return RedirectToAction("ExaminerNotificationManager", "Notifications");
-            }
-
+        
             return RedirectToAction("BlankMenu", "Certificates");
         }
 
@@ -120,50 +104,9 @@ namespace Certification_System.Controllers
             return View(adminNotifications);
         }
 
-        // GET: InstructorNotificationManager
-        [Authorize(Roles = "Instructor")]
-        public ActionResult InstructorNotificationManager()
-        {
-            var user = _context.userRepository.GetUserByEmail(this.User.Identity.Name);
-
-
-            return View();
-        }
-
-        // GET: ExaminerNotificationManager
-        [Authorize(Roles = "Examiner")]
-        public ActionResult ExaminerNotificationManager()
-        {
-            var user = _context.userRepository.GetUserByEmail(this.User.Identity.Name);
-
-
-            return View();
-        }
-
-        // GET: InstructorExaminerNotificationManager
-        [Authorize(Roles = "Instructor")]
-        [Authorize(Roles = "Examiner")]
-        public ActionResult InstructorExaminerNotificationManager()
-        {
-            var user = _context.userRepository.GetUserByEmail(this.User.Identity.Name);
-
-
-            return View();
-        }
-
-        // GET: CompanyNotificationManager
-        [Authorize(Roles = "Company")]
-        public ActionResult CompanyExaminerNotificationManager()
-        {
-            var user = _context.userRepository.GetUserByEmail(this.User.Identity.Name);
-
-
-            return View();
-        }
-
         // GET: NotificationManager
-        [Authorize(Roles = "Worker")]
-        public ActionResult WorkerExaminerNotificationManager()
+        [Authorize]
+        public ActionResult NotificationManager()
         {
             var user = _context.userRepository.GetUserByEmail(this.User.Identity.Name);
 
