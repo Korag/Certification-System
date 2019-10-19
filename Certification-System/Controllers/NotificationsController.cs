@@ -14,22 +14,13 @@ namespace Certification_System.Controllers
         private readonly MongoOperations _context;
 
         private readonly IMapper _mapper;
-        private readonly IKeyGenerator _keyGenerator;
-        private readonly ILogService _logger;
-        private readonly IEmailSender _emailSender;
 
         public NotificationsController(
                MongoOperations context,
-               IMapper mapper,
-               IKeyGenerator keyGenerator,
-               ILogService logger,
-               IEmailSender emailSender)
+               IMapper mapper)
         {
             _context = context;
             _mapper = mapper;
-            _keyGenerator = keyGenerator;
-            _logger = logger;
-            _emailSender = emailSender;
         }
 
         // GET: NotificationManagerHub

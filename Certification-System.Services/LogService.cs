@@ -31,7 +31,11 @@ namespace Certification_System.Services
             _keyGenerator = keyGenerator;
         }
 
-        public LogInformation GenerateLogInformation(string userEmailAddress, string actionName, string typeOfAction)
+        public LogInformation GenerateLogInformation(
+                                  string userEmailAddress,
+                                  string actionName,
+                                  string typeOfAction,
+                                  string descriptionOfAction)
         {
             var user = _userRepository.GetUserByEmail(userEmailAddress);
 
@@ -44,13 +48,19 @@ namespace Certification_System.Services
 
                 DateOfLogCreation = DateTime.Now,
                 IpAddress = _ipGetter.GetGlobalIPAddress(),
+                
                 TypeOfAction = typeOfAction,
+                DescriptionOfAction = descriptionOfAction,
 
                 ActionName = actionName,
             };
         }
 
-        public LogInformation GenerateLogInformationByUserId(string userIdentificator, string actionName, string typeOfAction)
+        public LogInformation GenerateLogInformationByUserId(
+                                    string userIdentificator,
+                                    string actionName,
+                                    string typeOfAction,
+                                    string descriptionOfAction)
         {
             var user = _userRepository.GetUserById(userIdentificator);
 
@@ -63,13 +73,20 @@ namespace Certification_System.Services
 
                 DateOfLogCreation = DateTime.Now,
                 IpAddress = _ipGetter.GetGlobalIPAddress(),
+
                 TypeOfAction = typeOfAction,
+                DescriptionOfAction = descriptionOfAction,
 
                 ActionName = actionName,
             };
         }
 
-        public PersonalLogInformation GeneratePersonalLogInformation(string userEmailAddress, string actionName, string typeOfAction, string urlToActionDetails)
+        public PersonalLogInformation GeneratePersonalLogInformation(
+                                              string userEmailAddress,
+                                              string actionName,
+                                              string typeOfAction, 
+                                              string urlToActionDetails,
+                                              string descriptionOfAction)
         {
             var user = _userRepository.GetUserByEmail(userEmailAddress);
 
@@ -82,14 +99,18 @@ namespace Certification_System.Services
 
                 DateOfLogCreation = DateTime.Now,
                 IpAddress = _ipGetter.GetGlobalIPAddress(),
+
                 TypeOfAction = typeOfAction,
+                DescriptionOfAction = descriptionOfAction,
 
                 ActionName = actionName,
                 UrlToDetailsOfAction = urlToActionDetails,
             };
         }
 
-        public UserLoginLogInformation GenerateUserLoginInformation(string userEmailAddress, string loginActionResult)
+        public UserLoginLogInformation GenerateUserLoginInformation(
+                                             string userEmailAddress, 
+                                             string loginActionResult)
         {
             var user = _userRepository.GetUserByEmail(userEmailAddress);
 
