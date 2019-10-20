@@ -103,9 +103,6 @@ namespace Certification_System.Repository
             _context.db.GetCollection<UserLoginLog>(_usersLoginLogCollectionName).InsertOne(userLoginLog);
         }
 
-
-
-
         #region PersonalUserLog
         public void AddLogToPersonalUserLogs(string userIdentificator, PersonalLogInformation logInfo)
         {

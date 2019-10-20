@@ -35,11 +35,5 @@ namespace Certification_System.ServicesInterfaces
         void AddMeetingLog(Meeting meeting, LogInformation logInfo);
         void AddMeetingsLogs(ICollection<Meeting> meetings, LogInformation logInfo);
         void AddUserLoginLog(UserLoginLogInformation logInfo);
-
-
-
-        PersonalLogInformation GeneratePersonalLogInformation(string userEmailAddress, string actionName, string typeOfAction, string urlToActionDetails, string descriptionOfAction);
-        void AddPersonalUserLog(string userIdentificator, PersonalLogInformation logInfo);
-        void AddPersonalUsersLogs(ICollection<string> usersIdentificators, PersonalLogInformation logInfo);
-    }
+     }
 }

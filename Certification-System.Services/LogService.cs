@@ -79,34 +79,7 @@ namespace Certification_System.Services
 
                 ActionName = actionName,
             };
-        }
-
-        public PersonalLogInformation GeneratePersonalLogInformation(
-                                              string userEmailAddress,
-                                              string actionName,
-                                              string typeOfAction, 
-                                              string urlToActionDetails,
-                                              string descriptionOfAction)
-        {
-            var user = _userRepository.GetUserByEmail(userEmailAddress);
-
-            return new PersonalLogInformation
-            {
-                ChangeAuthorEmail = user.Email,
-                ChangeAuthorFirstName = user.FirstName,
-                ChangeAuthorLastName = user.LastName,
-                ChangeAuthorIdentificator = user.Id,
-
-                DateOfLogCreation = DateTime.Now,
-                IpAddress = _ipGetter.GetGlobalIPAddress(),
-
-                TypeOfAction = typeOfAction,
-                DescriptionOfAction = descriptionOfAction,
-
-                ActionName = actionName,
-                UrlToDetailsOfAction = urlToActionDetails,
-            };
-        }
+        } 
 
         public UserLoginLogInformation GenerateUserLoginInformation(
                                              string userEmailAddress, 
@@ -503,35 +476,6 @@ namespace Certification_System.Services
                 };
 
                 _logRepository.AddMeetingLog(meetingLog);
-            }
-        }
-
-        public void AddPersonalUserLog(string userIdentificator, PersonalLogInformation logInfo)
-        {
-            var userLog = _personalLogRepository.GetPersonalUserLogById(userIdentificator);
-            var user = _userRepository.GetUserById(userIdentificator);
-
-            if (userLog == null)
-            {
-                _personalLogRepository.CreatePersonalUserLog(user);
-            }
-
-            _logRepository.AddLogToPersonalUserLogs(userIdentificator, logInfo);
-        }
-
-        public void AddPersonalUsersLogs(ICollection<string> usersIdentificators, PersonalLogInformation logInfo)
-        {
-            foreach (var userIdentificator in usersIdentificators)
-            {
-                var user = _userRepository.GetUserById(userIdentificator);
-                var userLog = _personalLogRepository.GetPersonalUserLogById(userIdentificator);
-
-                if (userLog == null)
-                {
-                    _personalLogRepository.CreatePersonalUserLog(user);
-                }
-
-                _logRepository.AddLogToPersonalUserLogs(userIdentificator, logInfo);
             }
         }
     }

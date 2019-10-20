@@ -1,4 +1,4 @@
-﻿namespace Certification_System.Services
+﻿namespace Certification_System.ServicesInterfaces
 {
     public interface IIPGetterService
     {
