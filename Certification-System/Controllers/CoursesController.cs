@@ -1393,7 +1393,14 @@ namespace Certification_System.Controllers
                     rejectedUser.UserIdentificator = userIdentificator;
                     rejectedUser.LogDataOfAssignToCourseQueue = userLogDataOfAssignToCourseQueueAction;
 
-                    _context.personalLogRepository.AddRejectedUserFromCourseQueueLog(rejectedUser, logInfoRemoveUserFromCourseQueue);
+                    var rejectedUserLog = new RejectedUserFromCourseQueueLog
+                    {
+                        RejectedUserFromCourseQueueLogIdentificator = "",
+                        AlteredEntity = rejectedUser,
+                        LogData = logInfoRemoveUserFromCourseQueue
+                    };
+
+                    _context.personalLogRepository.AddRejectedUserLog(rejectedUserLog);
 
                     return RedirectToAction("AdminNotificationManager", "Courses", new { message = "Zgłoszenie pracownika zostało odrzucone." });
                 }

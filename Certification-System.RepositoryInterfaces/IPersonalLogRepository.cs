@@ -13,7 +13,6 @@ namespace Certification_System.RepositoryInterfaces
         PersonalLogInformation GeneratePersonalLogInformation(string userEmailAddress, string actionName, string typeOfAction, string urlToActionDetails, string descriptionOfAction);
         void AddPersonalUserLog(string userIdentificator, PersonalLogInformation logInfo);
         void AddPersonalUsersLogs(ICollection<string> usersIdentificators, PersonalLogInformation logInfo);
-        void AddRejectedUserFromCourseQueueLog(CourseQueueWithSingleUser rejectedUser, LogInformation logInfo);
-        void AddRejectedUsersFromCourseQueueLog(ICollection<CourseQueueWithSingleUser> rejectedUsers, LogInformation logInfo);
+        void AddRejectedUserLog(RejectedUserFromCourseQueueLog rejectedUser);
     }
 }

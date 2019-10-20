@@ -20,18 +20,15 @@ namespace Certification_System.Repository
         private IMongoCollection<RejectedUserFromCourseQueueLog> _rejectedUsersLogs;
 
         private IIPGetterService _ipGetter;
-        private IKeyGenerator _keyGenerator;
 
         public PersonalLogRepository(
                      MongoContext context,
                      IUserRepository userRepository,
-                     IIPGetterService ipGetter,
-                     IKeyGenerator keyGenerator)
+                     IIPGetterService ipGetter)
         {
             _context = context;
             _userRepository = userRepository;
             _ipGetter = ipGetter;
-            _keyGenerator = keyGenerator;
         }
 
         public PersonalLogInformation GeneratePersonalLogInformation(
@@ -69,7 +66,7 @@ namespace Certification_System.Repository
             var result = _personalLogs.UpdateOne(filter, update);
         }
 
-        private void AddRejectedUserLog(RejectedUserFromCourseQueueLog rejectedUser)
+        public void AddRejectedUserLog(RejectedUserFromCourseQueueLog rejectedUser)
         {
             GetRejectedUsersLogs().InsertOne(rejectedUser);
         }
@@ -146,33 +143,6 @@ namespace Certification_System.Repository
                 }
 
                 AddLogToPersonalUserLogs(userIdentificator, logInfo);
-            }
-        }
-
-        public void AddRejectedUserFromCourseQueueLog(CourseQueueWithSingleUser rejectedUser, LogInformation logInfo)
-        {
-            var rejectedUserLog = new RejectedUserFromCourseQueueLog
-            {
-                RejectedUserFromCourseQueueLogIdentificator = _keyGenerator.GenerateNewId(),
-                AlteredEntity = rejectedUser,
-                LogData = logInfo
-            };
-
-            AddRejectedUserLog(rejectedUserLog);
-        }
-
-        public void AddRejectedUsersFromCourseQueueLog(ICollection<CourseQueueWithSingleUser> rejectedUsers, LogInformation logInfo)
-        {
-            foreach (var rejectedUser in rejectedUsers)
-            {
-                var rejectedUserLog = new RejectedUserFromCourseQueueLog
-                {
-                    RejectedUserFromCourseQueueLogIdentificator = _keyGenerator.GenerateNewId(),
-                    AlteredEntity = rejectedUser,
-                    LogData = logInfo
-                };
-
-                AddRejectedUserLog(rejectedUserLog);
             }
         }
     }
