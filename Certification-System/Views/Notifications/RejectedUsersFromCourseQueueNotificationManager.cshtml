@@ -1,0 +1,16 @@
+﻿@model IEnumerable<Certification_System.DTOViewModels.DisplayRejectedUserLog>
+
+@{
+    ViewData["Title"] = "RejectedUsersFromCourseQueueNotificationManager";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+<h1>Odrzucone wnioski o zapis na kurs</h1>
+<hr />
+
+@await Component.InvokeAsync("DisplayRejectedUsersFromCourseQueueLogDataTable", new { logViewModel = Model, tableIdentificator = "listNotifications", operationSet = 1 })
+
+@section Scripts {
+    @{await Html.RenderPartialAsync("_DataTableBasicScript", "listNotifications");}
+}
+

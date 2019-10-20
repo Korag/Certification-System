@@ -1368,6 +1368,7 @@ namespace Certification_System.Controllers
                     return RedirectToAction("BlankMenu", "Certificates");
                 }
 
+                var userLogDataOfAssignToCourseQueueAction = courseQueue.AwaitingUsers.Where(z => z.UserIdentificator == userIdentificator).Select(z => z.LogData).FirstOrDefault();
                 courseQueue = _context.courseRepository.RemoveAwaitingUserFromCourseQueue(courseIdentificator, userIdentificator);
 
                 var logInfoRemoveUserFromCourseQueue = _logger.GenerateLogInformation(this.User.Identity.Name, this.ControllerContext.RouteData.Values["action"].ToString(), LogTypeOfAction.TypesOfActions[1], LogDescriptionOfAction.DescriptionOfActions["removeUserFromCourseQueue"]);
@@ -1378,6 +1379,7 @@ namespace Certification_System.Controllers
                     _context.courseRepository.DeleteCourseQueue(courseIdentificator);
 
                     var logInfoDeleteCourseQueue = _logger.GenerateLogInformation(this.User.Identity.Name, this.ControllerContext.RouteData.Values["action"].ToString(), LogTypeOfAction.TypesOfActions[2], LogDescriptionOfAction.DescriptionOfActions["deleteCourseQueue"]);
+                    _logger.AddCourseQueueLog(courseQueue, logInfoDeleteCourseQueue);
                 }
 
                 if (userAssignedToCourse)
@@ -1386,6 +1388,13 @@ namespace Certification_System.Controllers
                 }
                 else
                 {
+                    CourseQueueWithSingleUser rejectedUser = new CourseQueueWithSingleUser();
+                    rejectedUser.CourseIdentificator = courseIdentificator;
+                    rejectedUser.UserIdentificator = userIdentificator;
+                    rejectedUser.LogDataOfAssignToCourseQueue = userLogDataOfAssignToCourseQueueAction;
+
+                    _context.personalLogRepository.AddRejectedUserFromCourseQueueLog(rejectedUser, logInfoRemoveUserFromCourseQueue);
+
                     return RedirectToAction("AdminNotificationManager", "Courses", new { message = "Zgłoszenie pracownika zostało odrzucone." });
                 }
             }

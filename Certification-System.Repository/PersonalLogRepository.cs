@@ -149,7 +149,6 @@ namespace Certification_System.Repository
             }
         }
 
-        // todo later action, View, dataTable
         public void AddRejectedUserFromCourseQueueLog(CourseQueueWithSingleUser rejectedUser, LogInformation logInfo)
         {
             var rejectedUserLog = new RejectedUserFromCourseQueueLog

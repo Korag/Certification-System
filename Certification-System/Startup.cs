@@ -62,11 +62,12 @@ namespace Certification_System
             }).AddTokenProvider<DataProtectorTokenProvider<CertificationPlatformUser>>("DeletionOfEntity")
               .AddTokenProvider<DataProtectorTokenProvider<CertificationPlatformUser>>("AssignToCourseQueue");
 
-            //services.ConfigureApplicationCookie(o => {
-            //    o.Cookie.Name = "Certification-Cookie";
-            //    o.ExpireTimeSpan = TimeSpan.FromHours(5);
-            //    o.SlidingExpiration = true;
-            //});
+            services.ConfigureApplicationCookie(o =>
+            {
+                o.Cookie.Name = "Certification-Cookie";
+                o.ExpireTimeSpan = TimeSpan.FromHours(5);
+                o.SlidingExpiration = true;
+            });
 
             // Auto Mapper Configurations
             var mappingConfig = new MapperConfiguration(mc =>
@@ -101,17 +102,17 @@ namespace Certification_System
             services.AddTransient<IExamResultRepository, ExamResultRepository>();
             services.AddTransient<IGivenCertificateRepository, GivenCertificateRepository>();
             services.AddTransient<IGivenDegreeRepository, GivenDegreeRepository>();
-            services.AddTransient<IPersonalLogRepository, PersonalLogRepository>();
             services.AddTransient<IMeetingRepository, MeetingRepository>();
             services.AddTransient<IUserRepository, UserRepository>();
 
+            // Repository Logs
+            services.AddTransient<IPersonalLogRepository, PersonalLogRepository>();
             services.AddTransient<ILogRepository, LogRepository>();
 
-            // Logs
+            // Logs Services
             services.AddTransient<IIPGetterService, IPGetterService>();
             services.AddTransient<ILogService, LogService>();
 
-            // IP
             services.AddSingleton<IHttpContextAccessor, HttpContextAccessor>();
 
             services.AddMvc(options =>

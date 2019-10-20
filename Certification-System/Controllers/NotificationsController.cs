@@ -159,5 +159,35 @@ namespace Certification_System.Controllers
 
             return View(userPersonalLogs);
         }
+
+        // GET: RejectedUsersFromCourseQueueNotificationManager
+        [Authorize(Roles = "Admin")]
+        public ActionResult RejectedUsersFromCourseQueueNotificationManager()
+        {
+            var rejectedUsers = _context.personalLogRepository.GetListOfRejectedUsers();
+
+            List<DisplayRejectedUserLog> rejectedUsersLogs = new List<DisplayRejectedUserLog>();
+
+            if (rejectedUsers != null)
+            {
+                foreach (var rejectedUser in rejectedUsers)
+                {
+                    DisplayRejectedUserLog singleLog = new DisplayRejectedUserLog();
+
+                    var course = _context.courseRepository.GetCourseById(rejectedUser.AlteredEntity.CourseIdentificator);
+                    var user = _context.userRepository.GetUserById(rejectedUser.AlteredEntity.UserIdentificator);
+
+                    singleLog.Course = _mapper.Map<DisplayCrucialDataCourseViewModel>(course);
+                    singleLog.User = _mapper.Map<DisplayCrucialDataUserViewModel>(user);
+
+                    singleLog.DateOfAssignToCourseQueue = rejectedUser.AlteredEntity.LogDataOfAssignToCourseQueue.DateOfLogCreation;
+                    singleLog.DateOfRejection = rejectedUser.LogData.DateOfLogCreation;
+
+                    rejectedUsersLogs.Add(singleLog);
+                }
+            }
+
+            return View(rejectedUsersLogs);
+        }
     }
 }

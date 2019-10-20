@@ -13,6 +13,10 @@
     <h2 class="alert alert-info" role="alert">@ViewBag.message</h2>
 }
 
+<div class="row m-0 mt-3 mb-3">
+    <a asp-action="RejectedUsersFromCourseQueueNotificationManager" asp-controller="Notifications" class="btn btn-info mt-1 mr-1 xs450px_FloatLeft">Niezaakceptowane wnioski</a>
+</div>
+
 <h2 class="mt-4 mb-4">Zgłoszenia użytkowników na kurs</h2>
 
 @await Component.InvokeAsync("DisplayCourseQueueWithDecisionDataTable", new { courseViewModel = Model.CourseQueueNotification, tableIdentificator = "listCourseQueue", operationSet = 2 })

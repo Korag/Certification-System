@@ -185,6 +185,9 @@ namespace Certification_System.Controllers
                     var logInfoRegister = _logger.GenerateLogInformation(this.User.Identity.Name, this.ControllerContext.RouteData.Values["action"].ToString(), LogTypeOfAction.TypesOfActions[0], LogDescriptionOfAction.DescriptionOfActions["registerUser"]);
                     _logger.AddUserLog(user, logInfoRegister);
 
+                    var createdUser = _context.userRepository.GetUserById(user.Id);
+                    _context.personalLogRepository.CreatePersonalUserLog(createdUser);
+
                     //await _signInManager.SignInAsync(user, isPersistent: false);
                     //_logger.LogInformation("Użytkownik utworzył nowe konto.");
                     //return RedirectToLocal(returnUrl);
