@@ -3,13 +3,13 @@
 @inject SignInManager<CertificationPlatformUser> SignInManager
 @inject UserManager<CertificationPlatformUser> UserManager
 
-<ul class="navbar-nav navbar-right">
+<ul class="navbar-nav navbar-right row justify-content-end mr-1 ml-1">
     @if (SignInManager.IsSignedIn(User))
     {
-        <li class="nav-item mr-2 font-weight-bold">
+        <li class="nav-item ml-1 font-weight-bold mt-1">
             <a asp-controller="Users" asp-action="AccountDetails" title="Manage" class="btn btn-outline-primary font-weight-bold">@User.Identity.Name</a>
         </li>
-        <li class="nav-item font-weight-bold">
+        <li class="nav-item font-weight-bold mt-1 ml-1">
             <form method="post" class="form-inline" asp-controller="Account" asp-action="Logout">
                 <button type="button" data-toggle="modal" data-target="#modalLogout" class="btn btn-outline-danger">Wyloguj</button>
                 @await Component.InvokeAsync("Modal", new { title = "Wylogowanie z systemu", body = "Czy na pewno chcesz się wylogować ?", formSubmit = true, dataTarget = "modalLogout", buttonText = "Wyloguj", buttonClass = "btn-danger" })
@@ -18,10 +18,10 @@
     }
     else
     {
-        <li class="nav-item ml-2 font-weight-bold">
+        <li class="nav-item ml-1 font-weight-bold mt-1">
             <a asp-controller="Account" asp-action="Register" class="nav-link text-muted">Register</a>
         </li>
-        <li class="nav-item font-weight-bold">
+        <li class="nav-item font-weight-bold mt-1 ml-1">
             <a asp-controller="Account" asp-action="Login" class="nav-link text-muted">Zaloguj</a>
         </li>
     }

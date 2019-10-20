@@ -6,32 +6,32 @@
 /* Set padding to keep content from hitting the edges */
 .body-content {
     padding: 2vh 2vw 2vh 2vw;
-    min-height: 32vw;
+    min-height: calc(100vh - 205px);
 }
 
-/*@media (min-width: 1200px) {
-    .container {
+@media (min-width: 1200px) {
+    /*.container {
         max-width: 70vw;
-    }
-}*/
+    }*/
+}
 
-/*@media (min-width: 992px) {
-    .container {
+@media (min-width: 992px) {
+    /*.container {
         max-width: 80vw;
-    }
+    }*/
 }
 
 @media (min-width: 768px) {
-    .container {
+    /*.container {
         max-width: 90vw;
-    }
+    }*/
 }
 
 @media (min-width: 576px) {
-    .container {
+    /*.container {
         max-width: 98vw;
-    }
-}*/
+    }*/
+}
 
 .body-image {
     background-image: url('../Image/page-bg_10.jpg');
@@ -40,10 +40,18 @@
 
 .background-image {
     background-image: url('../Image/logo_ziad_big_transparent.png');
-    background-size: 40vw 30vw;
     background-repeat: no-repeat;
-    background-attachment: fixed;
     background-position: center;
+    background-size: contain;
+}
+
+.certificationBanner {
+    background-image: url('../Image/logo_ziad_big.jpg');
+    background-size: contain;
+    background-repeat: no-repeat;
+    background-position: center;
+    opacity: 0.50;
+    min-height: calc(100vh - 240px);
 }
 
 /* Override the default bootstrap behavior where horizontal description lists 
@@ -216,7 +224,7 @@ ul {
 }
 
 .dropdown-menu {
-    max-height: 75vh;
+    max-height: calc(100vh - 150px);
     overflow-y: auto;
 }
 
