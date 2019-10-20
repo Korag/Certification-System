@@ -69,6 +69,9 @@ namespace Certification_System.Controllers
                 var logInfoAddDegree = _logger.GenerateLogInformation(this.User.Identity.Name, this.ControllerContext.RouteData.Values["action"].ToString(), LogTypeOfAction.TypesOfActions[0], LogDescriptions.DescriptionOfActionOnEntity["addDegree"]);
                 _logger.AddDegreeLog(degree, logInfoAddDegree);
 
+                var logInfoPersonal = _context.personalLogRepository.GeneratePersonalLogInformation(this.User.Identity.Name, this.ControllerContext.RouteData.Values["action"].ToString(), LogDescriptions.DescriptionOfPersonalUserLog["addDegree"], "Indekser " + degree.DegreeIndexer);
+                _context.personalLogRepository.AddPersonalUsersLogsToAdminGroup(logInfoPersonal);
+
                 return RedirectToAction("ConfirmationOfActionOnDegree", new { degreeIdentificator = degree.DegreeIdentificator, TypeOfAction = "Add" });
             }
 
@@ -127,7 +130,6 @@ namespace Certification_System.Controllers
                 singleDegree.RequiredDegrees = requiredDegrees.Select(z => z.DegreeIndexer + " " + z.Name).ToList();
                 singleDegree.Branches = _context.branchRepository.GetBranchesById(degree.Branches);
 
-
                 listOfDegrees.Add(singleDegree);
             }
 
@@ -167,6 +169,9 @@ namespace Certification_System.Controllers
 
                 var logInfoUpdateDegree = _logger.GenerateLogInformation(this.User.Identity.Name, this.ControllerContext.RouteData.Values["action"].ToString(), LogTypeOfAction.TypesOfActions[1], LogDescriptions.DescriptionOfActionOnEntity["updateDegree"]);
                 _logger.AddDegreeLog(originDegree, logInfoUpdateDegree);
+
+                var logInfoPersonal = _context.personalLogRepository.GeneratePersonalLogInformation(this.User.Identity.Name, this.ControllerContext.RouteData.Values["action"].ToString(), LogDescriptions.DescriptionOfPersonalUserLog["updateDegree"], "Indekser " + originDegree.DegreeIndexer);
+                _context.personalLogRepository.AddPersonalUsersLogsToAdminGroup(logInfoPersonal);
 
                 return RedirectToAction("ConfirmationOfActionOnDegree", "Degrees", new { degreeIdentificator = editedDegree.DegreeIdentificator, TypeOfAction = "Update" });
             }
@@ -315,6 +320,9 @@ namespace Certification_System.Controllers
 
                 var updatedUsers = _context.userRepository.GetUsersByGivenDegreesId(deletedGivenDegrees.Select(z=> z.GivenDegreeIdentificator).ToList());
                 _logger.AddUsersLogs(updatedUsers, logInfoUpdateUsers);
+
+                var logInfoPersonal = _context.personalLogRepository.GeneratePersonalLogInformation(this.User.Identity.Name, this.ControllerContext.RouteData.Values["action"].ToString(), LogDescriptions.DescriptionOfPersonalUserLog["deleteDegree"], "Indekser " + degree.DegreeIndexer);
+                _context.personalLogRepository.AddPersonalUsersLogsToAdminGroup(logInfoPersonal);
 
                 return RedirectToAction("DisplayAllDegrees", "Degrees", new { message = "Usunięto wskazany stopień zawodowy" });
             }
