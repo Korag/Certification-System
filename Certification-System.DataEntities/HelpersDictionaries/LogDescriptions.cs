@@ -109,9 +109,42 @@ namespace Certification_System.Entities
            {"deleteCertificate",  "Certyfikat został usunięty"},
            {"deleteBranch",  "Obszar certyfikacji został usunięty"},
 
-           {"updateCertificate",  "Dane certyfikatu zostały zaktualizowane"},
-           {"updateCertificate",  "Dane certyfikatu zostały zaktualizowane"},
-           {"updateCertificate",  "Dane certyfikatu zostały zaktualizowane"},
+           {"addCompany",  "Nowe przedsiębiorstwo zostało dodane do systemu"},
+           {"updateCompany",  "Dane przedsiębiorstwa zostały zaktualizowane"},
+           {"deleteCompany",  "Przedsiębiorstwo zostało usunięte z systemu"},
+           {"updateDegree",  "Dane stopnia zawodowego zostały zaktualizowane"},
+           {"addDegree",  "Nowy stopień zawodowy został dodany do systemu"},
+           {"deleteDegree",  "Stopień zawodowy został usunięty"},
+           {"addUserGivenCertificate",  "Otrzymałeś nowy certyfikat"},
+           {"updateGivenCertificate",  "Dane nadanego certyfikatu zostały zaktualizowane"},
+           {"updateUserGivenCertificate",  "Dane jednego z Twoich nadanych certyfikatów zostały zmodyfikowane"},
+           {"deleteGivenCertificate",  "Nadany certyfikat został usunięty z systemu"},
+           {"deleteUserGivenCertificate",  "Jeden z Twoich nadanych certyfikatów został usunięty z systemu"},
+           {"updateGivenDegree",  "Dane nadanego stopnia zawodowego zostały zaktualizowane"},
+           {"updateUserGivenDegree",  "Dane jednego z Twoich nadanych stopni zawodowych zostały zmodyfikowane"},
+           {"addGivenDegree",  "Dane certyfikatu zostały zaktualizowane"},
+           {"addUserGivenDegree",  "Otrzymałeś nowy stopień zawodowy"},
+           {"deleteGivenDegree",  "Stopień zawodowy został usunięty"},
+           {"deleteUserGivenDegree",  "Jeden z Twoich stopni zawodowych został usunięty z systemu"},
+           {"updateMeetingUsersInformation",  "Dane spotkania w którym bierzesz udział zostały zmodyfikowane"},
+           {"addMeeting",  "Nowe spotkanie w ramach kursu zostało dodane do systemu"},
+           {"updateMeeting",  "Dane spotkania w ramach kursu zostały zaktualizowane"},
+           {"checkMeetingPresence",  "Na spotkaniu została sprawdzona obecność użytkowników"},
+           {"checkUserMeetingPresence",  "W spotkaniu w którym uczestniczysz została sprawdzona obecność użytkowników"},
+           {"deleteMeeting",  "Spotkanie w ramach kursu zostało usunięte"},
+           {"deleteUserMeeting",  "Spotkanie w kursie w którym uczestniczysz zostało usunięte"},
+           {"addUser",  "Nowy użytkownik został dodany do systemu"},
+           {"userCreation",  "Twoje konto użytkownika w systemie zostało utworzone"},
+           {"updateUser",  "Dane użytkownika zostały zaktualizowane"},
+           {"userDataModification",  "Twoje dane użytkownika zostały zmodyfikowane"},
+           {"deleteUser",  "Użytkownik został usunięty"},
+           {"deleteUserInformation",  "Twoje konto oraz wszystkie powiązane z nim dane zostało usunięte"},
+           {"removeUserFromCourse",  "Usunięto użytkownika z kursu"},
+           {"removeUserFromMeeting",  "Usunięto użytkownika ze spotkania"},
+           {"removeUserFromExam",  "Usunięto użytkownika z egzaminu"},
+           {"removeUserFromExamTerm",  "Usunięto użytkownika z tury egzaminu"},
+           {"deleteExamResult",  "Wyniki egzaminów użytkoanika zostały usunięte "},
+
            {"updateCertificate",  "Dane certyfikatu zostały zaktualizowane"},
            {"updateCertificate",  "Dane certyfikatu zostały zaktualizowane"},
            {"updateCertificate",  "Dane certyfikatu zostały zaktualizowane"},
@@ -121,7 +154,3 @@ namespace Certification_System.Entities
     }
 }
 
-var logInfoPersonal = _context.personalLogRepository.GeneratePersonalLogInformation(this.User.Identity.Name, this.ControllerContext.RouteData.Values["action"].ToString(), LogDescriptions.DescriptionOfPersonalUserLog["resetPassword"]);
-_context.personalLogRepository.AddPersonalUserLog(updatedUser.Id, logInfoPersonal);
-
-                _context.personalLogRepository.AddPersonalUsersLogsToAdminGroup(logInfoPersonal);
