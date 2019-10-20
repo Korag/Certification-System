@@ -102,12 +102,26 @@ namespace Certification_System.Entities
            {"confirmEmail",  "Potwierdziłeś adres email powiązany z Twoim kontem użytkownika systemu"},
            {"setPassword",  "Ustawiłeś swoje hasło po raz pierwszy"},
            {"resetPassword",  "Zresetowałeś hasło do swojego konta w systemie"},
-           {"addBranch",  "Nowy obszar certyfikacji został dodany do systemu"},
 
-           {"confirmEmail",  "Potwierdziłeś adres email powiązany z Twoim kontem użytkownika systemu"},
-           {"confirmEmail",  "Potwierdziłeś adres email powiązany z Twoim kontem użytkownika systemu"},
+           {"addBranch",  "Nowy obszar certyfikacji został dodany do systemu"},
+           {"addCertificate",  "Nowy certyfikat został dodany do systemu"},
+           {"updateCertificate",  "Dane certyfikatu zostały zaktualizowane"},
+           {"deleteCertificate",  "Certyfikat został usunięty"},
+           {"deleteBranch",  "Obszar certyfikacji został usunięty"},
+
+           {"updateCertificate",  "Dane certyfikatu zostały zaktualizowane"},
+           {"updateCertificate",  "Dane certyfikatu zostały zaktualizowane"},
+           {"updateCertificate",  "Dane certyfikatu zostały zaktualizowane"},
+           {"updateCertificate",  "Dane certyfikatu zostały zaktualizowane"},
+           {"updateCertificate",  "Dane certyfikatu zostały zaktualizowane"},
+           {"updateCertificate",  "Dane certyfikatu zostały zaktualizowane"},
+           {"updateCertificate",  "Dane certyfikatu zostały zaktualizowane"},
 
         };
     }
 }
 
+var logInfoPersonal = _context.personalLogRepository.GeneratePersonalLogInformation(this.User.Identity.Name, this.ControllerContext.RouteData.Values["action"].ToString(), LogDescriptions.DescriptionOfPersonalUserLog["resetPassword"]);
+_context.personalLogRepository.AddPersonalUserLog(updatedUser.Id, logInfoPersonal);
+
+                _context.personalLogRepository.AddPersonalUsersLogsToAdminGroup(logInfoPersonal);

@@ -75,6 +75,9 @@ namespace Certification_System.Controllers
                 var logInfo = _logger.GenerateLogInformation(this.User.Identity.Name, this.ControllerContext.RouteData.Values["action"].ToString(), LogTypeOfAction.TypesOfActions[0], LogDescriptions.DescriptionOfActionOnEntity["addCertificate"]);
                 _logger.AddCertificateLog(certificate, logInfo);
 
+                var logInfoPersonal = _context.personalLogRepository.GeneratePersonalLogInformation(this.User.Identity.Name, this.ControllerContext.RouteData.Values["action"].ToString(), LogDescriptions.DescriptionOfPersonalUserLog["addCertificate"], "Indekser: " + certificate.CertificateIndexer);
+                _context.personalLogRepository.AddPersonalUsersLogsToAdminGroup(logInfoPersonal);
+
                 return RedirectToAction("ConfirmationOfActionOnCertificate", new { certificateIdentificator = certificate.CertificateIdentificator, TypeOfAction = "Add" });
             }
 
@@ -146,6 +149,9 @@ namespace Certification_System.Controllers
 
                 var logInfo = _logger.GenerateLogInformation(this.User.Identity.Name, this.ControllerContext.RouteData.Values["action"].ToString(), LogTypeOfAction.TypesOfActions[1], LogDescriptions.DescriptionOfActionOnEntity["updateCertificate"]);
                 _logger.AddCertificateLog(originCertificate, logInfo);
+
+                var logInfoPersonal = _context.personalLogRepository.GeneratePersonalLogInformation(this.User.Identity.Name, this.ControllerContext.RouteData.Values["action"].ToString(), LogDescriptions.DescriptionOfPersonalUserLog["updateCertificate"], "Indekser: " + originCertificate.CertificateIndexer);
+                _context.personalLogRepository.AddPersonalUsersLogsToAdminGroup(logInfoPersonal);
 
                 return RedirectToAction("ConfirmationOfActionOnCertificate", "Certificates", new { certificateIdentificator = editedCertificate.CertificateIdentificator, TypeOfAction = "Update" });
             }
@@ -276,6 +282,9 @@ namespace Certification_System.Controllers
 
                 var updatedUsers = _context.userRepository.GetUsersByGivenCertificatesId(deletedGivenCertificates.Select(z => z.GivenCertificateIdentificator).ToList());
                 _logger.AddUsersLogs(updatedUsers, logInfoUpdateUsers);
+
+                var logInfoPersonal = _context.personalLogRepository.GeneratePersonalLogInformation(this.User.Identity.Name, this.ControllerContext.RouteData.Values["action"].ToString(), LogDescriptions.DescriptionOfPersonalUserLog["deleteCertificate"], "Indekser: " + certificate.CertificateIndexer);
+                _context.personalLogRepository.AddPersonalUsersLogsToAdminGroup(logInfoPersonal);
 
                 return RedirectToAction("DisplayAllCertificates", "Certificates", new { message = "Usunięto wskazany certyfikat" });
             }

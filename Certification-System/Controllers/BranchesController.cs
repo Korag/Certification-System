@@ -123,6 +123,9 @@ namespace Certification_System.Controllers
                 var logInfo = _logger.GenerateLogInformation(this.User.Identity.Name, this.ControllerContext.RouteData.Values["action"].ToString(), LogTypeOfAction.TypesOfActions[1], LogDescriptions.DescriptionOfActionOnEntity["updateBranch"]);
                 _logger.AddBranchLog(originBranch, logInfo);
 
+                var logInfoPersonal = _context.personalLogRepository.GeneratePersonalLogInformation(this.User.Identity.Name, this.ControllerContext.RouteData.Values["action"].ToString(), LogDescriptions.DescriptionOfPersonalUserLog["updateBranch"], "Nazwa: " + editedBranch.Name);
+                _context.personalLogRepository.AddPersonalUsersLogsToAdminGroup(logInfoPersonal);
+
                 return RedirectToAction("ConfirmationOfActionOnBranch", "Branches", new { branchIdentificator = originBranch.BranchIdentificator, typeOfAction = "Update" });
             }
 
@@ -204,6 +207,9 @@ namespace Certification_System.Controllers
 
                 var updatedDegrees = _context.degreeRepository.DeleteBranchFromDegrees(branch.BranchIdentificator);
                 _logger.AddDegreesLogs(updatedDegrees, logInfoUpdateDegree);
+
+                var logInfoPersonal = _context.personalLogRepository.GeneratePersonalLogInformation(this.User.Identity.Name, this.ControllerContext.RouteData.Values["action"].ToString(), LogDescriptions.DescriptionOfPersonalUserLog["deleteBranch"], "Nazwa: " + branch.Name);
+                _context.personalLogRepository.AddPersonalUsersLogsToAdminGroup(logInfoPersonal);
 
                 return RedirectToAction("DisplayAllBranches", "Branches", new { message = "Usunięto wskazany obszar certyfikacji" });
             }
