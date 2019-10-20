@@ -26,13 +26,10 @@
                     @Html.DisplayNameFor(model => model.Logs.FirstOrDefault().DescriptionOfAction)
                 </th>
                 <th>
+                    @Html.DisplayNameFor(model => model.Logs.FirstOrDefault().AdditionalInfo)
+                </th>
+                <th>
                     @Html.DisplayNameFor(model => model.Logs.FirstOrDefault().DateOfLogCreation)
-                </th>
-                <th>
-                    @Html.DisplayNameFor(model => model.Logs.FirstOrDefault().UrlToDetailsOfAction)
-                </th>
-                <th>
-                    Szczegóły:
                 </th>
                 @if (Model.Options.OperationSet != 0)
                 {
@@ -68,10 +65,10 @@
                     @Html.DisplayFor(modelItem => log.DescriptionOfAction)
                 </td>
                 <td>
-                    @Html.DisplayFor(modelItem => log.DateOfLogCreation)
+                    @Html.DisplayFor(modelItem => log.AdditionalInfo)
                 </td>
                 <td>
-                    @Html.Raw(log.UrlToDetailsOfAction);
+                    @Html.DisplayFor(modelItem => log.DateOfLogCreation)
                 </td>
                 @if (Model.Options.OperationSet == 1)
                 {

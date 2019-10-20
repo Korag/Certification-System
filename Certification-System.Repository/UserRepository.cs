@@ -40,6 +40,11 @@ namespace Certification_System.Repository
             return GetUsers().AsQueryable().Where(z => z.Roles.Contains("EXAMINER")).ToList();
         }
 
+        public ICollection<CertificationPlatformUser> GetListOfAdmins()
+        {
+            return GetUsers().AsQueryable().Where(z => z.Roles.Contains("ADMIN")).ToList();
+        }
+
         public ICollection<CertificationPlatformUser> GetListOfUsers()
         {
             return GetUsers().AsQueryable().ToList();

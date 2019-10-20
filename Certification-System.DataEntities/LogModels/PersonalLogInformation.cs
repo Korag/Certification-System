@@ -10,12 +10,11 @@ namespace Certification_System.Entities
         public string ChangeAuthorFirstName { get; set; }
         public string ChangeAuthorLastName { get; set; }
 
-        public string TypeOfAction { get; set; }
         public string DescriptionOfAction { get; set; }
+        public string AdditionalInfo { get; set; }
         public string ActionName { get; set; }
 
 
-        public string UrlToDetailsOfAction { get; set; }
         public string IpAddress { get; set; }
         public DateTime DateOfLogCreation { get; set; }
     }

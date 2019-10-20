@@ -9,6 +9,7 @@ namespace Certification_System.RepositoryInterfaces
         ICollection<CertificationPlatformUser> GetListOfUsers();
         ICollection<CertificationPlatformUser> GetListOfInstructors();
         ICollection<CertificationPlatformUser> GetListOfWorkers();
+        ICollection<CertificationPlatformUser> GetListOfAdmins();
         ICollection<SelectListItem> GetRolesAsSelectList();
         ICollection<SelectListItem> GetAvailableRoleFiltersAsSelectList();
         void UpdateUser(CertificationPlatformUser user);

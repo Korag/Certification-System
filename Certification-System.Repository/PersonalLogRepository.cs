@@ -32,13 +32,12 @@ namespace Certification_System.Repository
         }
 
         public PersonalLogInformation GeneratePersonalLogInformation(
-                                              string userEmailAddress,
+                                              string userEmail,
                                               string actionName,
-                                              string typeOfAction,
-                                              string urlToActionDetails,
-                                              string descriptionOfAction)
+                                              string descriptionOfAction,
+                                              string additionalInfo = "")
         {
-            var user = _userRepository.GetUserByEmail(userEmailAddress);
+            var user = _userRepository.GetUserByEmail(userEmail);
 
             return new PersonalLogInformation
             {
@@ -50,11 +49,10 @@ namespace Certification_System.Repository
                 DateOfLogCreation = DateTime.Now,
                 IpAddress = _ipGetter.GetGlobalIPAddress(),
 
-                TypeOfAction = typeOfAction,
                 DescriptionOfAction = descriptionOfAction,
+                AdditionalInfo = additionalInfo,
 
                 ActionName = actionName,
-                UrlToDetailsOfAction = urlToActionDetails,
             };
         }
 
@@ -145,5 +143,24 @@ namespace Certification_System.Repository
                 AddLogToPersonalUserLogs(userIdentificator, logInfo);
             }
         }
+
+        public void AddPersonalUsersLogsToAdminGroup(PersonalLogInformation logInfo)
+        {
+            var admins = _userRepository.GetListOfAdmins();
+
+            foreach (var admin in admins)
+            {
+                var userLog = GetPersonalUserLogById(admin.Id);
+
+                if (userLog == null)
+                {
+                    CreatePersonalUserLog(admin);
+                }
+
+                AddLogToPersonalUserLogs(admin.Id, logInfo);
+            }
+        }
     }
 }
+
+

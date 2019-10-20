@@ -2,9 +2,9 @@
 
 namespace Certification_System.Entities
 {
-    public static class LogDescriptionOfAction
+    public static class LogDescriptions
     {
-        public static readonly Dictionary<string, string> DescriptionOfActions= new Dictionary<string, string>()
+        public static readonly Dictionary<string, string> DescriptionOfActionOnEntity = new Dictionary<string, string>()
          {
            {"addBranch", "Dodano do systemu nowy obszar certyfikacji"},
            {"updateBranch", "Dokonano aktualizacji istniejącego obszaru certyfikacji"},
@@ -93,6 +93,20 @@ namespace Certification_System.Entities
            {"deleteRequiredDegreeFromDegree",  "Dokonano usunięcia wymaganego stopnia zawodowego ze stopnia zawodowego"},
            {"deleteRequiredGivenCertificateFromDegree",  "Dokonano usunięcia wymaganego certyfikatu ze stopnia zawodowego"},
            {"updateGivenDegree",  "Dokonano aktualizacji nadanego stopnia zawodowego"},
+        };
+
+        public static readonly Dictionary<string, string> DescriptionOfPersonalUserLog = new Dictionary<string, string>()
+         {
+           {"registerUser", "Zarejestrowałeś się w platformie Certification-System. Dziękujemy za okazane zaufanie"},
+           {"changePassword", "Zmieniłeś swoje hasło dostępu do systemu"},
+           {"confirmEmail",  "Potwierdziłeś adres email powiązany z Twoim kontem użytkownika systemu"},
+           {"setPassword",  "Ustawiłeś swoje hasło po raz pierwszy"},
+           {"resetPassword",  "Zresetowałeś hasło do swojego konta w systemie"},
+           {"addBranch",  "Nowy obszar certyfikacji został dodany do systemu"},
+
+           {"confirmEmail",  "Potwierdziłeś adres email powiązany z Twoim kontem użytkownika systemu"},
+           {"confirmEmail",  "Potwierdziłeś adres email powiązany z Twoim kontem użytkownika systemu"},
+
         };
     }
 }

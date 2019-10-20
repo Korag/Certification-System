@@ -92,12 +92,12 @@ namespace Certification_System.Controllers
                 _context.meetingRepository.AddMeeting(meeting);
                 _context.courseRepository.AddMeetingToCourse(meeting.MeetingIdentificator, newMeeting.SelectedCourse);
 
-                var logInfoAddMeeting = _logger.GenerateLogInformation(this.User.Identity.Name, this.ControllerContext.RouteData.Values["action"].ToString(), LogTypeOfAction.TypesOfActions[0], LogDescriptionOfAction.DescriptionOfActions["addMeeting"]);
+                var logInfoAddMeeting = _logger.GenerateLogInformation(this.User.Identity.Name, this.ControllerContext.RouteData.Values["action"].ToString(), LogTypeOfAction.TypesOfActions[0], LogDescriptions.DescriptionOfActionOnEntity["addMeeting"]);
                 _logger.AddMeetingLog(meeting, logInfoAddMeeting);
 
                 var updatedCourse = _context.courseRepository.GetCourseById(newMeeting.SelectedCourse);
 
-                var logInfoUpdateCourse = _logger.GenerateLogInformation(this.User.Identity.Name, this.ControllerContext.RouteData.Values["action"].ToString(), LogTypeOfAction.TypesOfActions[1], LogDescriptionOfAction.DescriptionOfActions["addMeetingToCourse"]);
+                var logInfoUpdateCourse = _logger.GenerateLogInformation(this.User.Identity.Name, this.ControllerContext.RouteData.Values["action"].ToString(), LogTypeOfAction.TypesOfActions[1], LogDescriptions.DescriptionOfActionOnEntity["addMeetingToCourse"]);
                 _logger.AddCourseLog(updatedCourse, logInfoUpdateCourse);
 
                 return RedirectToAction("ConfirmationOfActionOnMeeting", new { meetingIdentificator = meeting.MeetingIdentificator, TypeOfAction = "Add" });
@@ -133,7 +133,7 @@ namespace Certification_System.Controllers
 
                 _context.meetingRepository.UpdateMeeting(originMeeting);
 
-                var logInfoUpdateMeeting = _logger.GenerateLogInformation(this.User.Identity.Name, this.ControllerContext.RouteData.Values["action"].ToString(), LogTypeOfAction.TypesOfActions[1], LogDescriptionOfAction.DescriptionOfActions["updateMeeting"]);
+                var logInfoUpdateMeeting = _logger.GenerateLogInformation(this.User.Identity.Name, this.ControllerContext.RouteData.Values["action"].ToString(), LogTypeOfAction.TypesOfActions[1], LogDescriptions.DescriptionOfActionOnEntity["updateMeeting"]);
                 _logger.AddMeetingLog(originMeeting, logInfoUpdateMeeting);
 
                 return RedirectToAction("ConfirmationOfActionOnMeeting", "Meetings", new { meetingIdentificator = editedMeeting.MeetingIdentificator, TypeOfAction = "Update" });
@@ -241,7 +241,7 @@ namespace Certification_System.Controllers
 
             var updatedMeeting = _context.meetingRepository.GetMeetingById(meetingWithPresenceToCheck.MeetingIdentificator);
 
-            var logInfoCheckPresence = _logger.GenerateLogInformation(this.User.Identity.Name, this.ControllerContext.RouteData.Values["action"].ToString(), LogTypeOfAction.TypesOfActions[1], LogDescriptionOfAction.DescriptionOfActions["checkPresenceOnMeeting"]);
+            var logInfoCheckPresence = _logger.GenerateLogInformation(this.User.Identity.Name, this.ControllerContext.RouteData.Values["action"].ToString(), LogTypeOfAction.TypesOfActions[1], LogDescriptions.DescriptionOfActionOnEntity["checkPresenceOnMeeting"]);
             _logger.AddMeetingLog(updatedMeeting, logInfoCheckPresence);
 
             return RedirectToAction("MeetingDetails", "Meetings", new { meetingIdentificator = meetingWithPresenceToCheck.MeetingIdentificator, checkedPresence = true });
@@ -328,8 +328,8 @@ namespace Certification_System.Controllers
 
             if (ModelState.IsValid && _keyGenerator.ValidateUserTokenForEntityDeletion(user, meetingToDelete.Code))
             {
-                var logInfoDeleteMeeting = _logger.GenerateLogInformation(this.User.Identity.Name, this.ControllerContext.RouteData.Values["action"].ToString(), LogTypeOfAction.TypesOfActions[2], LogDescriptionOfAction.DescriptionOfActions["deleteMeeting"]);
-                var logInfoUpdateCourse = _logger.GenerateLogInformation(this.User.Identity.Name, this.ControllerContext.RouteData.Values["action"].ToString(), LogTypeOfAction.TypesOfActions[1], LogDescriptionOfAction.DescriptionOfActions["removeMeetingFromCourse"]);
+                var logInfoDeleteMeeting = _logger.GenerateLogInformation(this.User.Identity.Name, this.ControllerContext.RouteData.Values["action"].ToString(), LogTypeOfAction.TypesOfActions[2], LogDescriptions.DescriptionOfActionOnEntity["deleteMeeting"]);
+                var logInfoUpdateCourse = _logger.GenerateLogInformation(this.User.Identity.Name, this.ControllerContext.RouteData.Values["action"].ToString(), LogTypeOfAction.TypesOfActions[1], LogDescriptions.DescriptionOfActionOnEntity["removeMeetingFromCourse"]);
 
                 _context.meetingRepository.DeleteMeeting(meetingToDelete.EntityIdentificator);
                 _logger.AddMeetingLog(meeting, logInfoDeleteMeeting);

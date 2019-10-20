@@ -10,9 +10,10 @@ namespace Certification_System.RepositoryInterfaces
         ICollection<PersonalLog> GetListOfPersonalLogs();
         PersonalLog GetPersonalUserLogById(string userIdentificator);
         ICollection<PersonalLog> GetPersonalUsersLogsById(ICollection<string> usersIdentificators);
-        PersonalLogInformation GeneratePersonalLogInformation(string userEmailAddress, string actionName, string typeOfAction, string urlToActionDetails, string descriptionOfAction);
+        PersonalLogInformation GeneratePersonalLogInformation(string userEmail, string actionName, string descriptionOfAction, string additionalInfo = "");
         void AddPersonalUserLog(string userIdentificator, PersonalLogInformation logInfo);
         void AddPersonalUsersLogs(ICollection<string> usersIdentificators, PersonalLogInformation logInfo);
         void AddRejectedUserLog(RejectedUserFromCourseQueueLog rejectedUser);
+        void AddPersonalUsersLogsToAdminGroup(PersonalLogInformation logInfo);
     }
 }

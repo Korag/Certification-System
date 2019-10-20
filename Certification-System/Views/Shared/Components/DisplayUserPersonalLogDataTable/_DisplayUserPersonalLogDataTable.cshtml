@@ -17,10 +17,10 @@
                     @Html.DisplayNameFor(model => model.Logs.FirstOrDefault().DescriptionOfAction)
                 </th>
                 <th>
-                    @Html.DisplayNameFor(model => model.Logs.FirstOrDefault().DateOfLogCreation)
+                    @Html.DisplayNameFor(model => model.Logs.FirstOrDefault().AdditionalInfo)
                 </th>
                 <th>
-                    @Html.DisplayNameFor(model => model.Logs.FirstOrDefault().UrlToDetailsOfAction)
+                    @Html.DisplayNameFor(model => model.Logs.FirstOrDefault().DateOfLogCreation)
                 </th>
                 <th>
                     Szczegóły:
@@ -36,30 +36,30 @@
         <tbody>
             @foreach (var log in Model.Logs)
             {
-                <tr>
-                    <td>
-                        @Html.DisplayFor(modelItem => log.ChangeAuthor.Email)
-                    </td>
-                    <td>
-                        @Html.DisplayFor(modelItem => log.ChangeAuthor.FirstName)
-                    </td>
-                    <td>
-                        @Html.DisplayFor(modelItem => log.ChangeAuthor.LastName)
-                    </td>
-                    <td>
-                        @Html.DisplayFor(modelItem => log.DescriptionOfAction)
-                    </td>
-                    <td>
-                        @Html.DisplayFor(modelItem => log.DateOfLogCreation)
-                    </td>
-                    <td>
-                        @Html.Raw(log.UrlToDetailsOfAction);
-                    </td>
-                    @if (Model.Options.OperationSet == 1)
-                    {
-                        <td></td>
-                    }
-                </tr>
+            <tr>
+                <td>
+                    @Html.DisplayFor(modelItem => log.ChangeAuthor.Email)
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => log.ChangeAuthor.FirstName)
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => log.ChangeAuthor.LastName)
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => log.DescriptionOfAction)
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => log.AdditionalInfo)
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => log.DateOfLogCreation)
+                </td>
+                @if (Model.Options.OperationSet == 1)
+                {
+                    <td></td>
+                }
+            </tr>
             }
         </tbody>
     </table>
