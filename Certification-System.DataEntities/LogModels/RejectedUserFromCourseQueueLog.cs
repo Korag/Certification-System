@@ -3,13 +3,13 @@ using MongoDB.Bson.Serialization.Attributes;
 
 namespace Certification_System.Entities
 {
-    public class CourseQueueLog
+    public class RejectedUserFromCourseQueueLog
     {
         [BsonId]
         [BsonRepresentation(BsonType.ObjectId)]
-        public string CourseQueueLogIdentificator { get; set; }
+        public string RejectedUserFromCourseQueueLogIdentificator { get; set; }
 
-        public CourseQueue AlteredEntity { get; set; }
+        public CourseQueueWithSingleUser AlteredEntity { get; set; }
 
         public LogInformation LogData { get; set; }
     }

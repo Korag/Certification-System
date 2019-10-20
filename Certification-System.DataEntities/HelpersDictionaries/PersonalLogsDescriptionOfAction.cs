@@ -82,6 +82,7 @@ namespace Certification_System.Entities
            {"removeUsersFromExamTerm",  "Grupa użytkowników została usunięta z tury egzaminu"},
            {"assignUserToExamTerm",  "Dodano użytkownika do tury egzaminu"},
            {"assignUsersToExamTerm",  "Dodano grupę użytkowników do tury egzaminu"},
+           {"removeExamTermFromExam",  "Usunięto turę egzaminu z wybranego egzaminu."},
 
            {"deleteExamResult",  "Dokonano usunięcia rezultatu z egzaminu z systemu"},
            {"updateExamResult",  "Dokonano aktualizacji wyniku z egzaminu"},
@@ -92,12 +93,6 @@ namespace Certification_System.Entities
            {"deleteRequiredDegreeFromDegree",  "Dokonano usunięcia wymaganego stopnia zawodowego ze stopnia zawodowego"},
            {"deleteRequiredGivenCertificateFromDegree",  "Dokonano usunięcia wymaganego certyfikatu ze stopnia zawodowego"},
            {"updateGivenDegree",  "Dokonano aktualizacji nadanego stopnia zawodowego"},
-
-           {"removeExamTermFromExam",  "Usunięto turę egzaminu z wybranego egzaminu."},
-           {"addExamTermToExam",  "Dokonano aktualizacji nadanego stopnia zawodowego"},
-           {"addExamTermToExam",  "Dokonano aktualizacji nadanego stopnia zawodowego"},
-           {"addExamTermToExam",  "Dokonano aktualizacji nadanego stopnia zawodowego"},
-           {"addExamTermToExam",  "Dokonano aktualizacji nadanego stopnia zawodowego"},
         };
     }
 }
