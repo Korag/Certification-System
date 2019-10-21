@@ -21,7 +21,7 @@ namespace Certification_System.Entities
            {"removeMeetingFromCourse",  "Dokonano usunięcia spotkania z kursu"},
            {"addExamToCourse",  "Dodano egzamin do kursu"},
            {"closeCourse",  "Dokonano zakończenia kursu"},
-
+           
            {"addCertificate",  "Dodano do systemu nowy certyfikat"},
            {"updateCertificate", "Dokonano aktualizacji danych certyfikatu"},
            {"deleteCertificate",  "Certyfikat został usunięty z systemu"},
@@ -169,10 +169,18 @@ namespace Certification_System.Entities
            {"rejectUserFromCourseQueue",  "Twoje zgłoszenie o zapis na kurs zostało odrzucone"},
            {"deleteRequiredCertificate",  "Certyfikat został usunięty z listy wymaganych do zdobycia stopnia zawodowego"},
            {"deleteUserCompany",  "Usunięto przedsiębiorstwo związane z Twoim kontem użytkownika"},
+           {"addInstructorToMeeting",  "Zostałeś przydzielony do spotkania w ramach kursu w charakterze instruktora"},
+           {"removeInstructorFromMeeting",  "Zostałeś usunięty ze spotkania w którym występowałeś w charakterze instruktora"},
 
            {"assignUserToCourse",  "Zostałeś dodany do kursu"},
            {"assignUserToCourse",  "Zostałeś dodany do kursu"},
            {"assignUserToCourse",  "Zostałeś dodany do kursu"},
+           {"assignUserToCourse",  "Zostałeś dodany do kursu"},
+           {"assignUserToCourse",  "Zostałeś dodany do kursu"},
+           {"assignUserToCourse",  "Zostałeś dodany do kursu"},
+           {"assignUserToCourse",  "Zostałeś dodany do kursu"},
+           {"assignUserToCourse",  "Zostałeś dodany do kursu"},
+
 
         };
     }

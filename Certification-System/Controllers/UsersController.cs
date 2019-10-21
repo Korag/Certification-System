@@ -144,8 +144,14 @@ namespace Certification_System.Controllers
                     var emailToSend = _emailSender.GenerateEmailMessage(user.Email, user.FirstName + " " + user.LastName, "setPassword", callbackUrl);
                     await _emailSender.SendEmailAsync(emailToSend);
 
+                    #region EntityLogs
+
                     var logInfoAddUser = _logger.GenerateLogInformation(this.User.Identity.Name, this.ControllerContext.RouteData.Values["action"].ToString(), LogTypeOfAction.TypesOfActions[0], LogDescriptions.DescriptionOfActionOnEntity["addUser"]);
                     _logger.AddUserLog(user, logInfoAddUser);
+
+                    #endregion
+
+                    #region PersonalUserLogs
 
                     var createdUser = _context.userRepository.GetUserById(user.Id);
                     _context.personalLogRepository.CreatePersonalUserLog(createdUser);
@@ -155,6 +161,8 @@ namespace Certification_System.Controllers
 
                     var logInfoPersonalUserCreation = _context.personalLogRepository.GeneratePersonalLogInformation(this.User.Identity.Name, this.ControllerContext.RouteData.Values["action"].ToString(), LogDescriptions.DescriptionOfPersonalUserLog["userCreation"], "Email " + createdUser.Email);
                     _context.personalLogRepository.AddPersonalUserLog(createdUser.Id, logInfoPersonalUserCreation);
+
+                    #endregion
 
                     return RedirectToAction("ConfirmationOfActionOnUser", "Users", new { userIdentificator = user.Id, TypeOfAction = "Add" });
                 }
@@ -222,14 +230,22 @@ namespace Certification_System.Controllers
 
                 var updatedUser = _context.userRepository.GetUserById(originUser.Id);
 
+                #region EntityLogs
+
+                #endregion
+
                 var logInfo = _logger.GenerateLogInformation(this.User.Identity.Name, this.ControllerContext.RouteData.Values["action"].ToString(), LogTypeOfAction.TypesOfActions[1], LogDescriptions.DescriptionOfActionOnEntity["updateUser"]);
                 _logger.AddUserLog(updatedUser, logInfo);
+
+                #region PersonalUserLogs
 
                 var logInfoPersonalUpdateUser = _context.personalLogRepository.GeneratePersonalLogInformation(this.User.Identity.Name, this.ControllerContext.RouteData.Values["action"].ToString(), LogDescriptions.DescriptionOfPersonalUserLog["updateUser"], "Email: " + updatedUser.Email);
                 _context.personalLogRepository.AddPersonalUserLogToAdminGroup(logInfoPersonalUpdateUser);
 
                 var logInfoPersonalUserDataModification = _context.personalLogRepository.GeneratePersonalLogInformation(this.User.Identity.Name, this.ControllerContext.RouteData.Values["action"].ToString(), LogDescriptions.DescriptionOfPersonalUserLog["userDataModification"], "Email " + updatedUser.Email);
                 _context.personalLogRepository.AddPersonalUserLog(updatedUser.Id, logInfoPersonalUserDataModification);
+
+                #endregion
 
                 return RedirectToAction("ConfirmationOfActionOnUser", "Users", new { userIdentificator = originUser.Id, TypeOfAction = "Update" });
             }
@@ -520,14 +536,22 @@ namespace Certification_System.Controllers
 
                 var updatedUser = _context.userRepository.GetUserById(originUser.Id);
 
+                #region EntityLogs
+
+                #endregion
+
                 var logInfo = _logger.GenerateLogInformation(this.User.Identity.Name, this.ControllerContext.RouteData.Values["action"].ToString(), LogTypeOfAction.TypesOfActions[1], LogDescriptions.DescriptionOfActionOnEntity["updateUser"]);
                 _logger.AddUserLog(updatedUser, logInfo);
+
+                #region PersonalUserLogs
 
                 var logInfoPersonalUpdateUser = _context.personalLogRepository.GeneratePersonalLogInformation(this.User.Identity.Name, this.ControllerContext.RouteData.Values["action"].ToString(), LogDescriptions.DescriptionOfPersonalUserLog["updateUser"], "Email: " + updatedUser.Email);
                 _context.personalLogRepository.AddPersonalUserLogToAdminGroup(logInfoPersonalUpdateUser);
 
                 var logInfoPersonalUserDataModification = _context.personalLogRepository.GeneratePersonalLogInformation(this.User.Identity.Name, this.ControllerContext.RouteData.Values["action"].ToString(), LogDescriptions.DescriptionOfPersonalUserLog["userDataModification"], "Email " + updatedUser.Email);
                 _context.personalLogRepository.AddPersonalUserLog(updatedUser.Id, logInfoPersonalUserDataModification);
+
+                #endregion
 
                 return RedirectToAction("EditAccount", "Users", new { userIdentificator = originUser.Id, message = "Pomyślnie zaktualizowano dane" });
             }
@@ -764,6 +788,10 @@ namespace Certification_System.Controllers
 
             if (ModelState.IsValid && _keyGenerator.ValidateUserTokenForEntityDeletion(user, userToDelete.Code))
             {
+                _context.userRepository.DeleteUser(userToDelete.EntityIdentificator);
+
+                #region EntityLogs
+
                 var logInfoDeleteUser = _logger.GenerateLogInformation(this.User.Identity.Name, this.ControllerContext.RouteData.Values["action"].ToString(), LogTypeOfAction.TypesOfActions[2], LogDescriptions.DescriptionOfActionOnEntity["deleteUser"]);
                 var logInfoDeleteGivenDegrees = _logger.GenerateLogInformation(this.User.Identity.Name, this.ControllerContext.RouteData.Values["action"].ToString(), LogTypeOfAction.TypesOfActions[2], LogDescriptions.DescriptionOfActionOnEntity["deleteGivenDegree"]);
                 var logInfoDeleteGivenCertificates = _logger.GenerateLogInformation(this.User.Identity.Name, this.ControllerContext.RouteData.Values["action"].ToString(), LogTypeOfAction.TypesOfActions[2], LogDescriptions.DescriptionOfActionOnEntity["deleteGivenCertificate"]);
@@ -774,7 +802,6 @@ namespace Certification_System.Controllers
                 var logInfoUpdateExams = _logger.GenerateLogInformation(this.User.Identity.Name, this.ControllerContext.RouteData.Values["action"].ToString(), LogTypeOfAction.TypesOfActions[1], LogDescriptions.DescriptionOfActionOnEntity["removeUserFromExam"]);
                 var logInfoUpdateExamsTerms = _logger.GenerateLogInformation(this.User.Identity.Name, this.ControllerContext.RouteData.Values["action"].ToString(), LogTypeOfAction.TypesOfActions[1], LogDescriptions.DescriptionOfActionOnEntity["removeUserFromExamTerm"]);
 
-                _context.userRepository.DeleteUser(userToDelete.EntityIdentificator);
                 _logger.AddUserLog(userToDeleteModel, logInfoDeleteUser);
 
                 var deletedGivenCertificates = _context.givenCertificateRepository.DeleteGivenCertificates(userToDeleteModel.GivenCertificates);
@@ -797,6 +824,10 @@ namespace Certification_System.Controllers
 
                 var deletedExamsResults = _context.examResultRepository.DeleteExamsResultsByUserId(userToDelete.EntityIdentificator);
                 _logger.AddExamsResultsLogs(deletedExamsResults, logInfoDeleteExamsResults);
+
+                #endregion
+
+                #region PersonalUserLogs
 
                 var logInfoPersonalDeleteUser = _context.personalLogRepository.GeneratePersonalLogInformation(this.User.Identity.Name, this.ControllerContext.RouteData.Values["action"].ToString(), LogDescriptions.DescriptionOfPersonalUserLog["deleteUser"], "Email: " + user.Email);
                 _context.personalLogRepository.AddPersonalUserLogToAdminGroup(logInfoPersonalDeleteUser);
@@ -845,6 +876,7 @@ namespace Certification_System.Controllers
                     var logInfoPersonalDeleteExamResult = _context.personalLogRepository.GeneratePersonalLogInformation(this.User.Identity.Name, this.ControllerContext.RouteData.Values["action"].ToString(), LogDescriptions.DescriptionOfPersonalUserLog["deleteExamResult"], "Indekser " + deleteExamResult.ExamResultIndexer);
                     _context.personalLogRepository.AddPersonalUserLogToAdminGroup(logInfoPersonalDeleteExamResult);
                 }
+                #endregion
 
                 return RedirectToAction("DisplayAllUsers", "Users", new { message = "Usunięto wskazanego użytkownika systemu" });
             }
