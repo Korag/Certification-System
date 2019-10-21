@@ -66,7 +66,15 @@ namespace Certification_System.Repository
             var filter = Builders<PersonalLog>.Filter.Where(z => z.UserIdentificator == userIdentificator);
             var update = Builders<PersonalLog>.Update.AddToSet(x => x.LogData, logInfo);
 
-            var result = _personalLogs.UpdateOne(filter, update);
+            var result = GetPersonalLogs().UpdateOne(filter, update);
+        }
+
+        private void AddLogToPersonalAdminUserLogs(string userIdentificator, PersonalLogInformation logInfo)
+        {
+            var filter = Builders<PersonalLog>.Filter.Where(z => z.UserIdentificator == userIdentificator);
+            var update = Builders<PersonalLog>.Update.AddToSet(x => x.LogData, logInfo);
+
+            var result = GetAdminPersonalLogs().UpdateOne(filter, update);
         }
 
         public void AddRejectedUserLog(RejectedUserFromCourseQueueLog rejectedUser)
@@ -197,7 +205,7 @@ namespace Certification_System.Repository
                 CreateAdminPersonalUserLog();
             }
 
-            AddLogToPersonalUserLogs(adminLog.UserIdentificator, logInfo);
+            AddLogToPersonalAdminUserLogs(adminLog.UserIdentificator, logInfo);
         }
 
         public void AddPersonalUsersLogsToAdminGroup(ICollection<PersonalLogInformation> logInfoCollection)
@@ -211,7 +219,7 @@ namespace Certification_System.Repository
 
             foreach (var logInfo in logInfoCollection)
             {
-                AddLogToPersonalUserLogs(adminLog.UserIdentificator, logInfo);
+                AddLogToPersonalAdminUserLogs(adminLog.UserIdentificator, logInfo);
             }
         }
     }

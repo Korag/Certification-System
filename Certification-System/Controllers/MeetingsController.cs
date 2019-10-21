@@ -109,9 +109,11 @@ namespace Certification_System.Controllers
                 var logInfoPersonalAddMeeting = _context.personalLogRepository.GeneratePersonalLogInformation(this.User.Identity.Name, this.ControllerContext.RouteData.Values["action"].ToString(), LogDescriptions.DescriptionOfPersonalUserLog["addMeeting"], "Indekser " + meeting.MeetingIndexer);
                 _context.personalLogRepository.AddPersonalUserLogToAdminGroup(logInfoPersonalAddMeeting);
 
+                var logInfoPersonalAddMeetingToCourse = _context.personalLogRepository.GeneratePersonalLogInformation(this.User.Identity.Name, this.ControllerContext.RouteData.Values["action"].ToString(), LogDescriptions.DescriptionOfPersonalUserLog["addMeetingToCourse"], "Indekser " + course.CourseIndexer);
+                _context.personalLogRepository.AddPersonalUserLogToAdminGroup(logInfoPersonalAddMeetingToCourse);
+
                 var logInfoPersonalAddInstructorsToMeeting = _context.personalLogRepository.GeneratePersonalLogInformation(this.User.Identity.Name, this.ControllerContext.RouteData.Values["action"].ToString(), LogDescriptions.DescriptionOfPersonalUserLog["addInstructorToMeeting"], "Indekser " + meeting.MeetingIndexer);
                 _context.personalLogRepository.AddPersonalUsersLogs(meeting.Instructors, logInfoPersonalAddInstructorsToMeeting);
-
 
                 #endregion
 
@@ -157,12 +159,12 @@ namespace Certification_System.Controllers
                 var logInfoUpdateMeeting = _logger.GenerateLogInformation(this.User.Identity.Name, this.ControllerContext.RouteData.Values["action"].ToString(), LogTypeOfAction.TypesOfActions[1], LogDescriptions.DescriptionOfActionOnEntity["updateMeeting"]);
                 _logger.AddMeetingLog(originMeeting, logInfoUpdateMeeting);
 
-                var logInfoPersonalUpdateMeeting = _context.personalLogRepository.GeneratePersonalLogInformation(this.User.Identity.Name, this.ControllerContext.RouteData.Values["action"].ToString(), LogDescriptions.DescriptionOfPersonalUserLog["updateMeeting"], "Indekser " + originMeeting.MeetingIndexer);
-                _context.personalLogRepository.AddPersonalUserLogToAdminGroup(logInfoPersonalUpdateMeeting);
-
                 #endregion
 
                 #region PersonalUserLogs
+
+                var logInfoPersonalUpdateMeeting = _context.personalLogRepository.GeneratePersonalLogInformation(this.User.Identity.Name, this.ControllerContext.RouteData.Values["action"].ToString(), LogDescriptions.DescriptionOfPersonalUserLog["updateMeeting"], "Indekser " + originMeeting.MeetingIndexer);
+                _context.personalLogRepository.AddPersonalUserLogToAdminGroup(logInfoPersonalUpdateMeeting);
 
                 var logInfoPersonalUpdateMeetingInformationToUsers = _context.personalLogRepository.GeneratePersonalLogInformation(this.User.Identity.Name, this.ControllerContext.RouteData.Values["action"].ToString(), LogDescriptions.DescriptionOfPersonalUserLog["updateUserMeeting"], "Indekser " + originMeeting.MeetingIndexer);
                 _context.personalLogRepository.AddPersonalUsersLogs(course.EnrolledUsers, logInfoPersonalUpdateMeetingInformationToUsers);

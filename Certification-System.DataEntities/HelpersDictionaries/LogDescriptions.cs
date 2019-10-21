@@ -9,7 +9,7 @@ namespace Certification_System.Entities
            {"addBranch", "Dodano do systemu nowy obszar certyfikacji"},
            {"updateBranch", "Dokonano aktualizacji istniejącego obszaru certyfikacji"},
            {"deleteBranch",  "Obszar certyfikacji został usunięty z systemu"},
-           
+
            {"addCourse",  "Dodano do systemu nowy kurs"},
            {"updateCourse", "Dokonano aktualizacji danych kursu"},
            {"removeGroupOfUsersFromCourse",  "Grupa użytkowników została usunięta z kursu"},
@@ -17,11 +17,10 @@ namespace Certification_System.Entities
            {"addCourseQueue",  "Dodano kolejkę oczekujących na zapisanie do kurs"},
            {"updateCourseQueue",  "Dokonano aktualizacji kolejki zapisu do kursu"},
            {"deleteCourseQueue",  "Dokonano usunięcia kolejki zapisu na egzamin z systemu"},
-           {"addMeeting",  "Dodano nowe spotkanie do kursu"},
            {"removeMeetingFromCourse",  "Dokonano usunięcia spotkania z kursu"},
            {"addExamToCourse",  "Dodano egzamin do kursu"},
            {"closeCourse",  "Dokonano zakończenia kursu"},
-           
+
            {"addCertificate",  "Dodano do systemu nowy certyfikat"},
            {"updateCertificate", "Dokonano aktualizacji danych certyfikatu"},
            {"deleteCertificate",  "Certyfikat został usunięty z systemu"},
@@ -171,16 +170,17 @@ namespace Certification_System.Entities
            {"deleteUserCompany",  "Usunięto przedsiębiorstwo związane z Twoim kontem użytkownika"},
            {"addInstructorToMeeting",  "Zostałeś przydzielony do spotkania w ramach kursu w charakterze instruktora"},
            {"removeInstructorFromMeeting",  "Zostałeś usunięty ze spotkania w którym występowałeś w charakterze instruktora"},
-
-           {"assignUserToCourse",  "Zostałeś dodany do kursu"},
-           {"assignUserToCourse",  "Zostałeś dodany do kursu"},
-           {"assignUserToCourse",  "Zostałeś dodany do kursu"},
-           {"assignUserToCourse",  "Zostałeś dodany do kursu"},
-           {"assignUserToCourse",  "Zostałeś dodany do kursu"},
-           {"assignUserToCourse",  "Zostałeś dodany do kursu"},
-           {"assignUserToCourse",  "Zostałeś dodany do kursu"},
-           {"assignUserToCourse",  "Zostałeś dodany do kursu"},
-
+           {"addExam",  "Nowy egzamin został dodany do systemu"},
+           {"addMeetingToCourse",  "Do kursu zostało dodane nowe spotkanie"},
+           {"addExaminerToExam",  "Zostałeś dodany do egzaminu w charakterze egzaminatora"},
+           {"addExamTerm",  "Nowa tura egzaminu została dodana do systemu"},
+           {"addExamTermToExam",  "Tura egzaminu została przypisana do egzaminu"},
+           {"addExaminerToExamTerm",  "Zostałeś dodany do tury egzaminu w charakterze egzaminatora"},
+           {"updateExam",  "Dane egzaminu zostały zmodyfikowane"},
+           {"updateUserExam",  "Dane egzaminu w którym bierzesz udział zostały zmodyfikowane"},
+           {"removeExaminerFromExam",  "Zostałeś usunięty z egzaminu"},
+           {"addUserToExam",  "Do egzaminu został dodany nowy użytkownik"},
+           {"assignUserToExam",  "Zostałeś dodany do egzaminu"},
 
         };
     }
