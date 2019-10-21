@@ -99,9 +99,9 @@ namespace Certification_System.Repository
             return GetPersonalLogs().AsQueryable().ToList();
         }
 
-        public ICollection<PersonalLog> GetListOfAdminPersonalLogs()
+        public PersonalLog GetListOfAdminPersonalLogs()
         {
-            return GetAdminPersonalLogs().AsQueryable().ToList();
+            return GetAdminPersonalLogs().AsQueryable().FirstOrDefault();
         }
 
         public PersonalLog GetPersonalUserLogById(string userIdentificator)
@@ -197,7 +197,7 @@ namespace Certification_System.Repository
                 CreateAdminPersonalUserLog();
             }
 
-            AddLogToPersonalUserLogs(adminLog.FirstOrDefault().UserIdentificator, logInfo);
+            AddLogToPersonalUserLogs(adminLog.UserIdentificator, logInfo);
         }
 
         public void AddPersonalUsersLogsToAdminGroup(ICollection<PersonalLogInformation> logInfoCollection)
@@ -211,7 +211,7 @@ namespace Certification_System.Repository
 
             foreach (var logInfo in logInfoCollection)
             {
-                AddLogToPersonalUserLogs(adminLog.FirstOrDefault().UserIdentificator, logInfo);
+                AddLogToPersonalUserLogs(adminLog.UserIdentificator, logInfo);
             }
         }
     }

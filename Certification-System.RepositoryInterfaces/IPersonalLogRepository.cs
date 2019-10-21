@@ -8,7 +8,7 @@ namespace Certification_System.RepositoryInterfaces
         void CreatePersonalUserLog(CertificationPlatformUser user);
         ICollection<RejectedUserFromCourseQueueLog> GetListOfRejectedUsers();
         ICollection<PersonalLog> GetListOfPersonalLogs();
-        ICollection<PersonalLog> GetListOfAdminPersonalLogs();
+        PersonalLog GetListOfAdminPersonalLogs();
         PersonalLog GetPersonalUserLogById(string userIdentificator);
         ICollection<PersonalLog> GetPersonalUsersLogsById(ICollection<string> usersIdentificators);
         PersonalLogInformation GeneratePersonalLogInformation(string userEmail, string actionName, string descriptionOfAction, string additionalInfo = "");

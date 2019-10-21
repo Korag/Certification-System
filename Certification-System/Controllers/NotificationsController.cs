@@ -91,10 +91,27 @@ namespace Certification_System.Controllers
                 notificationsNotEndedCourses.Add(singleNotification);
             }
 
+            var adminLogs = _context.personalLogRepository.GetListOfAdminPersonalLogs();
+            List<DisplayLogInformationViewModel> overallLogs = new List<DisplayLogInformationViewModel>();
+
+            if (adminLogs != null)
+            {
+                foreach (var log in adminLogs.LogData)
+                {
+                    DisplayLogInformationViewModel singleLog = _mapper.Map<DisplayLogInformationViewModel>(log);
+
+                    var changeAuthor = _context.userRepository.GetUserById(log.ChangeAuthorIdentificator);
+                    singleLog.ChangeAuthor = _mapper.Map<DisplayCrucialDataUserViewModel>(changeAuthor);
+
+                    overallLogs.Add(singleLog);
+                }
+            }
+
             AdminNotificationViewModel adminNotifications = new AdminNotificationViewModel
             {
                 CourseQueueNotification = notificationsCoursesQueue,
-                NotEndedCoursesAfterEndDate = notificationsNotEndedCourses
+                NotEndedCoursesAfterEndDate = notificationsNotEndedCourses,
+                OverallLogs = overallLogs
             };
 
             return View(adminNotifications);

@@ -6,5 +6,6 @@ namespace Certification_System.DTOViewModels
     {
         public ICollection<CourseQueueNotificationViewModel> CourseQueueNotification { get; set; }
         public ICollection<DisplayCourseNotificationViewModel> NotEndedCoursesAfterEndDate { get; set; }
+        public ICollection<DisplayLogInformationViewModel> OverallLogs { get; set; }
     }
 }

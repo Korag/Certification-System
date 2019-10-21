@@ -25,7 +25,12 @@
 
 @await Component.InvokeAsync("DisplayCourseNotificationDataTable", new { courseViewModel = Model.NotEndedCoursesAfterEndDate, tableIdentificator = "listNotEndedCourse", operationSet = 1 })
 
+<h2 class="mt-4 mb-4">Logi aplikacji</h2>
+
+@await Component.InvokeAsync("DisplayUserPersonalLogDataTable", new { logViewModel = Model.OverallLogs, tableIdentificator = "listNotifications" })
+
 @section Scripts {
     @{await Html.RenderPartialAsync("_DataTableBasicScript", "listCourseQueue");}
     @{await Html.RenderPartialAsync("_DataTableBasicScript", "listNotEndedCourse");}
+    @{await Html.RenderPartialAsync("_DataTableBasicScript", "listNotifications");}
 }
