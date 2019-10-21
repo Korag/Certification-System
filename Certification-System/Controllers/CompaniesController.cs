@@ -82,11 +82,11 @@ namespace Certification_System.Controllers
 
                 _context.companyRepository.AddCompany(company);
 
-                var logInfo = _logger.GenerateLogInformation(this.User.Identity.Name, this.ControllerContext.RouteData.Values["action"].ToString(), LogTypeOfAction.TypesOfActions[0], LogDescriptions.DescriptionOfActionOnEntity["addCompany"]);
-                _logger.AddCompanyLog(company, logInfo);
+                var logInfoAddCompany = _logger.GenerateLogInformation(this.User.Identity.Name, this.ControllerContext.RouteData.Values["action"].ToString(), LogTypeOfAction.TypesOfActions[0], LogDescriptions.DescriptionOfActionOnEntity["addCompany"]);
+                _logger.AddCompanyLog(company, logInfoAddCompany);
 
-                var logInfoPersonal = _context.personalLogRepository.GeneratePersonalLogInformation(this.User.Identity.Name, this.ControllerContext.RouteData.Values["action"].ToString(), LogDescriptions.DescriptionOfPersonalUserLog["addCompany"], "Nazwa przedsiębiorstwa: " + company.CompanyName);
-                _context.personalLogRepository.AddPersonalUserLogToAdminGroup(logInfoPersonal);
+                var logInfoPersonalAddCompany = _context.personalLogRepository.GeneratePersonalLogInformation(this.User.Identity.Name, this.ControllerContext.RouteData.Values["action"].ToString(), LogDescriptions.DescriptionOfPersonalUserLog["addCompany"], "Nazwa przedsiębiorstwa: " + company.CompanyName);
+                _context.personalLogRepository.AddPersonalUserLogToAdminGroup(logInfoPersonalAddCompany);
 
                 return RedirectToAction("ConfirmationOfActionOnCompany", new { companyIdentificator = company.CompanyIdentificator, TypeOfAction = "Add" });
             }
@@ -114,11 +114,11 @@ namespace Certification_System.Controllers
                 Company company = _mapper.Map<Company>(editedCompany);
                 _context.companyRepository.UpdateCompany(company);
 
-                var logInfo = _logger.GenerateLogInformation(this.User.Identity.Name, this.ControllerContext.RouteData.Values["action"].ToString(), LogTypeOfAction.TypesOfActions[1], LogDescriptions.DescriptionOfActionOnEntity["updateCompany"]);
-                _logger.AddCompanyLog(company, logInfo);
+                var logInfoUpdateCompany = _logger.GenerateLogInformation(this.User.Identity.Name, this.ControllerContext.RouteData.Values["action"].ToString(), LogTypeOfAction.TypesOfActions[1], LogDescriptions.DescriptionOfActionOnEntity["updateCompany"]);
+                _logger.AddCompanyLog(company, logInfoUpdateCompany);
 
-                var logInfoPersonal = _context.personalLogRepository.GeneratePersonalLogInformation(this.User.Identity.Name, this.ControllerContext.RouteData.Values["action"].ToString(), LogDescriptions.DescriptionOfPersonalUserLog["updateCompany"], "Nazwa przedsiębiorstwa: " + company.CompanyName);
-                _context.personalLogRepository.AddPersonalUserLogToAdminGroup(logInfoPersonal);
+                var logInfoPersonalUpdateCompany = _context.personalLogRepository.GeneratePersonalLogInformation(this.User.Identity.Name, this.ControllerContext.RouteData.Values["action"].ToString(), LogDescriptions.DescriptionOfPersonalUserLog["updateCompany"], "Nazwa przedsiębiorstwa: " + company.CompanyName);
+                _context.personalLogRepository.AddPersonalUserLogToAdminGroup(logInfoPersonalUpdateCompany);
 
                 return RedirectToAction("ConfirmationOfActionOnCompany", "Companies", new { companyIdentificator = editedCompany.CompanyIdentificator, TypeOfAction = "Update" });
             }
@@ -214,8 +214,11 @@ namespace Certification_System.Controllers
                 var updatedUsers = _context.userRepository.DeleteCompanyFromUsers(companyToDelete.EntityIdentificator);
                 _logger.AddUsersLogs(updatedUsers, logInfoUpdateUsers);
 
-                var logInfoPersonal = _context.personalLogRepository.GeneratePersonalLogInformation(this.User.Identity.Name, this.ControllerContext.RouteData.Values["action"].ToString(), LogDescriptions.DescriptionOfPersonalUserLog["deleteCompany"], "Nazwa przedsiębiorstwa: " + company.CompanyName);
-                _context.personalLogRepository.AddPersonalUserLogToAdminGroup(logInfoPersonal);
+                var logInfoPersonalDeleteCompany = _context.personalLogRepository.GeneratePersonalLogInformation(this.User.Identity.Name, this.ControllerContext.RouteData.Values["action"].ToString(), LogDescriptions.DescriptionOfPersonalUserLog["deleteCompany"], "Nazwa przedsiębiorstwa: " + company.CompanyName);
+                _context.personalLogRepository.AddPersonalUserLogToAdminGroup(logInfoPersonalDeleteCompany);
+
+                var logInfoPersonalDeleteUserCompany = _context.personalLogRepository.GeneratePersonalLogInformation(this.User.Identity.Name, this.ControllerContext.RouteData.Values["action"].ToString(), LogDescriptions.DescriptionOfPersonalUserLog["deleteUserCompany"], "Nazwa przedsiębiorstwa: " + company.CompanyName);
+                _context.personalLogRepository.AddPersonalUsersLogs(updatedUsers.Select(z=> z.Id).ToList(), logInfoPersonalDeleteUserCompany);
 
                 return RedirectToAction("DisplayAllCertificates", "Certificates", new { message = "Usunięto wskazane przedsiębiorstwo" });
             }

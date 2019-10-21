@@ -69,8 +69,8 @@ namespace Certification_System.Controllers
                 var logInfoAddDegree = _logger.GenerateLogInformation(this.User.Identity.Name, this.ControllerContext.RouteData.Values["action"].ToString(), LogTypeOfAction.TypesOfActions[0], LogDescriptions.DescriptionOfActionOnEntity["addDegree"]);
                 _logger.AddDegreeLog(degree, logInfoAddDegree);
 
-                var logInfoPersonal = _context.personalLogRepository.GeneratePersonalLogInformation(this.User.Identity.Name, this.ControllerContext.RouteData.Values["action"].ToString(), LogDescriptions.DescriptionOfPersonalUserLog["addDegree"], "Indekser " + degree.DegreeIndexer);
-                _context.personalLogRepository.AddPersonalUserLogToAdminGroup(logInfoPersonal);
+                var logInfoPersonalAddDegree = _context.personalLogRepository.GeneratePersonalLogInformation(this.User.Identity.Name, this.ControllerContext.RouteData.Values["action"].ToString(), LogDescriptions.DescriptionOfPersonalUserLog["addDegree"], "Indekser " + degree.DegreeIndexer);
+                _context.personalLogRepository.AddPersonalUserLogToAdminGroup(logInfoPersonalAddDegree);
 
                 return RedirectToAction("ConfirmationOfActionOnDegree", new { degreeIdentificator = degree.DegreeIdentificator, TypeOfAction = "Add" });
             }
@@ -170,8 +170,8 @@ namespace Certification_System.Controllers
                 var logInfoUpdateDegree = _logger.GenerateLogInformation(this.User.Identity.Name, this.ControllerContext.RouteData.Values["action"].ToString(), LogTypeOfAction.TypesOfActions[1], LogDescriptions.DescriptionOfActionOnEntity["updateDegree"]);
                 _logger.AddDegreeLog(originDegree, logInfoUpdateDegree);
 
-                var logInfoPersonal = _context.personalLogRepository.GeneratePersonalLogInformation(this.User.Identity.Name, this.ControllerContext.RouteData.Values["action"].ToString(), LogDescriptions.DescriptionOfPersonalUserLog["updateDegree"], "Indekser " + originDegree.DegreeIndexer);
-                _context.personalLogRepository.AddPersonalUserLogToAdminGroup(logInfoPersonal);
+                var logInfoPersonalUpdateDegree = _context.personalLogRepository.GeneratePersonalLogInformation(this.User.Identity.Name, this.ControllerContext.RouteData.Values["action"].ToString(), LogDescriptions.DescriptionOfPersonalUserLog["updateDegree"], "Indekser " + originDegree.DegreeIndexer);
+                _context.personalLogRepository.AddPersonalUserLogToAdminGroup(logInfoPersonalUpdateDegree);
 
                 return RedirectToAction("ConfirmationOfActionOnDegree", "Degrees", new { degreeIdentificator = editedDegree.DegreeIdentificator, TypeOfAction = "Update" });
             }
@@ -303,6 +303,8 @@ namespace Certification_System.Controllers
 
             if (ModelState.IsValid && _keyGenerator.ValidateUserTokenForEntityDeletion(user, degreeToDelete.Code))
             {
+                #region EntityLogs
+
                 var logInfoDeleteDegree = _logger.GenerateLogInformation(this.User.Identity.Name, this.ControllerContext.RouteData.Values["action"].ToString(), LogTypeOfAction.TypesOfActions[2], LogDescriptions.DescriptionOfActionOnEntity["deleteDegree"]);
                 var logInfoDeleteGivenDegrees = _logger.GenerateLogInformation(this.User.Identity.Name, this.ControllerContext.RouteData.Values["action"].ToString(), LogTypeOfAction.TypesOfActions[1], LogDescriptions.DescriptionOfActionOnEntity["deleteGivenDegree"]);
                 var logInfoDeleteRequiredDegreeFromGivenDegrees = _logger.GenerateLogInformation(this.User.Identity.Name, this.ControllerContext.RouteData.Values["action"].ToString(), LogTypeOfAction.TypesOfActions[2], LogDescriptions.DescriptionOfActionOnEntity["deleteRequiredDegreeFromDegree"]);
@@ -312,8 +314,8 @@ namespace Certification_System.Controllers
                 _context.degreeRepository.DeleteDegree(degreeToDelete.EntityIdentificator);
                 _logger.AddDegreeLog(degree, logInfoDeleteDegree);
 
-                var deletedRequiredDegrees = _context.degreeRepository.DeleteRequiredDegreeFromDegree(degreeToDelete.EntityIdentificator);
-                _logger.AddDegreesLogs(deletedRequiredDegrees, logInfoDeleteDegree);
+                var degreesWhichHasDeletedRequiredDegree = _context.degreeRepository.DeleteRequiredDegreeFromDegree(degreeToDelete.EntityIdentificator);
+                _logger.AddDegreesLogs(degreesWhichHasDeletedRequiredDegree, logInfoDeleteDegree);
 
                 var deletedGivenDegrees = _context.givenDegreeRepository.DeleteGivenDegreesByDegreeId(degreeToDelete.EntityIdentificator);
                 _logger.AddGivenDegreesLogs(deletedGivenDegrees, logInfoDeleteGivenDegrees);
@@ -321,8 +323,41 @@ namespace Certification_System.Controllers
                 var updatedUsers = _context.userRepository.GetUsersByGivenDegreesId(deletedGivenDegrees.Select(z=> z.GivenDegreeIdentificator).ToList());
                 _logger.AddUsersLogs(updatedUsers, logInfoUpdateUsers);
 
-                var logInfoPersonal = _context.personalLogRepository.GeneratePersonalLogInformation(this.User.Identity.Name, this.ControllerContext.RouteData.Values["action"].ToString(), LogDescriptions.DescriptionOfPersonalUserLog["deleteDegree"], "Indekser " + degree.DegreeIndexer);
-                _context.personalLogRepository.AddPersonalUserLogToAdminGroup(logInfoPersonal);
+                #endregion
+
+                #region PersonalLogs
+
+                var logInfoPersonalDeleteDegree = _context.personalLogRepository.GeneratePersonalLogInformation(this.User.Identity.Name, this.ControllerContext.RouteData.Values["action"].ToString(), LogDescriptions.DescriptionOfPersonalUserLog["deleteDegree"], "Indekser " + degree.DegreeIndexer);
+                _context.personalLogRepository.AddPersonalUserLogToAdminGroup(logInfoPersonalDeleteDegree);
+
+                foreach (var deletedGivenDegree in deletedGivenDegrees)
+                {
+                    var logInfoPersonalDeleteGivenDegree = _context.personalLogRepository.GeneratePersonalLogInformation(this.User.Identity.Name, this.ControllerContext.RouteData.Values["action"].ToString(), LogDescriptions.DescriptionOfPersonalUserLog["deleteGivenDegree"], "Indekser " + deletedGivenDegree.GivenDegreeIndexer);
+                    _context.personalLogRepository.AddPersonalUserLogToAdminGroup(logInfoPersonalDeleteGivenDegree);
+
+                    var deletedGivenDegreeOwner = _context.userRepository.GetUserByGivenDegreeId(deletedGivenDegree.GivenDegreeIdentificator);
+
+                    var logInfoPersonalDeleteUserGivenDegree = _context.personalLogRepository.GeneratePersonalLogInformation(this.User.Identity.Name, this.ControllerContext.RouteData.Values["action"].ToString(), LogDescriptions.DescriptionOfPersonalUserLog["deleteUserGivenDegree"], "Indekser " + deletedGivenDegree.GivenDegreeIndexer);
+                    _context.personalLogRepository.AddPersonalUserLog(deletedGivenDegreeOwner.Id, logInfoPersonalDeleteUserGivenDegree);
+                }
+
+                foreach (var degreeWhichHasDeletedRequiredDegree in degreesWhichHasDeletedRequiredDegree)
+                {
+                    var logInfoPersonalUpdateDegree = _context.personalLogRepository.GeneratePersonalLogInformation(this.User.Identity.Name, this.ControllerContext.RouteData.Values["action"].ToString(), LogDescriptions.DescriptionOfPersonalUserLog["deleteRequiredDegree"], "Indekser " + degreeWhichHasDeletedRequiredDegree.DegreeIndexer);
+                    _context.personalLogRepository.AddPersonalUserLogToAdminGroup(logInfoPersonalUpdateDegree);
+
+                    var givenDegrees = _context.givenDegreeRepository.GetGivenDegreesByIdOfDegree(degreeWhichHasDeletedRequiredDegree.DegreeIdentificator);
+
+                    foreach (var givenDegree in givenDegrees)
+                    {
+                        var ownerOfGivenDegree = _context.userRepository.GetUserByGivenDegreeId(givenDegree.GivenDegreeIdentificator);
+
+                        var logInfoPersonalUpdateUserGivenDegree = _context.personalLogRepository.GeneratePersonalLogInformation(this.User.Identity.Name, this.ControllerContext.RouteData.Values["action"].ToString(), LogDescriptions.DescriptionOfPersonalUserLog["updateUserGivenDegree"], "Indekser " + givenDegree.GivenDegreeIndexer);
+                        _context.personalLogRepository.AddPersonalUserLog(ownerOfGivenDegree.Id, logInfoPersonalUpdateUserGivenDegree);
+                    }
+                }
+
+                #endregion
 
                 return RedirectToAction("DisplayAllDegrees", "Degrees", new { message = "Usunięto wskazany stopień zawodowy" });
             }

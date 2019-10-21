@@ -84,11 +84,11 @@ namespace Certification_System.Controllers
 
                 _context.branchRepository.AddBranch(branch);
 
-                var logInfo = _logger.GenerateLogInformation(this.User.Identity.Name, this.ControllerContext.RouteData.Values["action"].ToString(), LogTypeOfAction.TypesOfActions[0], LogDescriptions.DescriptionOfActionOnEntity["addBranch"]);
-                _logger.AddBranchLog(branch, logInfo);
+                var logInfoAddBranch = _logger.GenerateLogInformation(this.User.Identity.Name, this.ControllerContext.RouteData.Values["action"].ToString(), LogTypeOfAction.TypesOfActions[0], LogDescriptions.DescriptionOfActionOnEntity["addBranch"]);
+                _logger.AddBranchLog(branch, logInfoAddBranch);
 
-                var logInfoPersonal = _context.personalLogRepository.GeneratePersonalLogInformation(this.User.Identity.Name, this.ControllerContext.RouteData.Values["action"].ToString(), LogDescriptions.DescriptionOfPersonalUserLog["addBranch"], "Nazwa: " + branch.Name);
-                _context.personalLogRepository.AddPersonalUserLogToAdminGroup(logInfoPersonal);
+                var logInfoPersonalAddBranch = _context.personalLogRepository.GeneratePersonalLogInformation(this.User.Identity.Name, this.ControllerContext.RouteData.Values["action"].ToString(), LogDescriptions.DescriptionOfPersonalUserLog["addBranch"], "Nazwa: " + branch.Name);
+                _context.personalLogRepository.AddPersonalUserLogToAdminGroup(logInfoPersonalAddBranch);
 
                 return RedirectToAction("ConfirmationOfActionOnBranch", "Branches", new { branchIdentificator = branch.BranchIdentificator, typeOfAction = "Add" });
             }
@@ -120,11 +120,11 @@ namespace Certification_System.Controllers
 
                 _context.branchRepository.UpdateBranch(originBranch);
 
-                var logInfo = _logger.GenerateLogInformation(this.User.Identity.Name, this.ControllerContext.RouteData.Values["action"].ToString(), LogTypeOfAction.TypesOfActions[1], LogDescriptions.DescriptionOfActionOnEntity["updateBranch"]);
-                _logger.AddBranchLog(originBranch, logInfo);
+                var logInfoUpdateBranch = _logger.GenerateLogInformation(this.User.Identity.Name, this.ControllerContext.RouteData.Values["action"].ToString(), LogTypeOfAction.TypesOfActions[1], LogDescriptions.DescriptionOfActionOnEntity["updateBranch"]);
+                _logger.AddBranchLog(originBranch, logInfoUpdateBranch);
 
-                var logInfoPersonal = _context.personalLogRepository.GeneratePersonalLogInformation(this.User.Identity.Name, this.ControllerContext.RouteData.Values["action"].ToString(), LogDescriptions.DescriptionOfPersonalUserLog["updateBranch"], "Nazwa: " + editedBranch.Name);
-                _context.personalLogRepository.AddPersonalUserLogToAdminGroup(logInfoPersonal);
+                var logInfoPersonalUpdateBranch = _context.personalLogRepository.GeneratePersonalLogInformation(this.User.Identity.Name, this.ControllerContext.RouteData.Values["action"].ToString(), LogDescriptions.DescriptionOfPersonalUserLog["updateBranch"], "Nazwa: " + editedBranch.Name);
+                _context.personalLogRepository.AddPersonalUserLogToAdminGroup(logInfoPersonalUpdateBranch);
 
                 return RedirectToAction("ConfirmationOfActionOnBranch", "Branches", new { branchIdentificator = originBranch.BranchIdentificator, typeOfAction = "Update" });
             }

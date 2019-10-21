@@ -167,10 +167,9 @@ namespace Certification_System.Entities
            {"assignUserToCourse",  "Zostałeś dodany do kursu"},
            {"addRejectedUser",  "Zgłoszenie użytkownika o zapis do kursu zostało odrzucone"},
            {"rejectUserFromCourseQueue",  "Twoje zgłoszenie o zapis na kurs zostało odrzucone"},
+           {"deleteRequiredCertificate",  "Certyfikat został usunięty z listy wymaganych do zdobycia stopnia zawodowego"},
+           {"deleteUserCompany",  "Usunięto przedsiębiorstwo związane z Twoim kontem użytkownika"},
 
-
-           {"assignUserToCourse",  "Zostałeś dodany do kursu"},
-           {"assignUserToCourse",  "Zostałeś dodany do kursu"},
            {"assignUserToCourse",  "Zostałeś dodany do kursu"},
            {"assignUserToCourse",  "Zostałeś dodany do kursu"},
            {"assignUserToCourse",  "Zostałeś dodany do kursu"},

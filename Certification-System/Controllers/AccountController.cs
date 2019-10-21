@@ -188,8 +188,8 @@ namespace Certification_System.Controllers
                     var createdUser = _context.userRepository.GetUserById(user.Id);
                     _context.personalLogRepository.CreatePersonalUserLog(createdUser);
 
-                    var logInfoPersonal = _context.personalLogRepository.GeneratePersonalLogInformation(this.User.Identity.Name, this.ControllerContext.RouteData.Values["action"].ToString(), LogDescriptions.DescriptionOfPersonalUserLog["registerUser"]);
-                    _context.personalLogRepository.AddPersonalUserLog(createdUser.Id, logInfoPersonal);
+                    var logInfoPersonalRegister = _context.personalLogRepository.GeneratePersonalLogInformation(this.User.Identity.Name, this.ControllerContext.RouteData.Values["action"].ToString(), LogDescriptions.DescriptionOfPersonalUserLog["registerUser"]);
+                    _context.personalLogRepository.AddPersonalUserLog(createdUser.Id, logInfoPersonalRegister);
 
                     //await _signInManager.SignInAsync(user, isPersistent: false);
                     //_logger.LogInformation("Użytkownik utworzył nowe konto.");
@@ -240,8 +240,8 @@ namespace Certification_System.Controllers
 
                     _signInManager.SignOutAsync().Wait();
 
-                    var logInfoPersonal = _context.personalLogRepository.GeneratePersonalLogInformation(this.User.Identity.Name, this.ControllerContext.RouteData.Values["action"].ToString(), LogDescriptions.DescriptionOfPersonalUserLog["changePassword"]);
-                    _context.personalLogRepository.AddPersonalUserLog(updatedUser.Id, logInfoPersonal);
+                    var logInfoPersonalChangePassword = _context.personalLogRepository.GeneratePersonalLogInformation(this.User.Identity.Name, this.ControllerContext.RouteData.Values["action"].ToString(), LogDescriptions.DescriptionOfPersonalUserLog["changePassword"]);
+                    _context.personalLogRepository.AddPersonalUserLog(updatedUser.Id, logInfoPersonalChangePassword);
 
                     return RedirectToAction("Login", "Account", new { message = "Twoje hasło zostało zmienione - zostałeś wylogowany" });
                 }
@@ -284,11 +284,11 @@ namespace Certification_System.Controllers
                 if (result.Succeeded)
                 {
                     var updatedUser = _context.userRepository.GetUserById(user.Id);
-                    var logInfo = _logger.GenerateLogInformation(user.Email, this.ControllerContext.RouteData.Values["action"].ToString(), LogTypeOfAction.TypesOfActions[1], LogDescriptions.DescriptionOfActionOnEntity["confirmEmail"]);
-                    _logger.AddUserLog(updatedUser, logInfo);
+                    var logInfoUpdateUser = _logger.GenerateLogInformation(user.Email, this.ControllerContext.RouteData.Values["action"].ToString(), LogTypeOfAction.TypesOfActions[1], LogDescriptions.DescriptionOfActionOnEntity["confirmEmail"]);
+                    _logger.AddUserLog(updatedUser, logInfoUpdateUser);
 
-                    var logInfoPersonal = _context.personalLogRepository.GeneratePersonalLogInformation(this.User.Identity.Name, this.ControllerContext.RouteData.Values["action"].ToString(), LogDescriptions.DescriptionOfPersonalUserLog["confirmEmail"]);
-                    _context.personalLogRepository.AddPersonalUserLog(updatedUser.Id, logInfoPersonal);
+                    var logInfoPersonalConfirmEmail = _context.personalLogRepository.GeneratePersonalLogInformation(this.User.Identity.Name, this.ControllerContext.RouteData.Values["action"].ToString(), LogDescriptions.DescriptionOfPersonalUserLog["confirmEmail"]);
+                    _context.personalLogRepository.AddPersonalUserLog(updatedUser.Id, logInfoPersonalConfirmEmail);
 
                     return RedirectToAction("Login", "Account", new { message = "Adres email został potwierdzony." });
                 }
@@ -333,14 +333,14 @@ namespace Certification_System.Controllers
                     _signInManager.SignInAsync(user, isPersistent: false).Wait();
 
                     var updatedUser = _context.userRepository.GetUserById(user.Id);
-                    var logInfo = _logger.GenerateLogInformation(this.User.Identity.Name, this.ControllerContext.RouteData.Values["action"].ToString(), LogTypeOfAction.TypesOfActions[1], LogDescriptions.DescriptionOfActionOnEntity["setAccountPassword"]);
-                    _logger.AddUserLog(updatedUser, logInfo);
+                    var logInfoUpdateUser = _logger.GenerateLogInformation(this.User.Identity.Name, this.ControllerContext.RouteData.Values["action"].ToString(), LogTypeOfAction.TypesOfActions[1], LogDescriptions.DescriptionOfActionOnEntity["setAccountPassword"]);
+                    _logger.AddUserLog(updatedUser, logInfoUpdateUser);
 
                     var logInfoUserLogin = _logger.GenerateUserLoginInformation(user.Email, UserLoginActionStatus.UserLoginStatus[0]);
                     _logger.AddUserLoginLog(logInfoUserLogin);
 
-                    var logInfoPersonal = _context.personalLogRepository.GeneratePersonalLogInformation(this.User.Identity.Name, this.ControllerContext.RouteData.Values["action"].ToString(), LogDescriptions.DescriptionOfPersonalUserLog["setPassword"]);
-                    _context.personalLogRepository.AddPersonalUserLog(updatedUser.Id, logInfoPersonal);
+                    var logInfoPersonalSetPassword = _context.personalLogRepository.GeneratePersonalLogInformation(this.User.Identity.Name, this.ControllerContext.RouteData.Values["action"].ToString(), LogDescriptions.DescriptionOfPersonalUserLog["setPassword"]);
+                    _context.personalLogRepository.AddPersonalUserLog(updatedUser.Id, logInfoPersonalSetPassword);
 
                     return RedirectToAction("BlankMenu", "Certificates", new { message = "Twoje hasło zostało ustawione - zostałeś zalogowany na swoje konto" });
                 }
@@ -434,11 +434,11 @@ namespace Certification_System.Controllers
                 if (result.Succeeded)
                 {
                     var updatedUser = _context.userRepository.GetUserById(user.Id);
-                    var logInfo = _logger.GenerateLogInformation(this.User.Identity.Name, this.ControllerContext.RouteData.Values["action"].ToString(), LogTypeOfAction.TypesOfActions[1], LogDescriptions.DescriptionOfActionOnEntity["resetPassword"]);
-                    _logger.AddUserLog(updatedUser, logInfo);
+                    var logInfoUpdateUser = _logger.GenerateLogInformation(this.User.Identity.Name, this.ControllerContext.RouteData.Values["action"].ToString(), LogTypeOfAction.TypesOfActions[1], LogDescriptions.DescriptionOfActionOnEntity["resetPassword"]);
+                    _logger.AddUserLog(updatedUser, logInfoUpdateUser);
 
-                    var logInfoPersonal = _context.personalLogRepository.GeneratePersonalLogInformation(this.User.Identity.Name, this.ControllerContext.RouteData.Values["action"].ToString(), LogDescriptions.DescriptionOfPersonalUserLog["resetPassword"]);
-                    _context.personalLogRepository.AddPersonalUserLog(updatedUser.Id, logInfoPersonal);
+                    var logInfoPersonalResetPassword = _context.personalLogRepository.GeneratePersonalLogInformation(this.User.Identity.Name, this.ControllerContext.RouteData.Values["action"].ToString(), LogDescriptions.DescriptionOfPersonalUserLog["resetPassword"]);
+                    _context.personalLogRepository.AddPersonalUserLog(updatedUser.Id, logInfoPersonalResetPassword);
 
                     return RedirectToAction(nameof(Login), "Account", new { message = "Hasło zostało zmienione" });
                 }
