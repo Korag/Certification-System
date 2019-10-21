@@ -88,7 +88,7 @@ namespace Certification_System.Controllers
                 _logger.AddBranchLog(branch, logInfo);
 
                 var logInfoPersonal = _context.personalLogRepository.GeneratePersonalLogInformation(this.User.Identity.Name, this.ControllerContext.RouteData.Values["action"].ToString(), LogDescriptions.DescriptionOfPersonalUserLog["addBranch"], "Nazwa: " + branch.Name);
-                _context.personalLogRepository.AddPersonalUsersLogsToAdminGroup(logInfoPersonal);
+                _context.personalLogRepository.AddPersonalUserLogToAdminGroup(logInfoPersonal);
 
                 return RedirectToAction("ConfirmationOfActionOnBranch", "Branches", new { branchIdentificator = branch.BranchIdentificator, typeOfAction = "Add" });
             }
@@ -124,7 +124,7 @@ namespace Certification_System.Controllers
                 _logger.AddBranchLog(originBranch, logInfo);
 
                 var logInfoPersonal = _context.personalLogRepository.GeneratePersonalLogInformation(this.User.Identity.Name, this.ControllerContext.RouteData.Values["action"].ToString(), LogDescriptions.DescriptionOfPersonalUserLog["updateBranch"], "Nazwa: " + editedBranch.Name);
-                _context.personalLogRepository.AddPersonalUsersLogsToAdminGroup(logInfoPersonal);
+                _context.personalLogRepository.AddPersonalUserLogToAdminGroup(logInfoPersonal);
 
                 return RedirectToAction("ConfirmationOfActionOnBranch", "Branches", new { branchIdentificator = originBranch.BranchIdentificator, typeOfAction = "Update" });
             }
@@ -209,7 +209,7 @@ namespace Certification_System.Controllers
                 _logger.AddDegreesLogs(updatedDegrees, logInfoUpdateDegree);
 
                 var logInfoPersonal = _context.personalLogRepository.GeneratePersonalLogInformation(this.User.Identity.Name, this.ControllerContext.RouteData.Values["action"].ToString(), LogDescriptions.DescriptionOfPersonalUserLog["deleteBranch"], "Nazwa: " + branch.Name);
-                _context.personalLogRepository.AddPersonalUsersLogsToAdminGroup(logInfoPersonal);
+                _context.personalLogRepository.AddPersonalUserLogToAdminGroup(logInfoPersonal);
 
                 return RedirectToAction("DisplayAllBranches", "Branches", new { message = "Usunięto wskazany obszar certyfikacji" });
             }

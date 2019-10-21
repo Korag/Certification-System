@@ -70,7 +70,7 @@ namespace Certification_System.Controllers
                 _logger.AddDegreeLog(degree, logInfoAddDegree);
 
                 var logInfoPersonal = _context.personalLogRepository.GeneratePersonalLogInformation(this.User.Identity.Name, this.ControllerContext.RouteData.Values["action"].ToString(), LogDescriptions.DescriptionOfPersonalUserLog["addDegree"], "Indekser " + degree.DegreeIndexer);
-                _context.personalLogRepository.AddPersonalUsersLogsToAdminGroup(logInfoPersonal);
+                _context.personalLogRepository.AddPersonalUserLogToAdminGroup(logInfoPersonal);
 
                 return RedirectToAction("ConfirmationOfActionOnDegree", new { degreeIdentificator = degree.DegreeIdentificator, TypeOfAction = "Add" });
             }
@@ -171,7 +171,7 @@ namespace Certification_System.Controllers
                 _logger.AddDegreeLog(originDegree, logInfoUpdateDegree);
 
                 var logInfoPersonal = _context.personalLogRepository.GeneratePersonalLogInformation(this.User.Identity.Name, this.ControllerContext.RouteData.Values["action"].ToString(), LogDescriptions.DescriptionOfPersonalUserLog["updateDegree"], "Indekser " + originDegree.DegreeIndexer);
-                _context.personalLogRepository.AddPersonalUsersLogsToAdminGroup(logInfoPersonal);
+                _context.personalLogRepository.AddPersonalUserLogToAdminGroup(logInfoPersonal);
 
                 return RedirectToAction("ConfirmationOfActionOnDegree", "Degrees", new { degreeIdentificator = editedDegree.DegreeIdentificator, TypeOfAction = "Update" });
             }
@@ -322,7 +322,7 @@ namespace Certification_System.Controllers
                 _logger.AddUsersLogs(updatedUsers, logInfoUpdateUsers);
 
                 var logInfoPersonal = _context.personalLogRepository.GeneratePersonalLogInformation(this.User.Identity.Name, this.ControllerContext.RouteData.Values["action"].ToString(), LogDescriptions.DescriptionOfPersonalUserLog["deleteDegree"], "Indekser " + degree.DegreeIndexer);
-                _context.personalLogRepository.AddPersonalUsersLogsToAdminGroup(logInfoPersonal);
+                _context.personalLogRepository.AddPersonalUserLogToAdminGroup(logInfoPersonal);
 
                 return RedirectToAction("DisplayAllDegrees", "Degrees", new { message = "Usunięto wskazany stopień zawodowy" });
             }

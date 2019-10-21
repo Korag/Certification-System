@@ -117,7 +117,7 @@ namespace Certification_System.Controllers
                 _logger.AddUserLog(user, logInfoUpdateUser);
 
                 var logInfoPersonalAddGivenCertificate = _context.personalLogRepository.GeneratePersonalLogInformation(this.User.Identity.Name, this.ControllerContext.RouteData.Values["action"].ToString(), LogDescriptions.DescriptionOfPersonalUserLog["addGivenCertificate"], "Indekser " + givenCertificate.GivenCertificateIndexer);
-                _context.personalLogRepository.AddPersonalUsersLogsToAdminGroup(logInfoPersonalAddGivenCertificate);
+                _context.personalLogRepository.AddPersonalUserLogToAdminGroup(logInfoPersonalAddGivenCertificate);
 
                 var logInfoPersonalAddGivenCertificateToUser = _context.personalLogRepository.GeneratePersonalLogInformation(this.User.Identity.Name, this.ControllerContext.RouteData.Values["action"].ToString(), LogDescriptions.DescriptionOfPersonalUserLog["addUserGivenCertificate"], "Indekser " + givenCertificate.GivenCertificateIndexer);
                 _context.personalLogRepository.AddPersonalUserLog(user.Id, logInfoPersonalAddGivenCertificateToUser);
@@ -194,7 +194,7 @@ namespace Certification_System.Controllers
                 _logger.AddGivenCertificateLog(originGivenCertificate, logInfoUpdateGivenCertificate);
 
                 var logInfoPersonalUpdateGivenCertificate = _context.personalLogRepository.GeneratePersonalLogInformation(this.User.Identity.Name, this.ControllerContext.RouteData.Values["action"].ToString(), LogDescriptions.DescriptionOfPersonalUserLog["updateGivenCertificate"], "Indekser " + originGivenCertificate.GivenCertificateIndexer);
-                _context.personalLogRepository.AddPersonalUsersLogsToAdminGroup(logInfoPersonalUpdateGivenCertificate);
+                _context.personalLogRepository.AddPersonalUserLogToAdminGroup(logInfoPersonalUpdateGivenCertificate);
 
                 var logInfoPersonalUpdateUserGivenCertificate = _context.personalLogRepository.GeneratePersonalLogInformation(this.User.Identity.Name, this.ControllerContext.RouteData.Values["action"].ToString(), LogDescriptions.DescriptionOfPersonalUserLog["updateUserGivenCertificate"], "Indekser " + originGivenCertificate.GivenCertificateIndexer);
                 _context.personalLogRepository.AddPersonalUserLog(editedGivenCertificate.User.UserIdentificator, logInfoPersonalUpdateUserGivenCertificate);
@@ -354,7 +354,7 @@ namespace Certification_System.Controllers
                 _logger.AddUserLog(updatedUser, logInfoUpdateUser);
 
                 var logInfoPersonalDeleteGivenCertificate = _context.personalLogRepository.GeneratePersonalLogInformation(this.User.Identity.Name, this.ControllerContext.RouteData.Values["action"].ToString(), LogDescriptions.DescriptionOfPersonalUserLog["deleteGivenCertificate"], "Indekser " + givenCertificate.GivenCertificateIndexer);
-                _context.personalLogRepository.AddPersonalUsersLogsToAdminGroup(logInfoPersonalDeleteGivenCertificate);
+                _context.personalLogRepository.AddPersonalUserLogToAdminGroup(logInfoPersonalDeleteGivenCertificate);
 
                 var logInfoPersonalDeleteUserGivenCertificate = _context.personalLogRepository.GeneratePersonalLogInformation(this.User.Identity.Name, this.ControllerContext.RouteData.Values["action"].ToString(), LogDescriptions.DescriptionOfPersonalUserLog["deleteUserGivenCertificate"], "Indekser " + givenCertificate.GivenCertificateIndexer);
                 _context.personalLogRepository.AddPersonalUserLog(user.Id, logInfoPersonalDeleteUserGivenCertificate);
