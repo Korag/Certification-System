@@ -46,11 +46,11 @@
 }
 
 .certificationBanner {
-    background-image: url('../Image/logo_ziad_big.jpg');
+    background-image: url('../Image/logo_ziad_big_tt.png');
     background-size: contain;
     background-repeat: no-repeat;
     background-position: center;
-    opacity: 0.50;
+    opacity: 0.60;
     min-height: calc(100vh - 240px);
 }
 
