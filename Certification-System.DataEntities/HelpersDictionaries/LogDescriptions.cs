@@ -180,10 +180,16 @@ namespace Certification_System.Entities
            {"updateUserExam",  "Dane egzaminu w którym bierzesz udział zostały zmodyfikowane"},
            {"removeExaminerFromExam",  "Zostałeś usunięty z egzaminu"},
            {"addUserToExam",  "Do egzaminu został dodany nowy użytkownik"},
+           {"addUserToExamTerm",  "Do tury egzaminu został dodany nowy użytkownik"},
+
            {"assignUserToExam",  "Zostałeś dodany do egzaminu"},
+           {"assignUserToExamTerm",  "Zostałeś dodany do tury egzaminu"},
            {"removeGroupOfUsersFromExam",  "Grupa użytkowników została usunięta z egzaminu"},
+           {"removeGroupOfUsersFromExamTerm",  "Grupa użytkowników została usunięta z tury egzaminu"},
            {"axUserFromExam",  "Zostałeś usunięty z egzaminu"},
+           {"axUserFromExamTerm",  "Zostałeś usunięty z tury egzaminu"},
            {"addGroupOfUsersToExam",  "Grupa użytkowników została dodana do egzaminu"},
+           {"addGroupOfUsersToExamTerm",  "Grupa użytkowników została dodana do tury egzaminu"},
 
            {"updateExamResultsFromExam",  "Zaktulizowano wyniki egzaminu"},
            {"updateUserExamResult",  "Twój wynik z egzaminu został zmodyfikowany"},
@@ -193,6 +199,10 @@ namespace Certification_System.Entities
            {"resignFromExam",  "Użytkownik zrezygnował z udziału w egzaminie"},
            {"resignUserFromExam",  "Zrezygnowałeś z udziału w egzaminie"},
 
+           {"updateExamTerm",  "Dane tury egzaminu zostały zmodyfikowane"},
+           {"updateUserExamTerm",  "Dane tury egzaminu w której uczestniczysz zostały zmodyfikowane"},
+           {"removeExaminerFromExamTerm",  "Zostałeś usunięty z tury egzaminu"},
+           
         };
     }
 }

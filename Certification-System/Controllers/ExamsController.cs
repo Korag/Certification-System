@@ -900,8 +900,8 @@ namespace Certification_System.Controllers
 
                         #region PersonalUserLogs
 
-                        var logInfoPersonalAddUsersToExam = _context.personalLogRepository.GeneratePersonalLogInformation(this.User.Identity.Name, this.ControllerContext.RouteData.Values["action"].ToString(), LogDescriptions.DescriptionOfPersonalUserLog["addUserToExam"], "Indekser: " + exam.ExamIndexer);
-                        _context.personalLogRepository.AddPersonalUserLogToAdminGroup(logInfoPersonalAddUsersToExam);
+                        var logInfoPersonalAddUserToExam = _context.personalLogRepository.GeneratePersonalLogInformation(this.User.Identity.Name, this.ControllerContext.RouteData.Values["action"].ToString(), LogDescriptions.DescriptionOfPersonalUserLog["addUserToExam"], "Indekser: " + exam.ExamIndexer);
+                        _context.personalLogRepository.AddPersonalUserLogToAdminGroup(logInfoPersonalAddUserToExam);
 
                         var logInfoPersonalAssignUserToExam = _context.personalLogRepository.GeneratePersonalLogInformation(this.User.Identity.Name, this.ControllerContext.RouteData.Values["action"].ToString(), LogDescriptions.DescriptionOfPersonalUserLog["assignUserToExam"], "Indekser: " + exam.ExamIndexer);
                         _context.personalLogRepository.AddPersonalUserLog(userAssignedToExam.SelectedUser, logInfoPersonalAssignUserToExam);
@@ -1472,7 +1472,6 @@ namespace Certification_System.Controllers
 
                 #endregion
 
-
                 return RedirectToAction("DisplayAllExamsResults", "Exams", new { message = "Usunięto wskazany wynik z egzaminu" });
             }
 
@@ -1849,6 +1848,16 @@ namespace Certification_System.Controllers
                     _context.examRepository.AddUserToExam(exam.ExamIdentificator, user.Id);
 
                     _logger.AddExamLog(exam, logInfoAssignUserToExam);
+
+                    #region PersonalUserLogs
+
+                    var logInfoPersonalAddUserToExam = _context.personalLogRepository.GeneratePersonalLogInformation(this.User.Identity.Name, this.ControllerContext.RouteData.Values["action"].ToString(), LogDescriptions.DescriptionOfPersonalUserLog["addUserToExam"], "Indekser: " + exam.ExamIndexer);
+                    _context.personalLogRepository.AddPersonalUserLogToAdminGroup(logInfoPersonalAddUserToExam);
+
+                    var logInfoPersonalAssignUserToExam = _context.personalLogRepository.GeneratePersonalLogInformation(this.User.Identity.Name, this.ControllerContext.RouteData.Values["action"].ToString(), LogDescriptions.DescriptionOfPersonalUserLog["assignUserToExam"], "Indekser: " + exam.ExamIndexer);
+                    _context.personalLogRepository.AddPersonalUserLog(userAssignedToExam.SelectedUser, logInfoPersonalAssignUserToExam);
+
+                    #endregion
 
                     var course = _context.courseRepository.GetCourseByExamId(exam.ExamIdentificator);
 
