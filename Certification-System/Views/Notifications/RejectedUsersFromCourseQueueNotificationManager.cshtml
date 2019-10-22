@@ -8,6 +8,10 @@
 <h1>Odrzucone wnioski o zapis na kurs</h1>
 <hr />
 
+<div class="row m-0 mt-3 mb-3">
+    <a asp-action="AdminNotificationManager" asp-controller="Notifications" class="btn btn-outline-info mt-1 xs450px_FloatRight">Powrót do panelu powiadomień</a>
+</div>
+
 @await Component.InvokeAsync("DisplayRejectedUsersFromCourseQueueLogDataTable", new { logViewModel = Model, tableIdentificator = "listNotifications", operationSet = 1 })
 
 @section Scripts {

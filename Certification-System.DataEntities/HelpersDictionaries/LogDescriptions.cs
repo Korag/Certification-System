@@ -202,8 +202,8 @@ namespace Certification_System.Entities
            {"updateExamTerm",  "Dane tury egzaminu zostały zmodyfikowane"},
            {"updateUserExamTerm",  "Dane tury egzaminu w której uczestniczysz zostały zmodyfikowane"},
            {"removeExaminerFromExamTerm",  "Zostałeś usunięty z tury egzaminu"},
-           
         };
     }
 }
+
 
