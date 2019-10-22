@@ -143,7 +143,7 @@ namespace Certification_System.Entities
            {"removeUserFromMeeting",  "Usunięto użytkownika ze spotkania"},
            {"removeUserFromExam",  "Usunięto użytkownika z egzaminu"},
            {"removeUserFromExamTerm",  "Usunięto użytkownika z tury egzaminu"},
-           {"deleteExamResult",  "Wyniki egzaminów użytkowników zostały usunięte"},
+           {"deleteAllExamResults",  "Wyniki egzaminów użytkowników zostały usunięte"},
            {"addCourse",  "Nowy kurs został dodany do systemu"},
            {"updateCourse", "Dane kursu zostały zmodyfikowane"},
            {"updateUserCourse",  "Dane kursu w którym bierzesz udział zostały zmodyfikowane"},
@@ -181,6 +181,17 @@ namespace Certification_System.Entities
            {"removeExaminerFromExam",  "Zostałeś usunięty z egzaminu"},
            {"addUserToExam",  "Do egzaminu został dodany nowy użytkownik"},
            {"assignUserToExam",  "Zostałeś dodany do egzaminu"},
+           {"removeGroupOfUsersFromExam",  "Grupa użytkowników została usunięta z egzaminu"},
+           {"axUserFromExam",  "Zostałeś usunięty z egzaminu"},
+           {"addGroupOfUsersToExam",  "Grupa użytkowników została dodana do egzaminu"},
+
+           {"updateExamResultsFromExam",  "Zaktulizowano wyniki egzaminu"},
+           {"updateUserExamResult",  "Twój wynik z egzaminu został zmodyfikowany"},
+           {"addUsersExamsResults",  "Egzamin został oceniony przez egzaminatora"},
+           {"addUserExamResult",  "Twój egzamin został oceniony"},
+           {"deleteExamResult",  "Wynik użytkownika z egzaminu został usunięty"},
+           {"resignFromExam",  "Użytkownik zrezygnował z udziału w egzaminie"},
+           {"resignUserFromExam",  "Zrezygnowałeś z udziału w egzaminie"},
 
         };
     }

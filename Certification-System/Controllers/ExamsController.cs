@@ -977,6 +977,16 @@ namespace Certification_System.Controllers
 
                     #endregion
 
+                    #region PersonalUserLogs
+
+                    var logInfoPersonalDeleteGroupOfUsersFromExam = _context.personalLogRepository.GeneratePersonalLogInformation(this.User.Identity.Name, this.ControllerContext.RouteData.Values["action"].ToString(), LogDescriptions.DescriptionOfPersonalUserLog["removeGroupOfUsersFromExam"], "Indekser: " + exam.ExamIndexer);
+                    _context.personalLogRepository.AddPersonalUserLogToAdminGroup(logInfoPersonalDeleteGroupOfUsersFromExam);
+
+                    var logInfoPersonalRemoveUserFromExam = _context.personalLogRepository.GeneratePersonalLogInformation(this.User.Identity.Name, this.ControllerContext.RouteData.Values["action"].ToString(), LogDescriptions.DescriptionOfPersonalUserLog["axUserFromExam"], "Indekser: " + exam.ExamIndexer);
+                    _context.personalLogRepository.AddPersonalUsersLogs(usersToDeleteFromExamIdentificators, logInfoPersonalRemoveUserFromExam);
+
+                    #endregion
+
                     if (deleteUsersFromExamViewModel.ExamDividedToTerms)
                     {
                         var examTerms = _context.examTermRepository.GetExamsTermsById(exam.ExamTerms);
@@ -1079,10 +1089,10 @@ namespace Certification_System.Controllers
                 {
                     var exam = _context.examRepository.GetExamById(addUsersToExamViewModel.ExamIdentificator);
 
-                    if (addUsersToExamViewModel.UsersToAssignToExam.Where(z => z.IsToAssign == true).Count() <= addUsersToExamViewModel.VacantSeats)
-                    {
-                        var usersToAddToExamIdentificators = addUsersToExamViewModel.UsersToAssignToExam.ToList().Where(z => z.IsToAssign == true).Select(z => z.UserIdentificator).ToList();
+                    var usersToAddToExamIdentificators = addUsersToExamViewModel.UsersToAssignToExam.ToList().Where(z => z.IsToAssign == true).Select(z => z.UserIdentificator).ToList();
 
+                    if (usersToAddToExamIdentificators.Count() <= addUsersToExamViewModel.VacantSeats)
+                    {
                         _context.examRepository.AddUsersToExam(addUsersToExamViewModel.ExamIdentificator, usersToAddToExamIdentificators);
 
                         foreach (var user in usersToAddToExamIdentificators)
@@ -1090,8 +1100,22 @@ namespace Certification_System.Controllers
                             exam.EnrolledUsers.Add(user);
                         }
 
+                        #region EntityLogs
+
                         var logInfoAssignUsersToExam = _logger.GenerateLogInformation(this.User.Identity.Name, this.ControllerContext.RouteData.Values["action"].ToString(), LogTypeOfAction.TypesOfActions[1], LogDescriptions.DescriptionOfActionOnEntity["assignUsersToExam"]);
                         _logger.AddExamLog(exam, logInfoAssignUsersToExam);
+
+                        #endregion
+
+                        #region PersonalUserLogs
+
+                        var logInfoPersonalAddGroupOfUsersToExam = _context.personalLogRepository.GeneratePersonalLogInformation(this.User.Identity.Name, this.ControllerContext.RouteData.Values["action"].ToString(), LogDescriptions.DescriptionOfPersonalUserLog["addGroupOfUsersToExam"], "Indekser: " + exam.ExamIndexer);
+                        _context.personalLogRepository.AddPersonalUserLogToAdminGroup(logInfoPersonalAddGroupOfUsersToExam);
+
+                        var logInfoPersonalAddUserToExam = _context.personalLogRepository.GeneratePersonalLogInformation(this.User.Identity.Name, this.ControllerContext.RouteData.Values["action"].ToString(), LogDescriptions.DescriptionOfPersonalUserLog["assignUserToExam"], "Indekser: " + exam.ExamIndexer);
+                        _context.personalLogRepository.AddPersonalUsersLogs(usersToAddToExamIdentificators, logInfoPersonalAddUserToExam);
+
+                        #endregion
 
                         return RedirectToAction("ExamDetails", new { examIdentificator = addUsersToExamViewModel.ExamIdentificator, message = "Dodano grupę użytkowników do egzaminu" });
                     }
@@ -1229,10 +1253,14 @@ namespace Certification_System.Controllers
                         }
                     }
 
+                    #region EntityLogs
+
                     var logInfoUpdateExam = _logger.GenerateLogInformation(this.User.Identity.Name, this.ControllerContext.RouteData.Values["action"].ToString(), LogTypeOfAction.TypesOfActions[1], LogDescriptions.DescriptionOfActionOnEntity["updateExam"]);
                     var logInfoUpdateExamResults = _logger.GenerateLogInformation(this.User.Identity.Name, this.ControllerContext.RouteData.Values["action"].ToString(), LogTypeOfAction.TypesOfActions[1], LogDescriptions.DescriptionOfActionOnEntity["updateExamResult"]);
 
                     var logInfoAddExamResults = _logger.GenerateLogInformation(this.User.Identity.Name, this.ControllerContext.RouteData.Values["action"].ToString(), LogTypeOfAction.TypesOfActions[0], LogDescriptions.DescriptionOfActionOnEntity["addExamResult"]);
+
+                    #endregion
 
                     if (usersExamsResultsToAdd.Count() == 0 && usersExamsResultsToUpdate.Count() == 0 && exam.MaxAmountOfPointsToEarn == markedExamViewModel.MaxAmountOfPointsToEarn)
                     {
@@ -1245,6 +1273,13 @@ namespace Certification_System.Controllers
                         _context.examRepository.SetMaxAmountOfPointsToEarn(markedExamViewModel.ExamIdentificator, markedExamViewModel.MaxAmountOfPointsToEarn);
 
                         _logger.AddExamLog(exam, logInfoUpdateExam);
+
+                        #region PersonalUserLogs
+
+                        var logInfoPersonalUpdateExam = _context.personalLogRepository.GeneratePersonalLogInformation(this.User.Identity.Name, this.ControllerContext.RouteData.Values["action"].ToString(), LogDescriptions.DescriptionOfPersonalUserLog["updateExam"], "Indekser: " + exam.ExamIndexer);
+                        _context.personalLogRepository.AddPersonalUserLogToAdminGroup(logInfoPersonalUpdateExam);
+
+                        #endregion
                     }
 
                     if (usersExamsResultsToUpdate.Count() != 0)
@@ -1252,7 +1287,15 @@ namespace Certification_System.Controllers
                         _context.examResultRepository.UpdateExamsResults(usersExamsResultsToUpdate);
                         _logger.AddExamsResultsLogs(usersExamsResultsToUpdate, logInfoUpdateExamResults);
 
-                        //_logger.AddExamLog(exam, logInfoUpdateExamsListOfResults);
+                        #region PersonalUserLogs
+
+                        var logInfoPersonalUpdateExamResultFromExam = _context.personalLogRepository.GeneratePersonalLogInformation(this.User.Identity.Name, this.ControllerContext.RouteData.Values["action"].ToString(), LogDescriptions.DescriptionOfPersonalUserLog["updateExamResultsFromExam"], "Indekser: " + exam.ExamIndexer);
+                        _context.personalLogRepository.AddPersonalUserLogToAdminGroup(logInfoPersonalUpdateExamResultFromExam);
+
+                        var logInfoPersonalUpdateUserExamResult = _context.personalLogRepository.GeneratePersonalLogInformation(this.User.Identity.Name, this.ControllerContext.RouteData.Values["action"].ToString(), LogDescriptions.DescriptionOfPersonalUserLog["updateUserExamResult"], "Indekser: " + exam.ExamIndexer);
+                        _context.personalLogRepository.AddPersonalUsersLogs(usersExamsResultsToUpdate.Select(z=> z.User).ToList(), logInfoPersonalUpdateUserExamResult);
+
+                        #endregion
                     }
                     if (usersExamsResultsToAdd.Count() != 0)
                     {
@@ -1260,6 +1303,16 @@ namespace Certification_System.Controllers
                         _context.examRepository.AddExamsResultsToExam(exam.ExamIdentificator, usersExamsResultsToAdd.Select(z => z.ExamResultIdentificator).ToList());
 
                         _logger.AddExamsResultsLogs(usersExamsResultsToAdd, logInfoAddExamResults);
+
+                        #region PersonalUserLogs
+
+                        var logInfoPersonalAddUserExamResults = _context.personalLogRepository.GeneratePersonalLogInformation(this.User.Identity.Name, this.ControllerContext.RouteData.Values["action"].ToString(), LogDescriptions.DescriptionOfPersonalUserLog["addUsersExamsResults"], "Indekser: " + exam.ExamIndexer);
+                        _context.personalLogRepository.AddPersonalUserLogToAdminGroup(logInfoPersonalAddUserExamResults);
+
+                        var logInfoPersonalAddUserExamResult = _context.personalLogRepository.GeneratePersonalLogInformation(this.User.Identity.Name, this.ControllerContext.RouteData.Values["action"].ToString(), LogDescriptions.DescriptionOfPersonalUserLog["addUserExamResult"], "Indekser: " + exam.ExamIndexer);
+                        _context.personalLogRepository.AddPersonalUsersLogs(usersExamsResultsToAdd.Select(z=> z.User).ToList(), logInfoPersonalAddUserExamResult);
+
+                        #endregion
                     }
                 }
 
@@ -1395,14 +1448,30 @@ namespace Certification_System.Controllers
 
             if (ModelState.IsValid && _keyGenerator.ValidateUserTokenForEntityDeletion(user, examResultToDelete.Code))
             {
+                _context.examResultRepository.DeleteExamResult(examResultToDelete.EntityIdentificator);
+
+                #region EntityLogs
+
                 var logInfoDeleteExamResult = _logger.GenerateLogInformation(this.User.Identity.Name, this.ControllerContext.RouteData.Values["action"].ToString(), LogTypeOfAction.TypesOfActions[2], LogDescriptions.DescriptionOfActionOnEntity["deleteExamResult"]);
                 var logInfoUpdateExam = _logger.GenerateLogInformation(this.User.Identity.Name, this.ControllerContext.RouteData.Values["action"].ToString(), LogTypeOfAction.TypesOfActions[1], LogDescriptions.DescriptionOfActionOnEntity["removeExamResultFromCourse"]);
 
-                _context.examResultRepository.DeleteExamResult(examResultToDelete.EntityIdentificator);
                 _logger.AddExamResultLog(examResult, logInfoDeleteExamResult);
 
                 var updatedExam = _context.examRepository.DeleteExamResultFromExam(examResultToDelete.EntityIdentificator);
                 _logger.AddExamLog(updatedExam, logInfoUpdateExam);
+
+                #endregion
+
+                #region PersonalUserLogs
+
+                var logInfoPersonalDeleteExamResult = _context.personalLogRepository.GeneratePersonalLogInformation(this.User.Identity.Name, this.ControllerContext.RouteData.Values["action"].ToString(), LogDescriptions.DescriptionOfPersonalUserLog["deleteExamResult"], "Indekser: " + examResult.ExamResultIndexer);
+                _context.personalLogRepository.AddPersonalUserLogToAdminGroup(logInfoPersonalDeleteExamResult);
+
+                var logInfoPersonalRemoveUserExamResult = _context.personalLogRepository.GeneratePersonalLogInformation(this.User.Identity.Name, this.ControllerContext.RouteData.Values["action"].ToString(), LogDescriptions.DescriptionOfPersonalUserLog["deleteUserExamResult"], "Indekser: " + examResult.ExamResultIndexer);
+                _context.personalLogRepository.AddPersonalUserLog(examResult.User, logInfoPersonalRemoveUserExamResult);
+
+                #endregion
+
 
                 return RedirectToAction("DisplayAllExamsResults", "Exams", new { message = "Usunięto wskazany wynik z egzaminu" });
             }
@@ -1467,13 +1536,16 @@ namespace Certification_System.Controllers
 
             if (ModelState.IsValid && _keyGenerator.ValidateUserTokenForEntityDeletion(user, examToDelete.Code))
             {
+                _context.examRepository.DeleteExam(examToDelete.EntityIdentificator);
+
+                #region EntityLogs
+
                 var logInfoDeleteExam = _logger.GenerateLogInformation(this.User.Identity.Name, this.ControllerContext.RouteData.Values["action"].ToString(), LogTypeOfAction.TypesOfActions[2], LogDescriptions.DescriptionOfActionOnEntity["deleteExam"]);
                 var logInfoDeleteExamTerms = _logger.GenerateLogInformation(this.User.Identity.Name, this.ControllerContext.RouteData.Values["action"].ToString(), LogTypeOfAction.TypesOfActions[2], LogDescriptions.DescriptionOfActionOnEntity["deleteExamTerm"]);
-                var logInfoDeleteExamResults = _logger.GenerateLogInformation(this.User.Identity.Name, this.ControllerContext.RouteData.Values["action"].ToString(), LogTypeOfAction.TypesOfActions[2], LogDescriptions.DescriptionOfActionOnEntity["deleteExamResult"]);
+                var logInfoDeleteExamResults = _logger.GenerateLogInformation(this.User.Identity.Name, this.ControllerContext.RouteData.Values["action"].ToString(), LogTypeOfAction.TypesOfActions[2], LogDescriptions.DescriptionOfActionOnEntity["deleteAllExamResults"]);
 
                 var logInfoUpdateCourse = _logger.GenerateLogInformation(this.User.Identity.Name, this.ControllerContext.RouteData.Values["action"].ToString(), LogTypeOfAction.TypesOfActions[1], LogDescriptions.DescriptionOfActionOnEntity["removeExamFromCourse"]);
 
-                _context.examRepository.DeleteExam(examToDelete.EntityIdentificator);
                 _logger.AddExamLog(exam, logInfoDeleteExam);
 
                 var deletedExamsTerms = _context.examTermRepository.DeleteExamsTerms(exam.ExamTerms);
@@ -1484,6 +1556,19 @@ namespace Certification_System.Controllers
 
                 var updatedCourse = _context.courseRepository.DeleteExamFromCourse(examToDelete.EntityIdentificator);
                 _logger.AddCourseLog(updatedCourse, logInfoUpdateCourse);
+
+                #endregion
+
+                #region PersonalUserLogs
+
+                var logInfoPersonalDeleteExam = _context.personalLogRepository.GeneratePersonalLogInformation(this.User.Identity.Name, this.ControllerContext.RouteData.Values["action"].ToString(), LogDescriptions.DescriptionOfPersonalUserLog["deleteExam"], "Indekser: " + exam.ExamIndexer);
+                _context.personalLogRepository.AddPersonalUserLogToAdminGroup(logInfoPersonalDeleteExam);
+
+                var logInfoPersonalDeleteUserExam = _context.personalLogRepository.GeneratePersonalLogInformation(this.User.Identity.Name, this.ControllerContext.RouteData.Values["action"].ToString(), LogDescriptions.DescriptionOfPersonalUserLog["deleteUserExam"], "Indekser: " + exam.ExamIndexer);
+                _context.personalLogRepository.AddPersonalUsersLogs(exam.EnrolledUsers, logInfoPersonalDeleteUserExam);
+                _context.personalLogRepository.AddPersonalUsersLogs(exam.Examiners, logInfoPersonalDeleteUserExam);
+                
+                #endregion
 
                 return RedirectToAction("DisplayAllExams", "Exams", new { message = "Usunięto wskazany egzamin" });
             }
@@ -1578,10 +1663,24 @@ namespace Certification_System.Controllers
             {
                 exam = _context.examRepository.DeleteUserFromExam(user.Id, exam.ExamIdentificator);
 
+                #region EntityLogs
+
                 var logInfoDeleteUserFromExam = _logger.GenerateLogInformation(this.User.Identity.Name, this.ControllerContext.RouteData.Values["action"].ToString(), LogTypeOfAction.TypesOfActions[1], LogDescriptions.DescriptionOfActionOnEntity["removeUserFromExam"]);
                 var logInfoDeleteUserFromExamTerm = _logger.GenerateLogInformation(this.User.Identity.Name, this.ControllerContext.RouteData.Values["action"].ToString(), LogTypeOfAction.TypesOfActions[1], LogDescriptions.DescriptionOfActionOnEntity["removeUserFromExamTerm"]);
 
                 _logger.AddExamLog(exam, logInfoDeleteUserFromExam);
+
+                #endregion
+
+                #region PersonalUserLog
+
+                var logInfoPersonalResignFromExam = _context.personalLogRepository.GeneratePersonalLogInformation(this.User.Identity.Name, this.ControllerContext.RouteData.Values["action"].ToString(), LogDescriptions.DescriptionOfPersonalUserLog["resignFromExam"], "Indekser: " + exam.ExamIndexer);
+                _context.personalLogRepository.AddPersonalUserLogToAdminGroup(logInfoPersonalResignFromExam);
+
+                var logInfoPersonalUserResignFromExam = _context.personalLogRepository.GeneratePersonalLogInformation(this.User.Identity.Name, this.ControllerContext.RouteData.Values["action"].ToString(), LogDescriptions.DescriptionOfPersonalUserLog["resignUserFromExam"], "Indekser: " + exam.ExamIndexer);
+                _context.personalLogRepository.AddPersonalUserLog(user.Id, logInfoPersonalUserResignFromExam);
+                
+                #endregion
 
                 if (exam.ExamDividedToTerms)
                 {
@@ -1704,6 +1803,16 @@ namespace Certification_System.Controllers
 
                     _logger.AddExamLog(exam, logInfoAssignUserToExam);
 
+                    #region PersonalUserLog
+
+                    var logInfoPersonalAddUserToExam = _context.personalLogRepository.GeneratePersonalLogInformation(this.User.Identity.Name, this.ControllerContext.RouteData.Values["action"].ToString(), LogDescriptions.DescriptionOfPersonalUserLog["addUserToExam"], "Indekser: " + exam.ExamIndexer);
+                    _context.personalLogRepository.AddPersonalUserLogToAdminGroup(logInfoPersonalAddUserToExam);
+
+                    var logInfoPersonalUserAssignUserToExam = _context.personalLogRepository.GeneratePersonalLogInformation(this.User.Identity.Name, this.ControllerContext.RouteData.Values["action"].ToString(), LogDescriptions.DescriptionOfPersonalUserLog["assignUserToExam"], "Indekser: " + exam.ExamIndexer);
+                    _context.personalLogRepository.AddPersonalUserLog(user.Id, logInfoPersonalUserAssignUserToExam);
+
+                    #endregion
+
                     return RedirectToAction("WorkerCourseDetails", "Courses", new { courseIdentificator = course.CourseIdentificator, message = "Zostałeś zapisany na wybrany egzamin" });
                 }
                 else
@@ -1820,6 +1929,16 @@ namespace Certification_System.Controllers
                     _context.examRepository.AddUserToExam(assignToExamViewModel.SelectedExamPeriod, user.Id);
 
                     _logger.AddExamLog(exam, logInfoAssignUserToExam);
+
+                    #region PersonalUserLog
+
+                    var logInfoPersonalAddUserToExam = _context.personalLogRepository.GeneratePersonalLogInformation(this.User.Identity.Name, this.ControllerContext.RouteData.Values["action"].ToString(), LogDescriptions.DescriptionOfPersonalUserLog["addUserToExam"], "Indekser: " + exam.ExamIndexer);
+                    _context.personalLogRepository.AddPersonalUserLogToAdminGroup(logInfoPersonalAddUserToExam);
+
+                    var logInfoPersonalUserAssignUserToExam = _context.personalLogRepository.GeneratePersonalLogInformation(this.User.Identity.Name, this.ControllerContext.RouteData.Values["action"].ToString(), LogDescriptions.DescriptionOfPersonalUserLog["assignUserToExam"], "Indekser: " + exam.ExamIndexer);
+                    _context.personalLogRepository.AddPersonalUserLog(user.Id, logInfoPersonalUserAssignUserToExam);
+
+                    #endregion
 
                     return RedirectToAction("WorkerCourseDetails", "Courses", new { courseIdentificator = course.CourseIdentificator, message = "Zostałeś zapisany na wybrany egzamin" });
                 }
