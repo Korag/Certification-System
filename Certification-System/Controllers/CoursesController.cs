@@ -124,11 +124,19 @@ namespace Certification_System.Controllers
 
                 _context.courseRepository.AddCourse(course);
 
+                #region EntityLogs
+
                 var logInfoAddCourse = _logger.GenerateLogInformation(this.User.Identity.Name, this.ControllerContext.RouteData.Values["action"].ToString(), LogTypeOfAction.TypesOfActions[0], LogDescriptions.DescriptionOfActionOnEntity["addCourse"]);
                 _logger.AddCourseLog(course, logInfoAddCourse);
 
+                #endregion
+
+                #region PersonalUserLogs
+
                 var logInfoPersonalAddCourse = _context.personalLogRepository.GeneratePersonalLogInformation(this.User.Identity.Name, this.ControllerContext.RouteData.Values["action"].ToString(), LogDescriptions.DescriptionOfPersonalUserLog["addCourse"], "Indekser " + course.CourseIndexer);
                 _context.personalLogRepository.AddPersonalUserLogToAdminGroup(logInfoPersonalAddCourse);
+
+                #endregion
 
                 return RedirectToAction("ConfirmationOfActionOnCourse", new { courseIdentificator = course.CourseIdentificator, TypeOfAction = "Update" });
             }

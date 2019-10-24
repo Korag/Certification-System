@@ -6,15 +6,15 @@
     Layout = "~/Views/Shared/_Layout.cshtml";
 }
 
-<h1>Szczegóły stopnia zawodowego</h1>
+<h1>Weryfikacja stopnia zawodowego</h1>
 <hr />
 
 <div>
 
     <h2>Informacje o użytkowniku</h2>
 
-    <div class="mt-3 mb-3">
-        <a asp-action="VerifyCompetenceManual" asp-controller="CompetenceVerification" class="btn btn-outline-info">Powrót do panelu weryfikacji</a>
+    <div class="row m-0 mt-3 mb-3">
+        <a asp-action="VerifyCompetenceManual" asp-controller="CompetenceVerification" class="btn btn-outline-info mt-1 xs350px_FloatRight">Powrót do panelu weryfikacji</a>
     </div>
 
     <form>
@@ -63,7 +63,7 @@ else
 @{List<DisplayGivenDegreeToUserExtendedViewModel> givenDegreeList = new List<DisplayGivenDegreeToUserExtendedViewModel>();
     givenDegreeList.Add(Model.GivenDegree);}
 
-@await Component.InvokeAsync("DisplayGivenDegreeToUserExtendedDataTable", new { givenDegreeViewModel = givenDegreeList, tableIdentificator = "listGivenDegree" })
+@await Component.InvokeAsync("DisplayGivenDegreeToUserExtDataTable", new { givenDegreeViewModel = givenDegreeList, tableIdentificator = "listGivenDegree" })
 
 @section Scripts{
     @{await Html.RenderPartialAsync("_DataTableBasicScript", "listGivenDegree");}
