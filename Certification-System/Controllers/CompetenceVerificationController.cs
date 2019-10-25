@@ -275,7 +275,7 @@ namespace Certification_System.Controllers
         }
 
         // GET: GenerateUserPhysicalIdentificator
-        [Authorize(Roles = "Admin, Worker")]
+        [Authorize(Roles = "Admin, Worker, Company")]
         public ActionResult GenerateUserPhysicalIdentificator(string userIdentificator)
         {
             if (!string.IsNullOrWhiteSpace(userIdentificator))
@@ -297,7 +297,7 @@ namespace Certification_System.Controllers
 
         //https://localhost:44378/CompetenceVerification/GenerateUserPhysicalIdentificator?userIdentificator=5d6ff3d85596d1c6a9e44124
         // GET: GenerateUserPhysicalIdentificator
-        [Authorize(Roles = "Admin, Worker")]
+        [Authorize(Roles = "Admin, Worker, Company")]
         [HttpPost]
         public ActionResult GenerateUserPhysicalIdentificator(GetUserImageViewModel userImage)
         {

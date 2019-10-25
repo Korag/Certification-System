@@ -553,6 +553,12 @@ namespace Certification_System.Services
                      .ForMember(dest => dest.Companies, opts => opts.Ignore())
                      .ForMember(dest => dest.GivenDegrees, opts => opts.Ignore());
 
+            CreateMap<CertificationPlatformUser, CompanyWorkerDetailsViewModel>()
+                   .ForMember(dest => dest.UserIdentificator, opts => opts.MapFrom(src => src.Id))
+                   .ForMember(dest => dest.Courses, opts => opts.Ignore())
+                   .ForMember(dest => dest.GivenCertificates, opts => opts.Ignore())
+                   .ForMember(dest => dest.GivenDegrees, opts => opts.Ignore());
+            
             CreateMap<CertificationPlatformUser, AccountDetailsViewModel>()
                     .ForMember(dest => dest.UserIdentificator, opts => opts.MapFrom(src => src.Id));
 

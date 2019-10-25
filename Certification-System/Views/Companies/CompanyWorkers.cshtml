@@ -23,7 +23,7 @@ else
 
 @if (Model.CompanyUserRoleWorker.Count != 0)
 {
-    @await Component.InvokeAsync("DisplayCrucialDataUserDataTable", new { userViewModel = Model.CompanyUserRoleWorker, tableIdentificator = "listWorkers", operationSet = 1 })
+    @await Component.InvokeAsync("DisplayCrucialDataUserDataTable", new { userViewModel = Model.CompanyUserRoleWorker, tableIdentificator = "listWorkers", operationSet = 2 })
 }
 else
 {

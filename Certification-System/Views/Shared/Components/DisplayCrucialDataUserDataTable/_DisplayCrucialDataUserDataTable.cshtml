@@ -34,10 +34,16 @@
                     <td>
                         @Html.DisplayFor(modelItem => user.LastName)
                     </td>
-                    @if (Model.Options.OperationSet != 0)
+                    @if (Model.Options.OperationSet == 1)
                     {
                         <td>
                             <a asp-action="UserDetails" asp-route-userIdentificator="@user.UserIdentificator" asp-controller="Users" class="btn btn-info">Szczegóły</a>
+                        </td>
+                    }
+                    @if (Model.Options.OperationSet == 2)
+                    {
+                        <td>
+                            <a asp-action="CompanyWorkerDetails" asp-route-userIdentificator="@user.UserIdentificator" asp-controller="Users" class="btn btn-info">Szczegóły</a>
                         </td>
                     }
                 </tr>

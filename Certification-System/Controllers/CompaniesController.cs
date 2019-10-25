@@ -227,9 +227,8 @@ namespace Certification_System.Controllers
         }
 
 
-        // GET: DeleteCompany
+        // GET: WorkerCompanies
         [Authorize(Roles = "Worker")]
-        [HttpGet]
         public ActionResult WorkerCompanies()
         {
             var user = _context.userRepository.GetUserByEmail(this.User.Identity.Name);
