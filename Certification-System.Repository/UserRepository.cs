@@ -152,6 +152,22 @@ namespace Certification_System.Repository
             return result;
         }
 
+        public ICollection<CertificationPlatformUser> GetUsersManagersByCompanyId(string companyIdentificator)
+        {
+            var filter = Builders<CertificationPlatformUser>.Filter.Where(z => z.CompanyRoleManager.ElementAt(0) == companyIdentificator);
+            var resultListOfUsers = GetUsers().Find<CertificationPlatformUser>(filter).ToList();
+
+            return resultListOfUsers;
+        }
+
+        public ICollection<CertificationPlatformUser> GetUsersWorkersByCompanyId(string companyIdentificator)
+        {
+            var filter = Builders<CertificationPlatformUser>.Filter.Where(z => z.CompanyRoleWorker.ElementAt(0) == companyIdentificator);
+            var resultListOfUsers = GetUsers().Find<CertificationPlatformUser>(filter).ToList();
+
+            return resultListOfUsers;
+        }
+
         public List<SelectListItem> GenerateSelectList(ICollection<string> usersIdentificators)
         {
             var users = GetUsersById(usersIdentificators);

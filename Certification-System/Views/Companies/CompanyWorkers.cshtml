@@ -1,0 +1,36 @@
+﻿@model Certification_System.DTOViewModels.DisplayAllCompanyEmployees
+
+@{
+    ViewData["Title"] = "CompanyWorkers";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+<h1 class="mt-4 mb-4">Wszyscy pracownicy przedsiębiorstwa</h1>
+<hr />
+
+<h2 class="mt-4 mb-4">Managerowie</h2>
+
+@if (Model.CompanyUserRoleManager.Count != 0)
+{
+    @await Component.InvokeAsync("DisplayCrucialDataUserDataTable", new { userViewModel = Model.CompanyUserRoleManager, tableIdentificator = "listManagers" })
+}
+else
+{
+    <div class="mt-4 mb-4 alert alert-warning">Brak managerów przedsiębiorstwa</div>
+}
+
+<h2 class="mt-4 mb-4">Pracownicy</h2>
+
+@if (Model.CompanyUserRoleWorker.Count != 0)
+{
+    @await Component.InvokeAsync("DisplayCrucialDataUserDataTable", new { userViewModel = Model.CompanyUserRoleWorker, tableIdentificator = "listWorkers", operationSet = 1 })
+}
+else
+{
+    <div class="mt-4 mb-4 alert alert-warning">Brak zrzeszonych użytkowników</div>
+}
+
+@section Scripts{
+    @{await Html.RenderPartialAsync("_DataTableBasicScript", "listManagers");}
+    @{await Html.RenderPartialAsync("_DataTableBasicScript", "listWorkers");}
+}

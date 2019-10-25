@@ -239,6 +239,22 @@ namespace Certification_System.Controllers
 
             return View(companiesList);
         }
+
+        // GET: CompanyWorkers
+        [Authorize(Roles = "Company")]
+        public ActionResult CompanyWorkers()
+        {
+            var user = _context.userRepository.GetUserByEmail(this.User.Identity.Name);
+
+            var companyWorkers = _context.userRepository.GetUsersWorkersByCompanyId(user.CompanyRoleManager.FirstOrDefault());
+            var companyManagers = _context.userRepository.GetUsersManagersByCompanyId(user.CompanyRoleManager.FirstOrDefault());
+
+            DisplayAllCompanyEmployees companyEmployees = new DisplayAllCompanyEmployees();
+            companyEmployees.CompanyUserRoleWorker = _mapper.Map<List<DisplayCrucialDataUserViewModel>>(companyWorkers);
+            companyEmployees.CompanyUserRoleManager = _mapper.Map<List<DisplayCrucialDataUserViewModel>>(companyManagers);
+
+            return View(companyEmployees);
+        }
     }
 }
 

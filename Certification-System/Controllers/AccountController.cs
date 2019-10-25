@@ -287,7 +287,7 @@ namespace Certification_System.Controllers
                     var logInfoUpdateUser = _logger.GenerateLogInformation(user.Email, this.ControllerContext.RouteData.Values["action"].ToString(), LogTypeOfAction.TypesOfActions[1], LogDescriptions.DescriptionOfActionOnEntity["confirmEmail"]);
                     _logger.AddUserLog(updatedUser, logInfoUpdateUser);
 
-                    var logInfoPersonalConfirmEmail = _context.personalLogRepository.GeneratePersonalLogInformation(this.User.Identity.Name, this.ControllerContext.RouteData.Values["action"].ToString(), LogDescriptions.DescriptionOfPersonalUserLog["confirmEmail"]);
+                    var logInfoPersonalConfirmEmail = _context.personalLogRepository.GeneratePersonalLogInformation(user.Email, this.ControllerContext.RouteData.Values["action"].ToString(), LogDescriptions.DescriptionOfPersonalUserLog["confirmEmail"]);
                     _context.personalLogRepository.AddPersonalUserLog(updatedUser.Id, logInfoPersonalConfirmEmail);
 
                     return RedirectToAction("Login", "Account", new { message = "Adres email został potwierdzony." });

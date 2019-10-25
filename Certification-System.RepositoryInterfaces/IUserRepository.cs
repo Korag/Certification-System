@@ -41,5 +41,7 @@ namespace Certification_System.RepositoryInterfaces
         void DeleteUser(string userIdentificator);
         List<SelectListItem> GenerateSelectList(ICollection<string> usersIdentificators);
         ICollection<CertificationPlatformUser> GetUsersByGivenDegreesId(ICollection<string> givenDegreesIdentificators);
+        ICollection<CertificationPlatformUser> GetUsersWorkersByCompanyId(string companyIdentificator);
+        ICollection<CertificationPlatformUser> GetUsersManagersByCompanyId(string companyIdentificator);
     }
 }
