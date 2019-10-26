@@ -196,14 +196,22 @@ namespace Certification_System.Controllers
 
                         meetingsLogInfo.Add(_context.personalLogRepository.GeneratePersonalLogInformation(this.User.Identity.Name, this.ControllerContext.RouteData.Values["action"].ToString(), LogDescriptions.DescriptionOfPersonalUserLog["addMeeting"], "Indekser " + meeting.MeetingIndexer));
 
+                        #region PersonalUserLogs
+
                         var logInfoPersonalAddInstructorsToMeeting = _context.personalLogRepository.GeneratePersonalLogInformation(this.User.Identity.Name, this.ControllerContext.RouteData.Values["action"].ToString(), LogDescriptions.DescriptionOfPersonalUserLog["addInstructorToMeeting"], "Indekser " + meeting.MeetingIndexer);
                         _context.personalLogRepository.AddPersonalUsersLogs(meeting.Instructors, logInfoPersonalAddInstructorsToMeeting);
+
+                        #endregion
                     }
 
                     _context.meetingRepository.AddMeetings(meetings);
 
+                    #region EntityLogs
+
                     var logInfoAddMeetings = _logger.GenerateLogInformation(this.User.Identity.Name, this.ControllerContext.RouteData.Values["action"].ToString(), LogTypeOfAction.TypesOfActions[0], LogDescriptions.DescriptionOfActionOnEntity["addMeeting"]);
                     _logger.AddMeetingsLogs(meetings, logInfoAddMeetings);
+
+                    #endregion
 
                     _context.personalLogRepository.AddPersonalUsersLogsToAdminGroup(meetingsLogInfo);
                 }
@@ -212,11 +220,19 @@ namespace Certification_System.Controllers
 
                 _context.courseRepository.AddCourse(course);
 
+                #region EntityLogs
+
                 var logInfoAddCourse = _logger.GenerateLogInformation(this.User.Identity.Name, this.ControllerContext.RouteData.Values["action"].ToString(), LogTypeOfAction.TypesOfActions[0], LogDescriptions.DescriptionOfActionOnEntity["addCourse"]);
                 _logger.AddCourseLog(course, logInfoAddCourse);
 
+                #endregion
+
+                #region PersonalUserLogs
+
                 var logInfoPersonalAddCourse = _context.personalLogRepository.GeneratePersonalLogInformation(this.User.Identity.Name, this.ControllerContext.RouteData.Values["action"].ToString(), LogDescriptions.DescriptionOfPersonalUserLog["addCourse"], "Indekser " + course.CourseIndexer);
                 _context.personalLogRepository.AddPersonalUserLogToAdminGroup(logInfoPersonalAddCourse);
+
+                #endregion
 
                 return RedirectToAction("ConfirmationOfActionOnCourse", new { courseIdentificator = course.CourseIdentificator, TypeOfAction = "Add" });
             }
@@ -271,6 +287,7 @@ namespace Certification_System.Controllers
             var users = _context.userRepository.GetUsersById(course.EnrolledUsers);
 
             List<DisplayCrucialDataUserViewModel> usersViewModel = _mapper.Map<List<DisplayCrucialDataUserViewModel>>(users);
+
             //usersViewModel.ForEach(z => z.CompanyRoleManager = _context.companyRepository.GetCompaniesById(z.CompanyRoleManager).Select(s => s.CompanyName).ToList());
             //usersViewModel.ForEach(z => z.CompanyRoleWorker = _context.companyRepository.GetCompaniesById(z.CompanyRoleWorker).Select(s => s.CompanyName).ToList());
 
@@ -1653,6 +1670,72 @@ namespace Certification_System.Controllers
             }
 
             return RedirectToAction("BlankMenu", "Certificates");
+        }
+
+        // GET: CompanyCourseDetails
+        [Authorize(Roles = "Company")]
+        public ActionResult CompanyCourseDetails(string courseIdentificator)
+        {
+            var user = _context.userRepository.GetUserByEmail(this.User.Identity.Name);
+            var companyWorkers = _context.userRepository.GetUsersWorkersByCompanyId(user.CompanyRoleManager.FirstOrDefault());
+
+            var course = _context.courseRepository.GetCourseById(courseIdentificator);
+            var meetings = _context.meetingRepository.GetMeetingsById(course.Meetings);
+
+            List<DisplayMeetingWithoutCourseViewModel> meetingsViewModel = new List<DisplayMeetingWithoutCourseViewModel>();
+
+            foreach (var meeting in meetings)
+            {
+                var meetingInstructors = _context.userRepository.GetInstructorsById(meeting.Instructors).ToList();
+
+                DisplayMeetingWithoutCourseViewModel singleMeeting = _mapper.Map<DisplayMeetingWithoutCourseViewModel>(meeting);
+                singleMeeting.Instructors = _mapper.Map<List<DisplayCrucialDataUserViewModel>>(meetingInstructors);
+
+                meetingsViewModel.Add(singleMeeting);
+            }
+
+            var users = _context.userRepository.GetUsersById(course.EnrolledUsers);
+            var companyWorkersEnrolledInCourse = companyWorkers.Where(z => z.Courses.Contains(courseIdentificator)).ToList();
+
+            List<DisplayCrucialDataUserViewModel> usersViewModel = _mapper.Map<List<DisplayCrucialDataUserViewModel>>(companyWorkersEnrolledInCourse);
+
+            var instructorsIdentificators = new List<string>();
+            meetings.ToList().ForEach(z => z.Instructors.ToList().ForEach(s => instructorsIdentificators.Add(s)));
+
+            var instructors = _context.userRepository.GetUsersById(instructorsIdentificators.Distinct().ToList());
+            List<DisplayCrucialDataWithContactUserViewModel> instructorsViewModel = _mapper.Map<List<DisplayCrucialDataWithContactUserViewModel>>(instructors);
+
+            var exams = _context.examRepository.GetExamsById(course.Exams);
+            List<DisplayExamWithoutCourseViewModel> examsViewModel = new List<DisplayExamWithoutCourseViewModel>();
+
+            List<string> listOfExaminatorsIdentificators = new List<string>();
+
+            foreach (var exam in exams)
+            {
+                DisplayExamWithoutCourseViewModel singleExam = _mapper.Map<DisplayExamWithoutCourseViewModel>(exam);
+                singleExam.Examiners = _mapper.Map<List<DisplayCrucialDataUserViewModel>>(_context.userRepository.GetUsersById(exam.Examiners));
+
+                examsViewModel.Add(singleExam);
+            }
+
+            listOfExaminatorsIdentificators.Distinct();
+
+            var examiners = _context.userRepository.GetUsersById(listOfExaminatorsIdentificators);
+            List<DisplayCrucialDataWithContactUserViewModel> examinersViewModel = _mapper.Map<List<DisplayCrucialDataWithContactUserViewModel>>(examiners);
+
+            CourseDetailsViewModel courseDetails = new CourseDetailsViewModel();
+            courseDetails.Course = _mapper.Map<DisplayCourseWithPriceViewModel>(course);
+            courseDetails.Course.Branches = _context.branchRepository.GetBranchesById(course.Branches);
+
+            courseDetails.Meetings = meetingsViewModel;
+            courseDetails.Exams = examsViewModel;
+
+            courseDetails.Course.EnrolledUsersQuantity = course.EnrolledUsers.Count;
+            courseDetails.EnrolledUsers = usersViewModel;
+            courseDetails.Instructors = instructorsViewModel;
+            courseDetails.Examiners = examinersViewModel;
+
+            return View(courseDetails);
         }
 
         #region AjaxQuery
