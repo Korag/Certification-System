@@ -177,6 +177,12 @@ namespace Certification_System.Services
                      .ForMember(dest => dest.RequiredDegrees, opts => opts.MapFrom(src => new List<string>()))
                      .ForMember(dest => dest.UsersWithDegree, opts => opts.MapFrom(src => new List<string>()));
 
+            CreateMap<Degree, CompanyDegreeDetailsViewModel>()
+                    .ForMember(dest => dest.Branches, opts => opts.MapFrom(src => new List<string>()))
+                    .ForMember(dest => dest.RequiredCertificates, opts => opts.MapFrom(src => new List<string>()))
+                    .ForMember(dest => dest.RequiredDegrees, opts => opts.MapFrom(src => new List<string>()))
+                    .ForMember(dest => dest.UsersWithDegree, opts => opts.MapFrom(src => new List<string>()));
+
             CreateMap<Degree, DisplayCrucialDataDegreeViewModel>();
 
             CreateMap<Degree, DisplayDegreeWithoutRequirementsViewModel>();

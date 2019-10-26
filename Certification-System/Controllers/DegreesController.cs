@@ -167,11 +167,19 @@ namespace Certification_System.Controllers
 
                 _context.degreeRepository.UpdateDegree(originDegree);
 
+                #region EntityLogs
+
                 var logInfoUpdateDegree = _logger.GenerateLogInformation(this.User.Identity.Name, this.ControllerContext.RouteData.Values["action"].ToString(), LogTypeOfAction.TypesOfActions[1], LogDescriptions.DescriptionOfActionOnEntity["updateDegree"]);
                 _logger.AddDegreeLog(originDegree, logInfoUpdateDegree);
 
+                #endregion
+
+                #region PersonalUserLogs
+
                 var logInfoPersonalUpdateDegree = _context.personalLogRepository.GeneratePersonalLogInformation(this.User.Identity.Name, this.ControllerContext.RouteData.Values["action"].ToString(), LogDescriptions.DescriptionOfPersonalUserLog["updateDegree"], "Indekser " + originDegree.DegreeIndexer);
                 _context.personalLogRepository.AddPersonalUserLogToAdminGroup(logInfoPersonalUpdateDegree);
+
+                #endregion
 
                 return RedirectToAction("ConfirmationOfActionOnDegree", "Degrees", new { degreeIdentificator = editedDegree.DegreeIdentificator, TypeOfAction = "Update" });
             }
@@ -363,6 +371,50 @@ namespace Certification_System.Controllers
             }
 
             return View("DeleteEntity", degreeToDelete);
+        }
+
+        // GET: CompanyDegreeDetails
+        [Authorize(Roles = "Company")]
+        public ActionResult CompanyDegreeDetails(string degreeIdentificator)
+        {
+            var user = _context.userRepository.GetUserByEmail(this.User.Identity.Name);
+            var companyWorkers = _context.userRepository.GetUsersWorkersByCompanyId(user.CompanyRoleManager.FirstOrDefault());
+
+            var degree = _context.degreeRepository.GetDegreeById(degreeIdentificator);
+
+            var requiredDegrees = _context.degreeRepository.GetDegreesById(degree.RequiredDegrees);
+            var requiredCertificates = _context.certificateRepository.GetCertificatesById(degree.RequiredCertificates);
+
+            var givenDegreesInstances = _context.givenDegreeRepository.GetGivenDegreesByIdOfDegree(degreeIdentificator).Select(z => z.GivenDegreeIdentificator).ToList();
+            var companyWorkersWithDegree = companyWorkers.Where(z => z.GivenDegrees.Any(x => givenDegreesInstances.Contains(x))).ToList();
+
+            List<DisplayCertificateViewModel> listOfCertificates = _mapper.Map<List<DisplayCertificateViewModel>>(requiredCertificates);
+            listOfCertificates.ForEach(z => z.Branches = _context.branchRepository.GetBranchesById(z.Branches));
+
+            List<DisplayDegreeViewModel> listOfDegrees = new List<DisplayDegreeViewModel>();
+
+            if (requiredDegrees.Count != 0)
+            {
+                foreach (var requiredSingleDegree in requiredDegrees)
+                {
+                    DisplayDegreeViewModel singleDegree = _mapper.Map<DisplayDegreeViewModel>(requiredSingleDegree);
+                    singleDegree.Branches = _context.branchRepository.GetBranchesById(requiredSingleDegree.Branches);
+                    singleDegree.RequiredCertificates = _context.degreeRepository.GetDegreesById(requiredSingleDegree.RequiredDegrees).Select(z => z.DegreeIndexer + " " + z.Name).ToList();
+                    singleDegree.RequiredDegrees = _context.certificateRepository.GetCertificatesById(requiredSingleDegree.RequiredCertificates).Select(z => z.CertificateIndexer + " " + z.Name).ToList();
+
+                    listOfDegrees.Add(singleDegree);
+                }
+            }
+
+            CompanyDegreeDetailsViewModel degreeDetails = _mapper.Map<CompanyDegreeDetailsViewModel>(degree);
+            degreeDetails.ConditionsList = String.Join(",", degree.Conditions);
+
+            degreeDetails.Branches = _context.branchRepository.GetBranchesById(degree.Branches);
+            degreeDetails.RequiredCertificates = listOfCertificates;
+            degreeDetails.RequiredDegrees = listOfDegrees;
+            degreeDetails.UsersWithDegree = _mapper.Map<List<DisplayCrucialDataUserViewModel>>(companyWorkersWithDegree);
+
+            return View(degreeDetails);
         }
 
         #region AjaxQuery
