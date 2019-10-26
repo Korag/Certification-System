@@ -268,6 +268,48 @@ namespace Certification_System.Controllers
 
             return View(companyInformation);
         }
+
+        // GET: CompanyWorkersCompetences
+        [Authorize(Roles = "Company")]
+        public ActionResult CompanyWorkersCompetences()
+        {
+            var user = _context.userRepository.GetUserByEmail(this.User.Identity.Name);
+            var companyWorkers = _context.userRepository.GetUsersWorkersByCompanyId(user.CompanyRoleManager.FirstOrDefault());
+
+            var companyWorkersGivenCertificates = companyWorkers.SelectMany(z => z.GivenCertificates).ToList();
+            var companyWorkersCertificates = _context.givenCertificateRepository.GetGivenCertificatesById(companyWorkersGivenCertificates).Select(z => z.Certificate).Distinct().ToList();
+
+            var certificatesDetails = _context.certificateRepository.GetCertificatesById(companyWorkersCertificates);
+
+            var companyWorkersGivenDegrees = companyWorkers.SelectMany(z => z.GivenDegrees).ToList();
+            var companyWorkersDegrees = _context.givenDegreeRepository.GetGivenDegreesById(companyWorkersGivenDegrees).Select(z => z.Degree).Distinct().ToList();
+
+            var degreesDetails = _context.degreeRepository.GetDegreesById(companyWorkersDegrees);
+
+            List<DisplayDegreeViewModel> listOfDegrees = new List<DisplayDegreeViewModel>();
+
+            foreach (var degree in degreesDetails)
+            {
+                var requiredCertificates = _context.certificateRepository.GetCertificatesById(degree.RequiredCertificates);
+                var requiredDegrees = _context.degreeRepository.GetDegreesById(degree.RequiredDegrees);
+
+                DisplayDegreeViewModel singleDegree = _mapper.Map<DisplayDegreeViewModel>(degree);
+
+                singleDegree.RequiredCertificates = requiredCertificates.Select(z => z.CertificateIndexer + " " + z.Name).ToList();
+                singleDegree.RequiredDegrees = requiredDegrees.Select(z => z.DegreeIndexer + " " + z.Name).ToList();
+                singleDegree.Branches = _context.branchRepository.GetBranchesById(degree.Branches);
+
+                listOfDegrees.Add(singleDegree);
+            }
+
+            DisplayCompanyWorkersCompetencesViewModel companyWorkersCompetences = new DisplayCompanyWorkersCompetencesViewModel();
+            companyWorkersCompetences.Certificates = _mapper.Map<List<DisplayCertificateViewModel>>(certificatesDetails);
+            companyWorkersCompetences.Certificates.ToList().ForEach(z => z.Branches = _context.branchRepository.GetBranchesById(z.Branches));
+
+            companyWorkersCompetences.Degrees = listOfDegrees;
+
+            return View(companyWorkersCompetences);
+        }
     }
 }
 
