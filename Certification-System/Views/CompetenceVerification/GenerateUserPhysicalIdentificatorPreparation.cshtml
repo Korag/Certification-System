@@ -28,9 +28,13 @@
                 {
                     <a asp-action="UserDetails" asp-controller="Users" asp-route-userIdentificator="@Model.UserIdentificator" class="btn btn-outline-info mt-1 xs300px_FloatRight">Powrót do szczegółów użytkownika</a>
                 }
+                @if (this.User.IsInRole("Company"))
+                {
+                    <a asp-action="CompanyWorkerDetails" asp-controller="Users" asp-route-userIdentificator="@Model.UserIdentificator" class="btn btn-outline-info mt-1 xs300px_FloatRight">Powrót do szczegółów pracownika</a>
+                }
                 else
                 {
-                    <a asp-action="" asp-controller="" class="btn btn-outline-info mt-1 xs300px_FloatRight">Powrót do moich osiągnieć</a>
+                    <a asp-action="WorkerCompetences" asp-controller="Users" class="btn btn-outline-info mt-1 xs300px_FloatRight">Powrót do moich osiągnieć</a>
                 }
             </div>
 

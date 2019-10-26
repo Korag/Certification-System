@@ -17,6 +17,10 @@
     {
         <a asp-action="UserDetails" asp-controller="Users" asp-route-userIdentificator="@Model.UserIdentificator" class="btn btn-outline-info mt-1 xs350px_FloatRight">Powrót do szczegółów użytkownika</a>
     }
+    else if (this.User.IsInRole("Company"))
+    {
+        <a asp-action="CompanyWorkerDetails" asp-route-userIdentificator="@Model.UserIdentificator" asp-controller="Users" class="btn btn-outline-info mt-1 xs350px_FloatRight">Powrót do szczegółów pracownika</a>
+    }
     else
     {
         <a asp-action="WorkerCompetences" asp-controller="Users" class="btn btn-outline-info mt-1 xs350px_FloatRight">Powrót do moich osiągnieć</a>

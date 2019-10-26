@@ -334,7 +334,7 @@ namespace Certification_System.Controllers
         }
 
         // GET: GenerateGivenCertificatePossessionConfirmation
-        [Authorize(Roles = "Admin, Worker")]
+        [Authorize(Roles = "Admin, Worker, Company")]
         public ActionResult GenerateGivenCertificatePossessionConfirmation(string givenCertificateIdentificator)
         {
             if (!string.IsNullOrWhiteSpace(givenCertificateIdentificator))
@@ -374,7 +374,7 @@ namespace Certification_System.Controllers
         }
 
         // GET: GenerateGivenDegreePossessionConfirmation
-        [Authorize(Roles = "Admin, Worker")]
+        [Authorize(Roles = "Admin, Worker, Company")]
         public ActionResult GenerateGivenDegreePossessionConfirmation(string givenDegreeIdentificator)
         {
             if (!string.IsNullOrWhiteSpace(givenDegreeIdentificator))

@@ -5,6 +5,8 @@ namespace Certification_System.DTOViewModels
 {
     public class WorkerGivenCertificateDetailsViewModel
     {
+        public string UserIdentificator { get; set; }
+
         [Display(Name = "Nadany certyfikat")]
         public DisplayGivenCertificateToUserWithoutCourseExtendedViewModel GivenCertificate { get; set; }
 

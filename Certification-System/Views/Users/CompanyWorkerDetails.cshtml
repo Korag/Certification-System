@@ -82,7 +82,7 @@
 
 @if (Model.GivenCertificates.Count != 0)
 {
-    @await Component.InvokeAsync("DisplayGivenCertificateToUserDataTable", new { givenCertificateViewModel = Model.GivenCertificates, tableIdentificator = "listGivenCertificates", operationSet = 1 })
+    @await Component.InvokeAsync("DisplayGivenCertificateToUserDataTable", new { givenCertificateViewModel = Model.GivenCertificates, tableIdentificator = "listGivenCertificates", operationSet = 2 })
 }
 else
 {
@@ -93,7 +93,7 @@ else
 
 @if (Model.GivenDegrees.Count != 0)
 {
-    @await Component.InvokeAsync("DisplayGivenDegreeToUserDataTable", new { givenDegreeViewModel = Model.GivenDegrees, tableIdentificator = "listGivenDegrees", operationSet = 1 })
+    @await Component.InvokeAsync("DisplayGivenDegreeToUserDataTable", new { givenDegreeViewModel = Model.GivenDegrees, tableIdentificator = "listGivenDegrees", operationSet = 3 })
 }
 else
 {
@@ -104,7 +104,7 @@ else
 
 @if (Model.Courses.Count != 0)
 {
-    @await Component.InvokeAsync("DisplayCourseDataTable", new { courseViewModel = Model.Courses, userIdentificator = Model.UserIdentificator, tableIdentificator = "listCourses", operationSet = 2 })
+    @await Component.InvokeAsync("DisplayCourseDataTable", new { courseViewModel = Model.Courses, userIdentificator = Model.UserIdentificator, tableIdentificator = "listCourses", operationSet = 4 })
 }
 else
 {

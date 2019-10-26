@@ -390,7 +390,7 @@ namespace Certification_System.Controllers
         }
 
         // GET: WorkerGivenCertificateDetails
-        [Authorize(Roles = "Worker")]
+        [Authorize(Roles = "Worker, Company")]
         public ActionResult WorkerGivenCertificateDetails(string givenCertificateIdentificator)
         {
             var givenCertificate = _context.givenCertificateRepository.GetGivenCertificateById(givenCertificateIdentificator);
@@ -428,6 +428,13 @@ namespace Certification_System.Controllers
 
             givenCertificateDetails.Course = courseViewModel;
             givenCertificateDetails.Meetings = meetingsViewModel;
+
+            givenCertificateDetails.UserIdentificator = _context.userRepository.GetUserByGivenCertificateId(givenCertificateIdentificator).Id;
+
+            if (this.User.IsInRole("Company"))
+            {
+                return View("CompanyWorkerGivenCertificateDetails", givenCertificateDetails);
+            }
 
             return View(givenCertificateDetails);
         }

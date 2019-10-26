@@ -119,6 +119,12 @@
                         <a asp-action="WorkerCourseDetails" asp-route-courseIdentificator="@course.CourseIdentificator" asp-controller="Courses" class="btn btn-info m-1">Szczegóły</a>
                     </td>
                 }
+                @if (Model.Options.OperationSet == 4)
+                {
+                    <td>
+                        <a asp-action="CompanyCourseDetails" asp-route-courseIdentificator="@course.CourseIdentificator" asp-controller="Courses" class="btn btn-info m-1">Szczegóły</a>
+                    </td>
+                }
             </tr>
             }
         </tbody>

@@ -1,0 +1,46 @@
+﻿@model Certification_System.DTOViewModels.WorkerGivenCertificateDetailsViewModel
+@using Certification_System.DTOViewModels
+
+@{
+    ViewData["Title"] = "WorkerGivenCertificateDetails";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+<h1>Szczegóły nadanego certyfikatu</h1>
+<hr />
+
+<h2 class="mt-4 mb-4">Dane odnośnie nadanego certyfikatu</h2>
+
+<div class="row m-0 mt-3 mb-3">
+    <a asp-action="GenerateGivenCertificatePossessionConfirmation" asp-route-givenCertificateIdentificator="@Model.GivenCertificate.GivenCertificateIdentificator" asp-controller="CompetenceVerification" class="btn btn-success mt-1 mr-1 md650px_FloatLeft">Wyświetl nadany certyfikat</a>
+    <a asp-action="CompanyWorkerDetails" asp-route-userIdentificator="@Model.UserIdentificator" asp-controller="Users" class="btn btn-outline-info mt-1 md650px_FloatRight">Powrót do szczegółów pracownika</a>
+</div>
+
+@{List<DisplayGivenCertificateToUserWithoutCourseExtendedViewModel> givenCertificateList = new List<DisplayGivenCertificateToUserWithoutCourseExtendedViewModel>();
+    givenCertificateList.Add(Model.GivenCertificate);}
+
+@await Component.InvokeAsync("DisplayGivenCertificateWithoutUserExtDataTable", new { givenCertificateViewModel = givenCertificateList, tableIdentificator = "listGivenCertificate" })
+
+<h2 class="mt-4 mb-4">Dane kursu</h2>
+
+@{List<DisplayCourseViewModel> courseList = new List<DisplayCourseViewModel>();
+    courseList.Add(Model.Course);}
+
+@await Component.InvokeAsync("DisplayCourseDataTable", new { courseViewModel = courseList, tableIdentificator = "listCourses", operationSet = 4 })
+
+<h2 class="mt-4 mb-4">Spotkania w ramach kursu</h2>
+
+@if (Model.Meetings.Count != 0)
+{
+    @await Component.InvokeAsync("DisplayMeetingWithoutCourseDataTable", new { meetingViewModel = Model.Meetings, tableIdentificator = "listMeetings" })
+}
+else
+{
+    <div class="mt-4 mb-4 alert alert-warning">Kurs nie posiada zdefiniowanych spotkań</div>
+}
+
+@section Scripts{
+    @{await Html.RenderPartialAsync("_DataTableBasicScript", "listGivenCertificates");}
+    @{await Html.RenderPartialAsync("_DataTableBasicScript", "listCourses");}
+    @{await Html.RenderPartialAsync("_DataTableBasicScript", "listMeetings");}
+}
