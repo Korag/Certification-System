@@ -5,6 +5,15 @@
         <thead>
             <tr>
                 <th>
+                    Autor zmian:  @Html.DisplayNameFor(model => model.Logs.FirstOrDefault().ChangeAuthor.Email)
+                </th>
+                <th>
+                    Autor zmian:  @Html.DisplayNameFor(model => model.Logs.FirstOrDefault().ChangeAuthor.FirstName)
+                </th>
+                <th>
+                    Autor zmian:  @Html.DisplayNameFor(model => model.Logs.FirstOrDefault().ChangeAuthor.LastName)
+                </th>
+                <th>
                     Pracownik: @Html.DisplayNameFor(model => model.Logs.FirstOrDefault().SubjectUser.Email)
                 </th>
                 <th>
@@ -12,15 +21,6 @@
                 </th>
                 <th>
                     Pracownik: @Html.DisplayNameFor(model => model.Logs.FirstOrDefault().SubjectUser.LastName)
-                </th>
-                <th>
-                    @Html.DisplayNameFor(model => model.Logs.FirstOrDefault().ChangeAuthor.Email)
-                </th>
-                <th>
-                    @Html.DisplayNameFor(model => model.Logs.FirstOrDefault().ChangeAuthor.FirstName)
-                </th>
-                <th>
-                    @Html.DisplayNameFor(model => model.Logs.FirstOrDefault().ChangeAuthor.LastName)
                 </th>
                 <th>
                     @Html.DisplayNameFor(model => model.Logs.FirstOrDefault().DescriptionOfAction)
@@ -44,15 +44,6 @@
             {
             <tr>
                 <td>
-                    @Html.DisplayFor(modelItem => log.SubjectUser.Email)
-                </td>
-                <td>
-                    @Html.DisplayFor(modelItem => log.SubjectUser.FirstName)
-                </td>
-                <td>
-                    @Html.DisplayFor(modelItem => log.SubjectUser.LastName)
-                </td>
-                <td>
                     @Html.DisplayFor(modelItem => log.ChangeAuthor.Email)
                 </td>
                 <td>
@@ -60,6 +51,15 @@
                 </td>
                 <td>
                     @Html.DisplayFor(modelItem => log.ChangeAuthor.LastName)
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => log.SubjectUser.Email)
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => log.SubjectUser.FirstName)
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => log.SubjectUser.LastName)
                 </td>
                 <td>
                     @Html.DisplayFor(modelItem => log.DescriptionOfAction)

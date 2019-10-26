@@ -141,7 +141,7 @@ namespace Certification_System.Controllers
                         singleLog.ChangeAuthor = _mapper.Map<DisplayCrucialDataUserViewModel>(changeAuthor);
 
                         var subjectUser = workers.Where(z => z.Id == userLog.UserIdentificator).FirstOrDefault();
-                        singleLog.ChangeAuthor = _mapper.Map<DisplayCrucialDataUserViewModel>(subjectUser);
+                        singleLog.SubjectUser = _mapper.Map<DisplayCrucialDataUserViewModel>(subjectUser);
 
                         usersPersonalLogs.Add(singleLog);
                     }

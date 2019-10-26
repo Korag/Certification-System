@@ -140,6 +140,7 @@ namespace Certification_System.Controllers
                 listOfUsers = _mapper.Map<List<DisplayUserViewModel>>(usersConnectedToCompany);
                 listOfUsers.ForEach(z => z.CompanyRoleManager = _context.companyRepository.GetCompaniesById(z.CompanyRoleManager).ToList().Select(s => s.CompanyName).ToList());
                 listOfUsers.ForEach(z => z.CompanyRoleWorker = _context.companyRepository.GetCompaniesById(z.CompanyRoleWorker).ToList().Select(s => s.CompanyName).ToList());
+                listOfUsers.ForEach(z => z.Roles = _context.userRepository.TranslateRoles(z.Roles));
             }
 
             CompanyDetailsViewModel companyDetails = _mapper.Map<CompanyDetailsViewModel>(company);
@@ -253,6 +254,19 @@ namespace Certification_System.Controllers
             companyEmployees.CompanyUserRoleManager = _mapper.Map<List<DisplayCrucialDataUserViewModel>>(companyManagers);
 
             return View(companyEmployees);
+        }
+
+        // GET: CompanyInformation
+        [Authorize(Roles = "Company")]
+        public ActionResult CompanyInformation()
+        {
+            var user = _context.userRepository.GetUserByEmail(this.User.Identity.Name);
+
+            var company = _context.companyRepository.GetCompanyById(user.CompanyRoleManager.FirstOrDefault());
+
+            DisplayCompanyViewModel companyInformation = _mapper.Map<DisplayCompanyViewModel>(company);
+
+            return View(companyInformation);
         }
     }
 }
