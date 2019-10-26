@@ -1,0 +1,70 @@
+﻿@model Certification_System.DTOViewModels.CompanyCertificateDetailsViewModel
+
+@{
+    ViewData["Title"] = "CompanyCertificateDetails";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+<h1>Certyfikaty posiadane przez wybranych pracowników</h1>
+<hr />
+
+<div>
+    <h2>Informacje o certyfikacie</h2>
+
+    <form>
+        <div class="col-md-8 col-xl-6 col-lg-6 col-sm-12 col-xs-10 m-auto p-3 shadow p-3 mb-5 bg-light rounded border border-primary rounded-bottom" style="opacity:0.90">
+
+            <div class="form-group">
+                <label asp-for="CertificateIndexer" class="control-label"></label>
+                <input asp-for="CertificateIndexer" class="form-control col-12" readonly />
+            </div>
+
+            <div class="form-group">
+                <label asp-for="Name" class="control-label"></label>
+                <input asp-for="Name" class="form-control col-12" readonly />
+            </div>
+
+            <div class="form-group">
+                <label asp-for="Description" class="control-label"></label>
+                <textarea asp-for="Description" class="form-control col-12" style="width:100%; min-width:100%;" readonly></textarea>
+            </div>
+
+            <div class="form-group">
+                <label asp-for="Depreciated" class="control-label"></label>
+                <div class="row pl-3">
+                    <input type="checkbox" asp-for="Depreciated" class="form-control col-12" data-toggle="toggle" data-on="Tak" data-off="Nie" data-size="sm" disabled />
+                </div>
+            </div>
+
+            <div class="form-group mb-0">
+                <label asp-for="Branches" class="control-label"></label>
+                <div class="row ml-0 mr-0">
+                    <div>
+                        @foreach (var branch in Model.Branches)
+                        {
+                            <label class="btn btn-secondary align-content-center">
+                                <span>@branch</span>
+                            </label>
+                        }
+                    </div>
+                </div>
+            </div>
+
+        </div>
+    </form>
+</div>
+
+<h2 class="mt-4 mb-4">Pracownicy przedsiębiorstwa posiadający certyfikat</h2>
+
+@if (Model.UsersWithCertificate.Count != 0)
+{
+    @await Component.InvokeAsync("DisplayCrucialDataUserDataTable", new { userViewModel = Model.UsersWithCertificate, tableIdentificator = "listUsers", operationSet = 2 })
+}
+else
+{
+    <div class="mt-4 mb-4 alert alert-warning">Brak użytkowników posiadających dany certyfikat</div>
+}
+
+@section Scripts {
+    @{await Html.RenderPartialAsync("_DataTableBasicScript", "listUsers");}
+}

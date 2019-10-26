@@ -42,6 +42,10 @@ namespace Certification_System.Services
                      .ForMember(dest => dest.CoursesWhichEndedWithCertificate, opts => opts.Ignore())
                      .ForMember(dest => dest.UsersWithCertificate, opts => opts.Ignore());
 
+            CreateMap<Certificate, CompanyCertificateDetailsViewModel>()
+                     .ForMember(dest => dest.Branches, opts => opts.Ignore())
+                     .ForMember(dest => dest.UsersWithCertificate, opts => opts.Ignore());
+
             CreateMap<Certificate, UserGivenCertificatePossessionConfirmationViewModel>()
                      .ForMember(dest => dest.CertificateName, opts => opts.MapFrom(src => src.Name))
                      .ForMember(dest => dest.CertificateDescription, opts => opts.MapFrom(src => src.Description));

@@ -147,11 +147,19 @@ namespace Certification_System.Controllers
 
                 _context.certificateRepository.UpdateCertificate(originCertificate);
 
+                #region EntityLogs
+
                 var logInfoUpdateCertificate = _logger.GenerateLogInformation(this.User.Identity.Name, this.ControllerContext.RouteData.Values["action"].ToString(), LogTypeOfAction.TypesOfActions[1], LogDescriptions.DescriptionOfActionOnEntity["updateCertificate"]);
                 _logger.AddCertificateLog(originCertificate, logInfoUpdateCertificate);
 
+                #endregion
+
+                #region PersonalUserLogs
+
                 var logInfoPersonalUpdateCertificate = _context.personalLogRepository.GeneratePersonalLogInformation(this.User.Identity.Name, this.ControllerContext.RouteData.Values["action"].ToString(), LogDescriptions.DescriptionOfPersonalUserLog["updateCertificate"], "Indekser: " + originCertificate.CertificateIndexer);
                 _context.personalLogRepository.AddPersonalUserLogToAdminGroup(logInfoPersonalUpdateCertificate);
+
+                #endregion
 
                 return RedirectToAction("ConfirmationOfActionOnCertificate", "Certificates", new { certificateIdentificator = editedCertificate.CertificateIdentificator, TypeOfAction = "Update" });
             }
@@ -274,7 +282,7 @@ namespace Certification_System.Controllers
                 var logInfoDeleteRequiredCertificateFromGivenDegrees = _logger.GenerateLogInformation(this.User.Identity.Name, this.ControllerContext.RouteData.Values["action"].ToString(), LogTypeOfAction.TypesOfActions[2], LogDescriptions.DescriptionOfActionOnEntity["deleteRequiredGivenCertificateFromDegree"]);
 
                 var logInfoUpdateUsers = _logger.GenerateLogInformation(this.User.Identity.Name, this.ControllerContext.RouteData.Values["action"].ToString(), LogTypeOfAction.TypesOfActions[1], LogDescriptions.DescriptionOfActionOnEntity["deleteUserGivenCertificate"]);
-                
+
                 _logger.AddCertificateLog(certificate, logInfoDeleteCertificate);
 
                 var deletedGivenCertificates = _context.givenCertificateRepository.DeleteGivenCertificatesByCertificateId(certificateToDelete.EntityIdentificator);
@@ -337,6 +345,25 @@ namespace Certification_System.Controllers
             }
 
             return View("DeleteEntity", certificateToDelete);
+        }
+
+        // GET: CompanyCertificateDetails
+        [Authorize(Roles = "Company")]
+        public ActionResult CompanyCertificateDetails(string certificateIdentificator)
+        {
+            var user = _context.userRepository.GetUserByEmail(this.User.Identity.Name);
+            var companyWorkers = _context.userRepository.GetUsersWorkersByCompanyId(user.CompanyRoleManager.FirstOrDefault());
+
+            var certificate = _context.certificateRepository.GetCertificateById(certificateIdentificator);
+            var givenCertificatesInstances = _context.givenCertificateRepository.GetGivenCertificatesByIdOfCertificate(certificateIdentificator).Select(z=> z.GivenCertificateIdentificator).ToList();
+
+            var companyWorkersWithCertificate = companyWorkers.Where(z => z.GivenCertificates.Any(x => givenCertificatesInstances.Contains(x))).ToList();
+
+            CompanyCertificateDetailsViewModel certificateDetails = _mapper.Map<CompanyCertificateDetailsViewModel>(certificate);
+            certificateDetails.Branches = _context.branchRepository.GetBranchesById(certificate.Branches);
+            certificateDetails.UsersWithCertificate = _mapper.Map<List<DisplayCrucialDataUserViewModel>>(companyWorkersWithCertificate).ToList();
+
+            return View(certificateDetails);
         }
     }
 }
