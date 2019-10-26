@@ -156,10 +156,10 @@ namespace Certification_System.Controllers
                     var createdUser = _context.userRepository.GetUserById(user.Id);
                     _context.personalLogRepository.CreatePersonalUserLog(createdUser);
 
-                    var logInfoPersonalAddUser = _context.personalLogRepository.GeneratePersonalLogInformation(this.User.Identity.Name, this.ControllerContext.RouteData.Values["action"].ToString(), LogDescriptions.DescriptionOfPersonalUserLog["addUser"], "Email: " + createdUser.Email);
+                    var logInfoPersonalAddUser = _context.personalLogRepository.GeneratePersonalLogInformation(this.User.Identity.Name, this.ControllerContext.RouteData.Values["action"].ToString(), LogDescriptions.DescriptionOfPersonalUserLog["addUser"]);
                     _context.personalLogRepository.AddPersonalUserLogToAdminGroup(logInfoPersonalAddUser);
 
-                    var logInfoPersonalUserCreation = _context.personalLogRepository.GeneratePersonalLogInformation(this.User.Identity.Name, this.ControllerContext.RouteData.Values["action"].ToString(), LogDescriptions.DescriptionOfPersonalUserLog["userCreation"], "Email " + createdUser.Email);
+                    var logInfoPersonalUserCreation = _context.personalLogRepository.GeneratePersonalLogInformation(this.User.Identity.Name, this.ControllerContext.RouteData.Values["action"].ToString(), LogDescriptions.DescriptionOfPersonalUserLog["userCreation"]);
                     _context.personalLogRepository.AddPersonalUserLog(createdUser.Id, logInfoPersonalUserCreation);
 
                     #endregion
@@ -239,10 +239,10 @@ namespace Certification_System.Controllers
 
                 #region PersonalUserLogs
 
-                var logInfoPersonalUpdateUser = _context.personalLogRepository.GeneratePersonalLogInformation(this.User.Identity.Name, this.ControllerContext.RouteData.Values["action"].ToString(), LogDescriptions.DescriptionOfPersonalUserLog["updateUser"], "Email: " + updatedUser.Email);
+                var logInfoPersonalUpdateUser = _context.personalLogRepository.GeneratePersonalLogInformation(this.User.Identity.Name, this.ControllerContext.RouteData.Values["action"].ToString(), LogDescriptions.DescriptionOfPersonalUserLog["updateUser"]);
                 _context.personalLogRepository.AddPersonalUserLogToAdminGroup(logInfoPersonalUpdateUser);
 
-                var logInfoPersonalUserDataModification = _context.personalLogRepository.GeneratePersonalLogInformation(this.User.Identity.Name, this.ControllerContext.RouteData.Values["action"].ToString(), LogDescriptions.DescriptionOfPersonalUserLog["userDataModification"], "Email " + updatedUser.Email);
+                var logInfoPersonalUserDataModification = _context.personalLogRepository.GeneratePersonalLogInformation(this.User.Identity.Name, this.ControllerContext.RouteData.Values["action"].ToString(), LogDescriptions.DescriptionOfPersonalUserLog["userDataModification"]);
                 _context.personalLogRepository.AddPersonalUserLog(updatedUser.Id, logInfoPersonalUserDataModification);
 
                 #endregion
@@ -613,10 +613,10 @@ namespace Certification_System.Controllers
 
                 #region PersonalUserLogs
 
-                var logInfoPersonalUpdateUser = _context.personalLogRepository.GeneratePersonalLogInformation(this.User.Identity.Name, this.ControllerContext.RouteData.Values["action"].ToString(), LogDescriptions.DescriptionOfPersonalUserLog["updateUser"], "Email: " + updatedUser.Email);
+                var logInfoPersonalUpdateUser = _context.personalLogRepository.GeneratePersonalLogInformation(this.User.Identity.Name, this.ControllerContext.RouteData.Values["action"].ToString(), LogDescriptions.DescriptionOfPersonalUserLog["updateUser"]);
                 _context.personalLogRepository.AddPersonalUserLogToAdminGroup(logInfoPersonalUpdateUser);
 
-                var logInfoPersonalUserDataModification = _context.personalLogRepository.GeneratePersonalLogInformation(this.User.Identity.Name, this.ControllerContext.RouteData.Values["action"].ToString(), LogDescriptions.DescriptionOfPersonalUserLog["userDataModification"], "Email " + updatedUser.Email);
+                var logInfoPersonalUserDataModification = _context.personalLogRepository.GeneratePersonalLogInformation(this.User.Identity.Name, this.ControllerContext.RouteData.Values["action"].ToString(), LogDescriptions.DescriptionOfPersonalUserLog["userDataModification"]);
                 _context.personalLogRepository.AddPersonalUserLog(updatedUser.Id, logInfoPersonalUserDataModification);
 
                 #endregion

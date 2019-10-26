@@ -1,0 +1,51 @@
+﻿@model Certification_System.DTOViewModels.CompanyWorkerGivenDegreeDetailsViewModel
+@using Certification_System.DTOViewModels
+
+@{
+    ViewData["Title"] = "CompanyWorkerGivenDegreeDetails";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+<h1>Szczegóły nadanego stopnia zawodowego</h1>
+<hr />
+
+<h2 class="mt-4 mb-4">Dane odnośnie nadanego stopnia zawodowego</h2>
+
+<div class="row 0 m-0 mt-3 mb-3">
+    <a asp-action="GenerateGivenDegreePossessionConfirmation" asp-route-givenDegreeIdentificator="@Model.GivenDegree.GivenDegreeIdentificator" asp-controller="CompetenceVerification" class="btn btn-success mt-1 mr-1 md650px_FloatLeft">Wyświetl nadany stopień</a>
+    <a asp-action="CompanyWorkerDetails" asp-route-userIdentificator="@Model.UserIdentificator" asp-controller="Users" class="btn btn-outline-info mt-1 md650px_FloatRight">Powrót do szczegółów pracownika</a>
+</div>
+
+@{List<DisplayGivenDegreeToUserExtendedViewModel> givenDegreeList = new List<DisplayGivenDegreeToUserExtendedViewModel>();
+    givenDegreeList.Add(Model.GivenDegree);}
+
+@await Component.InvokeAsync("DisplayGivenDegreeToUserExtDataTable", new { givenDegreeViewModel = givenDegreeList, tableIdentificator = "listGivenDegree" })
+
+<h2 class="mt-4 mb-4">Certyfikaty wymagane do uzyskania stopnia zawodowego</h2>
+
+@if (Model.RequiredCertificatesWithGivenInstances.Count != 0)
+{
+    @await Component.InvokeAsync("DisplayGivenCertificateWithoutUserDataTable", new { givenCertificateViewModel = Model.RequiredCertificatesWithGivenInstances, tableIdentificator = "listRequiredCertificates", operationSet = 2 })
+}
+else
+{
+    <div class="mt-4 mb-4 alert alert-warning">Do nadania stopnia zawodowego nie jest wymagane posiadanie jakiegokolwiek certyfikatu</div>
+}
+
+<h2 class="mt-4 mb-4">Stopnie zawodowe wymagane do uzyskania wymienionego stopnia zawodowego</h2>
+
+@if (Model.RequiredDegreesWithGivenInstances.Count != 0)
+{
+    @await Component.InvokeAsync("DisplayGivenDegreeToUserDataTable", new { givenCertificateViewModel = Model.RequiredDegreesWithGivenInstances, tableIdentificator = "listRequiredDegrees", operationSet = 2 })
+}
+else
+{
+    <div class="mt-4 mb-4 alert alert-warning">Do nadania stopnia zawodowego nie jest wymagane posiadanie jakiegokolwiek stopnia zawodowego</div>
+}
+
+@section Scripts{
+    @{await Html.RenderPartialAsync("_DataTableBasicScript", "listGivenDegree");}
+    @{await Html.RenderPartialAsync("_DataTableBasicScript", "listRequiredCertificates");}
+    @{await Html.RenderPartialAsync("_DataTableBasicScript", "listRequiredDegrees");}
+}
+

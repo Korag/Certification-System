@@ -152,9 +152,9 @@ namespace Certification_System.Controllers
 
                 var course = _context.courseRepository.GetCourseById(givenCertificate.Course);
                 var certificate = _context.certificateRepository.GetCertificateById(givenCertificate.Certificate);
-                //var user = _context.userRepository.GetUserByGivenCertificateId(givenCertificate.GivenCertificateIdentificator);
+                var user = _context.userRepository.GetUserByGivenCertificateId(givenCertificate.GivenCertificateIdentificator);
 
-                DisplayCrucialDataUserViewModel userViewModel = _mapper.Map<DisplayCrucialDataUserViewModel>(User);
+                DisplayCrucialDataUserViewModel userViewModel = _mapper.Map<DisplayCrucialDataUserViewModel>(user);
                 DisplayCrucialDataCourseViewModel courseViewModel = _mapper.Map<DisplayCrucialDataCourseViewModel>(course);
                 DisplayCrucialDataCertificateViewModel certificateViewModel = _mapper.Map<DisplayCrucialDataCertificateViewModel>(certificate);
 

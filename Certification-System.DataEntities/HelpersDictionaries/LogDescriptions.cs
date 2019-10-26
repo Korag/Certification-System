@@ -115,6 +115,7 @@ namespace Certification_System.Entities
            {"updateDegree",  "Dane stopnia zawodowego zostały zmodyfikowane"},
            {"addDegree",  "Nowy stopień zawodowy został dodany do systemu"},
            {"deleteDegree",  "Stopień zawodowy został usunięty"},
+           {"addGivenCertificate",  "Nowy nadany certyfikat został dodany do systemu"},
            {"addUserGivenCertificate",  "Otrzymałeś nowy certyfikat"},
            {"updateGivenCertificate",  "Dane nadanego certyfikatu zostały zmodyfikowane"},
            {"updateUserGivenCertificate",  "Dane jednego z Twoich nadanych certyfikatów zostały zmodyfikowane"},

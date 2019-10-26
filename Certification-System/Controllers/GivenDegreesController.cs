@@ -447,5 +447,68 @@ namespace Certification_System.Controllers
 
             return View(givenDegreeDetails);
         }
+
+        // GET: CompanyWorkerGivenDegreeDetails
+        [Authorize(Roles = "Company")]
+        public ActionResult CompanyWorkerGivenDegreeDetails(string givenDegreeIdentificator)
+        {
+            var user = _context.userRepository.GetUserByGivenDegreeId(givenDegreeIdentificator);
+
+            var givenDegree = _context.givenDegreeRepository.GetGivenDegreeById(givenDegreeIdentificator);
+            var degree = _context.degreeRepository.GetDegreeById(givenDegree.Degree);
+
+            var requiredDegrees = _context.degreeRepository.GetDegreesById(degree.RequiredDegrees);
+            var requiredCertificates = _context.certificateRepository.GetCertificatesById(degree.RequiredCertificates);
+
+            DisplayDegreeWithoutRequirementsViewModel degreeViewModel = _mapper.Map<DisplayDegreeWithoutRequirementsViewModel>(degree);
+            degreeViewModel.Branches = _context.branchRepository.GetBranchesById(degree.Branches);
+
+            List<DisplayGivenCertificateToUserWithoutCourseViewModel> listOfRequiredCertificatesWithInstances = new List<DisplayGivenCertificateToUserWithoutCourseViewModel>();
+            var usersGivenCertificate = _context.givenCertificateRepository.GetGivenCertificatesById(user.GivenCertificates);
+
+            if (requiredCertificates.Count != 0)
+            {
+                foreach (var certificate in requiredCertificates)
+                {
+                    DisplayCrucialDataCertificateViewModel certificateViewModel = _mapper.Map<DisplayCrucialDataCertificateViewModel>(certificate);
+
+                    var requiredGivenCertificate = usersGivenCertificate.Where(z => z.Certificate == certificate.CertificateIdentificator).FirstOrDefault();
+
+                    DisplayGivenCertificateToUserWithoutCourseViewModel requiredCertificateWithInstance = _mapper.Map<DisplayGivenCertificateToUserWithoutCourseViewModel>(requiredGivenCertificate);
+                    requiredCertificateWithInstance.Certificate = certificateViewModel;
+
+                    listOfRequiredCertificatesWithInstances.Add(requiredCertificateWithInstance);
+                }
+            }
+
+            List<DisplayGivenDegreeToUserViewModel> listOfRequiredDegreesWithInstances = new List<DisplayGivenDegreeToUserViewModel>();
+            var usersGivenDegrees = _context.givenDegreeRepository.GetGivenDegreesById(user.GivenDegrees);
+
+            if (requiredDegrees.Count != 0)
+            {
+                foreach (var requiredSingleDegree in requiredDegrees)
+                {
+                    DisplayCrucialDataDegreeViewModel singleDegreeViewModel = _mapper.Map<DisplayCrucialDataDegreeViewModel>(requiredSingleDegree);
+
+                    var requiredGivenDegree = usersGivenDegrees.Where(z => z.Degree == degree.DegreeIdentificator).FirstOrDefault();
+
+                    DisplayGivenDegreeToUserViewModel requiredDegreeWithInstance = _mapper.Map<DisplayGivenDegreeToUserViewModel>(singleDegreeViewModel);
+                    requiredDegreeWithInstance.Degree = singleDegreeViewModel;
+
+                    listOfRequiredDegreesWithInstances.Add(requiredDegreeWithInstance);
+                }
+            }
+
+            CompanyWorkerGivenDegreeDetailsViewModel givenDegreeDetails = new CompanyWorkerGivenDegreeDetailsViewModel();
+            givenDegreeDetails.GivenDegree = _mapper.Map<DisplayGivenDegreeToUserExtendedViewModel>(givenDegree);
+            givenDegreeDetails.GivenDegree.Degree = degreeViewModel;
+
+            givenDegreeDetails.RequiredCertificatesWithGivenInstances = listOfRequiredCertificatesWithInstances;
+            givenDegreeDetails.RequiredDegreesWithGivenInstances = listOfRequiredDegreesWithInstances;
+
+            givenDegreeDetails.UserIdentificator = user.Id;
+
+            return View(givenDegreeDetails);
+        }
     }
 }

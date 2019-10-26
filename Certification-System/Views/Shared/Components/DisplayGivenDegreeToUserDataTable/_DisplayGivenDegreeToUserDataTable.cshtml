@@ -78,6 +78,12 @@
                         <a asp-action="WorkerGivenDegreeDetails" asp-route-givenDegreeIdentificator="@givenDegree.GivenDegreeIdentificator" asp-controller="GivenDegrees" class="btn btn-primary m-1">Szczegóły</a>
                     </td>
                 }
+                @if (Model.Options.OperationSet == 4)
+                {
+                    <td>
+                        <a asp-action="CompanyWorkerGivenDegreeDetails" asp-route-givenDegreeIdentificator="@givenDegree.GivenDegreeIdentificator" asp-controller="GivenDegrees" class="btn btn-primary m-1">Szczegóły</a>
+                    </td>
+                }
             </tr>
             }
         </tbody>
