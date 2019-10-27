@@ -8,6 +8,10 @@
 <h1>Posiadane przez pracowników certyfikaty i stopnie zawodowe</h1>
 <hr />
 
+<div class="row m-0 mt-3 mb-3">
+    <a asp-action="CompanyUsersGivenCompetences" asp-controller="CompetenceVerification" class="btn btn-primary mt-1 mr-1 xs450px_FloatLeft">Wszystkie zdobyte kompetencje pracowników</a>
+</div>
+
 <h2 class="mt-4 mb-4">Certyfikaty</h2>
 
 @await Component.InvokeAsync("DisplayCertificateDataTable", new { certificateViewModel = Model.Certificates, tableIdentificator = "listCertificates", operationSet = 2 })

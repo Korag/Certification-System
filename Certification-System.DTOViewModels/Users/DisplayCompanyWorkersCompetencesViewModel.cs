@@ -5,6 +5,7 @@ namespace Certification_System.DTOViewModels
 {
     public class DisplayCompanyWorkersCompetencesViewModel
     {
+        public string CompanyIdentificator { get; set; }
 
         [Display(Name = "Certyfikaty pracowników przedsiębiorstwa")]
         public ICollection<DisplayCertificateViewModel> Certificates { get; set; }

@@ -1,0 +1,23 @@
+﻿@model Certification_System.DTOViewModels.DisplayCompanyWorkersGivenCompetencesViewModel
+
+@{
+    ViewData["Title"] = "CompanyUsersGivenCompetences";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+<h1>Lista wszystkich nadanych certyfikatów umiejętności nadanych pracownikom przedsiębiorstwa</h1>
+<hr />
+
+<h2 class="mt-4 mb-4">Certyfikaty</h2>
+
+@await Component.InvokeAsync("DisplayGivenCertificateWithValidityDataTable", new { givenCertificateViewModel = Model.GivenCertificates, tableIdentificator = "listGivenCertificates", operationSet = 2 })
+
+<h2 class="mt-4 mb-4">Stopnie zawodowe</h2>
+
+@await Component.InvokeAsync("DisplayGivenDegreeWithValidityDataTable", new { givenDegreeViewModel = Model.GivenDegrees, tableIdentificator = "listGivenDegrees", operationSet = 2 })
+
+@section Scripts{
+    @{await Html.RenderPartialAsync("_DataTableBasicScript", "listGivenCertificates");}
+    @{await Html.RenderPartialAsync("_DataTableBasicScript", "listGivenDegrees");}
+
+}

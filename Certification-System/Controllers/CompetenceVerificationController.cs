@@ -274,6 +274,64 @@ namespace Certification_System.Controllers
             }
         }
 
+        // GET: CompanyUsersGivenCompetences
+        [Authorize(Roles = "Company")]
+        public ActionResult CompanyUsersGivenCompetences()
+        {
+            var companyManager = _context.userRepository.GetUserByEmail(this.User.Identity.Name);
+            var companyWorkers = _context.userRepository.GetUsersWorkersByCompanyId(companyManager.CompanyRoleManager.FirstOrDefault());
+
+            var givenCertificates = _context.givenCertificateRepository.GetGivenCertificatesById(companyWorkers.SelectMany(z=> z.GivenCertificates).ToList());
+            var givenDegrees = _context.givenDegreeRepository.GetGivenDegreesById(companyWorkers.SelectMany(z => z.GivenDegrees).ToList());
+
+            List<DisplayGivenCertificateViewModel> listOfGivenCertificates = new List<DisplayGivenCertificateViewModel>();
+
+            foreach (var givenCertificate in givenCertificates)
+            {
+                var course = _context.courseRepository.GetCourseById(givenCertificate.Course);
+                var certificate = _context.certificateRepository.GetCertificateById(givenCertificate.Certificate);
+                var user = companyWorkers.Where(z => z.GivenCertificates.Contains(givenCertificate.GivenCertificateIdentificator)).FirstOrDefault();
+
+                DisplayCrucialDataCourseViewModel courseViewModel = _mapper.Map<DisplayCrucialDataCourseViewModel>(course);
+                DisplayCrucialDataCertificateViewModel certificateViewModel = _mapper.Map<DisplayCrucialDataCertificateViewModel>(certificate);
+                DisplayCrucialDataUserViewModel userViewModel = _mapper.Map<DisplayCrucialDataUserViewModel>(user);
+
+                DisplayGivenCertificateViewModel singleGivenCertificate = _mapper.Map<DisplayGivenCertificateViewModel>(givenCertificate);
+                singleGivenCertificate.Certificate = certificateViewModel;
+                singleGivenCertificate.Course = courseViewModel;
+                singleGivenCertificate.User = userViewModel;
+
+                listOfGivenCertificates.Add(singleGivenCertificate);
+            }
+
+            List<DisplayGivenDegreeViewModel> listOfGivenDegrees = new List<DisplayGivenDegreeViewModel>();
+
+            foreach (var givenDegree in givenDegrees)
+            {
+                var degree = _context.degreeRepository.GetDegreeById(givenDegree.Degree);
+                var user = companyWorkers.Where(z => z.GivenDegrees.Contains(givenDegree.GivenDegreeIdentificator)).FirstOrDefault();
+
+                DisplayCrucialDataDegreeViewModel degreeViewModel = _mapper.Map<DisplayCrucialDataDegreeViewModel>(degree);
+                DisplayCrucialDataUserViewModel userViewModel = _mapper.Map<DisplayCrucialDataUserViewModel>(user);
+
+                DisplayGivenDegreeViewModel singleGivenDegree = _mapper.Map<DisplayGivenDegreeViewModel>(givenDegree);
+                singleGivenDegree.Degree = degreeViewModel;
+                singleGivenDegree.User = userViewModel;
+
+                listOfGivenDegrees.Add(singleGivenDegree);
+            }
+
+            DisplayCompanyWorkersGivenCompetencesViewModel companyUsersCompetences = new DisplayCompanyWorkersGivenCompetencesViewModel
+            {
+                CompanyIdentificator = companyManager.CompanyRoleManager.FirstOrDefault(),
+                
+                GivenCertificates = listOfGivenCertificates,
+                GivenDegrees = listOfGivenDegrees
+            };
+
+            return View(companyUsersCompetences);
+        }
+
         // GET: GenerateUserPhysicalIdentificator
         [Authorize(Roles = "Admin, Worker, Company")]
         public ActionResult GenerateUserPhysicalIdentificator(string userIdentificator)
