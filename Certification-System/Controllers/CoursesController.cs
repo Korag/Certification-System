@@ -1738,6 +1738,27 @@ namespace Certification_System.Controllers
             return View(courseDetails);
         }
 
+        // GET: DisplayWorkerCourses
+        [Authorize(Roles = "Company")]
+        public ActionResult DisplayWorkerCourses()
+        {
+            var user = _context.userRepository.GetUserByEmail(this.User.Identity.Name);
+            var companyWorkers = _context.userRepository.GetUsersWorkersByCompanyId(user.CompanyRoleManager.FirstOrDefault());
+
+            var courses = _context.courseRepository.GetCoursesById(companyWorkers.SelectMany(z => z.Courses).ToList()).ToList();
+
+            List<DisplayCourseViewModel> listOfCourses = new List<DisplayCourseViewModel>();
+
+            if (courses.Count != 0)
+            {
+                listOfCourses = _mapper.Map<List<DisplayCourseViewModel>>(courses);
+                listOfCourses.ForEach(z => z.Branches = _context.branchRepository.GetBranchesById(z.Branches));
+                listOfCourses.ForEach(z => z.EnrolledUsersQuantity = courses.Where(s => s.CourseIdentificator == z.CourseIdentificator).FirstOrDefault().EnrolledUsers.Count);
+            }
+
+            return View(listOfCourses);
+        }
+
         #region AjaxQuery
         // GET: GetCoursesByUserId
         [Authorize(Roles = "Admin")]

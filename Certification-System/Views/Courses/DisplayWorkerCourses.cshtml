@@ -1,22 +1,13 @@
 ﻿@model IEnumerable<Certification_System.DTOViewModels.DisplayCourseViewModel>
-@using Certification_System.DTOViewModels
+@using Certification_System.DTOViewModels;
 
 @{
-    ViewData["Title"] = "DisplayAllCourses";
+    ViewData["Title"] = "DisplayWorkerCourses";
     Layout = "~/Views/Shared/_Layout.cshtml";
 }
 
-<h1>Lista wszystkich kursów</h1>
+<h1>Lista kursów pracowników przedsiębiorstwa</h1>
 <hr />
-
-@if (!string.IsNullOrWhiteSpace(ViewBag.message))
-{
-    <h2 class="alert alert-info" role="alert">@ViewBag.message</h2>
-}
-
-<div class="mt-3 mb-3">
-    <a asp-action="AddCourseMenu" asp-controller="Courses" class="btn btn-primary">Dodaj nowy kurs</a>
-</div>
 
 <div class="row justify-content-center form-group">
     <label class="control-label" id="labelWithSelect" style="margin-bottom:0px; margin-top:7px">Status kursu:</label>
