@@ -1087,6 +1087,55 @@ namespace Certification_System.Controllers
             return RedirectToAction("BlankMenu", "Certificates");
         }
 
+        // GET: DisplayCompanyWorkersExamTermSummary
+        [Authorize(Roles = "Company")]
+        public ActionResult DisplayCompanyWorkersExamTermSummary(string examTermIdentificator)
+        {
+            var companyManager = _context.userRepository.GetUserByEmail(this.User.Identity.Name);
+            var companyWorkers = _context.userRepository.GetUsersWorkersByCompanyId(companyManager.CompanyRoleManager.FirstOrDefault());
+            var companyWorkersIdentificators = companyWorkers.Select(z => z.Id).ToList();
+
+            var exam = _context.examRepository.GetExamByExamTermId(examTermIdentificator);
+            var examTerm = _context.examTermRepository.GetExamTermById(examTermIdentificator);
+
+            var examResults = _context.examResultRepository.GetExamsResultsById(exam.ExamResults);
+            var examTermResults = examResults.Where(z => z.ExamTerm == examTermIdentificator);
+
+            var companyWorkersEnrolledInExamTerm = companyWorkers.Where(z => examTerm.EnrolledUsers.Contains(z.Id)).ToList();
+            List<DisplayUserWithExamResults> listOfUsers = new List<DisplayUserWithExamResults>();
+
+            foreach (var companyWorker in companyWorkersEnrolledInExamTerm)
+            {
+                var userExamResult = examTermResults.Where(z => z.User == companyWorker.Id).FirstOrDefault();
+                DisplayUserWithExamResults userWithExamResult = new DisplayUserWithExamResults();
+
+                userWithExamResult = _mapper.Map<DisplayUserWithExamResults>(companyWorker);
+                userWithExamResult.MaxAmountOfPointsToEarn = exam.MaxAmountOfPointsToEarn;
+
+                if (userExamResult != null)
+                {
+                    userWithExamResult = _mapper.Map<ExamResult, DisplayUserWithExamResults>(userExamResult, userWithExamResult);
+                    userWithExamResult.HasExamResult = true;
+                }
+                else
+                {
+                    userWithExamResult.HasExamResult = false;
+                }
+
+                listOfUsers.Add(userWithExamResult);
+            }
+
+            DisplayUserListWithExamResultsAndExamIdentificator examTermSummary = new DisplayUserListWithExamResultsAndExamIdentificator
+            {
+                ExamIdentificator = exam.ExamIdentificator,
+                ExamTermIdentificator = examTerm.ExamTermIdentificator,
+
+                ResultsList = listOfUsers
+            };
+
+            return View(examTermSummary);
+        }
+
         #region AjaxQuery
         // GET: GetUserAvailableToEnrollExamsTermsByExamId
         [Authorize(Roles = "Admin, Examiner, Worker")]
