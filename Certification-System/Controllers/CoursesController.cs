@@ -307,9 +307,9 @@ namespace Certification_System.Controllers
                 DisplayExamWithoutCourseViewModel singleExam = _mapper.Map<DisplayExamWithoutCourseViewModel>(exam);
                 singleExam.Examiners = _mapper.Map<List<DisplayCrucialDataUserViewModel>>(_context.userRepository.GetUsersById(exam.Examiners));
 
-                //var examTerms= _context.examTermRepository.GetExamsTermsById(exam.ExamTerms);
-                //examTerms.ToList().ForEach(z => listOfExaminatorsIdentificators.AddRange(z.Examiners));
-                //listOfExaminatorsIdentificators.AddRange(exam.Examiners);
+                var examTerms= _context.examTermRepository.GetExamsTermsById(exam.ExamTerms);
+                examTerms.ToList().ForEach(z => listOfExaminatorsIdentificators.AddRange(z.Examiners));
+                listOfExaminatorsIdentificators.AddRange(exam.Examiners);
 
                 examsViewModel.Add(singleExam);
             }
@@ -1724,6 +1724,10 @@ namespace Certification_System.Controllers
                 DisplayExamWithoutCourseViewModel singleExam = _mapper.Map<DisplayExamWithoutCourseViewModel>(exam);
                 singleExam.Examiners = _mapper.Map<List<DisplayCrucialDataUserViewModel>>(_context.userRepository.GetUsersById(exam.Examiners));
 
+                var examTerms = _context.examTermRepository.GetExamsTermsById(exam.ExamTerms);
+                examTerms.ToList().ForEach(z => listOfExaminatorsIdentificators.AddRange(z.Examiners));
+                listOfExaminatorsIdentificators.AddRange(exam.Examiners);
+
                 examsViewModel.Add(singleExam);
             }
 
@@ -1877,10 +1881,10 @@ namespace Certification_System.Controllers
 
                             singleUser.ExamsResults.Add(singleExamResult);
                         }
-
-                        listOfUsers.Add(singleUser);
                     }
                 }
+
+                listOfUsers.Add(singleUser);
             }
 
             return listOfUsers;

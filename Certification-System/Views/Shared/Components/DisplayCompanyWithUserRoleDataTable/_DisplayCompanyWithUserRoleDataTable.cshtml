@@ -28,9 +28,6 @@
                 <th>
                     @Html.DisplayNameFor(model => model.Companies.First().NumberOfApartment)
                 </th>
-                <th>
-                    Rola użytkownika w przesiębiorstwie
-                </th>
                 @if (Model.Options.OperationSet != 0)
                 {
                     <th>
@@ -66,16 +63,6 @@
                     </td>
                     <td>
                         @Html.DisplayFor(modelItem => company.NumberOfApartment)
-                    </td>
-                    <td>
-                        @if (Model.User.CompanyRoleWorker.Contains(company.CompanyIdentificator))
-                        {
-                            <p>@Html.DisplayNameFor(model => model.User.CompanyRoleWorker)</p>
-                        }
-                        @if (Model.User.CompanyRoleManager.Contains(company.CompanyIdentificator))
-                        {
-                            <p>@Html.DisplayNameFor(model => model.User.CompanyRoleManager)</p>
-                        }
                     </td>
                     @if (Model.Options.OperationSet != 0)
                     {
