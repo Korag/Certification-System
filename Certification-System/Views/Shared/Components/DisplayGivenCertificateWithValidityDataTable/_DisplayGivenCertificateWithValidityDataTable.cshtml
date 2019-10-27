@@ -1,0 +1,91 @@
+﻿@model Certification_System.DTOViewModels.DisplayGivenCertificateDataTableViewModel
+
+<div class="col-12 table-responsive">
+    <table id="@Model.Options.TableIdentificator" class="table table-striped table-bordered display" style="width: 100%;" role="grid">
+        <thead>
+            <tr>
+                <th>
+                    @Html.DisplayNameFor(model => model.GivenCertificates.FirstOrDefault().GivenCertificateIndexer)
+                </th>
+                <th>
+                    @Html.DisplayNameFor(model => model.GivenCertificates.FirstOrDefault().ReceiptDate)
+                </th>
+                <th>
+                    @Html.DisplayNameFor(model => model.GivenCertificates.FirstOrDefault().ExpirationDate)
+                </th>
+                <th>
+                    @Html.DisplayNameFor(model => model.GivenCertificates.FirstOrDefault().Certificate.CertificateIndexer) i @Html.DisplayNameFor(model => model.GivenCertificates.FirstOrDefault().Certificate.Name)
+                </th>
+                <th>
+                    @Html.DisplayNameFor(model => model.GivenCertificates.FirstOrDefault().User.FirstName) i @Html.DisplayNameFor(model => model.GivenCertificates.FirstOrDefault().User.LastName)
+                </th>
+                <th>
+                    @Html.DisplayNameFor(model => model.GivenCertificates.FirstOrDefault().Course.CourseIndexer) i @Html.DisplayNameFor(model => model.GivenCertificates.FirstOrDefault().Course.Name)
+                </th>
+                <th>
+                    Certyfikat jest ważny ?
+                </th>
+                @if (Model.Options.OperationSet != 0)
+                {
+                    <th>
+                        Operacje
+                    </th>
+                }
+            </tr>
+        </thead>
+        <tbody>
+            @foreach (var givenCertificate in Model.GivenCertificates)
+            {
+                <tr class="alert @if (givenCertificate.ExpirationDate < DateTime.Now) { <text> table-danger </text>} else { <text> table-success </text> }">
+                    <td>
+                        @Html.DisplayFor(modelItem => givenCertificate.GivenCertificateIndexer)
+                    </td>
+                    <td>
+                        @Html.DisplayFor(modelItem => givenCertificate.ReceiptDate)
+                    </td>
+                    <td>
+                        @Html.DisplayFor(modelItem => givenCertificate.ExpirationDate)
+                    </td>
+                    <td>
+                        @Html.DisplayFor(model => givenCertificate.Certificate.CertificateIndexer) @Html.DisplayFor(model => givenCertificate.Certificate.Name)
+                    </td>
+                    <td>
+                        @Html.DisplayFor(model => givenCertificate.User.FirstName) @Html.DisplayFor(model => givenCertificate.User.LastName)
+                    </td>
+                    <td>
+                        @Html.DisplayFor(model => givenCertificate.Course.CourseIndexer) @Html.DisplayFor(model => givenCertificate.Course.Name)
+                    </td>
+                    <td style="text-align:center">
+                        @if (givenCertificate.ExpirationDate < DateTime.Now)
+                        {
+                            <span class="fas fa-times" style="font-size:34px"></span>
+                        }
+                        else
+                        {
+                            <span class="fas fa-check-circle" style="font-size:34px"></span>
+                        }
+                    </td>
+                    @if (Model.Options.OperationSet == 1)
+                    {
+                        <td>
+                            <div class="dropdown p-0">
+                                <button class="btn btn-success dropdown-toggle" type="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">Operacje</button>
+                                <div class="dropdown-menu nohover">
+                                    <a asp-action="EditGivenCertificate" asp-route-givenCertificateIdentificator="@givenCertificate.GivenCertificateIdentificator" asp-controller="GivenCertificates" class="btn btn-warning w-100 mb-1">Edytuj nadany certyfikat</a>
+                                    <a asp-action="CertificateDetails" asp-route-certificateIdentificator="@givenCertificate.Certificate.CertificateIdentificator" asp-controller="Certificates" class="btn btn-info w-100 mb-1">Szczegóły certyfikatu</a>
+                                    <a asp-action="GivenCertificateDetails" asp-route-givenCertificateIdentificator="@givenCertificate.GivenCertificateIdentificator" asp-controller="GivenCertificates" class="btn btn-secondary w-100">Szczegóły przyznanego certyfikatu</a>
+                                </div>
+                            </div>
+                        </td>
+                    }
+                    @if (Model.Options.OperationSet == 2)
+                    {
+                        <td>
+                            <a asp-action="WorkerGivenCertificateDetails" asp-route-givenCertificateIdentificator="@givenCertificate.GivenCertificateIdentificator" asp-controller="GivenCertificates" class="btn btn-primary m-1">Szczegóły</a>
+                        </td>
+                    }
+                </tr>
+            }
+        </tbody>
+    </table>
+</div>
