@@ -1,0 +1,85 @@
+﻿@model Certification_System.DTOViewModels.DisplayGivenDegreeDataTableViewModel
+
+<div class="col-12 table-responsive">
+    <table id="@Model.Options.TableIdentificator" class="table table-striped table-bordered display" style="width: 100%;" role="grid">
+        <thead>
+            <tr>
+                <th>
+                    @Html.DisplayNameFor(model => model.GivenDegrees.FirstOrDefault().GivenDegreeIndexer)
+                </th>
+                <th>
+                    @Html.DisplayNameFor(model => model.GivenDegrees.FirstOrDefault().ReceiptDate)
+                </th>
+                <th>
+                    @Html.DisplayNameFor(model => model.GivenDegrees.FirstOrDefault().ExpirationDate)
+                </th>
+                <th>
+                    @Html.DisplayNameFor(model => model.GivenDegrees.FirstOrDefault().Degree.DegreeIndexer) i @Html.DisplayNameFor(model => model.GivenDegrees.FirstOrDefault().Degree.Name)
+                </th>
+                <th>
+                    @Html.DisplayNameFor(model => model.GivenDegrees.FirstOrDefault().User.FirstName) i @Html.DisplayNameFor(model => model.GivenDegrees.FirstOrDefault().User.LastName)
+                </th>
+                <th>
+                    Stopień zawodowy jest ważny ?
+                </th>
+                @if (Model.Options.OperationSet != 0)
+                {
+                    <th>
+                        Operacje
+                    </th>
+                }
+            </tr>
+        </thead>
+        <tbody>
+            @foreach (var givenDegree in Model.GivenDegrees)
+            {
+                <tr class="alert @if (givenDegree.ExpirationDate < DateTime.Now) { <text> table-danger </text>} else { <text> table-success </text> }">
+                    <td>
+                        @Html.DisplayFor(modelItem => givenDegree.GivenDegreeIndexer)
+                    </td>
+                    <td>
+                        @Html.DisplayFor(modelItem => givenDegree.ReceiptDate)
+                    </td>
+                    <td>
+                        @Html.DisplayFor(modelItem => givenDegree.ExpirationDate)
+                    </td>
+                    <td>
+                        @Html.DisplayFor(model => givenDegree.Degree.DegreeIndexer) @Html.DisplayFor(model => givenDegree.Degree.Name)
+                    </td>
+                    <td>
+                        @Html.DisplayFor(model => givenDegree.User.FirstName) @Html.DisplayFor(model => givenDegree.User.LastName)
+                    </td>
+                    <td style="text-align:center">
+                        @if (givenDegree.ExpirationDate < DateTime.Now)
+                        {
+                            <span class="fas fa-times" style="font-size:34px"></span>
+                        }
+                        else
+                        {
+                            <span class="fas fa-check-circle" style="font-size:34px"></span>
+                        }
+                    </td>
+                    @if (Model.Options.OperationSet == 1)
+                    {
+                        <td>
+                            <div class="dropdown p-0">
+                                <button class="btn btn-success dropdown-toggle" type="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">Operacje</button>
+                                <div class="dropdown-menu nohover">
+                                    <a asp-action="GivenDegreeDetails" asp-route-givenDegreeIdentificator="@givenDegree.GivenDegreeIdentificator" asp-controller="GivenDegrees" class="btn btn-info w-100 mb-1">Szczegóły nadanego stopnia zawodowego</a>
+                                    <a asp-action="UserDetails" asp-route-userIdentificator="@givenDegree.User.UserIdentificator" asp-controller="Users" class="btn btn-secondary w-100 mb-1">Szczegóły użytkownika</a>
+                                    <a asp-action="EditGivenDegree" asp-route-givenDegreeIdentificator="@givenDegree.GivenDegreeIdentificator" asp-controller="GivenDegrees" class="btn btn-warning w-100">Edytuj stopień zawodowy</a>
+                                </div>
+                            </div>
+                        </td>
+                    }
+                    @if (Model.Options.OperationSet == 2)
+                    {
+                        <td>
+                            <a asp-action="CompanyWorkerGivenDegreeDetails" asp-route-givenDegreeIdentificator="@givenDegree.GivenDegreeIdentificator" asp-controller="GivenDegrees" class="btn btn-primary m-1">Szczegóły</a>
+                        </td>
+                    }
+                </tr>
+            }
+        </tbody>
+    </table>
+</div>

@@ -52,7 +52,7 @@
                     <td>
                         @Html.DisplayFor(model => givenCertificate.Course.CourseIndexer) @Html.DisplayFor(model => givenCertificate.Course.Name)
                     </td>
-                    @if (Model.Options.OperationSet != 0)
+                    @if (Model.Options.OperationSet == 1)
                     {
                         <td>
                             <div class="dropdown p-0">
