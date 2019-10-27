@@ -1922,7 +1922,7 @@ namespace Certification_System.Controllers
                 }
             }
 
-            var companyWorkersEnrolledInExam = _context.userRepository.GetUsersById(companyWorkersIdentificators.Where(z=> exam.EnrolledUsers.Contains(z)).ToList());
+            var companyWorkersEnrolledInExam = companyWorkers.Where(z => exam.EnrolledUsers.Contains(z.Id)).ToList();
             List<DisplayCrucialDataUserViewModel> listOfEnrolledExamCompanyWorkers = _mapper.Map<List<DisplayCrucialDataUserViewModel>>(companyWorkersEnrolledInExam);
 
             CompanyWorkersExamDetailsViewModel examDetails = _mapper.Map<CompanyWorkersExamDetailsViewModel>(exam);
@@ -2028,6 +2028,51 @@ namespace Certification_System.Controllers
             }
 
             return View(assignToExamViewModel);
+        }
+
+        // GET: DisplayCompanyWorkersExamSummary
+        [Authorize(Roles = "Company")]
+        public ActionResult DisplayCompanyWorkersExamSummary(string examIdentificator)
+        {
+            var companyManager = _context.userRepository.GetUserByEmail(this.User.Identity.Name);
+            var companyWorkers = _context.userRepository.GetUsersWorkersByCompanyId(companyManager.CompanyRoleManager.FirstOrDefault());
+            var companyWorkersIdentificators = companyWorkers.Select(z => z.Id).ToList(); 
+
+            var exam = _context.examRepository.GetExamById(examIdentificator);
+            var examResults = _context.examResultRepository.GetExamsResultsById(exam.ExamResults);
+
+            var companyWorkersEnrolledInExam = companyWorkers.Where(z => exam.EnrolledUsers.Contains(z.Id)).ToList();
+            List<DisplayUserWithExamResults> listOfUsers = new List<DisplayUserWithExamResults>();
+
+            foreach (var companyWorker in companyWorkersEnrolledInExam)
+            {
+                var userExamResult = examResults.Where(z => z.User == companyWorker.Id).FirstOrDefault();
+                DisplayUserWithExamResults userWithExamResult = new DisplayUserWithExamResults();
+
+                userWithExamResult = _mapper.Map<DisplayUserWithExamResults>(companyWorker);
+                userWithExamResult.MaxAmountOfPointsToEarn = exam.MaxAmountOfPointsToEarn;
+
+                if (userExamResult != null)
+                {
+                    userWithExamResult = _mapper.Map<ExamResult, DisplayUserWithExamResults>(userExamResult, userWithExamResult);
+                    userWithExamResult.HasExamResult = true;
+                }
+                else
+                {
+                    userWithExamResult.HasExamResult = false;
+                }
+
+                listOfUsers.Add(userWithExamResult);
+            }
+
+            DisplayUserListWithExamResultsAndExamIdentificator examSummary = new DisplayUserListWithExamResultsAndExamIdentificator
+            {
+                ExamIdentificator = exam.ExamIdentificator,
+
+                ResultsList = listOfUsers
+            };
+
+            return View(examSummary);
         }
 
         #region AjaxQuery

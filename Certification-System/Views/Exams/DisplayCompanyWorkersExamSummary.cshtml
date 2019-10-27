@@ -1,18 +1,18 @@
 ﻿@model Certification_System.DTOViewModels.DisplayUserListWithExamResultsAndExamIdentificator
 
 @{
-    ViewData["Title"] = "DisplayExamSummary";
+    ViewData["Title"] = "DisplayCompanyWorkersExamSummary";
     Layout = "~/Views/Shared/_Layout.cshtml";
 }
 
-<h2>Podsumowanie wyników uczestników egzaminu</h2>
+<h2>Podsumowanie wyników pracowników przedsiębiorstwa z egzaminu</h2>
 <hr />
 
 <div class="row m-0 mt-3 mb-3">
     <a asp-action="ExamDetails" asp-route-examIdentificator="@Model.ExamIdentificator" asp-controller="Exams" class="btn btn-outline-info mt-1 mr-1 xs450px_FloatRight">Powrót do szczegółów egzaminu</a>
 </div>
 
-@await Component.InvokeAsync("DisplayUserWithExamResultsDataTable", new { userViewModel = Model.ResultsList, tableIdentificator = "listUsers", operationSet = 1 })
+@await Component.InvokeAsync("DisplayUserWithExamResultsDataTable", new { userViewModel = Model.ResultsList, tableIdentificator = "listUsers", operationSet = 2 })
 
 @section Scripts {
     @{await Html.RenderPartialAsync("_DataTableBasicScript", "listUsers");}

@@ -28,7 +28,7 @@
     {
         <a asp-action="MarkExam" asp-route-examIdentificator="@Model.ExamIdentificator" asp-controller="Exams" class="btn btn-success mt-1 mr-1 xs450px_FloatLeft">Oceń egzamin</a>
     }
-        <a asp-action="DisplayExamSummary" asp-route-examIdentificator="@Model.ExamIdentificator" asp-controller="Exams" class="btn btn-success mt-1 mr-1 xs450px_FloatLeft">Osiągane rezultaty</a>
+    <a asp-action="DisplayExamSummary" asp-route-examIdentificator="@Model.ExamIdentificator" asp-controller="Exams" class="btn btn-success mt-1 mr-1 xs450px_FloatLeft">Osiągane rezultaty</a>
     @if (!Model.Course.CourseEnded)
     {
         <a asp-action="AddNewExamPeriod" asp-route-examIdentificator="@Model.ExamIdentificator" asp-route-courseIdentificator="@Model.Course.CourseIdentificator" asp-controller="Exams" class="btn btn-primary mt-1 mr-1 xs450px_FloatLeft">Dodaj termin</a>

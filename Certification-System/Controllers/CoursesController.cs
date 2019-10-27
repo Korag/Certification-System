@@ -300,7 +300,7 @@ namespace Certification_System.Controllers
             var exams = _context.examRepository.GetExamsById(course.Exams);
             List<DisplayExamWithoutCourseViewModel> examsViewModel = new List<DisplayExamWithoutCourseViewModel>();
 
-            List<string> listOfExaminatorsIdentificators = new List<string>();
+            List<string> listOfExaminersIdentificators = new List<string>();
 
             foreach (var exam in exams)
             {
@@ -308,15 +308,15 @@ namespace Certification_System.Controllers
                 singleExam.Examiners = _mapper.Map<List<DisplayCrucialDataUserViewModel>>(_context.userRepository.GetUsersById(exam.Examiners));
 
                 var examTerms= _context.examTermRepository.GetExamsTermsById(exam.ExamTerms);
-                examTerms.ToList().ForEach(z => listOfExaminatorsIdentificators.AddRange(z.Examiners));
-                listOfExaminatorsIdentificators.AddRange(exam.Examiners);
+                examTerms.ToList().ForEach(z => listOfExaminersIdentificators.AddRange(z.Examiners));
+                listOfExaminersIdentificators.AddRange(exam.Examiners);
 
                 examsViewModel.Add(singleExam);
             }
 
-            listOfExaminatorsIdentificators.Distinct();
+            listOfExaminersIdentificators.Distinct();
 
-            var examiners = _context.userRepository.GetUsersById(listOfExaminatorsIdentificators);
+            var examiners = _context.userRepository.GetUsersById(listOfExaminersIdentificators);
             List<DisplayCrucialDataWithContactUserViewModel> examinersViewModel = _mapper.Map<List<DisplayCrucialDataWithContactUserViewModel>>(examiners);
 
             CourseDetailsViewModel courseDetails = new CourseDetailsViewModel();
@@ -1717,23 +1717,24 @@ namespace Certification_System.Controllers
             var exams = _context.examRepository.GetExamsById(course.Exams);
             List<DisplayExamWithoutCourseViewModel> examsViewModel = new List<DisplayExamWithoutCourseViewModel>();
 
-            List<string> listOfExaminatorsIdentificators = new List<string>();
+            List<string> listOfExaminersIdentificators = new List<string>();
 
+            // todo: speed up
             foreach (var exam in exams)
             {
                 DisplayExamWithoutCourseViewModel singleExam = _mapper.Map<DisplayExamWithoutCourseViewModel>(exam);
                 singleExam.Examiners = _mapper.Map<List<DisplayCrucialDataUserViewModel>>(_context.userRepository.GetUsersById(exam.Examiners));
 
                 var examTerms = _context.examTermRepository.GetExamsTermsById(exam.ExamTerms);
-                examTerms.ToList().ForEach(z => listOfExaminatorsIdentificators.AddRange(z.Examiners));
-                listOfExaminatorsIdentificators.AddRange(exam.Examiners);
+                examTerms.ToList().ForEach(z => listOfExaminersIdentificators.AddRange(z.Examiners));
+                listOfExaminersIdentificators.AddRange(exam.Examiners);
 
                 examsViewModel.Add(singleExam);
             }
 
-            listOfExaminatorsIdentificators.Distinct();
+            listOfExaminersIdentificators.Distinct();
 
-            var examiners = _context.userRepository.GetUsersById(listOfExaminatorsIdentificators);
+            var examiners = _context.userRepository.GetUsersById(listOfExaminersIdentificators);
             List<DisplayCrucialDataWithContactUserViewModel> examinersViewModel = _mapper.Map<List<DisplayCrucialDataWithContactUserViewModel>>(examiners);
 
             CourseDetailsViewModel courseDetails = new CourseDetailsViewModel();

@@ -1017,7 +1017,7 @@ namespace Certification_System.Controllers
                 }
             }
 
-            var companyWorkersEnrolledInExamTerm = _context.userRepository.GetUsersById(companyWorkersIdentificators.Where(z => exam.EnrolledUsers.Contains(z)).ToList());
+            var companyWorkersEnrolledInExamTerm = companyWorkers.Where(z => examTerm.EnrolledUsers.Contains(z.Id)).ToList();
             List<DisplayCrucialDataUserViewModel> listOfEnrolledExamCompanyWorkers = _mapper.Map<List<DisplayCrucialDataUserViewModel>>(companyWorkersEnrolledInExamTerm);
 
             CompanyWorkersExamTermDetailsViewModel examTermDetails = _mapper.Map<CompanyWorkersExamTermDetailsViewModel>(examTerm);

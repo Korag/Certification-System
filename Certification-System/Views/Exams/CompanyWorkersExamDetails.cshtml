@@ -12,6 +12,7 @@
 <h2>Informacje o egzaminie</h2>
 
 <div class="row m-0 mt-3 mb-3">
+    <a asp-action="DisplayCompanyWorkersExamSummary" asp-route-examIdentificator="@Model.ExamIdentificator" asp-controller="Exams" class="btn btn-success mt-1 mr-1 xs450px_FloatLeft">Osiągane rezultaty</a>
     <a asp-action="CompanyWorkerCourseDetails" asp-route-courseIdentificator="@Model.Course.CourseIdentificator" asp-controller="Courses" class="btn btn-outline-info mt-1 xs450px_FloatRight">Powrót do szczegółów kursu</a>
 </div>
 
@@ -136,13 +137,17 @@
 
 @if (!Model.ExamDividedToTerms)
 {
-<div class="mt-3 mb-3">
-    <a asp-action="AssignCompanyWorkersToExam" asp-route-examIdentificator="@Model.ExamIdentificator" asp-controller="Exams" class="btn btn-primary mt-1 mr-1">Zapisz pracowników</a>
-    @if ((Model.DateOfEnd > DateTime.Now) && Model.EnrolledCompanyWorkers.Count != 0)
-    {
-        <a asp-action="RemoveCompanyWorkersFromExam" asp-route-examIdentificator="@Model.ExamIdentificator" asp-controller="Exams" class="btn btn-danger mt-1">Usuń zapisanych pracowników</a>
-    }
-</div>
+    <div class="mt-3 mb-3">
+        @if ((Model.DateOfStart > DateTime.Now))
+        {
+            <a asp-action="AssignCompanyWorkersToExam" asp-route-examIdentificator="@Model.ExamIdentificator" asp-controller="Exams" class="btn btn-primary mt-1 mr-1">Zapisz pracowników</a>
+
+            @if (Model.EnrolledCompanyWorkers.Count != 0)
+            {
+                <a asp-action="RemoveCompanyWorkersFromExam" asp-route-examIdentificator="@Model.ExamIdentificator" asp-controller="Exams" class="btn btn-danger mt-1">Usuń zapisanych pracowników</a>
+            }
+        }
+    </div>
 }
 
 @if (Model.EnrolledCompanyWorkers.Count != 0)
