@@ -161,7 +161,15 @@ else
 
     @if (Model.GivenCertificates.Count() != 0)
     {
-        <h2 class="mt-4 mb-4">Moje otrzymane certyfikaty</h2>
+        @if (this.User.IsInRole("Company"))
+        {
+            <h2 class="mt-4 mb-4">Certyfikaty pracownika przedsiębiorstwa z tego kursu</h2>
+
+        }
+        else
+        {
+            <h2 class="mt-4 mb-4">Moje otrzymane certyfikaty</h2>
+        }
 
         @await Component.InvokeAsync("DisplayGivenCertificateToUserDataTable", new { givenCertificateViewModel = Model.GivenCertificates, tableIdentificator = "listGivenCertificates" })
     }

@@ -24,29 +24,41 @@
         <tbody>
             @foreach (var user in Model.Users)
             {
-                <tr>
+            <tr>
+                <td>
+                    @Html.DisplayFor(modelItem => user.Email)
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => user.FirstName)
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => user.LastName)
+                </td>
+                @if (Model.Options.OperationSet == 1)
+                {
                     <td>
-                        @Html.DisplayFor(modelItem => user.Email)
+                        <a asp-action="UserDetails" asp-route-userIdentificator="@user.UserIdentificator" asp-controller="Users" class="btn btn-info">Szczegóły</a>
                     </td>
+                }
+                @if (Model.Options.OperationSet == 2)
+                {
                     <td>
-                        @Html.DisplayFor(modelItem => user.FirstName)
+                        <a asp-action="CompanyWorkerDetails" asp-route-userIdentificator="@user.UserIdentificator" asp-controller="Users" class="btn btn-info">Szczegóły</a>
                     </td>
+                }
+                @if (Model.Options.OperationSet == 3)
+                {
                     <td>
-                        @Html.DisplayFor(modelItem => user.LastName)
+                        <div class="dropdown p-0">
+                            <button class="btn btn-success dropdown-toggle" type="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">Operacje</button>
+                            <div class="dropdown-menu nohover">
+                                <a asp-action="CompanyWorkerDetails" asp-route-userIdentificator="@user.UserIdentificator" asp-controller="Users" class="btn btn-info w-100 mb-1">Szczegóły użytkownika</a>
+                                <a asp-action="WorkerCourseDetails" asp-route-userIdentificator="@user.UserIdentificator" asp-route-courseIdentificator="@Model.CourseIdentificator" asp-controller="Courses" class="btn btn-secondary mb-1">Szczegóły kursu z pozycji użytkownika</a>
+                            </div>
+                        </div>
                     </td>
-                    @if (Model.Options.OperationSet == 1)
-                    {
-                        <td>
-                            <a asp-action="UserDetails" asp-route-userIdentificator="@user.UserIdentificator" asp-controller="Users" class="btn btn-info">Szczegóły</a>
-                        </td>
-                    }
-                    @if (Model.Options.OperationSet == 2)
-                    {
-                        <td>
-                            <a asp-action="CompanyWorkerDetails" asp-route-userIdentificator="@user.UserIdentificator" asp-controller="Users" class="btn btn-info">Szczegóły</a>
-                        </td>
-                    }
-                </tr>
+                }
+            </tr>
             }
         </tbody>
     </table>

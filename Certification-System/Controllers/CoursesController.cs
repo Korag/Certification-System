@@ -1222,12 +1222,21 @@ namespace Certification_System.Controllers
         }
 
         // GET: WorkerCourseDetails
-        [Authorize(Roles = "Worker")]
-        public ActionResult WorkerCourseDetails(string courseIdentificator, string message)
+        [Authorize(Roles = "Worker, Company")]
+        public ActionResult WorkerCourseDetails(string courseIdentificator, string userIdentificator = null, string message = null)
         {
             ViewBag.Message = message;
 
-            var user = _context.userRepository.GetUserByEmail(this.User.Identity.Name);
+            CertificationPlatformUser user = new CertificationPlatformUser();
+
+            if (string.IsNullOrWhiteSpace(userIdentificator))
+            {
+                user = _context.userRepository.GetUserByEmail(this.User.Identity.Name);
+            }
+            else
+            {
+                user = _context.userRepository.GetUserById(userIdentificator);
+            }
 
             var course = _context.courseRepository.GetCourseById(courseIdentificator);
             var meetings = _context.meetingRepository.GetMeetingsById(course.Meetings);
@@ -1412,7 +1421,7 @@ namespace Certification_System.Controllers
         }
 
         // GET: CourseOffer
-        [Authorize(Roles = "Worker")]
+        [Authorize(Roles = "Worker, Company")]
         public ActionResult CourseOffer()
         {
             var courses = _context.courseRepository.GetListOfNotStartedCourses();

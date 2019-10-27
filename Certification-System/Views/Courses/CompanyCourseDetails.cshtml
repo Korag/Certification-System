@@ -18,7 +18,7 @@
 <div class="row m-0 mt-3 mb-3">
     <a asp-action="DisplayCourseSummary" asp-route-courseIdentificator="@Model.Course.CourseIdentificator" asp-controller="Courses" class="btn btn-success mt-1 mr-1 xs450px_FloatLeft">Osiągane rezultaty</a>
 
-    <a asp-action="DisplayWorkerCourses" asp-controller="Courses" class="btn btn-outline-info mt-1 xs450px_FloatRight">Powrót do listy kursów</a>
+    <a asp-action="DisplayWorkerCourses"  asp-controller="Courses" class="btn btn-outline-info mt-1 xs450px_FloatRight">Powrót do listy kursów</a>
 </div>
 
 <div>
@@ -158,7 +158,7 @@ else
 
 @if (Model.EnrolledUsers.Count != 0)
 {
-    @await Component.InvokeAsync("DisplayCrucialDataUserDataTable", new { userViewModel = Model.EnrolledUsers, tableIdentificator = "listUsers", operationSet = 3 })
+    @await Component.InvokeAsync("DisplayCrucialDataUserDataTable", new { userViewModel = Model.EnrolledUsers, tableIdentificator = "listUsers", courseIdentificator = Model.Course.CourseIdentificator, operationSet = 3 })
 }
 
 else
