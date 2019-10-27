@@ -141,7 +141,7 @@ else
 
     @if (Model.Exams.Count != 0)
     {
-        @await Component.InvokeAsync("DisplayExamWithoutCourseDataTable", new { examViewModel = Model.Exams, tableIdentificator = "listExams", operationSet = 2 })
+        @await Component.InvokeAsync("DisplayExamWithoutCourseDataTable", new { examViewModel = Model.Exams, tableIdentificator = "listExams", operationSet = 4 })
     }
     else
     {

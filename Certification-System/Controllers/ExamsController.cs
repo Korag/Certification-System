@@ -1009,7 +1009,7 @@ namespace Certification_System.Controllers
 
                         var logInfoDeleteUsersFromExamTerms = _logger.GenerateLogInformation(this.User.Identity.Name, this.ControllerContext.RouteData.Values["action"].ToString(), LogTypeOfAction.TypesOfActions[1], LogDescriptions.DescriptionOfActionOnEntity["removeUsersFromExamTerm"]);
                         _logger.AddExamsTermsLogs(examTerms, logInfoDeleteUsersFromExamTerms);
-                        
+
                         #endregion
                     }
 
@@ -1305,7 +1305,7 @@ namespace Certification_System.Controllers
                         _context.personalLogRepository.AddPersonalUserLogToAdminGroup(logInfoPersonalUpdateExamResultFromExam);
 
                         var logInfoPersonalUpdateUserExamResult = _context.personalLogRepository.GeneratePersonalLogInformation(this.User.Identity.Name, this.ControllerContext.RouteData.Values["action"].ToString(), LogDescriptions.DescriptionOfPersonalUserLog["updateUserExamResult"], "Indekser: " + exam.ExamIndexer);
-                        _context.personalLogRepository.AddPersonalUsersLogs(usersExamsResultsToUpdate.Select(z=> z.User).ToList(), logInfoPersonalUpdateUserExamResult);
+                        _context.personalLogRepository.AddPersonalUsersLogs(usersExamsResultsToUpdate.Select(z => z.User).ToList(), logInfoPersonalUpdateUserExamResult);
 
                         #endregion
                     }
@@ -1322,7 +1322,7 @@ namespace Certification_System.Controllers
                         _context.personalLogRepository.AddPersonalUserLogToAdminGroup(logInfoPersonalAddUserExamResults);
 
                         var logInfoPersonalAddUserExamResult = _context.personalLogRepository.GeneratePersonalLogInformation(this.User.Identity.Name, this.ControllerContext.RouteData.Values["action"].ToString(), LogDescriptions.DescriptionOfPersonalUserLog["addUserExamResult"], "Indekser: " + exam.ExamIndexer);
-                        _context.personalLogRepository.AddPersonalUsersLogs(usersExamsResultsToAdd.Select(z=> z.User).ToList(), logInfoPersonalAddUserExamResult);
+                        _context.personalLogRepository.AddPersonalUsersLogs(usersExamsResultsToAdd.Select(z => z.User).ToList(), logInfoPersonalAddUserExamResult);
 
                         #endregion
                     }
@@ -1578,7 +1578,7 @@ namespace Certification_System.Controllers
                 var logInfoPersonalDeleteUserExam = _context.personalLogRepository.GeneratePersonalLogInformation(this.User.Identity.Name, this.ControllerContext.RouteData.Values["action"].ToString(), LogDescriptions.DescriptionOfPersonalUserLog["deleteUserExam"], "Indekser: " + exam.ExamIndexer);
                 _context.personalLogRepository.AddPersonalUsersLogs(exam.EnrolledUsers, logInfoPersonalDeleteUserExam);
                 _context.personalLogRepository.AddPersonalUsersLogs(exam.Examiners, logInfoPersonalDeleteUserExam);
-                
+
                 #endregion
 
                 return RedirectToAction("DisplayAllExams", "Exams", new { message = "Usunięto wskazany egzamin" });
@@ -1690,7 +1690,7 @@ namespace Certification_System.Controllers
 
                 var logInfoPersonalUserResignFromExam = _context.personalLogRepository.GeneratePersonalLogInformation(this.User.Identity.Name, this.ControllerContext.RouteData.Values["action"].ToString(), LogDescriptions.DescriptionOfPersonalUserLog["resignUserFromExam"], "Indekser: " + exam.ExamIndexer);
                 _context.personalLogRepository.AddPersonalUserLog(user.Id, logInfoPersonalUserResignFromExam);
-                
+
                 #endregion
 
                 if (exam.ExamDividedToTerms)
@@ -1878,6 +1878,63 @@ namespace Certification_System.Controllers
             }
 
             return RedirectToAction("BlankMenu", "Certificates");
+        }
+
+        // GET: CompanyWorkersExamDetails
+        [Authorize(Roles = "Company")]
+        public ActionResult CompanyWorkersExamDetails(string examIdentificator)
+        {
+            var companyManager = _context.userRepository.GetUserByEmail(this.User.Identity.Name);
+
+            var companyWorkers = _context.userRepository.GetUsersWorkersByCompanyId(companyManager.CompanyRoleManager.FirstOrDefault());
+            var companyWorkersIdentificators = companyWorkers.Select(z => z.Id).ToList();
+
+            var exam = _context.examRepository.GetExamById(examIdentificator);
+            var companyWorkersExamResults = _context.examResultRepository.GetExamsResultsById(exam.ExamResults).Where(z => companyWorkersIdentificators.Contains(z.User)).ToList();
+
+            var examTerms = _context.examTermRepository.GetExamsTermsById(exam.ExamTerms);
+
+            List<DisplayExamTermWithoutExamViewModel> listOfExamTerms = new List<DisplayExamTermWithoutExamViewModel>();
+
+            foreach (var examTerm in examTerms)
+            {
+                DisplayExamTermWithoutExamViewModel singleExamTerm = _mapper.Map<DisplayExamTermWithoutExamViewModel>(examTerm);
+                singleExamTerm.Examiners = _mapper.Map<List<DisplayCrucialDataUserViewModel>>(_context.userRepository.GetUsersById(examTerm.Examiners));
+
+                listOfExamTerms.Add(singleExamTerm);
+            }
+
+            var course = _context.courseRepository.GetCourseByExamId(examIdentificator);
+            var courseExams = _context.examRepository.GetExamsById(course.Exams);
+
+            DisplayCourseViewModel courseViewModel = _mapper.Map<DisplayCourseViewModel>(course);
+            courseViewModel.Branches = _context.branchRepository.GetBranchesById(course.Branches);
+
+            ICollection<DisplayExamResultToUserViewModel> listOfExamResults = new List<DisplayExamResultToUserViewModel>();
+
+            if (companyWorkersExamResults.Count() != 0)
+            {
+                foreach (var companyWorkerExamResult in companyWorkersExamResults)
+                {
+                    DisplayExamResultToUserViewModel singleExamResult = _mapper.Map<DisplayExamResultToUserViewModel>(companyWorkerExamResult);
+
+                    singleExamResult.Exam = _mapper.Map<DisplayCrucialDataExamWithDatesViewModel>(exam);
+                    singleExamResult.MaxAmountOfPointsToEarn = exam.MaxAmountOfPointsToEarn;
+                }
+            }
+
+            var companyWorkersEnrolledInExam = _context.userRepository.GetUsersById(companyWorkersIdentificators.Where(z=> exam.EnrolledUsers.Contains(z)).ToList());
+            List<DisplayCrucialDataUserViewModel> listOfEnrolledExamCompanyWorkers = _mapper.Map<List<DisplayCrucialDataUserViewModel>>(companyWorkersEnrolledInExam);
+
+            CompanyWorkersExamDetailsViewModel examDetails = _mapper.Map<CompanyWorkersExamDetailsViewModel>(exam);
+
+            examDetails.ExamResults = listOfExamResults;
+            examDetails.ExamTerms = listOfExamTerms;
+            examDetails.Course = courseViewModel;
+
+            examDetails.EnrolledCompanyWorkers = listOfEnrolledExamCompanyWorkers;
+
+            return View(examDetails);
         }
 
         // GET: SelfAssignUserToExamDividedToExamTerms

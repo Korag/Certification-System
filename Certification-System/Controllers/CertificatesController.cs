@@ -351,8 +351,8 @@ namespace Certification_System.Controllers
         [Authorize(Roles = "Company")]
         public ActionResult CompanyCertificateDetails(string certificateIdentificator)
         {
-            var user = _context.userRepository.GetUserByEmail(this.User.Identity.Name);
-            var companyWorkers = _context.userRepository.GetUsersWorkersByCompanyId(user.CompanyRoleManager.FirstOrDefault());
+            var companyManager = _context.userRepository.GetUserByEmail(this.User.Identity.Name);
+            var companyWorkers = _context.userRepository.GetUsersWorkersByCompanyId(companyManager.CompanyRoleManager.FirstOrDefault());
 
             var certificate = _context.certificateRepository.GetCertificateById(certificateIdentificator);
             var givenCertificatesInstances = _context.givenCertificateRepository.GetGivenCertificatesByIdOfCertificate(certificateIdentificator).Select(z=> z.GivenCertificateIdentificator).ToList();

@@ -106,6 +106,12 @@
                             <a asp-action="WorkerExamTermDetails" asp-route-examTermIdentificator="@examTerm.ExamTermIdentificator" asp-controller="ExamsTerms" class="btn btn-info m-1">Szczegóły</a>
                         </td>
                     }
+                    @if (Model.Options.OperationSet == 4)
+                    {
+                        <td>
+                            <a asp-action="CompanyWorkersExamTermDetails" asp-route-examTermIdentificator="@examTerm.ExamTermIdentificator" asp-controller="ExamsTerms" class="btn btn-info m-1">Szczegóły</a>
+                        </td>
+                    }
                 </tr>
             }
         </tbody>
