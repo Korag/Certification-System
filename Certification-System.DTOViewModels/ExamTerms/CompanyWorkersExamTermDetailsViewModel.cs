@@ -4,24 +4,12 @@ using System.ComponentModel.DataAnnotations;
 
 namespace Certification_System.DTOViewModels
 {
-    public class CompanyWorkersExamDetailsViewModel
+    public class CompanyWorkersExamTermDetailsViewModel
     {
-        public string ExamIdentificator { get; set; }
+        public string ExamTermIdentificator { get; set; }
 
-        [Display(Name = "Identyfikator egzaminu")]
-        public string ExamIndexer { get; set; }
-
-        [Display(Name = "Termin")]
-        public string OrdinalNumber { get; set; }
-
-        [Display(Name = "Nazwa egzaminu")]
-        public string Name { get; set; }
-
-        [Display(Name = "Opis egzaminu")]
-        public string Description { get; set; }
-
-        [Display(Name = "Typ egzaminu")]
-        public string TypeOfExam { get; set; }
+        [Display(Name = "Identyfikator")]
+        public string ExamTermIndexer { get; set; }
 
         [Display(Name = "Data rozpoczęcia")]
         public DateTime DateOfStart { get; set; }
@@ -35,25 +23,28 @@ namespace Certification_System.DTOViewModels
         [Display(Name = "Czas [min]")]
         public int DurationMinutes { get; set; }
 
-        [Display(Name = "Egzamin podzielony na tury ?")]
-        public bool ExamDividedToTerms { get; set; }
-
         [Display(Name = "Liczba uczestników")]
         public int UsersQuantity { get; set; }
 
         [Display(Name = "Limit uczestników")]
         public int UsersLimit { get; set; }
 
+        [Display(Name = "Tura egzaminu nie oceniona")]
+        public bool ExamTermNotMarked { get; set; }
+
+        [Display(Name = "Egzamin")]
+        public DisplayExamWithoutCourseViewModel Exam { get; set; }
+
         [Display(Name = "Kurs")]
         public DisplayCourseViewModel Course { get; set; }
 
-        [Display(Name = "Tury egzaminu")]
-        public ICollection<DisplayExamTermWithoutExamViewModel> ExamTerms { get; set; }
+        [Display(Name = "Egzaminatorzy")]
+        public ICollection<DisplayCrucialDataWithContactUserViewModel> Examiners { get; set; }
 
-        [Display(Name = "Wyniki egzaminu")]
+        [Display(Name = "Wyniki tury egzaminu")]
         public ICollection<DisplayExamResultToUserViewModel> ExamResults { get; set; }
 
-        [Display(Name = "Uczestnicy egzaminu")]
+        [Display(Name = "Uczestnicy tury egzaminu")]
         public ICollection<DisplayCrucialDataUserViewModel> EnrolledCompanyWorkers { get; set; }
 
         [Display(Name = "Kraj")]

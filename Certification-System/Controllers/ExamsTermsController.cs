@@ -979,6 +979,59 @@ namespace Certification_System.Controllers
             return View(examTermDetails);
         }
 
+        // GET: CompanyWorkersExamTermDetails
+        [Authorize(Roles = "Company")]
+        public ActionResult CompanyWorkersExamTermDetails(string examTermIdentificator)
+        {
+            var companyManager = _context.userRepository.GetUserByEmail(this.User.Identity.Name);
+
+            var companyWorkers = _context.userRepository.GetUsersWorkersByCompanyId(companyManager.CompanyRoleManager.FirstOrDefault());
+            var companyWorkersIdentificators = companyWorkers.Select(z => z.Id).ToList();
+
+            var examTerm = _context.examTermRepository.GetExamTermById(examTermIdentificator);
+            var exam = _context.examRepository.GetExamByExamTermId(examTermIdentificator);
+            var companyWorkersExamTermResults = _context.examResultRepository.GetExamsResultsById(exam.ExamResults).Where(z => companyWorkersIdentificators.Contains(z.User) && z.ExamTerm == examTermIdentificator).ToList();
+
+            var examiners = _context.userRepository.GetUsersById(examTerm.Examiners);
+
+            var course = _context.courseRepository.GetCourseByExamId(exam.ExamIdentificator);
+
+            DisplayExamWithoutCourseViewModel examViewModel = _mapper.Map<DisplayExamWithoutCourseViewModel>(exam);
+            examViewModel.Examiners = _mapper.Map<List<DisplayCrucialDataUserViewModel>>(_context.userRepository.GetUsersById(exam.Examiners).ToList());
+
+            List<DisplayCrucialDataWithContactUserViewModel> examinersViewModel = _mapper.Map<List<DisplayCrucialDataWithContactUserViewModel>>(examiners);
+
+            DisplayCourseViewModel courseViewModel = _mapper.Map<DisplayCourseViewModel>(course);
+            courseViewModel.Branches = _context.branchRepository.GetBranchesById(course.Branches);
+
+            ICollection<DisplayExamResultToUserViewModel> listOfExamResults = new List<DisplayExamResultToUserViewModel>();
+
+            if (companyWorkersExamTermResults.Count() != 0)
+            {
+                foreach (var companyWorkerExamTermResult in companyWorkersExamTermResults)
+                {
+                    DisplayExamResultToUserViewModel singleExamResult = _mapper.Map<DisplayExamResultToUserViewModel>(companyWorkerExamTermResult);
+
+                    singleExamResult.Exam = _mapper.Map<DisplayCrucialDataExamWithDatesViewModel>(exam);
+                    singleExamResult.MaxAmountOfPointsToEarn = exam.MaxAmountOfPointsToEarn;
+                }
+            }
+
+            var companyWorkersEnrolledInExamTerm = _context.userRepository.GetUsersById(companyWorkersIdentificators.Where(z => exam.EnrolledUsers.Contains(z)).ToList());
+            List<DisplayCrucialDataUserViewModel> listOfEnrolledExamCompanyWorkers = _mapper.Map<List<DisplayCrucialDataUserViewModel>>(companyWorkersEnrolledInExamTerm);
+
+            CompanyWorkersExamTermDetailsViewModel examTermDetails = _mapper.Map<CompanyWorkersExamTermDetailsViewModel>(examTerm);
+
+            examTermDetails.Exam = examViewModel;
+            examTermDetails.Examiners = examinersViewModel;
+            examTermDetails.ExamResults = listOfExamResults;
+
+            examTermDetails.Course = courseViewModel;
+            examTermDetails.EnrolledCompanyWorkers = listOfEnrolledExamCompanyWorkers;
+
+            return View(examTermDetails);
+        }
+
         // GET: SelfAssignUserToExamTerm
         [Authorize(Roles = "Worker")]
         public ActionResult SelfAssignUserToExamTerm(string examTermIdentificator)

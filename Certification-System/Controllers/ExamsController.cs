@@ -1905,7 +1905,6 @@ namespace Certification_System.Controllers
             }
 
             var course = _context.courseRepository.GetCourseByExamId(examIdentificator);
-            var courseExams = _context.examRepository.GetExamsById(course.Exams);
 
             DisplayCourseViewModel courseViewModel = _mapper.Map<DisplayCourseViewModel>(course);
             courseViewModel.Branches = _context.branchRepository.GetBranchesById(course.Branches);
