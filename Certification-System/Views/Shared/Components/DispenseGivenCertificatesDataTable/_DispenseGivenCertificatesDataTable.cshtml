@@ -116,10 +116,20 @@
                             <td>Brak oceny</td>
                         }
                     }
-                    <td>
-                        <input type="checkbox" asp-for="@Model.DispensedGivenCertificates[i].GivenCertificateIsEarned" data-toggle="toggle" data-on="Przyznano" data-off="Nie przyznano" data-size="sm" />
-                        <input type="hidden" asp-for="@Model.DispensedGivenCertificates[i].UserIdentificator" />
-                    </td>
+                    @if (Model.CourseEnded)
+                    {
+                        <td>
+                            <input type="checkbox" asp-for="@Model.DispensedGivenCertificates[i].GivenCertificateIsEarned" data-toggle="toggle" data-on="Przyznano" data-off="Nie przyznano" data-size="sm" disabled />
+                            <input type="hidden" asp-for="@Model.DispensedGivenCertificates[i].UserIdentificator" hidden readonly />
+                        </td>
+                    }
+                    else
+                    {
+                        <td>
+                            <input type="checkbox" asp-for="@Model.DispensedGivenCertificates[i].GivenCertificateIsEarned" data-toggle="toggle" data-on="Przyznano" data-off="Nie przyznano" data-size="sm" />
+                            <input type="hidden" asp-for="@Model.DispensedGivenCertificates[i].UserIdentificator" hidden readonly />
+                        </td>
+                    }
                 </tr>
             }
         </tbody>

@@ -83,6 +83,7 @@ namespace Certification_System.Controllers
             {
                 var user = _context.userRepository.GetUserById(userIdentificator);
 
+                newGivenCertificate.SelectedUser = userIdentificator;
                 newGivenCertificate.AvailableCourses = _context.courseRepository.GenerateSelectList(user.Courses).ToList();
             }
 

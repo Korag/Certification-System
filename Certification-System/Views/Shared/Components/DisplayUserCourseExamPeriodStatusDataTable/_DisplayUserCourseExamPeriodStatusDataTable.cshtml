@@ -1,0 +1,77 @@
+﻿@model Certification_System.DTOViewModels.DisplayUserWithCourseExamPeriodsResultsDataTableViewModel
+
+<div class="col-12 table-responsive">
+    <table id="@Model.Options.TableIdentificator" class="table table-striped table-bordered display" style="width: 100%;" role="grid">
+        <thead>
+            <tr>
+                <th>
+                    @Html.DisplayNameFor(model => model.Users.FirstOrDefault().Email)
+                </th>
+                <th>
+                    @Html.DisplayNameFor(model => model.Users.FirstOrDefault().FirstName)
+                </th>
+                <th>
+                    @Html.DisplayNameFor(model => model.Users.FirstOrDefault().LastName)
+                </th>
+                @foreach (var exam in Model.LastExamsPeriods)
+                {
+                    <th>
+                        @exam.ExamIndexer
+                    </th>
+                }
+                @if (Model.CourseEnded)
+                {
+                    <th>
+                        Przyznano certyfikat
+                    </th>
+                }
+            </tr>
+        </thead>
+        <tbody>
+            @{var UsersQuantitity = Model.Users.Count();}
+            @for (int i = 0; i < UsersQuantitity; i++)
+            {
+            <tr>
+                <td>
+                    @Html.DisplayFor(model => model.Users.ElementAt(i).Email)
+                </td>
+                <td>
+                    @Html.DisplayFor(model => model.Users.ElementAt(i).FirstName)
+                </td>
+                <td>
+                    @Html.DisplayFor(model => model.Users.ElementAt(i).LastName)
+                </td>
+                @foreach (var exam in Model.LastExamsPeriods)
+                {
+
+                    if (!Model.Users.ElementAt(i).LastingExamsIndexers.Contains(exam.ExamIndexer))
+                    {
+                        <td>
+                            <input type="button" class="btn btn-warning m-1" value="Brak zaliczenia" disabled />
+                        </td>
+                    }
+                    else if (Model.Users.ElementAt(i).ExamsIndexersPassed.Contains(exam.ExamIndexer))
+                    {
+                        <td>
+                            <input type="button" class="btn btn-success m-1" value="Zaliczono" disabled />
+                        </td>
+                    }
+                    else
+                    {
+                        <td>
+                            <input type="button" class="btn btn-secondary m-1" value="Jesteś zapisany" disabled />
+                        </td>
+                    }
+                }
+                @if (Model.CourseEnded)
+                {
+                    <td>
+                        <input type="checkbox" asp-for="@Model.DispensedGivenCertificates[i].GivenCertificateIsEarned" data-toggle="toggle" data-on="Przyznano" data-off="Nie przyznano" data-size="sm" disabled />
+                        <input type="hidden" asp-for="@Model.DispensedGivenCertificates[i].UserIdentificator" hidden readonly />
+                    </td>
+                }
+            </tr>
+            }
+        </tbody>
+    </table>
+</div>

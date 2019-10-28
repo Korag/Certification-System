@@ -8,9 +8,6 @@
                     @Html.DisplayNameFor(model => model.Exams.FirstOrDefault().ExamIndexer)
                 </th>
                 <th>
-                    @Html.DisplayNameFor(model => model.Exams.FirstOrDefault().OrdinalNumber)
-                </th>
-                <th>
                     @Html.DisplayNameFor(model => model.Exams.FirstOrDefault().Name)
                 </th>
                 <th>
@@ -33,9 +30,6 @@
             <tr>
                 <td>
                     @Html.DisplayFor(modelItem => exam.ExamIndexer)
-                </td>
-                <td>
-                    @Html.DisplayFor(modelItem => exam.OrdinalNumber)
                 </td>
                 <td>
                     @Html.DisplayFor(modelItem => exam.Name)

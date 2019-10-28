@@ -30,36 +30,48 @@
         <tbody>
             @foreach (var givenCertificate in Model.GivenCertificates)
             {
-                <tr>
+            <tr>
+                <td>
+                    @Html.DisplayFor(modelItem => givenCertificate.GivenCertificateIndexer)
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => givenCertificate.ReceiptDate)
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => givenCertificate.ExpirationDate)
+                </td>
+                <td>
+                    @Html.DisplayFor(model => givenCertificate.Certificate.CertificateIndexer) @Html.DisplayFor(model => givenCertificate.Certificate.Name)
+                </td>
+                <td>
+                    @Html.DisplayFor(model => givenCertificate.User.FirstName) @Html.DisplayFor(model => givenCertificate.User.LastName)
+                </td>
+                @if (Model.Options.OperationSet == 1)
+                {
                     <td>
-                        @Html.DisplayFor(modelItem => givenCertificate.GivenCertificateIndexer)
-                    </td>
-                    <td>
-                        @Html.DisplayFor(modelItem => givenCertificate.ReceiptDate)
-                    </td>
-                    <td>
-                        @Html.DisplayFor(modelItem => givenCertificate.ExpirationDate)
-                    </td>
-                    <td>
-                        @Html.DisplayFor(model => givenCertificate.Certificate.CertificateIndexer) @Html.DisplayFor(model => givenCertificate.Certificate.Name)
-                    </td>
-                    <td>
-                        @Html.DisplayFor(model => givenCertificate.User.FirstName) @Html.DisplayFor(model => givenCertificate.User.LastName)
-                    </td>
-                    @if (Model.Options.OperationSet == 1)
-                    {
-                        <td>
-                            <div class="dropdown p-0">
-                                <button class="btn btn-success dropdown-toggle" type="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">Operacje</button>
-                                <div class="dropdown-menu nohover">
-                                    <a asp-action="GivenCertificateDetails" asp-route-givenCertificateIdentificator="@givenCertificate.GivenCertificateIdentificator" asp-controller="GivenCertificates" class="btn btn-primary w-100 mb-1">Szczegóły nadanego certyfikatu</a>
-                                    <a asp-action="UserDetails" asp-route-userIdentificator="@givenCertificate.User.UserIdentificator" asp-controller="Users" class="btn btn-info w-100 mb-1">Szczegóły użytkownika</a>
-                                    <a asp-action="EditGivenCertificate" asp-route-givenCertificateIdentificator="@givenCertificate.GivenCertificateIdentificator" asp-controller="GivenCertificates" class="btn btn-warning  w-100">Edytuj certyfikat</a>
-                                </div>
+                        <div class="dropdown p-0">
+                            <button class="btn btn-success dropdown-toggle" type="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">Operacje</button>
+                            <div class="dropdown-menu nohover">
+                                <a asp-action="GivenCertificateDetails" asp-route-givenCertificateIdentificator="@givenCertificate.GivenCertificateIdentificator" asp-controller="GivenCertificates" class="btn btn-primary w-100 mb-1">Szczegóły nadanego certyfikatu</a>
+                                <a asp-action="UserDetails" asp-route-userIdentificator="@givenCertificate.User.UserIdentificator" asp-controller="Users" class="btn btn-info w-100 mb-1">Szczegóły użytkownika</a>
+                                <a asp-action="EditGivenCertificate" asp-route-givenCertificateIdentificator="@givenCertificate.GivenCertificateIdentificator" asp-controller="GivenCertificates" class="btn btn-warning  w-100">Edytuj certyfikat</a>
                             </div>
-                        </td>
-                    }
-                </tr>
+                        </div>
+                    </td>
+                }
+                @if (Model.Options.OperationSet == 2)
+                {
+                    <td>
+                        <div class="dropdown p-0">
+                            <button class="btn btn-success dropdown-toggle" type="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">Operacje</button>
+                            <div class="dropdown-menu nohover">
+                                <a asp-action="CompanyWorkerDetails" asp-route-userIdentificator="@givenCertificate.User.UserIdentificator" asp-controller="Users" class="btn btn-info w-100 mb-1">Szczegóły użytkownika</a>
+                                <a asp-action="WorkerGivenCertificateDetails" asp-route-givenCertificateIdentificator="@givenCertificate.GivenCertificateIdentificator" asp-controller="GivenCertificates" class="btn btn-secondary w-100 mb-1">Szczegóły nadanego certyfikatu</a>
+                            </div>
+                        </div>
+                    </td>
+                }
+            </tr>
             }
         </tbody>
     </table>

@@ -1,4 +1,4 @@
-﻿@model Certification_System.DTOViewModels.DisplayCourseSummaryViewModel
+﻿@model Certification_System.DTOViewModels.DisplayCompanyCourseSummaryViewModel
 
 @{
     ViewData["Title"] = "DisplayCompanyWorkersCourseSummary";
@@ -61,6 +61,13 @@
     </div>
 
     <div class="form-group">
+        <label asp-for="CourseEnded" class="control-label"></label>
+        <div class="row pl-3">
+            <input type="checkbox" asp-for="CourseEnded" class="form-control col-12" data-toggle="toggle" data-on="Tak" data-off="Nie" data-size="sm" disabled />
+        </div>
+    </div>
+
+    <div class="form-group">
         <label asp-for="CourseLength" class="control-label"></label>
         <input asp-for="CourseLength" class="form-control col-12" readonly />
     </div>
@@ -83,15 +90,32 @@
 
 <h2 class="mt-4 mb-4">Pracownicy przedsiębiorstwa biorący udział w kursie</h2>
 
-@if (Model.AllCourseParticipants.Count != 0)
+@if (Model.AllCourseCompanyWorkers.Count != 0)
 {
-    @await Component.InvokeAsync("DisplayUserWithCourseResultsDataTable", new { userViewModel = Model.AllCourseParticipants, examViewModel = Model.AllCourseExams, tableIdentificator = "listUsers" })
+    @await Component.InvokeAsync("DisplayUserCourseExamPeriodStatusDataTable", new { userViewModel = Model.CompanyWorkersWithExamPeriodStatus, givenCertificateViewModel = Model.DispensedGivenCertificates, examViewModel = Model.LastExamsPeriods, courseEnded = Model.CourseEnded, tableIdentificator = "listUsersExamsPeriodsStatus" })
 }
 else
 {
     <div class="mt-4 mb-4 alert alert-warning">Brak zapisanych użytkowników</div>
 }
 
+<h2 class="mt-4 mb-4">Zestawienie brakujących zaliczeń egzaminów pracowników</h2>
+
+@await Component.InvokeAsync("DisplayUserWithCourseResultsDataTable", new { userViewModel = Model.AllCourseCompanyWorkers, examViewModel = Model.AllCourseExams, tableIdentificator = "listUsers" })
+
+@if (Model.GivenCertificates.Count() != 0)
+{
+    <h2 class="mt-4 mb-4">Otrzymane certyfikaty</h2>
+
+    @await Component.InvokeAsync("DisplayGivenCertificateWithoutCourseDataTable", new { givenCertificateViewModel = Model.GivenCertificates, tableIdentificator = "listGivenCertificates", operationSet = 2 })
+}
+else if (Model.CourseEnded)
+{
+    <div class="mt-4 mb-4 alert alert-danger">Żaden pracownik nie otrzymał certyfikatu za ten kurs</div>
+}
+
 @section Scripts {
     @{await Html.RenderPartialAsync("_DataTableBasicScript", "listUsers");}
+    @{await Html.RenderPartialAsync("_DataTableBasicScript", "listUsersExamsPeriodsStatus");}
+    @{await Html.RenderPartialAsync("_DataTableBasicScript", "listGivenCertificates");}
 }

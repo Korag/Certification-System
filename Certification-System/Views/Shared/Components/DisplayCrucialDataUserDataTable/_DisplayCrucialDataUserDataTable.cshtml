@@ -37,13 +37,13 @@
                     @if (Model.Options.OperationSet == 1)
                     {
                         <td>
-                            <a asp-action="UserDetails" asp-route-userIdentificator="@user.UserIdentificator" asp-controller="Users" class="btn btn-info">Szczegóły</a>
+                            <a asp-action="UserDetails" asp-route-userIdentificator="@user.UserIdentificator" asp-controller="Users" class="btn btn-info m-1">Szczegóły</a>
                         </td>
                     }
                     @if (Model.Options.OperationSet == 2)
                     {
                         <td>
-                            <a asp-action="CompanyWorkerDetails" asp-route-userIdentificator="@user.UserIdentificator" asp-controller="Users" class="btn btn-info">Szczegóły</a>
+                            <a asp-action="WorkerDetails" asp-route-userIdentificator="@user.UserIdentificator" asp-controller="Users" class="btn btn-info m-1">Szczegóły</a>
                         </td>
                     }
                     @if (Model.Options.OperationSet == 3)

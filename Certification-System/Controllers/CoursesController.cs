@@ -1806,7 +1806,12 @@ namespace Certification_System.Controllers
             var meetings = _context.meetingRepository.GetMeetingsById(course.Meetings);
 
             var exams = _context.examRepository.GetExamsById(course.Exams);
+
             var companyWorkersEnrolledInCourse = companyWorkers.Where(z => z.Courses.Contains(courseIdentificator)).ToList();
+            var companyWorkersEnrolledInCourseIdentificators = companyWorkersEnrolledInCourse.Select(z => z.Id).ToList();
+
+            var companyWorkersGivenCertificates = _context.givenCertificateRepository.GetGivenCertificatesById(companyWorkersEnrolledInCourse.SelectMany(z=> z.GivenCertificates).ToList()).Where(z => z.Course == courseIdentificator);
+            var companyWorkersExamsResults = _context.examResultRepository.GetExamsResultsById(exams.SelectMany(z => z.ExamResults).ToList()).Where(z=> companyWorkersEnrolledInCourseIdentificators.Contains(z.User)).ToList();
 
             List<DisplayUserWithCourseResultsViewModel> listOfUsers = new List<DisplayUserWithCourseResultsViewModel>();
 
@@ -1815,13 +1820,74 @@ namespace Certification_System.Controllers
                 listOfUsers = GetCourseListOfUsersWithAllStatistics(companyWorkersEnrolledInCourse, meetings, exams).ToList();
             }
 
-            DisplayCourseSummaryViewModel courseSummaryViewModel = _mapper.Map<DisplayCourseSummaryViewModel>(course);
-            courseSummaryViewModel.AllCourseParticipants = listOfUsers;
+            List<DisplayGivenCertificateWithoutCourseViewModel> listOfGivenCertificates = new List<DisplayGivenCertificateWithoutCourseViewModel>();
+
+            foreach (var givenCertificate in companyWorkersGivenCertificates)
+            {
+                var certificate = _context.certificateRepository.GetCertificateById(givenCertificate.Certificate);
+                var user = companyWorkers.Where(z => z.GivenCertificates.Contains(givenCertificate.GivenCertificateIdentificator)).FirstOrDefault();
+
+                DisplayCrucialDataCourseViewModel courseViewModel = _mapper.Map<DisplayCrucialDataCourseViewModel>(course);
+                DisplayCrucialDataCertificateViewModel certificateViewModel = _mapper.Map<DisplayCrucialDataCertificateViewModel>(certificate);
+                DisplayCrucialDataUserViewModel userViewModel = _mapper.Map<DisplayCrucialDataUserViewModel>(user);
+
+                DisplayGivenCertificateWithoutCourseViewModel singleGivenCertificate = _mapper.Map<DisplayGivenCertificateWithoutCourseViewModel>(givenCertificate);
+                singleGivenCertificate.Certificate = certificateViewModel;
+                singleGivenCertificate.User = userViewModel;
+
+                listOfGivenCertificates.Add(singleGivenCertificate);
+            }
+
+            var examsPeriods = _context.examRepository.GetFirstPeriodsExamsById(exams.Select(z=> z.ExamIdentificator).ToList());
+            var listOfUsersWithExamPeriodsStatus = new List<DisplayUserWithCourseExamPeriodsResultsViewModel>();
+
+            foreach (var companyWorker in companyWorkersEnrolledInCourse)
+            {
+                var singleCompanyWorkerWithExamsPeriodsStatus = _mapper.Map<DisplayUserWithCourseExamPeriodsResultsViewModel>(companyWorker);
+
+                var singleCompanyWorkerResults = companyWorkersExamsResults.Where(z => z.User == companyWorker.Id).ToList();
+
+                foreach (var examPeriod in examsPeriods)
+                {
+                    var examsFromExamPeriod = exams.Where(z => z.ExamIndexer == examPeriod.ExamIndexer).ToList();
+
+                    var companyWorkersExamsFromExamPeriod = examsFromExamPeriod.Where(z => z.EnrolledUsers.Contains(companyWorker.Id)).ToList();
+                    var companyWorkerResultsFromExamPeriod = singleCompanyWorkerResults.Where(z => examsFromExamPeriod.SelectMany(x=> x.ExamResults).ToList().Contains(z.ExamResultIdentificator)).ToList();
+
+                    if (companyWorkerResultsFromExamPeriod.Count() != companyWorkersExamsFromExamPeriod.Count())
+                    {
+                        continue;
+                    }
+                    else if (companyWorkerResultsFromExamPeriod.Where(z=> z.ExamPassed == true).Count() == 1)
+                    {
+                        singleCompanyWorkerWithExamsPeriodsStatus.ExamsIndexersPassed.Add(examPeriod.ExamIndexer);
+                    }
+                    else 
+                    {
+                        singleCompanyWorkerWithExamsPeriodsStatus.LastingExamsIndexers.Add(examPeriod.ExamIndexer);
+                    }
+                }
+            }
+
+            DisplayCompanyCourseSummaryViewModel courseSummaryViewModel = _mapper.Map<DisplayCompanyCourseSummaryViewModel>(course);
             courseSummaryViewModel.Branches = _context.branchRepository.GetBranchesById(course.Branches);
 
+            courseSummaryViewModel.AllCourseCompanyWorkers = listOfUsers;
+            courseSummaryViewModel.CompanyWorkersWithExamPeriodStatus = listOfUsersWithExamPeriodsStatus;
+
             courseSummaryViewModel.AllCourseExams = _mapper.Map<List<DisplayExamIndexerWithOrdinalNumberViewModel>>(exams.OrderBy(z => z.ExamIndexer));
+            courseSummaryViewModel.LastExamsPeriods = _mapper.Map<List<DisplayExamIndexerWithOrdinalNumberViewModel>>(examsPeriods);
+
             courseSummaryViewModel.CourseLength = courseSummaryViewModel.DateOfEnd.Subtract(courseSummaryViewModel.DateOfStart).Days;
             courseSummaryViewModel.EnrolledUsersQuantity = course.EnrolledUsers.Count;
+
+            courseSummaryViewModel.GivenCertificates = listOfGivenCertificates;
+            courseSummaryViewModel.DispensedGivenCertificates = _mapper.Map<DispenseGivenCertificateCheckBoxViewModel[]>(listOfUsers);
+
+            foreach (var givenCertificate in listOfGivenCertificates)
+            {
+                courseSummaryViewModel.DispensedGivenCertificates.Where(z => z.UserIdentificator == givenCertificate.User.UserIdentificator).FirstOrDefault().GivenCertificateIsEarned = true;
+            }
 
             return View(courseSummaryViewModel);
         }
