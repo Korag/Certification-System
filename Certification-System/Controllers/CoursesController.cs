@@ -1794,6 +1794,38 @@ namespace Certification_System.Controllers
             return View(listOfCourses);
         }
 
+
+        // GET: DisplayCompanyWorkersCourseSummary
+        [Authorize(Roles = "Company")]
+        public ActionResult DisplayCompanyWorkersCourseSummary(string courseIdentificator)
+        {
+            var companyManager = _context.userRepository.GetUserByEmail(this.User.Identity.Name);
+            var companyWorkers = _context.userRepository.GetUsersWorkersByCompanyId(companyManager.CompanyRoleManager.FirstOrDefault());
+
+            var course = _context.courseRepository.GetCourseById(courseIdentificator);
+            var meetings = _context.meetingRepository.GetMeetingsById(course.Meetings);
+
+            var exams = _context.examRepository.GetExamsById(course.Exams);
+            var companyWorkersEnrolledInCourse = companyWorkers.Where(z => z.Courses.Contains(courseIdentificator)).ToList();
+
+            List<DisplayUserWithCourseResultsViewModel> listOfUsers = new List<DisplayUserWithCourseResultsViewModel>();
+
+            if (companyWorkersEnrolledInCourse.Count != 0)
+            {
+                listOfUsers = GetCourseListOfUsersWithAllStatistics(companyWorkersEnrolledInCourse, meetings, exams).ToList();
+            }
+
+            DisplayCourseSummaryViewModel courseSummaryViewModel = _mapper.Map<DisplayCourseSummaryViewModel>(course);
+            courseSummaryViewModel.AllCourseParticipants = listOfUsers;
+            courseSummaryViewModel.Branches = _context.branchRepository.GetBranchesById(course.Branches);
+
+            courseSummaryViewModel.AllCourseExams = _mapper.Map<List<DisplayExamIndexerWithOrdinalNumberViewModel>>(exams.OrderBy(z => z.ExamIndexer));
+            courseSummaryViewModel.CourseLength = courseSummaryViewModel.DateOfEnd.Subtract(courseSummaryViewModel.DateOfStart).Days;
+            courseSummaryViewModel.EnrolledUsersQuantity = course.EnrolledUsers.Count;
+
+            return View(courseSummaryViewModel);
+        }
+
         #region AjaxQuery
         // GET: GetCoursesByUserId
         [Authorize(Roles = "Admin")]
