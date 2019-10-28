@@ -9,6 +9,11 @@
 <h1>Szczegóły tury egzaminu</h1>
 <hr />
 
+@if (!string.IsNullOrWhiteSpace(ViewBag.message))
+{
+    <h2 class="alert alert-info" role="alert">@ViewBag.message</h2>
+}
+
 <div>
     <h2>Informacje o turze</h2>
 

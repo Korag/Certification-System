@@ -981,8 +981,10 @@ namespace Certification_System.Controllers
 
         // GET: CompanyWorkersExamTermDetails
         [Authorize(Roles = "Company")]
-        public ActionResult CompanyWorkersExamTermDetails(string examTermIdentificator)
+        public ActionResult CompanyWorkersExamTermDetails(string examTermIdentificator, string message)
         {
+            ViewBag.message = message;
+
             var companyManager = _context.userRepository.GetUserByEmail(this.User.Identity.Name);
 
             var companyWorkers = _context.userRepository.GetUsersWorkersByCompanyId(companyManager.CompanyRoleManager.FirstOrDefault());
@@ -1134,6 +1136,134 @@ namespace Certification_System.Controllers
             };
 
             return View(examTermSummary);
+        }
+
+        // GET: AssignCompanyWorkersToExamTerm
+        [Authorize(Roles = "Company")]
+        public ActionResult AssignCompanyWorkersToExamTerm(string examTermIdentificator)
+        {
+            if (string.IsNullOrWhiteSpace(examTermIdentificator))
+            {
+                return RedirectToAction("BlankMenu", "Certificates");
+            }
+            var companyManager = _context.userRepository.GetUserByEmail(this.User.Identity.Name);
+            var companyWorkers = _context.userRepository.GetUsersWorkersByCompanyId(companyManager.CompanyRoleManager.FirstOrDefault());
+            var companyWorkersIdentificators = companyWorkers.Select(z => z.Id).ToList();
+
+            var examTerm = _context.examTermRepository.GetExamTermById(examTermIdentificator);
+
+            if (examTerm.DateOfStart < DateTime.Now)
+            {
+                var exam = _context.examRepository.GetExamByExamTermId(examTermIdentificator);
+
+                var course = _context.courseRepository.GetCourseByExamId(exam.ExamIdentificator);
+
+                var companyWorkersEnrolledInExamIdentificators = companyWorkersIdentificators.Where(z => !examTerm.EnrolledUsers.Contains(z)).ToList();
+
+                List<string> companyWorkersWithPassedExamIdentificators = new List<string>();
+
+                if (exam.OrdinalNumber != 1)
+                {
+                    var previousExamPeriods = _context.examRepository.GetExamPeriods(exam.ExamIndexer);
+
+                    foreach (var examPeriod in previousExamPeriods)
+                    {
+                        var examResults = _context.examResultRepository.GetExamsResultsById(examPeriod.ExamResults).Where(z => companyWorkersEnrolledInExamIdentificators.Contains(z.User)).ToList();
+
+                        var usersWithPassedExamInThatPeriod = examResults.Where(z => z.ExamPassed).Select(z => z.User).ToList();
+
+                        if (usersWithPassedExamInThatPeriod.Count() != 0)
+                        {
+                            companyWorkersWithPassedExamIdentificators.AddRange(usersWithPassedExamInThatPeriod);
+                        }
+                    }
+                }
+
+                var companyWorkersNotEnrolledInWithoutPassedExamIdentificators = companyWorkersEnrolledInExamIdentificators.Where(z => !companyWorkersWithPassedExamIdentificators.Contains(z)).ToList();
+                var companyWorkersNotEnrolledInWithoutPassedExam = _context.userRepository.GetUsersById(companyWorkersNotEnrolledInWithoutPassedExamIdentificators);
+
+                List<DisplayCrucialDataUserViewModel> listOfUsers = new List<DisplayCrucialDataUserViewModel>();
+
+                if (companyWorkersNotEnrolledInWithoutPassedExam.Count != 0)
+                {
+                    listOfUsers = _mapper.Map<List<DisplayCrucialDataUserViewModel>>(companyWorkersNotEnrolledInWithoutPassedExam);
+
+                    var vacantSeats = examTerm.UsersLimit - examTerm.EnrolledUsers.Count();
+
+                    AssignUsersFromCourseToExamTermViewModel addUsersToExamTermViewModel = _mapper.Map<AssignUsersFromCourseToExamTermViewModel>(examTerm);
+                    addUsersToExamTermViewModel.Exam = _mapper.Map<DisplayCrucialDataExamViewModel>(exam);
+
+                    addUsersToExamTermViewModel.CourseParticipants = listOfUsers;
+                    addUsersToExamTermViewModel.VacantSeats = vacantSeats;
+
+                    addUsersToExamTermViewModel.UsersToAssignToExamTerm = _mapper.Map<AddUsersFromCheckBoxViewModel[]>(listOfUsers);
+
+                    return View(addUsersToExamTermViewModel);
+                }
+
+                return RedirectToAction("CompanyWorkersExamTermDetails", new { examTermIdentificator = examTermIdentificator, message = "Wszyscy uczestnicy kursu nieposiadający zaliczonego egzaminu zostali już na niego zapisani" });
+            }
+
+            return RedirectToAction("CompanyWorkersExamTermDetails", new { examTermIdentificator = examTermIdentificator });
+        }
+
+        // POST: AssignCompanyWorkersToExamTerm
+        [HttpPost]
+        [Authorize(Roles = "Company")]
+        public ActionResult AssignCompanyWorkersToExamTerm(AssignUsersFromCourseToExamTermViewModel addCompanyWorkersToExamTermViewModel)
+        {
+            if (ModelState.IsValid)
+            {
+                if (addCompanyWorkersToExamTermViewModel.DateOfStart < DateTime.Now)
+                {
+                    var exam = _context.examRepository.GetExamByExamTermId(addCompanyWorkersToExamTermViewModel.ExamTermIdentificator);
+
+                    if (addCompanyWorkersToExamTermViewModel.UsersToAssignToExamTerm.Where(z => z.IsToAssign == true).Count() <= addCompanyWorkersToExamTermViewModel.VacantSeats)
+                    {
+                        var companyWorkersToAddToExamTermIdentificators = addCompanyWorkersToExamTermViewModel.UsersToAssignToExamTerm.ToList().Where(z => z.IsToAssign == true).Select(z => z.UserIdentificator).ToList();
+
+                        _context.examRepository.AddUsersToExam(addCompanyWorkersToExamTermViewModel.Exam.ExamIdentificator, companyWorkersToAddToExamTermIdentificators);
+                        _context.examTermRepository.AddUsersToExamTerm(addCompanyWorkersToExamTermViewModel.ExamTermIdentificator, companyWorkersToAddToExamTermIdentificators);
+
+                        var examTerm = _context.examTermRepository.GetExamTermById(addCompanyWorkersToExamTermViewModel.ExamTermIdentificator);
+
+                        foreach (var user in companyWorkersToAddToExamTermIdentificators)
+                        {
+                            exam.EnrolledUsers.Add(user);
+                            examTerm.EnrolledUsers.Add(user);
+                        }
+
+                        #region EntityLogs
+
+                        var logInfoAssignUsersToExam = _logger.GenerateLogInformation(this.User.Identity.Name, this.ControllerContext.RouteData.Values["action"].ToString(), LogTypeOfAction.TypesOfActions[1], LogDescriptions.DescriptionOfActionOnEntity["assignUsersToExam"]);
+                        var logInfoAssignUsersToExamTerm = _logger.GenerateLogInformation(this.User.Identity.Name, this.ControllerContext.RouteData.Values["action"].ToString(), LogTypeOfAction.TypesOfActions[1], LogDescriptions.DescriptionOfActionOnEntity["assignUsersToExamTerm"]);
+
+                        _logger.AddExamLog(exam, logInfoAssignUsersToExam);
+                        _logger.AddExamTermLog(examTerm, logInfoAssignUsersToExamTerm);
+
+                        #endregion
+
+                        #region PersonalUserLogs
+
+                        var logInfoPersonalAddGroupOfUsersToExamTerm = _context.personalLogRepository.GeneratePersonalLogInformation(this.User.Identity.Name, this.ControllerContext.RouteData.Values["action"].ToString(), LogDescriptions.DescriptionOfPersonalUserLog["addGroupOfUsersToExamTerm"], "Indekser: " + examTerm.ExamTermIndexer);
+                        _context.personalLogRepository.AddPersonalUserLogToAdminGroup(logInfoPersonalAddGroupOfUsersToExamTerm);
+
+                        var logInfoPersonalAddUserToExamTerm = _context.personalLogRepository.GeneratePersonalLogInformation(this.User.Identity.Name, this.ControllerContext.RouteData.Values["action"].ToString(), LogDescriptions.DescriptionOfPersonalUserLog["assignUserToExamTerm"], "Indekser: " + examTerm.ExamTermIndexer);
+                        _context.personalLogRepository.AddPersonalUsersLogs(companyWorkersToAddToExamTermIdentificators, logInfoPersonalAddUserToExamTerm);
+
+                        #endregion
+
+                        return RedirectToAction("ExamTermDetails", new { examTermIdentificator = addCompanyWorkersToExamTermViewModel.ExamTermIdentificator, message = "Dodano grupę użytkowników do tury egzaminu" });
+                    }
+
+                    ModelState.AddModelError("", "Brak wystarczającej ilości wolnych miejsc");
+                    ModelState.AddModelError("", $"Do tury egzaminu można dodać maksymalnie {addCompanyWorkersToExamTermViewModel.VacantSeats} użytkowników");
+                }
+
+                return RedirectToAction("ExamTermDetails", new { examTermIdentificator = addCompanyWorkersToExamTermViewModel.ExamTermIdentificator });
+            }
+
+            return View(addCompanyWorkersToExamTermViewModel);
         }
 
         #region AjaxQuery

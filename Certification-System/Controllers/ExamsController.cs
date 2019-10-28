@@ -2106,7 +2106,7 @@ namespace Certification_System.Controllers
 
                     foreach (var examPeriod in previousExamPeriods)
                     {
-                        var examResults = _context.examResultRepository.GetExamsResultsById(examPeriod.ExamResults).Where(z=> companyWorkersIdentificators.Contains(z.User)).ToList();
+                        var examResults = _context.examResultRepository.GetExamsResultsById(examPeriod.ExamResults).Where(z=> companyWorkersEnrolledInExamIdentificators.Contains(z.User)).ToList();
 
                         var usersWithPassedExamInThatPeriod = examResults.Where(z => z.ExamPassed).Select(z => z.User).ToList();
 
