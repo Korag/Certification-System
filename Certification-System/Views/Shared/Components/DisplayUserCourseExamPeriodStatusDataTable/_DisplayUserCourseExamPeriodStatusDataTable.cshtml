@@ -44,7 +44,7 @@
                 @foreach (var exam in Model.LastExamsPeriods)
                 {
 
-                    if (!Model.Users.ElementAt(i).LastingExamsIndexers.Contains(exam.ExamIndexer))
+                    if (Model.Users.ElementAt(i).LastingExamsIndexers.Contains(exam.ExamIndexer))
                     {
                         <td>
                             <input type="button" class="btn btn-warning m-1" value="Brak zaliczenia" disabled />
@@ -59,7 +59,7 @@
                     else
                     {
                         <td>
-                            <input type="button" class="btn btn-secondary m-1" value="Jesteś zapisany" disabled />
+                            <input type="button" class="btn btn-secondary m-1" value="Pracownik jest zapisany" disabled />
                         </td>
                     }
                 }

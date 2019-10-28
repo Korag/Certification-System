@@ -1,0 +1,149 @@
+﻿@model Certification_System.DTOViewModels.AssignUsersFromCourseToExamViewModel
+
+@{
+    ViewData["Title"] = "AssignCompanyWorkersToExam";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+<h2>Dodawanie nowych uczestników do egzaminu</h2>
+<hr />
+
+<form asp-action="AssignCompanyWorkersToExam">
+    <div>
+        <h2>Informacje o egzaminie</h2>
+
+        <div class="row m-0 mt-3 mb-3">
+            <a asp-action="CompanyWorkersExamDetails" asp-route-examIdentificator="@Model.ExamIdentificator" asp-controller="Exams" class="btn btn-outline-info mt-1 xs450px_FloatRight">Powrót do szczegółów egzaminu</a>
+        </div>
+
+        <div class="col-md-8 col-xl-6 col-lg-6 col-sm-12 col-xs-10 m-auto p-3 shadow p-3 mb-5 bg-light rounded border border-primary rounded-bottom" style="opacity:0.90">
+
+            <input asp-for="ExamIdentificator" class="form-control col-12" hidden readonly />
+
+            <div class="form-group">
+                <label asp-for="ExamIndexer" class="control-label"></label>
+                <input asp-for="ExamIndexer" class="form-control col-12" readonly />
+            </div>
+
+            <div class="form-group">
+                <label asp-for="OrdinalNumber" class="control-label"></label>
+                <input asp-for="OrdinalNumber" class="form-control col-12" readonly />
+            </div>
+
+            <div class="form-group">
+                <label asp-for="Name" class="control-label"></label>
+                <textarea asp-for="Name" class="form-control col-12" style="width:100%; min-width:100%;" readonly></textarea>
+            </div>
+
+            <div class="form-group">
+                <label asp-for="Description" class="control-label"></label>
+                <textarea asp-for="Description" class="form-control col-12" style="width:100%; min-width:100%;" readonly></textarea>
+            </div>
+
+            <div class="form-group">
+                <label asp-for="TypeOfExam" class="control-label"></label>
+                <input asp-for="TypeOfExam" class="form-control col-12" style="width:100%; min-width:100%;" readonly />
+            </div>
+
+            <div class="form-group">
+                <label asp-for="DateOfStart" class="control-label"></label>
+                <input asp-for="DateOfStart" class="form-control col-12" readonly />
+            </div>
+
+            <div class="form-group">
+                <label asp-for="DateOfEnd" class="control-label"></label>
+                <input asp-for="DateOfEnd" class="form-control col-12" readonly />
+            </div>
+
+            <div class="form-group">
+                <label asp-for="DurationDays" class="control-label"></label>
+                <input asp-for="DurationDays" class="form-control col-12" readonly />
+            </div>
+
+            <div class="form-group">
+                <label asp-for="DurationMinutes" class="control-label"></label>
+                <input asp-for="DurationMinutes" class="form-control col-12" readonly />
+            </div>
+
+            <div class="form-group">
+                <label asp-for="ExamDividedToTerms" class="control-label"></label>
+                <div class="row pl-3">
+                    <input type="checkbox" asp-for="ExamDividedToTerms" class="form-control col-12" data-toggle="toggle" data-on="Tak" data-off="Nie" data-size="sm" disabled />
+                </div>
+            </div>
+
+            <div class="form-group">
+                <label asp-for="UsersQuantity" class="control-label"></label>
+                <input asp-for="UsersQuantity" class="form-control col-12" readonly />
+            </div>
+
+            <div class="form-group">
+                <label asp-for="UsersLimit" class="control-label"></label>
+                <input asp-for="UsersLimit" class="form-control col-12" readonly />
+            </div>
+
+            <div class="form-group">
+                <label asp-for="Country" class="control-label"></label>
+                <input asp-for="Country" class="form-control col-12" readonly />
+            </div>
+
+            <div class="form-group">
+                <label asp-for="City" class="control-label"></label>
+                <input asp-for="City" class="form-control col-12" readonly />
+            </div>
+
+            <div class="form-group">
+                <label asp-for="PostCode" class="control-label"></label>
+                <input asp-for="PostCode" class="form-control col-12" readonly />
+            </div>
+
+            <div class="form-group">
+                <label asp-for="Address" class="control-label"></label>
+                <input asp-for="Address" class="form-control col-12" readonly />
+            </div>
+
+            <div class="form-group">
+                <label asp-for="NumberOfApartment" class="control-label"></label>
+                <input asp-for="NumberOfApartment" class="form-control col-12" readonly />
+            </div>
+
+        </div>
+    </div>
+
+    <h2 class="mt-4 mb-4">Zapisy na egzamin</h2>
+
+    <div class="form-group">
+        <label asp-for="VacantSeats" class="control-label"></label>
+        <input asp-for="VacantSeats" class="form-control col-12" readonly />
+    </div>
+
+    @if (Model.CourseParticipants.Count != 0)
+    {
+        @await Component.InvokeAsync("AssignUsersToExamDataTable", new { userViewModel = Model.CourseParticipants, userToAddViewModel = Model.UsersToAssignToExam, tableIdentificator = "listUsers" })
+
+        @if (Model.VacantSeats != 0)
+        {
+            <div>
+                <div class="row justify-content-center">
+                    <input type="submit" value="Dodaj pracowników" class="btn btn-primary" />
+                </div>
+            </div>
+        }
+        else
+        {
+            <div class="mt-4 mb-4 alert alert-danger text-center">Brak wolnych miejsc</div>
+        }
+    }
+    else
+    {
+        <div class="mt-4 mb-4 alert alert-warning">Brak możliwych do zapisania pracowników</div>
+    }
+
+</form>
+
+@section Scripts {
+    @{await Html.RenderPartialAsync("_ValidationScriptsPartial");}
+    @{await Html.RenderPartialAsync("_DataTableBasicScript", "listUsers");}
+    @{await Html.RenderPartialAsync("_CheckBoxLimitScript", Model.VacantSeats);}
+}
+

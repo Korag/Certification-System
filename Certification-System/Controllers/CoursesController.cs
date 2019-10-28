@@ -1867,6 +1867,8 @@ namespace Certification_System.Controllers
                         singleCompanyWorkerWithExamsPeriodsStatus.LastingExamsIndexers.Add(examPeriod.ExamIndexer);
                     }
                 }
+
+                listOfUsersWithExamPeriodsStatus.Add(singleCompanyWorkerWithExamsPeriodsStatus);
             }
 
             DisplayCompanyCourseSummaryViewModel courseSummaryViewModel = _mapper.Map<DisplayCompanyCourseSummaryViewModel>(course);

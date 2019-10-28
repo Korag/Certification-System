@@ -8,6 +8,11 @@
 <h2>Podsumowanie wyników uczestników kursu</h2>
 <hr />
 
+@if (!string.IsNullOrWhiteSpace(ViewBag.message))
+{
+    <h2 class="alert alert-info" role="alert">@ViewBag.message</h2>
+}
+
 <h2>Informacje o kursie</h2>
 
 <div class="row m-0 mt-3 mb-3">
@@ -92,7 +97,7 @@
 
 @if (Model.AllCourseCompanyWorkers.Count != 0)
 {
-    @await Component.InvokeAsync("DisplayUserCourseExamPeriodStatusDataTable", new { userViewModel = Model.CompanyWorkersWithExamPeriodStatus, givenCertificateViewModel = Model.DispensedGivenCertificates, examViewModel = Model.LastExamsPeriods, courseEnded = Model.CourseEnded, tableIdentificator = "listUsersExamsPeriodsStatus" })
+    @await Component.InvokeAsync("DisplayUserWithCourseResultsDataTable", new { userViewModel = Model.AllCourseCompanyWorkers, examViewModel = Model.AllCourseExams, tableIdentificator = "listUsers" })
 }
 else
 {
@@ -101,7 +106,7 @@ else
 
 <h2 class="mt-4 mb-4">Zestawienie brakujących zaliczeń egzaminów pracowników</h2>
 
-@await Component.InvokeAsync("DisplayUserWithCourseResultsDataTable", new { userViewModel = Model.AllCourseCompanyWorkers, examViewModel = Model.AllCourseExams, tableIdentificator = "listUsers" })
+@await Component.InvokeAsync("DisplayUserCourseExamPeriodStatusDataTable", new { userViewModel = Model.CompanyWorkersWithExamPeriodStatus, givenCertificateViewModel = Model.DispensedGivenCertificates, examViewModel = Model.LastExamsPeriods, courseEnded = Model.CourseEnded, tableIdentificator = "listUsersExamsPeriodsStatus" })
 
 @if (Model.GivenCertificates.Count() != 0)
 {
