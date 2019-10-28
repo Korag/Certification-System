@@ -1,44 +1,48 @@
-﻿@model Certification_System.DTOViewModels.DeleteUsersFromExamTermViewModel
+﻿@model Certification_System.DTOViewModels.DeleteUsersFromExamViewModel
 
 @{
-    ViewData["Title"] = "RemoveCompanyWorkersFromExamTerm";
+    ViewData["Title"] = "RemoveCompanyWorkersFromExam";
     Layout = "~/Views/Shared/_Layout.cshtml";
 }
 
-<h2>Usuwanie użytkowników z tury egzaminu</h2>
+<h2>Usuwanie pracowników przedsiębiorstwa z egzaminu</h2>
 <hr />
 
-<form asp-action="RemoveCompanyWorkersFromExamTerm">
+<form asp-action="RemoveCompanyWorkersFromExam">
     <div>
-        <h2>Informacje o turze egzaminu</h2>
+        <h2>Informacje o egzaminie</h2>
 
         <div class="row m-0 mt-3 mb-3">
-            <a asp-action="CompanyWorkersExamTermDetails" asp-route-examTermIdentificator="@Model.ExamTermIdentificator" asp-controller="ExamsTerms" class="btn btn-outline-info mt-1 xs450px_FloatRight">Powrót do szczegółów tury egzaminu</a>
+            <a asp-action="CompanyWorkersExamDetails" asp-route-examIdentificator="@Model.ExamIdentificator" asp-controller="Exams" class="btn btn-outline-info mt-1 xs450px_FloatRight">Powrót do szczegółów egzaminu</a>
         </div>
 
         <div class="col-md-8 col-xl-6 col-lg-6 col-sm-12 col-xs-10 m-auto p-3 shadow p-3 mb-5 bg-light rounded border border-primary rounded-bottom" style="opacity:0.90">
 
-            <input asp-for="ExamTermIdentificator" class="form-control col-12" hidden readonly />
-            <input asp-for="Exam.ExamIdentificator" class="form-control col-12" hidden readonly />
+            <input asp-for="ExamIdentificator" class="form-control col-12" hidden readonly />
 
             <div class="form-group">
-                <label asp-for="Exam.ExamIndexer" class="control-label"></label>
-                <input asp-for="Exam.ExamIndexer" class="form-control col-12" readonly />
+                <label asp-for="ExamIndexer" class="control-label"></label>
+                <input asp-for="ExamIndexer" class="form-control col-12" readonly />
             </div>
 
             <div class="form-group">
-                <label asp-for="Exam.Name" class="control-label"></label>
-                <input asp-for="Exam.Name" class="form-control col-12" readonly />
+                <label asp-for="OrdinalNumber" class="control-label"></label>
+                <input asp-for="OrdinalNumber" class="form-control col-12" readonly />
             </div>
 
             <div class="form-group">
-                <label asp-for="Exam.OrdinalNumber" class="control-label"></label>
-                <input asp-for="Exam.OrdinalNumber" class="form-control col-12" readonly />
+                <label asp-for="Name" class="control-label"></label>
+                <textarea asp-for="Name" class="form-control col-12" style="width:100%; min-width:100%;" readonly></textarea>
             </div>
 
             <div class="form-group">
-                <label asp-for="ExamTermIndexer" class="control-label"></label>
-                <input asp-for="ExamTermIndexer" class="form-control col-12" readonly />
+                <label asp-for="Description" class="control-label"></label>
+                <textarea asp-for="Description" class="form-control col-12" style="width:100%; min-width:100%;" readonly></textarea>
+            </div>
+
+            <div class="form-group">
+                <label asp-for="TypeOfExam" class="control-label"></label>
+                <input asp-for="TypeOfExam" class="form-control col-12" readonly />
             </div>
 
             <div class="form-group">
@@ -62,8 +66,15 @@
             </div>
 
             <div class="form-group">
-                <label asp-for="UsersQuantity" class="control-label"></label>
-                <input asp-for="UsersQuantity" class="form-control col-12" readonly />
+                <label asp-for="ExamDividedToTerms" class="control-label"></label>
+                <div class="row pl-3">
+                    <input type="checkbox" asp-for="ExamDividedToTerms" class="form-control col-12" data-toggle="toggle" data-on="Tak" data-off="Nie" data-size="sm" disabled />
+                </div>
+            </div>
+
+            <div class="form-group">
+                <label asp-for="UsersQuantitiy" class="control-label"></label>
+                <input asp-for="UsersQuantitiy" class="form-control col-12" readonly />
             </div>
 
             <div class="form-group">
@@ -80,6 +91,7 @@
                 <label asp-for="City" class="control-label"></label>
                 <input asp-for="City" class="form-control col-12" readonly />
             </div>
+
             <div class="form-group">
                 <label asp-for="PostCode" class="control-label"></label>
                 <input asp-for="PostCode" class="form-control col-12" readonly />
@@ -98,15 +110,15 @@
         </div>
     </div>
 
-    <h2 class="mt-4 mb-4">Uczestnicy tury egzaminu</h2>
+    <h2 class="mt-4 mb-4">Uczestnicy egzaminu</h2>
 
-    @if (Model.AllExamTermParticipants.Count != 0)
+    @if (Model.AllExamParticipants.Count != 0)
     {
-        @await Component.InvokeAsync("DeleteUserFromExamTermDataTable", new { userViewModel = Model.AllExamTermParticipants, userToDeleteViewModel = Model.UsersToDeleteFromExamTerm, tableIdentificator = "listUsers" })
+        @await Component.InvokeAsync("DeleteUserFromExamDataTable", new { userViewModel = Model.AllExamParticipants, userToDeleteViewModel = Model.UsersToDeleteFromExam, tableIdentificator = "listUsers" })
 
         <div>
             <div class="row justify-content-center">
-                <button type="button" class="btn btn-danger" data-toggle="modal" data-target="#modal">Usuń pracowników przedsiębiorstwa z tury egzaminu</button>
+                <button type="button" class="btn btn-danger" data-toggle="modal" data-target="#modal">Usuń pracowników z egzaminu</button>
             </div>
         </div>
     }
@@ -115,7 +127,7 @@
         <div class="mt-4 mb-4 alert alert-warning">Brak możliwych do usunięcia pracowników</div>
     }
 
-    @await Component.InvokeAsync("Modal", new { Title = "Usuwanie użytkowników z egzaminu", Body = "Czy na pewno chcesz usunąć zaznaczonych użytkowników z tury egzaminu ?", FormSubmit = true, ButtonText = "Usuń", ButtonClass = "btn-danger" })
+    @await Component.InvokeAsync("Modal", new { Title = "Usuwanie użytkowników z egzaminu", Body = "Czy na pewno chcesz usunąć zaznaczonych użytkowników z egzaminu ?", FormSubmit = true, ButtonText = "Usuń", ButtonClass = "btn-danger" })
 
 </form>
 

@@ -1315,10 +1315,10 @@ namespace Certification_System.Controllers
             {
                 if (removeCompanyWorkersFromExamTermViewModel.DateOfStart < DateTime.Now)
                 {
-                    var usersToDeleteFromExamTermIdentificators = removeCompanyWorkersFromExamTermViewModel.UsersToDeleteFromExamTerm.ToList().Where(z => z.IsToDelete == true).Select(z => z.UserIdentificator).ToList();
+                    var companyWorkersToDeleteFromExamTermIdentificators = removeCompanyWorkersFromExamTermViewModel.UsersToDeleteFromExamTerm.ToList().Where(z => z.IsToDelete == true).Select(z => z.UserIdentificator).ToList();
 
-                    _context.examTermRepository.DeleteUsersFromExamTerm(removeCompanyWorkersFromExamTermViewModel.ExamTermIdentificator, usersToDeleteFromExamTermIdentificators);
-                    _context.examRepository.DeleteUsersFromExam(removeCompanyWorkersFromExamTermViewModel.Exam.ExamIdentificator, usersToDeleteFromExamTermIdentificators);
+                    _context.examTermRepository.DeleteUsersFromExamTerm(removeCompanyWorkersFromExamTermViewModel.ExamTermIdentificator, companyWorkersToDeleteFromExamTermIdentificators);
+                    _context.examRepository.DeleteUsersFromExam(removeCompanyWorkersFromExamTermViewModel.Exam.ExamIdentificator, companyWorkersToDeleteFromExamTermIdentificators);
 
                     var exam = _context.examRepository.GetExamByExamTermId(removeCompanyWorkersFromExamTermViewModel.ExamTermIdentificator);
                     var examTerm = _context.examTermRepository.GetExamTermById(removeCompanyWorkersFromExamTermViewModel.ExamTermIdentificator);
@@ -1339,7 +1339,7 @@ namespace Certification_System.Controllers
                     _context.personalLogRepository.AddPersonalUserLogToAdminGroup(logInfoPersonalDeleteGroupOfUsersFromExamTerm);
 
                     var logInfoPersonalRemoveUserFromExamTerm = _context.personalLogRepository.GeneratePersonalLogInformation(this.User.Identity.Name, this.ControllerContext.RouteData.Values["action"].ToString(), LogDescriptions.DescriptionOfPersonalUserLog["axUserFromExamTerm"], "Indekser: " + examTerm.ExamTermIndexer);
-                    _context.personalLogRepository.AddPersonalUsersLogs(usersToDeleteFromExamTermIdentificators, logInfoPersonalRemoveUserFromExamTerm);
+                    _context.personalLogRepository.AddPersonalUsersLogs(companyWorkersToDeleteFromExamTermIdentificators, logInfoPersonalRemoveUserFromExamTerm);
 
                     #endregion
 
