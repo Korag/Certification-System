@@ -1,0 +1,125 @@
+﻿@model Certification_System.DTOViewModels.DeleteUsersFromExamTermViewModel
+
+@{
+    ViewData["Title"] = "RemoveCompanyWorkersFromExamTerm";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+<h2>Usuwanie użytkowników z tury egzaminu</h2>
+<hr />
+
+<form asp-action="RemoveCompanyWorkersFromExamTerm">
+    <div>
+        <h2>Informacje o turze egzaminu</h2>
+
+        <div class="row m-0 mt-3 mb-3">
+            <a asp-action="CompanyWorkersExamTermDetails" asp-route-examTermIdentificator="@Model.ExamTermIdentificator" asp-controller="ExamsTerms" class="btn btn-outline-info mt-1 xs450px_FloatRight">Powrót do szczegółów tury egzaminu</a>
+        </div>
+
+        <div class="col-md-8 col-xl-6 col-lg-6 col-sm-12 col-xs-10 m-auto p-3 shadow p-3 mb-5 bg-light rounded border border-primary rounded-bottom" style="opacity:0.90">
+
+            <input asp-for="ExamTermIdentificator" class="form-control col-12" hidden readonly />
+            <input asp-for="Exam.ExamIdentificator" class="form-control col-12" hidden readonly />
+
+            <div class="form-group">
+                <label asp-for="Exam.ExamIndexer" class="control-label"></label>
+                <input asp-for="Exam.ExamIndexer" class="form-control col-12" readonly />
+            </div>
+
+            <div class="form-group">
+                <label asp-for="Exam.Name" class="control-label"></label>
+                <input asp-for="Exam.Name" class="form-control col-12" readonly />
+            </div>
+
+            <div class="form-group">
+                <label asp-for="Exam.OrdinalNumber" class="control-label"></label>
+                <input asp-for="Exam.OrdinalNumber" class="form-control col-12" readonly />
+            </div>
+
+            <div class="form-group">
+                <label asp-for="ExamTermIndexer" class="control-label"></label>
+                <input asp-for="ExamTermIndexer" class="form-control col-12" readonly />
+            </div>
+
+            <div class="form-group">
+                <label asp-for="DateOfStart" class="control-label"></label>
+                <input asp-for="DateOfStart" class="form-control col-12" readonly />
+            </div>
+
+            <div class="form-group">
+                <label asp-for="DateOfEnd" class="control-label"></label>
+                <input asp-for="DateOfEnd" class="form-control col-12" readonly />
+            </div>
+
+            <div class="form-group">
+                <label asp-for="DurationDays" class="control-label"></label>
+                <input asp-for="DurationDays" class="form-control col-12" readonly />
+            </div>
+
+            <div class="form-group">
+                <label asp-for="DurationMinutes" class="control-label"></label>
+                <input asp-for="DurationMinutes" class="form-control col-12" readonly />
+            </div>
+
+            <div class="form-group">
+                <label asp-for="UsersQuantity" class="control-label"></label>
+                <input asp-for="UsersQuantity" class="form-control col-12" readonly />
+            </div>
+
+            <div class="form-group">
+                <label asp-for="UsersLimit" class="control-label"></label>
+                <input asp-for="UsersLimit" class="form-control col-12" readonly />
+            </div>
+
+            <div class="form-group">
+                <label asp-for="Country" class="control-label"></label>
+                <input asp-for="Country" class="form-control col-12" readonly />
+            </div>
+
+            <div class="form-group">
+                <label asp-for="City" class="control-label"></label>
+                <input asp-for="City" class="form-control col-12" readonly />
+            </div>
+            <div class="form-group">
+                <label asp-for="PostCode" class="control-label"></label>
+                <input asp-for="PostCode" class="form-control col-12" readonly />
+            </div>
+
+            <div class="form-group">
+                <label asp-for="Address" class="control-label"></label>
+                <input asp-for="Address" class="form-control col-12" readonly />
+            </div>
+
+            <div class="form-group">
+                <label asp-for="NumberOfApartment" class="control-label"></label>
+                <input asp-for="NumberOfApartment" class="form-control col-12" readonly />
+            </div>
+
+        </div>
+    </div>
+
+    <h2 class="mt-4 mb-4">Uczestnicy tury egzaminu</h2>
+
+    @if (Model.AllExamTermParticipants.Count != 0)
+    {
+        @await Component.InvokeAsync("DeleteUserFromExamTermDataTable", new { userViewModel = Model.AllExamTermParticipants, userToDeleteViewModel = Model.UsersToDeleteFromExamTerm, tableIdentificator = "listUsers" })
+
+        <div>
+            <div class="row justify-content-center">
+                <button type="button" class="btn btn-danger" data-toggle="modal" data-target="#modal">Usuń użytkowników z tury egzaminu</button>
+            </div>
+        </div>
+    }
+    else
+    {
+        <div class="mt-4 mb-4 alert alert-warning">Brak zapisanych użytkowników</div>
+    }
+
+    @await Component.InvokeAsync("Modal", new { Title = "Usuwanie użytkowników z egzaminu", Body = "Czy na pewno chcesz usunąć zaznaczonych użytkowników z tury egzaminu ?", FormSubmit = true, ButtonText = "Usuń", ButtonClass = "btn-danger" })
+
+</form>
+
+@section Scripts {
+    @{await Html.RenderPartialAsync("_ValidationScriptsPartial");}
+    @{await Html.RenderPartialAsync("_DataTableBasicScript", "listUsers");}
+}

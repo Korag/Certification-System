@@ -417,15 +417,15 @@ namespace Certification_System.Controllers
                     listOfUsers = _mapper.Map<List<DisplayCrucialDataUserViewModel>>(enrolledUsersList);
                 }
 
-                DeleteUsersFromExamTermViewModel deleteUsersFromExamViewModel = _mapper.Map<DeleteUsersFromExamTermViewModel>(examTerm);
-                deleteUsersFromExamViewModel.AllExamTermParticipants = listOfUsers;
+                DeleteUsersFromExamTermViewModel deleteUsersFromExamTermViewModel = _mapper.Map<DeleteUsersFromExamTermViewModel>(examTerm);
+                deleteUsersFromExamTermViewModel.AllExamTermParticipants = listOfUsers;
 
                 var exam = _context.examRepository.GetExamByExamTermId(examTermIdentificator);
-                deleteUsersFromExamViewModel.Exam = _mapper.Map<DisplayCrucialDataExamViewModel>(exam);
+                deleteUsersFromExamTermViewModel.Exam = _mapper.Map<DisplayCrucialDataExamViewModel>(exam);
 
-                deleteUsersFromExamViewModel.UsersToDeleteFromExamTerm = _mapper.Map<DeleteUsersFromCheckBoxViewModel[]>(listOfUsers);
+                deleteUsersFromExamTermViewModel.UsersToDeleteFromExamTerm = _mapper.Map<DeleteUsersFromCheckBoxViewModel[]>(listOfUsers);
 
-                return View(deleteUsersFromExamViewModel);
+                return View(deleteUsersFromExamTermViewModel);
             }
 
             return RedirectToAction("ExamTermDetails", new { examTermIdentificator = examTermIdentificator });
@@ -1264,6 +1264,99 @@ namespace Certification_System.Controllers
             }
 
             return View(addCompanyWorkersToExamTermViewModel);
+        }
+
+        // GET: RemoveCompanyWorkersFromExamTerm
+        [Authorize(Roles = "Company")]
+        public ActionResult RemoveCompanyWorkersFromExamTerm(string examTermIdentificator)
+        {
+            if (string.IsNullOrWhiteSpace(examTermIdentificator))
+            {
+                return RedirectToAction("BlankMenu", "Certificates");
+            }
+
+            var companyManager = _context.userRepository.GetUserByEmail(this.User.Identity.Name);
+            var companyWorkers = _context.userRepository.GetUsersWorkersByCompanyId(companyManager.CompanyRoleManager.FirstOrDefault());
+            var companyWorkersIdentificators = companyWorkers.Select(z => z.Id).ToList();
+
+            var examTerm = _context.examTermRepository.GetExamTermById(examTermIdentificator);
+
+            if (examTerm.DateOfStart < DateTime.Now)
+            {
+                var enrolledCompanyWorkersList = _context.userRepository.GetUsersById(examTerm.EnrolledUsers.Where(z=> examTermIdentificator.Contains(z)).ToList());
+
+                List<DisplayCrucialDataUserViewModel> listOfUsers = new List<DisplayCrucialDataUserViewModel>();
+
+                if (enrolledCompanyWorkersList.Count != 0)
+                {
+                    listOfUsers = _mapper.Map<List<DisplayCrucialDataUserViewModel>>(enrolledCompanyWorkersList);
+                }
+
+                DeleteUsersFromExamTermViewModel deleteUsersFromExamTermViewModel = _mapper.Map<DeleteUsersFromExamTermViewModel>(examTerm);
+                deleteUsersFromExamTermViewModel.AllExamTermParticipants = listOfUsers;
+
+                var exam = _context.examRepository.GetExamByExamTermId(examTermIdentificator);
+                deleteUsersFromExamTermViewModel.Exam = _mapper.Map<DisplayCrucialDataExamViewModel>(exam);
+
+                deleteUsersFromExamTermViewModel.UsersToDeleteFromExamTerm = _mapper.Map<DeleteUsersFromCheckBoxViewModel[]>(listOfUsers);
+
+                return View(deleteUsersFromExamTermViewModel);
+            }
+
+            return RedirectToAction("CompanyWorkersExamTermDetails", new { examTermIdentificator = examTermIdentificator });
+        }
+
+        // POST: RemoveCompanyWorkersFromExamTerm
+        [HttpPost]
+        [Authorize(Roles = "Company")]
+        public ActionResult RemoveCompanyWorkersFromExamTerm(DeleteUsersFromExamTermViewModel removeCompanyWorkersFromExamTermViewModel)
+        {
+            if (ModelState.IsValid)
+            {
+                if (removeCompanyWorkersFromExamTermViewModel.DateOfStart < DateTime.Now)
+                {
+                    var usersToDeleteFromExamTermIdentificators = removeCompanyWorkersFromExamTermViewModel.UsersToDeleteFromExamTerm.ToList().Where(z => z.IsToDelete == true).Select(z => z.UserIdentificator).ToList();
+
+                    _context.examTermRepository.DeleteUsersFromExamTerm(removeCompanyWorkersFromExamTermViewModel.ExamTermIdentificator, usersToDeleteFromExamTermIdentificators);
+                    _context.examRepository.DeleteUsersFromExam(removeCompanyWorkersFromExamTermViewModel.Exam.ExamIdentificator, usersToDeleteFromExamTermIdentificators);
+
+                    var exam = _context.examRepository.GetExamByExamTermId(removeCompanyWorkersFromExamTermViewModel.ExamTermIdentificator);
+                    var examTerm = _context.examTermRepository.GetExamTermById(removeCompanyWorkersFromExamTermViewModel.ExamTermIdentificator);
+
+                    #region EntityLogs
+
+                    var logInfoRemoveUsersFromExam = _logger.GenerateLogInformation(this.User.Identity.Name, this.ControllerContext.RouteData.Values["action"].ToString(), LogTypeOfAction.TypesOfActions[1], LogDescriptions.DescriptionOfActionOnEntity["removeUsersFromExam"]);
+                    var logInfoRemoveUsersFromExamTerm = _logger.GenerateLogInformation(this.User.Identity.Name, this.ControllerContext.RouteData.Values["action"].ToString(), LogTypeOfAction.TypesOfActions[1], LogDescriptions.DescriptionOfActionOnEntity["removeUsersFromExamTerm"]);
+
+                    _logger.AddExamLog(exam, logInfoRemoveUsersFromExam);
+                    _logger.AddExamTermLog(examTerm, logInfoRemoveUsersFromExamTerm);
+
+                    #endregion
+
+                    #region PersonalUserLogs
+
+                    var logInfoPersonalDeleteGroupOfUsersFromExamTerm = _context.personalLogRepository.GeneratePersonalLogInformation(this.User.Identity.Name, this.ControllerContext.RouteData.Values["action"].ToString(), LogDescriptions.DescriptionOfPersonalUserLog["removeGroupOfUsersFromExamTerm"], "Indekser: " + examTerm.ExamTermIndexer);
+                    _context.personalLogRepository.AddPersonalUserLogToAdminGroup(logInfoPersonalDeleteGroupOfUsersFromExamTerm);
+
+                    var logInfoPersonalRemoveUserFromExamTerm = _context.personalLogRepository.GeneratePersonalLogInformation(this.User.Identity.Name, this.ControllerContext.RouteData.Values["action"].ToString(), LogDescriptions.DescriptionOfPersonalUserLog["axUserFromExamTerm"], "Indekser: " + examTerm.ExamTermIndexer);
+                    _context.personalLogRepository.AddPersonalUsersLogs(usersToDeleteFromExamTermIdentificators, logInfoPersonalRemoveUserFromExamTerm);
+
+                    #endregion
+
+                    if (removeCompanyWorkersFromExamTermViewModel.UsersToDeleteFromExamTerm.Count() == 1)
+                    {
+                        return RedirectToAction("CompanyWorkersDetails", "Users", new { userIdentificator = removeCompanyWorkersFromExamTermViewModel.UsersToDeleteFromExamTerm.FirstOrDefault().UserIdentificator, message = "Usunięto użytkownika z tury egzaminu" });
+                    }
+                    else
+                    {
+                        return RedirectToAction("CompanyWorkersExamTermDetails", new { examTermIdentificator = removeCompanyWorkersFromExamTermViewModel.ExamTermIdentificator, message = "Usunięto grupę użytkowników z tury egzaminu" });
+                    }
+                }
+
+                return RedirectToAction("CompanyWorkersExamTermDetails", new { examTermIdentificator = removeCompanyWorkersFromExamTermViewModel.ExamTermIdentificator });
+            }
+
+            return RedirectToAction("RemoveCompanyWorkersFromExamTerm", new { examTermIdentificator = removeCompanyWorkersFromExamTermViewModel.ExamTermIdentificator });
         }
 
         #region AjaxQuery

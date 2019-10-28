@@ -346,8 +346,10 @@ namespace Certification_System.Controllers
 
         // GET: CompanyWorkerDetails
         [Authorize(Roles = "Company")]
-        public ActionResult CompanyWorkerDetails(string userIdentificator)
+        public ActionResult CompanyWorkerDetails(string userIdentificator, string message = null)
         {
+            ViewBag.message = message;
+            
             var user = _context.userRepository.GetUserById(userIdentificator);
             var givenCertificates = _context.givenCertificateRepository.GetGivenCertificatesById(user.GivenCertificates);
             var courses = _context.courseRepository.GetCoursesById(user.Courses);
