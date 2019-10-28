@@ -120,7 +120,7 @@ namespace Certification_System.Services
                    .ForMember(dest => dest.Meetings, opts => opts.Ignore())
                    .ForMember(dest => dest.EnrolledUsers, opts => opts.Ignore())
                    .ForMember(dest => dest.Branches, opts => opts.MapFrom(src => src.SelectedBranches));
-                      
+
             CreateMap<EditCourseViewModel, Course>()
                      .ForMember(dest => dest.CourseIdentificator, opts => opts.Ignore())
                      .ForMember(dest => dest.Meetings, opts => opts.Ignore())
@@ -280,7 +280,7 @@ namespace Certification_System.Services
                      .ForMember(dest => dest.ExamTerms, opts => opts.MapFrom(src => new List<string>()))
                      .ForMember(dest => dest.ExamResults, opts => opts.MapFrom(src => new List<string>()))
                      .ForMember(dest => dest.EnrolledUsers, opts => opts.MapFrom(src => new List<string>()));
-                   
+
             CreateMap<AddExamPeriodWithExamTermsViewModel, Exam>()
                      .ForMember(dest => dest.ExamTerms, opts => opts.MapFrom(src => new List<string>()))
                      .ForMember(dest => dest.ExamResults, opts => opts.MapFrom(src => new List<string>()))
@@ -361,7 +361,7 @@ namespace Certification_System.Services
 
             CreateMap<ExamTerm, EditExamTermWithoutCourseViewModel>()
                     .ForMember(dest => dest.SelectedExaminers, opts => opts.MapFrom(src => src.Examiners));
-           
+
             CreateMap<ExamTerm, ExamTermDetailsViewModel>()
                     .ForMember(dest => dest.UsersQuantity, opts => opts.MapFrom(src => src.EnrolledUsers.Count()))
                     .ForMember(dest => dest.Exam, opts => opts.Ignore())
@@ -416,7 +416,7 @@ namespace Certification_System.Services
 
             CreateMap<ExamResult, DisplayExamResultToUserViewModel>()
                      .ForMember(dest => dest.Exam, opts => opts.Ignore());
- 
+
             CreateMap<ExamResult, DisplayExamResultWithExamIdentificator>();
 
             CreateMap<ExamResult, MarkUserViewModel>();
@@ -481,7 +481,7 @@ namespace Certification_System.Services
             CreateMap<GivenDegree, DisplayGivenDegreeToUserExtendedViewModel>()
                      .ForMember(dest => dest.Degree, opts => opts.Ignore());
 
-            CreateMap<GivenDegree, UserGivenDegreePossessionConfirmationViewModel>(); 
+            CreateMap<GivenDegree, UserGivenDegreePossessionConfirmationViewModel>();
             #endregion
 
             #region Meetings
@@ -585,7 +585,7 @@ namespace Certification_System.Services
                      .ForMember(dest => dest.Courses, opts => opts.Ignore())
                      .ForMember(dest => dest.GivenCertificates, opts => opts.Ignore())
                      .ForMember(dest => dest.GivenDegrees, opts => opts.Ignore());
-            
+
             CreateMap<CertificationPlatformUser, AccountDetailsViewModel>()
                     .ForMember(dest => dest.UserIdentificator, opts => opts.MapFrom(src => src.Id));
 
@@ -666,6 +666,9 @@ namespace Certification_System.Services
 
             CreateMap<DisplayCrucialDataUserViewModel, DeleteUsersFromCheckBoxViewModel>()
                      .ForMember(dest => dest.IsToDelete, opts => opts.Ignore());
+
+            CreateMap<CourseOfferDetailsViewModel, CompanyCourseOfferDetailsViewModel>();
+
             #endregion
         }
     }

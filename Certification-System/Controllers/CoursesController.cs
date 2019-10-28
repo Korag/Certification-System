@@ -1450,7 +1450,7 @@ namespace Certification_System.Controllers
         }
 
         // GET: CourseOfferDetails
-        [Authorize(Roles = "Worker")]
+        [Authorize(Roles = "Worker, Company")]
         public ActionResult CourseOfferDetails(string courseIdentificator, string message)
         {
             ViewBag.message = message;
@@ -1471,6 +1471,12 @@ namespace Certification_System.Controllers
             }
 
             var courseQueue = _context.courseRepository.GetCourseQueueById(courseIdentificator);
+
+            if (courseQueue == null)
+            {
+                courseQueue = _context.courseRepository.CreateCourseQueue(courseIdentificator);
+            }
+
             bool userInQueue = false;
 
             CourseOfferDetailsViewModel courseOfferDetails = new CourseOfferDetailsViewModel();
@@ -1495,6 +1501,21 @@ namespace Certification_System.Controllers
 
             courseOfferDetails.Instructors = _mapper.Map<List<DisplayCrucialDataUserViewModel>>(instructors);
             courseOfferDetails.Examiners = _mapper.Map<List<DisplayCrucialDataUserViewModel>>(examiners);
+
+            if (this.User.IsInRole("Company"))
+            {
+                var companyManager = _context.userRepository.GetUserByEmail(this.User.Identity.Name);
+                var companyWorkers = _context.userRepository.GetUsersWorkersByCompanyId(companyManager.CompanyRoleManager.FirstOrDefault());
+
+                var companyCourseOfferDetails = _mapper.Map<CompanyCourseOfferDetailsViewModel>(courseOfferDetails);
+
+                var courseQueueAwaitingUsers = courseQueue.AwaitingUsers.Select(z=> z.UserIdentificator).ToList();
+                var companyWorkersInCourseQueue = companyWorkers.Where(z => courseQueueAwaitingUsers.Contains(z.Id)).ToList();
+
+                companyCourseOfferDetails.CompanyWorkersInQueue = _mapper.Map<List<DisplayCrucialDataUserViewModel>>(companyWorkersInCourseQueue);
+
+                return View("CompanyCourseOfferDetails", companyCourseOfferDetails);
+            }
 
             return View(courseOfferDetails);
         }

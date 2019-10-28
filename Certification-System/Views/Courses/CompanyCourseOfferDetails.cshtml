@@ -1,0 +1,144 @@
+﻿@model Certification_System.DTOViewModels.CompanyCourseOfferDetailsViewModel
+
+@{
+    ViewData["Title"] = "CompanyCourseOfferDetails";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+<h1>Szczegóły oferty kursu</h1>
+<hr />
+
+<div class="row m-0 mt-3 mb-3">
+    <a asp-action="CourseOffer" asp-controller="Courses" class="btn btn-outline-info mt-1 xs300px_FloatRight">Powrót do listy</a>
+</div>
+
+<form asp-action="CompanyCourseOfferDetails">
+    <div>
+        <div class="col-md-8 col-xl-6 col-lg-6 col-sm-12 col-xs-10 m-auto p-3 shadow p-3 mb-5 bg-light rounded border border-primary rounded-bottom" style="opacity:0.90">
+
+            <input asp-for="Course.CourseIdentificator" class="form-control col-12" readonly hidden />
+            <input asp-for="Price" class="form-control col-12" readonly hidden />
+
+            <div class="form-group">
+                <label asp-for="Course.CourseIndexer" class="control-label"></label>
+                <input asp-for="Course.CourseIndexer" class="form-control col-12" readonly />
+            </div>
+
+            <div class="form-group">
+                <label asp-for="Course.Name" class="control-label"></label>
+                <input asp-for="Course.Name" class="form-control col-12" readonly />
+            </div>
+
+            <div class="form-group">
+                <label asp-for="Course.Description" class="control-label"></label>
+                <textarea asp-for="Course.Description" class="form-control col-12" style="width:100%; min-width:100%;" readonly></textarea>
+            </div>
+
+            <div class="form-group">
+                <label asp-for="Course.DateOfStart" class="control-label"></label>
+                <input asp-for="Course.DateOfStart" class="form-control col-12" readonly />
+            </div>
+
+            <div class="form-group">
+                <label asp-for="Course.DateOfEnd" class="control-label"></label>
+                <input asp-for="Course.DateOfEnd" class="form-control col-12" readonly />
+            </div>
+
+            <div class="form-group mb-0">
+                <label asp-for="Course.Branches" class="control-label"></label>
+                <div class="row ml-0 mr-0">
+                    <div>
+                        @foreach (var branch in Model.Course.Branches)
+                        {
+                            <label class="btn btn-secondary align-content-center">
+                                <span>@branch</span>
+                            </label>
+                        }
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    @if (Model.Exams.Count != 0)
+    {
+        <h2 class="mt-4 mb-4">Egzaminy w ramach kursu</h2>
+
+        @await Component.InvokeAsync("DisplayCrucialDataExamDataTable", new { examViewModel = Model.Exams, tableIdentificator = "listExams" })
+    }
+
+    @if (Model.Instructors.Count != 0)
+    {
+        <h2 class="mt-4 mb-4">Instruktorzy</h2>
+
+        <div class="row justify-content-center ml-3 mr-3">
+            <div class="row justify-content-center">
+                @foreach (var instructor in Model.Instructors)
+                {
+                    <label class="btn btn-secondary align-content-center ml-3 mr-3" style="min-width:250px;">
+                        <span>@instructor.FirstName @instructor.LastName</span>
+                    </label>
+                }
+            </div>
+        </div>
+    }
+
+    @if (Model.Examiners.Count != 0)
+    {
+        <h2 class="mt-4 mb-4">Egzaminatorzy</h2>
+
+
+        <div class="row justify-content-center ml-3 mr-3 mb-4">
+            <div class="row justify-content-center">
+                @foreach (var examiner in Model.Examiners)
+                {
+                    <label class="btn btn-secondary align-content-center ml-3 mr-3" style="min-width:250px;">
+                        <span>@examiner.FirstName @examiner.LastName</span>
+                    </label>
+                }
+            </div>
+        </div>
+    }
+
+    <div class="row justify-content-center mt-5">
+        <div class="mr-3 p-1" style="font-size:30px">
+            <label asp-for="Price"></label>:
+        </div>
+        <div class="alert-primary p-1" style="font-size:30px">@Model.Price PLN</div>
+    </div>
+
+    <div class="row justify-content-center  mt-2 mb-5">
+        <div class="mr-3 p-1" style="font-size:30px">
+            <label asp-for="Course.VacantSeats"></label>:
+        </div>
+        <div class="alert-primary p-1" style="font-size:30px">@Model.Course.VacantSeats</div>
+    </div>
+
+    @if (Model.CompanyWorkersInQueue.Count() != 0)
+    {
+        <h2 class="mt-4 mb-4">Pracownicy oczekujący na zweryfikowanie zgłoszenia o zapis na kurs</h2>
+
+        @await Component.InvokeAsync("DisplayCrucialDataUserDataTable", new { userViewModel = Model.CompanyWorkersInQueue, tableIdentificator = "listUsers", courseIdentificator = Model.Course.CourseIdentificator, operationSet = 3 })
+    }
+
+    <div>
+        <div class="row justify-content-center">
+            @if (Model.Course.VacantSeats != 0)
+            {
+                <a asp-action="AssignCompanyWorkersToCourse" asp-controller="Courses" class="btn btn-outline-info">Zapisz pracowników na kurs</a>
+            }
+            else
+            {
+                <div class="mt-4 mb-4 alert alert-danger">Brak wolnych miejsc</div>
+            }
+        </div>
+    </div>
+
+</form>
+
+@section Scripts {
+    @{await Html.RenderPartialAsync("_DataTableBasicScript", "listExams");}
+}
+
+
+
