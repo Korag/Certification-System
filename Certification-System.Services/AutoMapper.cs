@@ -149,6 +149,11 @@ namespace Certification_System.Services
                     .ForMember(dest => dest.Exams, opts => opts.Ignore());
 
             CreateMap<Course, CourseOfferDetailsViewModel>();
+
+            CreateMap<Course, AssignCompanyWorkersToCourseViewModel>()
+                    .ForMember(dest => dest.EnrolledUsersQuantity, opts => opts.MapFrom(src => src.EnrolledUsers.Count()))
+                    .ForMember(dest => dest.CompanyWorkersToAssignToExam, opts => opts.Ignore())
+                    .ForMember(dest => dest.CompanyWorkers, opts => opts.Ignore());
             #endregion
 
             #region Degrees

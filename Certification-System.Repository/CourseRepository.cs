@@ -36,7 +36,7 @@ namespace Certification_System.Repository
 
         public ICollection<Course> GetListOfNotStartedCourses()
         {
-            return GetCourses().AsQueryable().Where(z=> z.DateOfStart > DateTime.Now).ToList();
+            return GetCourses().AsQueryable().Where(z => z.DateOfStart > DateTime.Now).ToList();
         }
 
         public void AddCourse(Course course)
@@ -344,7 +344,7 @@ namespace Certification_System.Repository
             var resultListOfCourses = GetCourses().Find<Course>(filter).ToList();
 
             // to check
-            resultListOfCourses.ForEach(z=> z.EnrolledUsers.ToList().RemoveAll(x=> usersIdentificators.Contains(x)));
+            resultListOfCourses.ForEach(z => z.EnrolledUsers.ToList().RemoveAll(x => usersIdentificators.Contains(x)));
 
             var result = _courses.DeleteMany(filter);
 
@@ -418,17 +418,42 @@ namespace Certification_System.Repository
             var resultCourseQueue = GetCoursesQueue().Find<CourseQueue>(filter).FirstOrDefault();
             resultCourseQueue.AwaitingUsers.Add(new CourseQueueUser { UserIdentificator = userIdentificator });
 
-            var result = GetCoursesQueue().UpdateOne(filter, update);
+            var result = _coursesQueue.UpdateOne(filter, update);
+
+            return resultCourseQueue;
+        }
+
+        public CourseQueue AddAwaitingUsersToCourseQueue(string courseIdentificator, ICollection<string> usersIdentificators, LogInformation logData)
+        {
+            GetCoursesQueue();
+            CourseQueue resultCourseQueue = new CourseQueue();
+
+            foreach (var userIdentificator in usersIdentificators)
+            {
+                CourseQueueUser user = new CourseQueueUser
+                {
+                    UserIdentificator = userIdentificator,
+                    LogData = logData
+                };
+
+                var filter = Builders<CourseQueue>.Filter.Where(z => z.CourseIdentificator == courseIdentificator);
+                var update = Builders<CourseQueue>.Update.AddToSet(x => x.AwaitingUsers, user);
+
+                resultCourseQueue = _coursesQueue.Find<CourseQueue>(filter).FirstOrDefault();
+                resultCourseQueue.AwaitingUsers.Add(new CourseQueueUser { UserIdentificator = userIdentificator });
+
+                var result = _coursesQueue.UpdateOne(filter, update);
+            }
 
             return resultCourseQueue;
         }
 
         public CourseQueue RemoveAwaitingUserFromCourseQueue(string courseIdentificator, string userIdentificator)
         {
-            var filter= Builders<CourseQueue>.Filter.Where(z => z.CourseIdentificator == courseIdentificator);
+            var filter = Builders<CourseQueue>.Filter.Where(z => z.CourseIdentificator == courseIdentificator);
 
             var resultCourseQueue = GetCoursesQueue().Find<CourseQueue>(filter).FirstOrDefault();
-            var courseQueueUser = resultCourseQueue.AwaitingUsers.Where(z=> z.UserIdentificator == userIdentificator).FirstOrDefault();
+            var courseQueueUser = resultCourseQueue.AwaitingUsers.Where(z => z.UserIdentificator == userIdentificator).FirstOrDefault();
 
             resultCourseQueue.AwaitingUsers.Remove(courseQueueUser);
 

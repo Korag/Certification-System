@@ -1562,9 +1562,9 @@ namespace Certification_System.Controllers
                     #region EntityLogs
 
                     var logInfoAddUserToCourseQueue = _logger.GenerateLogInformation(this.User.Identity.Name, this.ControllerContext.RouteData.Values["action"].ToString(), LogTypeOfAction.TypesOfActions[0], LogDescriptions.DescriptionOfActionOnEntity["assignUserToCourseQueue"]);
+                    courseQueue = _context.courseRepository.AddAwaitingUserToCourseQueue(courseIdentificator, userIdentificator, logInfoAddUserToCourseQueue);
                     _logger.AddCourseQueueLog(courseQueue, logInfoAddUserToCourseQueue);
 
-                    courseQueue = _context.courseRepository.AddAwaitingUserToCourseQueue(courseIdentificator, userIdentificator, logInfoAddUserToCourseQueue);
                     #endregion
 
                     #region PersonalUserLogs
@@ -1892,6 +1892,93 @@ namespace Certification_System.Controllers
             }
 
             return View(courseSummaryViewModel);
+        }
+
+        // GET: AssignCompanyWorkersToCourse
+        [Authorize(Roles = "Company")]
+        public ActionResult AssignCompanyWorkersToCourse(string courseIdentificator)
+        {
+            if (string.IsNullOrWhiteSpace(courseIdentificator))
+            {
+                return RedirectToAction("BlankMenu", "Certificates");
+            }
+
+            var companyManager = _context.userRepository.GetUserByEmail(this.User.Identity.Name);
+            var companyWorkers = _context.userRepository.GetUsersWorkersByCompanyId(companyManager.CompanyRoleManager.FirstOrDefault());
+            var companyWorkersIdentificators = companyWorkers.Select(z => z.Id).ToList();
+
+            var course = _context.courseRepository.GetCourseById(courseIdentificator);
+
+            if (course.DateOfStart > DateTime.Now && !course.CourseEnded)
+            {
+                var companyWorkersNotEnrolledInCourse = companyWorkers.Where(z => !z.Courses.Contains(courseIdentificator)).ToList();
+
+                List<DisplayCrucialDataUserViewModel> listOfUsers = new List<DisplayCrucialDataUserViewModel>();
+
+                if (companyWorkersNotEnrolledInCourse.Count != 0)
+                {
+                    listOfUsers = _mapper.Map<List<DisplayCrucialDataUserViewModel>>(companyWorkersNotEnrolledInCourse);
+
+                    var vacantSeats = course.EnrolledUsersLimit - course.EnrolledUsers.Count();
+
+                    AssignCompanyWorkersToCourseViewModel addCompanyWorkersToExamViewModel = _mapper.Map<AssignCompanyWorkersToCourseViewModel>(course);
+                    addCompanyWorkersToExamViewModel.CompanyWorkers = listOfUsers;
+                    addCompanyWorkersToExamViewModel.VacantSeats = vacantSeats;
+
+                    addCompanyWorkersToExamViewModel.CompanyWorkersToAssignToExam = _mapper.Map<AddUsersFromCheckBoxViewModel[]>(listOfUsers);
+
+                    return View(addCompanyWorkersToExamViewModel);
+                }
+                return RedirectToAction("CompanyCourseDetails", new { courseIdentificator , message = "Wszyscy pracownicy przedsiębiorstwa są już zapisani na ten kurs" });
+            }
+
+            return RedirectToAction("CompanyCourseDetails", new { courseIdentificator });
+        }
+
+        // POST: AssignCompanyWorkersToCourse
+        [HttpPost]
+        [Authorize(Roles = "Company")]
+        public ActionResult AssignCompanyWorkersToCourse(AssignCompanyWorkersToCourseViewModel addCompanyWorkersToCourseViewModel)
+        {
+            if (ModelState.IsValid)
+            {
+                if (addCompanyWorkersToCourseViewModel.DateOfStart > DateTime.Now)
+                {
+                    var companyWorkersToAddToCourseIdentificators = addCompanyWorkersToCourseViewModel.CompanyWorkersToAssignToExam.ToList().Where(z => z.IsToAssign == true).Select(z => z.UserIdentificator).ToList();
+
+                    if (companyWorkersToAddToCourseIdentificators.Count() <= addCompanyWorkersToCourseViewModel.VacantSeats)
+                    {
+                        #region EntityLogs
+
+                        var logInfoAddUserToCourseQueue = _logger.GenerateLogInformation(this.User.Identity.Name, this.ControllerContext.RouteData.Values["action"].ToString(), LogTypeOfAction.TypesOfActions[0], LogDescriptions.DescriptionOfActionOnEntity["assignGroupOfUsersToCourseQueue"]);
+                        var courseQueue = _context.courseRepository.AddAwaitingUsersToCourseQueue(addCompanyWorkersToCourseViewModel.CourseIdentificator, companyWorkersToAddToCourseIdentificators, logInfoAddUserToCourseQueue);
+                        _logger.AddCourseQueueLog(courseQueue, logInfoAddUserToCourseQueue);
+
+                        #endregion
+
+                        #region PersonalUserLogs
+
+                        var logInfoPersonalAddGroupOfUsersToCourseQueue = _context.personalLogRepository.GeneratePersonalLogInformation(this.User.Identity.Name, this.ControllerContext.RouteData.Values["action"].ToString(), LogDescriptions.DescriptionOfPersonalUserLog["addGroupOfUsersToCourseQueue"], "Indekser: " + addCompanyWorkersToCourseViewModel.CourseIndexer);
+                        _context.personalLogRepository.AddPersonalUserLogToAdminGroup(logInfoPersonalAddGroupOfUsersToCourseQueue);
+
+                        var logInfoPersonalAssignUserToCourseQueue = _context.personalLogRepository.GeneratePersonalLogInformation(this.User.Identity.Name, this.ControllerContext.RouteData.Values["action"].ToString(), LogDescriptions.DescriptionOfPersonalUserLog["assignUserToCourseQueue"], "Indekser: " + addCompanyWorkersToCourseViewModel.CourseIndexer);
+                        _context.personalLogRepository.AddPersonalUsersLogs(companyWorkersToAddToCourseIdentificators, logInfoPersonalAssignUserToCourseQueue);
+
+                        #endregion
+
+                        return RedirectToAction("CompanyCourseDetails", new { courseIdentificator = addCompanyWorkersToCourseViewModel.CourseIdentificator, message = "Dodano grupę użytkowników do kursu" });
+                    }
+
+                    ModelState.AddModelError("", "Brak wystarczającej ilości wolnych miejsc");
+                    ModelState.AddModelError("", $"Do kursu można dodać maksymalnie {addCompanyWorkersToCourseViewModel.VacantSeats} użytkowników");
+
+                    return View(addCompanyWorkersToCourseViewModel);
+                }
+
+                return RedirectToAction("CompanyCourseDetails", new { courseIdentificator = addCompanyWorkersToCourseViewModel.CourseIdentificator });
+            }
+
+            return View(addCompanyWorkersToCourseViewModel);
         }
 
         #region AjaxQuery
