@@ -30,6 +30,20 @@ namespace Certification_System.Services
             return Guid.NewGuid().ToString();
         }
 
+        public string GenerateRandomFourDigitToken()
+        {
+            Random randomize = new Random();
+
+            string generatedToken = "";
+
+            for (int i = 0; i < 4; i++)
+            {
+                generatedToken += randomize.Next().ToString();
+            }
+
+            return generatedToken;
+        }
+
         public string GenerateUserTokenForEntityDeletion(CertificationPlatformUser user)
         {
             return _userManager.GenerateUserTokenAsync(user, "DeletionOfEntity", "DeletionOfEntity").Result;

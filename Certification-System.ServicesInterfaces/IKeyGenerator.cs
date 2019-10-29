@@ -22,5 +22,6 @@ namespace Certification_System.ServicesInterfaces
         string GenerateExamEntityIndexer(string examName);
         string GenerateExamTermEntityIndexer(string examIndexer);
         string GenerateExamResultEntityIndexer(string examIndexer);
+        string GenerateRandomFourDigitToken();
     }
 }

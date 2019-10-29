@@ -176,12 +176,21 @@ namespace Certification_System.Extensions
                 protocol: scheme);
         }
 
-        public static string AssingUserToCourseVerify(this IUrlHelper urlHelper, string userIdentificator, string courseIdentificator, string code, string scheme)
+        public static string AssignUserToCourseVerify(this IUrlHelper urlHelper, string userIdentificator, string courseIdentificator, string code, string scheme)
         {
             return urlHelper.Action(
                 action: nameof(CoursesController.VerifyUserAssignToQueue),
                 controller: "Courses",
                 values: new { userIdentificator, courseIdentificator, code },
+                protocol: scheme);
+        }
+
+        public static string CourseOfferDetails(this IUrlHelper urlHelper, string courseIdentificator, string scheme)
+        {
+            return urlHelper.Action(
+                action: nameof(CoursesController.CourseOfferDetails),
+                controller: "Courses",
+                values: new { courseIdentificator},
                 protocol: scheme);
         }
     }

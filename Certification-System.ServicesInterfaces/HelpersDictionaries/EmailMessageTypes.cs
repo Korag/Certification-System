@@ -16,6 +16,7 @@ namespace Certification_System.ServicesInterfaces
            {"manuallySendResetPasswordMessage", "Administrator systemu uruchomił procedurę resetu hasła dla Twojego konta użytkownika. W celu dokończenia procesu należy kliknąć w poniższy link."},
            {"authorizeAction", "Administrator systemu z którego kontem powiązany jest ten adres email rozpoczął procedurę nieodwracalnego usunięcia danych z systemu. Jeżeli akcja ta została podjęta celowo należy kliknąć w poniższy przycisk aby dokończyć rozpoczęty proces."},
            {"selfAssignToCourse", "W celu dołączenia do wskazanego kursu wraz ze zobowiązaniem do opłacenia należności należy kliknąć w poniższy link."},
+           {"assignCompanyWorkersToCourse", "System zarejestrował próbę zapisu grupy użytkowników na kurs. Poniżej znajduje się kod autoryzujący operację, który należy wpisać w formularzu zapisu użytkowników na kurs. Poprzez dokonanie zapisu użytkowników na kurs zobowiązujesz się do opłacenia należności za przystąpienie do kursu grupy użytkowników. Po otrzymaniu środków wymienieni użytkownicy zostaną dodani do wybranego kursu."},
         };
 
         public static readonly Dictionary<string, string> EmailMessageHeader = new Dictionary<string, string>
@@ -30,6 +31,7 @@ namespace Certification_System.ServicesInterfaces
            {"manuallySendResetPasswordMessage", "Wykonano ręczną akcję wywołania procedury resetu hasła użytkownika"},
            {"authorizeAction", "Zarejestrowano próbę wykonania akcji wysokiego ryzyka"},
            {"selfAssignToCourse", "Odnotowano chęć dołączenia do kursu"},
+           {"assignCompanyWorkersToCourse", "Odnotowano próbę zapisu grupy użytkowników do kursu"},
         };
 
         public static readonly Dictionary<string, string> EmailMessageSubject = new Dictionary<string, string>
@@ -44,6 +46,7 @@ namespace Certification_System.ServicesInterfaces
            {"manuallySendResetPasswordMessage", "Reset hasła do konta w Certification-System"},
            {"authorizeAction", "Autoryzacja akcji administratora w Certification-System"},
            {"selfAssignToCourse", "Zapisy do kursu"},
+           {"assignCompanyWorkersToCourse", "Zapisy pracowników do kursu"},
         };
 
         public static readonly Dictionary<string, string> EmailMessageLinkText = new Dictionary<string, string>

@@ -64,6 +64,7 @@ namespace Certification_System.Controllers
            {5, "Na Twój adres email została wysłana wiadomość umożliwiająca dokończenie rozpoczętego procesu usuwania instancji."},
            {6, "Element, który chciałeś usunąć nie został odnaleziony."},
            {7, "Na Twój adres email została wysłana wiadomość w celu potwierdzenia akcji zapisu na kurs."},
+           {8, "Liczba wolnych miejsc w kursie zmieniła się - wyznaczona grupa pracowników jest zbyt liczna. Powrócisz teraz do strony szczegółów kursu."},
         };
 
         [HttpGet]
