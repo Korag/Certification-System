@@ -1922,9 +1922,15 @@ namespace Certification_System.Controllers
                     var courseQueue = _context.courseRepository.GetCourseQueueById(courseIdentificator);
                     var vacantSeats = course.EnrolledUsersLimit - course.EnrolledUsers.Count() - courseQueue.AwaitingUsers.Count();
 
-                    AssignCompanyWorkersToCourseViewModel addCompanyWorkersToExamViewModel = _mapper.Map<AssignCompanyWorkersToCourseViewModel>(course);
+                    AssignCompanyWorkersToCourseViewModel addCompanyWorkersToExamViewModel = new AssignCompanyWorkersToCourseViewModel();
+
+                    addCompanyWorkersToExamViewModel.Course = _mapper.Map<DisplayCourseOfferViewModel>(course);
+                    addCompanyWorkersToExamViewModel.Course.Branches = _context.branchRepository.GetBranchesById(addCompanyWorkersToExamViewModel.Course.Branches);
+
                     addCompanyWorkersToExamViewModel.CompanyWorkers = listOfUsers;
+
                     addCompanyWorkersToExamViewModel.VacantSeats = vacantSeats;
+                    addCompanyWorkersToExamViewModel.Price = course.Price;
 
                     addCompanyWorkersToExamViewModel.CompanyWorkersToAssignToExam = _mapper.Map<AddUsersFromCheckBoxViewModel[]>(listOfUsers);
 
@@ -1943,12 +1949,12 @@ namespace Certification_System.Controllers
         {
             if (ModelState.IsValid)
             {
-                if (addCompanyWorkersToCourseViewModel.DateOfStart > DateTime.Now)
+                if (addCompanyWorkersToCourseViewModel.Course.DateOfStart > DateTime.Now)
                 {
                     var companyWorkersToAddToCourseIdentificators = addCompanyWorkersToCourseViewModel.CompanyWorkersToAssignToExam.ToList().Where(z => z.IsToAssign == true).Select(z => z.UserIdentificator).ToList();
 
-                    var course = _context.courseRepository.GetCourseById(addCompanyWorkersToCourseViewModel.CourseIdentificator);
-                    var courseQueue = _context.courseRepository.GetCourseQueueById(addCompanyWorkersToCourseViewModel.CourseIdentificator);
+                    var course = _context.courseRepository.GetCourseById(addCompanyWorkersToCourseViewModel.Course.CourseIdentificator);
+                    var courseQueue = _context.courseRepository.GetCourseQueueById(addCompanyWorkersToCourseViewModel.Course.CourseIdentificator);
                     var vacantSeats = course.EnrolledUsersLimit - course.EnrolledUsers.Count() - courseQueue.AwaitingUsers.Count();
 
                     if (companyWorkersToAddToCourseIdentificators.Count() <= vacantSeats)
@@ -1963,7 +1969,7 @@ namespace Certification_System.Controllers
                         TempData["assignCompanyWorkersCode"] = generatedCode;
                         TempData["companyWorkersToAddToCourseIdentificators"] = companyWorkersToAddToCourseIdentificators;
 
-                        return RedirectToAction("ConfirmationOfAssignCompanyWorkersToCourse", "Courses", new { courseIdentificator = addCompanyWorkersToCourseViewModel.CourseIdentificator });
+                        return RedirectToAction("ConfirmationOfAssignCompanyWorkersToCourse", "Courses", new { courseIdentificator = addCompanyWorkersToCourseViewModel.Course.CourseIdentificator });
                     }
 
                     ModelState.AddModelError("", "Brak wystarczającej ilości wolnych miejsc");
@@ -1972,7 +1978,7 @@ namespace Certification_System.Controllers
                     return View(addCompanyWorkersToCourseViewModel);
                 }
 
-                return RedirectToAction("CompanyCourseDetails", new { courseIdentificator = addCompanyWorkersToCourseViewModel.CourseIdentificator });
+                return RedirectToAction("CompanyCourseDetails", new { courseIdentificator = addCompanyWorkersToCourseViewModel.Course.CourseIdentificator });
             }
 
             return View(addCompanyWorkersToCourseViewModel);

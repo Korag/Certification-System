@@ -125,7 +125,7 @@
         <div class="row justify-content-center">
             @if (Model.Course.VacantSeats != 0)
             {
-                <a asp-action="AssignCompanyWorkersToCourse" asp-controller="Courses" class="btn btn-outline-info">Zapisz pracowników na kurs</a>
+                <a asp-action="AssignCompanyWorkersToCourse" asp-route-courseIdentificator="@Model.Course.CourseIdentificator" asp-controller="Courses" class="btn btn-outline-info">Zapisz pracowników na kurs</a>
             }
             else
             {
