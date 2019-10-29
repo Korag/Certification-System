@@ -1989,6 +1989,7 @@ namespace Certification_System.Controllers
         public ActionResult ConfirmationOfAssignCompanyWorkersToCourse(string courseIdentificator)
         {
             var companyManager = _context.userRepository.GetUserByEmail(this.User.Identity.Name);
+            var course = _context.courseRepository.GetCourseById(courseIdentificator);
 
             var chosenCompanyWorkersIdentificators = TempData["companyWorkersToAddToCourseIdentificators"] as List<string>;
             List<DisplayCrucialDataUserViewModel> companyWorkersToAddToCourse = _mapper.Map<List<DisplayCrucialDataUserViewModel>>(_context.userRepository.GetUsersById(chosenCompanyWorkersIdentificators).ToList());
@@ -1996,8 +1997,13 @@ namespace Certification_System.Controllers
             ConfirmationOfAssignCompanyWorkersToCourse confirmationViewModel = new ConfirmationOfAssignCompanyWorkersToCourse
             {
                 CourseIdentificator = courseIdentificator,
-                CompanyWorkers = companyWorkersToAddToCourse
+                CompanyWorkers = companyWorkersToAddToCourse,
+                Course = _mapper.Map<DisplayCourseOfferViewModel>(course),
+                Price = course.Price
             };
+
+            confirmationViewModel.OverallPrice = confirmationViewModel.CompanyWorkers.Count() * course.Price;
+            confirmationViewModel.Course.Branches = _context.branchRepository.GetBranchesById(confirmationViewModel.Course.Branches);
 
             return View(confirmationViewModel);
         }
@@ -2054,6 +2060,7 @@ namespace Certification_System.Controllers
             List<DisplayCrucialDataUserViewModel> companyWorkersToAddToCourse = _mapper.Map<List<DisplayCrucialDataUserViewModel>>(_context.userRepository.GetUsersById(chosenCompanyWorkersIdentificators).ToList());
 
             assignConfirmation.CompanyWorkers = companyWorkersToAddToCourse;
+            assignConfirmation.Course.Branches = _context.branchRepository.GetBranchesById(assignConfirmation.Course.Branches);
 
             var generatedCode = _keyGenerator.GenerateRandomFourDigitToken();
 

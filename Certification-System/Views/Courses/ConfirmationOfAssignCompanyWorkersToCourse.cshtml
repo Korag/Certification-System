@@ -1,22 +1,19 @@
-﻿@model Certification_System.DTOViewModels.AssignCompanyWorkersToCourseViewModel
-@using System.Globalization
+﻿@model Certification_System.DTOViewModels.ConfirmationOfAssignCompanyWorkersToCourse
 
 @{
-    ViewData["Title"] = "AssignCompanyWorkersToCourse";
+    ViewData["Title"] = "ConfirmationOfAssignCompanyWorkersToCourse";
     Layout = "~/Views/Shared/_Layout.cshtml";
 }
 
-
-<h2>Zapisywanie pracowników przedsiębiorstwa na kurs</h2>
+<h2>Potwierdzenia zapisu grupy pracowników na kurs</h2>
 <hr />
 
 <div class="row m-0 mt-3 mb-3">
-    <a asp-action="CourseOffer" asp-controller="Courses" class="btn btn-outline-info mt-1 xs300px_FloatRight">Powrót do oferty kursów</a>
+    <a asp-action="CourseOfferDetails" asp-controller="Courses" class="btn btn-outline-info mt-1 xs300px_FloatRight">Powrót do szczegółów oferty</a>
 </div>
 
-<form asp-action="AssignCompanyWorkersToCourse">
+<form asp-action="ConfirmationOfAssignCompanyWorkersToCourse">
     <div>
-        @*<h2>Informacje o egzaminie</h2>*@
 
         <div>
             <div class="col-md-8 col-xl-6 col-lg-6 col-sm-12 col-xs-10 m-auto p-3 shadow p-3 mb-5 bg-light rounded border border-primary rounded-bottom" style="opacity:0.90">
@@ -66,12 +63,7 @@
         </div>
     </div>
 
-    <h2 class="mt-4 mb-4">Zapisy na kurs</h2>
-
-    <div class="form-group">
-        <label asp-for="VacantSeats" class="control-label"></label>
-        <input asp-for="VacantSeats" class="form-control col-12" readonly />
-    </div>
+    <h2 class="mt-4 mb-4">Pracownicy mający zostać zapisani na kurs</h2>
 
     <div class="row justify-content-center mt-5">
         <div class="mr-3 p-1" style="font-size:30px">
@@ -82,53 +74,44 @@
 
     @if (Model.CompanyWorkers.Count != 0)
     {
-        @await Component.InvokeAsync("AssignUsersToExamDataTable", new { userViewModel = Model.CompanyWorkers, userToAddViewModel = Model.CompanyWorkersToAssignToExam, tableIdentificator = "listUsers" })
+        @await Component.InvokeAsync("DisplayCrucialDataUserDataTable", new { userViewModel = Model.CompanyWorkers, tableIdentificator = "listUsers" })
 
         <div class="row justify-content-center mt-4 mb-4">
             <div class="mr-3 p-1" style="font-size:30px">
-                Sumaryczna cena za zapisanie pracowników:
+                <label asp-for="OverallPrice"></label>:
             </div>
-            <div class="alert-primary p-1" style="font-size:30px" id="overallPrice">0 PLN</div>
+            <div class="alert-primary p-1" style="font-size:30px" id="overallPrice">@Model.OverallPrice PLN</div>
         </div>
 
-        @if (Model.VacantSeats != 0)
-        {
-            <div>
-                <div class="row justify-content-center">
-                    <button type="button" class="btn btn-primary mt-1 xs300px_JustifyContentCenter" data-toggle="modal" data-target="#modal">Zapisuje pracownków i zobowiązuje się do zapłaty</button>
+        <div class="col-md-6 col-xl-6 col-sm-8 col-xs-10 m p-3 mr-auto ml-auto shadow p-3 bg-light rounded border border-primary rounded-bottom mt-4 mb-2" style="opacity:0.80">
+
+            <div class="form-group">
+                <label asp-for="Code" class="control-label"></label>
+                <div>
+                    <input type="number" asp-for="Code" class="form-control col-12" />
+                    <div class="row justify-content-center">
+                        <span asp-validation-for="Code" class="text-danger"></span>
+                    </div>
                 </div>
             </div>
-        }
-        else
-        {
-            <div class="mt-4 mb-4 alert alert-danger text-center">Brak wolnych miejsc</div>
-        }
+
+        </div>
+
+        <div>
+            <div class="row justify-content-center">
+                <button type="button" class="btn btn-primary mt-1 xs300px_JustifyContentCenter" data-toggle="modal" data-target="#modal">Zapisuje pracownków</button>
+            </div>
+        </div>
 
         <div asp-validation-summary="ModelOnly" class="row justify-content-center alert alert-danger validation-model"></div>
     }
-    else
-    {
-        <div class="mt-4 mb-4 alert alert-warning">Brak pracowników, którzy nie są zapisani na ten kurs</div>
-    }
 
-    @await Component.InvokeAsync("Modal", new { Title = "Zapisy na kurs", Body = "Czy na pewno chcesz zapisać grupę pracowników na wybrany kurs ? Poprzez kliknięcie w przycisk zobowiązuje się Pan/Pani do uiszczenia stosownej opłaty za uczestnictwo grupy pracowników w kursie wymienionym powyżej.", FormSubmit = true, ButtonText = "Zapisz pracowników", ButtonClass = "btn-success" })
+    @await Component.InvokeAsync("Modal", new { Title = "Potwierdzenie zapisu na kurs", Body = "Czy na pewno chcesz zapisać grupę pracowników na wybrany kurs ? Poprzez kliknięcie w przycisk zobowiązuje się Pan/Pani do uiszczenia stosownej opłaty za uczestnictwo grupy pracowników w kursie wymienionym powyżej.", FormSubmit = true, ButtonText = "Zapisz pracowników", ButtonClass = "btn-success" })
 
 </form>
+
 
 @section Scripts {
     @{await Html.RenderPartialAsync("_ValidationScriptsPartial");}
     @{await Html.RenderPartialAsync("_DataTableBasicScript", "listUsers");}
-    @{await Html.RenderPartialAsync("_CheckBoxLimitScript", Model.VacantSeats);}
-
-    <script>
-    $('[type="checkbox"]').on('change', function (event, state) {
-
-        var companyWorkersCount = $('[type="checkbox"]:checked').length;
-
-        var singlePrice = @Model.Price.ToString(new CultureInfo("en-US"));
-        var overallPrice = companyWorkersCount * singlePrice;
-
-        $('#overallPrice').replaceWith('<div class="alert-primary p-1" style="font-size:30px" id="overallPrice">' + overallPrice +  ' PLN</div>')
-    });
-    </script>
 }
