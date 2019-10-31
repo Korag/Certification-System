@@ -38,7 +38,7 @@ namespace Certification_System.Services
 
             for (int i = 0; i < 4; i++)
             {
-                generatedToken += randomize.Next().ToString();
+                generatedToken += randomize.Next(0,9).ToString();
             }
 
             return generatedToken;

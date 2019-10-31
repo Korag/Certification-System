@@ -82,7 +82,7 @@
 
     @if (Model.CompanyWorkers.Count != 0)
     {
-        @await Component.InvokeAsync("AssignUsersToExamDataTable", new { userViewModel = Model.CompanyWorkers, userToAddViewModel = Model.CompanyWorkersToAssignToExam, tableIdentificator = "listUsers" })
+        @await Component.InvokeAsync("AssignCompanyWorkersToCourseDataTable", new { userViewModel = Model.CompanyWorkers, userToAddViewModel = Model.CompanyWorkersToAssignToCourse, tableIdentificator = "listUsers" })
 
         <div class="row justify-content-center mt-4 mb-4">
             <div class="mr-3 p-1" style="font-size:30px">
@@ -91,7 +91,7 @@
             <div class="alert-primary p-1" style="font-size:30px" id="overallPrice">0 PLN</div>
         </div>
 
-        @if (Model.VacantSeats != 0)
+        @if (Model.VacantSeats != 0 && Model.CompanyWorkersToAssignToCourse.Count() != 0)
         {
             <div>
                 <div class="row justify-content-center">

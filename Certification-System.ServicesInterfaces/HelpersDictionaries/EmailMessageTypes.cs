@@ -18,7 +18,7 @@ namespace Certification_System.ServicesInterfaces
            {"selfAssignToCourse", "W celu dołączenia do wskazanego kursu wraz ze zobowiązaniem do opłacenia należności należy kliknąć w poniższy link."},
            {"assignCompanyWorkersToCourse", "System zarejestrował próbę zapisu grupy użytkowników na kurs. Poniżej znajduje się kod autoryzujący operację, który należy wpisać w formularzu zapisu użytkowników na kurs. Poprzez dokonanie zapisu użytkowników na kurs zobowiązujesz się do opłacenia należności za przystąpienie do kursu grupy użytkowników. Po otrzymaniu środków wymienieni użytkownicy zostaną dodani do wybranego kursu."},
         };
-
+        
         public static readonly Dictionary<string, string> EmailMessageHeader = new Dictionary<string, string>
          {
            {"resetPassword", "Zarejestrowana została prośba resetu hasła"},
@@ -61,6 +61,7 @@ namespace Certification_System.ServicesInterfaces
            {"manuallySendResetPasswordMessage", "Resetuj hasło"},
            {"authorizeAction", "Autoryzacja akcji"},
            {"selfAssignToCourse", "Zapisz mnie"},
+           {"assignCompanyWorkersToCourse", ""},
         };
     }
 }

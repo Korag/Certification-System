@@ -15,8 +15,8 @@ namespace Certification_System.DTOViewModels
         [Display(Name = "Liczba wolnych miejsc")]
         public int VacantSeats { get; set; }
 
-        [Display(Name = "Lista użytkowników możliwych do dodania do egzaminu")]
-        public AddUsersFromCheckBoxViewModel[] CompanyWorkersToAssignToExam { get; set; }
+        [Display(Name = "Lista użytkowników możliwych do dodania do kursu")]
+        public AddUsersFromCheckBoxViewModel[] CompanyWorkersToAssignToCourse { get; set; }
 
         [Display(Name = "Niezapisani na kurs pracownicy przedsiębiorstwa")]
         public ICollection<DisplayCrucialDataUserViewModel> CompanyWorkers { get; set; }

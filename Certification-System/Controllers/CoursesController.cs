@@ -1704,8 +1704,10 @@ namespace Certification_System.Controllers
 
         // GET: CompanyCourseDetails
         [Authorize(Roles = "Company")]
-        public ActionResult CompanyCourseDetails(string courseIdentificator)
+        public ActionResult CompanyCourseDetails(string courseIdentificator, string message)
         {
+            ViewBag.message = message;
+
             var user = _context.userRepository.GetUserByEmail(this.User.Identity.Name);
             var companyWorkers = _context.userRepository.GetUsersWorkersByCompanyId(user.CompanyRoleManager.FirstOrDefault());
 
@@ -1917,10 +1919,14 @@ namespace Certification_System.Controllers
 
                 if (companyWorkersNotEnrolledInCourse.Count != 0)
                 {
-                    listOfUsers = _mapper.Map<List<DisplayCrucialDataUserViewModel>>(companyWorkersNotEnrolledInCourse);
-
                     var courseQueue = _context.courseRepository.GetCourseQueueById(courseIdentificator);
                     var vacantSeats = course.EnrolledUsersLimit - course.EnrolledUsers.Count() - courseQueue.AwaitingUsers.Count();
+
+                    var awaitingUsers = courseQueue.AwaitingUsers.Select(z => z.UserIdentificator).ToList();
+
+                    companyWorkersNotEnrolledInCourse = companyWorkersNotEnrolledInCourse.Where(z => !awaitingUsers.Contains(z.Id)).ToList();
+
+                    listOfUsers = _mapper.Map<List<DisplayCrucialDataUserViewModel>>(companyWorkersNotEnrolledInCourse);
 
                     AssignCompanyWorkersToCourseViewModel addCompanyWorkersToExamViewModel = new AssignCompanyWorkersToCourseViewModel();
 
@@ -1932,7 +1938,7 @@ namespace Certification_System.Controllers
                     addCompanyWorkersToExamViewModel.VacantSeats = vacantSeats;
                     addCompanyWorkersToExamViewModel.Price = course.Price;
 
-                    addCompanyWorkersToExamViewModel.CompanyWorkersToAssignToExam = _mapper.Map<AddUsersFromCheckBoxViewModel[]>(listOfUsers);
+                    addCompanyWorkersToExamViewModel.CompanyWorkersToAssignToCourse = _mapper.Map<AddUsersFromCheckBoxViewModel[]>(listOfUsers);
 
                     return View(addCompanyWorkersToExamViewModel);
                 }
@@ -1951,7 +1957,7 @@ namespace Certification_System.Controllers
             {
                 if (addCompanyWorkersToCourseViewModel.Course.DateOfStart > DateTime.Now)
                 {
-                    var companyWorkersToAddToCourseIdentificators = addCompanyWorkersToCourseViewModel.CompanyWorkersToAssignToExam.ToList().Where(z => z.IsToAssign == true).Select(z => z.UserIdentificator).ToList();
+                    var companyWorkersToAddToCourseIdentificators = addCompanyWorkersToCourseViewModel.CompanyWorkersToAssignToCourse.ToList().Where(z => z.IsToAssign == true).Select(z => z.UserIdentificator).ToList();
 
                     var course = _context.courseRepository.GetCourseById(addCompanyWorkersToCourseViewModel.Course.CourseIdentificator);
                     var courseQueue = _context.courseRepository.GetCourseQueueById(addCompanyWorkersToCourseViewModel.Course.CourseIdentificator);
@@ -1967,7 +1973,7 @@ namespace Certification_System.Controllers
                         await _emailSender.SendEmailAsync(emailMessage);
 
                         TempData["assignCompanyWorkersCode"] = generatedCode;
-                        TempData["companyWorkersToAddToCourseIdentificators"] = companyWorkersToAddToCourseIdentificators;
+                        TempData["companyWorkersToAddToCourseIdentificators"] = companyWorkersToAddToCourseIdentificators.ToList();
 
                         return RedirectToAction("ConfirmationOfAssignCompanyWorkersToCourse", "Courses", new { courseIdentificator = addCompanyWorkersToCourseViewModel.Course.CourseIdentificator });
                     }
@@ -1991,16 +1997,17 @@ namespace Certification_System.Controllers
             var companyManager = _context.userRepository.GetUserByEmail(this.User.Identity.Name);
             var course = _context.courseRepository.GetCourseById(courseIdentificator);
 
-            var chosenCompanyWorkersIdentificators = TempData["companyWorkersToAddToCourseIdentificators"] as List<string>;
+            var chosenCompanyWorkersIdentificators = (string[])TempData["companyWorkersToAddToCourseIdentificators"];
             List<DisplayCrucialDataUserViewModel> companyWorkersToAddToCourse = _mapper.Map<List<DisplayCrucialDataUserViewModel>>(_context.userRepository.GetUsersById(chosenCompanyWorkersIdentificators).ToList());
 
             ConfirmationOfAssignCompanyWorkersToCourse confirmationViewModel = new ConfirmationOfAssignCompanyWorkersToCourse
             {
-                CourseIdentificator = courseIdentificator,
                 CompanyWorkers = companyWorkersToAddToCourse,
                 Course = _mapper.Map<DisplayCourseOfferViewModel>(course),
                 Price = course.Price
             };
+
+            TempData["companyWorkersToAddToCourseIdentificators"] = chosenCompanyWorkersIdentificators;
 
             confirmationViewModel.OverallPrice = confirmationViewModel.CompanyWorkers.Count() * course.Price;
             confirmationViewModel.Course.Branches = _context.branchRepository.GetBranchesById(confirmationViewModel.Course.Branches);
@@ -2017,13 +2024,13 @@ namespace Certification_System.Controllers
 
             if (assignConfirmation.Code == TempData["assignCompanyWorkersCode"] as string)
             {
-                var course = _context.courseRepository.GetCourseById(assignConfirmation.CourseIdentificator);
-                var courseQueue = _context.courseRepository.GetCourseQueueById(assignConfirmation.CourseIdentificator);
+                var course = _context.courseRepository.GetCourseById(assignConfirmation.Course.CourseIdentificator);
+                var courseQueue = _context.courseRepository.GetCourseQueueById(assignConfirmation.Course.CourseIdentificator);
                 var vacantSeats = course.EnrolledUsersLimit - course.EnrolledUsers.Count() - courseQueue.AwaitingUsers.Count();
 
                 if (course.DateOfStart > DateTime.Now)
                 {
-                    var companyWorkersToAddToCourseIdentificators = TempData["companyWorkersToAddToCourseIdentificators"] as List<string>;
+                    var companyWorkersToAddToCourseIdentificators = (string[])TempData["companyWorkersToAddToCourseIdentificators"];
  
                     if (companyWorkersToAddToCourseIdentificators.Count() <= vacantSeats)
                     {
@@ -2045,7 +2052,7 @@ namespace Certification_System.Controllers
 
                         #endregion
 
-                        return RedirectToAction("CompanyCourseDetails", new { courseIdentificator = assignConfirmation.CourseIdentificator, message = "Dodano grupę użytkowników do kursu" });
+                        return RedirectToAction("CompanyCourseDetails", new { courseIdentificator = course.CourseIdentificator, message = "Dodano grupę użytkowników do kursu" });
                     }
 
                     string url = Url.CourseOfferDetails(course.CourseIdentificator, Request.Scheme);
@@ -2053,10 +2060,10 @@ namespace Certification_System.Controllers
                     return RedirectToAction("UniversalConfirmationPanel", "Account", new { returnUrl = url, messageNumber = 8 });
                 }
 
-                return RedirectToAction("CompanyCourseDetails", new { courseIdentificator = assignConfirmation.CourseIdentificator });
+                return RedirectToAction("CompanyCourseDetails", new { courseIdentificator = course.CourseIdentificator });
             }
 
-            var chosenCompanyWorkersIdentificators = TempData["companyWorkersToAddToCourseIdentificators"] as List<string>;
+            var chosenCompanyWorkersIdentificators = (string[])TempData["companyWorkersToAddToCourseIdentificators"];
             List<DisplayCrucialDataUserViewModel> companyWorkersToAddToCourse = _mapper.Map<List<DisplayCrucialDataUserViewModel>>(_context.userRepository.GetUsersById(chosenCompanyWorkersIdentificators).ToList());
 
             assignConfirmation.CompanyWorkers = companyWorkersToAddToCourse;
