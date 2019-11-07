@@ -13,7 +13,7 @@ namespace Certification_System.Entities
         public string ActionResult { get; set; }
 
         public string IpAddress { get; set; }
-        public DateTime DateTime { get; set; }
+        public DateTime DateOfLogCreation { get; set; }
 
     }
 }

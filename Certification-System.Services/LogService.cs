@@ -96,7 +96,7 @@ namespace Certification_System.Services
                     UserLastName = user.LastName,
                     UserIdentificator = user.Id,
 
-                    DateTime = DateTime.Now,
+                    DateOfLogCreation = DateTime.Now,
                     IpAddress = _ipGetter.GetGlobalIPAddress(),
                     ActionResult = loginActionResult,
                 };
@@ -110,7 +110,7 @@ namespace Certification_System.Services
                     UserLastName = "EmailAddress not valid",
                     UserIdentificator = "EmailAddress not valid",
 
-                    DateTime = DateTime.Now,
+                    DateOfLogCreation = DateTime.Now,
                     IpAddress = _ipGetter.GetGlobalIPAddress(),
                     ActionResult = loginActionResult,
                 };

@@ -14,7 +14,6 @@ namespace Certification_System.Entities
         public string AdditionalInfo { get; set; }
         public string ActionName { get; set; }
 
-
         public string IpAddress { get; set; }
         public DateTime DateOfLogCreation { get; set; }
     }
