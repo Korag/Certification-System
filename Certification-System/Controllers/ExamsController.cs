@@ -1386,18 +1386,15 @@ namespace Certification_System.Controllers
 
             List<DisplayExamViewModel> listOfExams = new List<DisplayExamViewModel>();
 
-            foreach (var course in courses)
+            foreach (var exam in exams)
             {
-                foreach (var exam in course.Exams)
-                {
-                    Exam examModel = exams.Where(z => z.ExamIdentificator == exam).FirstOrDefault();
+                Exam examModel = _context.examRepository.GetExamById(exam.ExamIdentificator);
 
-                    DisplayExamViewModel singleExam = _mapper.Map<DisplayExamViewModel>(examModel);
-                    singleExam.Examiners = _mapper.Map<List<DisplayCrucialDataUserViewModel>>(_context.userRepository.GetUsersById(examModel.Examiners));
-                    singleExam.Course = _mapper.Map<DisplayCrucialDataCourseViewModel>(course);
+                DisplayExamViewModel singleExam = _mapper.Map<DisplayExamViewModel>(examModel);
+                singleExam.Examiners = _mapper.Map<List<DisplayCrucialDataUserViewModel>>(_context.userRepository.GetUsersById(examModel.Examiners));
+                singleExam.Course = _mapper.Map<DisplayCrucialDataCourseViewModel>(courses.Where(z=> z.Exams.Contains(examModel.ExamIdentificator)).FirstOrDefault());
 
-                    listOfExams.Add(singleExam);
-                }
+                listOfExams.Add(singleExam);
             }
 
             return View(listOfExams);

@@ -62,7 +62,7 @@
                         @Html.DisplayFor(modelItem => courseNotification.EnrollmentDate)
                     </td>
                     <td>
-                        <input type="checkbox" asp-for="@courseNotification.EnrollmentDate" class="form-control col-12" data-toggle="toggle" data-on="Tak" data-off="Nie" data-size="sm" disabled />
+                        <input type="checkbox" asp-for="@courseNotification.EnrollmentOlderThan2Weeks" class="form-control col-12" data-toggle="toggle" data-on="Tak" data-off="Nie" data-size="sm" disabled />
                     </td>
                     @if (Model.Options.OperationSet == 1)
                     {
