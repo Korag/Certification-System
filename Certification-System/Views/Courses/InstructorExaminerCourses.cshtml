@@ -24,7 +24,7 @@
     </select>
 </div>
 
-@await Component.InvokeAsync("DisplayCourseWithRolesDataTable", new { courseViewModel = Model, tableIdentificator = "listCourses" })
+@await Component.InvokeAsync("DisplayCourseWithRolesDataTable", new { courseViewModel = Model, tableIdentificator = "listCourses", operationSet = 1 })
 
 @section Scripts{
     @{await Html.RenderPartialAsync("_DataTableWithMultipleFilterOnScript", new DataTableMultipleFilterScriptViewModel { TableIdentificator = "listCourses", NumberOfColumn =  new List<string> { "8", "11" }, SelectId = new List<string> { "selectCourseEndedFilter", "selectRoleFilter" } });}

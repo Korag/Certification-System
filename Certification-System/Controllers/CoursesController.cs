@@ -826,7 +826,7 @@ namespace Certification_System.Controllers
         }
 
         // GET: DisplayCourseSummary
-        [Authorize(Roles = "Admin")]
+        [Authorize(Roles = "Admin, Instructor, Examiner")]
         public ActionResult DisplayCourseSummary(string courseIdentificator)
         {
             var course = _context.courseRepository.GetCourseById(courseIdentificator);

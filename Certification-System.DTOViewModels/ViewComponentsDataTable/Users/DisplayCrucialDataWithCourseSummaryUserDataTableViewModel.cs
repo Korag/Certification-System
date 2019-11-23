@@ -6,7 +6,7 @@ namespace Certification_System.DTOViewModels
     {
         public ICollection<DisplayCrucialDataUserViewModel> Users { get; set; }
         public DispenseGivenCertificateCheckBoxViewModel[] DispensedGivenCertificates { get; set; }
-        public DisplayCourseViewModel Course { get; set; }
+        public DisplayCourseWithPriceViewModel Course { get; set; }
         public DataTableOptionsViewModel Options { get; set; }
     }
 }

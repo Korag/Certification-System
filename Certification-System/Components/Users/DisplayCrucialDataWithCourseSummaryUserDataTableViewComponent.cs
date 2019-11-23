@@ -6,7 +6,7 @@ namespace Certification_System.Components
 {
     public class DisplayCrucialDataWithCourseSummaryUserDataTableViewComponent : ViewComponent
     {
-        public IViewComponentResult Invoke(ICollection<DisplayCrucialDataUserViewModel> userViewModel, DisplayCourseViewModel courseViewModel, DispenseGivenCertificateCheckBoxViewModel[] dispensedGivenCertificateViewModel ,string tableIdentificator, int operationSet = 0)
+        public IViewComponentResult Invoke(ICollection<DisplayCrucialDataUserViewModel> userViewModel, DisplayCourseWithPriceViewModel courseViewModel, DispenseGivenCertificateCheckBoxViewModel[] dispensedGivenCertificateViewModel ,string tableIdentificator, int operationSet = 0)
         {
             DisplayCrucialDataWithCourseSummaryUserDataTableViewModel userDataTableViewModel = new DisplayCrucialDataWithCourseSummaryUserDataTableViewModel
             {
