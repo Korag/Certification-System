@@ -1,4 +1,5 @@
-﻿using System.ComponentModel.DataAnnotations;
+﻿using System;
+using System.ComponentModel.DataAnnotations;
 
 namespace Certification_System.DTOViewModels
 {
@@ -72,6 +73,6 @@ namespace Certification_System.DTOViewModels
         [DataType(DataType.Date)]
         [DisplayFormat(DataFormatString = "{0:DD/MM/YYYY}")]
         [Display(Name = "Data urodzenia")]
-        public string DateOfBirth { get; set; }
+        public DateTime DateOfBirth { get; set; }
     }
 }

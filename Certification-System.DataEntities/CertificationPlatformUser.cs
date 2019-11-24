@@ -1,4 +1,5 @@
 ﻿using AspNetCore.Identity.Mongo.Model;
+using System;
 using System.Collections.Generic;
 
 namespace Certification_System.Entities
@@ -28,7 +29,7 @@ namespace Certification_System.Entities
 
         public string NumberOfApartment { get; set; }
 
-        public string DateOfBirth { get; set; }
+        public DateTime DateOfBirth { get; set; }
 
         public ICollection<string> CompanyRoleManager { get; set; }
         public ICollection<string> CompanyRoleWorker { get; set; }

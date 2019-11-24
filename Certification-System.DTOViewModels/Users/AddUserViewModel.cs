@@ -1,4 +1,5 @@
 ﻿using Microsoft.AspNetCore.Mvc.Rendering;
+using System;
 using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
 
@@ -62,7 +63,7 @@ namespace Certification_System.DTOViewModels
         [DataType(DataType.Date)]
         [DisplayFormat(DataFormatString = "{0:DD/MM/YYYY}")]
         [Display(Name = "Data urodzenia")]
-        public string DateOfBirth { get; set; }
+        public DateTime DateOfBirth { get; set; }
 
         [Display(Name = "Rola użytkownika")]
         public IList<SelectListItem> AvailableRoles { get; set; }

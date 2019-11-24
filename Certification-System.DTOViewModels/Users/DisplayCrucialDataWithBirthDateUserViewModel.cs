@@ -1,4 +1,5 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
 
 namespace Certification_System.DTOViewModels
@@ -17,7 +18,7 @@ namespace Certification_System.DTOViewModels
         public string LastName { get; set; }
 
         [Display(Name = "Data urodzenia")]
-        public string DateOfBirth { get; set; }
+        public DateTime DateOfBirth { get; set; }
 
         [Display(Name = "Zrzeszony z przedsiębiorstwem")]
         public ICollection<string> CompanyRoleWorker { get; set; }
