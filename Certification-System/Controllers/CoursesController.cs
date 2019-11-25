@@ -194,9 +194,9 @@ namespace Certification_System.Controllers
 
                         meetings.Add(meeting);
 
-                        meetingsLogInfo.Add(_context.personalLogRepository.GeneratePersonalLogInformation(this.User.Identity.Name, this.ControllerContext.RouteData.Values["action"].ToString(), LogDescriptions.DescriptionOfPersonalUserLog["addMeeting"], "Indekser " + meeting.MeetingIndexer));
-
                         #region PersonalUserLogs
+
+                        meetingsLogInfo.Add(_context.personalLogRepository.GeneratePersonalLogInformation(this.User.Identity.Name, this.ControllerContext.RouteData.Values["action"].ToString(), LogDescriptions.DescriptionOfPersonalUserLog["addMeeting"], "Indekser " + meeting.MeetingIndexer));
 
                         var logInfoPersonalAddInstructorsToMeeting = _context.personalLogRepository.GeneratePersonalLogInformation(this.User.Identity.Name, this.ControllerContext.RouteData.Values["action"].ToString(), LogDescriptions.DescriptionOfPersonalUserLog["addInstructorToMeeting"], "Indekser " + meeting.MeetingIndexer);
                         _context.personalLogRepository.AddPersonalUsersLogs(meeting.Instructors, logInfoPersonalAddInstructorsToMeeting);
@@ -213,7 +213,11 @@ namespace Certification_System.Controllers
 
                     #endregion
 
+                    #region PersonalUserLogs
+
                     _context.personalLogRepository.AddPersonalUsersLogsToAdminGroup(meetingsLogInfo);
+
+                    #endregion
                 }
 
                 course.Meetings = meetings.Select(z => z.MeetingIdentificator).ToList();
@@ -1113,6 +1117,10 @@ namespace Certification_System.Controllers
 
             if (ModelState.IsValid && _keyGenerator.ValidateUserTokenForEntityDeletion(user, courseToDelete.Code))
             {
+                _context.courseRepository.DeleteCourse(courseToDelete.EntityIdentificator);
+
+                #region EntityLogs
+
                 var logInfoDeleteCourse = _logger.GenerateLogInformation(this.User.Identity.Name, this.ControllerContext.RouteData.Values["action"].ToString(), LogTypeOfAction.TypesOfActions[2], LogDescriptions.DescriptionOfActionOnEntity["deleteCourse"]);
                 var logInfoDeleteMeetings = _logger.GenerateLogInformation(this.User.Identity.Name, this.ControllerContext.RouteData.Values["action"].ToString(), LogTypeOfAction.TypesOfActions[2], LogDescriptions.DescriptionOfActionOnEntity["deleteMeeting"]);
 
@@ -1123,10 +1131,6 @@ namespace Certification_System.Controllers
                 var logInfoDeleteGivenCertificates = _logger.GenerateLogInformation(this.User.Identity.Name, this.ControllerContext.RouteData.Values["action"].ToString(), LogTypeOfAction.TypesOfActions[2], LogDescriptions.DescriptionOfActionOnEntity["deleteGivenCertificate"]);
 
                 var logInfoUpdateUsers = _logger.GenerateLogInformation(this.User.Identity.Name, this.ControllerContext.RouteData.Values["action"].ToString(), LogTypeOfAction.TypesOfActions[1], LogDescriptions.DescriptionOfActionOnEntity["removeUserFromCourse"]);
-
-                _context.courseRepository.DeleteCourse(courseToDelete.EntityIdentificator);
-
-                #region EntityLogs
 
                 _logger.AddCourseLog(course, logInfoDeleteCourse);
 
@@ -1649,20 +1653,26 @@ namespace Certification_System.Controllers
                     return RedirectToAction("BlankMenu", "Certificates");
                 }
 
-                var userLogDataOfAssignToCourseQueueAction = courseQueue.AwaitingUsers.Where(z => z.UserIdentificator == userIdentificator).Select(z => z.LogData).FirstOrDefault();
                 courseQueue = _context.courseRepository.RemoveAwaitingUserFromCourseQueue(courseIdentificator, userIdentificator);
+
+                #region EntityLogs
 
                 var logInfoRemoveUserFromCourseQueue = _logger.GenerateLogInformation(this.User.Identity.Name, this.ControllerContext.RouteData.Values["action"].ToString(), LogTypeOfAction.TypesOfActions[1], LogDescriptions.DescriptionOfActionOnEntity["removeUserFromCourseQueue"]);
                 _logger.AddCourseQueueLog(courseQueue, logInfoRemoveUserFromCourseQueue);
+
+                #endregion
 
                 if (courseQueue.AwaitingUsers.Count() == 0)
                 {
                     _context.courseRepository.DeleteCourseQueue(courseIdentificator);
 
+                    #region EntityLogs
+
                     var logInfoDeleteCourseQueue = _logger.GenerateLogInformation(this.User.Identity.Name, this.ControllerContext.RouteData.Values["action"].ToString(), LogTypeOfAction.TypesOfActions[2], LogDescriptions.DescriptionOfActionOnEntity["deleteCourseQueue"]);
                     _logger.AddCourseQueueLog(courseQueue, logInfoDeleteCourseQueue);
+                    
+                    #endregion
                 }
-
                 if (userAssignedToCourse)
                 {
                     return RedirectToAction("AdminNotificationManager", "Courses", new { message = "Zgłoszenie pracownika zostało przyjęte." });
@@ -1672,6 +1682,7 @@ namespace Certification_System.Controllers
                     var course = _context.courseRepository.GetCourseById(courseIdentificator);
 
                     #region PersonalUserLogs
+                     var userLogDataOfAssignToCourseQueueAction = courseQueue.AwaitingUsers.Where(z => z.UserIdentificator == userIdentificator).Select(z => z.LogData).FirstOrDefault();
 
                     CourseQueueWithSingleUser rejectedUser = new CourseQueueWithSingleUser();
                     rejectedUser.CourseIdentificator = courseIdentificator;

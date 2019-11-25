@@ -716,11 +716,6 @@ namespace Certification_System.Controllers
                         }
                     }
 
-                    var logInfoUpdateExam = _logger.GenerateLogInformation(this.User.Identity.Name, this.ControllerContext.RouteData.Values["action"].ToString(), LogTypeOfAction.TypesOfActions[1], LogDescriptions.DescriptionOfActionOnEntity["updateExam"]);
-                    var logInfoUpdateExamResults = _logger.GenerateLogInformation(this.User.Identity.Name, this.ControllerContext.RouteData.Values["action"].ToString(), LogTypeOfAction.TypesOfActions[1], LogDescriptions.DescriptionOfActionOnEntity["updateExamResult"]);
-
-                    var logInfoAddExamResults = _logger.GenerateLogInformation(this.User.Identity.Name, this.ControllerContext.RouteData.Values["action"].ToString(), LogTypeOfAction.TypesOfActions[0], LogDescriptions.DescriptionOfActionOnEntity["addExamResult"]);
-
                     if (usersExamsTermsResultsToAdd.Count() == 0 && usersExamsTermsResultsToUpdate.Count() == 0 && exam.MaxAmountOfPointsToEarn == markedExamTermViewModel.MaxAmountOfPointsToEarn)
                     {
                         return RedirectToAction("ExamTermDetails", new { examTermIdentificator = markedExamTermViewModel.ExamTerm.ExamTermIdentificator, message = "Nie zmieniono żadnej oceny tury egzaminu" });
@@ -731,7 +726,12 @@ namespace Certification_System.Controllers
                         exam.MaxAmountOfPointsToEarn = markedExamTermViewModel.MaxAmountOfPointsToEarn;
                         _context.examRepository.SetMaxAmountOfPointsToEarn(markedExamTermViewModel.ExamTerm.Exam.ExamIdentificator, markedExamTermViewModel.MaxAmountOfPointsToEarn);
 
+                        #region EntityLogs
+
+                        var logInfoUpdateExam = _logger.GenerateLogInformation(this.User.Identity.Name, this.ControllerContext.RouteData.Values["action"].ToString(), LogTypeOfAction.TypesOfActions[1], LogDescriptions.DescriptionOfActionOnEntity["updateExam"]);
                         _logger.AddExamLog(exam, logInfoUpdateExam);
+
+                        #endregion
 
                         #region PersonalUserLogs
 
@@ -744,7 +744,13 @@ namespace Certification_System.Controllers
                     if (usersExamsTermsResultsToUpdate.Count() != 0)
                     {
                         _context.examResultRepository.UpdateExamsResults(usersExamsTermsResultsToUpdate);
+                       
+                        #region EntityLogs
+
+                        var logInfoUpdateExamResults = _logger.GenerateLogInformation(this.User.Identity.Name, this.ControllerContext.RouteData.Values["action"].ToString(), LogTypeOfAction.TypesOfActions[1], LogDescriptions.DescriptionOfActionOnEntity["updateExamResult"]);
                         _logger.AddExamsResultsLogs(usersExamsTermsResultsToUpdate, logInfoUpdateExamResults);
+
+                        #endregion
 
                         #region PersonalUserLogs
 
@@ -761,7 +767,12 @@ namespace Certification_System.Controllers
                         _context.examResultRepository.AddExamsResults(usersExamsTermsResultsToAdd);
                         _context.examRepository.AddExamsResultsToExam(exam.ExamIdentificator, usersExamsTermsResultsToAdd.Select(z => z.ExamResultIdentificator).ToList());
 
+                        #region EntityLogs
+
+                        var logInfoAddExamResults = _logger.GenerateLogInformation(this.User.Identity.Name, this.ControllerContext.RouteData.Values["action"].ToString(), LogTypeOfAction.TypesOfActions[0], LogDescriptions.DescriptionOfActionOnEntity["addExamResult"]);
                         _logger.AddExamsResultsLogs(usersExamsTermsResultsToAdd, logInfoAddExamResults);
+
+                        #endregion
 
                         #region PersonalUserLogs
 
@@ -1056,16 +1067,14 @@ namespace Certification_System.Controllers
                     _context.examTermRepository.AddUserToExamTerm(examTerm.ExamTermIdentificator, user.Id);
 
                     exam.EnrolledUsers.Add(user.Id);
+                    _context.examRepository.AddUserToExam(exam.ExamIdentificator, user.Id);
 
                     #region EntityLogs
 
-                    var logInfoAssignUserToExam = _logger.GenerateLogInformation(this.User.Identity.Name, this.ControllerContext.RouteData.Values["action"].ToString(), LogTypeOfAction.TypesOfActions[1], LogDescriptions.DescriptionOfActionOnEntity["assignUserToExam"]);
                     var logInfoAssignUserToExamTerm = _logger.GenerateLogInformation(this.User.Identity.Name, this.ControllerContext.RouteData.Values["action"].ToString(), LogTypeOfAction.TypesOfActions[1], LogDescriptions.DescriptionOfActionOnEntity["assignUserToExamTerm"]);
-
                     _logger.AddExamTermLog(examTerm, logInfoAssignUserToExamTerm);
 
-                    _context.examRepository.AddUserToExam(exam.ExamIdentificator, user.Id);
-
+                    var logInfoAssignUserToExam = _logger.GenerateLogInformation(this.User.Identity.Name, this.ControllerContext.RouteData.Values["action"].ToString(), LogTypeOfAction.TypesOfActions[1], LogDescriptions.DescriptionOfActionOnEntity["assignUserToExam"]);
                     _logger.AddExamLog(exam, logInfoAssignUserToExam);
 
                     #endregion

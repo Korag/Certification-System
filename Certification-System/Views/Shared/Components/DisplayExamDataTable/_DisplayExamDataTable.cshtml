@@ -63,99 +63,118 @@
         <tbody>
             @foreach (var exam in Model.Exams)
             {
-            <tr>
-                <td>
-                    @Html.DisplayFor(modelItem => exam.Course.CourseIndexer)
-                </td>
-                <td>
-                    @Html.DisplayFor(modelItem => exam.Course.Name)
-                </td>
-                <td>
-                    @Html.DisplayFor(modelItem => exam.Course.Description)
-                </td>
-                <td>
-                    @Html.DisplayFor(modelItem => exam.ExamIndexer)
-                </td>
-                <td>
-                    @Html.DisplayFor(modelItem => exam.OrdinalNumber)
-                </td>
-                <td>
-                    @Html.DisplayFor(modelItem => exam.Name)
-                </td>
-                <td>
-                    @Html.DisplayFor(modelItem => exam.Description)
-                </td>
-                <td>
-                    @Html.DisplayFor(modelItem => exam.TypeOfExam)
-                </td>
-                <td>
-                    @Html.DisplayFor(modelItem => exam.DateOfStart)
-                </td>
-                <td>
-                    @Html.DisplayFor(modelItem => exam.DateOfEnd)
-                </td>
-                <td>
-                    @Html.DisplayFor(modelItem => exam.DurationDays)
-                </td>
-                <td>
-                    @Html.DisplayFor(modelItem => exam.DurationMinutes)
-                </td>
-                <td>
-                    <input type="checkbox" asp-for="@exam.ExamDividedToTerms" data-toggle="toggle" data-on="Tak" data-off="Nie" data-size="sm" disabled />
-                </td>
-                <td>
-                    @Html.DisplayFor(modelItem => exam.UsersQuantity)
-                </td>
-                <td>
-                    @Html.DisplayFor(modelItem => exam.UsersLimit)
-                </td>
-                <td>
-                    <ul>
-                        @foreach (var examiner in exam.Examiners)
-                        {
-                            <li>@examiner.FirstName @examiner.LastName</li>
-                        }
-                    </ul>
-                </td>
-                @if (Model.Options.OperationSet == 1)
-                {
+                <tr>
                     <td>
-                        <div class="dropdown p-0">
-                            <button class="btn btn-success dropdown-toggle" type="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">Operacje</button>
-                            <div class="dropdown-menu nohover">
-                                @if (exam.ExamDividedToTerms)
-                                {
-                                    <a asp-action="AddNewExamTerm" asp-route-examIdentificator="@exam.ExamIdentificator" asp-controller="Exams" class="btn btn-secondary w-100 mb-1">Dodaj turę do egzaminu</a>
-                                }
-                                else
-                                {
-                                    <a asp-action="MarkExam" asp-route-examIdentificator="@exam.ExamIdentificator" asp-controller="Exams" class="btn btn-primary w-100 mb-1">Oceń egzamin</a>
-                                }
-                                <a asp-action="ExamDetails" asp-route-examIdentificator="@exam.ExamIdentificator" asp-controller="Exams" class="btn btn-info w-100 mb-1">Szczegóły egzaminu</a>
-                                <a asp-action="EditExamHub" asp-route-examIdentificator="@exam.ExamIdentificator" asp-controller="Exams" class="btn btn-warning w-100 mb-1">Edytuj</a>
-                                <a asp-action="AddUsersFromCourseToExam" asp-route-examIdentificator="@exam.ExamIdentificator" asp-controller="Exams" class="btn btn-light w-100  mb-1">Dodaj użytkowników do egzaminu</a>
-                                <a asp-action="DeleteUsersFromExam" asp-route-examIdentificator="@exam.ExamIdentificator" asp-controller="Exams" class="btn btn-danger w-100">Usuń użytkowników</a>
-                            </div>
-                        </div>
+                        @Html.DisplayFor(modelItem => exam.Course.CourseIndexer)
                     </td>
-                }
-                @if (Model.Options.OperationSet == 2)
-                {
                     <td>
-                        <div class="dropdown p-0">
-                            <button class="btn btn-success dropdown-toggle" type="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">Operacje</button>
-                            <div class="dropdown-menu nohover">
-                                <a asp-action="EditExamHub" asp-route-examIdentificator="@exam.ExamIdentificator" asp-controller="Exams" class="btn btn-warning w-100 mb-1">Edytuj</a>
-                                <a asp-action="ExamDetails" asp-route-examIdentificator="@exam.ExamIdentificator" asp-controller="Exams" class="btn btn-info w-100 mb-1">Szczegóły egzaminu</a>
-                                @if (!exam.ExamDividedToTerms)
-                                {
-                                    <a asp-action="MarkExam" asp-route-examIdentificator="@exam.ExamIdentificator" asp-controller="Exams" class="btn btn-primary w-100">Oceń egzamin</a>
-                                }
-                            </div>
-                        </div>
+                        @Html.DisplayFor(modelItem => exam.Course.Name)
                     </td>
-                }
-            </tr>
+                    <td>
+                        @Html.DisplayFor(modelItem => exam.Course.Description)
+                    </td>
+                    <td>
+                        @Html.DisplayFor(modelItem => exam.ExamIndexer)
+                    </td>
+                    <td>
+                        @Html.DisplayFor(modelItem => exam.OrdinalNumber)
+                    </td>
+                    <td>
+                        @Html.DisplayFor(modelItem => exam.Name)
+                    </td>
+                    <td>
+                        @Html.DisplayFor(modelItem => exam.Description)
+                    </td>
+                    <td>
+                        @Html.DisplayFor(modelItem => exam.TypeOfExam)
+                    </td>
+                    <td>
+                        @Html.DisplayFor(modelItem => exam.DateOfStart)
+                    </td>
+                    <td>
+                        @Html.DisplayFor(modelItem => exam.DateOfEnd)
+                    </td>
+                    <td>
+                        @Html.DisplayFor(modelItem => exam.DurationDays)
+                    </td>
+                    <td>
+                        @Html.DisplayFor(modelItem => exam.DurationMinutes)
+                    </td>
+                    <td>
+                        <input type="checkbox" asp-for="@exam.ExamDividedToTerms" data-toggle="toggle" data-on="Tak" data-off="Nie" data-size="sm" disabled />
+                    </td>
+                    <td>
+                        @Html.DisplayFor(modelItem => exam.UsersQuantity)
+                    </td>
+                    <td>
+                        @Html.DisplayFor(modelItem => exam.UsersLimit)
+                    </td>
+                    <td>
+                        <ul>
+                            @foreach (var examiner in exam.Examiners)
+                            {
+                                <li>@examiner.FirstName @examiner.LastName</li>
+                            }
+                        </ul>
+                    </td>
+                    @if (Model.Options.OperationSet == 1)
+                    {
+                        <td>
+                            <div class="dropdown p-0">
+                                <button class="btn btn-success dropdown-toggle" type="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">Operacje</button>
+                                <div class="dropdown-menu nohover">
+                                    @if (exam.ExamDividedToTerms)
+                                    {
+                                        <a asp-action="AddNewExamTerm" asp-route-examIdentificator="@exam.ExamIdentificator" asp-controller="Exams" class="btn btn-secondary w-100 mb-1">Dodaj turę do egzaminu</a>
+                                    }
+                                    else
+                                    {
+                                        <a asp-action="MarkExam" asp-route-examIdentificator="@exam.ExamIdentificator" asp-controller="Exams" class="btn btn-primary w-100 mb-1">Oceń egzamin</a>
+                                    }
+                                    <a asp-action="ExamDetails" asp-route-examIdentificator="@exam.ExamIdentificator" asp-controller="Exams" class="btn btn-info w-100 mb-1">Szczegóły egzaminu</a>
+                                    <a asp-action="EditExamHub" asp-route-examIdentificator="@exam.ExamIdentificator" asp-controller="Exams" class="btn btn-warning w-100 mb-1">Edytuj</a>
+                                    <a asp-action="AddUsersFromCourseToExam" asp-route-examIdentificator="@exam.ExamIdentificator" asp-controller="Exams" class="btn btn-light w-100  mb-1">Dodaj użytkowników do egzaminu</a>
+                                    <a asp-action="DeleteUsersFromExam" asp-route-examIdentificator="@exam.ExamIdentificator" asp-controller="Exams" class="btn btn-danger w-100">Usuń użytkowników</a>
+                                </div>
+                            </div>
+                        </td>
+                    }
+                    @if (Model.Options.OperationSet == 2)
+                    {
+                        <td>
+                            <div class="dropdown p-0">
+                                <button class="btn btn-success dropdown-toggle" type="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">Operacje</button>
+                                <div class="dropdown-menu nohover">
+                                    <a asp-action="EditExamHub" asp-route-examIdentificator="@exam.ExamIdentificator" asp-controller="Exams" class="btn btn-warning w-100 mb-1">Edytuj</a>
+                                    <a asp-action="ExamDetails" asp-route-examIdentificator="@exam.ExamIdentificator" asp-controller="Exams" class="btn btn-info w-100 mb-1">Szczegóły egzaminu</a>
+                                    @if (!exam.ExamDividedToTerms)
+                                    {
+                                        <a asp-action="MarkExam" asp-route-examIdentificator="@exam.ExamIdentificator" asp-controller="Exams" class="btn btn-primary w-100">Oceń egzamin</a>
+                                    }
+                                </div>
+                            </div>
+                        </td>
+                    }
+                    @if (Model.Options.OperationSet == 3)
+                    {
+                        <td>
+                            @if (!exam.ExamDividedToTerms)
+                            {
+                                <div class="dropdown p-0">
+                                    <button class="btn btn-success dropdown-toggle" type="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">Operacje</button>
+                                    <div class="dropdown-menu nohover">
+                                        <a asp-action="ExamDetails" asp-route-examIdentificator="@exam.ExamIdentificator" asp-controller="Exams" class="btn btn-info w-100 mb-1">Szczegóły egzaminu</a>
+                                        <a asp-action="MarkExam" asp-route-examIdentificator="@exam.ExamIdentificator" asp-controller="Exams" class="btn btn-primary w-100">Oceń egzamin</a>
+                                    </div>
+                                </div>
+                            }
+                            else
+                            {
+                                <a asp-action="ExamDetails" asp-route-examIdentificator="@exam.ExamIdentificator" asp-controller="Exams" class="btn btn-info m-1">Szczegóły egzaminu</a>
+                            }
+                        </td>
+                    }
+                </tr>
             }
         </tbody>
     </table>

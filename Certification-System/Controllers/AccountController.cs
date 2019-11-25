@@ -25,7 +25,6 @@ namespace Certification_System.Controllers
         private readonly SignInManager<CertificationPlatformUser> _signInManager;
         private readonly RoleManager<MongoRole> _roleManager;
         private readonly IEmailSender _emailSender;
-        //private readonly ILogger _logger;
         private readonly ILogService _logger;
         private readonly IMapper _mapper;
         private readonly IKeyGenerator _keyGenerator;
@@ -36,7 +35,6 @@ namespace Certification_System.Controllers
             SignInManager<CertificationPlatformUser> signInManager,
             RoleManager<MongoRole> roleManager,
             IEmailSender emailSender,
-            /*ILogger<AccountController> logger,*/
             IMapper mapper,
             IKeyGenerator keyGenerator,
             ILogService logger)
@@ -104,8 +102,12 @@ namespace Certification_System.Controllers
                         var emailToSend = _emailSender.GenerateEmailMessage(model.Email, user.FirstName + " " + user.LastName, "emailConfirmation", callbackUrl);
                         await _emailSender.SendEmailAsync(emailToSend);
 
+                        #region UserLoginLog
+
                         var logInfoUserLogin = _logger.GenerateUserLoginInformation(user.Email, UserLoginActionStatus.UserLoginStatus[2]);
                         _logger.AddUserLoginLog(logInfoUserLogin);
+
+                        #endregion
 
                         return View(model);
                     }
@@ -117,9 +119,12 @@ namespace Certification_System.Controllers
 
                 if (result.Succeeded)
                 {
-                    //_logger.LogInformation("User został zalogowany");
+                    #region UserLoginLog
+
                     var logInfoUserLogin = _logger.GenerateUserLoginInformation(user.Email, UserLoginActionStatus.UserLoginStatus[0]);
                     _logger.AddUserLoginLog(logInfoUserLogin);
+
+                    #endregion  
 
                     return RedirectToLocal(returnUrl);
                 }
@@ -136,8 +141,12 @@ namespace Certification_System.Controllers
                 {
                     ModelState.AddModelError(string.Empty, "Adres email lub hasło są błędne.");
 
+                    #region UserLoginLog
+
                     var logInfoUserLogin = _logger.GenerateUserLoginInformation("", UserLoginActionStatus.UserLoginStatus[1]);
                     _logger.AddUserLoginLog(logInfoUserLogin);
+
+                    #endregion
 
                     return View(model);
                 }
@@ -183,8 +192,14 @@ namespace Certification_System.Controllers
                     var emailToSend = _emailSender.GenerateEmailMessage(model.Email, user.FirstName + " " + user.LastName, "register", callbackUrl);
                     await _emailSender.SendEmailAsync(emailToSend);
 
+                    #region EntityLogs
+
                     var logInfoRegister = _logger.GenerateLogInformation(this.User.Identity.Name, this.ControllerContext.RouteData.Values["action"].ToString(), LogTypeOfAction.TypesOfActions[0], LogDescriptions.DescriptionOfActionOnEntity["registerUser"]);
                     _logger.AddUserLog(user, logInfoRegister);
+
+                    #endregion
+
+                    #region PersonalUserLogs
 
                     var createdUser = _context.userRepository.GetUserById(user.Id);
                     _context.personalLogRepository.CreatePersonalUserLog(createdUser);
@@ -192,8 +207,9 @@ namespace Certification_System.Controllers
                     var logInfoPersonalRegister = _context.personalLogRepository.GeneratePersonalLogInformation(this.User.Identity.Name, this.ControllerContext.RouteData.Values["action"].ToString(), LogDescriptions.DescriptionOfPersonalUserLog["registerUser"]);
                     _context.personalLogRepository.AddPersonalUserLog(createdUser.Id, logInfoPersonalRegister);
 
+                    #endregion
+
                     //await _signInManager.SignInAsync(user, isPersistent: false);
-                    //_logger.LogInformation("Użytkownik utworzył nowe konto.");
                     //return RedirectToLocal(returnUrl);
 
                     return RedirectToAction("Login", "Account", new { message = "Na Twój adres email została wysłana wiadomość z informacją dotyczącą potwierdzenia adresu email." });
@@ -228,11 +244,14 @@ namespace Certification_System.Controllers
                 var user = _context.userRepository.GetUserById(passwordToChange.UserIdentificator);
 
                 var result = _userManager.ChangePasswordAsync(user, passwordToChange.OldPassword, passwordToChange.Password).Result;
-
                 var updatedUser = _context.userRepository.GetUserById(user.Id);
+
+                #region EntityLogs
 
                 var logInfo = _logger.GenerateLogInformation(this.User.Identity.Name, this.ControllerContext.RouteData.Values["action"].ToString(), LogTypeOfAction.TypesOfActions[1], LogDescriptions.DescriptionOfActionOnEntity["changePasswordUser"]);
                 _logger.AddUserLog(updatedUser, logInfo);
+
+                #endregion
 
                 if (result.Succeeded)
                 {
@@ -241,8 +260,12 @@ namespace Certification_System.Controllers
 
                     _signInManager.SignOutAsync().Wait();
 
+                    #region PersonalUserLogs
+
                     var logInfoPersonalChangePassword = _context.personalLogRepository.GeneratePersonalLogInformation(this.User.Identity.Name, this.ControllerContext.RouteData.Values["action"].ToString(), LogDescriptions.DescriptionOfPersonalUserLog["changePassword"]);
                     _context.personalLogRepository.AddPersonalUserLog(updatedUser.Id, logInfoPersonalChangePassword);
+
+                    #endregion
 
                     return RedirectToAction("Login", "Account", new { message = "Twoje hasło zostało zmienione - zostałeś wylogowany" });
                 }
@@ -260,9 +283,13 @@ namespace Certification_System.Controllers
         public async Task<ActionResult> Logout()
         {
             await _signInManager.SignOutAsync();
-            //_logger.LogInformation("Użytkownik został wylogowany");
+
+            #region UserLoginLog
+
             var logInfoUserLogin = _logger.GenerateUserLoginInformation(this.User.Identity.Name, UserLoginActionStatus.UserLoginStatus[3]);
             _logger.AddUserLoginLog(logInfoUserLogin);
+
+            #endregion
 
             return RedirectToAction(nameof(Login), "Account");
         }
@@ -284,12 +311,20 @@ namespace Certification_System.Controllers
 
                 if (result.Succeeded)
                 {
+                    #region EntityLogs
+
                     var updatedUser = _context.userRepository.GetUserById(user.Id);
                     var logInfoUpdateUser = _logger.GenerateLogInformation(user.Email, this.ControllerContext.RouteData.Values["action"].ToString(), LogTypeOfAction.TypesOfActions[1], LogDescriptions.DescriptionOfActionOnEntity["confirmEmail"]);
                     _logger.AddUserLog(updatedUser, logInfoUpdateUser);
 
+                    #endregion
+
+                    #region PersonalUserLogs
+
                     var logInfoPersonalConfirmEmail = _context.personalLogRepository.GeneratePersonalLogInformation(user.Email, this.ControllerContext.RouteData.Values["action"].ToString(), LogDescriptions.DescriptionOfPersonalUserLog["confirmEmail"]);
                     _context.personalLogRepository.AddPersonalUserLog(updatedUser.Id, logInfoPersonalConfirmEmail);
+
+                    #endregion
 
                     return RedirectToAction("Login", "Account", new { message = "Adres email został potwierdzony." });
                 }
@@ -333,15 +368,27 @@ namespace Certification_System.Controllers
                 {
                     _signInManager.SignInAsync(user, isPersistent: false).Wait();
 
+                    #region EntityLogs
+
                     var updatedUser = _context.userRepository.GetUserById(user.Id);
                     var logInfoUpdateUser = _logger.GenerateLogInformation(this.User.Identity.Name, this.ControllerContext.RouteData.Values["action"].ToString(), LogTypeOfAction.TypesOfActions[1], LogDescriptions.DescriptionOfActionOnEntity["setAccountPassword"]);
                     _logger.AddUserLog(updatedUser, logInfoUpdateUser);
 
+                    #endregion
+
+                    #region UserLoginLog
+
                     var logInfoUserLogin = _logger.GenerateUserLoginInformation(user.Email, UserLoginActionStatus.UserLoginStatus[0]);
                     _logger.AddUserLoginLog(logInfoUserLogin);
 
+                    #endregion
+
+                    #region PersonalUserLogs
+
                     var logInfoPersonalSetPassword = _context.personalLogRepository.GeneratePersonalLogInformation(this.User.Identity.Name, this.ControllerContext.RouteData.Values["action"].ToString(), LogDescriptions.DescriptionOfPersonalUserLog["setPassword"]);
                     _context.personalLogRepository.AddPersonalUserLog(updatedUser.Id, logInfoPersonalSetPassword);
+
+                    #endregion
 
                     return RedirectToAction("BlankMenu", "Certificates", new { message = "Twoje hasło zostało ustawione - zostałeś zalogowany na swoje konto" });
                 }
@@ -365,9 +412,9 @@ namespace Certification_System.Controllers
             {
                 var user = await _userManager.FindByEmailAsync(emailModel.Email);
 
-                if (user == null  || !(await _userManager.IsEmailConfirmedAsync(user)))
+                if (user == null || !(await _userManager.IsEmailConfirmedAsync(user)))
                 {
-                    var emailMessage = _emailSender.GenerateEmailMessage(emailModel.Email, "" , "resetPasswordWithoutEmailConfirmation");
+                    var emailMessage = _emailSender.GenerateEmailMessage(emailModel.Email, "", "resetPasswordWithoutEmailConfirmation");
                     await _emailSender.SendEmailAsync(emailMessage);
 
                     return RedirectToAction(nameof(ForgotPasswordConfirmation));
@@ -434,12 +481,20 @@ namespace Certification_System.Controllers
 
                 if (result.Succeeded)
                 {
+                    #region EntityLogs
+
                     var updatedUser = _context.userRepository.GetUserById(user.Id);
                     var logInfoUpdateUser = _logger.GenerateLogInformation(this.User.Identity.Name, this.ControllerContext.RouteData.Values["action"].ToString(), LogTypeOfAction.TypesOfActions[1], LogDescriptions.DescriptionOfActionOnEntity["resetPassword"]);
                     _logger.AddUserLog(updatedUser, logInfoUpdateUser);
 
+                    #endregion
+
+                    #region PersonalUserLogs
+
                     var logInfoPersonalResetPassword = _context.personalLogRepository.GeneratePersonalLogInformation(this.User.Identity.Name, this.ControllerContext.RouteData.Values["action"].ToString(), LogDescriptions.DescriptionOfPersonalUserLog["resetPassword"]);
                     _context.personalLogRepository.AddPersonalUserLog(updatedUser.Id, logInfoPersonalResetPassword);
+
+                    #endregion
 
                     return RedirectToAction(nameof(Login), "Account", new { message = "Hasło zostało zmienione" });
                 }
@@ -454,7 +509,7 @@ namespace Certification_System.Controllers
         {
             var user = _context.userRepository.GetUserById(userIdentificator);
 
-            var code =  _userManager.GenerateEmailConfirmationTokenAsync(user).Result;
+            var code = _userManager.GenerateEmailConfirmationTokenAsync(user).Result;
             var callbackUrl = Url.EmailConfirmationLink(user.Id, code, Request.Scheme);
 
             var emailToSend = _emailSender.GenerateEmailMessage(user.Email, user.FirstName + " " + user.LastName, "manuallySendEmailConfirmationMessage", callbackUrl);
@@ -474,7 +529,7 @@ namespace Certification_System.Controllers
                 return RedirectToAction(nameof(UniversalConfirmationPanel), "Account", new { returnUrl = returnUrl, messageNumber = 4 });
             }
 
-            var code =  _userManager.GeneratePasswordResetTokenAsync(user).Result;
+            var code = _userManager.GeneratePasswordResetTokenAsync(user).Result;
 
             var callbackUrl = Url.ResetPasswordCallbackLink(user.Id, code, Request.Scheme);
 

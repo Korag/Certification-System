@@ -181,8 +181,6 @@ namespace Certification_System.Controllers
 
                 #endregion
 
-
-
                 return RedirectToAction("ConfirmationOfActionOnMeeting", "Meetings", new { meetingIdentificator = editedMeeting.MeetingIdentificator, TypeOfAction = "Update" });
             }
 

@@ -8,7 +8,7 @@
 <h1>Moje egzaminy</h1>
 <hr />
 
-@await Component.InvokeAsync("DisplayExamDataTable", new { examViewModel = Model, tableIdentificator = "listExams", operationSet = 2 })
+@await Component.InvokeAsync("DisplayExamDataTable", new { examViewModel = Model, tableIdentificator = "listExams", operationSet = 3 })
 
 @section Scripts{
     @{await Html.RenderPartialAsync("_DataTableBasicScript", "listExams");}

@@ -72,11 +72,19 @@ namespace Certification_System.Controllers
 
                 _context.certificateRepository.AddCertificate(certificate);
 
+                #region EntityLogs
+
                 var logInfoAddCertificate = _logger.GenerateLogInformation(this.User.Identity.Name, this.ControllerContext.RouteData.Values["action"].ToString(), LogTypeOfAction.TypesOfActions[0], LogDescriptions.DescriptionOfActionOnEntity["addCertificate"]);
                 _logger.AddCertificateLog(certificate, logInfoAddCertificate);
 
+                #endregion
+
+                #region PersonalUserLogs
+
                 var logInfoPersonalAddCertificate = _context.personalLogRepository.GeneratePersonalLogInformation(this.User.Identity.Name, this.ControllerContext.RouteData.Values["action"].ToString(), LogDescriptions.DescriptionOfPersonalUserLog["addCertificate"], "Indekser: " + certificate.CertificateIndexer);
                 _context.personalLogRepository.AddPersonalUserLogToAdminGroup(logInfoPersonalAddCertificate);
+
+                #endregion
 
                 return RedirectToAction("ConfirmationOfActionOnCertificate", new { certificateIdentificator = certificate.CertificateIdentificator, TypeOfAction = "Add" });
             }

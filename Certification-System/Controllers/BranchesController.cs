@@ -84,11 +84,19 @@ namespace Certification_System.Controllers
 
                 _context.branchRepository.AddBranch(branch);
 
+                #region EntityLogs
+
                 var logInfoAddBranch = _logger.GenerateLogInformation(this.User.Identity.Name, this.ControllerContext.RouteData.Values["action"].ToString(), LogTypeOfAction.TypesOfActions[0], LogDescriptions.DescriptionOfActionOnEntity["addBranch"]);
                 _logger.AddBranchLog(branch, logInfoAddBranch);
 
+                #endregion
+
+                #region PersonalUserLogs
+
                 var logInfoPersonalAddBranch = _context.personalLogRepository.GeneratePersonalLogInformation(this.User.Identity.Name, this.ControllerContext.RouteData.Values["action"].ToString(), LogDescriptions.DescriptionOfPersonalUserLog["addBranch"], "Nazwa: " + branch.Name);
                 _context.personalLogRepository.AddPersonalUserLogToAdminGroup(logInfoPersonalAddBranch);
+
+                #endregion
 
                 return RedirectToAction("ConfirmationOfActionOnBranch", "Branches", new { branchIdentificator = branch.BranchIdentificator, typeOfAction = "Add" });
             }
@@ -120,11 +128,19 @@ namespace Certification_System.Controllers
 
                 _context.branchRepository.UpdateBranch(originBranch);
 
+                #region EntityLogs
+
                 var logInfoUpdateBranch = _logger.GenerateLogInformation(this.User.Identity.Name, this.ControllerContext.RouteData.Values["action"].ToString(), LogTypeOfAction.TypesOfActions[1], LogDescriptions.DescriptionOfActionOnEntity["updateBranch"]);
                 _logger.AddBranchLog(originBranch, logInfoUpdateBranch);
 
+                #endregion
+
+                #region PersonalUserLogs
+
                 var logInfoPersonalUpdateBranch = _context.personalLogRepository.GeneratePersonalLogInformation(this.User.Identity.Name, this.ControllerContext.RouteData.Values["action"].ToString(), LogDescriptions.DescriptionOfPersonalUserLog["updateBranch"], "Nazwa: " + editedBranch.Name);
                 _context.personalLogRepository.AddPersonalUserLogToAdminGroup(logInfoPersonalUpdateBranch);
+
+                #endregion
 
                 return RedirectToAction("ConfirmationOfActionOnBranch", "Branches", new { branchIdentificator = originBranch.BranchIdentificator, typeOfAction = "Update" });
             }
@@ -191,6 +207,8 @@ namespace Certification_System.Controllers
             {
                 _context.branchRepository.DeleteBranch(branchToDelete.EntityIdentificator);
 
+                #region EntityLogs
+
                 var logInfoDeleteBranch = _logger.GenerateLogInformation(this.User.Identity.Name, this.ControllerContext.RouteData.Values["action"].ToString(), LogTypeOfAction.TypesOfActions[2], LogDescriptions.DescriptionOfActionOnEntity["deleteBranch"]);
 
                 var logInfoUpdateCertificate = _logger.GenerateLogInformation(this.User.Identity.Name, this.ControllerContext.RouteData.Values["action"].ToString(), LogTypeOfAction.TypesOfActions[1], LogDescriptions.DescriptionOfActionOnEntity["updateCertificate"]);
@@ -208,8 +226,14 @@ namespace Certification_System.Controllers
                 var updatedDegrees = _context.degreeRepository.DeleteBranchFromDegrees(branch.BranchIdentificator);
                 _logger.AddDegreesLogs(updatedDegrees, logInfoUpdateDegree);
 
+                #endregion
+
+                #region PersonalUserLogs
+
                 var logInfoPersonal = _context.personalLogRepository.GeneratePersonalLogInformation(this.User.Identity.Name, this.ControllerContext.RouteData.Values["action"].ToString(), LogDescriptions.DescriptionOfPersonalUserLog["deleteBranch"], "Nazwa: " + branch.Name);
                 _context.personalLogRepository.AddPersonalUserLogToAdminGroup(logInfoPersonal);
+
+                #endregion
 
                 return RedirectToAction("DisplayAllBranches", "Branches", new { message = "Usunięto wskazany obszar certyfikacji" });
             }

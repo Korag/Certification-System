@@ -66,11 +66,19 @@ namespace Certification_System.Controllers
 
                 _context.degreeRepository.AddDegree(degree);
 
+                #region EntityLogs
+
                 var logInfoAddDegree = _logger.GenerateLogInformation(this.User.Identity.Name, this.ControllerContext.RouteData.Values["action"].ToString(), LogTypeOfAction.TypesOfActions[0], LogDescriptions.DescriptionOfActionOnEntity["addDegree"]);
                 _logger.AddDegreeLog(degree, logInfoAddDegree);
 
+                #endregion
+
+                #region PersonalUserLogs
+
                 var logInfoPersonalAddDegree = _context.personalLogRepository.GeneratePersonalLogInformation(this.User.Identity.Name, this.ControllerContext.RouteData.Values["action"].ToString(), LogDescriptions.DescriptionOfPersonalUserLog["addDegree"], "Indekser " + degree.DegreeIndexer);
                 _context.personalLogRepository.AddPersonalUserLogToAdminGroup(logInfoPersonalAddDegree);
+
+                #endregion
 
                 return RedirectToAction("ConfirmationOfActionOnDegree", new { degreeIdentificator = degree.DegreeIdentificator, TypeOfAction = "Add" });
             }

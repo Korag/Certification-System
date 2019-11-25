@@ -82,11 +82,19 @@ namespace Certification_System.Controllers
 
                 _context.companyRepository.AddCompany(company);
 
+                #region EntityLogs
+
                 var logInfoAddCompany = _logger.GenerateLogInformation(this.User.Identity.Name, this.ControllerContext.RouteData.Values["action"].ToString(), LogTypeOfAction.TypesOfActions[0], LogDescriptions.DescriptionOfActionOnEntity["addCompany"]);
                 _logger.AddCompanyLog(company, logInfoAddCompany);
 
+                #endregion
+
+                #region PersonalUserLogs
+
                 var logInfoPersonalAddCompany = _context.personalLogRepository.GeneratePersonalLogInformation(this.User.Identity.Name, this.ControllerContext.RouteData.Values["action"].ToString(), LogDescriptions.DescriptionOfPersonalUserLog["addCompany"], "Nazwa przedsiębiorstwa: " + company.CompanyName);
                 _context.personalLogRepository.AddPersonalUserLogToAdminGroup(logInfoPersonalAddCompany);
+
+                #endregion
 
                 return RedirectToAction("ConfirmationOfActionOnCompany", new { companyIdentificator = company.CompanyIdentificator, TypeOfAction = "Add" });
             }
@@ -114,11 +122,19 @@ namespace Certification_System.Controllers
                 Company company = _mapper.Map<Company>(editedCompany);
                 _context.companyRepository.UpdateCompany(company);
 
+                #region EntityLogs
+
                 var logInfoUpdateCompany = _logger.GenerateLogInformation(this.User.Identity.Name, this.ControllerContext.RouteData.Values["action"].ToString(), LogTypeOfAction.TypesOfActions[1], LogDescriptions.DescriptionOfActionOnEntity["updateCompany"]);
                 _logger.AddCompanyLog(company, logInfoUpdateCompany);
 
+                #endregion
+
+                #region PersonalUserLogs
+
                 var logInfoPersonalUpdateCompany = _context.personalLogRepository.GeneratePersonalLogInformation(this.User.Identity.Name, this.ControllerContext.RouteData.Values["action"].ToString(), LogDescriptions.DescriptionOfPersonalUserLog["updateCompany"], "Nazwa przedsiębiorstwa: " + company.CompanyName);
                 _context.personalLogRepository.AddPersonalUserLogToAdminGroup(logInfoPersonalUpdateCompany);
+
+                #endregion
 
                 return RedirectToAction("ConfirmationOfActionOnCompany", "Companies", new { companyIdentificator = editedCompany.CompanyIdentificator, TypeOfAction = "Update" });
             }
@@ -271,7 +287,6 @@ namespace Certification_System.Controllers
         public ActionResult CompanyInformation()
         {
             var user = _context.userRepository.GetUserByEmail(this.User.Identity.Name);
-
             var company = _context.companyRepository.GetCompanyById(user.CompanyRoleManager.FirstOrDefault());
 
             DisplayCompanyViewModel companyInformation = _mapper.Map<DisplayCompanyViewModel>(company);
