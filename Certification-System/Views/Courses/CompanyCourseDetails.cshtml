@@ -153,7 +153,7 @@ else
 
 @if (Model.EnrolledUsers.Count != 0)
 {
-    @await Component.InvokeAsync("DisplayCrucialDataUserDataTable", new { userViewModel = Model.EnrolledUsers, tableIdentificator = "listUsers", courseIdentificator = Model.Course.CourseIdentificator, operationSet = 3 })
+    @await Component.InvokeAsync("DisplayCrucialDataUserDataTable", new { userViewModel = Model.EnrolledUsers, tableIdentificator = "listUsers", courseIdentificator = Model.Course.CourseIdentificator, operationSet = 2 })
 }
 
 else

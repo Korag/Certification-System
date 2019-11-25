@@ -157,7 +157,7 @@
 
 @if (Model.EnrolledCompanyWorkers.Count != 0)
 {
-    @await Component.InvokeAsync("DisplayCrucialDataUserDataTable", new { userViewModel = Model.EnrolledCompanyWorkers, tableIdentificator = "listUsers", operationSet = 3 })
+    @await Component.InvokeAsync("DisplayCrucialDataUserDataTable", new { userViewModel = Model.EnrolledCompanyWorkers, tableIdentificator = "listUsers", operationSet = 2 })
 }
 else
 {

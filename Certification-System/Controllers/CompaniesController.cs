@@ -206,20 +206,30 @@ namespace Certification_System.Controllers
 
             if (ModelState.IsValid && _keyGenerator.ValidateUserTokenForEntityDeletion(user, companyToDelete.Code))
             {
+
+                _context.companyRepository.DeleteCompany(companyToDelete.EntityIdentificator);
+
+                #region EntityLogs
+
                 var logInfoDeleteCompany = _logger.GenerateLogInformation(this.User.Identity.Name, this.ControllerContext.RouteData.Values["action"].ToString(), LogTypeOfAction.TypesOfActions[2], LogDescriptions.DescriptionOfActionOnEntity["deleteCompany"]);
                 var logInfoUpdateUsers = _logger.GenerateLogInformation(this.User.Identity.Name, this.ControllerContext.RouteData.Values["action"].ToString(), LogTypeOfAction.TypesOfActions[1], LogDescriptions.DescriptionOfActionOnEntity["updateUsers"]);
 
-                _context.companyRepository.DeleteCompany(companyToDelete.EntityIdentificator);
                 _logger.AddCompanyLog(company, logInfoDeleteCompany);
 
                 var updatedUsers = _context.userRepository.DeleteCompanyFromUsers(companyToDelete.EntityIdentificator);
                 _logger.AddUsersLogs(updatedUsers, logInfoUpdateUsers);
+
+                #endregion
+
+                #region PersonalUserLogs
 
                 var logInfoPersonalDeleteCompany = _context.personalLogRepository.GeneratePersonalLogInformation(this.User.Identity.Name, this.ControllerContext.RouteData.Values["action"].ToString(), LogDescriptions.DescriptionOfPersonalUserLog["deleteCompany"], "Nazwa przedsiębiorstwa: " + company.CompanyName);
                 _context.personalLogRepository.AddPersonalUserLogToAdminGroup(logInfoPersonalDeleteCompany);
 
                 var logInfoPersonalDeleteUserCompany = _context.personalLogRepository.GeneratePersonalLogInformation(this.User.Identity.Name, this.ControllerContext.RouteData.Values["action"].ToString(), LogDescriptions.DescriptionOfPersonalUserLog["deleteUserCompany"], "Nazwa przedsiębiorstwa: " + company.CompanyName);
                 _context.personalLogRepository.AddPersonalUsersLogs(updatedUsers.Select(z=> z.Id).ToList(), logInfoPersonalDeleteUserCompany);
+
+                #endregion
 
                 return RedirectToAction("DisplayAllCertificates", "Certificates", new { message = "Usunięto wskazane przedsiębiorstwo" });
             }

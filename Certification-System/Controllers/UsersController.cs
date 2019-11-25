@@ -232,10 +232,10 @@ namespace Certification_System.Controllers
 
                 #region EntityLogs
 
-                #endregion
-
                 var logInfo = _logger.GenerateLogInformation(this.User.Identity.Name, this.ControllerContext.RouteData.Values["action"].ToString(), LogTypeOfAction.TypesOfActions[1], LogDescriptions.DescriptionOfActionOnEntity["updateUser"]);
                 _logger.AddUserLog(updatedUser, logInfo);
+
+                #endregion
 
                 #region PersonalUserLogs
 
@@ -604,9 +604,9 @@ namespace Certification_System.Controllers
 
                 _context.userRepository.UpdateUser(originUser);
 
-                var updatedUser = _context.userRepository.GetUserById(originUser.Id);
-
                 #region EntityLogs
+
+                var updatedUser = _context.userRepository.GetUserById(originUser.Id);
 
                 var logInfo = _logger.GenerateLogInformation(this.User.Identity.Name, this.ControllerContext.RouteData.Values["action"].ToString(), LogTypeOfAction.TypesOfActions[1], LogDescriptions.DescriptionOfActionOnEntity["updateUser"]);
                 _logger.AddUserLog(updatedUser, logInfo);
