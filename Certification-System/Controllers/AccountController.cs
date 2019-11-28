@@ -424,7 +424,7 @@ namespace Certification_System.Controllers
 
                 var callbackUrl = Url.ResetPasswordCallbackLink(user.Id, code, Request.Scheme);
 
-                var emailToSend = _emailSender.GenerateEmailMessage(user.Email, user.FirstName + " " + user.LastName, "resetPassword");
+                var emailToSend = _emailSender.GenerateEmailMessage(user.Email, user.FirstName + " " + user.LastName, "resetPassword", callbackUrl);
                 await _emailSender.SendEmailAsync(emailToSend);
 
                 return RedirectToAction(nameof(ForgotPasswordConfirmation), new { messageNumber = 1 });
