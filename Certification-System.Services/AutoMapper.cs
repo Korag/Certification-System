@@ -550,13 +550,13 @@ namespace Certification_System.Services
 
             CreateMap<CertificationPlatformUser, DisplayCrucialDataWithBirthDateUserViewModel>()
                      .ForMember(dest => dest.UserIdentificator, opts => opts.MapFrom(src => src.Id))
-                     .ForMember(dest => dest.DateOfBirth, opts => opts.MapFrom(src => src.DateOfBirth.ToShortDateString()));
+                     .ForMember(dest => dest.DateOfBirth, opts => opts.MapFrom(src => src.DateOfBirth));
 
             CreateMap<CertificationPlatformUser, DisplayAllUserInformationViewModel>()
                      .ForMember(dest => dest.UserIdentificator, opts => opts.MapFrom(src => src.Id))
                      .ForMember(dest => dest.CompanyRoleManager, opts => opts.MapFrom(src => new List<string>()))
                      .ForMember(dest => dest.CompanyRoleWorker, opts => opts.MapFrom(src => new List<string>()))
-                     .ForMember(dest => dest.DateOfBirth, opts => opts.MapFrom(src => src.DateOfBirth.ToShortDateString()));
+                     .ForMember(dest => dest.DateOfBirth, opts => opts.MapFrom(src => src.DateOfBirth));
 
             CreateMap<AddUserViewModel, CertificationPlatformUser>()
                      .ForMember(dest => dest.GivenCertificates, opts => opts.MapFrom(src => new List<string>()))
@@ -571,7 +571,7 @@ namespace Certification_System.Services
             CreateMap<CertificationPlatformUser, EditUserViewModel>()
                      .ForMember(dest => dest.UserIdentificator, opts => opts.MapFrom(src => src.Id))
                      .ForMember(dest => dest.SelectedRole, opts => opts.MapFrom(src => src.Roles))
-                     .ForMember(dest => dest.DateOfBirth, opts => opts.MapFrom(src => src.DateOfBirth.ToShortDateString()));
+                     .ForMember(dest => dest.DateOfBirth, opts => opts.MapFrom(src => src.DateOfBirth));
 
             CreateMap<EditUserViewModel, CertificationPlatformUser>()
                      .ForMember(dest => dest.NormalizedUserName, opts => opts.MapFrom(src => src.Email.ToUpper()))
@@ -584,26 +584,25 @@ namespace Certification_System.Services
                      .ForMember(dest => dest.GivenCertificates, opts => opts.Ignore())
                      .ForMember(dest => dest.Companies, opts => opts.Ignore())
                      .ForMember(dest => dest.GivenDegrees, opts => opts.Ignore())
-                     .ForMember(dest => dest.DateOfBirth, opts => opts.MapFrom(src => src.DateOfBirth.ToShortDateString()));
+                     .ForMember(dest => dest.DateOfBirth, opts => opts.MapFrom(src => src.DateOfBirth));
 
             CreateMap<CertificationPlatformUser, CompanyWorkerDetailsViewModel>()
                      .ForMember(dest => dest.UserIdentificator, opts => opts.MapFrom(src => src.Id))
                      .ForMember(dest => dest.Courses, opts => opts.Ignore())
                      .ForMember(dest => dest.GivenCertificates, opts => opts.Ignore())
                      .ForMember(dest => dest.GivenDegrees, opts => opts.Ignore())
-                     .ForMember(dest => dest.DateOfBirth, opts => opts.MapFrom(src => src.DateOfBirth.ToShortDateString()));
+                     .ForMember(dest => dest.DateOfBirth, opts => opts.MapFrom(src => src.DateOfBirth));
 
             CreateMap<CertificationPlatformUser, AccountDetailsViewModel>()
                     .ForMember(dest => dest.UserIdentificator, opts => opts.MapFrom(src => src.Id))
-                    .ForMember(dest => dest.DateOfBirth, opts => opts.MapFrom(src => src.DateOfBirth.ToShortDateString()))
-                    .ForMember(dest => dest.DateOfBirth, opts => opts.MapFrom(src => src.DateOfBirth.ToShortDateString()));
+                    .ForMember(dest => dest.DateOfBirth, opts => opts.MapFrom(src => src.DateOfBirth));
 
             CreateMap<CertificationPlatformUser, UserDetailsForAnonymousViewModel>()
                      .ForMember(dest => dest.UserIdentificator, opts => opts.MapFrom(src => src.Id))
                      .ForMember(dest => dest.GivenCertificates, opts => opts.Ignore())
                      .ForMember(dest => dest.Companies, opts => opts.Ignore())
                      .ForMember(dest => dest.GivenDegrees, opts => opts.Ignore())
-                     .ForMember(dest => dest.DateOfBirth, opts => opts.MapFrom(src => src.DateOfBirth.ToShortDateString()));
+                     .ForMember(dest => dest.DateOfBirth, opts => opts.MapFrom(src => src.DateOfBirth));
            
             CreateMap<CertificationPlatformUser, DisplayUserWithCourseResultsViewModel>()
                      .ForMember(dest => dest.ExamsResults, opts => opts.MapFrom(src => new List<ExamResult>()))
@@ -611,7 +610,7 @@ namespace Certification_System.Services
 
             CreateMap<CertificationPlatformUser, EditAccountViewModel>()
                     .ForMember(dest => dest.UserIdentificator, opts => opts.MapFrom(src => src.Id))
-                    .ForMember(dest => dest.DateOfBirth, opts => opts.MapFrom(src => src.DateOfBirth.ToShortDateString()));
+                    .ForMember(dest => dest.DateOfBirth, opts => opts.MapFrom(src => src.DateOfBirth));
 
             CreateMap<EditAccountViewModel, CertificationPlatformUser>()
                     .ForMember(dest => dest.Id, opts => opts.Ignore())
@@ -624,14 +623,14 @@ namespace Certification_System.Services
                      .ForMember(dest => dest.Courses, opts => opts.Ignore())
                      .ForMember(dest => dest.Exams, opts => opts.Ignore())
                      .ForMember(dest => dest.ExamsTerms, opts => opts.Ignore())
-                     .ForMember(dest => dest.DateOfBirth, opts => opts.MapFrom(src => src.DateOfBirth.ToShortDateString()));
+                     .ForMember(dest => dest.DateOfBirth, opts => opts.MapFrom(src => src.DateOfBirth));
 
             CreateMap<CertificationPlatformUser, InstructorExaminerDetailsViewModel>()
                      .ForMember(dest => dest.UserIdentificator, opts => opts.MapFrom(src => src.Id))
                      .ForMember(dest => dest.Courses, opts => opts.Ignore())
                      .ForMember(dest => dest.Exams, opts => opts.Ignore())
                      .ForMember(dest => dest.ExamsTerms, opts => opts.Ignore())
-                     .ForMember(dest => dest.DateOfBirth, opts => opts.MapFrom(src => src.DateOfBirth.ToShortDateString()));
+                     .ForMember(dest => dest.DateOfBirth, opts => opts.MapFrom(src => src.DateOfBirth));
 
             CreateMap<CertificationPlatformUser, DisplayUserWithExamResults>()
                      .ForMember(dest => dest.UserIdentificator, opts => opts.MapFrom(src => src.Id));
@@ -682,7 +681,7 @@ namespace Certification_System.Services
                      .ForMember(dest => dest.UserIdentificator, opts => opts.MapFrom(src => src.Id))
                      .ForMember(dest => dest.Courses, opts => opts.Ignore())
                      .ForMember(dest => dest.Meetings, opts => opts.Ignore())
-                     .ForMember(dest => dest.DateOfBirth, opts => opts.MapFrom(src => src.DateOfBirth.ToShortDateString()));
+                     .ForMember(dest => dest.DateOfBirth, opts => opts.MapFrom(src => src.DateOfBirth));
 
             CreateMap<DisplayCrucialDataUserViewModel, DeleteUsersFromCheckBoxViewModel>()
                      .ForMember(dest => dest.IsToDelete, opts => opts.Ignore());

@@ -19,7 +19,7 @@
     <h2>Informacje o użytkowniku</h2>
 
     <div class="row m-0 mt-3 mb-3">
-        <a asp-action="EditUser" asp-route-userIdentificator="UserIdentificator" asp-controller="Users" class="btn btn-warning mt-1 mr-1 xs450px_FloatLeft">Edytuj</a>
+        <a asp-action="EditUser" asp-route-userIdentificator="@Model.UserIdentificator" asp-controller="Users" class="btn btn-warning mt-1 mr-1 xs450px_FloatLeft">Edytuj</a>
         <div class="dropdown p-0 mt-1 mr-1 xs450px_FloatLeft">
             <button class="btn btn-success dropdown-toggle" type="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">Wyślij email</button>
             <div class="dropdown-menu nohover">

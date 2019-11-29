@@ -28,7 +28,7 @@
                 {
                     <a asp-action="UserDetails" asp-controller="Users" asp-route-userIdentificator="@Model.UserIdentificator" class="btn btn-outline-info mt-1 xs300px_FloatRight">Powrót do szczegółów użytkownika</a>
                 }
-                @if (this.User.IsInRole("Company"))
+                else if (this.User.IsInRole("Company"))
                 {
                     <a asp-action="CompanyWorkerDetails" asp-controller="Users" asp-route-userIdentificator="@Model.UserIdentificator" class="btn btn-outline-info mt-1 xs300px_FloatRight">Powrót do szczegółów pracownika</a>
                 }
