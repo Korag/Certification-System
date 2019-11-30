@@ -1645,6 +1645,7 @@ namespace Certification_System.Controllers
         {
             var user = _context.userRepository.GetUserById(userIdentificator);
             var courseQueue = _context.courseRepository.GetCourseQueueById(courseIdentificator);
+            var userLogDataOfAssignToCourseQueueAction = courseQueue.AwaitingUsers.Where(z => z.UserIdentificator == userIdentificator).Select(z => z.LogData).FirstOrDefault();
 
             if (courseQueue != null && user != null)
             {
@@ -1682,8 +1683,7 @@ namespace Certification_System.Controllers
                     var course = _context.courseRepository.GetCourseById(courseIdentificator);
 
                     #region PersonalUserLogs
-                     var userLogDataOfAssignToCourseQueueAction = courseQueue.AwaitingUsers.Where(z => z.UserIdentificator == userIdentificator).Select(z => z.LogData).FirstOrDefault();
-
+                  
                     CourseQueueWithSingleUser rejectedUser = new CourseQueueWithSingleUser();
                     rejectedUser.CourseIdentificator = courseIdentificator;
                     rejectedUser.UserIdentificator = userIdentificator;

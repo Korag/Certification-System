@@ -22,8 +22,8 @@ namespace Certification_System.Controllers
         private readonly IEmailSender _emailSender;
 
         public DegreesController(
-            MongoOperations context, 
-            IMapper mapper, 
+            MongoOperations context,
+            IMapper mapper,
             IKeyGenerator keyGenerator,
             ILogService logger,
             IEmailSender emailSender)
@@ -62,7 +62,10 @@ namespace Certification_System.Controllers
                 degree.DegreeIdentificator = _keyGenerator.GenerateNewId();
                 degree.DegreeIndexer = _keyGenerator.GenerateDegreeEntityIndexer(degree.Name);
 
-                degree.Conditions = newDegree.ConditionsList.Split(",").ToList();
+                if (degree.Conditions.Count != 0)
+                {
+                    degree.Conditions = newDegree.ConditionsList.Split(",").ToList();
+                }
 
                 _context.degreeRepository.AddDegree(degree);
 
@@ -156,7 +159,10 @@ namespace Certification_System.Controllers
             degreeViewModel.AvailableCertificates = _context.certificateRepository.GetCertificatesAsSelectList().ToList();
             degreeViewModel.AvailableDegrees = _context.degreeRepository.GetDegreesAsSelectList().ToList();
 
-            degreeViewModel.ConditionsList = String.Join(",", degree.Conditions); 
+            if (degree.Conditions.Count != 0)
+            {
+                degreeViewModel.ConditionsList = String.Join(",", degree.Conditions);
+            }
 
             return View(degreeViewModel);
         }
@@ -171,7 +177,14 @@ namespace Certification_System.Controllers
                 var originDegree = _context.degreeRepository.GetDegreeById(editedDegree.DegreeIdentificator);
                 originDegree = _mapper.Map<EditDegreeViewModel, Degree>(editedDegree, originDegree);
 
-                originDegree.Conditions = editedDegree.ConditionsList.Split(",").ToList();
+                if (!String.IsNullOrWhiteSpace(editedDegree.ConditionsList))
+                {
+                    originDegree.Conditions = editedDegree.ConditionsList.Split(",").ToList();
+                }
+                else
+                {
+                    originDegree.Conditions.Clear();
+                }
 
                 _context.degreeRepository.UpdateDegree(originDegree);
 
@@ -336,7 +349,7 @@ namespace Certification_System.Controllers
                 var deletedGivenDegrees = _context.givenDegreeRepository.DeleteGivenDegreesByDegreeId(degreeToDelete.EntityIdentificator);
                 _logger.AddGivenDegreesLogs(deletedGivenDegrees, logInfoDeleteGivenDegrees);
 
-                var updatedUsers = _context.userRepository.GetUsersByGivenDegreesId(deletedGivenDegrees.Select(z=> z.GivenDegreeIdentificator).ToList());
+                var updatedUsers = _context.userRepository.GetUsersByGivenDegreesId(deletedGivenDegrees.Select(z => z.GivenDegreeIdentificator).ToList());
                 _logger.AddUsersLogs(updatedUsers, logInfoUpdateUsers);
 
                 #endregion

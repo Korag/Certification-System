@@ -184,6 +184,7 @@ namespace Certification_System.Entities
            {"removeExaminerFromExam",  "Zostałeś usunięty z egzaminu"},
            {"addUserToExam",  "Do egzaminu został dodany nowy użytkownik"},
            {"addUserToExamTerm",  "Do tury egzaminu został dodany nowy użytkownik"},
+           {"addExamToCourse",  "Do kursu został dodany nowy egzamin"},
 
            {"assignUserToExam",  "Zostałeś dodany do egzaminu"},
            {"assignUserToExamTerm",  "Zostałeś dodany do tury egzaminu"},
