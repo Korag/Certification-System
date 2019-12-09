@@ -1,11 +1,17 @@
 @model Certification_System.DTOViewModels.DataTableMultipleFilterScriptViewModel
 
+@{await Html.RenderPartialAsync("_DataTableEllipsisScript");}
+
 <script>
         $(document).ready(function () {
             $('#@Model.TableIdentificator').DataTable({
                 "language": {
                     "url": "//cdn.datatables.net/plug-ins/1.10.19/i18n/Polish.json"
                 },
+                   columnDefs: [{
+                    targets: @Html.Raw(Json.Serialize(Model.EllipsisTargets)),
+                    render: fnDataTableRenderEllipsis(@Model.MaxAmountOfCharacters, @Model.WordBreak.ToString().ToLower(), true),
+                }],
                 retrieve: true,
                 initComplete: function () {
                     this.api().columns(@Model.NumberOfColumn.ToList().ElementAt(0)).every(function () {
