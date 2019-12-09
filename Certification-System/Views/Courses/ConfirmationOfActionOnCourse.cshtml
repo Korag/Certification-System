@@ -42,6 +42,6 @@ else
 }
 
 @section Scripts{
-    @{await Html.RenderPartialAsync("_DataTableBasicScript", "courseConfirmation");}
-    @{await Html.RenderPartialAsync("_DataTableBasicScript", "listMeetings");}
+    @{await Html.RenderPartialAsync("_DataTableBasicScript", new DataTableInitializationViewModel("courseConfirmation", new int[] { }, 80, true));}
+    @{await Html.RenderPartialAsync("_DataTableBasicScript", new DataTableInitializationViewModel("listMeetings", new int[] { }, 80, true));}
 }

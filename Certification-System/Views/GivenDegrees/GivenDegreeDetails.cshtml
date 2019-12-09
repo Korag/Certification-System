@@ -6,10 +6,10 @@
     Layout = "~/Views/Shared/_Layout.cshtml";
 
     var deleteParams = new Dictionary<string, string>
-            {
-                { "givenDegreeIdentificator", Model.GivenDegree.GivenDegreeIdentificator },
-                { "returnUrl", ($"{Context.Request.Scheme}://{Context.Request.Host}{Context.Request.Path}{Context.Request.QueryString}")}
-            };
+{
+{ "givenDegreeIdentificator", Model.GivenDegree.GivenDegreeIdentificator },
+{ "returnUrl", ($"{Context.Request.Scheme}://{Context.Request.Host}{Context.Request.Path}{Context.Request.QueryString}")}
+};
 }
 
 <h1>Szczegóły nadanego stopnia zawodowego</h1>
@@ -149,8 +149,8 @@ else
 }
 
 @section Scripts{
-    @{await Html.RenderPartialAsync("_DataTableBasicScript", "listGivenDegree");}
-    @{await Html.RenderPartialAsync("_DataTableBasicScript", "listCompanies");}
-    @{await Html.RenderPartialAsync("_DataTableBasicScript", "listRequiredCertificates");}
-    @{await Html.RenderPartialAsync("_DataTableBasicScript", "listRequiredDegrees");}
+    @{await Html.RenderPartialAsync("_DataTableBasicScript", new DataTableInitializationViewModel("listGivenDegree", new int[] { }, 80, true));}
+    @{await Html.RenderPartialAsync("_DataTableBasicScript", new DataTableInitializationViewModel("listCompanies", new int[] { }, 80, true));}
+    @{await Html.RenderPartialAsync("_DataTableBasicScript", new DataTableInitializationViewModel("listRequiredCertificates", new int[] { }, 80, true));}
+    @{await Html.RenderPartialAsync("_DataTableBasicScript", new DataTableInitializationViewModel("listRequiredDegrees", new int[] { }, 80, true));}
 }

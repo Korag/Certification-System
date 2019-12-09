@@ -27,5 +27,5 @@ else
 @await Component.InvokeAsync("DisplayCompanyDataTable", new { companyViewModel = companyList, tableIdentificator = "companyConfirmation" })
 
 @section Scripts{
-    @{await Html.RenderPartialAsync("_DataTableBasicScript", "companyConfirmation");}
+    @{await Html.RenderPartialAsync("_DataTableBasicScript", new DataTableInitializationViewModel("companyConfirmation", new int[] { }, 80, true));}
 }

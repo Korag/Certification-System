@@ -6,10 +6,10 @@
     Layout = "~/Views/Shared/_Layout.cshtml";
 
     var deleteParams = new Dictionary<string, string>
-            {
-                { "givenCertificateIdentificator", Model.GivenCertificate.GivenCertificateIdentificator },
-                { "returnUrl", ($"{Context.Request.Scheme}://{Context.Request.Host}{Context.Request.Path}{Context.Request.QueryString}")}
-            };
+{
+{ "givenCertificateIdentificator", Model.GivenCertificate.GivenCertificateIdentificator },
+{ "returnUrl", ($"{Context.Request.Scheme}://{Context.Request.Host}{Context.Request.Path}{Context.Request.QueryString}")}
+};
 }
 
 <h1>Szczegóły nadanego certyfikatu</h1>
@@ -160,9 +160,9 @@ else
 }
 
 @section Scripts{
-    @{await Html.RenderPartialAsync("_DataTableBasicScript", "listGivenCertificate");}
-    @{await Html.RenderPartialAsync("_DataTableBasicScript", "listCompanies");}
-    @{await Html.RenderPartialAsync("_DataTableBasicScript", "listCourses");}
-    @{await Html.RenderPartialAsync("_DataTableBasicScript", "listMeetings");}
-    @{await Html.RenderPartialAsync("_DataTableBasicScript", "listInstructors");}
+    @{await Html.RenderPartialAsync("_DataTableBasicScript", new DataTableInitializationViewModel("listGivenCertificate", new int[] { }, 80, true));}
+    @{await Html.RenderPartialAsync("_DataTableBasicScript", new DataTableInitializationViewModel("listCompanies", new int[] { }, 80, true));}
+    @{await Html.RenderPartialAsync("_DataTableBasicScript", new DataTableInitializationViewModel("listCourses", new int[] { }, 80, true));}
+    @{await Html.RenderPartialAsync("_DataTableBasicScript", new DataTableInitializationViewModel("listMeetings", new int[] { }, 80, true));}
+    @{await Html.RenderPartialAsync("_DataTableBasicScript", new DataTableInitializationViewModel("listInstructors", new int[] { }, 80, true));}
 }

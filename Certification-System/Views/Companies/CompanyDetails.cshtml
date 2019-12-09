@@ -1,14 +1,15 @@
 ﻿@model Certification_System.DTOViewModels.CompanyDetailsViewModel
+@using Certification_System.DTOViewModels
 
 @{
     ViewData["Title"] = "CompanyDetails";
     Layout = "~/Views/Shared/_Layout.cshtml";
 
     var deleteParams = new Dictionary<string, string>
-            {
-                { "companyIdentificator", Model.CompanyIdentificator },
-                { "returnUrl", ($"{Context.Request.Scheme}://{Context.Request.Host}{Context.Request.Path}{Context.Request.QueryString}")}
-            };
+{
+{ "companyIdentificator", Model.CompanyIdentificator },
+{ "returnUrl", ($"{Context.Request.Scheme}://{Context.Request.Host}{Context.Request.Path}{Context.Request.QueryString}")}
+};
 }
 
 <h2>Szczegóły przedsiębiorstwa</h2>
@@ -85,5 +86,5 @@ else
 }
 
 @section Scripts{
-    @{await Html.RenderPartialAsync("_DataTableBasicScript", "listUsers");}
+    @{await Html.RenderPartialAsync("_DataTableBasicScript", new DataTableInitializationViewModel("listUsers", new int[] { }, 80, true));}
 }

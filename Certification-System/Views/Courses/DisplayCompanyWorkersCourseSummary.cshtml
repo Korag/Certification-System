@@ -1,4 +1,5 @@
 ﻿@model Certification_System.DTOViewModels.DisplayCompanyCourseSummaryViewModel
+@using Certification_System.DTOViewModels
 
 @{
     ViewData["Title"] = "DisplayCompanyWorkersCourseSummary";
@@ -120,7 +121,7 @@ else if (Model.CourseEnded)
 }
 
 @section Scripts {
-    @{await Html.RenderPartialAsync("_DataTableBasicScript", "listUsers");}
-    @{await Html.RenderPartialAsync("_DataTableBasicScript", "listUsersExamsPeriodsStatus");}
-    @{await Html.RenderPartialAsync("_DataTableBasicScript", "listGivenCertificates");}
+    @{await Html.RenderPartialAsync("_DataTableBasicScript", new DataTableInitializationViewModel("listUsers", new int[] { }, 80, true));}
+    @{await Html.RenderPartialAsync("_DataTableBasicScript", new DataTableInitializationViewModel("listUsersExamsPeriodsStatus", new int[] { }, 80, true));}
+    @{await Html.RenderPartialAsync("_DataTableBasicScript", new DataTableInitializationViewModel("listGivenCertificates", new int[] { }, 80, true));}
 }

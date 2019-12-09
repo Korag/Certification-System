@@ -178,9 +178,9 @@ else
 }
 
 @section Scripts{
-    @{await Html.RenderPartialAsync("_DataTableBasicScript", "listMeetings");}
-    @{await Html.RenderPartialAsync("_DataTableBasicScript", "listExams");}
-    @{await Html.RenderPartialAsync("_DataTableBasicScript", "listExamsTerms");}
+    @{await Html.RenderPartialAsync("_DataTableBasicScript", new DataTableInitializationViewModel("listMeetings", new int[] { }, 80, true));}
+    @{await Html.RenderPartialAsync("_DataTableBasicScript", new DataTableInitializationViewModel("listExams", new int[] { }, 80, true));}
+    @{await Html.RenderPartialAsync("_DataTableBasicScript", new DataTableInitializationViewModel("listExamsTerms", new int[] { }, 80, true));}
 
     @{await Html.RenderPartialAsync("_DataTableWithMultipleFilterOnScript", new DataTableMultipleFilterScriptViewModel { TableIdentificator = "listCourses", NumberOfColumn = new List<string> { "8", "11" }, SelectId = new List<string> { "selectCourseEndedFilter", "selectRoleFilter" } });}
 }

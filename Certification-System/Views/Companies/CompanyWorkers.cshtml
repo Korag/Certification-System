@@ -1,4 +1,5 @@
 ﻿@model Certification_System.DTOViewModels.DisplayAllCompanyEmployees
+@using Certification_System.DTOViewModels
 
 @{
     ViewData["Title"] = "CompanyWorkers";
@@ -31,6 +32,6 @@ else
 }
 
 @section Scripts{
-    @{await Html.RenderPartialAsync("_DataTableBasicScript", "listManagers");}
-    @{await Html.RenderPartialAsync("_DataTableBasicScript", "listWorkers");}
+    @{await Html.RenderPartialAsync("_DataTableBasicScript", new DataTableInitializationViewModel("listManagers", new int[] { }, 80, true));}
+    @{await Html.RenderPartialAsync("_DataTableBasicScript", new DataTableInitializationViewModel("listWorkers", new int[] { }, 80, true));}
 }

@@ -1,4 +1,5 @@
 ﻿@model IEnumerable<Certification_System.DTOViewModels.DisplayCompanyViewModel>
+@using Certification_System.DTOViewModels
 
 @{
     ViewData["Title"] = "WorkerCompanies";
@@ -80,5 +81,5 @@ else
 }
 
 @section Scripts{
-    @{await Html.RenderPartialAsync("_DataTableBasicScript", "listCompanies");}
+    @{await Html.RenderPartialAsync("_DataTableBasicScript", new DataTableInitializationViewModel("listCompanies", new int[] { }, 80, true));}
 }

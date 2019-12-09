@@ -1,4 +1,5 @@
 ﻿@model Certification_System.DTOViewModels.WorkerCourseDetailsViewModel
+@using Certification_System.DTOViewModels
 
 @{
     ViewData["Title"] = "WorkerCourseDetails";
@@ -172,10 +173,10 @@ else
 }
 
 @section Scripts {
-    @{await Html.RenderPartialAsync("_DataTableBasicScript", "listMeetings");}
-    @{await Html.RenderPartialAsync("_DataTableBasicScript", "listMeetingsPresence");}
-    @{await Html.RenderPartialAsync("_DataTableBasicScript", "listExams");}
-    @{await Html.RenderPartialAsync("_DataTableBasicScript", "listExamsWithExamsResults");}
-    @{await Html.RenderPartialAsync("_DataTableBasicScript", "listNotPassedExams");}
-    @{await Html.RenderPartialAsync("_DataTableBasicScript", "listGivenCertificates");}
+    @{await Html.RenderPartialAsync("_DataTableBasicScript", new DataTableInitializationViewModel("listMeetings", new int[] { }, 80, true));}
+    @{await Html.RenderPartialAsync("_DataTableBasicScript", new DataTableInitializationViewModel("listMeetingsPresence", new int[] { }, 80, true));}
+    @{await Html.RenderPartialAsync("_DataTableBasicScript", new DataTableInitializationViewModel("listExams", new int[] { }, 80, true));}
+    @{await Html.RenderPartialAsync("_DataTableBasicScript", new DataTableInitializationViewModel("listExamsWithExamsResults", new int[] { }, 80, true));}
+    @{await Html.RenderPartialAsync("_DataTableBasicScript", new DataTableInitializationViewModel("listNotPassedExams", new int[] { }, 80, true));}
+    @{await Html.RenderPartialAsync("_DataTableBasicScript", new DataTableInitializationViewModel("listGivenCertificates", new int[] { }, 80, true));}
 }

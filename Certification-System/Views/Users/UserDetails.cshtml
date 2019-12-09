@@ -1,14 +1,15 @@
 ﻿@model Certification_System.DTOViewModels.UserDetailsViewModel
+@using Certification_System.DTOViewModels
 
 @{
     ViewData["Title"] = "UserDetails";
     Layout = "~/Views/Shared/_Layout.cshtml";
 
     var deleteParams = new Dictionary<string, string>
-            {
-                { "userIdentificator", Model.UserIdentificator },
-                { "returnUrl", ($"{Context.Request.Scheme}://{Context.Request.Host}{Context.Request.Path}{Context.Request.QueryString}")}
-            };
+{
+{ "userIdentificator", Model.UserIdentificator },
+{ "returnUrl", ($"{Context.Request.Scheme}://{Context.Request.Host}{Context.Request.Path}{Context.Request.QueryString}")}
+};
 }
 
 <h1>Szczegóły użytkownika</h1>
@@ -172,8 +173,8 @@ else
 }
 
 @section Scripts{
-    @{await Html.RenderPartialAsync("_DataTableBasicScript", "listGivenCertificates");}
-    @{await Html.RenderPartialAsync("_DataTableBasicScript", "listGivenDegrees");}
-    @{await Html.RenderPartialAsync("_DataTableBasicScript", "listCourses");}
-    @{await Html.RenderPartialAsync("_DataTableBasicScript", "listCompanies");}
+    @{await Html.RenderPartialAsync("_DataTableBasicScript", new DataTableInitializationViewModel("listGivenCertificates", new int[] { }, 80, true));}
+    @{await Html.RenderPartialAsync("_DataTableBasicScript", new DataTableInitializationViewModel("listGivenDegrees", new int[] { }, 80, true));}
+    @{await Html.RenderPartialAsync("_DataTableBasicScript", new DataTableInitializationViewModel("listCourses", new int[] { }, 80, true));}
+    @{await Html.RenderPartialAsync("_DataTableBasicScript", new DataTableInitializationViewModel("listCompanies", new int[] { }, 80, true));}
 }

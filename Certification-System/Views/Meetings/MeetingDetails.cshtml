@@ -1,14 +1,15 @@
 ﻿@model Certification_System.DTOViewModels.MeetingDetailsViewModel
+@using Certification_System.DTOViewModels
 
 @{
     ViewData["Title"] = "MeetingDetails";
     Layout = "~/Views/Shared/_Layout.cshtml";
 
     var deleteParams = new Dictionary<string, string>
-            {
-                { "meetingIdentificator", Model.MeetingIdentificator },
-                { "returnUrl", ($"{Context.Request.Scheme}://{Context.Request.Host}{Context.Request.Path}{Context.Request.QueryString}")}
-            };
+{
+{ "meetingIdentificator", Model.MeetingIdentificator },
+{ "returnUrl", ($"{Context.Request.Scheme}://{Context.Request.Host}{Context.Request.Path}{Context.Request.QueryString}")}
+};
 }
 
 <h2>Szczegóły spotkania</h2>
@@ -106,7 +107,7 @@ else
 
 @if (Model.AllCourseParticipants.Count != 0)
 {
-    @await Component.InvokeAsync("DisplayMeetingPresenceDataTable", new { userViewModel = Model.AllCourseParticipants, attendanceViewModel = Model.AttendanceList, meetingStartDate = Model.DateOfStart ,tableIdentificator = "listUsers", operationSet = 1 })
+    @await Component.InvokeAsync("DisplayMeetingPresenceDataTable", new { userViewModel = Model.AllCourseParticipants, attendanceViewModel = Model.AttendanceList, meetingStartDate = Model.DateOfStart, tableIdentificator = "listUsers", operationSet = 1 })
 }
 else
 {
@@ -114,7 +115,7 @@ else
 }
 
 @section Scripts{
-    @{await Html.RenderPartialAsync("_DataTableBasicScript", "listInstructors");}
-    @{await Html.RenderPartialAsync("_DataTableBasicScript", "listUsers");}
+    @{await Html.RenderPartialAsync("_DataTableBasicScript", new DataTableInitializationViewModel("listInstructors", new int[] { }, 80, true));}
+    @{await Html.RenderPartialAsync("_DataTableBasicScript", new DataTableInitializationViewModel("listUsers", new int[] { }, 80, true));}
 }
 

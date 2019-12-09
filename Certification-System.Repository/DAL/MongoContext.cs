@@ -20,12 +20,12 @@ namespace Certification_System.Repository.Context
             InitializeContextInstantion();
         }
 
-         //"../wwwroot/DAL/dbCredentials.json"
-         //"../Certification-System.Repository/DAL/dbCredentials.json"
+        //"../wwwroot/DAL/dbCredentials.json"
+        //"../Certification-System.Repository/DAL/dbCredentials.json"
 
         private void InitializeDatabaseCredentials()
         {
-            using (StreamReader sr = new StreamReader("../Certification-System/wwwroot/DAL/dbCredentials.json"))
+            using (StreamReader sr = new StreamReader(@"../Certification-System.Repository/DAL/dbCredentials.json"))
             {
                 var json = sr.ReadToEnd();
                 try

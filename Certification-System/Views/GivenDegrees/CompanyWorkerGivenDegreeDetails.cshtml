@@ -44,8 +44,8 @@ else
 }
 
 @section Scripts{
-    @{await Html.RenderPartialAsync("_DataTableBasicScript", "listGivenDegree");}
-    @{await Html.RenderPartialAsync("_DataTableBasicScript", "listRequiredCertificates");}
-    @{await Html.RenderPartialAsync("_DataTableBasicScript", "listRequiredDegrees");}
+    @{await Html.RenderPartialAsync("_DataTableBasicScript", new DataTableInitializationViewModel("listGivenDegree", new int[] { }, 80, true));}
+    @{await Html.RenderPartialAsync("_DataTableBasicScript", new DataTableInitializationViewModel("listRequiredCertificates", new int[] { }, 80, true));}
+    @{await Html.RenderPartialAsync("_DataTableBasicScript", new DataTableInitializationViewModel("listRequiredDegrees", new int[] { }, 80, true));}
 }
 

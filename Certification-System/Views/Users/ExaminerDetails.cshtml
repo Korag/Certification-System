@@ -1,14 +1,15 @@
 ﻿@model Certification_System.DTOViewModels.ExaminerDetailsViewModel
+@using Certification_System.DTOViewModels
 
 @{
     ViewData["Title"] = "ExaminerDetails";
     Layout = "~/Views/Shared/_Layout.cshtml";
 
     var deleteParams = new Dictionary<string, string>
-            {
-                { "userIdentificator", Model.UserIdentificator },
-                { "returnUrl", ($"{Context.Request.Scheme}://{Context.Request.Host}{Context.Request.Path}{Context.Request.QueryString}")}
-            };
+{
+{ "userIdentificator", Model.UserIdentificator },
+{ "returnUrl", ($"{Context.Request.Scheme}://{Context.Request.Host}{Context.Request.Path}{Context.Request.QueryString}")}
+};
 }
 
 <h1>Szczegóły egzaminatora</h1>
@@ -151,7 +152,7 @@ else
 }
 
 @section Scripts{
-    @{await Html.RenderPartialAsync("_DataTableBasicScript", "listCourses");}
-    @{await Html.RenderPartialAsync("_DataTableBasicScript", "listExams");}
-    @{await Html.RenderPartialAsync("_DataTableBasicScript", "listExamsTerms");}
+    @{await Html.RenderPartialAsync("_DataTableBasicScript", new DataTableInitializationViewModel("listCourses", new int[] { }, 80, true));}
+    @{await Html.RenderPartialAsync("_DataTableBasicScript", new DataTableInitializationViewModel("listExams", new int[] { }, 80, true));}
+    @{await Html.RenderPartialAsync("_DataTableBasicScript", new DataTableInitializationViewModel("listExamsTerms", new int[] { }, 80, true));}
 }

@@ -32,7 +32,7 @@ else
     {
         <a asp-action="AddNewExamTerm" asp-route-examIdentificator="@Model.Exam.ExamIdentificator" asp-controller="Exams" class="btn btn-secondary mt-1 mr-1">Dodaj turę do egzaminu</a>
     }
-        <a asp-action="ExamDetails" asp-route-examIdentificator="@Model.Exam.ExamIdentificator" asp-controller="Exams" class="btn btn-info mt-1 mr-1">Szczegóły egzaminu</a>
+    <a asp-action="ExamDetails" asp-route-examIdentificator="@Model.Exam.ExamIdentificator" asp-controller="Exams" class="btn btn-info mt-1 mr-1">Szczegóły egzaminu</a>
     <a asp-action="EditExamHub" asp-route-examIdentificator="@Model.Exam.ExamIdentificator" asp-controller="Exams" class="btn btn-warning mt-1 mr-1">Edytuj egzamin</a>
     <a asp-action="AddUsersToExam" asp-route-examIdentificator="@Model.Exam.ExamIdentificator" asp-controller="Exams" class="btn btn-light mt-1 mr-1">Przypisz użytkowników</a>
 </div>
@@ -49,6 +49,6 @@ else
 }
 
 @section Scripts{
-    @{await Html.RenderPartialAsync("_DataTableBasicScript", "examConfirmation");}
-    @{await Html.RenderPartialAsync("_DataTableBasicScript", "examTermsConfirmation");}
+    @{await Html.RenderPartialAsync("_DataTableBasicScript", new DataTableInitializationViewModel("examConfirmation", new int[] { }, 80, true));}
+    @{await Html.RenderPartialAsync("_DataTableBasicScript", new DataTableInitializationViewModel("examTermsConfirmation", new int[] { }, 80, true));}
 }

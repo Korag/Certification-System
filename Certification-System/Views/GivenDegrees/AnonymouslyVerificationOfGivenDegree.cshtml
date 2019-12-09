@@ -66,6 +66,6 @@ else
 @await Component.InvokeAsync("DisplayGivenDegreeToUserExtDataTable", new { givenDegreeViewModel = givenDegreeList, tableIdentificator = "listGivenDegree" })
 
 @section Scripts{
-    @{await Html.RenderPartialAsync("_DataTableBasicScript", "listGivenDegree");}
-    @{await Html.RenderPartialAsync("_DataTableBasicScript", "listCompanies");}
+    @{await Html.RenderPartialAsync("_DataTableBasicScript", new DataTableInitializationViewModel("listGivenDegree", new int[] { }, 80, true));}
+    @{await Html.RenderPartialAsync("_DataTableBasicScript", new DataTableInitializationViewModel("listCompanies", new int[] { }, 80, true));}
 }

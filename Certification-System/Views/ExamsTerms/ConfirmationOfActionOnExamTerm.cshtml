@@ -26,5 +26,5 @@ else
 @await Component.InvokeAsync("DisplayExamTermWithLocationDataTable", new { examTermViewModel = examTermList, tableIdentificator = "examTermConfirmation" })
 
 @section Scripts{
-    @{await Html.RenderPartialAsync("_DataTableBasicScript", "examTermConfirmation");}
+    @{await Html.RenderPartialAsync("_DataTableBasicScript", new DataTableInitializationViewModel("examTermConfirmation", new int[] { }, 80, true));}
 }

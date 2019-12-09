@@ -30,5 +30,5 @@ else
 </div>
 
 @section Scripts{
-    @{await Html.RenderPartialAsync("_DataTableBasicScript", "certificateConfirmation");}
+    @{await Html.RenderPartialAsync("_DataTableBasicScript", new DataTableInitializationViewModel("certificateConfirmation", new int[] { }, 80, true));}
 }

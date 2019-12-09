@@ -1,4 +1,5 @@
 ﻿@model Certification_System.DTOViewModels.CourseOfferDetailsViewModel
+@using Certification_System.DTOViewModels
 
 @{
     ViewData["Title"] = "CourseOfferDetails";
@@ -127,7 +128,7 @@
         <div class="row justify-content-center">
             @if (!Model.UserInQueue)
             {
-                if (Model.Course.VacantSeats != 0 )
+                if (Model.Course.VacantSeats != 0)
                 {
                     <button type="button" class="btn btn-primary mt-1 xs300px_JustifyContentCenter" data-toggle="modal" data-target="#modal">Zapisuje się i zobowiązuję do zapłaty</button>
                 }
@@ -144,7 +145,7 @@
 </form>
 
 @section Scripts {
-    @{await Html.RenderPartialAsync("_DataTableBasicScript", "listExams");}
+    @{await Html.RenderPartialAsync("_DataTableBasicScript", new DataTableInitializationViewModel("listExams", new int[] { }, 80, true));}
 }
 
 

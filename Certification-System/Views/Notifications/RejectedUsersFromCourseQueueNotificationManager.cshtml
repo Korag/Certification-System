@@ -1,4 +1,5 @@
 ﻿@model IEnumerable<Certification_System.DTOViewModels.DisplayRejectedUserLog>
+@using Certification_System.DTOViewModels
 
 @{
     ViewData["Title"] = "RejectedUsersFromCourseQueueNotificationManager";
@@ -15,6 +16,6 @@
 @await Component.InvokeAsync("DisplayRejectedUsersFromCourseQueueLogDataTable", new { logViewModel = Model, tableIdentificator = "listNotifications", operationSet = 1 })
 
 @section Scripts {
-    @{await Html.RenderPartialAsync("_DataTableBasicScript", "listNotifications");}
+    @{await Html.RenderPartialAsync("_DataTableBasicScript", new DataTableInitializationViewModel("listNotifications", new int[] { }, 80, true));}
 }
 

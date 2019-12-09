@@ -1,4 +1,5 @@
 ﻿@model Certification_System.DTOViewModels.CompanyDegreeDetailsViewModel
+@using Certification_System.DTOViewModels
 
 @{
     ViewData["Title"] = "CompanyDegreeDetails";
@@ -99,7 +100,7 @@ else
 }
 
 @section Scripts{
-    @{await Html.RenderPartialAsync("_DataTableBasicScript", "listUsers");}
-    @{await Html.RenderPartialAsync("_DataTableBasicScript", "listRequiredCertificates");}
-    @{await Html.RenderPartialAsync("_DataTableBasicScript", "listRequiredDegrees");}
+    @{await Html.RenderPartialAsync("_DataTableBasicScript", new DataTableInitializationViewModel("listUsers", new int[] { }, 80, true));}
+    @{await Html.RenderPartialAsync("_DataTableBasicScript", new DataTableInitializationViewModel("listRequiredCertificates", new int[] { }, 80, true));}
+    @{await Html.RenderPartialAsync("_DataTableBasicScript", new DataTableInitializationViewModel("listRequiredDegrees", new int[] { }, 80, true));}
 }

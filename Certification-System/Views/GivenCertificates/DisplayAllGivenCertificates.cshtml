@@ -1,4 +1,5 @@
 ﻿@model IEnumerable<Certification_System.DTOViewModels.DisplayGivenCertificateViewModel>
+@using Certification_System.DTOViewModels
 
 @{
     ViewData["Title"] = "DisplayAllGivenCertificates";
@@ -20,5 +21,5 @@
 @await Component.InvokeAsync("DisplayGivenCertificateDataTable", new { givenCertificateViewModel = Model, tableIdentificator = "listGivenCertificates", operationSet = 1 })
 
 @section Scripts{
-    @{await Html.RenderPartialAsync("_DataTableBasicScript", "listGivenCertificates");}
+    @{await Html.RenderPartialAsync("_DataTableBasicScript", new DataTableInitializationViewModel("listGivenCertificates", new int[] { }, 80, true));}
 }

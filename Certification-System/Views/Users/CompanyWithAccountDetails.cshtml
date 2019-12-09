@@ -1,14 +1,15 @@
 ﻿@model Certification_System.DTOViewModels.CompanyWithAccountDetailsViewModel
+@using Certification_System.DTOViewModels
 
 @{
     ViewData["Title"] = "CompanyWithAccountDetails";
     Layout = "~/Views/Shared/_Layout.cshtml";
 
     var deleteParams = new Dictionary<string, string>
-            {
-                { "userIdentificator", Model.UserAccount.UserIdentificator },
-                { "returnUrl", ($"{Context.Request.Scheme}://{Context.Request.Host}{Context.Request.Path}{Context.Request.QueryString}")}
-            };
+    {
+        { "userIdentificator", Model.UserAccount.UserIdentificator },
+        { "returnUrl", ($"{Context.Request.Scheme}://{Context.Request.Host}{Context.Request.Path}{Context.Request.QueryString}")}
+    };
 }
 
 <h2>Szczegóły przedsiębiorstwa</h2>
@@ -19,7 +20,7 @@
 
     <div class="row m-0 mt-3 mb-3">
         <a asp-action="CompanyDetails" asp-route-companyIdentificator="@Model.CompanyIdentificator" asp-controller="Companies" class="btn btn-info mt-1 xs350px_FloatLeft">Szczegóły</a>
-   
+
         <a asp-action="DisplayAllCompanies" asp-controller="Companies" class="btn btn-outline-info mt-1 xs350px_FloatRight">Powrót do listy przedsiębiorstw</a>
     </div>
 
@@ -173,5 +174,5 @@ else
 }
 
 @section Scripts{
-    @{await Html.RenderPartialAsync("_DataTableBasicScript", "listUsers");}
+    @{await Html.RenderPartialAsync("_DataTableBasicScript", new DataTableInitializationViewModel("listUsers", new int[] { }, 80, true));}
 }

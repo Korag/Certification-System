@@ -1,4 +1,5 @@
 ﻿@model Certification_System.DTOViewModels.DeleteUsersFromExamViewModel
+@using Certification_System.DTOViewModels
 
 @{
     ViewData["Title"] = "DeleteUsersFromExam";
@@ -18,7 +19,7 @@
 
         <div class="col-md-8 col-xl-6 col-lg-6 col-sm-12 col-xs-10 m-auto p-3 shadow p-3 mb-5 bg-light rounded border border-primary rounded-bottom" style="opacity:0.90">
 
-            <input asp-for="ExamIdentificator" class="form-control col-12" hidden readonly/>
+            <input asp-for="ExamIdentificator" class="form-control col-12" hidden readonly />
 
             <div class="form-group">
                 <label asp-for="ExamIndexer" class="control-label"></label>
@@ -133,5 +134,5 @@
 
 @section Scripts {
     @{await Html.RenderPartialAsync("_ValidationScriptsPartial");}
-    @{await Html.RenderPartialAsync("_DataTableBasicScript", "listUsers");}
+    @{await Html.RenderPartialAsync("_DataTableBasicScript", new DataTableInitializationViewModel("listUsers", new int[] { }, 80, true));}
 }

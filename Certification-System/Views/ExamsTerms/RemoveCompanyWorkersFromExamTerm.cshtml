@@ -1,4 +1,5 @@
 ﻿@model Certification_System.DTOViewModels.DeleteUsersFromExamTermViewModel
+@using Certification_System.DTOViewModels
 
 @{
     ViewData["Title"] = "RemoveCompanyWorkersFromExamTerm";
@@ -121,5 +122,5 @@
 
 @section Scripts {
     @{await Html.RenderPartialAsync("_ValidationScriptsPartial");}
-    @{await Html.RenderPartialAsync("_DataTableBasicScript", "listUsers");}
+    @{await Html.RenderPartialAsync("_DataTableBasicScript", new DataTableInitializationViewModel("listUsers", new int[] { }, 80, true));}
 }

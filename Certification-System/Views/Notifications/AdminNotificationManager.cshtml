@@ -1,4 +1,5 @@
 ﻿@model Certification_System.DTOViewModels.AdminNotificationViewModel
+@using Certification_System.DTOViewModels
 
 @{
     ViewData["Title"] = "AdminNotificationManager";
@@ -30,7 +31,7 @@
 @await Component.InvokeAsync("DisplayUserPersonalLogDataTable", new { logViewModel = Model.OverallLogs, tableIdentificator = "listNotifications" })
 
 @section Scripts {
-    @{await Html.RenderPartialAsync("_DataTableBasicScript", "listCourseQueue");}
-    @{await Html.RenderPartialAsync("_DataTableBasicScript", "listNotEndedCourse");}
-    @{await Html.RenderPartialAsync("_DataTableBasicScript", "listNotifications");}
+    @{await Html.RenderPartialAsync("_DataTableBasicScript", new DataTableInitializationViewModel("listCourseQueue", new int[] { }, 80, true));}
+    @{await Html.RenderPartialAsync("_DataTableBasicScript", new DataTableInitializationViewModel("listNotEndedCourse", new int[] { }, 80, true));}
+    @{await Html.RenderPartialAsync("_DataTableBasicScript", new DataTableInitializationViewModel("listNotifications", new int[] { }, 80, true));}
 }

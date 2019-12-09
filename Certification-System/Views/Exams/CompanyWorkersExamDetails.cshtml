@@ -172,7 +172,7 @@ else
 }
 
 @section Scripts {
-    @{await Html.RenderPartialAsync("_DataTableBasicScript", "listCourses");}
-    @{await Html.RenderPartialAsync("_DataTableBasicScript", "listExamTerms");}
-    @{await Html.RenderPartialAsync("_DataTableBasicScript", "listExamsWithExamsResults");}
+    @{await Html.RenderPartialAsync("_DataTableBasicScript", new DataTableInitializationViewModel("listCourses", new int[] { }, 80, true));}
+    @{await Html.RenderPartialAsync("_DataTableBasicScript", new DataTableInitializationViewModel("listExamTerms", new int[] { }, 80, true));}
+    @{await Html.RenderPartialAsync("_DataTableBasicScript", new DataTableInitializationViewModel("listExamsWithExamsResults", new int[] { }, 80, true));}
 }

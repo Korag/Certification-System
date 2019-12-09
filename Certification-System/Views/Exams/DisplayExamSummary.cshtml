@@ -1,4 +1,5 @@
 ﻿@model Certification_System.DTOViewModels.DisplayUserListWithExamResultsAndExamIdentificator
+@using Certification_System.DTOViewModels
 
 @{
     ViewData["Title"] = "DisplayExamSummary";
@@ -15,5 +16,5 @@
 @await Component.InvokeAsync("DisplayUserWithExamResultsDataTable", new { userViewModel = Model.ResultsList, tableIdentificator = "listUsers", operationSet = 1 })
 
 @section Scripts {
-    @{await Html.RenderPartialAsync("_DataTableBasicScript", "listUsers");}
+    @{await Html.RenderPartialAsync("_DataTableBasicScript", new DataTableInitializationViewModel("listUsers", new int[] { }, 80, true));}
 }
