@@ -1,11 +1,17 @@
 @model Certification_System.DTOViewModels.DataTableExtendedScriptViewModel
 
+@{await Html.RenderPartialAsync("_DataTableEllipsisScript");}
+
 <script>
         $(document).ready(function () {
             $('#@Model.TableIdentificator').DataTable({
                 "language": {
                     "url": "//cdn.datatables.net/plug-ins/1.10.19/i18n/Polish.json"
                 },
+                  columnDefs: [{
+                    targets: @Html.Raw(Json.Serialize(Model.EllipsisTargets)),
+                    render: fnDataTableRenderEllipsis(@Model.MaxAmountOfCharacters, @Model.WordBreak.ToString().ToLower(), true),
+                }],
                 initComplete: function () {
                     this.api().columns(@Model.NumberOfColumn).every(function () {
                         var column = this;
@@ -21,12 +27,12 @@
 
                                 column
                                     .search(regex, true, false)
-                                    .draw();  
+                                    .draw();
                             }
                             else {
                                 column
                                     .search(val ? val : '', true, false)
-                                    .draw();               
+                                    .draw();
                             }
                         });
                     });

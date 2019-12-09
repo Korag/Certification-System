@@ -30,5 +30,5 @@
 @await Component.InvokeAsync("DisplayCourseDataTable", new { courseViewModel = Model, tableIdentificator = "listCourses", operationSet = 1 })
 
 @section Scripts{
-    @{await Html.RenderPartialAsync("_DataTableWithFilterOnColumnScript", new DataTableExtendedScriptViewModel { TableIdentificator = "listCourses", NumberOfColumn = 8, SelectId = "selectCourseEndedFilter" });}
+    @{await Html.RenderPartialAsync("_DataTableWithFilterOnColumnScript", new DataTableExtendedScriptViewModel("listCourses", 8, "selectCourseEndedFilter", new int[] { }, 80, true));}
 }

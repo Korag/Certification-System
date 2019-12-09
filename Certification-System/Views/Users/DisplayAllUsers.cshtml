@@ -26,5 +26,5 @@
 @await Component.InvokeAsync("DisplayUserDataTable", new { userViewModel = Model, tableIdentificator = "listUsers", operationSet = 2 })
 
 @section Scripts{
-    @{await Html.RenderPartialAsync("_DataTableWithFilterOnColumnScript", new DataTableExtendedScriptViewModel { TableIdentificator = "listUsers", NumberOfColumn = 3, SelectId = "selectUserRole" });}
+    @{await Html.RenderPartialAsync("_DataTableWithFilterOnColumnScript", new DataTableExtendedScriptViewModel("listUsers", 3, "selectUserRole", new int[] { }, 80, true));}
 }
