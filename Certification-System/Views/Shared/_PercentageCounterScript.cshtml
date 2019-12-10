@@ -1,0 +1,11 @@
+@model Certification_System.DTOViewModels.PercentageResultCounterViewModel
+
+<script>
+             for (let i = 0; i < @Model.UsersQuantity; i++) {
+                 $("#pointsResult_" + i).on('change', function (event, state) {
+                     var calculationResult = ($("#pointsResult_" + i).val() / @Model.MaxAmountOfPointsToEarn) * 100;
+
+                     $("#percentageResult_" + i).val(calculationResult.toFixed(0) + " %");
+                 });
+        };
+</script>

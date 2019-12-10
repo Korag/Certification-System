@@ -25,27 +25,27 @@
             </tr>
         </thead>
         <tbody>
-            @{var UsersQuantitity = Model.Users.Count();}
-            @for (int i = 0; i < UsersQuantitity; i++)
+            @{var UsersQuantity = Model.Users.Count();}
+            @for (int i = 0; i < UsersQuantity; i++)
             {
                 <tr>
                     <td>
                         @Html.DisplayFor(model => model.Users[i].Email)
-                        <input asp-for="Users[i].Email" class="form-control col-12" readonly hidden/>
+                        <input asp-for="Users[i].Email" class="form-control col-12" readonly hidden />
                     </td>
                     <td>
                         @Html.DisplayFor(model => model.Users[i].FirstName)
-                        <input asp-for="Users[i].FirstName" class="form-control col-12" readonly hidden/>
+                        <input asp-for="Users[i].FirstName" class="form-control col-12" readonly hidden />
                     </td>
                     <td>
                         @Html.DisplayFor(model => model.Users[i].LastName)
-                        <input asp-for="Users[i].LastName" class="form-control col-12" readonly hidden/>
+                        <input asp-for="Users[i].LastName" class="form-control col-12" readonly hidden />
                     </td>
                     <td>
-                        <input asp-for="Users[i].PointsEarned" type="number" class="form-control col-12" min="0"/>
+                        <input asp-for="Users[i].PointsEarned" type="number" class="form-control col-12" id="pointsResult_@i" min="0" />
                     </td>
                     <td>
-                        @Html.DisplayFor(model => model.Users[i].PercentageOfResult)
+                        <input asp-for="Users[i].PercentageOfResult" value="@Model.Users[i].PercentageOfResult %" class="form-control col-12" id="percentageResult_@i" readonly/>
                     </td>
                     <td>
                         <input type="checkbox" asp-for="Users[i].ExamPassed" class="form-control col-12" data-toggle="toggle" data-on="Tak" data-off="Nie" data-size="sm" />

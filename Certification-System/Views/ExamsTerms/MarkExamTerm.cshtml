@@ -166,4 +166,5 @@
 @section Scripts {
     @{await Html.RenderPartialAsync("_ValidationScriptsPartial");}
     @{await Html.RenderPartialAsync("_DataTableBasicScript", new DataTableInitializationViewModel("listUsers", new int[] { }, 80, true));}
+    @{await Html.RenderPartialAsync("_PercentageCounterScript", new PercentageResultCounterViewModel(Model.ExamTerm.UsersQuantity, Model.MaxAmountOfPointsToEarn));}
 }
