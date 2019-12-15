@@ -1,0 +1,20 @@
+<Project Sdk="Microsoft.NET.Sdk.Web">
+
+  <PropertyGroup>
+    <TargetFramework>netcoreapp2.2</TargetFramework>
+    <AspNetCoreHostingModel>InProcess</AspNetCoreHostingModel>
+    <RootNamespace>Certification_System.VerificationAPI</RootNamespace>
+  </PropertyGroup>
+
+  <ItemGroup>
+    <PackageReference Include="Microsoft.AspNetCore.App" />
+    <PackageReference Include="Microsoft.AspNetCore.Razor.Design" Version="2.2.0" PrivateAssets="All" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <ProjectReference Include="..\Certification-System.DataEntities\Certification-System.DataEntities.csproj" />
+    <ProjectReference Include="..\Certification-System.DTOViewModels\Certification-System.DTOViewModels.csproj" />
+    <ProjectReference Include="..\Certification-System.RepositoryInterfaces\Certification-System.RepositoryInterfaces.csproj" />
+  </ItemGroup>
+
+</Project>

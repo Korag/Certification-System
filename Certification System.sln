@@ -81,6 +81,8 @@ Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "images", "images", "{5CC1BA
 		Materials\EmailTemplate\images\logo_ziad_medium.jpg = Materials\EmailTemplate\images\logo_ziad_medium.jpg
 	EndProjectSection
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Certification-System.VerificationAPI", "Certification-System.VerificationAPI\Certification-System.VerificationAPI.csproj", "{BADB63A9-5CB8-4E9B-BADF-0862F09C8AEF}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -135,6 +137,10 @@ Global
 		{5836DE2A-0609-4690-B916-E18EEFF8953C}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{5836DE2A-0609-4690-B916-E18EEFF8953C}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{5836DE2A-0609-4690-B916-E18EEFF8953C}.Release|Any CPU.Build.0 = Release|Any CPU
+		{BADB63A9-5CB8-4E9B-BADF-0862F09C8AEF}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{BADB63A9-5CB8-4E9B-BADF-0862F09C8AEF}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{BADB63A9-5CB8-4E9B-BADF-0862F09C8AEF}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{BADB63A9-5CB8-4E9B-BADF-0862F09C8AEF}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
