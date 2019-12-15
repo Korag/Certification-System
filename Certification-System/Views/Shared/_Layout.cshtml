@@ -55,7 +55,7 @@
         // Menu Pracodawca
         else if (this.User.IsInRole("Company"))
         {@await Component.InvokeAsync("CompanyMenu")}
-
+     
         // Menu Pracownik
         else if (this.User.IsInRole("Worker"))
         {@await Component.InvokeAsync("WorkerMenu")}
@@ -71,17 +71,19 @@
         // Menu Egzaminator
         else if (this.User.IsInRole("Examiner"))
         {@await Component.InvokeAsync("ExaminerMenu")}
-}
-else
-{
-<partial name="_CertificationSystemBanner" />
-}
+    }
+    else
+    {
+         <partial name="_CertificationSystemBanner" />
+    }
+
     <div class="container body-content background-image mt-2">
         <partial name="_CookieConsentPartial" />
         @RenderBody()
     </div>
-    <hr />
 
+    <hr />
+  
     <div id="footer-bottom" class="clr no-footer-nav control" style="color: #ffffff">
         <div id="footer-bottom-inner" class="container clr">
             <div id="copyright" class="clr" role="contentinfo">

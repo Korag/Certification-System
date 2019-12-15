@@ -20,7 +20,11 @@
                     <h2 class="alert alert-info" role="alert">@ViewBag.message</h2>
                 }
 
-                <a asp-action="VerifyCompetenceManual" asp-controller="CompetenceVerification" asp-route-returnurl="@ViewData["ReturnUrl"]" class="btn btn-primary mt-1 mb-1">Weryfikuj certyfikat</a>
+                <div class="row ml-0 mr-0 mb-2">
+                    <a asp-action="VerifyCompetenceManual" asp-controller="CompetenceVerification" asp-route-returnurl="@ViewData["ReturnUrl"]" class="btn btn-primary xs450px_FloatLeft">Weryfikuj certyfikat</a>
+
+                    <a href="http://certification-system-verification-api.azurewebsites.net/" class="btn btn-light xs450px_FloatRight">API</a>
+                </div>
 
                 <div class="col-md-6 col-xl-6 col-sm-8 col-xs-10 m-auto p-3 shadow p-3 mb-5 bg-light rounded border border-primary rounded-bottom" style="opacity:0.65">
 
@@ -159,8 +163,8 @@
     @await Html.PartialAsync("_ValidationScriptsPartial")
 
     <script>
-    $( "#pHButton" ).click(function() {
-    $( "#passwordHelper" ).toggle();
-    });
+        $("#pHButton").click(function () {
+            $("#passwordHelper").toggle();
+        });
     </script>
 }
