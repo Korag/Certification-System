@@ -4,6 +4,7 @@
     <TargetFramework>netcoreapp2.2</TargetFramework>
     <AspNetCoreHostingModel>InProcess</AspNetCoreHostingModel>
     <RootNamespace>Certification_System.VerificationAPI</RootNamespace>
+    <UserSecretsId>cfbc8f86-06e5-48ea-abc0-68923cb24ccc</UserSecretsId>
   </PropertyGroup>
 
   <ItemGroup>
