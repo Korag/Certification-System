@@ -212,7 +212,7 @@ namespace Certification_System.Controllers
             var degree = _context.degreeRepository.GetDegreeById(givenDegree.Degree);
 
             var requiredDegrees = _context.degreeRepository.GetDegreesById(degree.RequiredDegrees);
-            var RequiredCertificates = _context.certificateRepository.GetCertificatesById(degree.RequiredCertificates);
+            var requiredCertificates = _context.certificateRepository.GetCertificatesById(degree.RequiredCertificates);
 
             var user = _context.userRepository.GetUserByGivenDegreeId(givenDegreeIdentificator);
             var companies = _context.companyRepository.GetCompaniesById(user.CompanyRoleManager.Concat(user.CompanyRoleWorker).Distinct().ToList());
@@ -228,9 +228,9 @@ namespace Certification_System.Controllers
             List<DisplayGivenCertificateToUserWithoutCourseViewModel> listOfRequiredCertificatesWithInstances = new List<DisplayGivenCertificateToUserWithoutCourseViewModel>();
             var UsersGivenCertificate = _context.givenCertificateRepository.GetGivenCertificatesById(user.GivenCertificates);
 
-            if (RequiredCertificates.Count != 0)
+            if (requiredCertificates.Count != 0)
             {
-                foreach (var certificate in RequiredCertificates)
+                foreach (var certificate in requiredCertificates)
                 {
                     DisplayCrucialDataCertificateViewModel certificateViewModel = _mapper.Map<DisplayCrucialDataCertificateViewModel>(certificate);
 
