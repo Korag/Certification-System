@@ -9,12 +9,14 @@
   <ItemGroup>
     <PackageReference Include="Microsoft.AspNetCore.App" />
     <PackageReference Include="Microsoft.AspNetCore.Razor.Design" Version="2.2.0" PrivateAssets="All" />
+    <PackageReference Include="Swashbuckle.AspNetCore" Version="5.0.0-rc4" />
   </ItemGroup>
 
   <ItemGroup>
     <ProjectReference Include="..\Certification-System.DataEntities\Certification-System.DataEntities.csproj" />
     <ProjectReference Include="..\Certification-System.DTOViewModels\Certification-System.DTOViewModels.csproj" />
-    <ProjectReference Include="..\Certification-System.RepositoryInterfaces\Certification-System.RepositoryInterfaces.csproj" />
+    <ProjectReference Include="..\Certification-System.Repository\Certification-System.Repository.csproj" />
+    <ProjectReference Include="..\Certification-System.Services\Certification-System.Services.csproj" />
   </ItemGroup>
 
 </Project>
