@@ -36,6 +36,7 @@ namespace Certification_System.Repository.Context
                 }
                 catch (Exception e)
                 {
+                    Console.WriteLine(e.Message);
                 }
             }
         }

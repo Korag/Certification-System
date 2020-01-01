@@ -82,7 +82,8 @@ namespace Certification_System
 
             // Services Layer
             services.AddTransient<IEmailSender, EmailSender>();
-            services.AddSingleton<IEmailConfiguration>(Configuration.GetSection("EmailConfiguration").Get<EmailConfiguration>());
+            services.AddSingleton<IEmailConfiguration>
+                                 (Configuration.GetSection("EmailConfiguration").Get<EmailConfiguration>());
 
             services.AddTransient<IGeneratorQR, GeneratorQR>();
             services.AddTransient<IKeyGenerator, KeyGenerator>();

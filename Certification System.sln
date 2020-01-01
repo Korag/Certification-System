@@ -55,6 +55,9 @@ Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Architecture Scheme", "Arch
 		MongoDB Scheme\certification-system_architectureScheme.png = MongoDB Scheme\certification-system_architectureScheme.png
 		MongoDB Scheme\certification-system_architectureScheme.tests.png = MongoDB Scheme\certification-system_architectureScheme.tests.png
 		MongoDB Scheme\certification-system_architectureScheme.vsdx = MongoDB Scheme\certification-system_architectureScheme.vsdx
+		MongoDB Scheme\certification-system_architectureScheme_v2.pdf = MongoDB Scheme\certification-system_architectureScheme_v2.pdf
+		MongoDB Scheme\certification-system_architectureScheme_v2.png = MongoDB Scheme\certification-system_architectureScheme_v2.png
+		MongoDB Scheme\certification-system_architectureScheme_v2.vsdx = MongoDB Scheme\certification-system_architectureScheme_v2.vsdx
 	EndProjectSection
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Certification-System.RepositoryInterfaces", "Certification-System.RepositoryInterfaces\Certification-System.RepositoryInterfaces.csproj", "{96923ED7-0C77-4D19-9B43-961D7AD8F624}"
@@ -81,7 +84,7 @@ Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "images", "images", "{5CC1BA
 		Materials\EmailTemplate\images\logo_ziad_medium.jpg = Materials\EmailTemplate\images\logo_ziad_medium.jpg
 	EndProjectSection
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Certification-System.VerificationAPI", "Certification-System.VerificationAPI\Certification-System.VerificationAPI.csproj", "{BADB63A9-5CB8-4E9B-BADF-0862F09C8AEF}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Certification-System.VerificationAPI", "Certification-System.VerificationAPI\Certification-System.VerificationAPI.csproj", "{BADB63A9-5CB8-4E9B-BADF-0862F09C8AEF}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution

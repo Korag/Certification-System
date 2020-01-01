@@ -418,7 +418,8 @@ namespace Certification_System.Services
                      .ForMember(dest => dest.User, opts => opts.Ignore());
 
             CreateMap<ExamResult, DisplayExamResultToUserViewModel>()
-                     .ForMember(dest => dest.Exam, opts => opts.Ignore());
+                     .ForMember(dest => dest.Exam, opts => opts.Ignore())
+                     .ForMember(dest => dest.ExamTerm, opts => opts.Ignore());
 
             CreateMap<ExamResult, DisplayExamResultWithExamIdentificator>();
 
