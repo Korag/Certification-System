@@ -38,8 +38,12 @@
     background-repeat: no-repeat;
 }
 
+.address {
+    margin-top: 23px;
+}
+
 .qrCode {
-    margin-top: 20px;
+    margin-top: 10px;
     width: 180px;
     height: 180px;
     border: 4px dotted;
