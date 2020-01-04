@@ -78,16 +78,17 @@
             <p align="center" class="person"><b>@Model.FirstName @Model.LastName</b></p>
         </div>
 
-        <div class="pagebreak"> </div>
+        <div class="pagebreak">
 
-        <div class="identificatorPart2">
-            <p align="center"><span><b>certification-system.azurewebsites.net</b></span></p>
+            <div class="identificatorPart2">
+                <p align="center"><span><b>certification-system.azurewebsites.net</b></span></p>
 
-            <div class="img-container">
-                <img class="qrCode" src="@String.Format("data:image/png;base64,{0}", Convert.ToBase64String(Model.QRCode))" />
+                <div class="img-container">
+                    <img class="qrCode" src="@String.Format("data:image/png;base64,{0}", Convert.ToBase64String(Model.QRCode))" />
+                </div>
+
+                <p align="center"><b>Identyfikator</b> <br /> <span>@Model.UserIdentificator</span></p>
             </div>
-
-            <p align="center"><b>Identyfikator</b> <br /> <span>@Model.UserIdentificator</span></p>
         </div>
 
     </div>
