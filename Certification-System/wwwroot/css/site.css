@@ -261,3 +261,8 @@ hr {
 .icon-hover:hover {
     color: #990F0F;
 }
+
+.verifyManualButton {
+    margin-top: auto;
+    margin-bottom: 0px;
+}

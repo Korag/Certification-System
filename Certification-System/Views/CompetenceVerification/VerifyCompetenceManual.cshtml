@@ -21,9 +21,9 @@
 <div class="col-md-8 col-xl-8 col-lg-6 col-sm-12 col-xs-10 m-auto p-3 shadow p-3 mb-5 bg-light rounded border border-primary rounded-bottom" style="opacity:0.90">
 
     <div class="alert alert-info col-12" role="alert">
-        <p>Zwyczajowo weryfikacja odbywa się poprzez wykorzystywanie kodów QR. </p>
+        <p>Zwyczajowo weryfikacja odbywa się poprzez wykorzystanie kodów QR. </p>
 
-        <p>Szukaj kodu QR wyglądającego tak jak ten:</p>
+        <p>Szukaj kodu QR wyglądającego tak jak ten zamieszczony poniżej:</p>
 
         <img src="~/Image/qr_code.png" class="img-fluid rounded mx-auto d-block mb-2 col-12" alt="QR Code" style="width:50%; height:50%; opacity:0.60" />
 
@@ -33,54 +33,54 @@
         </p>
 
         <p>
-            Jeżeli nie masz dostępu do kodów QR natomiast dysponujesz odpowiednio:
+            Jeżeli nie masz dostępu do kodu QR, natomiast dysponujesz odpowiednio:
             <ul>
                 <li>identyfikatorem pracownika</li>
                 <li>identyfikatorem nadanego certyfikatu</li>
                 <li>identyfikatorem nadanego stopnia zawodowego</li>
             </ul>
 
-            Możesz dokonać ręcznej weryfikacji wykorzystując jedną z poniższych opcji.
+            Możesz dokonać ręcznej weryfikacji wykorzystując jeden z powyższych identyfikatorów zasobu.
         </p>
     </div>
 
     <div class="row">
 
-        <div class="card m-auto mb-3" style="width: 18rem; height: 22rem">
+        <div class="card ml-auto mr-auto mt-3" style="width: 18rem; height: 22rem">
             <div class="card-body d-flex flex-column">
-                <h5 class="card-title text-center">Weryfikuj pojedynczy certyfikat</h5>
+                <h5 class="card-title text-center">Weryfikuj certyfikat</h5>
                 <p class="card-text">
-                    Chcąć zweryfikować ważność pojedynczego certyfikatu poproś użytkownika platformy o możliwość zeskanowania
-                    kodu znajdującego się na nadanym certyfikacie lub wprowadź ręcznie identyfikator nadanego certyfikatu.
+                    Chcąc zweryfikować ważność pojedynczego certyfikatu zeskanuj
+                    kod QR znajdujący się na dokumencie poświadczającym posiadanie certyfikatu lub wprowadź ręcznie identyfikator weryfikowanego zasobu.
                 </p>
-                <div class="row justify-content-center">
+                <div class="row justify-content-center verifyManualButton">
                     <a asp-action="VerifyGivenCertificate" asp-controller="CompetenceVerification" class="btn btn-primary">Weryfikuj</a>
                 </div>
             </div>
         </div>
 
-        <div class="card m-auto mb-3" style="width: 18rem; height: 22rem">
+        <div class="card ml-auto mr-auto mt-3" style="width: 18rem; height: 22rem">
             <div class="card-body d-flex flex-column">
-                <h5 class="card-title text-center">Weryfikuj pojedynczy stopień zawodowy</h5>
+                <h5 class="card-title text-center">Weryfikuj stopień zawodowy</h5>
                 <p class="card-text">
-                    Chcąć zweryfikować ważność pojedynczego stopnia zawodowego poproś użytkownika platformy o możliwość zeskanowania
-                    kodu znajdującego się na stopniu zawodowym lub wprowadź ręcznie identyfikator stopnia zawodowego.
+                    Chcąc zweryfikować ważność pojedynczego stopnia zawodowego zeskanuj
+                    kod QR znajdujący się na dokumencie poświadczającym posiadanie stopnia zawodowego lub wprowadź ręcznie identyfikator weryfikowanego zasobu.
                 </p>
-                <div class="row justify-content-center">
+                <div class="row justify-content-center verifyManualButton">
                     <a asp-action="VerifyGivenDegree" asp-controller="CompetenceVerification" class="btn btn-primary">Weryfikuj</a>
                 </div>
             </div>
         </div>
 
-        <div class="card m-auto mb-3" style="width: 18rem; height: 22rem; top:10px">
+        <div class="card ml-auto mr-auto mt-3" style="width: 18rem; height: 22rem;">
             <div class="card-body d-flex flex-column">
-                <h5 class="card-title text-center">Weryfikuj uprawnienia użytkownika</h5>
+                <h5 class="card-title text-center">Weryfikuj kompetencje użytkownika</h5>
                 <p class="card-text">
-                    Chcąc zweryfikować uprawnienia użytkownika poproś go o możliwość zeskanowania kodu znajdującego się
-                    na jego identyfikatorze lub wprowadź ręcznie identyfikator użytkownika.
+                    Chcąc zweryfikować kompetencje posiadane przez użytkownika platformy zeskanuj
+                    kod QR znajdujący się na osobistym identyfikatorze użytkownika lub wprowadź ręcznie jego unikalny identyfikator w postaci łańcucha znaków.
                 </p>
-                <div class="row justify-content-center">
-                    <a asp-action="VerifyUser" asp-controller="CompetenceVerification" class="btn btn-primary" style="margin-top:17%">Weryfikuj</a>
+                <div class="row justify-content-center verifyManualButton">
+                    <a asp-action="VerifyUser" asp-controller="CompetenceVerification" class="btn btn-primary">Weryfikuj</a>
                 </div>
             </div>
         </div>
