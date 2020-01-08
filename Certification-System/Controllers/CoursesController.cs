@@ -119,7 +119,7 @@ namespace Certification_System.Controllers
 
                 if (course.DateOfEnd != null)
                 {
-                    course.CourseLength = course.DateOfEnd.Subtract(course.DateOfStart).Days;
+                    course.CourseLength = course.DateOfEnd.Subtract(course.DateOfStart).Days+1;
                 }
 
                 _context.courseRepository.AddCourse(course);
@@ -178,7 +178,7 @@ namespace Certification_System.Controllers
 
                 if (course.DateOfEnd != null)
                 {
-                    course.CourseLength = course.DateOfEnd.Subtract(course.DateOfStart).Days;
+                    course.CourseLength = course.DateOfEnd.Subtract(course.DateOfStart).Days+1;
                 }
 
                 List<Meeting> meetings = new List<Meeting>();
@@ -392,7 +392,7 @@ namespace Certification_System.Controllers
 
                 if (originCourse.DateOfEnd != null)
                 {
-                    originCourse.CourseLength = originCourse.DateOfEnd.Subtract(originCourse.DateOfStart).Days;
+                    originCourse.CourseLength = originCourse.DateOfEnd.Subtract(originCourse.DateOfStart).Days+1;
                 }
 
                 _context.courseRepository.UpdateCourse(originCourse);
@@ -485,7 +485,7 @@ namespace Certification_System.Controllers
 
                 if (originCourse.DateOfEnd != null)
                 {
-                    originCourse.CourseLength = originCourse.DateOfEnd.Subtract(originCourse.DateOfStart).Days;
+                    originCourse.CourseLength = originCourse.DateOfEnd.Subtract(originCourse.DateOfStart).Days+1;
                 }
 
                 _context.courseRepository.UpdateCourse(originCourse);

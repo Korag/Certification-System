@@ -551,6 +551,11 @@ namespace Certification_System.Controllers
         {
             var user = _context.userRepository.GetUserById(userIdentificator);
 
+            if (user == null)
+            {
+                return RedirectToAction("BlankMenu", "Certificates");
+            }
+
             var company = _context.companyRepository.GetCompanyById(user.CompanyRoleManager.FirstOrDefault());
             var usersConnectedToCompany = _context.userRepository.GetUsersConnectedToCompany(company.CompanyIdentificator);
 
