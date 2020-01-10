@@ -673,9 +673,6 @@ namespace Certification_System.Services
             CreateMap<DisplayUserWithCourseResultsViewModel, DispenseGivenCertificateCheckBoxViewModel>()
                      .ForMember(dest => dest.GivenCertificateIsEarned, opts => opts.Ignore());
 
-            //CreateMap<DisplayCrucialDataWithCompaniesRoleUserViewModel, DispenseGivenCertificateCheckBoxViewModel>()
-            //         .ForMember(dest => dest.GivenCertificateIsEarned, opts => opts.Ignore());
-
             CreateMap<DisplayCrucialDataUserViewModel, DispenseGivenCertificateCheckBoxViewModel>()
                      .ForMember(dest => dest.GivenCertificateIsEarned, opts => opts.Ignore());
 

@@ -72,8 +72,6 @@ al. Armii Krajowej 220
                                                  .Replace("{Indexer}", emailMessage.Indexer);
             };
 
-            //builder.Attachments.Add(@"C:\Users\Joey\Documents\party.ics");
-
             message.Body = builder.ToMessageBody();
 
             using (var client = new SmtpClient())

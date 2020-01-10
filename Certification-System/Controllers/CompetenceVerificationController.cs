@@ -58,7 +58,6 @@ namespace Certification_System.Controllers
             return View(userToVerify);
         }
 
-        // CompetenceVerification/VerifyUserCompetencesByQR?userIdentificator=b38ce91a-1cab-43e5-b430-0434d7a542a0
         // GET: VerifyUserCompetencesByQR
         [AllowAnonymous]
         public ActionResult VerifyUserCompetencesByQR(string userIdentificator)
@@ -160,7 +159,6 @@ namespace Certification_System.Controllers
             return View(givenCertificateToVerify);
         }
 
-        // CompetenceVerification/VerifyGivenCertificateByQR?givenCertificateIdentificator=5ce002107e5ac431745de4cd
         // GET: VerifyGivenCertificateByQR
         [AllowAnonymous]
         public ActionResult VerifyGivenCertificateByQR(string givenCertificateIdentificator)
@@ -243,7 +241,6 @@ namespace Certification_System.Controllers
             return View(givenDegreeToVerify);
         }
 
-        // CompetenceVerification/VerifyGivenDegreeByQR?givenDegreeIdentificator=5d4aa2399dd655477c2c8877
         // GET: VerifyGivenDegreeByQR
         [AllowAnonymous]
         public ActionResult VerifyGivenDegreeByQR(VerifyGivenDegreeViewModel givenDegreeToVerify)
@@ -353,7 +350,6 @@ namespace Certification_System.Controllers
             return RedirectToAction("BlankMenu", "Certificates");
         }
 
-        //https://localhost:44378/CompetenceVerification/GenerateUserPhysicalIdentificator?userIdentificator=5d6ff3d85596d1c6a9e44124
         // GET: GenerateUserPhysicalIdentificator
         [Authorize(Roles = "Admin, Worker, Company")]
         [HttpPost]

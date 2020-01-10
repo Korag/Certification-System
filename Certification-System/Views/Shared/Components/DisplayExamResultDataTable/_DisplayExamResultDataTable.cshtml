@@ -128,7 +128,7 @@
                             </div>
                         </div>
                         @await Component.InvokeAsync("Modal", new {
-                        DataTarget = modalDataTarget, Title = "Usuwanie egzaminu", Body = "Czy na pewno chcesz usunąć ten egzamin wraz ze wszystkimi jego zależnościami ?", Action = "DeleteExamResultHub", Controller = "Exams", Arguments = deleteParams, ButtonText = "Usuń", ButtonClass = "btn-danger" })
+                        DataTarget = modalDataTarget, Title = "Usuwanie wyniku egzaminu", Body = "Czy na pewno chcesz usunąć ten wynik z egzaminu wraz ze wszystkimi jego zależnościami ?", Action = "DeleteExamResultHub", Controller = "Exams", Arguments = deleteParams, ButtonText = "Usuń", ButtonClass = "btn-danger" })
                
                     @{ i++; }
                 </td>

@@ -1,8 +1,0 @@
-﻿namespace Certification_System.DTOViewModels.ManageViewModels
-{
-    public class RemoveLoginViewModel
-    {
-        public string LoginProvider { get; set; }
-        public string ProviderKey { get; set; }
-    }
-}

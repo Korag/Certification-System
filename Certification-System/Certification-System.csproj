@@ -12,34 +12,6 @@
 
   <ItemGroup>
     <Compile Remove="Controllers\ManageController.cs" />
-    <Compile Remove="Views\Manage Not-used\ManageNavPages.cs" />
-  </ItemGroup>
-
-  <ItemGroup>
-    <Content Remove="Views\Account\Not-used\AccessDenied.cshtml" />
-    <Content Remove="Views\Account\Not-used\ConfirmEmail.cshtml" />
-    <Content Remove="Views\Account\Not-used\ExternalLogin.cshtml" />
-    <Content Remove="Views\Account\Not-used\ForgotPassword.cshtml" />
-    <Content Remove="Views\Account\Not-used\ForgotPasswordConfirmation.cshtml" />
-    <Content Remove="Views\Account\Not-used\Lockout.cshtml" />
-    <Content Remove="Views\Account\Not-used\LoginWith2fa.cshtml" />
-    <Content Remove="Views\Account\Not-used\LoginWithRecoveryCode.cshtml" />
-    <Content Remove="Views\Account\Not-used\ResetPasswordConfirmation.cshtml" />
-    <Content Remove="Views\Account\Not-used\SignedOut.cshtml" />
-    <Content Remove="Views\Manage Not-used\ChangePassword.cshtml" />
-    <Content Remove="Views\Manage Not-used\Disable2fa.cshtml" />
-    <Content Remove="Views\Manage Not-used\EnableAuthenticator.cshtml" />
-    <Content Remove="Views\Manage Not-used\ExternalLogins.cshtml" />
-    <Content Remove="Views\Manage Not-used\GenerateRecoveryCodes.cshtml" />
-    <Content Remove="Views\Manage Not-used\Index.cshtml" />
-    <Content Remove="Views\Manage Not-used\ResetAuthenticator.cshtml" />
-    <Content Remove="Views\Manage Not-used\SetPassword.cshtml" />
-    <Content Remove="Views\Manage Not-used\ShowRecoveryCodes.cshtml" />
-    <Content Remove="Views\Manage Not-used\TwoFactorAuthentication.cshtml" />
-    <Content Remove="Views\Manage Not-used\_Layout.cshtml" />
-    <Content Remove="Views\Manage Not-used\_ManageNav.cshtml" />
-    <Content Remove="Views\Manage Not-used\_StatusMessage.cshtml" />
-    <Content Remove="Views\Manage Not-used\_ViewImports.cshtml" />
   </ItemGroup>
 
   <ItemGroup>
@@ -74,12 +46,6 @@
     <ProjectReference Include="..\Certification-System.Repository\Certification-System.Repository.csproj" />
     <ProjectReference Include="..\Certification-System.ServicesInterfaces\Certification-System.ServicesInterfaces.csproj" />
     <ProjectReference Include="..\Certification-System.Services\Certification-System.Services.csproj" />
-  </ItemGroup>
-
-
-  <ItemGroup>
-    <Folder Include="Views\Account\Not-used\" />
-    <Folder Include="Views\Manage Not-used\" />
   </ItemGroup>
 
 </Project>

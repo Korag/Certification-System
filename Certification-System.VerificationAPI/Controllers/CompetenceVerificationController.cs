@@ -24,7 +24,6 @@ namespace Certification_System.VerificationAPI.Controllers
             _mapper = mapper;
         }
 
-        // VerifyUserCompetences?userIdentificator=b38ce91a-1cab-43e5-b430-0434d7a542a0
         // GET: VerifyUserCompetences
         [Route("VerifyUserCompetences")]
         [HttpGet]
@@ -169,7 +168,6 @@ namespace Certification_System.VerificationAPI.Controllers
             }
         }
 
-        // VerifyGivenCertificate?givenCertificateIdentificator=5ce002107e5ac431745de4cd
         // GET: VerifyGivenCertificate
         [Route("VerifyGivenCertificate")]
         [HttpGet]
@@ -260,7 +258,6 @@ namespace Certification_System.VerificationAPI.Controllers
             }
         }
 
-        // VerifyGivenDegree?givenDegreeIdentificator=5d4aa2399dd655477c2c8877
         // GET: VerifyGivenDegree
         [Route("VerifyGivenDegree")]
         [HttpGet]

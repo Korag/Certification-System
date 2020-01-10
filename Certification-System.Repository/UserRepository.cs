@@ -112,11 +112,6 @@ namespace Certification_System.Repository
         {
             List<SelectListItem> selectList = new List<SelectListItem>
             {
-              //    new SelectListItem()
-              //{
-              //    Text = "Brak filtra",
-              //    Value = ""
-              //},
                   new SelectListItem()
               {
                   Text = UserRolesDictionary.TranslationDictionary["Instructor"],
@@ -347,7 +342,6 @@ namespace Certification_System.Repository
                 var resultUser = _users.Find<CertificationPlatformUser>(filter).FirstOrDefault();
                 resultListOfUsers.Add(resultUser);
             }
-            //var resultListOfUsers = GetUsers().AsQueryable().ToList().Where(z => z.Certificates.Where(x => givenCertificatesIdentificators.Contains(x)).Count() != 0).ToList();
 
             return resultListOfUsers;
         }
@@ -409,9 +403,6 @@ namespace Certification_System.Repository
         {
             var filter = Builders<CertificationPlatformUser>.Filter.Where(z => usersIdentificators.Contains(z.Id));
             var update = Builders<CertificationPlatformUser>.Update.Pull(x => x.Courses, courseIdentificator);
-
-            //var resultListOfUsers = GetUsers().Find<CertificationPlatformUser>(filter).ToList();
-            //resultListOfUsers.ForEach(z => z.Courses.Remove(courseIdentificator));
 
             var result = GetUsers().UpdateMany(filter, update);
         }

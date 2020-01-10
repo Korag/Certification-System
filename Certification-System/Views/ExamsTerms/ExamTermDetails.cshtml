@@ -30,7 +30,7 @@
         <i class="fas fa-times mt-1 mr-1 icon-hover xs450px_FloatLeft" data-toggle="modal" data-target="#modal"></i>
         @await Component.InvokeAsync("Modal", new { Title = "Usuwanie tury egzaminu", Body = "Czy na pewno chcesz usunąć tą turę egzaminu wraz ze wszystkimi jej zależnościami ?", Action = "DeleteExamTermHub", Controller = "ExamsTerms", Arguments = deleteParams, ButtonText = "Usuń", ButtonClass = "btn-danger" })
 
-        <a asp-action="DisplayExamsTerms" asp-controller="ExamsTerms" class="btn btn-outline-info mt-1 xs450px_FloatRight">Powrót do listy tur</a>
+        <a asp-action="DisplayAllExamsTerms" asp-controller="ExamsTerms" class="btn btn-outline-info mt-1 xs450px_FloatRight">Powrót do listy tur</a>
     </div>
 
     <form>

@@ -311,29 +311,29 @@ namespace Certification_System.Controllers
 
                 foreach (var deletedGivenCertificate in deletedGivenCertificates)
                 {
-                    var logInfoPersonalDeleteGivenCertificate = _context.personalLogRepository.GeneratePersonalLogInformation(this.User.Identity.Name, this.ControllerContext.RouteData.Values["action"].ToString(), LogDescriptions.DescriptionOfPersonalUserLog["deleteGivenCertificate"], "Indekser " + deletedGivenCertificate.GivenCertificateIndexer);
+                    var logInfoPersonalDeleteGivenCertificate = _context.personalLogRepository.GeneratePersonalLogInformation(this.User.Identity.Name, this.ControllerContext.RouteData.Values["action"].ToString(), LogDescriptions.DescriptionOfPersonalUserLog["deleteGivenCertificate"], "Indekser: " + deletedGivenCertificate.GivenCertificateIndexer);
                     _context.personalLogRepository.AddPersonalUserLogToAdminGroup(logInfoPersonalDeleteGivenCertificate);
 
                     var deletedGivenCertificateOwner = _context.userRepository.GetUserByGivenCertificateId(deletedGivenCertificate.GivenCertificateIdentificator);
 
-                    var logInfoPersonalDeleteUserGivenCertificate = _context.personalLogRepository.GeneratePersonalLogInformation(this.User.Identity.Name, this.ControllerContext.RouteData.Values["action"].ToString(), LogDescriptions.DescriptionOfPersonalUserLog["deleteUserGivenCertificate"], "Indekser " + deletedGivenCertificate.GivenCertificateIndexer);
+                    var logInfoPersonalDeleteUserGivenCertificate = _context.personalLogRepository.GeneratePersonalLogInformation(this.User.Identity.Name, this.ControllerContext.RouteData.Values["action"].ToString(), LogDescriptions.DescriptionOfPersonalUserLog["deleteUserGivenCertificate"], "Indekser: " + deletedGivenCertificate.GivenCertificateIndexer);
                     _context.personalLogRepository.AddPersonalUserLog(deletedGivenCertificateOwner.Id, logInfoPersonalDeleteUserGivenCertificate);
                 }
 
                 foreach (var deletedGivenCertificate in deletedGivenCertificates)
                 {
-                    var logInfoPersonalDeleteGivenCertificate = _context.personalLogRepository.GeneratePersonalLogInformation(this.User.Identity.Name, this.ControllerContext.RouteData.Values["action"].ToString(), LogDescriptions.DescriptionOfPersonalUserLog["deleteGivenCertificate"], "Indekser " + deletedGivenCertificate.GivenCertificateIndexer);
+                    var logInfoPersonalDeleteGivenCertificate = _context.personalLogRepository.GeneratePersonalLogInformation(this.User.Identity.Name, this.ControllerContext.RouteData.Values["action"].ToString(), LogDescriptions.DescriptionOfPersonalUserLog["deleteGivenCertificate"], "Indekser: " + deletedGivenCertificate.GivenCertificateIndexer);
                     _context.personalLogRepository.AddPersonalUserLogToAdminGroup(logInfoPersonalDeleteGivenCertificate);
 
                     var deletedGivenCertificateOwner = _context.userRepository.GetUserByGivenCertificateId(deletedGivenCertificate.GivenCertificateIdentificator);
 
-                    var logInfoPersonalDeleteUserGivenCertificate = _context.personalLogRepository.GeneratePersonalLogInformation(this.User.Identity.Name, this.ControllerContext.RouteData.Values["action"].ToString(), LogDescriptions.DescriptionOfPersonalUserLog["deleteUserGivenCertificate"], "Indekser " + deletedGivenCertificate.GivenCertificateIndexer);
+                    var logInfoPersonalDeleteUserGivenCertificate = _context.personalLogRepository.GeneratePersonalLogInformation(this.User.Identity.Name, this.ControllerContext.RouteData.Values["action"].ToString(), LogDescriptions.DescriptionOfPersonalUserLog["deleteUserGivenCertificate"], "Indekser: " + deletedGivenCertificate.GivenCertificateIndexer);
                     _context.personalLogRepository.AddPersonalUserLog(deletedGivenCertificateOwner.Id, logInfoPersonalDeleteUserGivenCertificate);
                 }
 
                 foreach (var degreeWhichHasDeletedRequiredCertificate in degreesWhichHasDeletedRequiredCertificate)
                 {
-                    var logInfoPersonalUpdateDegree = _context.personalLogRepository.GeneratePersonalLogInformation(this.User.Identity.Name, this.ControllerContext.RouteData.Values["action"].ToString(), LogDescriptions.DescriptionOfPersonalUserLog["deleteRequiredCertificate"], "Indekser " + degreeWhichHasDeletedRequiredCertificate.DegreeIndexer);
+                    var logInfoPersonalUpdateDegree = _context.personalLogRepository.GeneratePersonalLogInformation(this.User.Identity.Name, this.ControllerContext.RouteData.Values["action"].ToString(), LogDescriptions.DescriptionOfPersonalUserLog["deleteRequiredCertificate"], "Indekser: " + degreeWhichHasDeletedRequiredCertificate.DegreeIndexer);
                     _context.personalLogRepository.AddPersonalUserLogToAdminGroup(logInfoPersonalUpdateDegree);
 
                     var givenDegrees = _context.givenDegreeRepository.GetGivenDegreesByIdOfDegree(degreeWhichHasDeletedRequiredCertificate.DegreeIdentificator);
