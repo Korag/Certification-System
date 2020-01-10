@@ -47,5 +47,5 @@
 
 @section Scripts {
     @{await Html.RenderPartialAsync("_ValidationScriptsPartial");}
-    @{await Html.RenderPartialAsync("_AjaxCallSelectFilterScript", new AjaxCallSelectScriptViewModel { OnChangeSelect = "userSelect", FilteredSelect = "examSelect", ActionPath = "/Exams/GetUserAvailableToEnrollExamsByUserId?userIdentificator=" });}
+    @{await Html.RenderPartialAsync("_AjaxCallSelectFilterScript", new AjaxCallSelectScriptViewModel { OnChangeSelect = "userSelect", FilteredSelect = "examSelect", ActionPath = "/Exams/GetUserAvailableToEnrollExamsNotDividedToExamsTermsByUserId?userIdentificator=" });}
 }

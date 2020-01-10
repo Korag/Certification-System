@@ -42,5 +42,6 @@ namespace Certification_System.RepositoryInterfaces
         ICollection<Exam> GetExamsByIndexer(string examIndexer);
         ICollection<SelectListItem> GeneraterateSelectList(ICollection<string> examsIdentificators);
         ICollection<SelectListItem> GeneraterateExamsPeriodsSelectListWithVacantSeats(ICollection<string> examsIdentificators);
+        ICollection<Exam> GetOnlyActiveExamsById(ICollection<string> examsIdentificators);
     }
 }

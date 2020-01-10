@@ -2342,6 +2342,30 @@ namespace Certification_System.Controllers
         }
 
         #region AjaxQuery
+        // GET: GetUserAvailableToEnrollExamsNotDividedToExamsTermsByUserId
+        [Authorize(Roles = "Admin, Examiner")]
+        public string[][] GetUserAvailableToEnrollExamsNotDividedToExamsTermsByUserId(string userIdentificator)
+        {
+            var user = _context.userRepository.GetUserById(userIdentificator);
+
+            var examsIdentificators = _context.courseRepository.GetCoursesById(user.Courses).SelectMany(z => z.Exams).ToList();
+            var exams = _context.examRepository.GetOnlyActiveExamsById(examsIdentificators).Where(z => !z.EnrolledUsers.Contains(userIdentificator)).ToList();
+
+            string[][] examsArray = new string[exams.Count()][];
+
+            for (int i = 0; i < exams.Count(); i++)
+            {
+                var vacantSeats = exams[i].UsersLimit - exams[i].EnrolledUsers.Count();
+
+                examsArray[i] = new string[2];
+
+                examsArray[i][0] = exams[i].ExamIdentificator;
+                examsArray[i][1] = exams[i].ExamIndexer + " |Term." + exams[i].OrdinalNumber + " | " + exams[i].Name + " |wm.: " + vacantSeats;
+            }
+
+            return examsArray;
+        }
+
         // GET: GetUserAvailableToEnrollExamsByUserId
         [Authorize(Roles = "Admin, Examiner")]
         public string[][] GetUserAvailableToEnrollExamsByUserId(string userIdentificator)
