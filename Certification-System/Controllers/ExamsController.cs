@@ -1182,7 +1182,7 @@ namespace Certification_System.Controllers
 
             var exam = _context.examRepository.GetExamById(examIdentificator);
 
-            if (exam.DateOfStart > DateTime.Now)
+            if (exam.DateOfStart < DateTime.Now)
             {
                 var usersEnrolledInExam = _context.userRepository.GetUsersById(exam.EnrolledUsers).ToList();
                 var examResults = _context.examResultRepository.GetExamsResultsById(exam.ExamResults);
@@ -1227,7 +1227,7 @@ namespace Certification_System.Controllers
         {
             if (ModelState.IsValid)
             {
-                if (markedExamViewModel.DateOfStart > DateTime.Now)
+                if (markedExamViewModel.DateOfStart < DateTime.Now)
                 {
                     List<ExamResult> usersExamsResultsToAdd = new List<ExamResult>();
                     List<ExamResult> usersExamsResultsToUpdate = new List<ExamResult>();

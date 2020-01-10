@@ -18,7 +18,7 @@
     <h2>Informacje o turze</h2>
 
     <div class="row m-0 mt-3 mb-3">
-        @if (Model.Examiners.Select(z => z.Email).Contains(this.User.Identity.Name))
+        @if (Model.Examiners.Select(z => z.Email).Contains(this.User.Identity.Name) && Model.DateOfStart < DateTime.Now)
         {
             <a asp-action="MarkExamTerm" asp-route-courseIdentificator="@Model.ExamTermIdentificator" asp-controller="ExamsTerms" class="btn btn-success mt-1 mr-1 xs450px_FloatLeft">Oceń turę egzaminu</a>
         }

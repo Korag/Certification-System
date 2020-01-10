@@ -162,6 +162,7 @@ namespace Certification_System.Controllers
             var originExam = _context.examRepository.GetListOfExams().Where(z => z.ExamTerms.Contains(editedExamTerm.ExamTermIdentificator)).FirstOrDefault();
 
             var originExamTermExaminers = originExamTerm.Examiners.ToList();
+            var originExamTermEnrolledUsers = originExamTerm.EnrolledUsers.ToList();
 
             if (ModelState.IsValid)
             {
@@ -183,6 +184,8 @@ namespace Certification_System.Controllers
                 }
 
                 exam.Examiners.Distinct();
+                originExamTerm = _mapper.Map<ExamTerm>(editedExamTerm);
+                originExamTerm.EnrolledUsers = originExamTermEnrolledUsers;
 
                 _context.examRepository.UpdateExam(exam);
                 _context.examTermRepository.UpdateExamTerm(originExamTerm);
@@ -405,7 +408,7 @@ namespace Certification_System.Controllers
 
             var examTerm = _context.examTermRepository.GetExamTermById(examTermIdentificator);
 
-            if (examTerm.DateOfStart < DateTime.Now)
+            if (examTerm.DateOfStart > DateTime.Now)
             {
                 var enrolledUsersList = _context.userRepository.GetUsersById(examTerm.EnrolledUsers);
 
@@ -437,7 +440,7 @@ namespace Certification_System.Controllers
         {
             if (ModelState.IsValid)
             {
-                if (deleteUsersFromExamTermViewModel.DateOfStart < DateTime.Now)
+                if (deleteUsersFromExamTermViewModel.DateOfStart > DateTime.Now)
                 {
                     var usersToDeleteFromExamTermIdentificators = deleteUsersFromExamTermViewModel.UsersToDeleteFromExamTerm.ToList().Where(z => z.IsToDelete == true).Select(z => z.UserIdentificator).ToList();
 
@@ -494,7 +497,7 @@ namespace Certification_System.Controllers
 
             var examTerm = _context.examTermRepository.GetExamTermById(examTermIdentificator);
 
-            if (examTerm.DateOfStart < DateTime.Now)
+            if (examTerm.DateOfStart > DateTime.Now)
             {
                 var exam = _context.examRepository.GetExamByExamTermId(examTermIdentificator);
 
@@ -556,7 +559,7 @@ namespace Certification_System.Controllers
         {
             if (ModelState.IsValid)
             {
-                if (addUsersToExamTermViewModel.DateOfStart < DateTime.Now)
+                if (addUsersToExamTermViewModel.DateOfStart > DateTime.Now)
                 {
                     var exam = _context.examRepository.GetExamByExamTermId(addUsersToExamTermViewModel.ExamTermIdentificator);
 
@@ -619,7 +622,7 @@ namespace Certification_System.Controllers
 
             var examTerm = _context.examTermRepository.GetExamTermById(examTermIdentificator);
 
-            if (examTerm.DateOfStart > DateTime.Now)
+            if (examTerm.DateOfStart < DateTime.Now)
             {
                 var exam = _context.examRepository.GetExamByExamTermId(examTermIdentificator);
                 var usersEnrolledInExamTerm = _context.userRepository.GetUsersById(examTerm.EnrolledUsers).ToList();
@@ -672,7 +675,7 @@ namespace Certification_System.Controllers
         {
             if (ModelState.IsValid)
             {
-                if (markedExamTermViewModel.ExamTerm.DateOfStart > DateTime.Now)
+                if (markedExamTermViewModel.ExamTerm.DateOfStart < DateTime.Now)
                 {
                     List<ExamResult> usersExamsTermsResultsToAdd = new List<ExamResult>();
                     List<ExamResult> usersExamsTermsResultsToUpdate = new List<ExamResult>();
@@ -1160,7 +1163,7 @@ namespace Certification_System.Controllers
 
             var examTerm = _context.examTermRepository.GetExamTermById(examTermIdentificator);
 
-            if (examTerm.DateOfStart < DateTime.Now)
+            if (examTerm.DateOfStart > DateTime.Now)
             {
                 var exam = _context.examRepository.GetExamByExamTermId(examTermIdentificator);
 
@@ -1222,7 +1225,7 @@ namespace Certification_System.Controllers
         {
             if (ModelState.IsValid)
             {
-                if (addCompanyWorkersToExamTermViewModel.DateOfStart < DateTime.Now)
+                if (addCompanyWorkersToExamTermViewModel.DateOfStart > DateTime.Now)
                 {
                     var exam = _context.examRepository.GetExamByExamTermId(addCompanyWorkersToExamTermViewModel.ExamTermIdentificator);
 
@@ -1289,7 +1292,7 @@ namespace Certification_System.Controllers
 
             var examTerm = _context.examTermRepository.GetExamTermById(examTermIdentificator);
 
-            if (examTerm.DateOfStart < DateTime.Now)
+            if (examTerm.DateOfStart > DateTime.Now)
             {
                 var enrolledCompanyWorkersList = _context.userRepository.GetUsersById(examTerm.EnrolledUsers.Where(z=> examTermIdentificator.Contains(z)).ToList());
 
@@ -1321,7 +1324,7 @@ namespace Certification_System.Controllers
         {
             if (ModelState.IsValid)
             {
-                if (removeCompanyWorkersFromExamTermViewModel.DateOfStart < DateTime.Now)
+                if (removeCompanyWorkersFromExamTermViewModel.DateOfStart > DateTime.Now)
                 {
                     var companyWorkersToDeleteFromExamTermIdentificators = removeCompanyWorkersFromExamTermViewModel.UsersToDeleteFromExamTerm.ToList().Where(z => z.IsToDelete == true).Select(z => z.UserIdentificator).ToList();
 

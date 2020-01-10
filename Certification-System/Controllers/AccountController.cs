@@ -71,6 +71,11 @@ namespace Certification_System.Controllers
         {
             ViewBag.message = message;
 
+            if (this.User.Identity.IsAuthenticated)
+            {
+                return RedirectToAction("BlankMenu", "Certificates");
+            }
+
             await HttpContext.SignOutAsync(IdentityConstants.ExternalScheme);
 
             ViewData["ReturnUrl"] = returnUrl;

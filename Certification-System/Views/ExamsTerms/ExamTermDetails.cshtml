@@ -25,7 +25,10 @@
 
     <div class="row m-0 mt-3 mb-3">
         <a asp-action="EditExamTerm" asp-route-examTermIdentificator="@Model.ExamTermIdentificator" asp-controller="ExamsTerms" class="btn btn-warning mt-1 mr-1 xs450px_FloatLeft">Edytuj</a>
+        @if (Model.DateOfStart < DateTime.Now)
+        {
         <a asp-action="MarkExamTerm" asp-route-examTermIdentificator="@Model.ExamTermIdentificator" asp-controller="ExamsTerms" class="btn btn-success mt-1 mr-1 xs450px_FloatLeft">Oceń turę egzaminu</a>
+        }
         <a asp-action="DisplayExamTermSummary" asp-route-examTermIdentificator="@Model.ExamTermIdentificator" asp-controller="ExamsTerms" class="btn btn-success mt-1 mr-1 xs450px_FloatLeft">Osiągane rezultaty</a>
         <i class="fas fa-times mt-1 mr-1 icon-hover xs450px_FloatLeft" data-toggle="modal" data-target="#modal"></i>
         @await Component.InvokeAsync("Modal", new { Title = "Usuwanie tury egzaminu", Body = "Czy na pewno chcesz usunąć tą turę egzaminu wraz ze wszystkimi jej zależnościami ?", Action = "DeleteExamTermHub", Controller = "ExamsTerms", Arguments = deleteParams, ButtonText = "Usuń", ButtonClass = "btn-danger" })

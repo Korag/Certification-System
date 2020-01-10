@@ -24,7 +24,7 @@
 
 <div class="row m-0 mt-3 mb-3">
     <a asp-action="EditExamHub" asp-route-examIdentificator="@Model.ExamIdentificator" asp-controller="Exams" class="btn btn-warning mt-1 mr-1 xs450px_FloatLeft">Edytuj</a>
-    @if (Model.ExamDividedToTerms == false)
+    @if (Model.ExamDividedToTerms == false && Model.DateOfStart < DateTime.Now)
     {
         <a asp-action="MarkExam" asp-route-examIdentificator="@Model.ExamIdentificator" asp-controller="Exams" class="btn btn-success mt-1 mr-1 xs450px_FloatLeft">Oceń egzamin</a>
     }
